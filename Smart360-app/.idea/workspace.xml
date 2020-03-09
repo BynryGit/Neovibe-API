@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4b42fd56-5472-422d-8019-c717a8d3841e" name="Default Changelist" comment="" />
+    <list default="true" id="4b42fd56-5472-422d-8019-c717a8d3841e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/userapp/serializers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/userapp/serializers/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/smart360_API.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smart360_API.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart360_API/messages.py" beforeDir="false" afterPath="$PROJECT_DIR$/smart360_API/messages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userapp/api/v1/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/userapp/api/v1/user.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +24,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1YLZVvXHQO2E9oc6JoBe6HWDXIS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -22,6 +36,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -50,13 +65,15 @@
       <screen x="59" y="27" width="1307" height="741" />
     </state>
     <state x="170" y="49" width="1084" height="719" key="#com.intellij.execution.impl.EditConfigurationsDialog/59.27.1307.741@59.27.1307.741" timestamp="1583043241405" />
-    <state x="495" y="154" width="424" height="484" key="FileChooserDialogImpl" timestamp="1583147981519">
-      <screen x="59" y="27" width="1307" height="741" />
+    <state x="500" y="154" width="424" height="484" key="FileChooserDialogImpl" timestamp="1583738175279">
+      <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="495" y="154" width="424" height="484" key="FileChooserDialogImpl/59.27.1307.741@59.27.1307.741" timestamp="1583147981519" />
-    <state x="201" y="31" key="SettingsEditor" timestamp="1583043213533">
-      <screen x="59" y="27" width="1307" height="741" />
+    <state x="500" y="154" width="424" height="484" key="FileChooserDialogImpl/67.27.1299.741@67.27.1299.741" timestamp="1583738175279" />
+    <state x="208" y="31" key="SettingsEditor" timestamp="1583738185596">
+      <screen x="67" y="27" width="1299" height="741" />
     </state>
     <state x="201" y="31" key="SettingsEditor/59.27.1307.741@59.27.1307.741" timestamp="1583043213533" />
+    <state x="208" y="31" key="SettingsEditor/67.27.1299.741@67.27.1299.741" timestamp="1583738185596" />
   </component>
 </project>
