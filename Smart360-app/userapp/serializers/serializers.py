@@ -1,12 +1,10 @@
-import pdb
+__author__ = "rohan"
 
 import jwt
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from smart360_API.settings import SECRET_KEY
 from userapp.models.user import User, Token
-
-__author__ = "rohan"
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True)

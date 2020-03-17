@@ -8,8 +8,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from smart360_API import messages
-from smart360_API.settings import SECRET_KEY
-from userapp.models.user import User, Token
 from userapp.serializers.serializers import LoginSerializer
 
 

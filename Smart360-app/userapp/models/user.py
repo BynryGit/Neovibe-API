@@ -9,6 +9,7 @@ class Token(models.Model):
     user_id = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     token = models.CharField(max_length=1000, null=False, blank=False)
 
+
 class User(User):
     """"Database Model For User In The System"""
     USER_STATUS = (

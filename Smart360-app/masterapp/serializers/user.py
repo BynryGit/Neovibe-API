@@ -1,32 +1,56 @@
+import jwt
 from rest_framework import serializers
+from masterapp.models.user_lookup import Privilege
+from smart360_API.settings import SECRET_KEY
+from userapp.models.user import User
 
-#
-# class PrivilegeSerializer(serializers.ModelSerializer):
-#     first_name = serializers.CharField(max_length=50, required=True)
-#     last_name = serializers.CharField(max_length=50, required=True)
-#     email = serializers.CharField(max_length=50, required=True)
-#     contact_no = serializers.CharField(max_length=15, required=True)
-#     address_line_1 = serializers.CharField(max_length=500, required=True)
-#     city = serializers.CharField(max_length=500, required=True)
-#
-#     class Meta:
-#         model = UserProfile
-#         fields = ('first_name', 'last_name', 'email', 'contact_no', 'address_line_1', 'city')
-#
-#     def update_profile(self, validated_data, user, userprofileimage=None):
-#         city_obj = get_object_or_404(City, city=validated_data['city'], is_deleted=False)
-#
-#         user.first_name = validated_data['first_name']
-#         user.last_name = validated_data['last_name']
-#         user.email = validated_data['email']
-#         user.contact_no = validated_data['contact_no']
-#         user.address_line_1 = validated_data['address_line_1']
-#         user.city = city_obj
-#
-#         try:
-#             user.profile_image = str(settings.MEDIA_URL) #+ str(userprofileimage.user_profile_image)
-#         except Exception:
-#             pass
-#
-#         user.userprofile.save()
-#         return user.userprofile
+
+class PrivilegeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Privilege
+        fields = ('id_string','name', 'description')
+
+class CreatePrivilegeSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True)
+    description = serializers.CharField(required=False)
+    id_string = serializers.CharField(required=False)
+    # token = serializers.CharField(required=True)
+
+    class Meta:
+        model = Privilege
+        fields = ('id_string','name', 'description')
+
+    def create(self, validated_data, token):
+        data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        user = User.objects.get(id_string=data['id_string'])
+        if Privilege.objects.filter(name=validated_data['name']).exists():
+            return False
+        else:
+            privilege = Privilege()
+            privilege.name = validated_data['name']
+            privilege.description = validated_data['description']
+            privilege.created_by = user
+            privilege.save()
+            return True
+
+    def update(self, validated_data, token):
+        data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        user = User.objects.get(id_string=data['id_string'])
+        if Privilege.objects.filter(id_string=validated_data['id_string'],is_deleted=False).exists():
+            privilege = Privilege.objects.get(id_string=validated_data['id_string'],is_deleted=False)
+            privilege.name = validated_data['name']
+            privilege.description = validated_data['description']
+            privilege.updated_by = user
+            privilege.save()
+            return True
+        else:
+            return False
+
+    def delete(self, validated_data):
+        if Privilege.objects.filter(id_string=validated_data['id_string'],is_deleted=False).exists():
+            privilege = Privilege.objects.get(id_string=validated_data['id_string'],is_deleted=False)
+            privilege.is_deleted=True
+            privilege.save()
+            return True
+        else:
+            return False
