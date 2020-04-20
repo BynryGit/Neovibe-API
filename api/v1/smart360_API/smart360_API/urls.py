@@ -17,9 +17,7 @@ __author__ = 'aki'
 
 from django.contrib import admin
 from django.urls import path, include
-from userapp.urls.api import v1 as userapi
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/user/', include(userapi)),
 ]
