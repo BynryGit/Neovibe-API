@@ -17,7 +17,9 @@ __author__ = 'aki'
 
 from django.contrib import admin
 from django.urls import path, include
+from api.v1.smart360_API.registration import urls as registration_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/registration/', include(registration_urls)),
 ]
