@@ -6,9 +6,23 @@ from rest_framework.views import APIView
 from api.v1.smart360_API.registration.views.common_functions import is_token_valid, get_payload, \
      check_authorization, get_user
 
+from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
 from api.v1.smart360_API.lookup.models.privillege import Privillege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.campaign.models.campaign_master import CampaignMaster
+
+
+# API Header
+# API end Point: api/v1/campaign
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Campaign
+# Interaction: Add Campaign
+# Usage: API for Add Campaign
+# Tables used: 2.3.6 Campaign Master
+# Auther: Priyanka
+# Created on: 22/04/2020
 
 
 # Api for add campaign details
@@ -39,12 +53,11 @@ class AddCampaignApi(APIView):
                                              'sub_area':request.data['sub_area'],'start_date':request.data['start_date'],'end_date':request.data['end_date']}
 
                             return Response({
-                                'success': 'false',
+                                STATE: ERROR,
                                 'data': campaign_data,
-                                'message': 'Campaign Already Exists.'
                             }, status=status.HTTP_409_CONFLICT)
                         else:
-
+                            # save campaign details
                             campaignmaster = CampaignMaster(
                                 tenant=TenantMaster.objects.get(id=request.data['tenant_id']),
                                 utility=UtilityMaster.objects.get(id=request.data['utility']),
@@ -54,39 +67,37 @@ class AddCampaignApi(APIView):
                                 sub_category_id=request.data['sub_cat_id_string'],
                                 start_date=request.data['start_date'],
                                 end_date=request.data['end_date'],
+                                portion_id=request.data['portion_id_string'],
+                                mru_id=request.data['mru_id_string'],
                                 doc_url=request.data['document_url'],
                                 description=request.data['description'],
                             )
                             campaignmaster.save()
 
                             return Response({
-                                'success': 'true',
-                                'data': '',
-                                'message': 'Data Save Successfully.'
+                                STATE: SUCCESS,
+                                'data':'',
                             }, status=status.HTTP_200_OK)
                     else:
                         return Response({
-                            'success': 'false',
-                            'data': '',
-                            'message': 'Some values are missing'
+                             STATE: ERROR,
+                             'data': '',
                         }, status=status.HTTP_400_BAD_REQUEST)
 
                 else:
                     return Response({
-                        'success': 'false',
+                        STATE: ERROR,
                         'data': '',
-                        'message': 'User does not have required privillege.',
                     }, status=status.HTTP_401_UNAUTHORIZED)
             else:
                 return Response({
-                    'success': 'false',
+                    STATE: ERROR,
                     'data': '',
-                    'message': 'Please login first.'
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({
-                'success': 'false',
-                'error': str(traceback.print_exc(e))
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
