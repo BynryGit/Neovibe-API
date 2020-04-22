@@ -28,7 +28,7 @@ class RegistrationListApiView(APIView):
             # Checking authentication end
 
                 # Checking authorization start
-                privillege = Privillege.objects.filter(id = 1)
+                privillege = privilege.objects.filter(id = 1)
                 sub_module = SubModule.objects.filter(id = 1)
                 if is_authorized(user, privillege, sub_module):
                 # Checking authorization end

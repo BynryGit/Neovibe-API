@@ -2,7 +2,7 @@ import datetime
 import uuid
 
 from django.db import models
-
+# Remove all fields as compulsory
 # Create Consumer Registration table start.
 class ConsumerRegistration(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
