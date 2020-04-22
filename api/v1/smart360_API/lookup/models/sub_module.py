@@ -14,3 +14,14 @@ class SubModule(models.Model):
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.sub_module
+
+    def __unicode__(self):
+        return self.sub_module
+
+
+
+def get_sub_module_by_id(id):
+    return SubModule.objects.get(id=id)

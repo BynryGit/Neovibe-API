@@ -2,11 +2,12 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from api.v1.smart360_API.lookup.models.area import get_areas_by_tenant_id_string
+from api.v1.smart360_API.lookup.models.sub_area import get_sub_areas_by_tenant_id_string
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
-from api.v1.smart360_API.lookup.models.privilege import Privilege
-from api.v1.smart360_API.lookup.models.sub_module import SubModule
+from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
+from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
@@ -37,8 +38,8 @@ class RegistrationListApiView(APIView):
             # Checking authentication end
 
                 # Checking authorization start
-                privilege = Privilege.objects.filter(id = 1)
-                sub_module = SubModule.objects.filter(id = 1)
+                privilege = get_privilege_by_id(1)
+                sub_module = get_sub_module_by_id(1)
                 if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
 
@@ -48,8 +49,8 @@ class RegistrationListApiView(APIView):
 
                     # Code for lookups start
                     statuses = Status.objects.all()
-                    areas = Area.objects.all()
-                    sub_areas = SubAreas.objects.all()
+                    areas = get_areas_by_tenant_id_string(tenant.id_string)
+                    sub_areas = get_sub_areas_by_tenant_id_string(tenant.id_string)
                     # Code for lookups end
 
                     # Code for sending registrations in response start

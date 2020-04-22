@@ -29,3 +29,7 @@ class SubArea(models.Model):
 
     def __unicode__(self):
         return self.sub_area_name
+
+
+def get_sub_areas_by_tenant_id_string(id_string):
+    return SubArea.objects.filter(tenant__id_string=id_string)

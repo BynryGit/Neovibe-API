@@ -26,3 +26,6 @@ class Area(models.Model):
 
     def __unicode__(self):
         return self.area_name
+
+def get_areas_by_tenant_id_string(id_string):
+    return Area.objects.filter(tenant__id_string=id_string)
