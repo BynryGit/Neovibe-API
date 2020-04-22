@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
-from api.v1.smart360_API.lookup.models.privillege import Privillege
+from api.v1.smart360_API.lookup.models.privilege import Privilege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
