@@ -5,6 +5,8 @@ RESULT='result'
 MESSAGE='message'
 RESPONSE_DATA='response_data'
 Token = 'token'
+STATE = 'state'
+
 
 
 # *********** VALUE CONSTANTS **************
@@ -18,8 +20,10 @@ DATA_NOT_EXISTS='Data not exists.'
 AUTODISCOVER_STARTED_SUCCESSFULLY='Autodiscover started successfully'
 INVALID_DATA='Invalid data provided, data could not save.'
 FAIL= 'fail'
-SUCCESS='success'
 EXIST='exist'
 USER_ALREADY_EXIST='User all ready exit with this name.'
 SERVER_ERROR='Server error occurred {0}'
 INVALID_CREDENTIALS='Provided credentials are wrong.'
+SUCCESS = 'success'
+ERROR = 'error'
+EXCEPTION = 'exception'
