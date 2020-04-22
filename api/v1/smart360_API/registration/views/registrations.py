@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from api.v1.smart360_API.registration.views.common_functions import is_token_valid, get_payload, \
     get_filtered_registrations, check_authorization, get_user
 
-from api.v1.smart360_API.lookup.models.privillege import Privillege
+from api.v1.smart360_API.lookup.models.privilege import privilege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
@@ -26,7 +26,7 @@ class RegistrationListApiView(APIView):
             # Checking authentication end
 
                 # Checking authorization start
-                privillege = Privillege.objects.filter(id = 1)
+                privillege = privilege.objects.filter(id = 1)
                 sub_module = SubModule.objects.filter(id = 1)
                 if check_authorization(user, privillege, sub_module):
                 # Checking authorization end
