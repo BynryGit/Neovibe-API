@@ -1,11 +1,12 @@
-import jwt
-
+from django.db.models import Q
 from api.v1.smart360_API.registration.models.consumer_registration import ConsumerRegistration
-from api.v1.smart360_API.smart360_API.settings import SECRET_KEY
+from django.core.paginator import Paginator
 
 
 
 def get_filtered_registrations(request, user):
+    total_pages = ''
+    page_no = ''
     registrations = ConsumerRegistration.objects.filter(tenant_id=user.tenant_id,
                                                 utility_id__in=user.data_access.all())
     if request.data['utillity']:
@@ -29,23 +30,20 @@ def get_filtered_registrations(request, user):
     if request.data['status']:
         registrations = registrations.objects.filter(status_id=
                                                      request.data['status'])
-    return registrations
-
-def is_token_valid(token):
-    return Token.objects.filter(token=token).exists()
-
-def get_payload(token):
-    return jwt.decode(token, SECRET_KEY, algorithms='RS256')
-
-def get_user(id_string):
-    user = User.objects.get(id_string = id_string)
-    return user
-
-def check_authorization(user, privillege, sub_module):
-    privilleges = user.privilleges.all()
-    sub_modules = user.sub_modules.all()
-    if privillege in privilleges:
-        if sub_module in sub_modules:
-            return True
+    if request.data['page_number'] == '':
+        paginator = Paginator(registrations,int(request.data['page_size']))
+        total_pages = str(paginator.num_pages)
+        page_no = '1'
+        registrations = paginator.page(1)
+        return registrations,total_pages,page_no
     else:
-        return False
+        paginator = Paginator(registrations, int(request.data['page_size']))
+        total_pages = str(paginator.num_pages)
+        page_no = request.data['page_no']
+        registrations = paginator.page(int(page_no))
+        registrations = registrations.filter(
+                        Q(registration_no__icontains=request.data['search_text']) |
+                        Q(first_name__icontains=request.data['search_text']))
+        return registrations, total_pages, page_no
+
+

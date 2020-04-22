@@ -1,10 +1,20 @@
-import uuid
-import datetime
+import uuid  # importing package for guid
+import datetime  # importing package for datetime
 
-from django.db import models
+from django.db import models  # importing package for database
 
 
-# Created by Saloni on 21/04/2020. It stores categories of products and services
+# table header
+# table type : lookup
+# table name : 2.12.3 Product/Services Category
+# table description : It is a lookup table to store the Product/Services Category. It capture Product/Services Category and ID of various Product/Services Category Type to be used by Operator or Utility
+# frequency of data changes : Medium
+# sample tale data :
+# reference tables :
+# auther : Saloni
+
+# change history
+# 21/04/2020 Creation Saloni
 
 class ProductServiceCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

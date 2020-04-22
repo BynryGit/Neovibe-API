@@ -5,7 +5,7 @@ from django.db import models
 from api.v1.smart360_API.lookup.models.activity import Activity
 #TODO: correct the spelling :Done
 # Create Consumer Registration table start.
-class privilege(models.Model):
+class Privilege(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     privilege = models.CharField(null=False, blank=False)
     activity = models.ForeignKey(Activity,null=False, blank=False)
