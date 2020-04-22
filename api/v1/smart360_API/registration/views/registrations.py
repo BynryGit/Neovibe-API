@@ -37,7 +37,7 @@ class RegistrationListApiView(APIView):
             # Checking authentication end
 
                 # Checking authorization start
-                privilege = Privilege.objects.filter(id = 1)
+                privilege = Privilege.objects.filter(id = 1) #TODO: write method
                 sub_module = SubModule.objects.filter(id = 1)
                 if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
@@ -47,7 +47,7 @@ class RegistrationListApiView(APIView):
                     # Code for filtering registrations end
 
                     # Code for lookups start
-                    statuses = Status.objects.all()
+                    statuses = Status.objects.all() #TODO: wrapper to be added.
                     areas = Area.objects.all()
                     sub_areas = SubAreas.objects.all()
                     # Code for lookups end

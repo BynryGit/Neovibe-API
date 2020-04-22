@@ -59,24 +59,24 @@ class AddCampaignApi(APIView):
                         else:
                             # save campaign details
                             campaignmaster = CampaignMaster(
-                                tenant=TenantMaster.objects.get(id=request.data['tenant_id']),
-                                utility=UtilityMaster.objects.get(id=request.data['utility']),
+                                tenant=TenantMaster.objects.get(id=request.data['tenant_id']), #TODO:  Wrapper
+                                utility=UtilityMaster.objects.get(id=request.data['utility']), #TODO: Change to utility_id
                                 name=request.data['campaign_name'],
                                 cam_group_id=request.data['cam_gr_id_string'],
-                                category_id=request.data['category_id_string'],
+                                category_id=request.data['category_id_string'], #TODO: Write function to get category by IDstring.
                                 sub_category_id=request.data['sub_cat_id_string'],
                                 start_date=request.data['start_date'],
                                 end_date=request.data['end_date'],
-                                portion_id=request.data['portion_id_string'],
-                                mru_id=request.data['mru_id_string'],
-                                doc_url=request.data['document_url'],
-                                description=request.data['description'],
+                                portion_id=request.data['portion_id_string'], #TODO:  to be removed
+                                mru_id=request.data['mru_id_string'], #TODO:  to be removed
+                                doc_url=request.data['document_url'], ##TODO:  use global method
+                                description=request.data['description'], #TODO: limit to be added. txt -250, desc -1000
                             )
                             campaignmaster.save()
 
                             return Response({
                                 STATE: SUCCESS,
-                                'data':'',
+                                'data':'', 
                             }, status=status.HTTP_200_OK)
                     else:
                         return Response({
