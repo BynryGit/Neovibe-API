@@ -51,6 +51,7 @@ class RegistrationListApiView(APIView):
                     statuses = Status.objects.all()
                     areas = get_areas_by_tenant_id_string(tenant.id_string)
                     sub_areas = get_sub_areas_by_tenant_id_string(tenant.id_string)
+
                     # Code for lookups end
 
                     # Code for sending registrations in response start

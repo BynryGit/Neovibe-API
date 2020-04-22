@@ -1,21 +1,24 @@
+# table header
+# table type : lookup (Local)
+# table name : 2.12.69 Wage Cycle
+# table description : A lookup table for wage cycles.
+# frequency of data changes : Low
+# sample tale data :
+# reference tables :
+# author : Saloni
+# created on : 22/04/2020
+
+# change history
+# <ddmmyyyy><changes><author>
+
+
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
 
-# table header
-# table type : lookup
-# table name : 2.12.7 Wage Cycle
-# table description : It will be used in the soucing module in setting. Wage Cycle and ID used to Various operator Or Utility
-# frequency of data changes : Low
-# sample tale data :
-# reference tables :
-# auther : Saloni
-
-# change history
-# 22/04/2020 Creation Saloni
-
+# Create Wage Cycle table start.
 
 class WageCycle(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -30,3 +33,5 @@ class WageCycle(models.Model):
 
     def __unicode__(self):
         return self.wage_cycle_name
+
+# Create Wage Cycle table end.

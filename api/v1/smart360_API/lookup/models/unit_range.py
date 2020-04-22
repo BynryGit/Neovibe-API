@@ -1,10 +1,24 @@
-import uuid
-import datetime
+# table header
+# table type : lookup (Local)
+# table name : 2.12.30 Unit Range
+# table description : A lookup table for unit ranges.
+# frequency of data changes : Low
+# sample tale data :
+# reference tables : 2.2.2. Service Plan Rate
+# author : Saloni
+# created on : 21/04/2020
 
-from django.db import models
+# change history
+# <ddmmyyyy><changes><author>
 
 
-# Created by Saloni on 21/04/2020. It stores unit ranges
+import uuid  # importing package for guid
+import datetime  # importing package for datetime
+
+from django.db import models  # importing package for database
+
+
+# Create Unit Range table start.
 
 class UnitRange(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -19,3 +33,6 @@ class UnitRange(models.Model):
 
     def __unicode__(self):
         return self.range
+
+# Create Unit Range table start.
+

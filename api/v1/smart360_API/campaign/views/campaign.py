@@ -3,11 +3,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.v1.smart360_API.registration.views.common_functions import is_token_valid, get_payload, \
+from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
      check_authorization, get_user
 
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
-from api.v1.smart360_API.lookup.models.privillege import Privillege
+from api.v1.smart360_API.lookup.models.privilege import Privilege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.campaign.models.campaign_master import CampaignMaster
 
@@ -36,9 +36,9 @@ class AddCampaignApi(APIView):
                 user = get_user(payload['id_string'])
 
                 # Checking authorization start
-                privillege = Privillege.objects.filter(id = 1)
+                privilege = Privilege.objects.filter(id = 1)
                 sub_module = SubModule.objects.filter(id = 1)
-                if check_authorization(user, privillege, sub_module):
+                if check_authorization(user, privilege, sub_module):
 
                     # Code for add campaign start
                     # first check values are present or not
@@ -59,24 +59,24 @@ class AddCampaignApi(APIView):
                         else:
                             # save campaign details
                             campaignmaster = CampaignMaster(
-                                tenant=TenantMaster.objects.get(id=request.data['tenant_id']),
-                                utility=UtilityMaster.objects.get(id=request.data['utility']),
+                                tenant=TenantMaster.objects.get(id=request.data['tenant_id']), #TODO:  Wrapper
+                                utility=UtilityMaster.objects.get(id=request.data['utility']), #TODO: Change to utility_id
                                 name=request.data['campaign_name'],
                                 cam_group_id=request.data['cam_gr_id_string'],
-                                category_id=request.data['category_id_string'],
+                                category_id=request.data['category_id_string'], #TODO: Write function to get category by IDstring.
                                 sub_category_id=request.data['sub_cat_id_string'],
                                 start_date=request.data['start_date'],
                                 end_date=request.data['end_date'],
-                                portion_id=request.data['portion_id_string'],
-                                mru_id=request.data['mru_id_string'],
-                                doc_url=request.data['document_url'],
-                                description=request.data['description'],
+                                portion_id=request.data['portion_id_string'], #TODO:  to be removed
+                                mru_id=request.data['mru_id_string'], #TODO:  to be removed
+                                doc_url=request.data['document_url'], ##TODO:  use global method
+                                description=request.data['description'], #TODO: limit to be added. txt -250, desc -1000
                             )
                             campaignmaster.save()
 
                             return Response({
                                 STATE: SUCCESS,
-                                'data':'',
+                                'data':'', 
                             }, status=status.HTTP_200_OK)
                     else:
                         return Response({

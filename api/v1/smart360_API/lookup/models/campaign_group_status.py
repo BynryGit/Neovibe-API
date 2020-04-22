@@ -1,10 +1,23 @@
-import uuid
-import datetime
+# table type : lookup (Local)
+# table name : 2.12.36 Campaign Group Status
+# table description : A lookup table for campaign group status for given campaign group.
+# frequency of data changes : Low
+# sample tale data : "started" , "running", "completed"
+# reference tables : 2.12.40 Campaign Group
+# author : Saloni
+# created on : 21/04/2020
 
-from django.db import models
+# change history
+# <ddmmyyyy><changes><author>
 
 
-# Created by Saloni on 21/04/2020. It stores the status of the campaign groups
+import uuid  # importing package for guid
+import datetime  # importing package for datetime
+
+from django.db import models  # importing package for database
+
+
+# Create Campaign Group status table start.
 
 class CampaignGroupStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -19,3 +32,5 @@ class CampaignGroupStatus(models.Model):
 
     def __unicode__(self):
         return self.group_status
+
+# Create Campaign Group status table end.
