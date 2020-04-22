@@ -3,11 +3,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.v1.smart360_API.registration.views.common_functions import is_token_valid, get_payload, \
+from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
      check_authorization, get_user
 
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
-from api.v1.smart360_API.lookup.models.privillege import Privillege
+from api.v1.smart360_API.lookup.models.privilege import Privilege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.campaign.models.campaign_master import CampaignMaster
 
@@ -36,9 +36,9 @@ class AddCampaignApi(APIView):
                 user = get_user(payload['id_string'])
 
                 # Checking authorization start
-                privillege = Privillege.objects.filter(id = 1)
+                privilege = Privilege.objects.filter(id = 1)
                 sub_module = SubModule.objects.filter(id = 1)
-                if check_authorization(user, privillege, sub_module):
+                if check_authorization(user, privilege, sub_module):
 
                     # Code for add campaign start
                     # first check values are present or not
