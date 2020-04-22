@@ -1,10 +1,10 @@
-# table: Consumer Status
+# table: Complaint Status
 # table type: lookup
-# table name: 2.12.45 Consumer Status (Local)
-# table description: It is a lookup table that stores the status of the consumer to be used in various tables.
+# table name: 2.12.49 Complaint Status (Local)
+# table description: The complaint status store in this table with respect to the complaint.
 # frequency of data changes: low
-# sample table data: "Connected", "Disconnected", "Temp disconnected"
-# reference tables: 2.4.1. Consumer Master
+# sample table data: "Received","Complete","Rejected","Pending","Hold"
+# reference tables: 2.3.5. Consumer - complaints
 # auther: Gauri
 # creation date: 22/4/2020
 
@@ -17,8 +17,8 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-#Create ConsumerStatus table start
-class ConsumerStatus(models.Model):
+#Create ComplaintStatus table start
+class ComplaintStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
@@ -35,4 +35,4 @@ class ConsumerStatus(models.Model):
     def __unicode__(self):
         return self.status
 
- # Create ConsumerStatus table end
+ # Create ComplaintStatus table end

@@ -1,10 +1,10 @@
-# table: Consumer Status
+# table: Service Status
 # table type: lookup
-# table name: 2.12.45 Consumer Status (Local)
-# table description: It is a lookup table that stores the status of the consumer to be used in various tables.
+# table name: 2.12.48 Service Status (Local)
+# table description: It is a lookup table to store the Service status to be used in various tables.
 # frequency of data changes: low
-# sample table data: "Connected", "Disconnected", "Temp disconnected"
-# reference tables: 2.4.1. Consumer Master
+# sample table data: "Request Received","Complete","Rejected","Pending","Hold"
+# reference tables: 2.2.1 Utility Services Master
 # auther: Gauri
 # creation date: 22/4/2020
 
@@ -17,8 +17,8 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-#Create ConsumerStatus table start
-class ConsumerStatus(models.Model):
+#Create ServiceStatus table start
+class ServiceStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
@@ -35,4 +35,4 @@ class ConsumerStatus(models.Model):
     def __unicode__(self):
         return self.status
 
- # Create ConsumerStatus table end
+ # Create ServiceStatus table end
