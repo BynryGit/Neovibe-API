@@ -4,7 +4,7 @@ import uuid
 from django.db import models
 from api.v1.smart360_API.lookup.models.activity import Activity
 
-# Create Consumer Registration table start.
+# It is sub module lookup up table. This table will save all the sub modules.Create Consumer Registration table start.
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     sub_module = models.CharField(null=False, blank=False)
