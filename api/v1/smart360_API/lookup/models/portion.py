@@ -1,4 +1,5 @@
-#table : Portion
+#table header
+# module: Consumer Care & Ops | sub-module - Consumer, Metering & Billing
 #table type: lookup
 #table name: 2.12.44 Portion  (Local)
 #table description: It is lookup tables to be used in various tables.
