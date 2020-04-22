@@ -1,15 +1,16 @@
-import datetime
-import uuid
-from django.db import models
-
-# Table Type : Lookup
+# Table Header : Payment Source
+# Table Type : Lookup (Global)
 # Table Name : 2.12.21 Payment Source
 # Description : Payment Source and ID of Payment Source to be used by Operator or Utility
 # Frequency of data changes : Low
+# Sample Table Data:    web mobile, branch, BBPS
 # Reference Table : 2.5.10 Payment Table.
 # Auther : Jayshree
 # Creation Date : 21-04-2020
 
+import datetime
+import uuid
+from django.db import models
 
 class PaymentSource(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
