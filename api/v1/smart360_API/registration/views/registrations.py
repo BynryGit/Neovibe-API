@@ -11,8 +11,17 @@ from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPT
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
 
-
-# Api for getting registrations list, filter, search
+# API Header
+# API end Point: api/v1/registration/list
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Registration list
+# Usage: API will fetch required data for Registration list
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 21/04/2020
 class RegistrationListApiView(APIView):
 
     def get(self, request, format=None):
