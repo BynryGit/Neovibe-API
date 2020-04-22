@@ -11,10 +11,10 @@ def get_user(id_string):
     user = User.objects.get(id_string = id_string)
     return user
 
-def is_authorized(user, privillege, sub_module):
-    privilleges = user.privilleges.all()
+def is_authorized(user, privilege, sub_module):
+    privileges = user.privileges.all()
     sub_modules = user.sub_modules.all()
-    if privillege in privilleges:
+    if privilege in privileges:
         if sub_module in sub_modules:
             return True
     else:

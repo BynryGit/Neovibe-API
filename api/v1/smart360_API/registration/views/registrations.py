@@ -5,14 +5,23 @@ from rest_framework.views import APIView
 
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
-from api.v1.smart360_API.lookup.models.privillege import Privillege
+from api.v1.smart360_API.lookup.models.privilege import Privilege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
 
-
-# Api for getting registrations list, filter, search
+# API Header
+# API end Point: api/v1/registration/list
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Registration list
+# Usage: API will fetch required data for Registration list
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 21/04/2020
 class RegistrationListApiView(APIView):
 
     def get(self, request, format=None):
@@ -28,9 +37,9 @@ class RegistrationListApiView(APIView):
             # Checking authentication end
 
                 # Checking authorization start
-                privillege = privilege.objects.filter(id = 1)
+                privilege = Privilege.objects.filter(id = 1) #TODO: write method
                 sub_module = SubModule.objects.filter(id = 1)
-                if is_authorized(user, privillege, sub_module):
+                if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
 
                     # Code for filtering registrations start
@@ -38,7 +47,7 @@ class RegistrationListApiView(APIView):
                     # Code for filtering registrations end
 
                     # Code for lookups start
-                    statuses = Status.objects.all()
+                    statuses = Status.objects.all() #TODO: wrapper to be added.
                     areas = Area.objects.all()
                     sub_areas = SubAreas.objects.all()
                     # Code for lookups end

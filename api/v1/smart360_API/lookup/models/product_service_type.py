@@ -1,10 +1,24 @@
-import uuid
-import datetime
+# table header
+# table type : lookup (Local)
+# table name : 2.12.64 Product/Services Type
+# table description : A lookup table for types of products and services.
+# frequency of data changes : Low
+# sample tale data :
+# reference tables : 2.5.4 Product/Services Table
+# author : Saloni
+# created on : 21/04/2020
 
-from django.db import models
+# change history
+# <ddmmyyyy><changes><author>
 
 
-# Created by Saloni on 21/04/2020. It stores contract period
+import uuid  # importing package for guid
+import datetime  # importing package for datetime
+
+from django.db import models  # importing package for database
+
+
+# Create Product Service Type table start.
 
 class ProductServiceType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -19,3 +33,5 @@ class ProductServiceType(models.Model):
 
     def __unicode__(self):
         return self.ps_type
+
+# Create Product Service Type table end.

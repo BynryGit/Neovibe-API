@@ -1,9 +1,10 @@
+# table header
 # table type : lookup (Local)
-# table name : 2.12.36 Campaign Group Status
-# table description : A lookup table for campaign group status for given campaign group.
+# table name : 2.12.43 Activity Type
+# table description : A lookup table that stores various types of activities.
 # frequency of data changes : Low
-# sample tale data : "started" , "running", "completed"
-# reference tables : 2.12.40 Campaign Group
+# sample tale data : "tv_add" , "canopy" , "fm_radio_add"
+# reference tables : 2.3.6 Activity Master Table
 # author : Saloni
 # created on : 21/04/2020
 
@@ -17,13 +18,13 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Campaign Group status table start.
+# Create Activity type table start.
 
-class CampaignGroupStatus(models.Model):
+class ActivityType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    group_status = models.CharField(max_length=200, blank=False, null=False)
+    type = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.CharField(blank=False, null=False)
     updated_by = models.CharField(blank=False, null=False)
     created_date = models.DateField(default=datetime.now)
@@ -31,6 +32,6 @@ class CampaignGroupStatus(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.group_status
+        return self.type
 
-# Create Campaign Group status table end.
+# Create Activity type table end.

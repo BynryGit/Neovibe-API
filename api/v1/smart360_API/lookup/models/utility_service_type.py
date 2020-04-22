@@ -1,16 +1,30 @@
-import uuid
-import datetime
+# table header
+# table type : lookup (Local)
+# table name : 2.12.27 Utility Service Type
+# table description : A lookup table for types of utility services.
+# frequency of data changes : Low
+# sample tale data :
+# reference tables : 2.2.1 Utility Services Master
+# author : Saloni
+# created on : 21/04/2020
 
-from django.db import models
+# change history
+# <ddmmyyyy><changes><author>
 
 
-# Created by Saloni on 21/04/2020. It stores utility service types
+import uuid  # importing package for guid
+import datetime  # importing package for datetime
+
+from django.db import models  # importing package for database
+
+
+# Create Utility Service Type table start.
 
 class UtilityServiceType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    util_service_type = models.CharField(maxlength=200, blank=False, null=False)
+    util_service = models.CharField(maxlength=200, blank=False, null=False)
     created_by = models.CharField(blank=False, null=False)
     updated_by = models.CharField(blank=False, null=False)
     created_date = models.DateField(default=datetime.now)
@@ -18,4 +32,6 @@ class UtilityServiceType(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.util_service_type
+        return self.service
+
+# Create Utility Service Type table end.
