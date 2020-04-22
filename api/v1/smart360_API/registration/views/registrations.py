@@ -44,7 +44,7 @@ class RegistrationListApiView(APIView):
                 # Checking authorization end
 
                     # Code for filtering registrations start
-                    registrations = get_filtered_registrations(user, request)
+                    registrations,total_pages,page_no = get_filtered_registrations(user, request)
                     # Code for filtering registrations end
 
                     # Code for lookups start
@@ -64,7 +64,9 @@ class RegistrationListApiView(APIView):
                             'mobile_no' : registration.phone_mobile,
                             'area' : areas.objects.get(id_string = registration.area_id).area_name,
                             'sub_area' : sub_areas.objects.get(id_string = registration.sub_area_id).sub_area_name,
-                            'raised_on' : registration.registration_date.strftime(DISPLAY_DATE_FORMAT)
+                            'raised_on' : registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
+                            'total_pages': total_pages,
+                            'page_no' : page_no
                         })
                     return Response({
                         STATE: SUCCESS,

@@ -37,5 +37,3 @@ class SubArea(models.Model):
 def get_sub_areas_by_tenant_id_string(id_string):
     return SubArea.objects.filter(tenant__id_string=id_string)
 
-# End the Code
-

@@ -31,12 +31,8 @@ class Area(models.Model):
         return self.area
 
     def __unicode__(self):
-<<<<<<< HEAD
         return self.area_name
 
 def get_areas_by_tenant_id_string(id_string):
     return Area.objects.filter(tenant__id_string=id_string)
-=======
-        return self.area
-# End the Code
->>>>>>> 194e9f01c671d2eaf567444e98991fe1d1578a77
+
