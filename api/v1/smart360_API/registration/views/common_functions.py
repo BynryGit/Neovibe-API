@@ -1,5 +1,5 @@
 from django.db.models import Q
-from api.v1.smart360_API.registration.models.consumer_registration import ConsumerRegistration
+from api.v1.smart360_API.registration.models.registrations import Registration
 from django.core.paginator import Paginator
 
 
@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 def get_filtered_registrations(request, user):
     total_pages = ''
     page_no = ''
-    registrations = ConsumerRegistration.objects.filter(tenant_id=user.tenant_id,
+    registrations = Registration.objects.filter(tenant_id=user.tenant_id,
                                                 utility_id__in=user.data_access.all())
     if request.data['utillity']:
         registrations = registrations.objects.filter(utility_id=
