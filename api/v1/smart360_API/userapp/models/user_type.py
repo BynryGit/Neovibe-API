@@ -1,6 +1,6 @@
 # Table Header
 # module : All modules & sub-modules
-# Table Type : Lookup (Global)
+# Table Type : Lookup (local)
 # Table Name : 2.12.17 User Type
 # Description : It is a global lookup table that stores various types of users
 # Frequency of data changes : Low
