@@ -51,7 +51,7 @@ def is_advertisement_verified(request):
         return True
 
 
-def save_advertisement_details(request,id_string):
+def save_advertisement_details(request,user,id_string):
     campaign_obj = Campaign.objects.get(id_string=id_string)
     utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
     area = get_area_by_id_string(request.data['area'])
@@ -70,6 +70,8 @@ def save_advertisement_details(request,id_string):
 
     for advertise in advertises:
          advertise_obj = Advertisements(
+             tenant=user.tenant,
+             utility=utility,
              name = advertise['advertisements_name'],
              area = area.id,
              sub_area = sub_area.id,
@@ -79,12 +81,11 @@ def save_advertisement_details(request,id_string):
              campaign_id = campaign_obj.id,
              budget_amount = advertise['budget_amount'],
              actual_amount = advertise['actual_amount'],
-             frequency_id = frequency.id,
-
+             frequency_id = frequency.id
          )
          advertise_obj.save()
 
-     return advertise_obj
+    return advertise_obj
 
 
 

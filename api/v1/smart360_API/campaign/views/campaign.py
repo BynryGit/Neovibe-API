@@ -69,7 +69,7 @@ class CampaignListApiView(APIView):
                             'category': category.category_name,
                             'sub_category': sub_category.sub_category_name,
                             'frequency':frequency.frequency_name,
-                            'status': statuses.objects.get(id_string=campaign.status_id).status_name,
+                            'status': statuses.objects.get(id=campaign.id).status_name,
                         })
                     return Response({
                          STATE: SUCCESS,
@@ -173,7 +173,7 @@ class AddCampaignApi(APIView):
 
                             # Request advertisement verification start
                             if is_advertisement_verified(request,user):
-                                save_advertisement_details(request, campaign_details.id_string)
+                                save_advertisement_details(request,user,campaign_details.id_string)
 
                             return Response({
                                 STATE: SUCCESS,
