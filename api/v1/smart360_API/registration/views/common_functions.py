@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from api.v1.smart360_API.commonapp.models.area import get_area_by_id_string
 from api.v1.smart360_API.commonapp.models.city import get_city_by_id_string
-from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
+from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string
 from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from api.v1.smart360_API.commonapp.models.country import get_country_by_id_string
 from api.v1.smart360_API.lookup.models.registration_type import get_registration_type_by_id_string
