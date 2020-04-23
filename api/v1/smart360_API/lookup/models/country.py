@@ -39,3 +39,7 @@ class Country(models.Model):
 
 # Create Country table end
 
+
+def get_country_by_id_string(id_string):
+    return Country.objects.get(id_string = id_string)
+

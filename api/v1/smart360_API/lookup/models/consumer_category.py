@@ -40,3 +40,6 @@ class ConsumerCategory(models.Model):
 
 # Create Consumer Category table end
 
+def get_consumer_category_by_id_string(id_string):
+    return ConsumerCategory.objects.get(id_string = id_string)
+

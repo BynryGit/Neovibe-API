@@ -34,6 +34,10 @@ class SourceType(models.Model):
     def __unicode__(self):
         return self.source_type_name
 
+
+def get_source_type_by_id_string(id_string):
+    return SourceType.objects.get(id_string=id_string)
+
 # Create Source Type table end.
 
 

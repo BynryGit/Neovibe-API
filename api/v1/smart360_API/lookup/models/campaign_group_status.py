@@ -2,9 +2,9 @@
 # table name : 2.12.36 Campaign Group Status
 # table description : A lookup table for campaign group status for given campaign group.
 # frequency of data changes : Low
-# sample tale data : "started" , "running", "completed"
+# sample tale data : "started" , "InProgress", "completed"
 # reference tables : 2.12.40 Campaign Group
-# author : Saloni
+# author : Saloni Monde
 # created on : 21/04/2020
 
 # change history

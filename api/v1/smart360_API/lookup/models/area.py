@@ -1,5 +1,5 @@
 # table header
-# module : All modules & sub-modules
+# module: All | sub-module - All
 # Table Type : Lookup (Global)
 # Table Name : 2.12.8 Area
 # Description : It is a global lookup table that stores areas within cities
@@ -39,8 +39,16 @@ class Area(models.Model):
     def __unicode__(self):
         return self.name
 
-
 # Create Area table end
 
 def get_areas_by_tenant_id_string(id_string):
     return Area.objects.filter(tenant__id_string=id_string)
+
+# Create area table end
+
+def get_areas_by_tenant_id_string(tenant_id_string):
+    return Area.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_area_by_id_string(id_string):
+    return Area.objects.get(id_string = id_string)
+

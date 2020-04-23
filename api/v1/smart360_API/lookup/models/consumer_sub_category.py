@@ -40,3 +40,8 @@ class ConsumerSubCategory(models.Model):
         return self.name
 
 # Create Consumer Sub Category table end
+
+
+def get_consumer_sub_category_by_id_string(id_string):
+    return ConsumerSubCategory.objects.get(id_string = id_string)
+

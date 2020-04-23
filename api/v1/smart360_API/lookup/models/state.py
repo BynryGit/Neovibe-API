@@ -37,3 +37,8 @@ class State(models.Model):
         return self.name
 
 # Create State table end
+
+
+def get_state_by_id_string(id_string):
+    return State.objects.get(id_string = id_string)
+

@@ -42,3 +42,8 @@ class City(models.Model):
         return self.name
 
 # Create City table end
+
+
+def get_city_by_id_string(id_string):
+    return City.objects.get(id_string = id_string)
+
