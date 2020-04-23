@@ -2,7 +2,7 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from api.v1.smart360_API.lookup.models.area import get_areas_by_tenant_id_string
+from api.v1.smart360_API.commonapp.models.area import get_areas_by_tenant_id_string
 from api.v1.smart360_API.lookup.models.sub_area import get_sub_areas_by_tenant_id_string
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
     save_basic_registration_details, save_payment_details
