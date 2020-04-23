@@ -1,4 +1,4 @@
-# # Table Header : Meter Image Type
+# Table Header : Meter Image Type
 # Table Type : Lookup (Local)
 # Table Name : 2.12.58 Meter Image Type
 # Description : Meter Image Type and ID of Meter Image Type to be used by Operator or Utility

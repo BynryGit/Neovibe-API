@@ -1,13 +1,14 @@
 # table header
-# module: S&M, | sub-module - Survey
+# module: Asset, Sourcing | sub-module - All
 # table type : lookup (Local)
-# table name : 2.12.35 Field Type
-# table description : A lookup table for various types of fields in given survey .
-# frequency of data changes : LOW
-# sample tale data : "meter no" , "address" , "connection status"
-# reference tables : 2.3.4 Survey Consumer Table , 2.6.3 SOP Master Details , 2.6.7 Closure Report Transaction
+# table name : 2.12.66 Product/Services Sub-Category
+# table description : A lookup table for sub-categories of products and services.
+# frequency of data changes : Low
+# sample tale data :
+# reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
 # created on : 21/04/2020
+
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,13 +20,14 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Field Type table start.
+# Create Product Service Sub Category table start.
 
-class FieldType(models.Model):
-    id_string = models.UUIDField(default = uuid.uuid4, editable = False, unique = True)
+class ProductServiceSubCategory(models.Model):
+    id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
+    category = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -38,4 +40,4 @@ class FieldType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Field Type table end.
+# Create Product Service Sub Category table end.

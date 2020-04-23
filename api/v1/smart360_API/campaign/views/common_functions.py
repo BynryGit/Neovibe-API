@@ -2,8 +2,8 @@ from api.v1.smart360_API.smart360_API.campaign.models.campaign_master import Cam
 from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
 
 from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
-from api.v1.smart360_API.lookup.models.sub_area import get_sub_area_by_id_string
-from api.v1.smart360_API.lookup.models.frequency import get_frequency_by_id_string
+from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
+from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_id_string
 
 
 
