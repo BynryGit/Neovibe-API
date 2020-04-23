@@ -30,4 +30,9 @@ class City(models.Model):
 
     def __unicode__(self):
         return self.city_name
+
+
+def get_city_by_id_string(id_string):
+    return City.objects.get(id_string = id_string)
+
 # End the Code

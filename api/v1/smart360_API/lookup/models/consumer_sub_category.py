@@ -32,4 +32,9 @@ class ConsumerSubCategory(models.Model):
 
     def __unicode__(self):
         return self.sub_category_name
+
+
+def get_consumer_sub_category_by_id_string(id_string):
+    return ConsumerSubCategory.objects.get(id_string = id_string)
+
 # End the Code

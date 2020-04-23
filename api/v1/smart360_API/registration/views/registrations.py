@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from api.v1.smart360_API.lookup.models.area import get_areas_by_tenant_id_string
 from api.v1.smart360_API.lookup.models.sub_area import get_sub_areas_by_tenant_id_string
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
-    save_basic_registration_details
+    save_basic_registration_details, save_payment_details
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
 from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
 from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
@@ -109,9 +109,30 @@ class AddRegistrationApiView(APIView):
                 if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
 
+                    # Request data verification start
                     if is_data_verified(request,user):
-                        registration = save_basic_registration_details(request,user)
+                    # Request data verification end
+
+                        # Save basic and payment details start
+                        registration = save_basic_registration_details(request, user)
+                        payment = save_payment_details(request, user, registration) # TODO: Remaining
+                        # Save basic and payment details start
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            pass
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

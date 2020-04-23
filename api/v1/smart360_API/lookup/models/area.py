@@ -39,3 +39,6 @@ class Area(models.Model):
 def get_areas_by_tenant_id_string(tenant_id_string):
     return Area.objects.filter(tenant__id_string=tenant_id_string)
 
+def get_area_by_id_string(id_string):
+    return Area.objects.get(id_string = id_string)
+

@@ -1,6 +1,16 @@
 from datetime import datetime
 
 from django.db.models import Q
+
+from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
+from api.v1.smart360_API.lookup.models.city import get_city_by_id_string
+from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
+from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id_string
+from api.v1.smart360_API.lookup.models.country import get_country_by_id_string
+from api.v1.smart360_API.lookup.models.registration_type import get_registration_type_by_id_string
+from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id_string
+from api.v1.smart360_API.lookup.models.state import get_state_by_id_string
+from api.v1.smart360_API.lookup.models.sub_area import get_sub_area_by_id_string
 from api.v1.smart360_API.registration.models.registrations import Registration
 from django.core.paginator import Paginator
 
@@ -62,19 +72,19 @@ def is_data_verified(request):
         return True
 
 
-def save_basic_registration_details(request,user):
-    utility = UtilityMaster.objects.get(id_string = request.data['utility'])
-    country = Country.objects.get(id_string = request.data['country'])
-    state = State.objects.get(id_string=request.data['state'])
-    city = City.objects.get(id_string=request.data['city'])
-    area = Area.objects.get(id_string=request.data['area'])
-    sub_area = SubArea.objects.get(id_string=request.data['sub_area'])
+def save_basic_registration_details(request, user):
+    utility = UtilityMaster.objects.get(id_string = request.data['utility']) # Don't have table
+    country = get_country_by_id_string(request.data['country'])
+    state = get_state_by_id_string(request.data['state'])
+    city = get_city_by_id_string(request.data['city'])
+    area = get_area_by_id_string(request.data['area'])
+    sub_area = get_sub_area_by_id_string(request.data['sub_area'])
     scheme = Scheme.objects.get(id_string=request.data['scheme']) # Don't have table
     ownership = Ownership.objects.get(id_string=request.data['ownership']) # Don't have table
-    consumer_category = ConsumerCategory.objects.get(id_string=request.data['consumer_category'])
-    sub_category = SubCategory.objects.get(id_string=request.data['consumer_sub_category'])
-    registration_type = RegistrationType.objects.get(id_string=request.data['registration_type'])
-    source = SourceType.objects.get(id_string=request.data['source'])
+    consumer_category = get_consumer_category_by_id_string(request.data['consumer_category'])
+    sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
+    registration_type = get_registration_type_by_id_string(request.data['registration_type'])
+    source = get_source_type_by_id_string(request.data['source'])
 
     registration = Registration(
         tenant = user.tenant,
@@ -106,4 +116,11 @@ def save_basic_registration_details(request,user):
     registration.registration_no = registration.id
     registration.save()
     return registration
+
+
+def save_payment_details(request, user, registration):
+    try:
+        pass
+    except Exception as e:
+        pass
 

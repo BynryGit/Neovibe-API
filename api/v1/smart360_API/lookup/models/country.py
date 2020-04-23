@@ -29,4 +29,8 @@ class Country(models.Model):
     def __unicode__(self):
         return self.country
 
+
+def get_country_by_id_string(id_string):
+    return Country.objects.get(id_string = id_string)
+
 # End the Code

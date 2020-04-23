@@ -35,4 +35,7 @@ class RegistrationType(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_registration_type_by_id_string(id_string):
+    return RegistrationType.objects.get(id_string=id_string)
+
     # Create Registration Type table end

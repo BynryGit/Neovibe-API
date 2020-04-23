@@ -31,4 +31,9 @@ class ConsumerCategory(models.Model):
 
     def __unicode__(self):
         return self.category_name
+
+
+def get_consumer_category_by_id_string(id_string):
+    return ConsumerCategory.objects.get(id_string = id_string)
+
 # End The Code

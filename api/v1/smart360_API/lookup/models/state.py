@@ -29,4 +29,9 @@ class State(models.Model):
 
     def __unicode__(self):
         return self.state
+
+
+def get_state_by_id_string(id_string):
+    return State.objects.get(id_string = id_string)
+
 # End the Code
