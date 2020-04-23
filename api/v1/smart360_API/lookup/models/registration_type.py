@@ -15,7 +15,7 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 #Create Registration Type table start
-class Registration_Type(models.Model):
+class RegistrationType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
