@@ -1,11 +1,12 @@
 # table header
+# module: O&M, Assets, Purchase, Store, Tender, Contract | sub-module - All
 # table type : lookup (Local)
 # table name : 2.12.85 Asset Category
 # table description : A lookup table for categories of assets.
 # frequency of data changes : Low
-# sample tale data :
+# sample table data : Meter, CNG Station, Pipe
 # reference tables : 2.6.2.2 Asset Master
-# author : Saloni
+# author : Saloni Monde
 # created on : 22/04/2020
 
 # change history
@@ -18,9 +19,9 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Asset Category table start.
+# Create Asset Category table start
 
-class AdAssignmentStatus(models.Model):
+class AssetCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -30,6 +31,9 @@ class AdAssignmentStatus(models.Model):
     created_date = models.DateField(default=datetime.now)
     updated_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.category
 
     def __unicode__(self):
         return self.category

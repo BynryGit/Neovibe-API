@@ -1,11 +1,12 @@
 # table header
+# module: S&M | sub-module - Campaign
 # table type : lookup (Local)
-# table name : 2.12.43 Activity Type
-# table description : A lookup table that stores various types of activities.
+# table name : 2.12.43 advertisement type
+# table description : A lookup table that stores various types of advertisement for campaign.
 # frequency of data changes : Low
-# sample tale data : "tv_add" , "canopy" , "fm_radio_add"
-# reference tables : 2.3.6 Activity Master Table
-# author : Saloni
+# sample table data : "tv_ads" , "canopy" , "fm_radio", "email" "linkedin" "google"
+# reference tables : 2.3.6 advertisement master table
+# author : Saloni Monde
 # created on : 21/04/2020
 
 # change history
@@ -18,20 +19,23 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Activity type table start.
+# Create advertisement type table start.
 
-class ActivityType(models.Model):
+class advertisementType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    type = models.CharField(max_length=200, blank=False, null=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.CharField(blank=False, null=False)
     updated_by = models.CharField(blank=False, null=False)
     created_date = models.DateField(default=datetime.now)
     updated_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return self.type
+    def __str__(self):
+        return self.name
 
-# Create Activity type table end.
+    def __unicode__(self):
+        return self.name
+
+# Create advertisement type table end.

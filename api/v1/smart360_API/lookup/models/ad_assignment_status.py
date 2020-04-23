@@ -1,11 +1,12 @@
 # table header
+# module: S&M | sub-module - Campaign
 # table type : lookup (Local)
-# table name : 2.12.41 Ad Assignment Status
-# table description : A lookup table for advertisement assignment status for given campaign and vendor.
+# table name : 2.12.41 Ad assign status
+# table description : A lookup table for advertisement assign status for given campaign and vendor.
 # frequency of data changes : Low
 # sample tale data : "created", "assigned", "started","completed","hold","cancel"
-# reference tables : 2.3.7 Activity Assignment Table
-# author : Saloni
+# reference tables : 2.3.7 advertisement assign table
+# author : Saloni Monde
 # created on : 21/04/2020
 
 # change history
@@ -18,9 +19,9 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Ad Assignment Status table start.
+# Create advertisement assign status table start
 
-class AdAssignmentStatus(models.Model):
+class AdAssignStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -31,7 +32,10 @@ class AdAssignmentStatus(models.Model):
     updated_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.status
+
     def __unicode__(self):
         return self.status
 
-# Create Ad Assignment Status table end.
+# Create advertisement assign status table end.

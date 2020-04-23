@@ -1,11 +1,12 @@
-# table: Service Status
+# table header
+# module: Consumer Care & Ops | sub-module - Consumer, services
 # table type: lookup
 # table name: 2.12.48 Service Status (Local)
-# table description: It is a lookup table to store the Service status to be used in various tables.
+# table description: Lookup table for consumer services in Consumer care & ops
 # frequency of data changes: low
-# sample table data: "Request Received","Complete","Rejected","Pending","Hold"
-# reference tables: 2.2.1 Utility Services Master
-# auther: Gauri
+# sample table data: "Received","Assigned", "Inprogress" "Completed","Rejected","Hold"
+# reference tables: 2.2.1 Utility Services Master #todo: table name to be checked
+# auther: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
