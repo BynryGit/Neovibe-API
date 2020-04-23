@@ -1,11 +1,12 @@
-# table:  Purchase Request Status
-# table type: lookup
+# table header:
+# module: Purchase | sub-module - Requests
+# table type: lookup (local)
 # table name: 2.12.88 Purchase Request Status (Local)
-# table description: It store the purchase request status.
+# table description: A lookup table for status of purchase requests
 # frequency of data changes: low
-# sample table data: "Initiated","Received","Rejected","Pending","Hold"
+# sample table data: "Initiated","Received","Inprogress", "Partial","Completed""Rejected","Pending","Hold"
 # reference tables: 2.7.1 Request Master
-# auther: Gauri
+# auther: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
@@ -18,16 +19,17 @@ from django.db import models  # importing package for database
 
 
 #Create PurchaseRequestStatus table start
+
 class PurchaseRequestStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    status = models.CharField(null=False, blank=False)
-    created_by = models.CharField(null=False, blank=False)
-    updated_by = models.CharField(null=False, blank=False)
-    created_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    is_active = models.Boolean(default=False)
+    status = models.CharField(null=True, blank=True)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
+    created_date = models.DateField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.status

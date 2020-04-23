@@ -39,3 +39,10 @@ class CampaignGroup(models.Model):
     def __unicode__(self):
         return self.name
 # Create Campaign Group table end.
+
+
+def get_camp_type_by_tenant_id_string(tenant_id_string):
+    return CampaignGroup.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_camp_type_by_id_string(id_string):
+    return CampaignGroup.objects.get(id_string = id_string)

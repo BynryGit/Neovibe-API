@@ -39,3 +39,9 @@ class CampaignStatus(models.Model):
         return self.status
 
 # Create Campaign Status table end.
+
+def get_cam_status_by_tenant_id_string(tenant_id_string):
+    return CampaignStatus.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_cam_status_by_id_string(id_string):
+    return CampaignStatus.objects.get(id_string = id_string)
