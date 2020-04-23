@@ -69,7 +69,7 @@ class CampaignListApiView(APIView):
                             'category': category.category_name,
                             'sub_category': sub_category.sub_category_name,
                             'frequency':frequency.frequency_name,
-                            'status': statuses.objects.get(id_string=campaign.status_id).status_name,
+                            'status': statuses.objects.get(campaign.status_id).status_name,
                         })
                     return Response({
                          STATE: SUCCESS,
