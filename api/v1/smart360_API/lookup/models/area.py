@@ -35,3 +35,7 @@ class Area(models.Model):
         return self.name
 
 # Create area table end
+
+def get_areas_by_tenant_id_string(id_string):
+    return Area.objects.filter(tenant__id_string=id_string)
+

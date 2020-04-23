@@ -10,7 +10,7 @@ class CampaignMaster(models.Model):
     cam_group_id = models.CharField(null=False, blank=False)
     name = models.CharField(null=False, blank=False)
     objective_id = models.IntegerField(default=0,null=False, blank=False)
-    description = models.CharField(null=False, blank=False)
+    description = models.textfield(null=False, blank=False)
     frequency_id = models.IntegerField(default=0, null=False, blank=False)
     type_id = models.IntegerField(default=0, null=False, blank=False)
     potential_consumers = models.IntegerField(default=0, null=False, blank=False)

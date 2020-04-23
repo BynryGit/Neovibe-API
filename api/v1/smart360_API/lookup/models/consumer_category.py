@@ -1,7 +1,8 @@
-# Table Header : Consumer Category
-# Table Type : Lookup (Global)
+# Table Header
+# module: S&M, Consumer Care & Ops | sub-module - Consumer, Metering, Billing, Payments, Services, Complaints
+# Table Type: Lookup (Global)
 # Table Name : 2.12.14 Consumer Category
-# Description : It captures Consumer Category and ID of various Consumer Category to be used by Operator or Utility.
+# Description : Lookup table for all consumer categories to be used by Operator or Utility.
 # Frequency of data changes : Low
 # Sample Table Data : Domestic
 # Reference Table : 2.2.2 Service Plans, 2.3.1 Survey Table, 2.3.8 Campaign Transaction Table,
