@@ -26,7 +26,7 @@ class City(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    state = models.IntegerField(blank=, null=False)
+    state = models.IntegerField(blank=False, null=False)
     country = models.IntegerField(null=True, blank=True)
     region = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
