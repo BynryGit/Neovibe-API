@@ -6,6 +6,7 @@ MESSAGE='message'
 RESPONSE_DATA='response_data'
 Token = 'token'
 STATE = 'state'
+DATA = 'data'
 
 
 

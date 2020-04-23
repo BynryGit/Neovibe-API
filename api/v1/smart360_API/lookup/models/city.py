@@ -35,4 +35,7 @@ class City(models.Model):
 def get_city_by_id_string(id_string):
     return City.objects.get(id_string = id_string)
 
+def get_city_by_id(id):
+    return City.objects.get(id = id)
+
 # End the Code

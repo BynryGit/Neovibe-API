@@ -38,6 +38,9 @@ class SourceType(models.Model):
 def get_source_type_by_id_string(id_string):
     return SourceType.objects.get(id_string=id_string)
 
+def get_source_type_by_id(id):
+    return SourceType.objects.get(id = id)
+
 # Create Source Type table end.
 
 
