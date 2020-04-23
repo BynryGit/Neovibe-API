@@ -1,11 +1,12 @@
+# table header
 # table type : lookup (Local)
-# table name : 2.12.36 Campaign Group Status
-# table description : A lookup table for campaign group status for given campaign group.
+# table name : 2.12.80 Deprecation Method
+# table description : A lookup table for different deprecation methods.
 # frequency of data changes : Low
-# sample tale data : "started" , "running", "completed"
-# reference tables : 2.12.40 Campaign Group
+# sample tale data :
+# reference tables : 2.6.2.2 Asset Master
 # author : Saloni
-# created on : 21/04/2020
+# created on : 22/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -17,13 +18,13 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Campaign Group status table start.
+# Create Deprecation Method table start.
 
-class CampaignGroupStatus(models.Model):
+class DeprecationMethod(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    group_status = models.CharField(max_length=200, blank=False, null=False)
+    method = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.CharField(blank=False, null=False)
     updated_by = models.CharField(blank=False, null=False)
     created_date = models.DateField(default=datetime.now)
@@ -31,6 +32,7 @@ class CampaignGroupStatus(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.group_status
+        return self.method
 
-# Create Campaign Group status table end.
+# Create Deprecation Method table end.
+
