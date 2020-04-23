@@ -2,11 +2,12 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from api.v1.smart360_API.lookup.models.area import get_areas_by_tenant_id_string, get_area_by_id
-from api.v1.smart360_API.lookup.models.city import get_city_by_id
+
+from api.v1.smart360_API.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
+from api.v1.smart360_API.commonapp.models.city import get_city_by_id
+from api.v1.smart360_API.commonapp.models.country import get_country_by_id
 from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id
 from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id
-from api.v1.smart360_API.lookup.models.country import get_country_by_id
 from api.v1.smart360_API.lookup.models.registration_type import get_registration_type_by_id
 from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id
 from api.v1.smart360_API.lookup.models.state import get_state_by_id
