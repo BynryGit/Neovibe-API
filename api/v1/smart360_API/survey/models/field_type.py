@@ -1,16 +1,17 @@
-# Table Header
-# module : All modules & sub-modules
-# Table Type : Lookup (Global)
-# Table Name : 2.12.17 User Type
-# Description : It is a global lookup table that stores various types of users
-# Frequency of data changes : Low
-# Sample Table Data : "Employee" ,  "Vendor" , "Supplier"
-# Reference Table : 2.5.5 User Documents.
-# Author : Jayshree Kumbhare
-# Creation Date : 21/04/2020
+# table header
+# module: S&M, | sub-module - Survey
+# table type : lookup (local)
+# table name : 2.12.35 Field Type
+# table description : A lookup table for various types of fields in given survey .
+# frequency of data changes : LOW
+# sample tale data : "meter no" , "address" , "connection status"
+# reference tables : 2.3.4 Survey Consumer Table , 2.6.3 SOP Master Details , 2.6.7 Closure Report Transaction
+# author : Saloni Monde
+# created on : 21/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
+
 
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
@@ -18,10 +19,10 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create User Type table start
+# Create Field Type table start.
 
-class UserType(models.Model):
-    id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+class FieldType(models.Model):
+    id_string = models.UUIDField(default = uuid.uuid4, editable = False, unique = True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
@@ -37,4 +38,4 @@ class UserType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create User Type table end
+# Create Field Type table end.

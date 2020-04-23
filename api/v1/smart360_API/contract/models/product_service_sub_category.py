@@ -1,13 +1,14 @@
 # table header
-# module: S&M | sub-module - Campaign Group
+# module: Asset, Sourcing | sub-module - All
 # table type : lookup (Local)
-# table name : 2.12.40 Campaign Group
-# table description : A lookup table for campaign groups.
+# table name : 2.12.66 Product/Services Sub-Category
+# table description : A lookup table for sub-categories of products and services.
 # frequency of data changes : Low
-# sample tale data : "campaign_group_1" , "campaign_group_2"
-# reference tables : 2.3.6 Campaign Master Table , 2.3.7 Activity Assignment Table , 2.3.8 Campaign Transaction Table
+# sample tale data :
+# reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
 # created on : 21/04/2020
+
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -16,17 +17,17 @@
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
-from django.db import models   # importing package for database
+from django.db import models  # importing package for database
 
 
-# Create Campaign Group table start.
+# Create Product Service Sub Category table start.
 
-class CampaignGroup(models.Model):
+class ProductServiceSubCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    name = models.CharField(max_length=500, blank=False, null=False)
-    status = models.CharField(blank=False, null=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    category = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -38,11 +39,5 @@ class CampaignGroup(models.Model):
 
     def __unicode__(self):
         return self.name
-# Create Campaign Group table end.
 
-
-def get_camp_type_by_tenant_id_string(tenant_id_string):
-    return CampaignGroup.objects.filter(tenant__id_string=tenant_id_string)
-
-def get_camp_type_by_id_string(id_string):
-    return CampaignGroup.objects.get(id_string = id_string)
+# Create Product Service Sub Category table end.

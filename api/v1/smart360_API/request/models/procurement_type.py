@@ -1,13 +1,13 @@
 # table header
-# module: S&M  | sub-module - Survey
+# module: Purchase  | sub-module - Request
 # table type : lookup (Local)
-# table name : 2.12.35 Field Type
-# table description : A lookup table for various types of fields in given survey .
-# frequency of data changes : LOW
-# sample tale data : "meter no" , "address" , "connection status"
-# reference tables : 2.3.4 Survey Consumer Table , 2.6.3 SOP Master Details , 2.6.7 Closure Report Transaction
+# table name : 2.12.84 Procurement Type
+# table description : A lookup table for procurement type of all given asset.
+# frequency of data changes : Low
+# sample tale data :"In-house", "External","External procurement planning"
+# reference tables : 2.4.1 Asset - Procurement
 # author : Saloni Monde
-# created on : 21/04/2020
+# created on : 22/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,10 +19,10 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Field Type table start.
+# Create Procurement Type table start.
 
-class FieldType(models.Model):
-    id_string = models.UUIDField(default = uuid.uuid4, editable = False, unique = True)
+class ProcurementType(models.Model):
+    id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
@@ -38,4 +38,5 @@ class FieldType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Field Type table end.
+# Create Procurement Type table end.
+

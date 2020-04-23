@@ -1,13 +1,14 @@
-# Table Header
+# Table header
 # module : All modules & sub-modules
 # Table Type : Lookup (Global)
-# Table Name : 2.12.5 Country
-# Description : A global lookup table that stores countries within the regions
+# Table Name : 2.12.7 City
+# Description : It is a global lookup table that stores cities within the countries
 # Frequency of data changes : Low
-# Sample Table Data : India
-# Reference Table : 2.3.1. Consumer Master, 2.3.2. Consumer - Registration, 2.7.7. Branch details, 2.5.3. Vendor Details
+# Sample Table Data : "Pune", "Nagpur", "Bharatpur"
+# Reference Table : 2.3.1. Consumer Master, 2.3.5 Campaign Group Table,2.3.1 Survey Table,2.7.1. Employee,
+#                    2.7.7. Branch details,2.5.1. User Details,2.5.3. Vendor Details,Supplier, Contracts.
 # Author : Jayshree Kumbhare
-# Creation Date : 21-04-2020
+# Creation Date : 21/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -18,13 +19,16 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Country table start
+# Create City table start
 
-class Country(models.Model):
+class City(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
+    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    region = models.IntegerField(null=False, blank=False)
+    state = models.IntegerField(blank=False, null=False)
+    country = models.IntegerField(null=True, blank=True)
+    region = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -37,9 +41,15 @@ class Country(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Country table end
+# Create City table end
 
 
-def get_country_by_id_string(id_string):
-    return Country.objects.get(id_string = id_string)
+def get_city_by_id_string(id_string):
+    return City.objects.get(id_string = id_string)
+
+
+def get_city_by_id(id):
+    return City.objects.get(id = id)
+
+# End the Code
 

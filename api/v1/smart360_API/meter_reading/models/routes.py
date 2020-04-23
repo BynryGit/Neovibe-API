@@ -1,15 +1,15 @@
-# table Header :
-# module: S&M, Consumer Care & Ops | sub-module - Registrations
+# table header:
+# module: S&M, Consumer Care & Ops | sub-module - Meter Reading
 # table type: lookup (local)
-# table name: 2.12.46 Registration Type
-# table description: A lookup table that stores the various types of registrations
-# frequency of data changes: low
-# sample table data:
-# reference tables: 2.3.2. Consumer - Registration
-# auther: Gauri
+# table name: 2.12.50 Route Details
+# table description: A lookup tables to be used for meter reading routes
+# frequency of data changes: Medium
+# sample table data:R1, R2, R3, R4
+# reference tables: 2.3.8.2 Reading Consumer Master, 2.3.8.3 Jobcard, 2.3.8.4 Meter Reading, 2.3.9 Invoice/Bill
+# auther: Gauri Deshmukh
 # creation date: 22/4/2020
 
-# change history
+#change history
 #<ddmmyyyy>-<changes>-<auther>
 
 import datetime  # importing package for datetime
@@ -17,12 +17,17 @@ import uuid  # importing package for GUID
 
 from django.db import models  # importing package for database
 
-#Create Registration Type table start
-class RegistrationType(models.Model):
+
+#Create RouteDetails table start
+class Routes(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    name = models.CharField(null=True, blank=True)
+    code = models.CharField(null=False, blank=False)
+    name = models.CharField(null=False, blank=False)
+    city = models.IntegerField(null=True, blank=True)
+    area = models.IntegerField(null=True, blank=True)
+    subarea = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -30,12 +35,9 @@ class RegistrationType(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.route_code
 
     def __unicode__(self):
-        return self.name
+        return self.route_code
 
-def get_registration_type_by_id_string(id_string):
-    return RegistrationType.objects.get(id_string=id_string)
-
-    # Create Registration Type table end
+ # Create RouteDetails table end

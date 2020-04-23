@@ -60,4 +60,8 @@ class Registration(models.Model):
 
     def __unicode__(self):
         return self.registration_no
+
+
+def get_registration_by_id_string(id_string):
+    return Registration.objects.get(id_string = id_string)
 # Create Consumer Registration table end.

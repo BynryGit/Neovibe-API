@@ -9,13 +9,13 @@ from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, 
 
 from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
 from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
-from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string,get_category_by_tenant_id_string
-from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id_string,get_sub_category_by_tenant_id_string
-from api.v1.smart360_API.lookup.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
+from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string,get_category_by_tenant_id_string
+from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string,get_sub_category_by_tenant_id_string
+from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
 from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_tenant_id_string,get_camp_type_by_id_string
-from api.v1.smart360_API.lookup.models.campaign_status import get_cam_status_by_tenant_id_string
+from api.v1.smart360_API.campaign.models.campaign_status import get_cam_status_by_tenant_id_string
 from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
-from api.v1.smart360_API.lookup.models.sub_area import get_sub_area_by_id_string
+from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
 
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION

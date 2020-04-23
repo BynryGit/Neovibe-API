@@ -3,14 +3,14 @@ from datetime import datetime
 from django.db.models import Q
 
 from api.v1.smart360_API.commonapp.models.area import get_area_by_id_string
-from api.v1.smart360_API.lookup.models.city import get_city_by_id_string
-from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
-from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from api.v1.smart360_API.lookup.models.country import get_country_by_id_string
-from api.v1.smart360_API.lookup.models.registration_type import get_registration_type_by_id_string
+from api.v1.smart360_API.commonapp.models.city import get_city_by_id_string
+from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string
+from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string
+from api.v1.smart360_API.commonapp.models.country import get_country_by_id_string
+from api.v1.smart360_API.registration.models.registration_type import get_registration_type_by_id_string
 from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id_string
-from api.v1.smart360_API.lookup.models.state import get_state_by_id_string
-from api.v1.smart360_API.lookup.models.sub_area import get_sub_area_by_id_string
+from api.v1.smart360_API.commonapp.models.state import get_state_by_id_string
+from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
 from api.v1.smart360_API.registration.models.registrations import Registration
 from django.core.paginator import Paginator
 
@@ -107,7 +107,7 @@ def save_basic_registration_details(request, user):
         ownership_id = ownership.id,
         consumer_category_id = consumer_category.id,
         sub_category_id = sub_category.id,
-        is_vip = True if request.data['is_vip'] == '1' else False,
+        is_vip = True if request.data['is_vip'] == 'true' else False,
         connectivity = True if request.data['connectivity'] == '1' else False,
         source_id = source.id,
         created_by = user.id,

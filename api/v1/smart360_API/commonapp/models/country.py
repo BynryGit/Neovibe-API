@@ -1,18 +1,16 @@
-# table header
-# module: Asset, Sourcing | sub-module - All
-# table type : lookup (Local)
-# table name : 2.12.66 Product/Services Sub-Category
-# table description : A lookup table for sub-categories of products and services.
-# frequency of data changes : Low
-# sample tale data :
-# reference tables : 2.5.4 Product/Services Table
-# author : Saloni Monde
-# created on : 21/04/2020
-
+# Table Header
+# module : All modules & sub-modules
+# Table Type : Lookup (Global)
+# Table Name : 2.12.5 Country
+# Description : A global lookup table that stores countries within the regions
+# Frequency of data changes : Low
+# Sample Table Data : India
+# Reference Table : 2.3.1. Consumer Master, 2.3.2. Consumer - Registration, 2.7.7. Branch details, 2.5.3. Vendor Details
+# Author : Jayshree Kumbhare
+# Creation Date : 21-04-2020
 
 # change history
 # <ddmmyyyy><changes><author>
-
 
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
@@ -20,14 +18,13 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Product Service Sub Category table start.
+# Create Country table start
 
-class ProductServiceSubCategory(models.Model):
+class Country(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    category = models.CharField(blank=False, null=False)
+    region = models.IntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -40,4 +37,15 @@ class ProductServiceSubCategory(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Product Service Sub Category table end.
+# Create Country table end
+
+
+def get_country_by_id_string(id_string):
+    return Country.objects.get(id_string = id_string)
+
+
+def get_country_by_id(id):
+    return Country.objects.get(id = id)
+
+# End the Code
+
