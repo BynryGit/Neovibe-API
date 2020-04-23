@@ -9,7 +9,7 @@ from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, 
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
 from api.v1.smart360_API.lookup.models.privilege import Privilege
 from api.v1.smart360_API.lookup.models.sub_module import SubModule
-from api.v1.smart360_API.campaign.models.campaign_master import CampaignMaster
+from api.v1.smart360_API.campaign.models.campaign import CampaignMaster
 
 
 # API Header
