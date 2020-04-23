@@ -1,7 +1,5 @@
-import jwt
-
+import jwt # jwt token library
 from api.v1.smart360_API.smart360_API.settings import SECRET_KEY
-
 
 def is_token_valid(token):
     return Token.objects.filter(token=token).exists()
@@ -13,10 +11,10 @@ def get_user(id_string):
     user = User.objects.get(id_string = id_string)
     return user
 
-def check_authorization(user, privillege, sub_module):
-    privilleges = user.privilleges.all()
+def is_authorized(user, privilege, sub_module):
+    privileges = user.privileges.all()
     sub_modules = user.sub_modules.all()
-    if privillege in privilleges:
+    if privilege in privileges:
         if sub_module in sub_modules:
             return True
     else:
