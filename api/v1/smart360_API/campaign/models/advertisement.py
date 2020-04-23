@@ -3,7 +3,7 @@
 # table name : 2.3.6 advertisements master
 # table description : A master table to store advertisements in given campaign
 # frequency of data changes : high
-# sample tale data : campaign = 'Smart360", Ads1 = "Smart360-Awareness-Gas" , Ads1 = "Smart360-Awareness-Power"
+# sample tale data : campaign = 'Smart360", Ads1 = "Smart360-Awareness-Gas" , Ads2 = "Smart360-Awareness-Power"
 # author : Priyanka Kachare
 # created on : 21/04/2020
 
@@ -47,4 +47,4 @@ class Advertisements(models.Model):
     def __unicode__(self):
         return self.name
 
-    # Create advertisement master table ends
+# Create advertisement master table ends

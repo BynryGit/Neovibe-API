@@ -1,7 +1,8 @@
 # Table Header : Task Type
+# module: O&M  | sub-module - SOP
 # Table Type : Lookup (Local)
 # Table Name : 2.12.77 Task Type (Local)
-# Description : It Task Type and ID of various Task Type to be used by Operator or Utility
+# Description : A lookup table for types of task added in SOP's.
 # Frequency of data changes : Low
 # Sample Table Data : Image, Parameter, Material
 # Reference Table : 2.6.3 SOP Master Details

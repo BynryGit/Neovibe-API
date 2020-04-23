@@ -36,3 +36,9 @@ class Frequency(models.Model):
     def __unicode__(self):
         return self.name
 # Create Frequency table end
+
+def get_frequency_by_tenant_id_string(tenant_id_string):
+    return Frequency.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_frequency_by_id_string(id_string):
+    return Frequency.objects.get(id_string = id_string)
