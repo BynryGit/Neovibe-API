@@ -1,7 +1,3 @@
-import datetime
-import uuid
-from django.db import models
-
 # table header
 # table type : Master (Local)
 # table name : 2.3.6 Campaign Master
@@ -14,7 +10,12 @@ from django.db import models
 # change history
 # <ddmmyyyy><changes><author>
 
-# Create Campain Master table start.
+import datetime
+import uuid
+from django.db import models
+
+# Create Campaign Master table start
+
 class CampaignMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
@@ -36,14 +37,16 @@ class CampaignMaster(models.Model):
     area_id = models.IntegerField(null=True, blank=True)
     sub_area_id = models.IntegerField(null=True, blank=True)
     status_id = models.IntegerField(null=True, blank=True)
-
     created_date = models.DateField(null=True, blank=True, default=datetime.utcnow())
     updated_date = models.DateField(null=True, blank=True, default=datetime.utcnow())
     created_by = models.ForeignKey(User, null=False, blank=False)
     updated_by = models.ForeignKey(User, null=False, blank=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
     def __unicode__(self):
         return self.name
+
+    # Create Campaign Master table ends
