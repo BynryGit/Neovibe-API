@@ -1,35 +1,47 @@
-# Table Header : Consumer Sub-Category
+# Table Header
+# module: S&M, Consumer Care & Ops | sub-module - Consumer, Metering, Billing, Payments, Services, Complaints
 # Table Type : Lookup (Global)
 # Table Name : 2.12.15 Consumer Sub-Category
-# Description : This table will store Consumer sub- Category with respect to the Consumer Category.
+# Description : It is a global lookup table that will store sub categories of consumers with respect to categories
 # Frequency of data changes : Low
-# Sample Table Data : Builder, Individual
+# Sample Table Data : "Builder" , "Individual"
 # Reference Table : 2.2.2 Service Plans, 2.3.1 Survey Table, 2.3.8 Campaign Transaction Table,
 #                    2.3.1. Consumer Master, 2.3.2. Consumer - Registration, 2.4.3 Asset Master, 2.7.1. Employee
-# Auther : Jayshree
+# Author : Jayshree Kumbhare
 # Creation Date : 21-04-2020
 
-import datetime
-import uuid
-from django.db import models
+# change history
+# <ddmmyyyy><changes><author>
+
+import uuid  # importing package for guid
+import datetime  # importing package for datetime
+
+from django.db import models  # importing package for database
 
 
-# Start the Code
+# Create Consumer Sub Category table start
+
 class ConsumerSubCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    sub_category_name = models.CharField(max_length=40, blank=False, null=False)
-    category_id = models.IntegerField(blank=False, null=False)
-    created_by = models.IntegerField(null=False, blank=False)
-    updated_by = models.IntegerField(null=False, blank=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    category = models.IntegerField(blank=False, null=False)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.sub_category_name
+        return self.name
 
     def __unicode__(self):
-        return self.sub_category_name
-# End the Code
+        return self.name
+
+# Create Consumer Sub Category table end
+
+
+def get_consumer_sub_category_by_id_string(id_string):
+    return ConsumerSubCategory.objects.get(id_string = id_string)
+

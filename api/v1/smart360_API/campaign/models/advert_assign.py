@@ -15,6 +15,7 @@ import datetime
 import uuid
 from django.db import models
 
+
 # Create advertisement assignment table starts
 
 class AdvertisementAssignment(models.Model):
@@ -23,7 +24,7 @@ class AdvertisementAssignment(models.Model):
     utility = models.ForeignKey(Utility, null=False, blank=False)
     campaign_id = models.IntegerField(default=1, null=True, blank=True)
     group_id = models.IntegerField(default=1, null=True, blank=True)
-    vendor_id = models.IntegerField(default=1, null=True, blank=True) #todo: check actual name
+    vendor_id = models.IntegerField(default=1, null=True, blank=True)  # todo: check actual name
     assigned_date = models.DateField(null=True, blank=True, default=datetime.now())
     completion_date = models.DateField(null=True, blank=True, default=datetime.now())
     status_id = models.IntegerField(default=1, null=True, blank=True)

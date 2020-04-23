@@ -23,17 +23,17 @@ class ServiceStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    status = models.CharField(null=False, blank=False)
-    created_by = models.CharField(null=False, blank=False)
-    updated_by = models.CharField(null=False, blank=False)
-    created_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    is_active = models.Boolean(default=False)
+    name = models.CharField(null=False, blank=False)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
+    created_date = models.DateField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
  # Create ServiceStatus table end

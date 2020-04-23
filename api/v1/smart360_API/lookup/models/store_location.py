@@ -29,11 +29,11 @@ class StoreLocation(models.Model):
     contact_landstore = models.CharField(null=False, blank=False)
     city_id = models.CharField(null=False, blank=False)
     area_id = models.CharField(null=False, blank=False)
-    created_by = models.CharField(null=False, blank=False)
-    updated_by = models.CharField(null=False, blank=False)
-    created_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    is_active = models.Boolean(default=False)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
+    created_date = models.DateField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.store_name
