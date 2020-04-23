@@ -43,3 +43,9 @@ class ConsumerCategory(models.Model):
 def get_consumer_category_by_id_string(id_string):
     return ConsumerCategory.objects.get(id_string = id_string)
 
+
+def get_consumer_category_by_id(id):
+    return ConsumerCategory.objects.get(id = id)
+
+# End The Code
+

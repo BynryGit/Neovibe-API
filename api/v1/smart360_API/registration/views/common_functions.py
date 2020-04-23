@@ -107,7 +107,7 @@ def save_basic_registration_details(request, user):
         ownership_id = ownership.id,
         consumer_category_id = consumer_category.id,
         sub_category_id = sub_category.id,
-        is_vip = True if request.data['is_vip'] == '1' else False,
+        is_vip = True if request.data['is_vip'] == 'true' else False,
         connectivity = True if request.data['connectivity'] == '1' else False,
         source_id = source.id,
         created_by = user.id,

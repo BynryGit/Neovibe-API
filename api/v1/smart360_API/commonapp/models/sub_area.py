@@ -47,3 +47,6 @@ def get_sub_areas_by_tenant_id_string(id_string):
 
 def get_sub_area_by_id_string(id_string):
     return SubArea.objects.get(id_string = id_string)
+
+def get_sub_area_by_id(id):
+    return SubArea.objects.get(id = id)

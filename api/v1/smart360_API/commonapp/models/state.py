@@ -41,3 +41,9 @@ class State(models.Model):
 def get_state_by_id_string(id_string):
     return State.objects.get(id_string = id_string)
 
+
+def get_state_by_id(id):
+    return State.objects.get(id = id)
+
+# End the Code
+
