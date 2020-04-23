@@ -1,11 +1,11 @@
 # table header
 # module: S&M | sub-module - Campaign
 # table type : lookup (Local)
-# table name : 2.12.39 Campaign Status
-# table description : A lookup table for status of given campaign.
+# table name : 2.12.40 Campaign Group
+# table description : A lookup table for campaign groups.
 # frequency of data changes : Low
-# sample tale data : "created", "assigned", "started","completed","hold","cancel"
-# reference tables : 2.3.6 Campaign Master Table
+# sample tale data : "campaign_group_1" , "campaign_group_2"
+# reference tables : 2.3.6 Campaign Master Table , 2.3.7 advertisement Assignment Table , 2.3.8 advertisement Table
 # author : Saloni Monde
 # created on : 21/04/2020
 
@@ -16,16 +16,16 @@
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
-from django.db import models  # importing package for database
+from django.db import models   # importing package for database
 
 
-# Create Campaign Status table start.
+# Create Campaign Group table start.
 
-class CampaignStatus(models.Model):
+class CampaignGroup(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    status = models.CharField(max_length=200, blank=False, null=False)
+    name = models.CharField(max_length=500, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -33,15 +33,15 @@ class CampaignStatus(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
+# Create Campaign Group table end.
 
-# Create Campaign Status table end.
 
-def get_cam_status_by_tenant_id_string(tenant_id_string):
-    return CampaignStatus.objects.filter(tenant__id_string=tenant_id_string)
+def get_camp_type_by_tenant_id_string(tenant_id_string):
+    return CampaignGroup.objects.filter(tenant__id_string=tenant_id_string)
 
-def get_cam_status_by_id_string(id_string):
-    return CampaignStatus.objects.get(id_string = id_string)
+def get_camp_type_by_id_string(id_string):
+    return CampaignGroup.objects.get(id_string = id_string)
