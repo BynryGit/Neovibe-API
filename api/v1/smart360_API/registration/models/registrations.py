@@ -1,14 +1,28 @@
+# table header
+# module: S&M,Consumer care and ops | sub-module - Registration
+# table type : Master
+# table name : 2.4.2 Registration Master
+# table description : A master table to store new registration details.
+# frequency of data changes : High
+# sample table data : "Registration 1" , "Registration 2" , "Registration 3"
+# reference tables : None
+# author : Rohan Wagh
+# created on : 21/04/2020
+
+# change history
+# <ddmmyyyy><changes><author>
+
 import datetime
 import uuid
 
 from django.db import models
 # Remove all fields as compulsory
 # Create Consumer Registration table start.
-class ConsumerRegistration(models.Model):
+class Registration(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant_id = models.IntegerField(null=False, blank=False)
     utility_id = models.IntegerField(null=False, blank=False)
-    registration_no = models.IntegerField(null=False, blank=False)
+    registration_no = models.CharField(null=True, blank=True)
     registration_type_id = models.CharField(null=True, blank=True)
     status_id = models.CharField(null=True, blank=True)
     first_name = models.CharField(null=True, blank=True)
@@ -46,3 +60,4 @@ class ConsumerRegistration(models.Model):
 
     def __unicode__(self):
         return self.registration_no
+# Create Consumer Registration table end.

@@ -2,10 +2,10 @@
 # module: Consumer Care & Ops | sub-module - Consumer, Metering & Billing
 #table type: lookup
 #table name: 2.12.44 Portion  (Local)
-#table description: It is lookup tables to be used in various tables.
+#table description: It portion and ID of various portion to be used by Operator or Utility
 # #frequency of data changes: low
 #sample table data:
-#reference tables:2.3.1. Consumer Master
+#reference tables: 2.3.1. Consumer Master
 #auther: Gauri
 #creation date: 21/4/2020
 
