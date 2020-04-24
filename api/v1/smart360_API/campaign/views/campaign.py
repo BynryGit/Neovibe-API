@@ -4,14 +4,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
-     check_authorization, get_user,get_filtered_campaign
+     check_authorization, get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
+    save_advertisement_details
 
 from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
 from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
+from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string,get_category_by_tenant_id_string
+from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id_string,get_sub_category_by_tenant_id_string
+from api.v1.smart360_API.lookup.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
+from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_tenant_id_string,get_camp_type_by_id_string
+from api.v1.smart360_API.lookup.models.campaign_status import get_cam_status_by_tenant_id_string
+from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
+from api.v1.smart360_API.lookup.models.sub_area import get_sub_area_by_id_string
+
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION
-from api.v1.smart360_API.lookup.models.privilege import Privilege
-from api.v1.smart360_API.lookup.models.sub_module import SubModule
 from api.v1.smart360_API.campaign.models.campaign import Campaign
 
 # API Header
@@ -20,7 +27,7 @@ from api.v1.smart360_API.campaign.models.campaign import Campaign
 # Package: Basic
 # Modules: S&M
 # Sub Module: Campaign
-# Interaction: List Campaign
+# Interaction: Campaign List
 # Usage: API will fetch required data for Campaign list
 # Tables used: 2.3.6 Campaign Master
 # Auther: Priyanka Kachare
@@ -45,15 +52,24 @@ class CampaignListApiView(APIView):
 
                     # Code for filtering campaign start
                     campaigns = get_filtered_campaign(user, request)
+                    # Code for filtering campaign end
+
+                    # Code for lookups start
+                    statuses = Status.objects.all()
+                    campaigns_type = get_camp_type_by_tenant_id_string(user.tenant.id_string)
+                    category = get_category_by_tenant_id_string(user.tenant.id_string)
+                    sub_category = get_sub_category_by_tenant_id_string(user.tenant.id_string)
+                    frequency = get_frequency_by_tenant_id_string(user.tenant.id_string)
+                    # Code for lookups end
 
                     # Code for sending campaigns in response
                     for campaign in campaigns:
                         campaign_list.append({
-                            'cam_type': CampaignType.objects.get(id_string=campaign.type_id).campaign_type,
-                            'status' : Status.objects.get(id_string = campaign.status_id).status_name,
-                            'category': Category.objects.get(id_string=campaign.category_id).category_name,
-                            'sub_category': SubCategory.objects.get(id_string=campaign.sub_category_id).sub_category_name,
-                            'frequency':Frequency.objects.get(id_string=campaign.frequency_id).frequency_name,
+                            'cam_type': campaigns_type.type,
+                            'category': category.category_name,
+                            'sub_category': sub_category.sub_category_name,
+                            'frequency':frequency.frequency_name,
+                            'status': statuses.objects.get(campaign.status_id).status_name,
                         })
                     return Response({
                          STATE: SUCCESS,
@@ -109,16 +125,25 @@ class AddCampaignApi(APIView):
                 if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
 
+                    # Code for lookups start
+                    status = get_cam_status_by_tenant_id_string(request.data['camp_status'])
+                    campaigns_type = get_camp_type_by_id_string(request.data['campaigns_type'])
+                    category = get_consumer_category_by_id_string(request.data['consumer_category'])
+                    sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
+                    frequency = get_frequency_by_id_string(request.data['frequency'])
+                    area = get_area_by_id_string(request.data['area'])
+                    sub_area = get_sub_area_by_id_string(request.data['sub_area'])
+                    # Code for lookups end
 
                     # Code for add campaign start
-                    # first check values are present or not
-                    if request.data['campaign_name'] and request.data['campaign_type'] and request.data['area'] and\
-                       request.data['sub_area'] and request.data['start_date'] and request.data['end_date'] and request.data['description'] and\
-                       request.data['cam_gr_id_string'] and request.data['category_id_string'] and request.data['sub_cat_id_string']:
+
+                    # Request data verification start
+                    if is_data_verified(request, user):
+                    # Request data verification end
 
                         # check Campaign is Already Exists or not
                         if Campaign.objects.get(area=request.data['area'],sub_area=request.data['sub_area'],
-                                                      start_date=request.data['start_date'],end_date=request.data['end_date']):
+                                                start_date=request.data['start_date'],end_date=request.data['end_date']):
 
                             campaign_data = {'campaign_name':request.data['campaign_name'],'area':request.data['area'],
                                              'sub_area':request.data['sub_area'],'start_date':request.data['start_date'],'end_date':request.data['end_date']}
@@ -130,21 +155,25 @@ class AddCampaignApi(APIView):
                         else:
                             # save campaign details
                             campaign_details = Campaign(
-                                tenant=TenantMaster.objects.get(id=request.data['tenant_id']), #TODO:  Wrapper
-                                utility=UtilityMaster.objects.get(id=request.data['utility_id']),
+                                tenant=TenantMaster.objects.get(id_string=request.data['tenant_id_string']), #TODO:  Wrapper
+                                utility=UtilityMaster.objects.get(id_string=request.data['utility_id_str']),
                                 name=request.data['campaign_name'],
-                                cam_type_id=CampaignType.objects.get(id_string=request.data['cam_type_id_string']).campaign_type,
+                                cam_type_id=campaigns_type.id,
                                 start_date=request.data['start_date'],
                                 end_date=request.data['end_date'],
                                 description=request.data['description'],
-                                frequency_id=Frequency.objects.get(id_string=request.data['frequency_id']).frequency_name,
-                                category_id=Category.objects.get(id_string=request.data['category_id_string']).category_name,
-                                sub_category_id=SubCategory.objects.get(id_string=request.data['sub_cat_id_string']).sub_category_name,
-                                area=areas.objects.get(id_string=request.data['area_id_string']).area_name,
-                                sub_area=sub_areas.objects.get(id_string=request.data['subarea_id_string']).sub_area_name,
-                                status_id=Status.objects.get(id_string = request.data['status_id']).status_name,
+                                frequency_id=frequency.id,
+                                category_id=category.id,
+                                sub_category_id=sub_category.id,
+                                area=area.id,
+                                sub_area=sub_area.id,
+                                status_id=status.id
                             )
                             campaign_details.save()
+
+                            # Request advertisement verification start
+                            if is_advertisement_verified(request,user):
+                                save_advertisement_details(request, campaign_details.id_string)
 
                             return Response({
                                 STATE: SUCCESS,
@@ -174,14 +203,3 @@ class AddCampaignApi(APIView):
 
 
 
-# API Header
-# API end Point: api/v1/campaign
-# API verb: POST
-# Package: Basic
-# Modules: S&M
-# Sub Module: Campaign
-# Interaction: Add Campaign
-# Usage: API for Add Campaign
-# Tables used: 2.3.6 Campaign Master
-# Auther: Priyanka Kachare
-# Created on: 22/04/2020

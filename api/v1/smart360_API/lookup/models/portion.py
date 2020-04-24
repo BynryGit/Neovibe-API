@@ -25,11 +25,11 @@ class Portion(models.Model):
     utility = models.ForeignKey(UtilityMaster,null=False, blank=False)  # Table name:Done
     portion_name = models.CharField(null=False, blank=False)#TODO: Name: Done
     city_id = models.CharField(null=False, blank=False) #TODO: remove foreignkey :Done
-    created_by = models.CharField(null=False, blank=False) #TODO: remove foreignkey : Done
-    updated_by = models.CharField(null=False, blank=False) #TODO: remove foreignkey : Done
-    created_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTime(null=True, blank=True, default=datetime.now())
-    is_active = models.Boolean(default=False)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
+    created_date = models.DateField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
 
     def __str__(self):

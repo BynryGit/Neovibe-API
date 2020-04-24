@@ -1,11 +1,12 @@
 # table header
+# module: S&M | sub-module - Campaign
 # table type : lookup (Local)
 # table name : 2.12.39 Campaign Status
-# table description : A lookup table for campaign status for given campaign.
+# table description : A lookup table for status of given campaign.
 # frequency of data changes : Low
 # sample tale data : "created", "assigned", "started","completed","hold","cancel"
 # reference tables : 2.3.6 Campaign Master Table
-# author : Saloni
+# author : Saloni Monde
 # created on : 21/04/2020
 
 # change history
@@ -25,13 +26,22 @@ class CampaignStatus(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     status = models.CharField(max_length=200, blank=False, null=False)
-    created_by = models.CharField(blank=False, null=False)
-    updated_by = models.CharField(blank=False, null=False)
-    created_date = models.DateField(default=datetime.now)
-    updated_date = models.DateField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
+    created_date = models.DateField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+
+    def __str__(self):
+        return self.status
 
     def __unicode__(self):
         return self.status
 
 # Create Campaign Status table end.
+
+def get_cam_status_by_tenant_id_string(tenant_id_string):
+    return CampaignStatus.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_cam_status_by_id_string(id_string):
+    return CampaignStatus.objects.get(id_string = id_string)

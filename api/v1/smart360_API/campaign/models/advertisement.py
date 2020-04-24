@@ -3,7 +3,7 @@
 # table name : 2.3.6 advertisements master
 # table description : A master table to store advertisements in given campaign
 # frequency of data changes : high
-# sample tale data : campaign = 'Smart360", Ads1 = "Smart360-Awareness-Gas" , Ads1 = "Smart360-Awareness-Power"
+# sample tale data : campaign = 'Smart360", Ads1 = "Smart360-Awareness-Gas" , Ads2 = "Smart360-Awareness-Power"
 # author : Priyanka Kachare
 # created on : 21/04/2020
 
@@ -35,11 +35,11 @@ class Advertisements(models.Model):
     area_id = models.IntegerField(null=True, blank=True)
     sub_area_id = models.IntegerField(null=True, blank=True)
     status_id = models.IntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.utcnow())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.utcnow())
-    created_by = models.ForeignKey(User, null=False, blank=False)
-    updated_by = models.ForeignKey(User, null=False, blank=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
+    created_by = models.IntegerField(null=True, blank=True)
+    updated_by = models.IntegerField(null=True, blank=True)
+    created_date = models.DateField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
