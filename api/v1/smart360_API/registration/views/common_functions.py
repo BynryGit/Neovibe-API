@@ -63,8 +63,8 @@ def get_filtered_registrations(request, user):
 
         return registrations, total_pages, page_no
 
-
-def is_data_verified(request):
+# only check only mandatory fields
+def is_data_verified(request): #todo - Black, Null, empty string - ready to use method by Django
     if request.data['first_name'] == '' and request.data['middle_name'] == '' and \
         request.data['last_name'] == '' and request.data['utility'] == '' and \
         request.data['mobile_number'] == '' and request.data['email'] == '' and \
@@ -119,7 +119,7 @@ def save_basic_registration_details(request, user):
             created_by = user.id,
             created_date = datetime.now()
         ).save()
-        registration.registration_no = registration.id
+        registration.registration_no = registration.id #todo: Alpha Numeric - format - BGCLDDMMYYnnnnnnnnnn / Number generation logic / DB column Unique
         registration.save()
         return registration
     else:
