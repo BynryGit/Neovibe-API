@@ -2,7 +2,7 @@
 # Module: Consumer Care | Sub-Module : Billing
 # Table Type : Master (Global)
 # Table Name : 2.3.13. Consumer - Payments
-# Description : It will store the all consumer payment details
+# Description : It will store the all consumer1 payment details
 # Frequency of data changes : High
 # Sample table : "Payment Details"
 # Reference Table : None
