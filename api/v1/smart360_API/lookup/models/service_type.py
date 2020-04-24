@@ -34,6 +34,14 @@ class ServiceType(models.Model):
         return self.name
 
     def __unicode__(self):
+<<<<<<< HEAD
         return self.name
 
 # Create Service Type table end
+=======
+        return self.service_type
+
+def get_service_type_by_id_string(id_string):
+    return ServiceType.objects.get(id_string = id_string)
+# End the Code
+>>>>>>> a2d5c7e1cef5f059ef038fd4cea4a92035bc8c68

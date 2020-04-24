@@ -4,7 +4,7 @@
 # table name : 2.12.32 Survey Type
 # table description : A lookup table for types of surveys.
 # frequency of data changes : Low
-# sample tale data : "consumer1", "location"
+# sample tale data : "consumer", "location"
 # reference tables : 2.3.1 Survey master Table
 # author : Saloni Monde
 # created on : 21/04/2020

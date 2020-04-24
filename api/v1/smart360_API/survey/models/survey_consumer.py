@@ -2,7 +2,7 @@
 # Module : S&M | Sub-Module : Survey
 # table type : Transaction (Local)
 # table name : 2.3.4 Survey Consumer Table
-# table description : A transaction table to store consumer1 details for given consumer1 survey
+# table description : A transaction table to store consumer details for given consumer survey
 # frequency of data changes : high
 # sample tale data : "Meter No", "Address", "Phone No", "Email"
 # Reference Table :

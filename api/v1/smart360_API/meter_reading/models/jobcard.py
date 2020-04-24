@@ -2,7 +2,7 @@
 # Module: Consumer Ops | Sub-Module : Meter Reading
 # Table Type : Master (Global)
 # Table Name : 2.3.8.3 Jobcard
-# Description : Assigned and De-assigned record are created in this table consumer1 wise and month wise.
+# Description : Assigned and De-assigned record are created in this table consumer wise and month wise.
 # Frequency of data changes : High
 # Sample table : "Consumer Details monthly"
 # Reference Table : None

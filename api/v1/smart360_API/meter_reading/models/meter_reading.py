@@ -4,7 +4,7 @@
 # Table Name : 2.3.8.4 Meter Reading
 # Description : When meter reader takes the reading and upload on server, entry will be created in meter reading table.
 # Frequency of data changes : High
-# Sample table : "Meter reading records consumer1 wise"
+# Sample table : "Meter reading records consumer wise"
 # Reference Table : None
 # Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020

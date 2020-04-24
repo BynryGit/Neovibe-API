@@ -2,7 +2,7 @@
 # module: Consumer care & Ops | sub-module - Consumer, Metering, Billing
 # Table Type : Lookup (local)
 # Table Name : 2.12.23 Bill Cycle
-# Description : Bill Cycle and ID for consumer1 billing to be used by Operator or Utility.
+# Description : Bill Cycle and ID for consumer billing to be used by Operator or Utility.
 # Frequency of data changes : Medium
 # Sample Table Data : 15,16,17,18, 21,22,23,24,00
 # Reference Table : 2.3.1. Consumer Master, 2.3.9 Invoice/Bill, 2.3.8.3 Jobcard, 2.3.8.4 Meter Reading,
