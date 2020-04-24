@@ -1,4 +1,4 @@
-# table Header:
+# table Header
 # module: Purchase | sub-module - Store
 # table type: lookup (local)
 # table name: 2.12.90 Store Type

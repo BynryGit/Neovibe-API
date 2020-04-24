@@ -1,5 +1,5 @@
 # Table Header
-# Module: Consumerops | Consumer Care
+# Module: Consumer Ops | Sub-Module : Meter Reading
 # Table Type : Master (Global)
 # Table Name : 2.4.12. Smart Meter Data
 # Description : It is Smart Meter Data table. It will contain the list of Smart Metering data details.
@@ -9,24 +9,27 @@
 # Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
 
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
-import datetime
-import uuid
+import datetime  # importing package for datetime
+import uuid  # importing package for GUID
 
-from django.db import models
+from django.db import models  # importing package for database
 
-# Create Smart Meter Data Table Start.
+
+# Create Smart Meter Data Table Start
 
 class SmartMeterData(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    consumer_id = models.IntegerField(null=True, blank=True)
-    meter_id = models.IntegerField(null=True, blank=True)
-    meter_reading = models.CharField(null=True, blank=True)
+    consumer = models.IntegerField(null=True, blank=True)
+    meter = models.IntegerField(null=True, blank=True)
+    meter_reading = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.IntegerField(null=True, blank=True)
-    router_id = models.IntegerField(null=True, blank=True)
-    data_vendor_no = models.CharField(null=True, blank=True)
+    route = models.IntegerField(null=True, blank=True)
+    data_vendor_no = models.CharField(max_length=200, null=True, blank=True)
     reading_date = models.DateField(null=True, blank=True, default=datetime.now())
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -34,4 +37,10 @@ class SmartMeterData(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
-# Create Smart Meter Data Table End.
+    def __str__(self):
+        return self.consumer
+
+    def __unicode__(self):
+        return self.consumer
+
+# Create Smart Meter Data Table end

@@ -1,5 +1,5 @@
 # Table Header
-# Module: Consumerops | Consumer Care
+# Module: Consumer Care & Ops | Sub-Module : Meter Reading
 # Table Type : Master (Global)
 # Table Name : 2.3.8.6 Reading Additional parameters
 # Description :Additional information will be saved in this table reading wise.
@@ -9,30 +9,33 @@
 # Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
 
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
-import datetime
-import uuid
+import datetime  # importing package for datetime
+import uuid  # importing package for GUID
 
-from django.db import models
+from django.db import models  # importing package for database
 
-# Create Meter Reading Additional Parameter Table Start.
+
+# Create Reading Additional Parameters Table Start
 
 class ReadingAdditionalParameters(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    consumer_no = models.CharField(null=True, blank=True)
-    meter_reading_id = models.IntegerField(null=True, blank=True)
-    lat = models.CharField(null=True, blank=True)
-    long = models.CharField(null=True, blank=True)
-    new_sequence = models.CharField(null=True, blank=True)
-    prev_sequence = models.CharField(null=True, blank=True)
-    location_guidance = models.CharField(null=True, blank=True)
-    time_taken = models.CharField(null=True, blank=True)
-    reading_type_id = models.IntegerField(null=True, blank=True)
-    reading_type_status_id = models.IntegerField(null=True, blank=True)
-    extra_parameter_id = models.IntegerField(null=True, blank=True)
-    extra_parameter_remark = models.CharField(null=True, blank=True)
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    meter_reading = models.IntegerField(null=True, blank=True)
+    lat = models.CharField(max_length=200, null=True, blank=True)
+    long = models.CharField(max_length=200, null=True, blank=True)
+    new_sequence = models.CharField(max_length=500, null=True, blank=True)
+    prev_sequence = models.CharField(max_length=500, null=True, blank=True)
+    location_guidance = models.CharField(max_length=500, null=True, blank=True)
+    time_taken = models.CharField(max_length=200, null=True, blank=True)
+    reading_type = models.IntegerField(null=True, blank=True)
+    reading_type_status = models.IntegerField(null=True, blank=True)
+    extra_parameter = models.IntegerField(null=True, blank=True)
+    extra_parameter_remark = models.CharField(max_length=500, null=True, blank=True)
     parameter_flag_type = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -40,4 +43,10 @@ class ReadingAdditionalParameters(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
-# Create Reading Additional parameter Table End.
+    def __str__(self):
+        return self.consumer_no
+
+    def __unicode__(self):
+        return self.consumer_no
+
+# Create Reading Additional Parameters Table end

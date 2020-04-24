@@ -42,6 +42,13 @@ def get_filtered_registrations(request, user):
     if request.data['status']:
         registrations = registrations.objects.filter(status_id=
                                                      request.data['status'])
+    if request.data['search_text'] == '':
+        pass
+    else:
+        registrations = registrations.filter(
+            Q(registration_no__icontains=request.data['search_text']) |
+            Q(first_name__icontains=request.data['search_text']))
+
     if request.data['page_number'] == '':
         paginator = Paginator(registrations,int(request.data['page_size']))
         total_pages = str(paginator.num_pages)
@@ -51,11 +58,9 @@ def get_filtered_registrations(request, user):
     else:
         paginator = Paginator(registrations, int(request.data['page_size']))
         total_pages = str(paginator.num_pages)
-        page_no = request.data['page_no']
+        page_no = request.data['page_number']
         registrations = paginator.page(int(page_no))
-        registrations = registrations.filter(
-                        Q(registration_no__icontains=request.data['search_text']) |
-                        Q(first_name__icontains=request.data['search_text']))
+
         return registrations, total_pages, page_no
 
 

@@ -5,13 +5,17 @@
 # Frequency of data changes : Low
 # Sample Table Data :
 # Reference Table : 2.6.1 Service Request
-# Author : Jayshree
+# Author : Jayshree Kumbhare
 # Creation Date : 22/04/2020
+
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
 
 from django.db import models  # importing package for database
+
 
 # Create Skills table start
 
