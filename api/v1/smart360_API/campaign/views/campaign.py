@@ -316,7 +316,7 @@ class CampaignApiView(APIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-            
+
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,

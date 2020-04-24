@@ -89,24 +89,25 @@ def save_campaign_details(request, user):
             return campaign_details
         else:
             campaign_details = get_campaign_by_id_string(request.data['camp_id_string'])
-            campaign_details.tenant = user.tenant,
-            campaign_details.utility = utility,
-            campaign_details.name = request.data['campaign_name'],
-            campaign_details.cam_type_id = campaigns_type.id,
-            campaign_details.start_date = request.data['start_date'],
-            campaign_details.end_date = request.data['end_date'],
-            campaign_details.description = request.data['description'],
-            campaign_details.frequency_id = frequency.id,
-            campaign_details.category_id = category.id,
-            campaign_details.sub_category_id = sub_category.id,
-            campaign_details.area = area.id,
-            campaign_details.sub_area = sub_area.id,
+            campaign_details.tenant = user.tenant
+            campaign_details.utility = utility
+            campaign_details.name = request.data['campaign_name']
+            campaign_details.cam_type_id = campaigns_type.id
+            campaign_details.start_date = request.data['start_date']
+            campaign_details.end_date = request.data['end_date']
+            campaign_details.description = request.data['description']
+            campaign_details.frequency_id = frequency.id
+            campaign_details.category_id = category.id
+            campaign_details.sub_category_id = sub_category.id
+            campaign_details.area = area.id
+            campaign_details.sub_area = sub_area.id
             campaign_details.status_id = status.id
             campaign_details.save()
             return campaign_details
     except Exception as e:
-        return e
-    # save the campign details end
+        campaign_details = ''
+        return campaign_details
+# save the campign details end
 
 
 # save advertisement details start
@@ -127,6 +128,7 @@ def save_advertisement_details(request,user,id_string):
                        'start_date': '1 jan 2020', 'end_date': '30 mar 2020','budget_amount':4000,'actual_amount':7000,
                         'description':'This campaign for Awareness of Gas','campaign_id_string':'uheui',
                         'frequency_id_string':'fbdhkfbk'}]
+
         advertise_list = []
         for advertise in advertises:
              advertise_obj = Advertisements(
@@ -147,7 +149,8 @@ def save_advertisement_details(request,user,id_string):
              advertise_list.append(advertise_obj)
         return advertise_list
     except Exception as e:
-        return e
+        advertise_list = ''
+        return advertise_list
 # save advertisement details end
 
 
