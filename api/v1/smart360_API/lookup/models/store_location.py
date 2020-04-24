@@ -6,11 +6,11 @@
 # frequency of data changes: Medium
 # sample table data: Shivaji Nagar, Kothrud, Aundh
 # reference tables: 2.7.10 Store Master
-# auther: Gauri Deshmukh
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
-#change history
-#<ddmmyyyy>-<changes>-<auther>
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
@@ -18,7 +18,7 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-#Create StoreLocation table start
+# Create StoreLocation table start
 class StoreLocation(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
@@ -41,4 +41,4 @@ class StoreLocation(models.Model):
     def __unicode__(self):
         return self.store_name
 
- # Create StoreLocation table end
+# Create StoreLocation table end

@@ -1,50 +1,53 @@
 # Table Header
-# Module: Consumerops | Consumer Care
+# Module: Consumer Care & Ops | Sub-Module : Meter Reading
 # Table Type : Master (Global)
 # Table Name : 2.3.8.2 Temp Consumer Master
 # Description : Data will be store month wise,whose reading should be taken for the specific month.
 # Frequency of data changes : High
 # Sample table :
 # Reference Table : None
-# Auther : Jayshree Kumbhare
+# Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
 
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
-import datetime
-import uuid
+import datetime  # importing package for datetime
+import uuid  # importing package for GUID
 
-from django.db import models
+from django.db import models  # importing package for database
 
-# Create Temp Consumer Master Start.
+
+# Create Temp Consumer Master Table Start
 
 class TempConsumerMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    consumer_no = models.CharField(null=True, blank=True)
-    first_name = models.CharField(null=True, blank=True)
-    middle_name = models.CharField(null=True, blank=True)
-    last_name = models.CharField(null=True, blank=True)
-    email_id = models.CharField(null=True, blank=True)
-    phone_no1 = models.IntegerField(null=True, blank=True)
-    phone_no2 = models.IntegerField(null=True, blank=True)
-    address_line_1 = models.CharField(null=True, blank=True)
-    street = models.CharField(null=True, blank=True)
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    middle_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
+    email_id = models.CharField(max_length=200, null=True, blank=True)
+    phone_no1 = models.IntegerField(max_length=200, null=True, blank=True)
+    phone_no2 = models.IntegerField(max_length=200, null=True, blank=True)
+    address_line_1 = models.CharField(max_length=500, null=True, blank=True)
+    street = models.CharField(max_length=200, null=True, blank=True)
     zipcode = models.IntegerField(null=True, blank=True)
-    country_id = models.IntegerField(null=True, blank=True)
-    state_id = models.IntegerField(null=True, blank=True)
-    city_id = models.IntegerField(null=True, blank=True)
-    meter_reading_id = models.IntegerField(null=True, blank=True)
-    jobcard_id = models.IntegerField(null=True, blank=True)
-    bill_cycle_id = models.IntegerField(null=True, blank=True)
-    mru_id = models.IntegerField(null=True, blank=True)
-    meter_status_id = models.IntegerField(null=True, blank=True)
-    reader_status_id = models.IntegerField(null=True, blank=True)
-    reading_img_id = models.IntegerField(null=True, blank=True)
-    month = models.CharField(null=True, blank=True)
-    current_reading = models.CharField(null=True, blank=True)
+    country = models.IntegerField(null=True, blank=True)
+    state = models.IntegerField(null=True, blank=True)
+    city = models.IntegerField(null=True, blank=True)
+    meter_reading = models.IntegerField(null=True, blank=True)
+    jobcard = models.IntegerField(null=True, blank=True)
+    bill_cycle = models.IntegerField(null=True, blank=True)
+    mru = models.IntegerField(null=True, blank=True)
+    meter_status = models.IntegerField(null=True, blank=True)
+    reader_status = models.IntegerField(null=True, blank=True)
+    reading_img = models.IntegerField(null=True, blank=True)
+    month = models.CharField(max_length=200, null=True, blank=True)
+    current_reading = models.CharField(max_length=200, null=True, blank=True)
     reading_date = models.DateField(null=True, blank=True, default=datetime.now())
-    reading_status_id = models.IntegerField(null=True, blank=True)
+    reading_status = models.IntegerField(null=True, blank=True)
     suspicious_activity = models.BooleanField(default=False)
     is_qr_tempered = models.BooleanField(default=False)
     reading_taken_by = models.IntegerField(null=True, blank=True)
@@ -58,4 +61,9 @@ class TempConsumerMaster(models.Model):
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
-# Create Temp Consumer Master End.
+    def __str__(self):
+        return self.consumer_no
+
+    def __unicode__(self):
+        return self.consumer_no
+# Create Temp Consumer Master Table end

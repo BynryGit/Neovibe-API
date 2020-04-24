@@ -8,10 +8,8 @@
 # reference tables :
 # author : Saloni Monde
 # created on : 22/04/2020
-
 # change history
 # <ddmmyyyy><changes><author>
-
 
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
