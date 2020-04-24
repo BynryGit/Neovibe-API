@@ -4,7 +4,7 @@
 # table name : 2.12.37 Objective (Campaign)
 # table description : A lookup table for for objectives for given campaign.
 # frequency of data changes : Medium
-# sample tale data : "brand awareness", "increasing consumer capacity"
+# sample tale data : "brand awareness", "increasing consumer1 capacity"
 # reference tables : 2.3.6 Campaign Master Table
 # author : Saloni Monde
 # created on : 21/04/2020

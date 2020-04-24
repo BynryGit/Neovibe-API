@@ -1,23 +1,29 @@
-# Table Header : Service Type
+# Table Header
 # Table Type : Lookup (Local)
 # Table Name : 2.12.73 Service Type
 # Description : Service type and ID of Service type to be used by Operator or Utility
 # Frequency of data changes : Low
-# Sample Table Data : Installation, Convertion, Repair, Maintenance, Outage, Emergency, Meter Reading.
+# Sample Table Data : Installation, Conversion, Repair, Maintenance, Outage, Emergency, Meter Reading.
 # Reference Table : 2.6.2 SOP Master
-# Author : Jayshree
+# Author : Jayshree Kumbhare
 # Creation Date : 22/04/2020
 
-import datetime
-import uuid
-from django.db import models
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
-# Start the Code
+import datetime  # importing package for datetime
+import uuid  # importing package for GUID
+
+from django.db import models  # importing package for database
+
+
+# Create Service Type table start
+
 class ServiceType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    service_type = models.CharField(max_length=30, blank=False, null=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.IntegerField(null=False, blank=False)
     updated_by = models.IntegerField(null=False, blank=False)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -25,8 +31,9 @@ class ServiceType(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.service_type
+        return self.name
 
     def __unicode__(self):
-        return self.service_type
-# End the Code
+        return self.name
+
+# Create Service Type table end

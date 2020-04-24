@@ -4,7 +4,7 @@
 # table name : 2.3.1 Survey master Table
 # table description : A Master table that store survey details
 # frequency of data changes : high
-# sample tale data : "Domestic consumer survey", "New Location Survey"
+# sample tale data : "Domestic consumer1 survey", "New Location Survey"
 # Reference Table : 2.3.2 Survey Assignment Table, 2.3.3 Survey Transaction Table , 2.3.4 Survey Consumer Table
 # Author : Saloni Monde
 # created on : 23/04/2020

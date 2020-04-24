@@ -4,7 +4,7 @@
 # table name : 2.12.31 Objective (Survey)
 # table description : A lookup table for objectives for given Survey.
 # frequency of data changes : Medium
-# sample tale data : "Update consumer data"
+# sample tale data : "Update consumer1 data"
 # reference tables : 2.3.1 Survey master Table
 # author : Saloni Monde
 # created on : 21/04/2020

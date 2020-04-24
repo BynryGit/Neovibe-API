@@ -1,11 +1,11 @@
-# table Header
-# module: Consumer Care & Ops | sub-module - Consumer
-# table type: lookup (Local)
-# table name: 2.12.49 Complaint Status
-# table description: A lookup table for complaint status to be used on consumer module
+# table header
+# module: Consumer Care & Ops | sub-module - Consumer, services
+# table type: lookup
+# table name: 2.12.48 Service Status (Local)
+# table description: Lookup table for consumer1 services in Consumer care & ops
 # frequency of data changes: low
-# sample table data: "Received","Inprogress","Complete","Rejected","Pending","Hold"
-# reference tables: 2.3.5. Consumer - complaints
+# sample table data: "Received","Assigned", "Inprogress" "Completed","Rejected","Hold"
+# reference tables: 2.2.1 Utility Services Master #todo: table name to be checked
 # Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
@@ -18,13 +18,12 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-#Create ComplaintStatus table start
-
-class ComplaintStatus(models.Model):
+#Create ServiceStatus table start
+class ServiceStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    status = models.CharField(null=True, blank=True)
+    name = models.CharField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -32,9 +31,9 @@ class ComplaintStatus(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
- # Create ComplaintStatus table end
+ # Create ServiceStatus table end
