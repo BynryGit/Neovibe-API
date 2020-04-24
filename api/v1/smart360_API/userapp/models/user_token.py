@@ -1,13 +1,13 @@
 # table header
-# module: S&M | sub-module - Campaign Group
-# table type : lookup (Local)
-# table name : 2.12.36 Campaign Group Status
-# table description : A lookup table of status for given campaign group.
+# module: All  | sub-module - All
+# table type : Master
+# table name : 2.5.1. Role Master
+# table description : All users unique tokens will be saved in this table along with user_id
 # frequency of data changes : Low
-# sample tale data : "started" , "InProgress", "completed"
-# reference tables : 2.12.40 Campaign Group
+# sample tale data :
+# reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
-# created on : 21/04/2020
+# created on : 24/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,13 +19,17 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Campaign Group status table start.
+# Create User Token table start
 
-class CampaignGroupStatus(models.Model):
+class UserToken(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    status = models.CharField(max_length=200, blank=False, null=False)
+    token = models.CharField(max_lengt=200, null=True, blank=True)
+    form_factor = models.IntegerField(null=False, blank=False)
+    user = models.IntegerField(null=False, blank=False)
+    ip_address = models.CharField(max_length=200,null=False, blank=False)
+    status = models.IntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -33,9 +37,9 @@ class CampaignGroupStatus(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.token
 
     def __unicode__(self):
-        return self.status
+        return self.token
 
-# Create Campaign Group status table end.
+# Create User Token table end

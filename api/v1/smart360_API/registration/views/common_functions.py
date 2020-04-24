@@ -9,7 +9,7 @@ from api.v1.smart360_API.commonapp.models.payment_type import get_payment_type_b
 from api.v1.smart360_API.commonapp.models.state import get_state_by_id_string
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
 from api.v1.smart360_API.lookup.models.service_type import get_service_type_by_id_string
-from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id_string
+from api.v1.smart360_API.consumer.models.source_type import get_source_type_by_id_string
 from api.v1.smart360_API.registration.models.registration_type import get_registration_type_by_id_string
 from api.v1.smart360_API.registration.models.registrations import Registration, get_registration_by_id_string
 from django.core.paginator import Paginator

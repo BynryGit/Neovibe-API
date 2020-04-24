@@ -9,14 +9,14 @@ from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consu
 from api.v1.smart360_API.commonapp.models.country import get_country_by_id
 from api.v1.smart360_API.commonapp.models.state import get_state_by_id
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string, get_sub_area_by_id
-from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id
+from api.v1.smart360_API.consumer.models.source_type import get_source_type_by_id
 from api.v1.smart360_API.registration.models.registration_type import get_registration_type_by_id
 from api.v1.smart360_API.registration.models.registrations import get_registration_by_id_string
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
     save_basic_registration_details, save_payment_details
 from api.v1.smart360_API.commonapp.common_functions import get_payload, get_user, is_authorized, is_token_valid
-from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
-from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
+from api.v1.smart360_API.userapp.models.privilege import get_privilege_by_id
+from api.v1.smart360_API.commonapp.models.sub_module import get_sub_module_by_id
 from api.v1.smart360_API.smart360_API.messages import STATE, SUCCESS, ERROR, EXCEPTION, DATA
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
