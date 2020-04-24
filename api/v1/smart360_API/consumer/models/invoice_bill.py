@@ -2,7 +2,7 @@
 # Module: Consumer Care & Ops | Sub-Module : Billing
 # Table Type : Master (Global)
 # Table Name : 2.4.9 Invoice/Bill
-# Description : It is billing details table. it contains all record related to billing for each consumer month wise.
+# Description : It is billing details table. it contains all record related to billing for each consumer1 month wise.
 # Frequency of data changes : High
 # Sample table : "Bill 1", "Bill 2"
 # Reference Table : None

@@ -3,7 +3,7 @@
 # Module: Consumer Care | sub-module : Complaints
 # Table Type : Master (Global)
 # Table Name : 2.4.5. Consumer - Complaints
-# Description : it will contain the list of complaint request raised by the consumer with its status, request etc.
+# Description : it will contain the list of complaint request raised by the consumer1 with its status, request etc.
 # Frequency of data changes : High
 # Sample table :
 # Reference Table : None

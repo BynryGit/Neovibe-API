@@ -2,7 +2,7 @@
 # module: Consumer Care & Ops | sub-module - Consumer, services
 # table type: lookup
 # table name: 2.12.48 Service Status (Local)
-# table description: Lookup table for consumer services in Consumer care & ops
+# table description: Lookup table for consumer1 services in Consumer care & ops
 # frequency of data changes: low
 # sample table data: "Received","Assigned", "Inprogress" "Completed","Rejected","Hold"
 # reference tables: 2.2.1 Utility Services Master #todo: table name to be checked
