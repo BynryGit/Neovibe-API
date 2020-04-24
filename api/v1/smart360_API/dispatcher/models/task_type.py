@@ -20,11 +20,6 @@ from django.db import models  # importing package for database
 
 # Create Task Type table start
 
-<<<<<<< HEAD
-# Create Task Type table start
-
-=======
->>>>>>> b941903123e03248e891298e98bfc30481b8e0c9
 class TaskType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
@@ -40,11 +35,6 @@ class TaskType(models.Model):
         return self.name
 
     def __unicode__(self):
-<<<<<<< HEAD
-        return self.task_type
-# Create Task Type table end.
-=======
         return self.name
 
 # Create Task Type table end
->>>>>>> b941903123e03248e891298e98bfc30481b8e0c9
