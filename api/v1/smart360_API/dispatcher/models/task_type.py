@@ -6,14 +6,15 @@
 # Frequency of data changes : Low
 # Sample Table Data : Image, Parameter, Material
 # Reference Table : 2.6.3 SOP Master Details
-# Author : Jayshree
+# Author : Jayshree Kumbhare
 # Creation Date : 22-04-2020
 
 import datetime
 import uuid
 from django.db import models
 
-# Start the Code
+# Create Task Type table start
+
 class TaskType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
@@ -30,4 +31,4 @@ class TaskType(models.Model):
 
     def __unicode__(self):
         return self.task_type
-# End The Code
+# Create Task Type table end.
