@@ -1,19 +1,19 @@
 from datetime import datetime
-
 from django.db.models import Q
-
 from api.v1.smart360_API.commonapp.models.area import get_area_by_id_string
 from api.v1.smart360_API.commonapp.models.city import get_city_by_id_string
 from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string
 from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from api.v1.smart360_API.commonapp.models.country import get_country_by_id_string
-from api.v1.smart360_API.registration.models.registration_type import get_registration_type_by_id_string
-from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id_string
+from api.v1.smart360_API.commonapp.models.payment_type import get_payment_type_by_id_string
 from api.v1.smart360_API.commonapp.models.state import get_state_by_id_string
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
-from api.v1.smart360_API.registration.models.registrations import Registration
+from api.v1.smart360_API.lookup.models.service_type import get_service_type_by_id_string
+from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id_string
+from api.v1.smart360_API.registration.models.registration_type import get_registration_type_by_id_string
+from api.v1.smart360_API.registration.models.registrations import Registration, get_registration_by_id_string
 from django.core.paginator import Paginator
-
+from api.v1.smart360_API.smart360_API.settings import INPUT_DATE_FORMAT
 
 
 def get_filtered_registrations(request, user):
@@ -73,54 +73,113 @@ def is_data_verified(request):
 
 
 def save_basic_registration_details(request, user):
-    utility = UtilityMaster.objects.get(id_string = request.data['utility']) # Don't have table
-    country = get_country_by_id_string(request.data['country'])
-    state = get_state_by_id_string(request.data['state'])
-    city = get_city_by_id_string(request.data['city'])
-    area = get_area_by_id_string(request.data['area'])
-    sub_area = get_sub_area_by_id_string(request.data['sub_area'])
-    scheme = Scheme.objects.get(id_string=request.data['scheme']) # Don't have table
-    ownership = Ownership.objects.get(id_string=request.data['ownership']) # Don't have table
-    consumer_category = get_consumer_category_by_id_string(request.data['consumer_category'])
-    sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
-    registration_type = get_registration_type_by_id_string(request.data['registration_type'])
-    source = get_source_type_by_id_string(request.data['source'])
+    if request.data['registration_id_string'] == '':
+        utility = UtilityMaster.objects.get(id_string = request.data['utility']) # Don't have table
+        country = get_country_by_id_string(request.data['country'])
+        state = get_state_by_id_string(request.data['state'])
+        city = get_city_by_id_string(request.data['city'])
+        area = get_area_by_id_string(request.data['area'])
+        sub_area = get_sub_area_by_id_string(request.data['sub_area'])
+        scheme = Scheme.objects.get(id_string=request.data['scheme']) # Don't have table
+        ownership = Ownership.objects.get(id_string=request.data['ownership']) # Don't have table
+        consumer_category = get_consumer_category_by_id_string(request.data['consumer_category'])
+        sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
+        registration_type = get_registration_type_by_id_string(request.data['registration_type'])
+        source = get_source_type_by_id_string(request.data['source'])
 
-    registration = Registration(
-        tenant = user.tenant,
-        utility = utility,
-        registration_type_id = registration_type.id,
-        first_name = request.data['first_name'],
-        middle_name = request.data['middle_name'],
-        last_name = request.data['last_name'],
-        email_id = request.data['email'],
-        phone_mobile = request.data['mobile_number'],
-        address_line_1 = request.data['address'],
-        street = request.data['street'],
-        zipcode = request.data['zipcode'],
-        country_id = country.id,
-        state_id = state.id,
-        city_id = city.id,
-        area_id = area.id,
-        sub_area_id = sub_area.id,
-        scheme_id = scheme.id,
-        ownership_id = ownership.id,
-        consumer_category_id = consumer_category.id,
-        sub_category_id = sub_category.id,
-        is_vip = True if request.data['is_vip'] == 'true' else False,
-        connectivity = True if request.data['connectivity'] == '1' else False,
-        source_id = source.id,
-        created_by = user.id,
-        created_date = datetime.now()
-    ).save()
-    registration.registration_no = registration.id
-    registration.save()
-    return registration
+        registration = Registration(
+            tenant = user.tenant,
+            utility = utility,
+            registration_type_id = registration_type.id,
+            first_name = request.data['first_name'],
+            middle_name = request.data['middle_name'],
+            last_name = request.data['last_name'],
+            email_id = request.data['email'],
+            phone_mobile = request.data['mobile_number'],
+            address_line_1 = request.data['address'],
+            street = request.data['street'],
+            zipcode = request.data['zipcode'],
+            country_id = country.id,
+            state_id = state.id,
+            city_id = city.id,
+            area_id = area.id,
+            sub_area_id = sub_area.id,
+            scheme_id = scheme.id,
+            ownership_id = ownership.id,
+            consumer_category_id = consumer_category.id,
+            sub_category_id = sub_category.id,
+            is_vip = True if request.data['is_vip'] == 'true' else False,
+            connectivity = True if request.data['connectivity'] == '1' else False,
+            source_id = source.id,
+            created_by = user.id,
+            created_date = datetime.now()
+        ).save()
+        registration.registration_no = registration.id
+        registration.save()
+        return registration
+    else:
+        utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
+        country = get_country_by_id_string(request.data['country'])
+        state = get_state_by_id_string(request.data['state'])
+        city = get_city_by_id_string(request.data['city'])
+        area = get_area_by_id_string(request.data['area'])
+        sub_area = get_sub_area_by_id_string(request.data['sub_area'])
+        scheme = Scheme.objects.get(id_string=request.data['scheme'])  # Don't have table
+        ownership = Ownership.objects.get(id_string=request.data['ownership'])  # Don't have table
+        consumer_category = get_consumer_category_by_id_string(request.data['consumer_category'])
+        sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
+        registration_type = get_registration_type_by_id_string(request.data['registration_type'])
+        source = get_source_type_by_id_string(request.data['source'])
+
+        registration = get_registration_by_id_string(request.data['registration_id_string'])
+        registration.utility = utility
+        registration.registration_type_id = registration_type.id
+        registration.first_name = request.data['first_name']
+        registration.middle_name = request.data['middle_name']
+        registration.last_name = request.data['last_name']
+        registration.email_id = request.data['email']
+        registration.phone_mobile = request.data['mobile_number']
+        registration.address_line_1 = request.data['address']
+        registration.street = request.data['street']
+        registration.zipcode = request.data['zipcode']
+        registration.country_id = country.id
+        registration.state_id = state.id
+        registration.city_id = city.id
+        registration.area_id = area.id
+        registration.sub_area_id = sub_area.id
+        registration.scheme_id = scheme.id
+        registration.ownership_id = ownership.id
+        registration.consumer_category_id = consumer_category.id
+        registration.sub_category_id = sub_category.id
+        registration.is_vip = True if request.data['is_vip'] == 'true' else False,
+        registration.connectivity = True if request.data['connectivity'] == '1' else False,
+        registration.source_id = source.id,
+        registration.updated_by_by = user.id,
+        registration.updated_date = datetime.now()
+        registration.save()
+        return registration
 
 
 def save_payment_details(request, user, registration):
     try:
-        pass
+        if request.data['payment_details'] == '':
+            return True
+        else:
+            for payment_detail in request.data['payment_details']:
+                service_type = get_service_type_by_id_string(payment_detail['service_type_id_string'])
+                payment_type = get_payment_type_by_id_string(payment_detail['payment_type_id_string'])
+                Payment( # TODO: Payment table is missing
+                    tenant = registration.tenant,
+                    utility = registration.utility,
+                    identification_id = registration.id,
+                    service_type_id = service_type.id,
+                    payment_type_id = payment_type.id,
+                    paid_amount = payment_detail['amount'],
+                    payment_date = datetime.strptime(payment_detail['payment_date'],INPUT_DATE_FORMAT),
+                    created_by = user.id,
+                    created_date = datetime.now()
+                ).save
+            return True
     except Exception as e:
-        pass
+        return False
 

@@ -2,16 +2,15 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from api.v1.smart360_API.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
 from api.v1.smart360_API.commonapp.models.city import get_city_by_id
+from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id
+from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id
 from api.v1.smart360_API.commonapp.models.country import get_country_by_id
-from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id
-from api.v1.smart360_API.lookup.models.consumer_sub_category import get_consumer_sub_category_by_id
-from api.v1.smart360_API.lookup.models.registration_type import get_registration_type_by_id
+from api.v1.smart360_API.commonapp.models.state import get_state_by_id
+from api.v1.smart360_API.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string, get_sub_area_by_id
 from api.v1.smart360_API.lookup.models.source_type import get_source_type_by_id
-from api.v1.smart360_API.lookup.models.state import get_state_by_id
-from api.v1.smart360_API.lookup.models.sub_area import get_sub_areas_by_tenant_id_string, get_sub_area_by_id
+from api.v1.smart360_API.registration.models.registration_type import get_registration_type_by_id
 from api.v1.smart360_API.registration.models.registrations import get_registration_by_id_string
 from api.v1.smart360_API.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
     save_basic_registration_details, save_payment_details
@@ -33,8 +32,6 @@ from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
-
-
 class RegistrationListApiView(APIView):
 
     def get(self, request, format=None):
@@ -276,3 +273,26 @@ class RegistrationApiView(APIView):
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class RegistrationStatusApiView(APIView):
+
+    def get(self, request, format=None):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def post(self, request, format=None):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def put(self, request, format=None):
+        try:
+            pass
+        except Exception as e:
+            pass
+
