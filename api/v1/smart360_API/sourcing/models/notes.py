@@ -1,13 +1,13 @@
 # table header
-# module: S&M | sub-module - Campaign
-# table type : lookup (Local)
-# table name : 2.12.41 advertisement status
-# table description : A lookup table for advertisement status for campaign.
-# frequency of data changes : Low
-# sample tale data : "created", "assigned", "started","completed","hold","cancel"
-# reference tables : 2.3.7 advertisement assignment Table
-# author : Saloni Monde
-# created on : 21/04/2020
+# module: Sourcing
+# table type : Master
+# table name : 2.5.12 Notes
+# table description : The Notes table saves the Common Notes
+# frequency of data changes : High
+# sample table data :
+# reference tables : None
+# author : Jayshree Kumbhare
+# created on : 24/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,22 +19,24 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create advertisement Status table start.
+# Create Notes Table start
 
-class AdvertisementStatus(models.Model):
+class Notes(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    name = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    module_id = models.IntegerField(null=True, blank=True)
+    sub_module_id = models.IntegerField(null=True, blank=True)
+    note_name = models.CharField(max_length=200, blank=True, null=True)
+    note = models.CharField(max_length=500, blank=True, null=True)
+    status_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
-
-    def __str__(self):
-        return self.name
+    is_active = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.name
-# Create advertisement Status table end.
+        return self.id
+
+# Create Notes table end.

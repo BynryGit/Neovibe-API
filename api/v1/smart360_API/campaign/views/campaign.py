@@ -4,12 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
-     check_authorization, get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
+    get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
     save_advertisement_details,save_campaign_details
 from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
 
-from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
-from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
+from api.v1.smart360_API.userapp.models.privilege import get_privilege_by_id
+from api.v1.smart360_API.commonapp.models.sub_module import get_sub_module_by_id
 from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string,get_category_by_tenant_id_string
 from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_sub_category_by_tenant_id_string
 from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
@@ -56,7 +56,7 @@ class CampaignListApiView(APIView):
                     # Code for filtering campaign end
 
                     # Code for lookups start
-                    statuses = Status.objects.all()
+                    statuses = Status.objects.filter(user.tenant)
                     campaigns_type = get_camp_type_by_tenant_id_string(user.tenant.id_string)
                     category = get_category_by_tenant_id_string(user.tenant.id_string)
                     sub_category = get_sub_category_by_tenant_id_string(user.tenant.id_string)
@@ -66,11 +66,11 @@ class CampaignListApiView(APIView):
                     # Code for sending campaigns in response
                     for campaign in campaigns:
                         campaign_list.append({
-                            'cam_type': campaigns_type.objects.get(id_string = campaign.type_id).campaign_type,
-                            'category': category.objects.get(id_string = campaign.category_id).category_name,
-                            'sub_category': sub_category.objects.get(id_string = campaign.sub_category_id).sub_category_name,
-                            'frequency':frequency.objects.get(id_string = campaign.frequency_id).frequency_name,
-                            'status': statuses.objects.get(id_string = campaign.status_id).status_name,
+                            'cam_type': campaigns_type.objects.get(id = campaign.type_id).campaign_type,
+                            'category': category.objects.get(id = campaign.category_id).category_name,
+                            'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
+                            'frequency':frequency.objects.get(id = campaign.frequency_id).frequency_name,
+                            'status': statuses.objects.get(id = campaign.status_id).status_name,
                         })
                     return Response({
                          STATE: SUCCESS,
@@ -134,16 +134,17 @@ class CampaignApiView(APIView):
                     # Code for lookups end
 
                     # Code for sending campaign and advertisement details in response start
-                    campaign_detail_list = []
+                    campaign_detail = {}
                     campaign_details = {
                         'camp_id': campaign_obj.id,
                         'camp_name': campaign_obj.name,
-                        'frequency': frequency_obj.frequency,
-                        'utility': campaign_obj.utility.name,
-                        'type': camp_type_obj.campaign_type,
-                        'category': category_obj.category_name,
-                        'area': area.area_name,
-                        'sub_area': sub_area.sub_area_name,
+                        'frequency_id_string': frequency_obj.id_string,
+                        'tenant_id_string': campaign_obj.tenant.id_string,
+                        'utility_id_string': campaign_obj.utility.id_string,
+                        'type_id_string': camp_type_obj.id_string,
+                        'category_id_string': category_obj.id_string,
+                        'area_id_string': area.id_string,
+                        'sub_area_id_string': sub_area.id_string,
                         'start_date': campaign_obj.start_date,
                         'end_date': campaign_obj.end_date,
                         'description': campaign_obj.description if campaign_obj.description else '',
@@ -158,18 +159,19 @@ class CampaignApiView(APIView):
                                 'actual_amount': advertisement.actual_amount,
                                 'start_date': advertisement.start_date,
                                 'end_date': advertisement.end_date,
-                                'area': area.area_name,
-                                'sub_area': sub_area.sub_area_name,
-                                'category': category_obj.category_name,
-                                'frequency': frequency_obj.frequency_name,
+                                'area_id_string': area.id_string,
+                                'sub_area_id_string': sub_area.id_string,
+                                'category_id_string': category_obj.id_string,
+                                'frequency_id_string': frequency_obj.id_string,
                             }
                             advertisement_list.append(advertisement_details)
 
-                    campaign_detail_list.append(campaign_details,advertisement_list)
+                    campaign_detail['campaign_detail']=campaign_details
+                    campaign_detail['cadvertisement_detail']=advertisement_list
 
                     return Response({
                             STATE: SUCCESS,
-                            DATA: campaign_detail_list,
+                            DATA: campaign_detail,
                         }, status=status.HTTP_200_OK)
                         # Code for sending campaign and advertisement details in response end
                 else:
@@ -221,26 +223,49 @@ class CampaignApiView(APIView):
                                 'data': campaign_data,
                             }, status=status.HTTP_409_CONFLICT)
                         else:
-                            campaign_details_list = []
+                            campaign_details_list = {}
                             # save campaign details start
-                            campaign_id_string=''
-                            campaign_details = save_campaign_details(request, user,campaign_id_string)
+                            campaign_details = save_campaign_details(request, user)
                             # save campaign details end
 
-                            # Request advertisement verification start
-                            if is_advertisement_verified(request,user):
-                            # Request advertisement verification end
+                            if campaign_details:
+                                # Request advertisement verification start
+                                if is_advertisement_verified(request,user):
+                                # Request advertisement verification end
 
-                                # save advertisement details start
-                                adv_details = save_advertisement_details(request,user,campaign_details.id_string)
-                                # save advertisement details end
+                                    # save advertisement details start
+                                    adv_details = save_advertisement_details(request,user,campaign_details.id_string)
+                                    # save advertisement details end
 
-                            campaign_details_list.append(campaign_details,adv_details)
+                                    if adv_details:
+                                        campaign_details_list['campaign_details'] = campaign_details
+                                        campaign_details_list['adv_details'] = adv_details
 
-                            return Response({
-                                STATE: SUCCESS,
-                                'data':campaign_details_list,
-                            }, status=status.HTTP_200_OK)
+                                        return Response({
+                                            STATE: SUCCESS,
+                                            'data':campaign_details_list,
+                                        }, status=status.HTTP_200_OK)
+
+                                    else:
+                                        campaign_details_list['campaign_details'] = campaign_details
+                                        campaign_details_list['adv_details'] = ''
+                                        return Response({
+                                            STATE: ERROR,
+                                            'data': campaign_details_list,
+                                        }, status=status.HTTP_400_BAD_REQUEST)
+
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        'data': '',
+                                    }, status=status.HTTP_400_BAD_REQUEST)
+
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    'data': '',
+                                }, status=status.HTTP_400_BAD_REQUEST)
+
                     else:
                         return Response({
                              STATE: ERROR,
@@ -277,19 +302,26 @@ class CampaignApiView(APIView):
                 if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
 
-                    campaign_details_list = []
-                    campaign_id_string = request.data['cam_id_string']
-                    # save updated values of campaign start
-                    campaign_details = save_campaign_details(request, user, campaign_id_string)
+                    # Request data verification start
+                    if is_data_verified(request, user):
+                    # Request data verification end
 
-                    # Request advertisement verification start
-                    if is_advertisement_verified(request, user):
+                        campaign_details_list = {}
+                        campaign_id_string = request.data['cam_id_string']
+                        # save updated values of campaign start
+                        campaign_details = save_campaign_details(request, user)
+                        # save updated values of campaign end
+
+                        # Request advertisement verification start
+                        if is_advertisement_verified(request, user):
                         # Request advertisement verification end
 
-                        # save advertisement details start
-                        adv_details = save_advertisement_details(request, user, campaign_id_string)
-                        # save advertisement details end
-                        campaign_details_list.append(campaign_details, adv_details)
+                            # save advertisement details start
+                            adv_details = save_advertisement_details(request, user, campaign_id_string)
+                            # save advertisement details end
+
+                        campaign_details_list['campaign_details'] = campaign_details
+                        campaign_details_list['adv_details'] = adv_details
 
                         return Response({
                             STATE: SUCCESS,
@@ -308,6 +340,7 @@ class CampaignApiView(APIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
+
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,

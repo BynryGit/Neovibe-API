@@ -5,9 +5,11 @@ from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consu
 from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_id_string
 from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
 from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
+from django.core.paginator import Paginator
 
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
 from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_id_string
+from api.v1.smart360_API.commonapp.models.campaign import get_campaign_by_id_string
 
 
 
@@ -55,51 +57,57 @@ def is_advertisement_verified(request):
 
 
 # save the campign details start
-def save_campaign_details(request, user,campaign_id_string):
-    # Code for lookups start
-    status = get_cam_status_by_tenant_id_string(request.data['camp_status'])
-    campaigns_type = get_camp_type_by_id_string(request.data['campaigns_type'])
-    category = get_consumer_category_by_id_string(request.data['consumer_category'])
-    sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
-    frequency = get_frequency_by_id_string(request.data['frequency'])
-    area = get_area_by_id_string(request.data['area'])
-    sub_area = get_sub_area_by_id_string(request.data['sub_area'])
-    # Code for lookups end
+def save_campaign_details(request, user):
+    try:
+        # Code for lookups start
+        utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
+        status = get_cam_status_by_tenant_id_string(request.data['camp_status'])
+        campaigns_type = get_camp_type_by_id_string(request.data['campaigns_type'])
+        category = get_consumer_category_by_id_string(request.data['consumer_category'])
+        sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
+        frequency = get_frequency_by_id_string(request.data['frequency'])
+        area = get_area_by_id_string(request.data['area'])
+        sub_area = get_sub_area_by_id_string(request.data['sub_area'])
+        # Code for lookups end
 
-    if campaign_id_string:
-        campaign_details = Campaign.objects.get(id_string=campaign_id_string)
-        campaign_details.tenant = TenantMaster.objects.get(id_string=request.data['tenant_id_string']),  # TODO:  Wrapper
-        campaign_details.utility = UtilityMaster.objects.get(id_string=request.data['utility_id_str']),
-        campaign_details.name = request.data['campaign_name'],
-        campaign_details.cam_type_id = campaigns_type.id,
-        campaign_details.start_date = request.data['start_date'],
-        campaign_details.end_date = request.data['end_date'],
-        campaign_details.description = request.data['description'],
-        campaign_details.frequency_id = frequency.id,
-        campaign_details.category_id = category.id,
-        campaign_details.sub_category_id = sub_category.id,
-        campaign_details.area = area.id,
-        campaign_details.sub_area = sub_area.id,
-        campaign_details.status_id = status.id
-        campaign_details.save()
-    else:
-        campaign_details = Campaign(
-            tenant=TenantMaster.objects.get(id_string=request.data['tenant_id_string']),  # TODO:  Wrapper
-            utility=UtilityMaster.objects.get(id_string=request.data['utility_id_str']),
-            name=request.data['campaign_name'],
-            cam_type_id=campaigns_type.id,
-            start_date=request.data['start_date'],
-            end_date=request.data['end_date'],
-            description=request.data['description'],
-            frequency_id=frequency.id,
-            category_id=category.id,
-            sub_category_id=sub_category.id,
-            area=area.id,
-            sub_area=sub_area.id,
-            status_id=status.id
-        )
-        campaign_details.save()
-    return campaign_details
+        if request.data['camp_id_string'] == '':
+            campaign_details = Campaign(
+                tenant=user.tenant,
+                utility=utility,
+                name=request.data['campaign_name'],
+                cam_type_id=campaigns_type.id,
+                start_date=request.data['start_date'],
+                end_date=request.data['end_date'],
+                description=request.data['description'],
+                frequency_id=frequency.id,
+                category_id=category.id,
+                sub_category_id=sub_category.id,
+                area=area.id,
+                sub_area=sub_area.id,
+                status_id=status.id
+            )
+            campaign_details.save()
+            return campaign_details
+        else:
+            campaign_details = get_campaign_by_id_string(request.data['camp_id_string'])
+            campaign_details.tenant = user.tenant
+            campaign_details.utility = utility
+            campaign_details.name = request.data['campaign_name']
+            campaign_details.cam_type_id = campaigns_type.id
+            campaign_details.start_date = request.data['start_date']
+            campaign_details.end_date = request.data['end_date']
+            campaign_details.description = request.data['description']
+            campaign_details.frequency_id = frequency.id
+            campaign_details.category_id = category.id
+            campaign_details.sub_category_id = sub_category.id
+            campaign_details.area = area.id
+            campaign_details.sub_area = sub_area.id
+            campaign_details.status_id = status.id
+            campaign_details.save()
+            return campaign_details
+    except Exception as e:
+        campaign_details = ''
+        return campaign_details
 # save the campign details end
 
 
@@ -122,6 +130,7 @@ def save_advertisement_details(request,user,id_string):
                         'description':'This campaign for Awareness of Gas','campaign_id_string':'uheui',
                         'frequency_id_string':'fbdhkfbk'}]
 
+        advertise_list = []
         for advertise in advertises:
              advertise_obj = Advertisements(
                  tenant=user.tenant,
@@ -138,9 +147,11 @@ def save_advertisement_details(request,user,id_string):
                  frequency_id = frequency.id
              )
              advertise_obj.save()
-        return advertise_obj
+             advertise_list.append(advertise_obj)
+        return advertise_list
     except Exception as e:
-        return e
+        advertise_list = ''
+        return advertise_list
 # save advertisement details end
 
 

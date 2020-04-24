@@ -1,12 +1,12 @@
 # Table Header
 # Table Type : Lookup (Local)
-# Table Name : 2.12.59 Reading Type
-# Description : It Reading Type and ID of various Reading type to be used by Operator or Utility
+# Table Name : 2.12.56 Reading Taken By
+# Description : It Reading Taken By and ID of Reading Taken By to be used by Operator or Utility
 # Frequency of data changes : Low
-# Sample Table Data :
-# Reference Table : 2.3.8.6 Reading Additional parameters
+# Sample Table Data : "Manual" , "Smart meter", "Photo Meter Reading"
+# Reference Table : 2.3.8.4 Meter Reading
 # Author : Jayshree Kumbhare
-# Creation Date : 22/04/2020
+# Creation Date : 22-04-2020
 
 # change history
 # <ddmmyyyy>-<changes>-<Author>
@@ -17,9 +17,9 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-# Create Reading Type table start
+# Create Reading Taken By table start
 
-class ReadingType(models.Model):
+class ReadingTakenBy(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -36,4 +36,4 @@ class ReadingType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Reading Type table end
+# Create Reading Taken By table end
