@@ -1,5 +1,5 @@
 # table header
-# module: S&M  | sub-module - Survey
+# module: S&M, | sub-module - Survey
 # table type : lookup (Local)
 # table name : 2.12.35 Field Type
 # table description : A lookup table for various types of fields in given survey .
