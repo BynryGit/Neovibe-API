@@ -138,12 +138,13 @@ class CampaignApiView(APIView):
                     campaign_details = {
                         'camp_id': campaign_obj.id,
                         'camp_name': campaign_obj.name,
-                        'frequency': frequency_obj.frequency,
-                        'utility': campaign_obj.utility.name,
-                        'type': camp_type_obj.campaign_type,
-                        'category': category_obj.category_name,
-                        'area': area.area_name,
-                        'sub_area': sub_area.sub_area_name,
+                        'frequency_id_string': frequency_obj.id_string,
+                        'tenant_id_string': campaign_obj.tenant.id_string,
+                        'utility_id_string': campaign_obj.utility.id_string,
+                        'type_id_string': camp_type_obj.id_string,
+                        'category_id_string': category_obj.id_string,
+                        'area_id_string': area.id_string,
+                        'sub_area_id_string': sub_area.id_string,
                         'start_date': campaign_obj.start_date,
                         'end_date': campaign_obj.end_date,
                         'description': campaign_obj.description if campaign_obj.description else '',
@@ -158,10 +159,10 @@ class CampaignApiView(APIView):
                                 'actual_amount': advertisement.actual_amount,
                                 'start_date': advertisement.start_date,
                                 'end_date': advertisement.end_date,
-                                'area': area.area_name,
-                                'sub_area': sub_area.sub_area_name,
-                                'category': category_obj.category_name,
-                                'frequency': frequency_obj.frequency_name,
+                                'area_id_string': area.id_string,
+                                'sub_area_id_string': sub_area.id_string,
+                                'category_id_string': category_obj.id_string,
+                                'frequency_id_string': frequency_obj.id_string,
                             }
                             advertisement_list.append(advertisement_details)
 
@@ -227,21 +228,44 @@ class CampaignApiView(APIView):
                             campaign_details = save_campaign_details(request, user)
                             # save campaign details end
 
-                            # Request advertisement verification start
-                            if is_advertisement_verified(request,user):
-                            # Request advertisement verification end
+                            if campaign_details:
+                                # Request advertisement verification start
+                                if is_advertisement_verified(request,user):
+                                # Request advertisement verification end
 
-                                # save advertisement details start
-                                adv_details = save_advertisement_details(request,user,campaign_details.id_string)
-                                # save advertisement details end
+                                    # save advertisement details start
+                                    adv_details = save_advertisement_details(request,user,campaign_details.id_string)
+                                    # save advertisement details end
 
-                            campaign_details_list['campaign_details'] = campaign_details
-                            campaign_details_list['adv_details'] = adv_details
+                                    if adv_details:
+                                        campaign_details_list['campaign_details'] = campaign_details
+                                        campaign_details_list['adv_details'] = adv_details
 
-                            return Response({
-                                STATE: SUCCESS,
-                                'data':campaign_details_list,
-                            }, status=status.HTTP_200_OK)
+                                        return Response({
+                                            STATE: SUCCESS,
+                                            'data':campaign_details_list,
+                                        }, status=status.HTTP_200_OK)
+
+                                    else:
+                                        campaign_details_list['campaign_details'] = campaign_details
+                                        campaign_details_list['adv_details'] = ''
+                                        return Response({
+                                            STATE: ERROR,
+                                            'data': campaign_details_list,
+                                        }, status=status.HTTP_400_BAD_REQUEST)
+
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        'data': campaign_details_list,
+                                    }, status=status.HTTP_400_BAD_REQUEST)
+
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    'data': '',
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        
                     else:
                         return Response({
                              STATE: ERROR,

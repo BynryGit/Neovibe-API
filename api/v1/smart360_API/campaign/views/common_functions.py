@@ -5,6 +5,7 @@ from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consu
 from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_id_string
 from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
 from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
+from django.core.paginator import Paginator
 
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
 from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_id_string
