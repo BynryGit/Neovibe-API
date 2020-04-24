@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data :
 # Reference Table : 2.6.7 Closure Report Transaction
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22/04/2020
 
 

@@ -1,16 +1,16 @@
 # table header:
-# module: Purchase | sub-module - Requests
+# module: Purchase | sub-module - Tender
 # table type: lookup (local)
-# table name: 2.12.88 Purchase Request Status (Local)
-# table description: A lookup table for status of purchase requests
+# table name: 2.12.89 Tender Status
+# table description: A lookup table for the Tender status.
 # frequency of data changes: low
-# sample table data: "Initiated","Received","Inprogress", "Partial","Completed""Rejected","Pending","Hold"
-# reference tables: 2.7.1 Request Master
-# auther: Gauri Deshmukh
+# sample table data: "Initiated","Received","Approved","Rejected","Pending","Hold"
+# reference tables:2.7.3 Tender Master
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
-#<ddmmyyyy>-<changes>-<auther>
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
@@ -18,13 +18,13 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-#Create PurchaseRequestStatus table start
+#Create TenderStatus table start
 
-class PurchaseRequestStatus(models.Model):
+class TenderStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    status = models.CharField(null=True, blank=True)
+    status = models.CharField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -37,4 +37,4 @@ class PurchaseRequestStatus(models.Model):
     def __unicode__(self):
         return self.status
 
- # Create PurchaseRequestStatus table end
+ # Create TenderStatus table end

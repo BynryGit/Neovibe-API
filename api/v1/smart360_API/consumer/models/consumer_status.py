@@ -2,15 +2,15 @@
 # Module: Consumer Care & Ops | Sub-Modules - Consumer, Metering, Billing
 # table type: lookup
 # table name: 2.12.45 Consumer Status (Local)
-# table description: It is a lookup table that stores the status of the consumer to be used in various tables.
+# table description: It is a lookup table that stores the status of the consumer1 to be used in various tables.
 # frequency of data changes: low
 # sample table data: "Connected", "Disconnected", "Temp disconnected", "Hold"
 # reference tables: 2.4.1. Consumer Master
-# auther: Gauri Deshmukh
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
-#<ddmmyyyy>-<changes>-<auther>
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID

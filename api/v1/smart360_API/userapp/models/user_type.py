@@ -1,14 +1,16 @@
 # Table Header
 # module : All modules & sub-modules
-
-# Table Type : Lookup (Global)
-# Table Name : 2.12.6 State
-# Description : It is a global lookup table that stores the states with countries
+# Table Type : Lookup (local)
+# Table Name : 2.12.17 User Type
+# Description : It is a global lookup table that stores various types of users
 # Frequency of data changes : Low
-# Sample Table Data : Maharashtra, Assam, Bihar.
-# Reference Table : 2.3.1. Consumer Master, 2.3.2. Consumer - Registration, 2.7.1. Employee, 2.7.7. Branch details,
+# Sample Table Data : "Employee" ,  "Vendor" , "Supplier"
+# Reference Table : 2.5.5 User Documents.
 # Author : Jayshree Kumbhare
-# Creation Date : 21-04-2020
+# Creation Date : 21/04/2020
+
+# change history
+# <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
 import datetime  # importing package for datetime
@@ -16,14 +18,13 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create State table start
+# Create User Type table start
 
-class State(models.Model):
+class UserType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
+    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    country = models.IntegerField(blank=False, null=False)
-    region = models.IntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -36,15 +37,4 @@ class State(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create State table end
-
-
-def get_state_by_id_string(id_string):
-    return State.objects.get(id_string = id_string)
-
-
-def get_state_by_id(id):
-    return State.objects.get(id = id)
-
-# End the Code
-
+# Create User Type table end

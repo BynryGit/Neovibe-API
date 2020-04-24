@@ -6,11 +6,11 @@
 # frequency of data changes: Medium
 # sample table data:
 # reference tables: 2.7.10 Store Master
-# auther: Gauri Deskhmukh
+# Author: Gauri Deskhmukh
 # creation date: 22/4/2020
 
-#change history
-#<ddmmyyyy>-<changes>-<auther>
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
@@ -18,7 +18,7 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-#Create StoreType table start
+# Create StoreType table start
 
 class StoreType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -37,4 +37,4 @@ class StoreType(models.Model):
     def __unicode__(self):
         return self.type
 
- # Create StoreType table end
+# Create StoreType table end

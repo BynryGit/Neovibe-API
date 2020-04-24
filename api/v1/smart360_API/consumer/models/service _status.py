@@ -1,28 +1,29 @@
-# table Header :
-# module: S&M, Consumer Care & Ops | sub-module - Registrations
-# table type: lookup (local)
-# table name: 2.12.46 Registration Type
-# table description: A lookup table that stores the various types of registrations
+# table header
+# module: Consumer Care & Ops | sub-module - Consumer, services
+# table type: lookup
+# table name: 2.12.48 Service Status (Local)
+# table description: Lookup table for consumer1 services in Consumer care & ops
 # frequency of data changes: low
-# sample table data:
-# reference tables: 2.3.2. Consumer - Registration
-# auther: Gauri
+# sample table data: "Received","Assigned", "Inprogress" "Completed","Rejected","Hold"
+# reference tables: 2.2.1 Utility Services Master #todo: table name to be checked
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
-# change history
-#<ddmmyyyy>-<changes>-<auther>
+#change history
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
 
 from django.db import models  # importing package for database
 
-#Create Registration Type table start
-class RegistrationType(models.Model):
+
+#Create ServiceStatus table start
+class ServiceStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    name = models.CharField(null=True, blank=True)
+    name = models.CharField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -35,10 +36,4 @@ class RegistrationType(models.Model):
     def __unicode__(self):
         return self.name
 
-def get_registration_type_by_id_string(id_string):
-    return RegistrationType.objects.get(id_string = id_string)
-
-def get_registration_type_by_id(id):
-    return RegistrationType.objects.get(id = id)
-
-    # Create Registration Type table end
+ # Create ServiceStatus table end
