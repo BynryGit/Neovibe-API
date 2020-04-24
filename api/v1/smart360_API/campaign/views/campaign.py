@@ -56,7 +56,7 @@ class CampaignListApiView(APIView):
                     # Code for filtering campaign end
 
                     # Code for lookups start
-                    statuses = Status.objects.all()
+                    statuses = Status.objects.filter(user.tenant)
                     campaigns_type = get_camp_type_by_tenant_id_string(user.tenant.id_string)
                     category = get_category_by_tenant_id_string(user.tenant.id_string)
                     sub_category = get_sub_category_by_tenant_id_string(user.tenant.id_string)
@@ -66,11 +66,11 @@ class CampaignListApiView(APIView):
                     # Code for sending campaigns in response
                     for campaign in campaigns:
                         campaign_list.append({
-                            'cam_type': campaigns_type.objects.get(id_string = campaign.type_id).campaign_type,
-                            'category': category.objects.get(id_string = campaign.category_id).category_name,
-                            'sub_category': sub_category.objects.get(id_string = campaign.sub_category_id).sub_category_name,
-                            'frequency':frequency.objects.get(id_string = campaign.frequency_id).frequency_name,
-                            'status': statuses.objects.get(id_string = campaign.status_id).status_name,
+                            'cam_type': campaigns_type.objects.get(id = campaign.type_id).campaign_type,
+                            'category': category.objects.get(id = campaign.category_id).category_name,
+                            'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
+                            'frequency':frequency.objects.get(id = campaign.frequency_id).frequency_name,
+                            'status': statuses.objects.get(id = campaign.status_id).status_name,
                         })
                     return Response({
                          STATE: SUCCESS,
@@ -134,7 +134,7 @@ class CampaignApiView(APIView):
                     # Code for lookups end
 
                     # Code for sending campaign and advertisement details in response start
-                    campaign_detail_list = []
+                    campaign_detail = {}
                     campaign_details = {
                         'camp_id': campaign_obj.id,
                         'camp_name': campaign_obj.name,
@@ -165,11 +165,12 @@ class CampaignApiView(APIView):
                             }
                             advertisement_list.append(advertisement_details)
 
-                    campaign_detail_list.append(campaign_details,advertisement_list)
+                    campaign_detail['campaign_detail']=campaign_details
+                    campaign_detail['cadvertisement_detail']=advertisement_list
 
                     return Response({
                             STATE: SUCCESS,
-                            DATA: campaign_detail_list,
+                            DATA: campaign_detail,
                         }, status=status.HTTP_200_OK)
                         # Code for sending campaign and advertisement details in response end
                 else:
@@ -223,8 +224,7 @@ class CampaignApiView(APIView):
                         else:
                             campaign_details_list = []
                             # save campaign details start
-                            campaign_id_string=''
-                            campaign_details = save_campaign_details(request, user,campaign_id_string)
+                            campaign_details = save_campaign_details(request, user)
                             # save campaign details end
 
                             # Request advertisement verification start
@@ -280,7 +280,7 @@ class CampaignApiView(APIView):
                     campaign_details_list = []
                     campaign_id_string = request.data['cam_id_string']
                     # save updated values of campaign start
-                    campaign_details = save_campaign_details(request, user, campaign_id_string)
+                    campaign_details = save_campaign_details(request, user)
 
                     # Request advertisement verification start
                     if is_advertisement_verified(request, user):

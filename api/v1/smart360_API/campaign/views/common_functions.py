@@ -55,7 +55,7 @@ def is_advertisement_verified(request):
 
 
 # save the campign details start
-def save_campaign_details(request, user,campaign_id_string):
+def save_campaign_details(request, user):
     # Code for lookups start
     status = get_cam_status_by_tenant_id_string(request.data['camp_status'])
     campaigns_type = get_camp_type_by_id_string(request.data['campaigns_type'])
@@ -66,7 +66,7 @@ def save_campaign_details(request, user,campaign_id_string):
     sub_area = get_sub_area_by_id_string(request.data['sub_area'])
     # Code for lookups end
 
-    if campaign_id_string:
+    if request.data['camp_id_string']:
         campaign_details = Campaign.objects.get(id_string=campaign_id_string)
         campaign_details.tenant = TenantMaster.objects.get(id_string=request.data['tenant_id_string']),  # TODO:  Wrapper
         campaign_details.utility = UtilityMaster.objects.get(id_string=request.data['utility_id_str']),
