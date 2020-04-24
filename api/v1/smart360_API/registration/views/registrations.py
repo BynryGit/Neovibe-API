@@ -32,6 +32,7 @@ from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
+
 class RegistrationListApiView(APIView):
 
     def get(self, request, format=None):
@@ -39,7 +40,10 @@ class RegistrationListApiView(APIView):
             # Initializing output list start
             registrations_list = []
             # Initializing output list end
-
+#todo: Rohan - create a common function
+#login
+#module, Submodule
+#utility access
             # Checking authentication start
             if is_token_valid(request.data['token']):
                 payload = get_payload(request.data['token'])
@@ -110,6 +114,7 @@ class RegistrationListApiView(APIView):
 # Tables used: 2.4.2. Consumer - Registration
 # Auther: Rohan
 # Created on: 23/04/2020
+
 class RegistrationApiView(APIView):
 
     def get(self, request, format=None):

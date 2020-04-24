@@ -49,4 +49,6 @@ class Campaign(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_campaign_by_id_string(id_string):
+    return Campaign.objects.get(id_string=id_string)
     # Create Campaign Master table ends

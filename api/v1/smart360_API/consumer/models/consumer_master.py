@@ -2,7 +2,7 @@
 # Module: Consumer Care
 # Table Type : Master
 # Table Name : 2.4.1. Consumer Master
-# Description :All active and inactive consumer1 for given tenant will be saved in this table all master values
+# Description :All active and inactive consumer for given tenant will be saved in this table all master values
 # Frequency of data changes : High
 # Sample table : Consumer 1, Consumer 2, Consumer 3, Consumer 4
 # Reference Table : None

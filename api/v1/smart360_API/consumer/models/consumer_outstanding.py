@@ -2,7 +2,7 @@
 # Module: Consumer Care | Sub-Module : Billing
 # Table Type : Master (Global)
 # Table Name : 2.4.11. Consumer - Outstanding
-# Description : It will contain the amount outstanding against consumer1 with outstanding days and paid amount records.
+# Description : It will contain the amount outstanding against consumer with outstanding days and paid amount records.
 # Frequency of data changes : High
 # Sample table :
 # Reference Table : None

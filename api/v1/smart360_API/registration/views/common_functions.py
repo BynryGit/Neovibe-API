@@ -42,6 +42,13 @@ def get_filtered_registrations(request, user):
     if request.data['status']:
         registrations = registrations.objects.filter(status_id=
                                                      request.data['status'])
+    if request.data['search_text'] == '':
+        pass
+    else:
+        registrations = registrations.filter(
+            Q(registration_no__icontains=request.data['search_text']) |
+            Q(first_name__icontains=request.data['search_text']))
+
     if request.data['page_number'] == '':
         paginator = Paginator(registrations,int(request.data['page_size']))
         total_pages = str(paginator.num_pages)
@@ -51,15 +58,13 @@ def get_filtered_registrations(request, user):
     else:
         paginator = Paginator(registrations, int(request.data['page_size']))
         total_pages = str(paginator.num_pages)
-        page_no = request.data['page_no']
+        page_no = request.data['page_number']
         registrations = paginator.page(int(page_no))
-        registrations = registrations.filter(
-                        Q(registration_no__icontains=request.data['search_text']) |
-                        Q(first_name__icontains=request.data['search_text']))
+
         return registrations, total_pages, page_no
 
-
-def is_data_verified(request):
+# only check only mandatory fields
+def is_data_verified(request): #todo - Black, Null, empty string - ready to use method by Django
     if request.data['first_name'] == '' and request.data['middle_name'] == '' and \
         request.data['last_name'] == '' and request.data['utility'] == '' and \
         request.data['mobile_number'] == '' and request.data['email'] == '' and \
@@ -114,7 +119,7 @@ def save_basic_registration_details(request, user):
             created_by = user.id,
             created_date = datetime.now()
         ).save()
-        registration.registration_no = registration.id
+        registration.registration_no = registration.id #todo: Alpha Numeric - format - BGCLDDMMYYnnnnnnnnnn / Number generation logic / DB column Unique
         registration.save()
         return registration
     else:
