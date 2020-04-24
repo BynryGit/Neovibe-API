@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data : Validation one, Validation two, Complete
 # Reference Table : 2.3.8.4 Meter Reading
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22-04-2020
 
 import datetime

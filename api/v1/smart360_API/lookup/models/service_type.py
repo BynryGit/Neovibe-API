@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data : Installation, Convertion, Repair, Maintenance, Outage, Emergency, Meter Reading.
 # Reference Table : 2.6.2 SOP Master
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22/04/2020
 
 import datetime

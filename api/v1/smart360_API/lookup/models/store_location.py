@@ -6,11 +6,11 @@
 # frequency of data changes: Medium
 # sample table data: Shivaji Nagar, Kothrud, Aundh
 # reference tables: 2.7.10 Store Master
-# auther: Gauri Deshmukh
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
-#<ddmmyyyy>-<changes>-<auther>
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID

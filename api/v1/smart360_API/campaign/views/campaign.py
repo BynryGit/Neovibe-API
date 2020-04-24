@@ -30,7 +30,7 @@ from api.v1.smart360_API.campaign.models.campaign import Campaign
 # Interaction: Campaign List
 # Usage: API will fetch required data for Campaign list
 # Tables used: 2.3.6 Campaign Master
-# Auther: Priyanka
+# Author: Priyanka Kachare
 # Created on: 22/04/2020
 
 # Api for getting campaign  filter
@@ -94,8 +94,6 @@ class CampaignListApiView(APIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
 # API Header
 # API end Point: api/v1/campaign/
 # API verb: GET, POST, PUT
@@ -107,7 +105,6 @@ class CampaignListApiView(APIView):
 # Tables used:  2.3.6 Campaign Master
 # Auther: Priyanka
 # Created on: 23/04/2020
-
 
 # API for add, edit, view campaign details
 class CampaignApiView(APIView):

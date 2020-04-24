@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data : High, Low, Medium.
 # Reference Table : 2.6.1 Service Request
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22/04/2020
 
 

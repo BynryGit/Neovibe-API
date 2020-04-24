@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data : V1, V2
 # Reference Table : 2.3.8.7 Validation Details
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22/04/2020
 
 import datetime

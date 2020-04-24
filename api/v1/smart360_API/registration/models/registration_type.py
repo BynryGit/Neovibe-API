@@ -6,11 +6,11 @@
 # frequency of data changes: low
 # sample table data:
 # reference tables: 2.3.2. Consumer - Registration
-# auther: Gauri
+# Author: Gauri
 # creation date: 22/4/2020
 
 # change history
-#<ddmmyyyy>-<changes>-<auther>
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID

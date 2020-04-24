@@ -6,11 +6,11 @@
 # frequency of data changes: low
 # sample table data: "Received","Inprogress","Complete","Rejected","Pending","Hold"
 # reference tables: 2.3.5. Consumer - complaints
-# auther: Gauri Deshmukh
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
-#<ddmmyyyy>-<changes>-<auther>
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
