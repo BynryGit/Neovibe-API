@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data : RCNT, Faulty, Normal
 # Reference Table : 2.3.8.1 Schedule
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22-04-2020
 
 import datetime

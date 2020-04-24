@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Table Data :
 # Reference Table : 2.3.8.5 Meter Reading Images
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 21-04-2020
 
 import datetime

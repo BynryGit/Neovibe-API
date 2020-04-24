@@ -6,7 +6,7 @@
 # Frequency of data changes : Low
 # Sample Table Data : Image, Parameter, Material
 # Reference Table : 2.6.3 SOP Master Details
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22-04-2020
 
 import datetime

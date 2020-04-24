@@ -6,7 +6,7 @@
 # Frequency of data changes : High
 # Sample table :
 # Reference Table : None
-# Auther : Jayshree Kumbhare
+# Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
 
 

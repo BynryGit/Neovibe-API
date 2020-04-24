@@ -22,7 +22,7 @@ from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 # Interaction: Registration list
 # Usage: API will fetch required data for Registration list
 # Tables used: 2.4.2. Consumer - Registration
-# Auther: Rohan
+# Author: Rohan
 # Created on: 21/04/2020
 
 

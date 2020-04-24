@@ -6,11 +6,11 @@
 # frequency of data changes: low
 # sample table data: "Received","Assigned", "Inprogress" "Completed","Rejected","Hold"
 # reference tables: 2.2.1 Utility Services Master #todo: table name to be checked
-# auther: Gauri Deshmukh
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
 #change history
-#<ddmmyyyy>-<changes>-<auther>
+#<ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID

@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Parameter Flag Type :
 # Reference Table : 2.3.8.6 Reading Additional parameters
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 22-04-2020
 
 

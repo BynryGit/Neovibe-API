@@ -30,7 +30,7 @@ from api.v1.smart360_API.campaign.models.campaign import Campaign
 # Interaction: Campaign List
 # Usage: API will fetch required data for Campaign list
 # Tables used: 2.3.6 Campaign Master
-# Auther: Priyanka Kachare
+# Author: Priyanka Kachare
 # Created on: 22/04/2020
 
 # Api for getting campaign  filter
@@ -104,7 +104,7 @@ class CampaignListApiView(APIView):
 # Interaction: Add Campaign
 # Usage: API for Add Campaign
 # Tables used: 2.3.6 Campaign Master
-# Auther: Priyanka Kachare
+# Author: Priyanka Kachare
 # Created on: 22/04/2020
 
 

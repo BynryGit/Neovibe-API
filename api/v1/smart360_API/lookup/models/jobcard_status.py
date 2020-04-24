@@ -5,7 +5,7 @@
 # Frequency of data changes : Low
 # Sample Data Table : Allocated,Assigned, Deassigned, Complete, Duplicated,Revisit.
 # Reference Table : 2.3.8.3 Jobcard
-# Auther : Jayshree
+# Author : Jayshree
 # Creation Date : 21-04-2020
 
 
