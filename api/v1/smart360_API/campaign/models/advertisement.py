@@ -47,4 +47,4 @@ class Advertisements(models.Model):
     def __unicode__(self):
         return self.name
 
-    # Create advertisement master table ends
+# Create advertisement master table ends
