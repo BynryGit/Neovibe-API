@@ -257,7 +257,7 @@ class CampaignApiView(APIView):
                                 else:
                                     return Response({
                                         STATE: ERROR,
-                                        'data': campaign_details_list,
+                                        'data': '',
                                     }, status=status.HTTP_400_BAD_REQUEST)
 
                             else:
@@ -265,7 +265,7 @@ class CampaignApiView(APIView):
                                     STATE: ERROR,
                                     'data': '',
                                 }, status=status.HTTP_400_BAD_REQUEST)
-                        
+
                     else:
                         return Response({
                              STATE: ERROR,
