@@ -1,4 +1,4 @@
-# Table Header : Skills
+# Table Header
 # Table Type : Lookup (Local)
 # Table Name : 2.12.76 Skills
 # Description : It will store the skills of each service type.
@@ -8,12 +8,13 @@
 # Author : Jayshree
 # Creation Date : 22/04/2020
 
+import datetime  # importing package for datetime
+import uuid  # importing package for GUID
 
-import datetime
-import uuid
-from django.db import models
+from django.db import models  # importing package for database
 
-# Start the Code
+# Create Skills table start
+
 class Skills(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
@@ -32,4 +33,4 @@ class Skills(models.Model):
 
     def __unicode__(self):
         return self.skill
-# End The Code
+# Create Skills table end

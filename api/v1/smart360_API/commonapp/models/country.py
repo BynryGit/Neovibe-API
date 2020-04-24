@@ -43,3 +43,9 @@ class Country(models.Model):
 def get_country_by_id_string(id_string):
     return Country.objects.get(id_string = id_string)
 
+
+def get_country_by_id(id):
+    return Country.objects.get(id = id)
+
+# End the Code
+

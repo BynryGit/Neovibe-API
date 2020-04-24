@@ -1,5 +1,6 @@
 # table header
-# table type : lookup (Local)
+# module: Asset, Finance | sub-module - assets, Finance
+# table type : lookup (Global)
 # table name : 2.12.80 Deprecation Method
 # table description : A lookup table for different deprecation methods.
 # frequency of data changes : Low

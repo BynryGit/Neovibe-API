@@ -1,5 +1,5 @@
 # table Header
-# module: Consumer Care & Ops | sub-module - complaint
+# module: Consumer Care & Ops | sub-module - Consumer
 # table type: lookup (Local)
 # table name: 2.12.49 Complaint Status
 # table description: A lookup table for complaint status to be used on consumer module

@@ -1,14 +1,13 @@
 # table header
-# module: Asset, Sourcing | sub-module - All
+# module: Purchase  | sub-module - Request
 # table type : lookup (Local)
-# table name : 2.12.66 Product/Services Sub-Category
-# table description : A lookup table for sub-categories of products and services.
+# table name : 2.12.84 Procurement Type
+# table description : A lookup table for procurement type of all given asset.
 # frequency of data changes : Low
-# sample tale data :
-# reference tables : 2.5.4 Product/Services Table
+# sample tale data :"In-house", "External","External procurement planning"
+# reference tables : 2.4.1 Asset - Procurement
 # author : Saloni Monde
-# created on : 21/04/2020
-
+# created on : 22/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -20,14 +19,13 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Product Service Sub Category table start.
+# Create Procurement Type table start.
 
-class ProductServiceSubCategory(models.Model):
+class ProcurementType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    category = models.CharField(blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -40,4 +38,5 @@ class ProductServiceSubCategory(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Product Service Sub Category table end.
+# Create Procurement Type table end.
+
