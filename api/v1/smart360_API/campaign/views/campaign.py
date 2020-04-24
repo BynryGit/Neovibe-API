@@ -222,7 +222,7 @@ class CampaignApiView(APIView):
                                 'data': campaign_data,
                             }, status=status.HTTP_409_CONFLICT)
                         else:
-                            campaign_details_list = []
+                            campaign_details_list = {}
                             # save campaign details start
                             campaign_details = save_campaign_details(request, user)
                             # save campaign details end
@@ -235,7 +235,8 @@ class CampaignApiView(APIView):
                                 adv_details = save_advertisement_details(request,user,campaign_details.id_string)
                                 # save advertisement details end
 
-                            campaign_details_list.append(campaign_details,adv_details)
+                            campaign_details_list['campaign_details'] = campaign_details
+                            campaign_details_list['adv_details'] = adv_details
 
                             return Response({
                                 STATE: SUCCESS,
@@ -277,19 +278,26 @@ class CampaignApiView(APIView):
                 if is_authorized(user, privilege, sub_module):
                 # Checking authorization end
 
-                    campaign_details_list = []
-                    campaign_id_string = request.data['cam_id_string']
-                    # save updated values of campaign start
-                    campaign_details = save_campaign_details(request, user)
+                    # Request data verification start
+                    if is_data_verified(request, user):
+                    # Request data verification end
 
-                    # Request advertisement verification start
-                    if is_advertisement_verified(request, user):
+                        campaign_details_list = {}
+                        campaign_id_string = request.data['cam_id_string']
+                        # save updated values of campaign start
+                        campaign_details = save_campaign_details(request, user)
+                        # save updated values of campaign end
+
+                        # Request advertisement verification start
+                        if is_advertisement_verified(request, user):
                         # Request advertisement verification end
 
-                        # save advertisement details start
-                        adv_details = save_advertisement_details(request, user, campaign_id_string)
-                        # save advertisement details end
-                        campaign_details_list.append(campaign_details, adv_details)
+                            # save advertisement details start
+                            adv_details = save_advertisement_details(request, user, campaign_id_string)
+                            # save advertisement details end
+
+                        campaign_details_list['campaign_details'] = campaign_details
+                        campaign_details_list['adv_details'] = adv_details
 
                         return Response({
                             STATE: SUCCESS,
@@ -308,6 +316,7 @@ class CampaignApiView(APIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
+            
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
