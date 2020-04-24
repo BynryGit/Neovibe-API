@@ -277,3 +277,22 @@ class RegistrationApiView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class RegistrationStatusApiView(APIView):
+
+    def get(self, request, format=None):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def post(self, request, format=None):
+        try:
+            pass
+        except Exception as e:
+            pass
+
+    def put(self, request, format=None):
+        try:
+            pass
+        except Exception as e:
+            pass
