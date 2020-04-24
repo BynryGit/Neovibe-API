@@ -1,10 +1,11 @@
 # table header
-# table type : Master
+# module: Tenant | sub-module - All
+# table type : Master - Global
 # table name : 1.1 Tenant Master
 # table description : It is Tenant Master table. It will contain details for Tenant
-# frequency of data changes : Low
-# sample tale data : "Bynry Technologies",
-# reference tables :
+# frequency of data changes : Medium
+# sample table data : MNGL,VGL,SGL
+# reference tables :-
 # author : Gauri Deshmukh
 # created on : 24/04/2020
 

@@ -1,10 +1,11 @@
 # table header
+# module: Utility | sub-module - All
 # table type : Master
-# table name : 1.2  Tenant Subscription
-# table description :  It will contain details for Tenant subscription related to tenant subscription id, plan.
+# table name : 2.3 Utility Module
+# table description :  It will contain details of Modules available for the given Utility
 # frequency of data changes : Medium
-# sample tale data :"sub1234","Plan12"
-# reference tables : 1.1 Tenant Master
+# sample tale data : "Plan - A"
+# reference tables : 2.1 Utility Master
 # author : Gauri Deshmukh
 # created on : 24/04/2020
 
@@ -18,17 +19,17 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Tenant Subscription table start.
+# Create Utility Module table start.
 
-class TenantSubscription(models.Model):
+class UtilityModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
+    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     subscription_id = models.IntegerField(null=True, blank=True)
-    subscription_frequency_id = models.IntegerField(null=True, blank=True) #Payment fr
-    subscription_plan_id = models.IntegerField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
-    validity_id = models.IntegerField(null=True, blank=True)
+    subscription_type_id = models.IntegerField(null=True, blank=True)
+    subscription_type_name = models.CharField(max_length=200, blank=False, null=False)
+    module_name  = models.CharField(max_length=200, blank=False, null=False)
+    module_desc  = models.CharField(max_length=500, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -36,9 +37,10 @@ class TenantSubscription(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.subscription_id
+        return self.id_string
+
 
     def __unicode__(self):
-        return self.subscription_id
+        return self.id_string
 
-# Create Tenant Subscription table end.
+# Create Utility Module table end.
