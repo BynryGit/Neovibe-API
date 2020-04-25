@@ -1,7 +1,8 @@
 # table header
+# module: Utility | sub-module - Service plan
 # table type : Master
 # table name :2.2.2 Service Plan Rate
-# table description :  It will contain details like Service name, service type,service status etc.
+# table description : This table contains the details of rates for given service plan.
 # frequency of data changes : Low
 # sample tale data : "27","29.85"
 # reference tables :2.2.1 Utility Service Master
@@ -18,7 +19,7 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Utility System Modules table start.
+# Create Service Plan Rate table start.
 
 class  ServicePlanRate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -43,4 +44,4 @@ class  ServicePlanRate(models.Model):
     def __unicode__(self):
         return self.base_rate
 
-# Create Utility system Modules table end.
+# Create Service Plan rate table end.

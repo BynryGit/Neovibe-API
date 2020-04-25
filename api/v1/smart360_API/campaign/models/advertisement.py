@@ -1,4 +1,5 @@
 # table header
+# module: S&M | sub-module - Campaign
 # table type : Master (Local)
 # table name : 2.3.6 advertisements master
 # table description : A master table to store advertisements in given campaign
@@ -13,13 +14,14 @@
 import datetime
 import uuid
 from django.db import models
-
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 # Create advertisement master table starts
 
 class Advertisements(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(Tenant, null=False, blank=False)
-    utility = models.ForeignKey(Utility, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
+    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
     campaign_id = models.IntegerField(default=1, null=True, blank=True)
     group_id = models.IntegerField(default=1, null=True, blank=True)
     name = models.CharField(max_length=200, null=False, blank=False)

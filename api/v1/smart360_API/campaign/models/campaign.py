@@ -1,4 +1,5 @@
 # table header
+# module: S&M | sub-module - All
 # table type : Master (Local)
 # table name : 2.3.6 Campaign Master
 # table description : A Master table that store campaign details
@@ -13,6 +14,8 @@
 import datetime
 import uuid
 from django.db import models
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 # Create Campaign Master table start
 

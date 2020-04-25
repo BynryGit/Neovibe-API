@@ -1,4 +1,5 @@
 # table header
+# module: Tenant | sub-module - All
 # table type : Master
 # table name : 1.2  Tenant Subscription
 # table description :  It will contain details for Tenant subscription related to tenant subscription id, plan.
@@ -24,7 +25,7 @@ class TenantSubscription(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     subscription_id = models.IntegerField(null=True, blank=True)
-    subscription_frequency_id = models.IntegerField(null=True, blank=True)
+    subscription_frequency_id = models.IntegerField(null=True, blank=True) #Payment fr
     subscription_plan_id = models.IntegerField(null=True, blank=True)
     start_date = models.DateField(null=True, blank=True, default=datetime.now())
     end_date = models.DateField(null=True, blank=True, default=datetime.now())

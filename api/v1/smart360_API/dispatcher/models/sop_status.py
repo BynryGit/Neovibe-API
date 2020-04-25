@@ -1,12 +1,13 @@
 # Table Header
+# Module : O&M
 # Table Type : Lookup (Local)
-# Table Name : 2.12.56 Reading Taken By
-# Description : It Reading Taken By and ID of Reading Taken By to be used by Operator or Utility
+# Table Name : 2.12.79 SOP Status
+# Description : It  SOP Status and ID of various SOP Status to be used by Operator or Utility
 # Frequency of data changes : Low
-# Sample Table Data : "Manual" , "Smart meter"
-# Reference Table : 2.3.8.4 Meter Reading
+# Sample Table Data :
+# Reference Table : 2.6.7 Closure Report Transaction
 # Author : Jayshree Kumbhare
-# Creation Date : 22-04-2020
+# Creation Date : 22/04/2020
 
 # change history
 # <ddmmyyyy>-<changes>-<Author>
@@ -15,11 +16,13 @@ import datetime  # importing package for datetime
 import uuid  # importing package for GUID
 
 from django.db import models  # importing package for database
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
-# Create Reading Taken By table start
+# Create Sop Status table start
 
-class ReadingTakenBy(models.Model):
+class SopStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -36,4 +39,4 @@ class ReadingTakenBy(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Reading Taken By table end
+# Create Sop Status table end

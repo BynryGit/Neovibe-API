@@ -1,5 +1,5 @@
 # table header
-# module: S&M | sub-module - Campaign Transaction
+# module: All | sub-module - All
 # table type : lookup (Local)
 # table name : 2.12.42 Campaign Transaction Status
 # table description : A lookup table for all transactions of given campaign.
@@ -17,26 +17,28 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
+
+# Create Module table start
 
 
-# Create Campaign Transaction Status table start.
-
-class CampaignTransactionStatus(models.Model):
+class Module(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    status = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    name = models.CharField(max_length=200, blank=False, null=False)
+    created_by = models.IntegerField(blank=False, null=False)
+    updated_by = models.IntegerField(blank=False, null=False)
+    created_date = models.DateField(default=datetime.now)
+    updated_date = models.DateField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
-# Create Campaign Transaction Status table start.
+# Create Module table start
 

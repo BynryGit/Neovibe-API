@@ -5,13 +5,13 @@ from rest_framework.views import APIView
 from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
 from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
-     check_authorization, get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
+    get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
     save_advertisement_details,save_campaign_details
 from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
 from api.v1.smart360_API.smart360_API.campaign.models.advert_status import get_cam_status_by_tenant_id_string
 
-from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
-from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
+from api.v1.smart360_API.userapp.models.privilege import get_privilege_by_id
+from api.v1.smart360_API.commonapp.models.sub_module import get_sub_module_by_id
 from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string,get_category_by_tenant_id_string
 from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_sub_category_by_tenant_id_string
 from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string

@@ -1,4 +1,5 @@
 # table header
+# module: Utility | sub-module - All
 # table type : Master
 # table name : 2.1  Utility Master
 # table description : It is Utility Master table. It will contain details for Utility details
@@ -27,10 +28,10 @@ class UtilityMaster(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     phone_no = models.IntegerField(null=True, blank=True)
     email_id = models.CharField(max_length=200, blank=False, null=False)
-    location = models.CharField(max_length=200, blank=False, null=False)
     region_id = models.IntegerField(null=True, blank=True)
     country_id = models.IntegerField(null=True, blank=True)
     state_id = models.IntegerField(null=True, blank=True)
+    city_id = models.IntegerField(null=True, blank=True)
     status_id = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
