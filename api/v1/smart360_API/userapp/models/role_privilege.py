@@ -2,7 +2,7 @@
 # module: All  | sub-module - All
 # table type : Master
 # table name : 2.5.2. Role Privileges
-# table description : A master table that stores privileges of users.
+# table description : A master table that stores role wise privileges.
 # frequency of data changes : Low
 # sample tale data : "view only", "validation 1", "validation 2"
 # reference tables : 2.5.4 Product/Services Table

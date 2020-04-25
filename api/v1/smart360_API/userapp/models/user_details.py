@@ -52,9 +52,9 @@ class UserDetails(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.email_id
+        return self.id_string
 
     def __unicode__(self):
-        return self.email_id
+        return self.id_string
 
 # Create User Details table end

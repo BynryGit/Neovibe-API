@@ -5,7 +5,7 @@
 # table description : A master table that stores details of all vendor user in the system.
 # frequency of data changes : Low
 # sample tale data :
-# reference tables :
+# reference tables : Vendor Details
 # author : Saloni Monde
 # created on : 24/04/2020
 
@@ -32,7 +32,6 @@ class VendorDetails(models.Model):
     ifsc_code = models.CharField(max_length=200, blank=True, null=True)
     phone_no = models.CharField(max_length=200, blank=True, null=True)
     email_id = models.CharField(max_length=200, blank=True, null=True)
-
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

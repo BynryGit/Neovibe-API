@@ -4,7 +4,7 @@
 # table name : 2.5.1. Role Master
 # table description : All users unique tokens will be saved in this table along with user_id
 # frequency of data changes : Low
-# sample tale data :
+# sample tale data :"atg23466hdkksk89"
 # reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
 # created on : 24/04/2020
