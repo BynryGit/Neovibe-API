@@ -1,4 +1,5 @@
 # table header
+# module: Utility | sub-module - Utility Services
 # table type : lookup (Local)
 # table name : 2.12.27 Utility Service Type
 # table description : A lookup table for types of utility services.

@@ -1,8 +1,8 @@
 # table header
 # module: Sourcing
 # table type : Master
-# table name : Contracts Master
-# table description : The Contracts Master table saves the basic details of any Contracts created
+# table name : 2.5.3 Contact Person
+# table description : The Contact person table saves the basic details of Contact person/Supplier Contact
 # frequency of data changes : High
 # sample table data :
 # reference tables : None
@@ -17,27 +17,23 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
-from decimal import Decimal
+
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
+# Create Contact Person table start
 
-
-# Create Contracts Master Table start
-
-class ContractsMaster(models.Model):
+class ContactPerson(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    supplier_id = models.IntegerField(null=True, blank=True)
-    contract_name = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
-    contract_type_id = models.IntegerField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
-    contract_period_id = models.IntegerField(null=True, blank=True)
-    contract_amount = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
-    cost_center_id = models.IntegerField(null=True, blank=True)
-    payment_id = models.IntegerField(null=True, blank=True)
+    supplier = models.IntegerField(null=False, blank=False)
+    first_name = models.CharField(max_length=200, blank=True, null=True)
+    middle_name = models.CharField(max_length=200, blank=True, null=True)
+    last_name = models.CharField(max_length=200, blank=True, null=True)
+    phone_no = models.IntegerField(null=True, blank=True)
+    email_id = models.CharField(max_length=200, blank=True, null=True)
     status_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -45,7 +41,10 @@ class ContractsMaster(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
-    def __unicode__(self):
-        return self.id
+    def __str__(self):
+        return self.supplier
 
-# Create Contracts Master table end.
+    def __unicode__(self):
+        return self.supplier
+
+# Create Contact Person table end.

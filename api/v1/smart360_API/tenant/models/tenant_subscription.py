@@ -1,4 +1,5 @@
 # table header
+# module: Tenant | sub-module - All
 # table type : Master
 # table name : 1.2  Tenant Subscription
 # table description :  It will contain details for Tenant subscription related to tenant subscription id, plan.

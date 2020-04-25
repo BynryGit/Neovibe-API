@@ -1,9 +1,10 @@
 # table header
+# module: Tenant | sub-module - Invoices, Payments
 # table type : Master
 # table name : 1.5  Tenant Invoice Transaction
 # table description :  It will contain details for all invoices transaction for multiple invoice references.
 # frequency of data changes : High
-# sample tale data :
+# sample tale data :"INV675","Rs.4500","23",
 # reference tables : 1.4 Tenant Invoices
 # author : Gauri Deshmukh
 # created on : 24/04/2020

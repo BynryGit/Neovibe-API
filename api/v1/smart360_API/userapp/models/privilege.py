@@ -1,8 +1,8 @@
 # table header
 # module: Consumer Care & Ops | sub-module - Consumer, Metering & Billing
 # table type: lookup
-# table name: 2.12.44 Portion  (Local)
-# table description: It portion and ID of various portion to be used by Operator or Utility
+# table name: 2.12.44 Portion (Local)
+# table description: It contains the list of privileges to be used by Operator or Utility
 # #frequency of data changes: low
 # sample table data:
 # reference tables: 2.3.1. Consumer Master

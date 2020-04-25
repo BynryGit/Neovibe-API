@@ -17,6 +17,8 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
 # Create Closure Report table start
@@ -25,13 +27,13 @@ class ClosureReport(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    service_request_id = models.IntegerField(null=True, blank=True)
-    parent_record_id = models.IntegerField(null=True, blank=True)
-    service_type_id = models.IntegerField(null=True, blank=True)
-    city_id = models.IntegerField(null=True, blank=True)
-    area_id = models.IntegerField(null=True, blank=True)
-    resource_id = models.IntegerField(null=True, blank=True)
-    remark = field_unit = models.CharField(max_length=500, blank=True, null=True)
+    service_request = models.IntegerField(null=True, blank=True)
+    parent_record = models.IntegerField(null=True, blank=True)
+    service_type = models.IntegerField(null=True, blank=True)
+    city = models.IntegerField(null=True, blank=True)
+    area = models.IntegerField(null=True, blank=True)
+    resource = models.IntegerField(null=True, blank=True)
+    remark = models.CharField(max_length=500, blank=True, null=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -39,6 +41,6 @@ class ClosureReport(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return unicode(str(self.id))
+        return str(self.service_request)
 
 # Create Closure Report table end.

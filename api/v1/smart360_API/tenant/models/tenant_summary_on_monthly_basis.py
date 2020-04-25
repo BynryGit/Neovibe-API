@@ -1,4 +1,5 @@
 # table header
+# module: Tenant | sub-module - All
 # table type : Master
 # table name : 1.8 Tenant Summary on Monthly Basis
 # table description :  It will contain details for Tenant's summary  with respect to his monthly usage.
