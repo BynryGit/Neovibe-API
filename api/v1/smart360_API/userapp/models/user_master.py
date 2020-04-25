@@ -21,7 +21,7 @@ from django.db import models  # importing package for database
 
 # Create User Details table start
 
-class UserDetails(models.Model):
+class User(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)

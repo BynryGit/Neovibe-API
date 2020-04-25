@@ -25,8 +25,6 @@ from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 class Module(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.IntegerField(blank=False, null=False)
     updated_by = models.IntegerField(blank=False, null=False)
