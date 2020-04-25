@@ -1,4 +1,5 @@
 # table header
+# module: Tenant | sub-module - Invoices, Payments
 # table type : Master
 # table name : 1.3 Tenant bank details
 # table description : It will contain details for Tenant bank like bank name, branch name,etc.

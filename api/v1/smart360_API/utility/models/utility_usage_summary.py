@@ -1,9 +1,10 @@
 # table header
+# module: Utility | sub-module - Utility Usage
 # table type : Transactional
 # table name :2.3  Utility Usage Summary
 # table description : It will contain summary of usage by the utility.
 # frequency of data changes : High
-# sample tale data :
+# sample tale data :"1200","2324","May","5GB"
 # reference tables : 2.1. UtilityMaster
 # author : Gauri Deshmukh
 # created on : 24/04/2020
@@ -43,4 +44,4 @@ class UtilityUsageSummary(models.Model):
     def __unicode__(self):
         return self.id_string
 
-# Create Utility Master table end.
+# Create Utility Usage Summary table end.
