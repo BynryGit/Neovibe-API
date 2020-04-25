@@ -25,10 +25,10 @@ class Schedule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    schedule_type = models.IntegerField(null=True, blank=True)
-    activity_type = models.IntegerField(null=True, blank=True)
+    schedule_type = models.IntegerField(null=True, blank=True) #Meter Reading, Bill Distribution, Notices
+    activity_type = models.IntegerField(null=True, blank=True) #Manual, Photo, SpotBill, SmartMeter
     bill_cycle = models.IntegerField(null=True, blank=True)
-    month = models.CharField(max_length=200, null=True, blank=True)
+    bill_month = models.CharField(max_length=200, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True, default=datetime.now())
     end_date = models.DateField(null=True, blank=True, default=datetime.now())
     due_date = models.DateField(null=True, blank=True, default=datetime.now())

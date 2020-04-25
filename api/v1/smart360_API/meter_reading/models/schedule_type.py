@@ -3,7 +3,7 @@
 # Table Name : 2.12.51 Schedule Type
 # Description : It Schedule type and ID of various Schedule type to be used by Operator or Utility
 # Frequency of data changes : Low
-# Sample Table Data : Reading, Billing
+# Sample Table Data : Reading, Bill Distribution, Notices
 # Reference Table : 2.3.8.1 Schedule
 # Author : Jayshree
 # Creation Date : 22/04/2020
