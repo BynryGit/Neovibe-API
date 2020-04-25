@@ -17,7 +17,8 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
-
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 # Create Deprecation Method table start.
 
