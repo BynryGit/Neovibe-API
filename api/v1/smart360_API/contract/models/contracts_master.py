@@ -1,8 +1,8 @@
 # table header
-# module: O&M
+# module: Sourcing
 # table type : Master
-# table name : 2.6.5 SOP Assign
-# table description : It is service appointment table. It will store the appointment of each service type.
+# table name : Contracts Master
+# table description : The Contracts Master table saves the basic details of any Contracts created
 # frequency of data changes : High
 # sample table data :
 # reference tables : None
@@ -17,23 +17,29 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
+from decimal import Decimal  # importing package for decimal
+
 from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
-# Create Service Assign table start
+# Create Contracts Master Table start
 
-class ServiceAssign(models.Model):
+class ContractsMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    service_request = models.IntegerField(null=True, blank=True)
-    sop_master_detail = models.IntegerField(null=True, blank=True)
-    parent_record = models.IntegerField(null=True, blank=True)
+    supplier = models.IntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
+    contract_type = models.IntegerField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True, default=datetime.now())
+    end_date = models.DateField(null=True, blank=True, default=datetime.now())
+    contract_period = models.IntegerField(null=True, blank=True)
+    contract_amount = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
+    cost_center = models.IntegerField(null=True, blank=True)
+    payment = models.IntegerField(null=True, blank=True)
     status = models.IntegerField(null=True, blank=True)
-    city = models.IntegerField(null=True, blank=True)
-    area = models.IntegerField(null=True, blank=True)
-    subarea = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -41,9 +47,9 @@ class ServiceAssign(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.sop_master_detail)
+        return self.name
 
     def __unicode__(self):
-        return str(self.sop_master_detail)
+        return self.name
 
-# Create Service Assign table end.
+# Create Contracts Master table end.

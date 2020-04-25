@@ -1,13 +1,13 @@
 # table header
-# module: Sourcing
+# module: Purchase
 # table type : Master
-# table name : Contracts Master
-# table description : The Contracts Master table saves the basic details of any Contracts created
+# table name : 2.7.2 Asset Assign Table
+# table description : This table will store all the assign assets.
 # frequency of data changes : High
 # sample table data :
 # reference tables : None
 # author : Jayshree Kumbhare
-# created on : 24/04/2020
+# created on : 25/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -17,28 +17,24 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
-from decimal import Decimal
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
+# Create Asset Assign table start
 
-
-
-# Create Contracts Master Table start
-
-class ContractsMaster(models.Model):
+class AssetAssign(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    supplier_id = models.IntegerField(null=True, blank=True)
-    contract_name = models.CharField(max_length=200, blank=True, null=True)
+    request_master_id = models.IntegerField(null=True, blank=True)
+    asset_id = models.IntegerField(null=True, blank=True)
+    quantity = models.CharField(max_length=200, blank=True, null=True)
+    assign_quantity = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    contract_type_id = models.IntegerField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
-    contract_period_id = models.IntegerField(null=True, blank=True)
-    contract_amount = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
-    cost_center_id = models.IntegerField(null=True, blank=True)
-    payment_id = models.IntegerField(null=True, blank=True)
-    status_id = models.IntegerField(null=True, blank=True)
+    get_pass_number = models.CharField(max_length=200, blank=True, null=True)
+    country_id = models.IntegerField(null=True, blank=True)
+    state_id = models.IntegerField(null=True, blank=True)
+    city_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -48,4 +44,4 @@ class ContractsMaster(models.Model):
     def __unicode__(self):
         return self.id
 
-# Create Contracts Master table end.
+# Create Asset Assign table end.

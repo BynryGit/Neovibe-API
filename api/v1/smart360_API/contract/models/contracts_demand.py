@@ -17,7 +17,10 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
-from decimal import Decimal   # importing package for float number
+from decimal import Decimal  # importing package for float number
+
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
 # Create Contracts Demand Table start
@@ -26,8 +29,8 @@ class ContractsDemand(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    contract_id = models.IntegerField(null=True, blank=True)
-    product_id = models.IntegerField(null=True, blank=True)
+    contract = models.IntegerField(null=True, blank=True)
+    product = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField(null=True, blank=True)
     rate = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
     demand = models.IntegerField(null=True, blank=True)
@@ -35,7 +38,7 @@ class ContractsDemand(models.Model):
     due_date = models.DateField(null=True, blank=True, default=datetime.now())
     remark = models.CharField(max_length=500, blank=True, null=True)
     status_id = models.IntegerField(null=True, blank=True)
-    fulfilment = models.IntegerField(null=True, blank=True)
+    fulfillment = models.IntegerField(null=True, blank=True)
     gate_pass_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -43,8 +46,10 @@ class ContractsDemand(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.contract
+
     def __unicode__(self):
-        return self.id
+        return self.contract
 
 # Create Contracts Demand table end.
-

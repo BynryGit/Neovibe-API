@@ -1,13 +1,13 @@
 # table header
-# module: Sourcing
+# module: Purchase
 # table type : Master
-# table name : Product Table
-# table description : The Product table saves the basic Product/Services details of any Supplier
+# table name : 2.7.5 Tender Quatation
+# table description : The quatation table saves the quatation details according tender.
 # frequency of data changes : High
 # sample table data :
 # reference tables : None
 # author : Jayshree Kumbhare
-# created on : 24/04/2020
+# created on : 25/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -17,26 +17,20 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
-from decimal import Decimal   # importing package for float number
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
+# Create Tender Quatation table start
 
-
-# Create Product Table start
-
-class Product(models.Model):
+class TenderQuatation(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    supplier_id = models.IntegerField(null=True, blank=True)
-    ps_type_id = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
-    image = models.UrlField(null=False, blank=False)
-    ps_category_id = models.IntegerField(null=True, blank=True)
-    ps_sub_category_id = models.IntegerField(null=True, blank=True)
-    rate = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
-    unit_id = models.IntegerField(null=True, blank=True)
-    status_id = models.IntegerField(null=True, blank=True)
-    source_type_id = models.IntegerField(null=True, blank=True)
+    tender_id = models.IntegerField(null=True, blank=True)
+    vendor_id = models.IntegerField(null=True, blank=True)
+    amount = models.CharField(max_length=200, blank=True, null=True)
+    submission_date = models.DateField(null=True, blank=True, default=datetime.now())
+    description = models.CharField(max_length=500, blank=True, null=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -46,4 +40,4 @@ class Product(models.Model):
     def __unicode__(self):
         return self.id
 
-# Create Product table end.
+# Create Tender Quatation table end.

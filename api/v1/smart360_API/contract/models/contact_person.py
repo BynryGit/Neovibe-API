@@ -18,6 +18,9 @@ import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
+
 
 # Create Contact Person table start
 
@@ -25,7 +28,7 @@ class ContactPerson(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    supplier_id = models.IntegerField(null=True, blank=True)
+    supplier = models.IntegerField(null=False, blank=False)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     middle_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
@@ -38,7 +41,10 @@ class ContactPerson(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.supplier
+
     def __unicode__(self):
-        return self.id
+        return self.supplier
 
 # Create Contact Person table end.
