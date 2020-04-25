@@ -4,7 +4,7 @@
 # table name: 2.12.45 Consumer Status (Local)
 # table description: It is a lookup table that stores the status of the consumer to be used in various tables.
 # frequency of data changes: low
-# sample table data: "Connected", "Disconnected", "Temp disconnected", "Hold"
+# sample table data: "Connected", "Disconnected", "Temp disconnected", "Hold","Registered"
 # reference tables: 2.4.1. Consumer Master
 # Author: Gauri Deshmukh
 # creation date: 22/4/2020
