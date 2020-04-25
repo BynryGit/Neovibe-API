@@ -20,20 +20,24 @@ from django.db import models  # importing package for database
 from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
-# Create Tender -  Vendor table start
+
+# Create Tender - Vendor table start
 
 class TenderVendor(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    tender_id = models.IntegerField(null=True, blank=True)
-    vendor_id = models.IntegerField(null=True, blank=True)
-    status_id = models.IntegerField(null=True, blank=True)
+    tender = models.IntegerField(null=True, blank=True)
+    vendor = models.IntegerField(null=True, blank=True)
+    status = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.id
 
     def __unicode__(self):
         return self.id
