@@ -1,9 +1,10 @@
 # table header
+# module: Tenant | sub-module - Invoices, Payments
 # table type : Master
 # table name : 1.4 Tenant Invoices
 # table description :  It will contain details for all invoices generated against the Tenant.
 # frequency of data changes : High
-# sample tale data :
+# sample tale data : "Sub2","UTI4579989","8765675788","INV786965",
 # reference tables : 1.1 Tenant Master
 # author : Gauri Deshmukh
 # created on : 24/04/2020

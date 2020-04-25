@@ -1,4 +1,5 @@
 # table header
+# module: Tenant | sub-module - All
 # table type : Master
 # table name : 1.7 Tenant System Modules
 # table description : It will contain details for Tenant system modules.

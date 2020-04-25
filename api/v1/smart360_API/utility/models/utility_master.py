@@ -1,4 +1,5 @@
 # table header
+# module: Utility | sub-module - All
 # table type : Master
 # table name : 2.1  Utility Master
 # table description : It is Utility Master table. It will contain details for Utility details
