@@ -2,11 +2,13 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
 
 from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
      check_authorization, get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
     save_advertisement_details,save_campaign_details
 from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
+from api.v1.smart360_API.smart360_API.campaign.models.advert_status import get_cam_status_by_tenant_id_string
 
 from api.v1.smart360_API.lookup.models.privilege import get_privilege_by_id
 from api.v1.smart360_API.lookup.models.sub_module import get_sub_module_by_id
@@ -52,11 +54,11 @@ class CampaignListApiView(APIView):
                 # Checking authorization end
 
                     # Code for filtering campaign start
-                    campaigns = get_filtered_campaign(user, request)
+                    campaigns,total_pages, page_no = get_filtered_campaign(user, request)
                     # Code for filtering campaign end
 
                     # Code for lookups start
-                    statuses = Status.objects.filter(user.tenant)
+                    status = get_cam_status_by_tenant_id_string(user.tenant)
                     campaigns_type = get_camp_type_by_tenant_id_string(user.tenant.id_string)
                     category = get_category_by_tenant_id_string(user.tenant.id_string)
                     sub_category = get_sub_category_by_tenant_id_string(user.tenant.id_string)
@@ -70,7 +72,11 @@ class CampaignListApiView(APIView):
                             'category': category.objects.get(id = campaign.category_id).category_name,
                             'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
                             'frequency':frequency.objects.get(id = campaign.frequency_id).frequency_name,
-                            'status': statuses.objects.get(id = campaign.status_id).status_name,
+                            'status': status.objects.get(id = campaign.status_id).status_name,
+                            'name':campaign.name,
+                            'raised_on': campaign.created_date.strftime(DISPLAY_DATE_FORMAT),
+                            'total_pages': total_pages,
+                            'page_no': page_no
                         })
                     return Response({
                          STATE: SUCCESS,
