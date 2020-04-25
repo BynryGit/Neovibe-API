@@ -37,4 +37,5 @@ class AdvertisementStatus(models.Model):
 
     def __unicode__(self):
         return self.name
+
 # Create advertisement Status table end.

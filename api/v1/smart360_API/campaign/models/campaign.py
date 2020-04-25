@@ -1,4 +1,5 @@
 # table header
+# module: S&M | sub-module - All
 # table type : Master (Local)
 # table name : 2.3.6 Campaign Master
 # table description : A Master table that store campaign details

@@ -1,4 +1,5 @@
 # table header
+# module: S&M | sub-module - Campaign
 # table type : Transaction (Local)
 # table name : 2.3.6 advertisement assignment
 # table description : A transaction table to store vendor assignment for given advertisement

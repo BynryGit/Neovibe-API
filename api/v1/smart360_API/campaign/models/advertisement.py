@@ -1,4 +1,5 @@
 # table header
+# module: S&M | sub-module - Campaign
 # table type : Master (Local)
 # table name : 2.3.6 advertisements master
 # table description : A master table to store advertisements in given campaign

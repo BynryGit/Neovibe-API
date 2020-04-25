@@ -37,4 +37,5 @@ class AdvertisementType(models.Model):
 
     def __unicode__(self):
         return self.status
+
 # Create advertisement type table end.

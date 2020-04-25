@@ -3,7 +3,7 @@
 # table type : lookup (local)
 # table name : 2.12.35 Field Type
 # table description : A lookup table for various types of fields in given survey .
-# frequency of data changes : LOW
+# frequency of data changes : low
 # sample tale data : "meter no" , "address" , "connection status"
 # reference tables : 2.3.4 Survey Consumer Table , 2.6.3 SOP Master Details , 2.6.7 Closure Report Transaction
 # author : Saloni Monde
