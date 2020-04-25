@@ -1,5 +1,5 @@
 # table header
-# module: S&M | sub-module - Campaign Transaction
+# module: All | sub-module - All
 # table type : lookup (Local)
 # table name : 2.12.42 Campaign Transaction Status
 # table description : A lookup table for all transactions of given campaign.
