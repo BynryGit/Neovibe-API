@@ -20,6 +20,7 @@ from django.db import models  # importing package for database
 from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
+
 # Create Request Master table start
 
 class RequestMaster(models.Model):
@@ -29,26 +30,29 @@ class RequestMaster(models.Model):
     type = models.IntegerField(null=True, blank=True)
     short_name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    requester_id = models.IntegerField(null=True, blank=True)
-    approver_id = models.IntegerField(null=True, blank=True)
-    asset_id = models.IntegerField(null=True, blank=True)
+    requester = models.IntegerField(null=True, blank=True)
+    approver = models.IntegerField(null=True, blank=True)
+    asset = models.IntegerField(null=True, blank=True)
     request_date = models.DateField(null=True, blank=True, default=datetime.now())
     request_due_date = models.DateField(null=True, blank=True, default=datetime.now())
-    request_status_id = models.IntegerField(null=True, blank=True)
-    country_id = models.IntegerField(null=True, blank=True)
-    state_id = models.IntegerField(null=True, blank=True)
-    city_id = models.IntegerField(null=True, blank=True)
-    department_id = models.IntegerField(null=True, blank=True)
-    project_id = models.IntegerField(null=True, blank=True)
-    category_id = models.IntegerField(null=True, blank=True)
-    sub_category_id = models.IntegerField(null=True, blank=True)
+    request_status = models.IntegerField(null=True, blank=True)
+    country = models.IntegerField(null=True, blank=True)
+    state = models.IntegerField(null=True, blank=True)
+    city = models.IntegerField(null=True, blank=True)
+    department = models.IntegerField(null=True, blank=True)
+    project = models.IntegerField(null=True, blank=True)
+    category = models.IntegerField(null=True, blank=True)
+    sub_category = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.short_name
+
     def __unicode__(self):
-        return self.id
+        return self.short_name
 
 # Create Request Master table end.
