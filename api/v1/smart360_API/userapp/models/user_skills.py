@@ -1,13 +1,13 @@
 # table header
 # module: All  | sub-module - All
-# table type : Master
-# table name : 2.5.2. Role Privileges
-# table description : A master table that stores role wise privileges.
-# frequency of data changes : Low
-# sample tale data : "view only", "validation 1", "validation 2"
-# reference tables : 2.5.4 Product/Services Table
+# table type :
+# table name :
+# table description : Skills of a particular user will be stored in this table
+# frequency of data changes :
+# sample tale data :
+# reference tables :
 # author : Saloni Monde
-# created on : 24/04/2020
+# created on : 25/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -22,16 +22,14 @@ from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
-# Create Role Privilege table start
+# Create User Skills table start
 
-class RolePrivilege(models.Model):
+class UserSkills(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    role_id = models.IntegerField(null=False, blank=False)
-    module = models.IntegerField(null=False, blank=False)
-    sub_module = models.IntegerField(null=False, blank=False)
-    privilege_id = models.IntegerField(null=False, blank=False)
+    user = models.IntegerField(blank=False, null=False)
+    skill = models.IntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -39,9 +37,9 @@ class RolePrivilege(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.roleprivilege.id
+        return self.id
 
     def __unicode__(self):
-        return self.self.roleprivilege.id
+        return self.id
 
-# Create Role Privilege table end
+# Create User Skills table end
