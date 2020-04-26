@@ -25,7 +25,7 @@ from api.v1.smart360_API.lookup.models.activity import Activity
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     sub_module = models.CharField(null=False, blank=False)
-    activity = models.ForeignKey(Activity, null=False, blank=False)
+    module_id = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=200, null=False, blank=False)
     created_by = models.IntegerField(null=False, blank=False)
     updated_by = models.IntegerField(null=False, blank=False)

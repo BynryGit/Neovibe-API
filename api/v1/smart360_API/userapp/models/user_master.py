@@ -24,7 +24,7 @@ from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 # Create User Details table start
 
-class UserDetails(models.Model):
+class User(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
