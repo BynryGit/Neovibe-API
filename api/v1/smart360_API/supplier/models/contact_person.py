@@ -34,7 +34,6 @@ class ContactPerson(models.Model):
     last_name = models.CharField(max_length=200, blank=True, null=True)
     phone_no = models.IntegerField(null=True, blank=True)
     email_id = models.CharField(max_length=200, blank=True, null=True)
-    status_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())

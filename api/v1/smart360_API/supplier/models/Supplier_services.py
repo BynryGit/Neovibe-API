@@ -1,10 +1,10 @@
 # table header
-# module: Sourcing, Purchase
+# module: Sourcing
 # table type : Master
-# table name : Supplier  Master
-# table description : The Supplier Master table saves the basic details of any Supplier that exists.
+# table name : Product Table
+# table description : The Product table saves the basic Product/Services details of any Supplier
 # frequency of data changes : High
-# sample table data : "Supplier 1", "Supplier 2"
+# sample table data :
 # reference tables : None
 # author : Jayshree Kumbhare
 # created on : 24/04/2020
@@ -17,29 +17,29 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
+from decimal import Decimal  # importing package for float number
 
 from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
-# Create Supplier Master table start
+# Create Product Service Table start
 
-class SupplierMaster(models.Model):
+class SupplierServices(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    country = models.IntegerField(null=True, blank=True)
-    state = models.IntegerField(null=True, blank=True)
-    city = models.IntegerField(null=True, blank=True)
-    source = models.IntegerField(null=True, blank=True)
-    name = models.CharField(max_length=500, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
-    phone_no = models.CharField(max_length=200, blank=True, null=True)
-    email_id = models.CharField(max_length=200, blank=True, null=True)
-    address_line_1 = models.CharField(max_length=500, null=True, blank=True)
-    street = models.CharField(max_length=200, blank=True, null=True)
-    zipcode = models.IntegerField(blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
+    supplier = models.IntegerField(null=True, blank=True)
+    type = models.IntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    image = models.UrlField(null=False, blank=False)
+    category = models.IntegerField(null=True, blank=True)
+    subcategory = models.IntegerField(null=True, blank=True)
+    rate = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
+    quantity = models.IntegerField(null=True, blank=True)
+    unit = models.IntegerField(null=True, blank=True)
+    status = models.IntegerField(null=True, blank=True)
+    source_type = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -52,4 +52,4 @@ class SupplierMaster(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Supplier Master table end.
+# Create Product Service table end.

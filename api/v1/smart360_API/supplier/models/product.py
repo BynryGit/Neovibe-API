@@ -25,17 +25,18 @@ from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 # Create Product Service Table start
 
-class ProductService(models.Model):
+class Product(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     supplier = models.IntegerField(null=True, blank=True)
-    ps_type = models.IntegerField(null=True, blank=True)
+    type = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     image = models.UrlField(null=False, blank=False)
-    ps_category = models.IntegerField(null=True, blank=True)
-    ps_sub_category = models.IntegerField(null=True, blank=True)
-    rate = models.FloatField(blank=False, null=False, default=Decimal(0.00))
+    category = models.IntegerField(null=True, blank=True)
+    subcategory = models.IntegerField(null=True, blank=True)
+    rate = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
+    quantity = models.IntegerField(null=True, blank=True)
     unit = models.IntegerField(null=True, blank=True)
     status = models.IntegerField(null=True, blank=True)
     source_type = models.IntegerField(null=True, blank=True)

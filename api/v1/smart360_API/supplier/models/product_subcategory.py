@@ -1,13 +1,14 @@
 # table header
-# module: All  | sub-module - All
-# table type : Master
-# table name : 2.5.4. Vendors User Details
-# table description : A master table that stores details of all vendor user in the system.
+# module: Asset, Sourcing | sub-module - All
+# table type : lookup (Local)
+# table name : 2.12.66 Product/Services Sub-Category
+# table description : A lookup table for sub-categories of products and services.
 # frequency of data changes : Low
 # sample tale data :
-# reference tables : Vendor Details
+# reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
-# created on : 24/04/2020
+# created on : 21/04/2020
+
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,19 +20,14 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Vendor User Details table start
+# Create Product Service Sub Category table start.
 
-class VendorDetails(models.Model):
+class ProductSubCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    vendor = models.IntegerField(blank=False, null=False)
-    user = models.IntegerField(blank=False, null=False)
-    bank_name = models.CharField(max_length=200, blank=True, null=True)
-    account_no = models.CharField(max_length=200, blank=True, null=True)
-    ifsc_code = models.CharField(max_length=200, blank=True, null=True)
-    phone_no = models.CharField(max_length=200, blank=True, null=True)
-    email_id = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    category = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -39,9 +35,9 @@ class VendorDetails(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.vendor
+        return self.name
 
     def __unicode__(self):
-        return self.vendor
+        return self.name
 
-# Create Vendor User Details table end
+# Create Product Service Sub Category table end.
