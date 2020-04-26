@@ -22,7 +22,7 @@ from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 # Create Campaign Status table start.
 
-class advertStatus(models.Model):
+class AdvertStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -42,7 +42,7 @@ class advertStatus(models.Model):
 # Create Campaign Status table end.
 
 def get_cam_status_by_tenant_id_string(tenant_id_string):
-    return CampaignStatus.objects.filter(tenant__id_string=tenant_id_string)
+    return AdvertStatus.objects.filter(tenant__id_string=tenant_id_string)
 
 def get_cam_status_by_id_string(id_string):
-    return CampaignStatus.objects.get(id_string = id_string)
+    return AdvertStatus.objects.get(id_string = id_string)
