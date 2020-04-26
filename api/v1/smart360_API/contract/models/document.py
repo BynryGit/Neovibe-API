@@ -24,15 +24,17 @@ from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 # Create Document Demand Table start
 
 
-class Document(models.Model):
+class Documents(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     module = models.IntegerField(null=True, blank=True)
     sub_module = models.IntegerField(null=True, blank=True)
+    servicetype = models.IntegerField(null=True, blank=True)
     identification = models.IntegerField(null=True, blank=True)
     document_type = models.IntegerField(null=True, blank=True)
-    doc_name = models.CharField(max_length=200, blank=True, null=True)
+    document_subtype = models.IntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
     doc_link = models.UrlField(null=False, blank=False)
     status_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
