@@ -23,15 +23,16 @@ class ConsumerPayments(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    payment_type = models.IntegerField(null=True, blank=True)
-    identification = models.IntegerField(null=True, blank=True)
-    payment_mode = models.IntegerField(null=True, blank=True)
-    payment_channel = models.IntegerField(null=True, blank=True)
-    payment_provider = models.IntegerField(null=True, blank=True)
+    payment_type = models.IntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
+    payment_subtype = models.IntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
+    identification = models.IntegerField(null=True, blank=True) # registration No, Invoice #, service request no
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.FloatField(blank=False, null=False)
     transaction_charges = models.FloatField(blank=False, null=False)
     transaction_date = models.DateField(null=True, blank=True, default=datetime.now())
+    payment_mode = models.IntegerField(null=True, blank=True)
+    payment_channel = models.IntegerField(null=True, blank=True)
+    payment_provider = models.IntegerField(null=True, blank=True)
     receipt_no = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
