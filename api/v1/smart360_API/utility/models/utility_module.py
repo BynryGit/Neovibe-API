@@ -26,8 +26,6 @@ class UtilityModule(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     subscription_id = models.IntegerField(null=True, blank=True)
-    subscription_type_id = models.IntegerField(null=True, blank=True)
-    subscription_type_name = models.CharField(max_length=200, blank=False, null=False)
     module_name  = models.CharField(max_length=200, blank=False, null=False)
     module_desc  = models.CharField(max_length=500, blank=False, null=False)
     is_active = models.BooleanField(default=False)
@@ -37,10 +35,10 @@ class UtilityModule(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id_string
+        return self.module_name
 
 
     def __unicode__(self):
-        return self.id_string
+        return self.module_name
 
 # Create Utility Module table end.

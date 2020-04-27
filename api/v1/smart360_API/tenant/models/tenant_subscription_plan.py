@@ -23,7 +23,6 @@ from django.db import models  # importing package for database
 
 class TenantSubscriptionPlan(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    # tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     subscription_id = models.IntegerField(null=True, blank=True)
     short_name = models.IntegerField(null=True, blank=True)
     subcription_type = models.CharField(max_length=200, blank=False, null=False)

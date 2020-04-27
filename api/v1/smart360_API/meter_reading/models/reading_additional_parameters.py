@@ -32,8 +32,7 @@ class ReadingAdditionalParameters(models.Model):
     prev_sequence = models.CharField(max_length=500, null=True, blank=True)
     location_guidance = models.CharField(max_length=500, null=True, blank=True)
     time_taken = models.CharField(max_length=200, null=True, blank=True)
-    reading_type = models.IntegerField(null=True, blank=True)
-    reading_type_status = models.IntegerField(null=True, blank=True)
+
     extra_parameter = models.IntegerField(null=True, blank=True)
     extra_parameter_remark = models.CharField(max_length=500, null=True, blank=True)
     parameter_flag_type = models.IntegerField(null=True, blank=True)

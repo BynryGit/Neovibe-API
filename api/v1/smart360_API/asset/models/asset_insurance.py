@@ -27,6 +27,7 @@ class AsssetInsurance(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+    asset_id = models.IntegerField(null=True, blank=True)
     insurance_no = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     provider = models.CharField(max_length=200, blank=True, null=True)

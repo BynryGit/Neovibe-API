@@ -1,5 +1,5 @@
 # Table Header
-# Module: Consumer Care
+# Module: Consumer Care and Ops
 # Table Type : Master
 # Table Name : 2.4.1. Consumer Master
 # Description :All active and inactive consumer for given tenant will be saved in this table all master values
@@ -37,8 +37,7 @@ class ConsumerMaster(models.Model):
     cycle = models.IntegerField(null=True, blank=True)
     area = models.IntegerField(null=True, blank=True)
     subarea = models.IntegerField(null=True, blank=True)
-    portion = models.IntegerField(null=True, blank=True)
-    mru = models.IntegerField(null=True, blank=True)
+    route = models.IntegerField(null=True, blank=True)
     scheme = models.IntegerField(null=True, blank=True)
     deposit_amt = models.FloatField(null=True, blank=True)
     collected_amt = models.FloatField(null=True, blank=True)
@@ -51,7 +50,6 @@ class ConsumerMaster(models.Model):
     gas_demand = models.CharField(null=True, blank=True)
     monthly_demand = models.CharField(null=True, blank=True)
     consumer_status = models.IntegerField(null=True, blank=True)
-    consumer_meter = models.IntegerField(null=True, blank=True)
     consumption_ltd = models.CharField(null=True, blank=True)
     invoice_amount_ltd = models.CharField(null=True, blank=True)
     payment_ltd = models.CharField(null=True, blank=True)

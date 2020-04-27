@@ -2,7 +2,7 @@
 # Table Type : Lookup (Local)
 # Table Name : 2.12.51 Schedule Type
 # Description : This table store the schedule status with respect to particular schedule.
-# Sample Table Data : Confirm, Reject, Pending
+# Sample Table Data : Confirm, Reject, Pending, Consumer Imported
 # Frequency of data changes : Low
 # Reference Table : 2.3.8.1 Schedule
 # Author : Jayshree Kumbhare

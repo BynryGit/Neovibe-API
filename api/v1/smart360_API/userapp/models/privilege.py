@@ -28,7 +28,6 @@ class Privilege(models.Model):
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
     name = models.CharField(max_length=500, null=False, blank=False)
-    activity = models.ForeignKey(Activity, null=False, blank=False)
     created_by = models.IntegerField(null=False, blank=False)
     updated_by = models.IntegerField(null=False, blank=False)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
