@@ -1,8 +1,8 @@
 # table header
 # module: Sourcing
 # table type : Master
-# table name : 2.5.3 Contact Person
-# table description : The Contact person table saves the basic details of Contact person/Supplier Contact
+# table name : Document
+# table description : The Document table saves the Document details of all the modules that need documents against them.
 # frequency of data changes : High
 # sample table data :
 # reference tables : None
@@ -21,19 +21,21 @@ from django.db import models  # importing package for database
 from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
+# Create Document Demand Table start
 
-# Create Contact Person table start
 
-class ContactPerson(models.Model):
+class Documents(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    supplier = models.IntegerField(null=False, blank=False)
-    first_name = models.CharField(max_length=200, blank=True, null=True)
-    middle_name = models.CharField(max_length=200, blank=True, null=True)
-    last_name = models.CharField(max_length=200, blank=True, null=True)
-    phone_no = models.IntegerField(null=True, blank=True)
-    email_id = models.CharField(max_length=200, blank=True, null=True)
+    module = models.IntegerField(null=True, blank=True)
+    sub_module = models.IntegerField(null=True, blank=True)
+    servicetype = models.IntegerField(null=True, blank=True)
+    identification = models.IntegerField(null=True, blank=True)
+    document_type = models.IntegerField(null=True, blank=True)
+    document_subtype = models.IntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    doc_link = models.UrlField(null=False, blank=False)
     status_id = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -42,9 +44,10 @@ class ContactPerson(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.supplier
+        return self.identification
 
     def __unicode__(self):
-        return self.supplier
+        return self.identification
 
-# Create Contact Person table end.
+# Create Document table end.
+

@@ -1,11 +1,12 @@
 from api.v1.smart360_API.smart360_API.campaign.models.campaign_master import Campaign
 from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
-from api.v1.smart360_API.campaign.models.campaign_status import get_cam_status_by_tenant_id_string
+from api.v1.smart360_API.campaign.models.advert_status import get_cam_status_by_id_string
 from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_id_string
 from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
 from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
 from django.core.paginator import Paginator
+from django.db import transaction
 
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
 from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_id_string
@@ -33,7 +34,24 @@ def get_filtered_campaign(request, user):
     if request.data['status_id']:
         campaign = campaign.objects.filter(status_id=request.data['status_id'])
 
-    return campaign
+    if request.data['search_text'] == '':
+        pass
+    else:
+        campaign = campaign.filter(name__icontains=request.data['search_text'])
+
+    if request.data['page_number'] == '':
+        paginator = Paginator(campaign,int(request.data['page_size']))
+        total_pages = str(paginator.num_pages)
+        page_no = '1'
+        campaigns = paginator.page(1)
+        return campaigns,total_pages,page_no
+    else:
+        paginator = Paginator(campaign, int(request.data['page_size']))
+        total_pages = str(paginator.num_pages)
+        page_no = request.data['page_number']
+        campaigns = paginator.page(int(page_no))
+
+    return campaigns,total_pages, page_no
 
 
 # verify the campaign data
@@ -57,11 +75,13 @@ def is_advertisement_verified(request):
 
 
 # save the campign details start
+@transaction.atomic
 def save_campaign_details(request, user):
+    sid = transaction.savepoint()
     try:
         # Code for lookups start
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
-        status = get_cam_status_by_tenant_id_string(request.data['camp_status'])
+        status = get_cam_status_by_id_string(request.data['camp_status'])
         campaigns_type = get_camp_type_by_id_string(request.data['campaigns_type'])
         category = get_consumer_category_by_id_string(request.data['consumer_category'])
         sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
@@ -104,15 +124,19 @@ def save_campaign_details(request, user):
             campaign_details.sub_area = sub_area.id
             campaign_details.status_id = status.id
             campaign_details.save()
+            transaction.savepoint_commit(sid)
             return campaign_details
     except Exception as e:
+        transaction.rollback(sid)
         campaign_details = ''
         return campaign_details
 # save the campign details end
 
 
 # save advertisement details start
+@transaction.atomic
 def save_advertisement_details(request,user,id_string):
+    sid = transaction.savepoint()
     try:
         campaign_obj = Campaign.objects.get(id_string=id_string)
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
@@ -148,8 +172,10 @@ def save_advertisement_details(request,user,id_string):
              )
              advertise_obj.save()
              advertise_list.append(advertise_obj)
+        transaction.savepoint_commit(sid)
         return advertise_list
     except Exception as e:
+        transaction.rollback(sid)
         advertise_list = ''
         return advertise_list
 # save advertisement details end

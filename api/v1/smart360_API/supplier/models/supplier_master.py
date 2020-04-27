@@ -1,5 +1,5 @@
 # table header
-# module: Sourcing
+# module: Sourcing, Purchase
 # table type : Master
 # table name : Supplier  Master
 # table description : The Supplier Master table saves the basic details of any Supplier that exists.
@@ -39,7 +39,6 @@ class SupplierMaster(models.Model):
     address_line_1 = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=200, blank=True, null=True)
     zipcode = models.IntegerField(blank=True, null=True)
-    payment = models.IntegerField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

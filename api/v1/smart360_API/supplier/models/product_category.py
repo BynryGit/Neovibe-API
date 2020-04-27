@@ -1,11 +1,11 @@
 # table header
-# module: S&M | sub-module - Campaign
+# module: Asset, Sourcing | sub-module - All
 # table type : lookup (Local)
-# table name : 2.12.41 advertisement status
-# table description : A lookup table for advertisement status for campaign.
+# table name : 2.12.65 Product/Services Category
+# table description : A lookup table for categories of products and services.
 # frequency of data changes : Low
-# sample tale data : "created", "assigned", "started","completed","hold","cancel"
-# reference tables : 2.3.7 advertisement assignment Table
+# sample tale data :
+# reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
 # created on : 21/04/2020
 
@@ -17,12 +17,11 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
-from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
-from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
-# Create advertisement Status table start.
 
-class AdvertisementStatus(models.Model):
+# Create Product Service Category table start.
+
+class ProductCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -39,4 +38,5 @@ class AdvertisementStatus(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create advertisement Status table end.
+# Create Product Service Category table start.
+

@@ -20,6 +20,9 @@ from django.db import models  # importing package for database
 
 
 # Create Procurement Type table start.
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
+
 
 class ProcurementType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

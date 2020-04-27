@@ -26,9 +26,11 @@ class Role(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_lengt=200, null=True, blank=True)
-    department = models.CharField(max_lengt=200, null=True, blank=True)
-    form_factor = models.IntegerField(null=False, blank=False)
-    status = models.IntegerField(null=False, blank=False)
+    role_type = models.IntegerField(null=False, blank=False) # Tenant, Utility
+    role_subtype = models.IntegerField(null=False, blank=False)  # employee, vendor, supplier
+    form_factor_id = models.IntegerField(null=False, blank=False) # Web, Mobile
+    department_id = models.IntegerField(null=False, blank=False)
+    status_id = models.IntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

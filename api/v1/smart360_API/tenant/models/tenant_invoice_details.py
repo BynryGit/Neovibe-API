@@ -21,9 +21,10 @@ from django.db import models  # importing package for database
 
 # Create Tenant Invoice Transaction table start.
 
-class TenantInvoiceTransaction(models.Model):
+class TenantInvoiceDetails(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
+    tenantinvoices_id = models.IntegerField(null=True, blank=True)
     invoice_number = models.IntegerField(null=True, blank=True)
     description = models.CharField(max_length=500, blank=False, null=False)
     qty = models.FloatField(null=True, blank=True)

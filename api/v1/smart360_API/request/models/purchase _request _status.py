@@ -9,16 +9,19 @@
 # Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
-#change history
-#<ddmmyyyy>-<changes>-<Author>
+# change history
+# <ddmmyyyy>-<changes>-<Author>
 
 import datetime  # importing package for datetime
 import uuid  # importing package for GUID
 
 from django.db import models  # importing package for database
 
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
-#Create PurchaseRequestStatus table start
+
+# Create PurchaseRequestStatus table start
 
 class PurchaseRequestStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -37,4 +40,4 @@ class PurchaseRequestStatus(models.Model):
     def __unicode__(self):
         return self.status
 
- # Create PurchaseRequestStatus table end
+# Create PurchaseRequestStatus table end

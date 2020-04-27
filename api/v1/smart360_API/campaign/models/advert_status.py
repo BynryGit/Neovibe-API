@@ -1,11 +1,11 @@
 # table header
-# module: Utility  | sub-module - Utility Services
+# module: S&M | sub-module - Campaign
 # table type : lookup (Local)
-# table name : 2.12.27 Utility Service Type
-# table description : A lookup table for utility service status for given utility.
+# table name : 2.12.39 Advertisement Status
+# table description : A lookup table for status of given Advertisement.
 # frequency of data changes : Low
-# sample tale data : "Active","Deactive"
-# reference tables : 2.2.1 Utility Services Master
+# sample tale data : "created", "assigned", "started","completed","hold","cancel"
+# reference tables : 2.3.6 Campaign Master Table
 # author : Saloni Monde
 # created on : 21/04/2020
 
@@ -17,11 +17,12 @@ import uuid  # importing package for guid
 import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
+from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
+from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
+# Create Campaign Status table start.
 
-# Create Utility Service Status table start.
-
-class UtilityServiceStatus(models.Model):
+class AdvertStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
@@ -38,4 +39,10 @@ class UtilityServiceStatus(models.Model):
     def __unicode__(self):
         return self.status
 
-# Create Utility Service Status table end.
+# Create Campaign Status table end.
+
+def get_cam_status_by_tenant_id_string(tenant_id_string):
+    return AdvertStatus.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_cam_status_by_id_string(id_string):
+    return AdvertStatus.objects.get(id_string = id_string)

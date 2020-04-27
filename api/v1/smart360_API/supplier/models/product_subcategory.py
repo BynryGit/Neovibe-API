@@ -1,13 +1,14 @@
 # table header
-# module: Utility | sub-module - Utility Services
+# module: Asset, Sourcing | sub-module - All
 # table type : lookup (Local)
-# table name : 2.12.27 Utility Service Type
-# table description : A lookup table for types of utility services.
+# table name : 2.12.66 Product/Services Sub-Category
+# table description : A lookup table for sub-categories of products and services.
 # frequency of data changes : Low
 # sample tale data :
-# reference tables : 2.2.1 Utility Services Master
+# reference tables : 2.5.4 Product/Services Table
 # author : Saloni Monde
 # created on : 21/04/2020
+
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,13 +20,14 @@ import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 
-# Create Utility Service Type table start.
+# Create Product Service Sub Category table start.
 
-class UtilityServiceType(models.Model):
+class ProductSubCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    name = models.CharField(maxlength=200, blank=False, null=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    category = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
@@ -38,4 +40,4 @@ class UtilityServiceType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Utility Service Type table end.
+# Create Product Service Sub Category table end.

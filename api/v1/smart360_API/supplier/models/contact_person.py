@@ -1,12 +1,12 @@
 # table header
-# module: All  | sub-module - All
+# module: Sourcing
 # table type : Master
-# table name : 2.5.2. Role Privileges
-# table description : A master table that stores role wise privileges.
-# frequency of data changes : Low
-# sample tale data : "view only", "validation 1", "validation 2"
-# reference tables : 2.5.4 Product/Services Table
-# author : Saloni Monde
+# table name : 2.5.3 Contact Person
+# table description : The Contact person table saves the basic details of Contact person/Supplier Contact
+# frequency of data changes : High
+# sample table data :
+# reference tables : None
+# author : Jayshree Kumbhare
 # created on : 24/04/2020
 
 # change history
@@ -22,26 +22,28 @@ from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
 from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
-# Create Role Privilege table start
+# Create Contact Person table start
 
-class RolePrivilege(models.Model):
+class ContactPerson(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    role_id = models.IntegerField(null=False, blank=False)
-    module = models.IntegerField(null=False, blank=False)
-    sub_module = models.IntegerField(null=False, blank=False)
-    privilege_id = models.IntegerField(null=False, blank=False)
-    is_active = models.BooleanField(default=False)
+    supplier = models.IntegerField(null=False, blank=False)
+    first_name = models.CharField(max_length=200, blank=True, null=True)
+    middle_name = models.CharField(max_length=200, blank=True, null=True)
+    last_name = models.CharField(max_length=200, blank=True, null=True)
+    phone_no = models.IntegerField(null=True, blank=True)
+    email_id = models.CharField(max_length=200, blank=True, null=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.roleprivilege.id
+        return self.supplier
 
     def __unicode__(self):
-        return self.self.roleprivilege.id
+        return self.supplier
 
-# Create Role Privilege table end
+# Create Contact Person table end.

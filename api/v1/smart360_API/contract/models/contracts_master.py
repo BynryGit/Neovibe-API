@@ -1,5 +1,5 @@
 # table header
-# module: Sourcing
+# module: Sourcing, Purchase
 # table type : Master
 # table name : Contracts Master
 # table description : The Contracts Master table saves the basic details of any Contracts created
@@ -29,16 +29,16 @@ class ContractsMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    supplier = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     contract_type = models.IntegerField(null=True, blank=True)
     start_date = models.DateField(null=True, blank=True, default=datetime.now())
     end_date = models.DateField(null=True, blank=True, default=datetime.now())
     contract_period = models.IntegerField(null=True, blank=True)
-    contract_amount = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
+    contract_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
+    supplier = models.IntegerField(null=True, blank=True)
+    product_id = models.IntegerField(null=True, blank=True)
     cost_center = models.IntegerField(null=True, blank=True)
-    payment = models.IntegerField(null=True, blank=True)
     status = models.IntegerField(null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
