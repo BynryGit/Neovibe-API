@@ -13,8 +13,8 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
 
 
@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 
 class Unit(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)

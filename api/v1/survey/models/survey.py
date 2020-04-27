@@ -13,8 +13,9 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 

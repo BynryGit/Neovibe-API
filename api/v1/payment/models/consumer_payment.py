@@ -11,8 +11,9 @@
 
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
@@ -20,8 +21,8 @@ from django.db import models  # importing package for database
 
 class ConsumerPayments(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     payment_type = models.IntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_subtype = models.IntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees

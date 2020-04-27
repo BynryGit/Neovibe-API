@@ -12,12 +12,11 @@
 # change history
 # <ddmmyyyy>-<changes>-<Author>
 
-import datetime  # importing package for datetime
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
-
 from django.db import models  # importing package for database
-
-from api.v1.smart360_API.lookup.models.activity import Activity
 
 
 # TODO: correct the spelling :Done

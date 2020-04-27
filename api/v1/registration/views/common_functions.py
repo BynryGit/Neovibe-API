@@ -12,7 +12,7 @@ from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.lookup.models.service_type import get_service_type_by_id_string
-from v1.registration.models.registration_type import get_registration_type_by_id_string
+from v1.registration.models.registration import get_registration_type_by_id_string
 from v1.registration.models.registrations import Registration, get_registration_by_id_string
 from v1.supplier.models.supplier_payment import Payment
 from v1.utility.models.utility_master import UtilityMaster

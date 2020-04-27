@@ -12,13 +12,11 @@
 # change history
 # <ddmmyyyy>-<changes>-<Author>
 
-import datetime  # importing package for datetime
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
-
 from django.db import models  # importing package for database
-
-from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
-from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
 # Create PurchaseRequestStatus table start

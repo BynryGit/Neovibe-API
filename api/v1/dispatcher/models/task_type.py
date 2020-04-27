@@ -12,20 +12,19 @@
 # change history
 # <ddmmyyyy>-<changes>-<Author>
 
-import datetime  # importing package for datetime
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
-
 from django.db import models  # importing package for database
-from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
-from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
 # Create Task Type table start
 
 class TaskType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.IntegerField(null=False, blank=False)
     updated_by = models.IntegerField(null=False, blank=False)

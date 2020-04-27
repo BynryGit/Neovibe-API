@@ -11,8 +11,9 @@
 
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
@@ -20,8 +21,8 @@ from django.db import models  # importing package for database
 
 class ConsumerOutstanding(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer = models.IntegerField(null=True, blank=True)
     outstanding_amt = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     created_by = models.IntegerField(null=True, blank=True)

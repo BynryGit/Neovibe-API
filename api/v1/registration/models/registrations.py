@@ -12,16 +12,17 @@
 # change history
 # <ddmmyyyy><changes><author>
 
-import datetime
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 import uuid
-
 from django.db import models
 # Remove all fields as compulsory
 # Create Consumer Registration table start.
 class Registration(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     registration_no = models.CharField(null=True, blank=True)
     registration_type_id = models.IntegerField(null=True, blank=True)
     status_id = models.IntegerField(null=True, blank=True)

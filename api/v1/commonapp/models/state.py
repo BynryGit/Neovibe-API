@@ -10,17 +10,14 @@
 # Creation Date : 21-04-2020
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
-from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
-from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
-
 # Create State table start
 
 class State(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     country = models.IntegerField(blank=False, null=False)
     region = models.IntegerField(blank=False, null=False)

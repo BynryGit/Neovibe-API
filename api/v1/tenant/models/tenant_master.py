@@ -14,8 +14,7 @@
 
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
 
 

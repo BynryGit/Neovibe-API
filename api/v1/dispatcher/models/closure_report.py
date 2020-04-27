@@ -14,19 +14,18 @@
 
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from api.v1.smart360_API.tenant.models.tenant_master import TenantMaster
-from api.v1.smart360_API.utility.models.utility_master import UtilityMaster
 
 
 # Create Closure Report table start
 
 class ClosureReport(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     service_request = models.IntegerField(null=True, blank=True)
     parent_record = models.IntegerField(null=True, blank=True)
     service_type = models.IntegerField(null=True, blank=True)
