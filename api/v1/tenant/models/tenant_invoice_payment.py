@@ -32,7 +32,7 @@ class TenantInvoiceTransaction(models.Model):
     transaction_date = models.DateField(null=True, blank=True, default=datetime.now())
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     tax_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
-    currency = models.CharField(max_length=100, blank=False, null=False)
+    currency = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

@@ -37,7 +37,7 @@ class TenantInvoices(models.Model):
     contact_no = models.IntegerField(null=True, blank=True)
     email_id = models.CharField(max_length=200, blank=False, null=False)
     month = models.CharField(max_length=200, blank=False, null=False)
-    billing_address = models.CharField(max_length=800, blank=False, null=False)
+    billing_address = models.CharField(max_length=500, blank=False, null=False)
     address = models.CharField(max_length=500, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)

@@ -32,7 +32,7 @@ class ContractsDemand(models.Model):
     requested_quantity = models.IntegerField(null=True, blank=True)
     unit = models.IntegerField(null=True, blank=True)
     actual_quantity = models.IntegerField(null=True, blank=True)
-    rate = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
+    rate = models.FloatField(max_length=200, blank=False, null=False, default=Decimal(0.00))
     demand_date = models.DateField(null=True, blank=True, default=datetime.now())
     due_date = models.DateField(null=True, blank=True, default=datetime.now())
     remark = models.CharField(max_length=500, blank=True, null=True)
