@@ -1,3 +1,6 @@
+# Default ignored files
+/shelf/
+/workspace.xml
 /api/v1/asset/migrations/
 /api/v1/billing/migrations/
 /api/v1/campaign/migrations/
