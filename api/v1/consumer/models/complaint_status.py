@@ -26,7 +26,7 @@ class ComplaintStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    status = models.CharField(null=True, blank=True)
+    status = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

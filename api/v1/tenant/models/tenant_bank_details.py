@@ -34,7 +34,7 @@ class TenantBankDetails(models.Model):
     ifsc_no = models.CharField(max_length=300, blank=False, null=False)
     pan_no = models.CharField(max_length=100, blank=False, null=False)
     gst_no  = models.CharField(max_length=100, blank=False, null=False)
-    tax_id_no = models.CharField(null=True, blank=True)
+    tax_id_no = models.CharField(max_length=100, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

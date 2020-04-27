@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    sub_module = models.CharField(null=False, blank=False)
+    sub_module = models.IntegerField(null=False, blank=False)
     module_id = models.IntegerField(null=False, blank=False)
     name = models.CharField(max_length=200, null=False, blank=False)
     created_by = models.IntegerField(null=False, blank=False)

@@ -25,13 +25,13 @@ class InvoiceBill(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     invoice_no = models.CharField(max_length=200, null=True, blank=True)
     invoice_date = models.DateField(null=True, blank=True, default=datetime.now())
-    consumer_no = models.CharField(max_length=200, null=True, blank=True)  # TODO
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
     category = models.IntegerField(null=True, blank=True)
     subcategory = models.IntegerField(null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
     contact = models.CharField(max_length=200, null=True, blank=True)
     conversion_date = models.DateField(null=True, blank=True, default=datetime.now())
-    consumer_status = models.CharField(null=True, blank=True)  # TODO
+    consumer_status = models.CharField(max_length=200, null=True, blank=True)
     cycle = models.IntegerField(null=True, blank=True)
     route = models.IntegerField(null=True, blank=True)
     utility_service_plan = models.IntegerField(null=True, blank=True)
@@ -42,7 +42,7 @@ class InvoiceBill(models.Model):
     billing_period_to = models.DateField(null=True, blank=True, default=datetime.now())
     meter_no = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.IntegerField(null=True, blank=True)
-    meter_reading = models.IntegerField(max_length=200, null=True, blank=True)
+    meter_reading = models.IntegerField(null=True, blank=True)
     previous_reading = models.CharField(max_length=200, null=True, blank=True)
     current_reading = models.CharField(max_length=200, null=True, blank=True)
     previous_reading_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -54,7 +54,7 @@ class InvoiceBill(models.Model):
     consumption_charges = models.FloatField(null=True, blank=True)
     net_amount = models.FloatField(null=True, blank=True)
     outstanding = models.FloatField(null=True, blank=True)
-    payment = models.CharField(null=True, blank=True)
+    payment = models.CharField(max_length=200, null=True, blank=True)
     current_charges = models.FloatField(null=True, blank=True)
     total_emi_paid = models.FloatField(null=True, blank=True)
     remaining_emi_amt = models.FloatField(null=True, blank=True)
@@ -63,7 +63,7 @@ class InvoiceBill(models.Model):
     after_due_date = models.DateField(null=True, blank=True, default=datetime.now())
     current_emi_amt = models.FloatField(null=True, blank=True)
     closing_month = models.CharField(max_length=200, null=True, blank=True)
-    bill_status = models.IntegerField(null=True, blank=True)  # TODO
+    bill_status = models.IntegerField(null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     is_adjusted = models.BooleanField(default=False)
     is_spot_bill = models.BooleanField(default=False)
@@ -75,7 +75,7 @@ class InvoiceBill(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
-    # TODO Logo/Company Name, address,
+
 
     def __str__(self):
         return self.invoice_no
