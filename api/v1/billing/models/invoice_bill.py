@@ -31,7 +31,7 @@ class InvoiceBill(models.Model):
     address = models.CharField(max_length=500, null=True, blank=True)
     contact = models.CharField(max_length=200, null=True, blank=True)
     conversion_date = models.DateField(null=True, blank=True, default=datetime.now())
-    consumer_status = models.CharField(null=True, blank=True)  # TODO
+    consumer_status  = models.CharField(max_length=200, null=True, blank=True)
     cycle = models.IntegerField(null=True, blank=True)
     route = models.IntegerField(null=True, blank=True)
     utility_service_plan = models.IntegerField(null=True, blank=True)

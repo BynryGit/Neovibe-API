@@ -6,7 +6,7 @@
 # frequency of data changes: low
 # sample table data:
 # reference tables: 2.3.2. Consumer - Registration
-# Author: Gauri
+# Author: Gauri Deshmukh
 # creation date: 22/4/2020
 
 # change history
@@ -23,7 +23,7 @@ class RegistrationType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

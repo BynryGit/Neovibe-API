@@ -25,7 +25,7 @@ class MeterReadingImages(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    consumer_no = models.CharField(null=True, blank=True)
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
     meter_reading = models.IntegerField(null=True, blank=True)
     type = models.IntegerField(null=True, blank=True)
     image_url = models.UrlField(null=False, blank=False)
