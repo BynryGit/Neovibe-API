@@ -53,11 +53,7 @@ class TempConsumerMaster(models.Model):
     outstanding = models.IntegerField(null=True, blank=True)
     meter_reading = models.IntegerField(null=True, blank=True)
     jobcard = models.IntegerField(null=True, blank=True)
-
-
-
     month = models.CharField(max_length=200, null=True, blank=True)
-
     suspicious_activity = models.BooleanField(default=False)
     is_qr_tempered = models.BooleanField(default=False)
     reading_taken_by = models.IntegerField(null=True, blank=True)
