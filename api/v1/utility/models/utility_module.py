@@ -4,7 +4,7 @@
 # table name : 2.3 Utility Module
 # table description :  It will contain details of Modules available for the given Utility
 # frequency of data changes : Medium
-# sample tale data : "Plan - A"
+# sample tale data : "Module1"
 # reference tables : 2.1 Utility Master
 # author : Gauri Deshmukh
 # created on : 24/04/2020
@@ -27,8 +27,8 @@ class UtilityModule(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     subscription_id = models.IntegerField(null=True, blank=True)
-    module_name  = models.CharField(max_length=200, blank=False, null=False)
-    module_desc  = models.CharField(max_length=500, blank=False, null=False)
+    module_name = models.CharField(max_length=200, blank=False, null=False)
+    module_desc = models.CharField(max_length=500, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)
