@@ -16,8 +16,8 @@
 		"pk": "2",
 		"model": "tenant.TenantMaster",
 		"fields": {
-			"name": "BGL",
-			"email_id": "bgl@gmail.com",
+			"name": "BCGL",
+			"email_id": "bcgl@gmail.com",
 			"phone_no": 8550209071,
 			"region_id": 3,
 			"country_id": 3,
