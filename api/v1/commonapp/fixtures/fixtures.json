@@ -1,0 +1,41 @@
+[
+	{
+		"pk" : "1",
+		"model" : "tenant.TenantMaster",
+		"fields" : {
+			"name" : "GAIL",
+			"email_id" : "gail@gmail.com",
+			"phone_no" : 7020929071,
+			"region_id" : 3,
+			"country_id" : 3,
+			"state_id" : 1,
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "tenant.TenantMaster",
+		"fields": {
+			"name": "BGL",
+			"email_id": "bgl@gmail.com",
+			"phone_no": 8550209071,
+			"region_id": 3,
+			"country_id": 3,
+			"state_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "tenant.TenantMaster",
+		"fields": {
+			"name": "INFRA MARK",
+			"email_id": "infra@gmail.com",
+			"phone_no": 9550209071,
+			"region_id": 1,
+			"country_id": 1,
+			"state_id": 5,
+			"is_active": "True"
+		}
+	}
+]
