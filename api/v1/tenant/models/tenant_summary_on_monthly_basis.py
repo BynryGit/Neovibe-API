@@ -31,7 +31,7 @@ class TenantSummaryOnMonthlyBasis(models.Model):
     no_of_cities = models.IntegerField(null=True, blank=True)
     no_of_documents = models.IntegerField(null=True, blank=True)
     total_storage_in_use = models.FloatField(null=True, blank=True)
-    month = models.CharField(max_length=100, blank=False, null=False)
+    month = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.IntegerField(null=True, blank=True)
     updated_by = models.IntegerField(null=True, blank=True)

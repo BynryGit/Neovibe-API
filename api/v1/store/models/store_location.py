@@ -25,7 +25,7 @@ class StoreLocation(models.Model):
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
     store_name = models.CharField(max_length=200, blank=True, null=True)
-    store_address = models.CharField(max_length=300, blank=True, null=True)
+    store_address = models.CharField(max_length=500, blank=True, null=True)
     contact_mobile = models.IntegerField(null=True, blank=True)
     contact_landstore  = models.IntegerField(null=True, blank=True)
     city_id  = models.IntegerField(null=True, blank=True)
