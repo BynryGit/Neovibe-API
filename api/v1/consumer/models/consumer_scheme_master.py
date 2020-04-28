@@ -24,7 +24,7 @@ class ConsumerSchemeMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    scheme_type = models.IntegerField(null=True, blank=True)  # TODO Conform for lookup Table
+    scheme_type = models.BigIntegerField(null=True, blank=True)  # TODO Conform for lookup Table
     scheme_name = models.CharField(max_length=500, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     effective_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -34,8 +34,8 @@ class ConsumerSchemeMaster(models.Model):
     monthly_emi = models.FloatField(null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

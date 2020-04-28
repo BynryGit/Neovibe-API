@@ -24,24 +24,24 @@ class ConsumerPayments(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    payment_type = models.IntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
-    payment_subtype = models.IntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
-    identification = models.IntegerField(null=True, blank=True) # registration No, Invoice #, service request no
+    payment_type = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
+    payment_subtype = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
+    identification = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.FloatField(blank=False, null=False)
     transaction_charges = models.FloatField(blank=False, null=False)
     transaction_date = models.DateField(null=True, blank=True, default=datetime.now())
-    payment_mode = models.IntegerField(null=True, blank=True)
-    payment_channel = models.IntegerField(null=True, blank=True)
-    payment_provider = models.IntegerField(null=True, blank=True)
+    payment_mode = models.BigIntegerField(null=True, blank=True)
+    payment_channel = models.BigIntegerField(null=True, blank=True)
+    payment_provider = models.BigIntegerField(null=True, blank=True)
     receipt_no = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
     cheque_dd_no = models.CharField(max_length=200, null=True, blank=True)
     cheque_dd_date = models.DateField(null=True, blank=True, default=datetime.now())
     ifsc_code = models.CharField(max_length=200, null=True, blank=True)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)

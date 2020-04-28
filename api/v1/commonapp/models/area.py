@@ -6,7 +6,7 @@
 # Frequency of data changes : Low
 # Sample table : "Shivajinagar", "Kothrod".
 # Reference Table : 2.3.1 Survey Table, 2.3.4 Survey Consumer Table, 2.3.8 Campaign Transaction Table,
-#                   2.3.2. Consumer - Registration, Service Assignment, Service AppoIntegerFieldment, 2.7.1. Employee
+#                   2.3.2. Consumer - Registration, Service Assignment, Service AppoBigIntegerFieldment, 2.7.1. Employee
 # Author : Jayshree Kumbhare
 # Creation Date : 21/04/2020
 
@@ -29,10 +29,10 @@ class Area(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    city = models.IntegerField(blank=False, null=False)
+    city = models.BigIntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

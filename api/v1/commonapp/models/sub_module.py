@@ -22,11 +22,11 @@ from django.db import models  # importing package for database
 
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    sub_module = models.IntegerField(null=False, blank=False)
-    module_id = models.IntegerField(null=False, blank=False)
+    sub_module = models.BigIntegerField(null=False, blank=False)
+    module_id = models.BigIntegerField(null=False, blank=False)
     name = models.CharField(max_length=200, null=False, blank=False)
-    created_by = models.IntegerField(null=False, blank=False)
-    updated_by = models.IntegerField(null=False, blank=False)
+    created_by = models.BigIntegerField(null=False, blank=False)
+    updated_by = models.BigIntegerField(null=False, blank=False)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)

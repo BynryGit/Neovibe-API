@@ -28,13 +28,13 @@ class UtilityServiceNumberFormat(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    utility_service_plan_id = models.IntegerField(null=True, blank=True)
+    utility_service_plan_id = models.BigIntegerField(null=True, blank=True)
     is_prefix = models.BooleanField(default=False)
     prefix = models.CharField(max_length=200, blank=False, null=False) #Emp, TEC
-    id_starting_with  = models.IntegerField(null=True, blank=True) #Range as in =0,00001,100001
+    id_starting_with  = models.BigIntegerField(null=True, blank=True) #Range as in =0,00001,100001
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

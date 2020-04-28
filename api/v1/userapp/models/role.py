@@ -27,14 +27,14 @@ class Role(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_lengt=200, null=True, blank=True)
-    role_type = models.IntegerField(null=False, blank=False) # Tenant, Utility
-    role_subtype = models.IntegerField(null=False, blank=False)  # employee, vendor, supplier
-    form_factor_id = models.IntegerField(null=False, blank=False) # Web, Mobile
-    department_id = models.IntegerField(null=False, blank=False)
-    status_id = models.IntegerField(null=False, blank=False)
+    role_type = models.BigIntegerField(null=False, blank=False) # Tenant, Utility
+    role_subtype = models.BigIntegerField(null=False, blank=False)  # employee, vendor, supplier
+    form_factor_id = models.BigIntegerField(null=False, blank=False) # Web, Mobile
+    department_id = models.BigIntegerField(null=False, blank=False)
+    status_id = models.BigIntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

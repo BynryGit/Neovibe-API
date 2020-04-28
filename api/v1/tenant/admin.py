@@ -1,3 +1,4 @@
 from django.contrib import admin
+from v1.tenant.models.tenant_master import TenantMaster
 
-# Register your models here.
+admin.site.register(TenantMaster)

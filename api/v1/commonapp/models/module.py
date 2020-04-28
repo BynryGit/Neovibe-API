@@ -23,8 +23,8 @@ from django.db import models  # importing package for database
 class Module(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=200, blank=False, null=False)
-    created_by = models.IntegerField(blank=False, null=False)
-    updated_by = models.IntegerField(blank=False, null=False)
+    created_by = models.BigIntegerField(blank=False, null=False)
+    updated_by = models.BigIntegerField(blank=False, null=False)
     created_date = models.DateField(default=datetime.now)
     updated_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
