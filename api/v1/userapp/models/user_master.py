@@ -30,10 +30,10 @@ class User(models.Model):
     user_type = models.BigIntegerField(null=False, blank=False)  # Tenant, Utility
     user_subtype = models.BigIntegerField(null=False, blank=False)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=False, blank=False)  # Web, Mobile
-    first_name = models.CharFiaddeld(max_lengt=200, null=True, blank=True)
+    first_name = models.CharField(max_lengt=200, null=True, blank=True)
     middle_name = models.CharField(max_lengt=200, null=True, blank=True)
     last_name = models.CharField(max_lengt=200, null=True, blank=True)
-    user_image = models.UrlField(null=True, blank=True)
+    user_image = models.URLField(null=True, blank=True)
     email_id = models.CharField(max_lengt=200, null=True, blank=True)
     password = models.CharField(max_lengt=200, null=True, blank=True)
     salt = models.CharField(max_lengt=200, null=False, blank=False)
