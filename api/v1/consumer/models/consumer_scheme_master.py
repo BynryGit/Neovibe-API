@@ -45,4 +45,8 @@ class ConsumerSchemeMaster(models.Model):
     def __unicode__(self):
         return self.scheme_name
 
+
+def get_scheme_by_id_string(id_string):
+    return ConsumerSchemeMaster.objects.get(id_string = id_string)
+
 # Create Consumer Scheme Master table end.
