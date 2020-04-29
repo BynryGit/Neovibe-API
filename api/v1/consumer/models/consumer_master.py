@@ -28,8 +28,8 @@ class ConsumerMaster(models.Model):
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     last_name = models.CharField(max_length=200, null=True, blank=True)
     email_id = models.CharField(max_length=200, null=True, blank=True)
-    phone_no1 = models.CharField(max_length=200, null=True, blank=True)
-    phone_no2 = models.CharField(max_length=200, null=True, blank=True)
+    phone_mobile = models.CharField(max_length=200, null=True, blank=True)
+    phone_landline = models.CharField(max_length=200, null=True, blank=True)
     address_line_1 = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
     zipcode = models.BigIntegerField(null=True, blank=True)
@@ -67,5 +67,8 @@ class ConsumerMaster(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
+def get_consumer_by_id_string(id_string):
+    return ConsumerMaster.objects.get(id_string = id_string)
 
 # Create Consumer Master table end.
