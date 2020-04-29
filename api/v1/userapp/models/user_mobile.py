@@ -29,8 +29,8 @@ class UserDetails(models.Model):
     imei_no = models.CharField(max_lengt=200, null=True, blank=True)
     phone_mobile = models.CharField(max_lengt=200, null=False, blank=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

@@ -26,20 +26,20 @@ class Schedule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    schedule_type = models.IntegerField(null=True, blank=True) #Meter Reading, Bill Distribution, Notices
-    activity_type = models.IntegerField(null=True, blank=True) #Manual, Photo, SpotBill, SmartMeter
-    bill_cycle = models.IntegerField(null=True, blank=True)
+    schedule_type = models.BigIntegerField(null=True, blank=True) #Meter Reading, Bill Distribution, Notices
+    activity_type = models.BigIntegerField(null=True, blank=True) #Manual, Photo, SpotBill, SmartMeter
+    bill_cycle = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True, default=datetime.now())
     end_date = models.DateField(null=True, blank=True, default=datetime.now())
     due_date = models.DateField(null=True, blank=True, default=datetime.now())
-    schedule_status = models.IntegerField(null=True, blank=True)
+    schedule_status = models.BigIntegerField(null=True, blank=True)
     is_valid_next_cycle = models.BooleanField(default=False)
     is_imported = models.BooleanField(default=False)
     is_uploaded = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

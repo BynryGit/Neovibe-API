@@ -29,8 +29,8 @@ class SourceType(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

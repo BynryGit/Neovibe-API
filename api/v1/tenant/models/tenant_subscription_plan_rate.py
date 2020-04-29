@@ -24,7 +24,7 @@ from django.db import models  # importing package for database
 
 class TenantSubscriptionPlanRate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    TenantSubscriptionPlan_id = models.IntegerField(null=True, blank=True)
+    TenantSubscriptionPlan_id = models.BigIntegerField(null=True, blank=True)
     base_rate = models.FloatField(null=True, blank=True)
     currency = models.CharField(max_length=200, blank=False, null=False)
     region = models.CharField(max_length=200, blank=False, null=False)
@@ -33,8 +33,8 @@ class TenantSubscriptionPlanRate(models.Model):
     tax = models.FloatField(null=True, blank=True)
     effective_date = models.DateField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 

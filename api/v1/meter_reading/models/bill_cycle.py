@@ -25,10 +25,10 @@ class BillCycle(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    code = models.IntegerField(max_length=200, blank=False, null=False)
+    code = models.BigIntegerField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
@@ -37,5 +37,12 @@ class BillCycle(models.Model):
 
     def __unicode__(self):
         return self.code
+
+def get_bill_cycle_by_id_string(id_string):
+    return BillCycle.objects.get(id_string = id_string)
+
+
+def get_bill_cycle_by_id(id):
+    return BillCycle.objects.get(id = id)
 
 # Create Bill Cycle table end

@@ -24,15 +24,15 @@ class AdvertisementAssignment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
     utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    campaign_id = models.IntegerField(default=1, null=True, blank=True)
-    group_id = models.IntegerField(default=1, null=True, blank=True)
-    vendor_id = models.IntegerField(default=1, null=True, blank=True)  # todo: check actual name
+    campaign_id = models.BigIntegerField(default=1, null=True, blank=True)
+    group_id = models.BigIntegerField(default=1, null=True, blank=True)
+    vendor_id = models.BigIntegerField(default=1, null=True, blank=True)  # todo: check actual name
     assigned_date = models.DateField(null=True, blank=True, default=datetime.now())
     completion_date = models.DateField(null=True, blank=True, default=datetime.now())
-    status_id = models.IntegerField(default=1, null=True, blank=True)
+    status_id = models.BigIntegerField(default=1, null=True, blank=True)
     is_active = models.BooleanField(default=False)
-    created_by = models.IntegerField(null=True, blank=True)
-    updated_by = models.IntegerField(null=True, blank=True)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
