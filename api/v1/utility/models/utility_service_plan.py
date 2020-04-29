@@ -14,12 +14,15 @@
 
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
-
+from datetime import datetime  # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
 # Create Utility Service Plan table start.
+
+
 
 class UtilityServicePlan(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -46,4 +49,11 @@ def __str__(self):
 def __unicode__(self):
     return self.name
 
+
+def get_utility_service_plan_by_id_string(id_string):
+    return UtilityServicePlan.objects.get(id_string = id_string)
+
+
+def get_utility_service_plan_by_id(id):
+    return UtilityServicePlan.objects.get(id = id)
 # Create  Utility Service Plan  table end.

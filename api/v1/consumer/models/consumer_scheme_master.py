@@ -49,4 +49,8 @@ class ConsumerSchemeMaster(models.Model):
 def get_scheme_by_id_string(id_string):
     return ConsumerSchemeMaster.objects.get(id_string = id_string)
 
+
+def get_scheme_by_id(id):
+    return ConsumerSchemeMaster.objects.get(id = id)
+
 # Create Consumer Scheme Master table end.
