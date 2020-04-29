@@ -4,7 +4,7 @@
 # Table Name : 2.12.4 Region
 # Description : A global lookup table that stores regions.
 # Frequency of data changes : Low
-# Sample Table Data : "East India", "North India","South Asia"
+# Sample Table Data : "Americas", "Asia","Africa"
 # Reference Table : 2.1 Utility Master
 # Author : Jayshree Kumbhare
 # Creation Date : 21-04-2020
@@ -22,8 +22,8 @@ from django.db import models  # importing package for database
 
 class Region(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    tenant = models.ForeignKey(TenantMaster, blank=False, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=False, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
