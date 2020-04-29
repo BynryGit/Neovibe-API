@@ -46,4 +46,7 @@ class UtilityMaster(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_utility_by_id_string(id_string):
+    return UtilityMaster.objects.get(id_string = id_string)
+
 # Create Utility Master table end.
