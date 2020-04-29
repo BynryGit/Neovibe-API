@@ -1,3 +1,6 @@
 from django.contrib import admin
+from v1.utility.models.utility_module import UtilityModule
+from v1.utility.models.utility_sub_module import UtilitySubModule
 
-# Register your models here.
+admin.site.register(UtilityModule)
+admin.site.register(UtilitySubModule)

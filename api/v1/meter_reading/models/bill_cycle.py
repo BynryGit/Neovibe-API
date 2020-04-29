@@ -38,4 +38,11 @@ class BillCycle(models.Model):
     def __unicode__(self):
         return self.code
 
+def get_bill_cycle_by_id_string(id_string):
+    return BillCycle.objects.get(id_string = id_string)
+
+
+def get_bill_cycle_by_id(id):
+    return BillCycle.objects.get(id = id)
+
 # Create Bill Cycle table end

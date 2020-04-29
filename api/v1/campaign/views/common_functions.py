@@ -107,6 +107,7 @@ def save_campaign_details(request, user):
                 status_id=status.id
             )
             campaign_details.save()
+            transaction.savepoint_commit(sid)
             return campaign_details
         else:
             campaign_details = get_campaign_by_id_string(request.data['camp_id_string'])

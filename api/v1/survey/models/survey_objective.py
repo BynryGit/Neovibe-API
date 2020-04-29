@@ -39,5 +39,11 @@ class SurveyObjective(models.Model):
     def __unicode__(self):
         return self.objective
 
+def get_survey_objective_by_id_string(id_string):
+    return SurveyObjective.objects.get(id_string = id_string)
+
+def get_survey_objective_by_id(id):
+    return SurveyObjective.objects.get(id = id)
+
 # Create Survey Objective table end.
 
