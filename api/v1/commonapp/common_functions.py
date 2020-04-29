@@ -1,8 +1,13 @@
 import jwt # jwt token library
-from api.v1.smart360_API.smart360_API.settings import SECRET_KEY
+from api.settings import SECRET_KEY
+from v1.userapp.models.user_token import UserToken
+
 
 def is_token_valid(token):
-    return Token.objects.filter(token=token).exists()
+    try:
+        return UserToken.objects.filter(token=token).exists()
+    except:
+        return False
 
 def get_payload(token):
     return jwt.decode(token, SECRET_KEY, algorithms='RS256')
