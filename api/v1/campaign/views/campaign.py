@@ -18,6 +18,7 @@ from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_tena
 from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_tenant_id_string,get_camp_type_by_id_string
 from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
 from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
+from api.v1.smart360_API.commonapp.models.campaign import get_campaign_by_id_string
 
 from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
 from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION,DATA
@@ -130,8 +131,7 @@ class CampaignApiView(APIView):
                 # Checking authorization end
 
                     # Code for lookups start
-                    camp_id_string = request.data['camp_id_string']
-                    campaign_obj = Campaign.objects.get(id_string=camp_id_string)
+                    campaign_obj = get_campaign_by_id_string(request.data['id_string'])
                     frequency_obj = get_frequency_by_id_string(campaign_obj.frequency_id)
                     camp_type_obj = get_camp_type_by_id_string(campaign_obj.type_id)
                     category_obj = get_consumer_category_by_id_string(campaign_obj.category_id)

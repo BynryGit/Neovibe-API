@@ -39,5 +39,11 @@ class SurveyStatus(models.Model):
     def __unicode__(self):
         return self.status
 
+def get_survey_status_by_id_string(id_string):
+    return SurveyStatus.objects.get(id_string = id_string)
+
+def get_survey_status_by_id(id):
+    return SurveyStatus.objects.get(id = id)
+
 # Create Survey Status table end.
 
