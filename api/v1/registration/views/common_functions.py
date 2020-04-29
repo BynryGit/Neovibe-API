@@ -27,6 +27,7 @@ def get_filtered_registrations(request, user):
     total_pages = ''
     page_no = ''
     registrations = ''
+    error = ''
     try:
         registrations = Registration.objects.filter(tenant_id=user.tenant_id,
                                                     utility_id__in=user.data_access.all())
@@ -68,10 +69,11 @@ def get_filtered_registrations(request, user):
             total_pages = str(paginator.num_pages)
             page_no = request.data['page_number']
             registrations = paginator.page(int(page_no))
-        return registrations, total_pages, page_no, True
+        return registrations, total_pages, page_no, True, error
     except Exception as e:
         print("Exception occured ",str(traceback.print_exc(e)))
-        return registrations, total_pages, page_no, False
+        error = str(traceback.print_exc(e))
+        return registrations, total_pages, page_no, False, error
 
 
 # only check only mandatory fields
@@ -92,6 +94,7 @@ def is_data_verified(request): #todo - Black, Null, empty string - ready to use 
 def save_basic_registration_details(request, user):
     sid = transaction.savepoint()
     registration = ""
+    error = ''
     try:
         registration = Registration()
         if request.method == "POST":
@@ -230,11 +233,12 @@ def save_basic_registration_details(request, user):
             registration.updated_date = datetime.now()
             registration.save()
         transaction.savepoint_commit(sid)
-        return registration, True
+        return registration, True, error
     except Exception as e:
         print("Exception occured ",str(traceback.print_exc(e)))
         transaction.rollback(sid)
-        return registration, False
+        error = str(traceback.print_exc(e))
+        return registration, False, error
 
 
 def save_payment_details(request, user, registration):

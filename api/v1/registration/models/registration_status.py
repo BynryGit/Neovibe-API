@@ -24,3 +24,7 @@ class RegistrationStatus(models.Model):
 
 def get_registration_status_by_id_string(id_string):
     return RegistrationStatus.objects.get(id_string = id_string)
+
+
+def get_registration_statuses_by_tenant_id_string(id_string):
+    return RegistrationStatus.objects.filter(tenant__id_string = id_string, is_active = True)
