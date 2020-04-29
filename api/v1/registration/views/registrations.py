@@ -4,13 +4,25 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
-from v1.commonapp.models.area import get_areas_by_tenant_id_string
-from v1.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string
+from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.consumer_category import get_consumer_category_by_id
+from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id
+from v1.commonapp.models.country import get_country_by_id
+from v1.commonapp.models.state import get_state_by_id
+from v1.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string, get_sub_area_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
-from v1.registration.views.common_functions import get_filtered_registrations
+from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
+from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
+from v1.consumer.models.source_type import get_source_type_by_id
+from v1.registration.models.registration_status import get_registration_status_by_id_string, \
+    get_registration_statuses_by_tenant_id_string
+from v1.registration.models.registration_type import get_registration_type_by_id
+from v1.registration.models.registrations import get_registration_by_id_string
+from v1.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
+    save_basic_registration_details, save_payment_details
 from v1.userapp.models.privilege import get_privilege_by_id
-from api.messages import SUCCESS,STATE,ERROR,EXCEPTION
-
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
@@ -48,11 +60,16 @@ class RegistrationListApiView(APIView):
                     # Checking authorization end
 
                     # Code for filtering registrations start
-                    registrations, total_pages, page_no = get_filtered_registrations(user, request)
+                    registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
+                    if result == False:
+                        return Response({
+                            STATE: EXCEPTION,
+                            ERROR: error
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     # Code for filtering registrations end
 
                     # Code for lookups start
-                    statuses = Status.objects.all()
+                    statuses = get_registration_status_by_id_string(request.data["status_id_string"])
                     areas = get_areas_by_tenant_id_string(user.tenant.id_string)
                     sub_areas = get_sub_areas_by_tenant_id_string(user.tenant.id_string)
                     # Code for lookups end
@@ -63,10 +80,10 @@ class RegistrationListApiView(APIView):
                             'first_name': registration.first_name,
                             'last_name': registration.last_name,
                             'registration_no': registration.registration_no,
-                            'status': statuses.objects.get(id_string=registration.status_id).status_name,
+                            'status': statuses.objects.get(id=registration.status_id).status_name,
                             'mobile_no': registration.phone_mobile,
-                            'area': areas.objects.get(id_string=registration.area_id).area_name,
-                            'sub_area': sub_areas.objects.get(id_string=registration.sub_area_id).sub_area_name,
+                            'area': areas.objects.get(id=registration.area_id).area_name,
+                            'sub_area': sub_areas.objects.get(id=registration.sub_area_id).sub_area_name,
                             'raised_on': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
                             'total_pages': total_pages,
                             'page_no': page_no
@@ -114,13 +131,13 @@ class RegistrationApiView(APIView):
             if is_token_valid(request.data['token']):
                 payload = get_payload(request.data['token'])
                 user = get_user(payload['id_string'])
-                # Checking authentication end
+            # Checking authentication end
 
                 # Checking authorization start
                 privilege = get_privilege_by_id(1)
                 sub_module = get_sub_module_by_id(1)
                 if is_authorized(user, privilege, sub_module):
-                    # Checking authorization end
+                # Checking authorization end
 
                     # Code for lookups start
                     registration = get_registration_by_id_string(request.data['id_string'])
@@ -129,12 +146,13 @@ class RegistrationApiView(APIView):
                     city = get_city_by_id(registration.city_id)
                     area = get_area_by_id(registration.area_id)
                     sub_area = get_sub_area_by_id(registration.sub_area_id)
-                    scheme = Scheme.objects.get(id_string=request.data['scheme'])  # Don't have table
-                    ownership = Ownership.objects.get(id_string=request.data['ownership'])  # Don't have table
+                    scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
+                    ownership = get_consumer_ownership_by_id_string(request.data["ownership_id_string"])
                     consumer_category = get_consumer_category_by_id(registration.consumer_category_id)
                     sub_category = get_consumer_sub_category_by_id(registration.sub_category_id)
                     registration_type = get_registration_type_by_id(registration.registration_type_id)
                     source = get_source_type_by_id(registration.source_id)
+                    registration_status = get_registration_status_by_id_string(request.data["status_id_string"])
                     # Code for lookups end
 
                     # Code for sending registrations in response start
@@ -160,6 +178,7 @@ class RegistrationApiView(APIView):
                         'scheme_id_string': scheme.id_string,
                         'consumer_category_id_string': consumer_category.id_string,
                         'sub_category_id_string': sub_category.id_string,
+                        'status_id_string': registration_status.id_string,
                         'is_vip': registration.is_vip,
                         'connectivity': registration.connectivity,
                         'source_id_string': source.id_string,
@@ -204,12 +223,17 @@ class RegistrationApiView(APIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request, user):
+                    if is_data_verified(request):
                         # Request data verification end
 
                         # Save basic and payment details start
-                        registration = save_basic_registration_details(request, user)
-                        payment = save_payment_details(request, user, registration)  # TODO: Remaining
+                        registration, result, error = save_basic_registration_details(request, user)
+                        if result == False:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: error
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        payment = save_payment_details(request, user, registration)
                         # Save basic and payment details start
                     else:
                         return Response({
@@ -244,13 +268,17 @@ class RegistrationApiView(APIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request, user):
+                    if is_data_verified(request):
                         # Request data verification end
 
-                        # Save basic and payment details start
-                        registration = save_basic_registration_details(request, user)
-                        payment = save_payment_details(request, user, registration)  # TODO: Remaining
-                        # Save basic and payment details start
+                        # Save basic details start
+                        registration, result, error = save_basic_registration_details(request, user)
+                        if result == False:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: error
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        # Save basic details start
                     else:
                         return Response({
                             STATE: ERROR,
@@ -276,9 +304,37 @@ class RegistrationStatusApiView(APIView):
 
     def get(self, request, format=None):
         try:
-            pass
+            registration_status_list = []
+            # Checking authentication start
+            if is_token_valid(request.data['token']):
+                payload = get_payload(request.data['token'])
+                user = get_user(payload['id_string'])
+            # Checking authentication end
+
+                # Checking authorization start
+                privilege = get_privilege_by_id(1)
+                sub_module = get_sub_module_by_id(1)
+                if is_authorized(user, privilege, sub_module):
+                # Checking authorization end
+
+                    # Get registration statuses
+                    registration_statuses = get_registration_statuses_by_tenant_id_string(request.data['tenant_id_string'])
+
+                    for registration_status in registration_statuses:
+                        registration_status_list.append({
+                            'id_string': registration_status.id_string,
+                            'name': registration_status.name
+                        })
+                    return Response({
+                        STATE: SUCCESS,
+                        'data': registration_status_list,
+                    }, status=status.HTTP_200_OK)
         except Exception as e:
-            pass
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request, format=None):
         try:
