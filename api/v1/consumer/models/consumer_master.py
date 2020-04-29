@@ -68,4 +68,7 @@ class ConsumerMaster(models.Model):
     def __unicode__(self):
         return self.consumer_no
 
+def get_consumer_by_id_string(id_string):
+    return ConsumerMaster.objects.get(id_string = id_string)
+
 # Create Consumer Master table end.
