@@ -50,4 +50,7 @@ class Survey(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_survey_by_id_string(id_string):
+    return Survey.objects.get(id_string = id_string)
+
 # Create Survey table end
