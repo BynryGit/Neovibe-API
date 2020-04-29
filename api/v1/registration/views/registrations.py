@@ -48,7 +48,7 @@ class RegistrationListApiView(APIView):
 #module, Submodule
 #utility access
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid():
                 payload = get_payload(request.data['token'])
                 user = get_user(payload['id_string'])
                 # Checking authentication end

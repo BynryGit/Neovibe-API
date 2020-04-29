@@ -1,5 +1,6 @@
 import jwt # jwt token library
-from api.v1.smart360_API.smart360_API.settings import SECRET_KEY
+from api.settings import SECRET_KEY
+
 
 def is_token_valid(token):
     return Token.objects.filter(token=token).exists()
