@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.common  app.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.consumer_category import get_consumer_category_by_id

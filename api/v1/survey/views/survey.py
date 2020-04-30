@@ -192,7 +192,7 @@ class ConsumerSurveyListApiView(APIView):
 
 
 # API Header
-# API end Point: api/v1/location-survey/
+# API end Point: api/v1/survey=?id-string
 # API verb: GET, POST, PUT
 # Package: Basic
 # Modules: S&M
