@@ -36,80 +36,76 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
-class RegistrationListApiView(APIView):
-
-    def get(self, request, format=None):
-        try:
-            # Initializing output list start
-            registrations_list = []
-            # Initializing output list end
-#todo: Rohan - create a common function
-#login
-#module, Submodule
-#utility access
-            print("#################",is_token_valid(request.data['token']))
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
-                    # Checking authorization end
-
-                    # Code for filtering registrations start
-                    registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
-                    if result == False:
-                        return Response({
-                            STATE: EXCEPTION,
-                            ERROR: error
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                    # Code for filtering registrations end
-
-                    # Code for lookups start
-                    statuses = get_registration_status_by_id_string(request.data["status_id_string"])
-                    areas = get_areas_by_tenant_id_string(user.tenant.id_string)
-                    sub_areas = get_sub_areas_by_tenant_id_string(user.tenant.id_string)
-                    # Code for lookups end
-
-                    # Code for sending registrations in response start
-                    for registration in registrations:
-                        registrations_list.append({
-                            'first_name': registration.first_name,
-                            'last_name': registration.last_name,
-                            'registration_no': registration.registration_no,
-                            'status': statuses.objects.get(id=registration.status_id).status_name,
-                            'mobile_no': registration.phone_mobile,
-                            'area': areas.objects.get(id=registration.area_id).area_name,
-                            'sub_area': sub_areas.objects.get(id=registration.sub_area_id).sub_area_name,
-                            'raised_on': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
-                            'total_pages': total_pages,
-                            'page_no': page_no
-                        })
-                    return Response({
-                        STATE: SUCCESS,
-                        'data': registrations_list,
-                    }, status=status.HTTP_200_OK)
-                    # Code for sending registrations in response end
-
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        'data': '',
-                    }, status=status.HTTP_403_FORBIDDEN)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    'data': '',
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as e:
-            return Response({
-                STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# class RegistrationListApiView(APIView):
+#
+#     def get(self, request, format=None):
+#         try:
+#             # Initializing output list start
+#             registrations_list = []
+#             # Initializing output list end
+#
+#             # Checking authentication start
+#             if is_token_valid(request.data['token']):
+#                 payload = get_payload(request.data['token'])
+#                 user = get_user(payload['id_string'])
+#                 # Checking authentication end
+#
+#                 # Checking authorization start
+#                 privilege = get_privilege_by_id(1)
+#                 sub_module = get_sub_module_by_id(1)
+#                 if is_authorized(user, privilege, sub_module):
+#                     # Checking authorization end
+#
+#                     # Code for filtering registrations start
+#                     registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
+#                     if result == False:
+#                         return Response({
+#                             STATE: EXCEPTION,
+#                             ERROR: error
+#                         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#                     # Code for filtering registrations end
+#
+#                     # Code for lookups start
+#                     statuses = get_registration_status_by_id_string(request.data["status_id_string"])
+#                     areas = get_areas_by_tenant_id_string(user.tenant.id_string)
+#                     sub_areas = get_sub_areas_by_tenant_id_string(user.tenant.id_string)
+#                     # Code for lookups end
+#
+#                     # Code for sending registrations in response start
+#                     for registration in registrations:
+#                         registrations_list.append({
+#                             'first_name': registration.first_name,
+#                             'last_name': registration.last_name,
+#                             'registration_no': registration.registration_no,
+#                             'status': statuses.objects.get(id=registration.status_id).status_name,
+#                             'mobile_no': registration.phone_mobile,
+#                             'area': areas.objects.get(id=registration.area_id).area_name,
+#                             'sub_area': sub_areas.objects.get(id=registration.sub_area_id).sub_area_name,
+#                             'raised_on': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
+#                             'total_pages': total_pages,
+#                             'page_no': page_no
+#                         })
+#                     return Response({
+#                         STATE: SUCCESS,
+#                         'data': registrations_list,
+#                     }, status=status.HTTP_200_OK)
+#                     # Code for sending registrations in response end
+#
+#                 else:
+#                     return Response({
+#                         STATE: ERROR,
+#                         'data': '',
+#                     }, status=status.HTTP_403_FORBIDDEN)
+#             else:
+#                 return Response({
+#                     STATE: ERROR,
+#                     'data': '',
+#                 }, status=status.HTTP_401_UNAUTHORIZED)
+#         except Exception as e:
+#             return Response({
+#                 STATE: EXCEPTION,
+#                 ERROR: str(traceback.print_exc(e))
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # API Header
@@ -349,3 +345,54 @@ class RegistrationStatusApiView(APIView):
         except Exception as e:
             pass
 
+
+class RegistrationListApiView(APIView):
+
+    def get(self, request, format=None):
+        try:
+            # Initializing output list start
+            registrations_list = []
+            # Initializing output list end
+
+            user = get_user(payload['id_string'])
+
+            # Code for filtering registrations start
+            registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
+            if result == False:
+                return Response({
+                    STATE: EXCEPTION,
+                    ERROR: error
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # Code for filtering registrations end
+
+            # Code for lookups start
+            statuses = get_registration_status_by_id_string(request.data["status_id_string"])
+            areas = get_areas_by_tenant_id_string(user.tenant.id_string)
+            sub_areas = get_sub_areas_by_tenant_id_string(user.tenant.id_string)
+            # Code for lookups end
+
+            # Code for sending registrations in response start
+            for registration in registrations:
+                registrations_list.append({
+                    'first_name': registration.first_name,
+                    'last_name': registration.last_name,
+                    'registration_no': registration.registration_no,
+                    'status': statuses.objects.get(id=registration.status_id).status_name,
+                    'mobile_no': registration.phone_mobile,
+                    'area': areas.objects.get(id=registration.area_id).area_name,
+                    'sub_area': sub_areas.objects.get(id=registration.sub_area_id).sub_area_name,
+                    'raised_on': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
+                    'total_pages': total_pages,
+                    'page_no': page_no
+                })
+            return Response({
+                STATE: SUCCESS,
+                'data': registrations_list,
+            }, status=status.HTTP_200_OK)
+            # Code for sending registrations in response end
+
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
