@@ -30,28 +30,28 @@ def get_filtered_registrations(user, request):
     error = ''
     try:
         registrations = Registration.objects.filter(tenant=user.tenant)
-        if "utillity" in request.GET:
+        if "utillity" in request.data:
             registrations = registrations.objects.filter(utility_id=
                                                          request.data['utillity'])
-        if "category" in request.GET:
+        if "category" in request.data:
             registrations = registrations.objects.filter(consumer_category_id=
                                                          request.data['category'])
-        if "sub_category" in request.GET:
+        if "sub_category" in request.data:
             registrations = registrations.objects.filter(sub_category_id=
                                                          request.data['sub_category'])
-        if "city" in request.GET:
+        if "city" in request.data:
             registrations = registrations.objects.filter(city_id=
                                                          request.data['city'])
-        if "area" in request.GET:
+        if "area" in request.data:
             registrations = registrations.objects.filter(area_id=
                                                          request.data['area'])
-        if "subarea" in request.GET:
+        if "subarea" in request.data:
             registrations = registrations.objects.filter(subarea_id=request.data['subarea'])
 
-        if "status" in request.GET:
+        if "status" in request.data:
             registrations = registrations.objects.filter(status_id=request.data['status'])
 
-        if "search_text" in request.GET:
+        if "search_text" in request.data:
             if request.data['search_text'] == '':
                 pass
             else:
@@ -59,7 +59,7 @@ def get_filtered_registrations(user, request):
                     Q(registration_no__icontains=request.data['search_text']) |
                     Q(first_name__icontains=request.data['search_text']))
 
-        if "page_number" in request.GET:
+        if "page_number" in request.data:
             if request.data['page_number'] == '':
                 paginator = Paginator(registrations,int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
