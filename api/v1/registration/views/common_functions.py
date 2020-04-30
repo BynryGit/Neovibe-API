@@ -23,52 +23,53 @@ from v1.supplier.models.supplier_payment import Payment
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id_string
 
 
-def get_filtered_registrations(request, user):
+def get_filtered_registrations(user, request):
     total_pages = ''
     page_no = ''
     registrations = ''
     error = ''
     try:
-        registrations = Registration.objects.filter(tenant_id=user.tenant_id,
-                                                    utility_id__in=user.data_access.all())
-        if request.data['utillity']:
+        registrations = Registration.objects.filter(tenant=user.tenant)
+        if "utillity" in request.GET:
             registrations = registrations.objects.filter(utility_id=
                                                          request.data['utillity'])
-        if request.data['category']:
+        if "category" in request.GET:
             registrations = registrations.objects.filter(consumer_category_id=
                                                          request.data['category'])
-        if request.data['sub_category']:
+        if "sub_category" in request.GET:
             registrations = registrations.objects.filter(sub_category_id=
                                                          request.data['sub_category'])
-        if request.data['city']:
+        if "city" in request.GET:
             registrations = registrations.objects.filter(city_id=
                                                          request.data['city'])
-        if request.data['area']:
+        if "area" in request.GET:
             registrations = registrations.objects.filter(area_id=
                                                          request.data['area'])
-        if request.data['subarea']:
-            registrations = registrations.objects.filter(subarea_id=
-                                                         request.data['subarea'])
-        if request.data['status']:
-            registrations = registrations.objects.filter(status_id=
-                                                         request.data['status'])
-        if request.data['search_text'] == '':
-            pass
-        else:
-            registrations = registrations.filter(
-                Q(registration_no__icontains=request.data['search_text']) |
-                Q(first_name__icontains=request.data['search_text']))
+        if "subarea" in request.GET:
+            registrations = registrations.objects.filter(subarea_id=request.data['subarea'])
 
-        if request.data['page_number'] == '':
-            paginator = Paginator(registrations,int(request.data['page_size']))
-            total_pages = str(paginator.num_pages)
-            page_no = '1'
-            registrations = paginator.page(1)
-        else:
-            paginator = Paginator(registrations, int(request.data['page_size']))
-            total_pages = str(paginator.num_pages)
-            page_no = request.data['page_number']
-            registrations = paginator.page(int(page_no))
+        if "status" in request.GET:
+            registrations = registrations.objects.filter(status_id=request.data['status'])
+
+        if "search_text" in request.GET:
+            if request.data['search_text'] == '':
+                pass
+            else:
+                registrations = registrations.filter(
+                    Q(registration_no__icontains=request.data['search_text']) |
+                    Q(first_name__icontains=request.data['search_text']))
+
+        if "page_number" in request.GET:
+            if request.data['page_number'] == '':
+                paginator = Paginator(registrations,int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = '1'
+                registrations = paginator.page(1)
+            else:
+                paginator = Paginator(registrations, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = request.data['page_number']
+                registrations = paginator.page(int(page_no))
         return registrations, total_pages, page_no, True, error
     except Exception as e:
         print("Exception occured ",str(traceback.print_exc(e)))
