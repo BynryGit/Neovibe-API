@@ -29,7 +29,7 @@ class RolePrivilege(models.Model):
     role_id = models.BigIntegerField(null=False, blank=False)
     module = models.BigIntegerField(null=False, blank=False)
     sub_module = models.BigIntegerField(null=False, blank=False)
-    privilege_id = models.BigIntegerField(null=False, blank=False)
+    privilege_id = models.BigIntegerField(null=False, blank=False) # View, Edit
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

@@ -7,9 +7,9 @@ from v1.commonapp.models.region import Region
 from v1.commonapp.models.state import State
 from v1.commonapp.models.sub_module import SubModule
 
-admin.site.register(Module)
-admin.site.register(SubModule)
 admin.site.register(Region)
 admin.site.register(Country)
 admin.site.register(State)
 admin.site.register(City)
+admin.site.register(Module)
+admin.site.register(SubModule)

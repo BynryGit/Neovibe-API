@@ -22,8 +22,8 @@ from django.db import models  # importing package for database
 
 class Region(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=True, on_delete=models.SET_NULL)
+    tenant = models.ForeignKey(TenantMaster, blank=False, null=True, on_delete=models.SET_NULL) # to be removed
+    utility = models.ForeignKey(UtilityMaster, blank=False, null=True, on_delete=models.SET_NULL) # to be removed
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)

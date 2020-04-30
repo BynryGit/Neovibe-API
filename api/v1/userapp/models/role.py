@@ -31,7 +31,6 @@ class Role(models.Model):
     role_subtype = models.BigIntegerField(null=False, blank=False)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=False, blank=False) # Web, Mobile
     department_id = models.BigIntegerField(null=False, blank=False)
-    status_id = models.BigIntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
