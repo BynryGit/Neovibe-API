@@ -1,36 +1,15 @@
-# table header
-# module: All  | sub-module - All
-# table type : Master
-# table name : 2.5.1. Role Master
-# table description : A role master to store all roles for users.
-# frequency of data changes : Low
-# sample tale data : "admin","super admin", "vendor"
-# reference tables : 2.5.4 Product/Services Table
-# author : Saloni Monde
-# created on : 24/04/2020
-
-# change history
-# <ddmmyyyy><changes><author>
-
-
-import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
-
-# Create Role Master table start
-
-class Role(models.Model):
+#Create Registration Type table start
+class BillStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=200, null=True, blank=True)
-    role_type = models.BigIntegerField(null=False, blank=False) # Tenant, Utility
-    role_subtype = models.BigIntegerField(null=False, blank=False)  # employee, vendor, supplier
-    form_factor_id = models.BigIntegerField(null=False, blank=False) # Web, Mobile
-    department_id = models.BigIntegerField(null=False, blank=False)
+    name = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -43,4 +22,14 @@ class Role(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Role Master table end
+
+def get_bill_status_by_id_string(id_string):
+    return BillStatus.objects.get(id_string = id_string)
+
+
+def get_bill_status_by_id(id):
+    return BillStatus.objects.get(id = id)
+
+
+def get_bill_statuses_by_tenant_id_string(id_string):
+    return BillStatus.objects.filter(tenant__id_string = id_string, is_active = True)
