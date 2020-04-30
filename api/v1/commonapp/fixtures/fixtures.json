@@ -957,5 +957,156 @@
 			"region": 3,
 			"is_active": "True"
 		}
+	},
+
+
+
+  {
+		"pk": "1",
+		"model": "userapp.Privilege",
+		"fields": {
+			"tenant": ,
+			"utility": ,
+			"name": ,
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "1",
+		"model": "userapp.Role",
+		"fields": {
+			"tenant": ,
+			"utility": ,
+			"name": ,
+            "role_type": ,
+            "role_subtype": ,
+            "form_factor_id": ,
+            "department_id": ,
+            "status_id": ,
+			"is_active": "True"
+		}
+	},
+  {
+        "pk": "1",
+		"model": "userapp.RolePrivilege",
+		"fields": {
+          "tenant": ,
+          "utility": ,
+          "role_id": ,
+          "module": ,
+          "sub_module": ,
+          "privilege_id": ,
+          "is_active": "True"
+
+        }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserSkills",
+    "fields": {
+      "tenant": ,
+      "utility": ,
+      "user": ,
+      "area": ,
+      "is_active": "True"
+    }
+  },
+
+  {
+        "pk": "1",
+		"model": "userapp.User",
+		"fields": {
+          "tenant": ,
+          "utility": ,
+          "city": ,
+          "user_type": ,
+          "user_subtype": ,
+          "form_factor_id": ,
+          "first_name": ,
+          "middle_name",:,
+          "last_name": ,
+          "user_image": ,
+          "email_id": ,
+          "password": ,
+          "salt": ,
+          "phone_mobile": ,
+          "phone_landline": ,
+          "department": ,
+          "status": ,
+          "is_active": "True"
+
+        }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserDetails",
+    "fields": {
+        "tenant": ,
+        "utility": ,
+        "imei_no": ,
+        "phone_mobile": ,
+        "is_active": "True"
+    }
+  },
+  {
+        "pk": "1",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": ,
+          "utility": ,
+          "user": ,
+          "role": ,
+          "module": ,
+          "sub_module": ,
+          "privilege": ,
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "1",
+		"model": "userapp.UserRole",
+		"fields": {
+          "tenant": ,
+          "utility": ,
+          "user": ,
+          "role": ,
+          "is_active": "True"
+
+        }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserSkills",
+    "fields": {
+      "tenant": ,
+      "utility": ,
+      "user": ,
+      "skill": ,
+      "is_active": "True"
+    }
+  },
+	{
+		"pk": "1",
+		"model": "userapp.UserToken",
+		"fields": {
+			"tenant": ,
+			"utility": ,
+			"token": ,
+			"form_factor": ,
+			"user": ,
+			"ip_address": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "1",
+		"model": "userapp.UserType",
+		"fields": {
+			"tenant": ,
+			"utility": ,
+			"name": ,
+			"is_active": "True"
+		}
 	}
 ]
