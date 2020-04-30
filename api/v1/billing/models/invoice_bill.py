@@ -59,8 +59,8 @@ class InvoiceBill(models.Model):
     total_emi_paid = models.FloatField(null=True, blank=True)
     remaining_emi_amt = models.FloatField(null=True, blank=True)
     adjustments = models.CharField(max_length=200, null=True, blank=True)
-    before_due_date = models.DateField(null=True, blank=True, default=datetime.now())
-    after_due_date = models.DateField(null=True, blank=True, default=datetime.now())
+    before_due_date_amount = models.FloatField(null=True, blank=True)
+    after_due_date_amount = models.FloatField(null=True, blank=True)
     current_emi_amt = models.FloatField(null=True, blank=True)
     closing_month = models.CharField(max_length=200, null=True, blank=True)
     bill_status = models.BigIntegerField(null=True, blank=True)
@@ -82,5 +82,9 @@ class InvoiceBill(models.Model):
 
     def __unicode__(self):
         return self.invoice_no
+
+
+def get_invoice_bills_by_consumer_no(consumer_no):
+    return InvoiceBill.objects.filter(consumer_no = consumer_no)
 
 # Create Invoice Bill table end.

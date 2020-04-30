@@ -940,5 +940,417 @@
 			"region": 3,
 			"is_active": "True"
 		}
-	}
+	},
+
+
+
+  {
+		"pk": "1",
+		"model": "userapp.Privilege",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "View",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "2",
+		"model": "userapp.Privilege",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Edit",
+			"is_active": "True"
+		}
+	},
+
+  {
+        "pk": "1",
+		"model": "userapp.RolePrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 1,
+          "module": 1,
+          "sub_module":1,2,3,4,5,6,7,
+          "privilege_id": 1,
+          "is_active": "True"
+
+        }
+  },
+  {
+        "pk": "2",
+		"model": "userapp.RolePrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 1,
+          "module": 1,
+          "sub_module":1,2,3,4,5,6,7,
+          "privilege_id": 2,
+          "is_active": "True"
+
+        }
+  },
+  {
+        "pk": "3",
+		"model": "userapp.RolePrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 2,
+          "module": 1,
+          "sub_module":1,2,3,4,5,6,7,
+          "privilege_id": 1,
+          "is_active": "True"
+
+        }
+  },
+  {
+        "pk": "4",
+		"model": "userapp.RolePrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 2,
+          "module": 1,
+          "sub_module":1,2,3,4,5,6,7,
+          "privilege_id": 2,
+          "is_active": "True"
+
+        }
+  },
+  {
+        "pk": "1",
+		"model": "userapp.RoleSubType",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "employee",
+          "role_type": 2,
+          "is_active": "True"
+        }
+  },
+{
+        "pk": "2",
+		"model": "userapp.RoleSubType",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "vendor",
+          "role_type": 2,
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "3",
+		"model": "userapp.RoleSubType",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "supplier",
+          "role_type": 2,
+          "is_active": "True"
+        }
+  },
+{
+        "pk": "1",
+		"model": "userapp.RoleType",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "Tenant",
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "2",
+		"model": "userapp.RoleType",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "Utility",
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "1",
+		"model": "userapp.UserArea",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "area": "Kothrud",
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "2",
+		"model": "userapp.UserArea",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "area": "Karvenagar",
+          "is_active": "True"
+        }
+  },
+
+  {
+        "pk": "1",
+		"model": "userapp.User",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "city": 1,
+          "user_type": 1,
+          "user_subtype": 1,
+          "form_factor_id": 1,
+          "first_name": "Rohan",
+          "middle_name": ,
+          "last_name": "Wagh",
+          "user_image": ,
+          "email_id": "abcd@gmail.com",
+          "password": 123456,
+          "salt": ,
+          "phone_mobile": 9844165420,
+          "phone_landline": ,
+          "department": 1,
+          "status": ,
+          "is_active": "True"
+
+        }
+  },
+  {
+        "pk": "2",
+		"model": "userapp.User",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "city": 1,
+          "user_type": 2,
+          "user_subtype": 2,
+          "form_factor_id": 1,
+          "first_name": "Akshay",
+          "middle_name": ,
+          "last_name": "Nibrad",
+          "user_image": ,
+          "email_id": "xyz@gmail.com",
+          "password": 123456,
+          "salt": ,
+          "phone_mobile": 7845632122,
+          "phone_landline": ,
+          "department": 1,
+          "status": ,
+          "is_active": "True"
+
+        }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserDetails",
+    "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "imei_no": 121212121212121,
+        "phone_mobile": 2222222222,
+        "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.UserDetails",
+    "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "imei_no": 131516589675326,
+        "phone_mobile": 2222222222,
+        "is_active": "True"
+    }
+  },
+  {
+        "pk": "1",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 1,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "2",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 2,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "3",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 3,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+{
+        "pk": "4",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 4,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+{
+        "pk": "5",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 5,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "6",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 6,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+  {
+        "pk": "7",
+		"model": "userapp.UserPrivilege",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": 1,
+          "module": 1,
+          "sub_module": 7,
+          "privilege": 2,
+          "is_active": "True"
+        }
+  },
+
+  {
+        "pk": "1",
+		"model": "userapp.UserRole",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 1,
+          "role": "Admin",
+          "is_active": "True"
+
+        }
+  },
+  {
+        "pk": "2",
+		"model": "userapp.UserRole",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "user": 2,
+          "role": "Executive",
+          "is_active": "True"
+
+        }
+  },
+
+  {
+		"pk": "1",
+		"model": "userapp.UserType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Tenant",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "2",
+		"model": "userapp.UserType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Utility",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "1",
+		"model": "commonapp.Department",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "S&M",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "2",
+		"model": "commonapp.Department",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Consumer care",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "1",
+		"model": "commonapp.FormFactor",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "Web",
+          "is_active": "True"
+        }
+  },
+  {
+		"pk": "2",
+		"model": "commonapp.FormFactor",
+		"fields": {
+          "tenant": 1,
+          "utility": 1,
+          "name": "Mobile",
+          "is_active": "True"
+        }
+  }
 ]

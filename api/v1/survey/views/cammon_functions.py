@@ -9,6 +9,7 @@ from v1.commonapp.models.Survey import get_survey_by_id_string
 from v1.commonapp.models.survey_consumer import get_survey_consumer_by_id_string
 from v1.commonapp.models.survey_status import get_survey_status_by_id_string,get_survey_status_by_id
 from v1.commonapp.models.survey_type import get_survey_type_by_id_string,get_survey_type_by_id
+from v1.commonapp.models.survey_assignment import SurveyAssignment
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 
@@ -221,7 +222,6 @@ def save_consumer_survey_details(request,user):
     sid = transaction.savepoint()
     try:
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
-        consumer_id = get_survey_consumer_by_id_string(request.data['consumer_id_string'])
         area = get_area_by_id_string(request.data['area'])
         sub_area = get_sub_area_by_id_string(request.data['sub_area'])
         type = get_survey_type_by_id_string(request.data['type'])
@@ -246,15 +246,6 @@ def save_consumer_survey_details(request,user):
                 is_active=True
             )
             consumer_survey.save()
-            consumer_survey = SurveyConsumer(
-                tenant=user.tenant,
-                utility=utility,
-                survey_id=consumer_survey.id,
-                consumer_no=request.data['consumer_no'],
-                status_id=status.id,
-                is_active=True
-            )
-            consumer_survey.save()
             transaction.savepoint_commit(sid)
             return consumer_survey
         else:
@@ -274,16 +265,107 @@ def save_consumer_survey_details(request,user):
             consumer_survey.sub_area = sub_area.id
             consumer_survey.status_id = status.id
             consumer_survey.save()
-            consumer_survey = get_survey_consumer_by_id_string(request.data['consumer_id_string'])
-            consumer_survey.tenant = user.tenant
-            consumer_survey.utility = utility
-            consumer_survey.survey_id = consumer_survey.id
-            consumer_survey.status_id = status.id
-            consumer_survey.is_active = True            
-            consumer_survey.save()
             transaction.savepoint_commit(sid)
             return consumer_survey
     except Exception as e:
         transaction.rollback(sid)
         consumer_survey = ''
         return consumer_survey
+
+@transaction.atomic
+def save_consumer_details(request, user,consumer_survey):
+    sid = transaction.savepoint()
+    try:
+        utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
+        survey_id = get_survey_by_id_string(request.data['id_string'])
+        status = get_survey_status_by_id_string(request.data['status'])
+
+        if request.data['consumer_id_string'] == "":
+            # Sample data of Consumers
+            consumer_datas = [{'consumer_name': 'priyanka', 'mobile_no': '9011613929', 'meter_no': '859756547895',
+                           'area': 'Kothrud', 'sub_area': 'bhusari colony','consumer_no':554811464894,
+                           'description': 'This updated information'},
+                            {'consumer_name': 'ravi', 'mobile_no': '7620983335', 'meter_no': '2568756547895',
+                           'area': 'nagar', 'sub_area': 'bhusari colony','consumer_no':895455546544,
+                           'description': 'This updated information'}]
+
+            consumer_data_list = []
+            for consumer_data in consumer_datas:
+                consumer_survey = SurveyConsumer(
+                    tenant=user.tenant,
+                    utility=utility,
+                    survey_id=survey_id.id,
+                    consumer_no=consumer_data['consumer_no'],
+                    consumer_name=consumer_data['consumer_name'],
+                    mobile_no=consumer_data['mobile_no'],
+                    meter_no=consumer_data['meter_no'],
+                    area=consumer_data['area'],
+                    sub_area=consumer_data['sub_area'],
+                    description=consumer_data['description'],
+                    status_id=status.id,
+                    is_active=True
+                )
+                consumer_survey.save()
+                transaction.savepoint_commit(sid)
+                consumer_data_list.append(consumer_survey)
+            return consumer_data_list
+        else:
+            consumer_survey = get_survey_consumer_by_id_string(request.data['consumer_id_string'])
+            consumer_survey.tenant = user.tenant
+            consumer_survey.utility = utility
+            consumer_survey.survey_id = consumer_survey.id
+            consumer_survey.consumer_no = consumer_survey.consumer_no,
+            consumer_survey.consumer_name = consumer_survey.consumer_name,
+            consumer_survey.mobile_no = consumer_survey.mobile_no,
+            consumer_survey.meter_no = consumer_survey.meter_no,
+            consumer_survey.area = consumer_survey.area,
+            consumer_survey.sub_area = consumer_survey.sub_area,
+            consumer_survey.description = consumer_survey.description,
+            consumer_survey.status_id = status.id
+            consumer_survey.is_active = True
+            consumer_survey.save()
+            transaction.savepoint_commit(sid)
+            return consumer_survey
+
+    except Exception as e:
+        transaction.rollback(sid)
+        consumer_data_list = ''
+        return consumer_data_list
+
+
+def is_assignment_verified(request):
+    if request.data['vendor_id_string'] == "" and request.data['survey_id_string'] == "" and request.data['assigned_date'] =="" \
+       and request.data['completion_date'] == "":
+        return False
+    else:
+        return True
+
+@transaction.atomic
+def save_vendor_assignment_details(request,user):
+    sid = transaction.savepoint()
+    try:
+        utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
+        vendor_details = VendorDetails.objects.get(id_string=request.data['vendor_id_string'])
+        survey_details = get_survey_by_id_string(request.data['survey_id_string'])
+        status = get_survey_status_by_id(survey_details.status)
+        survey_assignment = SurveyAssignment(
+            tenant=user.tenant,
+            utility=utility,
+            survey_id=survey_details.id,
+            vendor_id=vendor_details.id,
+            assigned_date=request.data['assigned_date'],
+            completion_date=request.data['completion_date'],
+            status_id=status.id,
+            is_active=True
+        )
+        survey_assignment.save()
+        transaction.savepoint_commit(sid)
+        return survey_assignment
+    except Exception as e:
+        transaction.rollback(sid)
+        survey_assignment = ''
+        return survey_assignment
+        pass
+
+
+

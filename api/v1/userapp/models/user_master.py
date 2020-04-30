@@ -27,19 +27,16 @@ class SystemUser(User):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    city = models.BigIntegerField(blank=False, null=False)
-    user_type = models.BigIntegerField(null=False, blank=False)  # Tenant, Utility
-    user_subtype = models.BigIntegerField(null=False, blank=False)  # employee, vendor, supplier
-    form_factor_id = models.BigIntegerField(null=False, blank=False)  # Web, Mobile
-    first_name = models.CharField(max_lengt=200, null=True, blank=True)
-    middle_name = models.CharField(max_lengt=200, null=True, blank=True)
-    last_name = models.CharField(max_lengt=200, null=True, blank=True)
+    city = models.BigIntegerField(blank=True, null=True)
+    user_type = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
+    user_subtype = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
+    form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
+    middle_name = models.CharField(max_length=200, null=True, blank=True)
     user_image = models.URLField(null=True, blank=True)
-    email_id = models.CharField(max_lengt=200, null=True, blank=True)
-    password = models.CharField(max_lengt=200, null=True, blank=True)
-    salt = models.CharField(max_lengt=200, null=False, blank=False)
-    phone_mobile = models.CharField(max_lengt=200, null=False, blank=False)
-    phone_landline = models.CharField(max_lengt=200, null=False, blank=False)
+    email_id = models.CharField(max_length=200, null=True, blank=True)
+    salt = models.CharField(max_length=200, null=True, blank=True)
+    phone_mobile = models.CharField(max_length=200, null=True, blank=True)
+    phone_landline = models.CharField(max_length=200, null=True, blank=True)
     department = models.BigIntegerField(null=True, blank=True)
     role = models.BigIntegerField(null=False, blank=False)
     status = models.BigIntegerField(null=False, blank=False)
@@ -50,9 +47,9 @@ class SystemUser(User):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id_string
+        return self.first_name
 
     def __unicode__(self):
-        return self.id_string
+        return self.first_name
 
 # Create User Details table end

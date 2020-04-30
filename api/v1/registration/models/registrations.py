@@ -57,10 +57,10 @@ class Registration(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.registration_no
+        return self.first_name
 
     def __unicode__(self):
-        return self.registration_no
+        return self.first_name
 
 
 def get_registration_by_id_string(id_string):
