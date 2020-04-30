@@ -1,4 +1,10 @@
+import traceback
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.views import APIView
+from api.messages import STATE, DATA, ERROR, EXCEPTION, SUCCESS
+from v1.billing.models.bill_status import get_bill_statuses_by_tenant_id_string
+from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
@@ -12,6 +18,7 @@ from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
 from v1.userapp.models.privilege import get_privilege_by_id
+from v1.userapp.models.user_master import SystemUser
 from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id
 
 
@@ -74,3 +81,31 @@ class ConsumerApiView(APIView):
                     }
         except Exception as e:
             pass
+
+
+class ConsumerBillListApiView(APIView):
+    def get(self, request, format=None):
+        bill_list = []
+        try:
+            user = SystemUser.objects.get(id=4)
+            if "consumer_id_string" in request.data:
+                consumer = get_consumer_by_id_string(request.data["consumer_id_string"])
+                bills = get_invoice_bills_by_consumer_no(consumer.cosumer_no)
+                bill_statuses = get_bill_statuses_by_tenant_id_string(user.tenant.id_string)
+                for bill in bills:
+                    bill_list.append({
+                        "bill_month": bill.bill_month,
+                        "before_due_date_amount": bill.before_due_date_amount,
+                        "due_date": bill.due_date,
+                        "bill_status": bill_statuses.get(id = bill.bill_status)
+                    })
+                return Response({
+                    STATE: SUCCESS,
+                    'data': bill_list,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

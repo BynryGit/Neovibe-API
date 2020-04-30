@@ -1,3 +1,4 @@
 from django.contrib import admin
+from v1.consumer.models.source_type import SourceType
 
-# Register your models here.
+admin.site.register(SourceType)

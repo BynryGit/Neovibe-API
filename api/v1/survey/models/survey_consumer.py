@@ -44,4 +44,8 @@ class SurveyConsumer(models.Model):
     def __unicode__(self):
         return self.survey
 
+def get_survey_consumer_by_id_string(id_string):
+    return SurveyConsumer.objects.get(id_string = id_string)
+
+
 # Create Survey Consumer table end
