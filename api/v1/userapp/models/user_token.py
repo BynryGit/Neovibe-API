@@ -26,7 +26,7 @@ class UserToken(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    token = models.CharField(max_lengt=200, null=True, blank=True)
+    token = models.CharField(max_length=200, null=True, blank=True)
     form_factor = models.BigIntegerField(null=False, blank=False)
     user = models.BigIntegerField(null=False, blank=False)
     ip_address = models.CharField(max_length=200,null=False, blank=False)

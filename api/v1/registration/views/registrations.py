@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
+from v1.userapp.models.user_master import SystemUser
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.consumer_category import get_consumer_category_by_id
 from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id
@@ -43,10 +44,7 @@ class RegistrationListApiView(APIView):
             # Initializing output list start
             registrations_list = []
             # Initializing output list end
-#todo: Rohan - create a common function
-#login
-#module, Submodule
-#utility access
+
             # Checking authentication start
             if is_token_valid(request.data['token']):
                 payload = get_payload(request.data['token'])
@@ -348,3 +346,52 @@ class RegistrationStatusApiView(APIView):
         except Exception as e:
             pass
 
+
+# class RegistrationListApiView(APIView):
+#
+#     def get(self, request, format=None):
+#         if "page_number" in request.data:
+#             print("##########", request)
+#         try:
+#             # Initializing output list start
+#             registrations_list = []
+#             # Initializing output list end
+#
+#             user = SystemUser.objects.get(id = 4)
+#
+#             # Code for filtering registrations start
+#             registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
+#             # Code for filtering registrations end
+#
+#             # Code for lookups start
+#             statuses = get_registration_statuses_by_tenant_id_string(user.tenant.id_string)
+#             areas = get_areas_by_tenant_id_string(user.tenant.id_string)
+#             sub_areas = get_sub_areas_by_tenant_id_string(user.tenant.id_string)
+#             # Code for lookups end
+#
+#             # Code for sending registrations in response start
+#             for registration in registrations:
+#                 registrations_list.append({
+#                     'first_name': registration.first_name,
+#                     'last_name': registration.last_name,
+#                     'registration_no': registration.registration_no,
+#                     'status': statuses.get(id=registration.status_id).name,
+#                     'mobile_no': registration.phone_mobile,
+#                     'area': areas.get(id=registration.area_id).name,
+#                     'sub_area': sub_areas.get(id=registration.sub_area_id).name,
+#                     'raised_on': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
+#                     'total_pages': total_pages,
+#                     'page_no': page_no
+#                 })
+#             return Response({
+#                 STATE: SUCCESS,
+#                 'data': registrations_list,
+#             }, status=status.HTTP_200_OK)
+#             # Code for sending registrations in response end
+#
+#         except Exception as e:
+#             print("Exception occured ",str(traceback.print_exc(e)))
+#             return Response({
+#                 STATE: EXCEPTION,
+#                 ERROR: ERROR
+#             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

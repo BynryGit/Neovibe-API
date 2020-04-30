@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 
 # Create User Skills table start
 
-class UserSkills(models.Model):
+class UserArea(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)

@@ -39,5 +39,11 @@ class SurveyType(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_survey_type_by_id_string(id_string):
+    return SurveyType.objects.get(id_string = id_string)
+
+def get_survey_type_by_id(id):
+    return SurveyType.objects.get(id = id)
+
 # Create Survey Type table end.
 
