@@ -41,3 +41,7 @@ class UserRole(models.Model):
         return self.id
 
 # Create User Role table end
+
+
+def get_role_by_id(id):
+    return UserRole.objects.get(id=id)

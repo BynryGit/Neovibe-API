@@ -2,10 +2,12 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from api.messages import STATE, DATA, ERROR, EXCEPTION, SUCCESS
 from v1.billing.models.bill_status import get_bill_statuses_by_tenant_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.consumer_category import get_consumer_category_by_id
