@@ -41,6 +41,7 @@ class SystemUser(User):
     phone_mobile = models.CharField(max_lengt=200, null=False, blank=False)
     phone_landline = models.CharField(max_lengt=200, null=False, blank=False)
     department = models.BigIntegerField(null=True, blank=True)
+    role = models.BigIntegerField(null=False, blank=False)
     status = models.BigIntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)

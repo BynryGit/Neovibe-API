@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from api import messages
-from v1.userapp.views.common_functions import login
+from v1.userapp.views.common_functions import login, authentication
+
 
 # API Header
 # API end Point: api/v1/user/login
@@ -26,19 +27,27 @@ class LoginApiView(APIView):
                 'password': request.data['password']
             }
 
-            token = login(validated_data = validated_data) # Call Login function
+            auth = authentication(validated_data)
 
-            if not token:
+            if auth:
+                token = login(auth) # Call Login function
+
+                if not token:
+                    return Response({
+                        messages.RESULT: messages.FAIL,
+                        messages.MESSAGE: messages.INVALID_CREDENTIALS,
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+                else:
+                    return Response({
+                        messages.RESULT: messages.SUCCESS,
+                        messages.MESSAGE: messages.SUCCESSFULLY_DATA_RETRIEVE,
+                        messages.Token: token,
+                    }, status=status.HTTP_200_OK)
+            else:
                 return Response({
                     messages.RESULT: messages.FAIL,
                     messages.MESSAGE: messages.INVALID_CREDENTIALS,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-            else:
-                return Response({
-                    messages.RESULT: messages.SUCCESS,
-                    messages.MESSAGE: messages.SUCCESSFULLY_DATA_RETRIEVE,
-                    messages.Token: token,
-                }, status=status.HTTP_200_OK)
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
