@@ -1,13 +1,12 @@
 # Table Header
-# Modules : Tenant, Utility | sub-modules : Tenant Master, Utility Master
-# Table Type : Lookup (Global)
-# Table Name : 2.12.4 Region
-# Description : A global lookup table that stores regions.
+# module : All modules & sub-modules
+# Table Type : Lookup (local)
+# Description : It is a global lookup table that stores various sub types of roles
 # Frequency of data changes : Low
-# Sample Table Data : "Americas", "Asia","Africa"
-# Reference Table : 2.1 Utility Master
-# Author : Jayshree Kumbhare
-# Creation Date : 21-04-2020
+# Sample Table Data :
+# Reference Table :
+# Author : Saloni Monde
+# Creation Date : 30/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -18,13 +17,15 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
-# Create Region table start
 
-class Region(models.Model):
+# Create Role Sub Type table start
+
+class RoleSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=True, on_delete=models.SET_NULL) # to be removed
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=True, on_delete=models.SET_NULL) # to be removed
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
+    role_type = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -37,4 +38,4 @@ class Region(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Region table end.
+# Create Role Sub Type table end
