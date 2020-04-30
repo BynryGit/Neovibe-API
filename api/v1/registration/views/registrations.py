@@ -1,4 +1,6 @@
 import traceback
+
+from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -225,13 +227,14 @@ class RegistrationApiView(APIView):
                         # Request data verification end
 
                         # Save basic and payment details start
-                        registration, result, error = save_basic_registration_details(request, user)
+                        sid = transaction.savepoint()
+                        registration, result, error = save_basic_registration_details(request, user, sid)
                         if result == False:
                             return Response({
                                 STATE: EXCEPTION,
                                 ERROR: error
                             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        payment = save_payment_details(request, user, registration)
+                        payment = save_payment_details(request, user, registration, sid)
                         # Save basic and payment details start
                     else:
                         return Response({
