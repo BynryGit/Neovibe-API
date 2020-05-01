@@ -860,6 +860,28 @@
 	},
 	{
 		"pk": "1",
+		"model": "commonapp.Area",
+		"fields": {
+			"tenant": 1,
+			"utility": 2,
+			"name": "Kothrud",
+			"city": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "commonapp.SubArea",
+		"fields": {
+			"tenant": 1,
+			"utility": 2,
+			"area": 1,
+			"name": "Bhusari colony",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
 		"model": "commonapp.State",
 		"fields": {
 			"tenant": 1,
