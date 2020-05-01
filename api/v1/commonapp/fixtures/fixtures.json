@@ -115,7 +115,7 @@
 		"model": "utility.UtilityMaster",
 		"fields": {
 			"tenant": 1,
-			"name": "MNGL pune",
+			"name": "MNGL Mumbai",
 			"phone_no": 1111111111,
 			"email_id": "gas@gmail.com",
 			"region_id": 3,
@@ -131,7 +131,7 @@
 		"model": "utility.UtilityMaster",
 		"fields": {
 			"tenant": 1,
-			"name": "MNGL pune",
+			"name": "MNGL Pune",
 			"phone_no": 2222222222,
 			"email_id": "power@gmail.com",
 			"region_id": 3,
@@ -973,7 +973,7 @@
           "utility": 1,
           "role_id": 1,
           "module": 1,
-          "sub_module":1,2,3,4,5,6,7,
+          "sub_module":1,
           "privilege_id": 1,
           "is_active": "True"
 
@@ -987,7 +987,7 @@
           "utility": 1,
           "role_id": 1,
           "module": 1,
-          "sub_module":1,2,3,4,5,6,7,
+          "sub_module":2,
           "privilege_id": 2,
           "is_active": "True"
 
@@ -1001,7 +1001,7 @@
           "utility": 1,
           "role_id": 2,
           "module": 1,
-          "sub_module":1,2,3,4,5,6,7,
+          "sub_module":3,
           "privilege_id": 1,
           "is_active": "True"
 
@@ -1015,7 +1015,7 @@
           "utility": 1,
           "role_id": 2,
           "module": 1,
-          "sub_module":1,2,3,4,5,6,7,
+          "sub_module":4,
           "privilege_id": 2,
           "is_active": "True"
 
@@ -1108,16 +1108,11 @@
           "user_subtype": 1,
           "form_factor_id": 1,
           "first_name": "Rohan",
-          "middle_name": ,
           "last_name": "Wagh",
-          "user_image": ,
           "email_id": "abcd@gmail.com",
           "password": 123456,
-          "salt": ,
           "phone_mobile": 9844165420,
-          "phone_landline": ,
           "department": 1,
-          "status": ,
           "is_active": "True"
 
         }
@@ -1133,16 +1128,11 @@
           "user_subtype": 2,
           "form_factor_id": 1,
           "first_name": "Akshay",
-          "middle_name": ,
           "last_name": "Nibrad",
-          "user_image": ,
           "email_id": "xyz@gmail.com",
           "password": 123456,
-          "salt": ,
           "phone_mobile": 7845632122,
-          "phone_landline": ,
           "department": 1,
-          "status": ,
           "is_active": "True"
 
         }
