@@ -78,6 +78,7 @@ class RegistrationListApiView(APIView):
                     # Code for sending registrations in response start
                     for registration in registrations:
                         registrations_list.append({
+                            'registration_id_string': registration.id_string,
                             'first_name': registration.first_name,
                             'last_name': registration.last_name,
                             'registration_no': registration.registration_no,
