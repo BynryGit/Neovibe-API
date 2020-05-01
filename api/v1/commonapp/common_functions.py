@@ -17,7 +17,7 @@ def get_user(id_string):
     user = User.objects.get(id_string = id_string)
     return user
 
-def is_authorized(user, privilege, sub_module):
+def is_authorized():
     return True
     privileges = user.privileges.all()
     sub_modules = user.sub_modules.all()
