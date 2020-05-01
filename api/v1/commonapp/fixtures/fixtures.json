@@ -5,7 +5,7 @@
 		"fields" : {
 			"name" : "MNGL",
 			"email_id" : "info@mngl.in",
-			"phone_no" : 18002662696,
+			"mobile_no" : 18002662696,
 			"region_id" : 3,
 			"country_id" : 3,
 			"state_id" : 1,
@@ -18,7 +18,7 @@
 		"fields": {
 			"name": "BGCL",
 			"email_id": "info@bgcl.in",
-			"phone_no": 23248070,
+			"mobile_no": 23248070,
 			"region_id": 3,
 			"country_id": 3,
 			"state_id": 2,
@@ -31,7 +31,7 @@
 		"fields": {
 			"name": "INFRA MARK",
 			"email_id": "infra@gmail.com",
-			"phone_no": 9550209071,
+			"mobile_no": 9550209071,
 			"region_id": 1,
 			"country_id": 1,
 			"state_id": 5,
@@ -44,7 +44,7 @@
 		"fields": {
 			"name": "GAIL",
 			"email_id": "gail@gmail.com",
-			"phone_no": 7020929071,
+			"mobile_no": 7020929071,
 			"region_id": 3,
 			"country_id": 3,
 			"state_id": 1,
@@ -1094,47 +1094,6 @@
           "user": 1,
           "area": "Karvenagar",
           "is_active": "True"
-        }
-  },
-
-  {
-        "pk": "1",
-		"model": "userapp.User",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "city": 1,
-          "user_type": 1,
-          "user_subtype": 1,
-          "form_factor_id": 1,
-          "first_name": "Rohan",
-          "last_name": "Wagh",
-          "email_id": "abcd@gmail.com",
-          "password": 123456,
-          "phone_mobile": 9844165420,
-          "department": 1,
-          "is_active": "True"
-
-        }
-  },
-  {
-        "pk": "2",
-		"model": "userapp.User",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "city": 1,
-          "user_type": 2,
-          "user_subtype": 2,
-          "form_factor_id": 1,
-          "first_name": "Akshay",
-          "last_name": "Nibrad",
-          "email_id": "xyz@gmail.com",
-          "password": 123456,
-          "phone_mobile": 7845632122,
-          "department": 1,
-          "is_active": "True"
-
         }
   },
   {
