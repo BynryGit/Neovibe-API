@@ -14,7 +14,7 @@ from v1.commonapp.models.area import get_area_by_id,get_areas_by_tenant_id_strin
 from v1.commonapp.models.sub_area import get_sub_area_by_id,get_sub_areas_by_tenant_id_string
 from v1.survey.views.common_functions import get_filtered_location_survey,get_filtered_consumer_survey,\
     is_data_verified,save_location_survey_details,get_consumer_survey_list,is_consumer_data_verified,save_consumer_survey_details,\
-    save_consumer_details,is_assignment_verified,save_vendor_assignment_details
+    save_consumer_details,is_assignment_verified,save_vendor_assignment_details,get_vendor_details
 from v1.userapp.models.privilege import get_privilege_by_id
 from api.messages import SUCCESS,STATE,ERROR,EXCEPTION,DATA
 
@@ -554,7 +554,7 @@ class AssignVendorApiView(APIView):
                 if is_authorized(user, privilege, sub_module):
                  # Checking authorization end
                     print()
-                     # get_vendor_list()
+                    vendor_details = get_vendor_details(request,user)
                 else:
                     return Response({
                         STATE: ERROR,
