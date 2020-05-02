@@ -1,4 +1,6 @@
 import traceback
+
+from pyatspi import state
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,6 +13,13 @@ from api.v1.smart360_API.tenant.models.tenant_master import get_tenant
 from api.v1.smart360_API.userapp.models.privilege import get_privilege_by_id
 from api.v1.smart360_API.commonapp.models.sub_module import get_sub_module_by_id
 from api.v1.smart360_API.commonapp.models.country import get_country_by_id_string, get_country_by_id
+from api.v1.smart360_API.commonapp.models.city import get_city_by_id_string, get_city_by_id
+from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.country import get_country_by_id
+from v1.commonapp.models.state import get_state_by_id
 
 
 # API Header
@@ -90,3 +99,70 @@ class TenantApiView(APIView):
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # API Header
+        # API end Point: api/v1/tenant/
+        # API verb: GET, POST, PUT
+        # Package: Basic
+        # Modules: All
+        # Sub Module: Tenant
+        # Interaction: View Tenant, Add Tenant, Edit Tenants
+        # Usage: View, Add, Edit Tenants
+        # Tables used: 1.1 Tenant
+        # Auther: Gauri
+        # Created on: 29/04/2020
+
+    class TenantApiView(APIView):
+
+
+def get(self, request, format=None):
+    try:
+        # Checking authentication start
+        if is_token_valid(request.data['token']):
+            payload = get_payload(request.data['token'])
+            user = get_user(payload['id_string'])
+            # Checking authentication end
+
+            # Checking authorization start
+            privilege = get_privilege_by_id(1)
+            if is_authorized(user, privilege):
+                # Checking authorization end
+
+                # Code for lookups start
+                tenant = get_tenant(request.data['id_string'])
+                country = get_country_by_id(tenant.country_id)
+
+                # Code for sending registrations in response start
+                data = {
+                    'tenant_id_string': tenant.id_string,
+                    'first_name': tenant.name,
+                    'email_id': tenant.email_id,
+                    'mobile_no': tenant.phone_mobile,
+                    'country_id_string': country.id_string,
+                    'state_id_string': state.id_string,
+                    'city_id_string': city.id_string,
+                    'area_id_string': area.id_string,
+                    'is_active': tenant.is_active,
+                }
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: data,
+                }, status=status.HTTP_200_OK)
+                # Code for sending registrations in response end
+
+            else:
+                return Response({
+                    STATE: ERROR,
+                    DATA: '',
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response({
+                STATE: ERROR,
+                DATA: '',
+            }, status=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return Response({
+            STATE: EXCEPTION,
+            DATA: '',
+            ERROR: str(traceback.print_exc(e))
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

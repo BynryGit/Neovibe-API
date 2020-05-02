@@ -92,8 +92,7 @@ def is_data_verified(request): #todo - Black, Null, empty string - ready to use 
 
 
 @transaction.atomic
-def save_basic_registration_details(request, user):
-    sid = transaction.savepoint()
+def save_basic_registration_details(request, user, sid):
     registration = ""
     error = ''
     try:
@@ -233,7 +232,6 @@ def save_basic_registration_details(request, user):
             registration.updated_by = user.id
             registration.updated_date = datetime.now()
             registration.save()
-        transaction.savepoint_commit(sid)
         return registration, True, error
     except Exception as e:
         print("Exception occured ",str(traceback.print_exc(e)))
@@ -242,7 +240,7 @@ def save_basic_registration_details(request, user):
         return registration, False, error
 
 
-def save_payment_details(request, user, registration):
+def save_payment_details(request, user, registration, sid):
     try:
         if request.data['payment_details'] == '':
             return True
@@ -261,8 +259,10 @@ def save_payment_details(request, user, registration):
                     created_by = user.id,
                     created_date = datetime.now()
                 ).save
+            transaction.savepoint_commit(sid)
             return True
     except Exception as e:
+        transaction.rollback(sid)
         return False
 
 
