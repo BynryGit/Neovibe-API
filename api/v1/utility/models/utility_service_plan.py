@@ -30,11 +30,13 @@ class UtilityServicePlan(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=500, blank=False, null=False)
-    is_valid = models.BooleanField(default=False)
-    validity = models.BigIntegerField(null=True, blank=True)
+    category = models.BigIntegerField(null=True, blank=True) # CNG, PNG
+    subcategory = models.BigIntegerField(null=True, blank=True) # Domestic, Industrial, Commercials
+    type = models.BigIntegerField(null=True, blank=True) # prepaid, postpaid
+    subtype = models.BigIntegerField(null=True, blank=True) # fixed, variable
+    city = models.BigIntegerField(null=True, blank=True) # city1, city 2
     start_date = models.DateField(null=True, blank=True, default=datetime.now())
     end_date = models.DateField(null=True, blank=True, default=datetime.now())
-    location = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

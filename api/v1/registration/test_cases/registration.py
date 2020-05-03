@@ -18,6 +18,7 @@ class RegistrationTestCase(TestCase):
     # initialize the APIClient app
     client = Client()
 
+
     def setUp(self):
         self.valid_payload = {
             "registration_no": "NSC10000001",
