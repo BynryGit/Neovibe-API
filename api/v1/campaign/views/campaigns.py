@@ -12,8 +12,8 @@ from v1.campaign.models.campaign_status import get_cam_status_by_tenant_id_strin
 from v1.userapp.models.user_master import SystemUser
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
-from v1.commonapp.models.consumer_category import get_consumer_category_by_id
-from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 
 from v1.commonapp.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
 from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
@@ -44,7 +44,7 @@ class CampaignListApiView(APIView):
             campaign_list = []
 
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid():
                 # payload = get_payload(request.data['token'])
                 # user = get_user(payload['id_string'])
 
@@ -56,7 +56,7 @@ class CampaignListApiView(APIView):
                 # Checking authorization end
 
                     # Code for filtering campaign start
-                    user = SystemUser.objects.get(id=3)
+                    user = SystemUser.objects.get(id=2)
                     campaigns,total_pages, page_no, result, error = get_filtered_campaign(user, request)
                     if result == False:
                         return Response({
@@ -66,19 +66,19 @@ class CampaignListApiView(APIView):
                     # Code for filtering campaign end
 
                     # Code for lookups start
-                    status = get_cam_status_by_tenant_id_string(user.tenant)
-                    category = get_consumer_category_by_id(user.tenant.id_string)
-                    sub_category = get_consumer_sub_category_by_id(user.tenant.id_string)
+                    statususe = get_cam_status_by_tenant_id_string(user.tenant.id_string)
+                    # category = get_consumer_category_by_id_string(user.tenant.id_string)
+                    # sub_category = get_consumer_sub_category_by_id_string(user.tenant.id_string)
                     frequency = get_frequency_by_tenant_id_string(user.tenant.id_string)
                     # Code for lookups end
 
                     # Code for sending campaigns in response
                     for campaign in campaigns:
                         campaign_list.append({
-                            'category': category.objects.get(id = campaign.category_id).category_name,
-                            'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
-                            'frequency':frequency.objects.get(id = campaign.frequency_id).frequency_name,
-                            'status': status.objects.get(id = campaign.status_id).status_name,
+                            # 'category': category.objects.get(id = campaign.category_id).category_name,
+                            # 'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
+                            'frequency':frequency.get(id = campaign.frequency_id).frequency_name,
+                            'status': statususe.get(id = campaign.status_id).status_name,
                             'name':campaign.name,
                             'raised_on': campaign.created_date.strftime(DISPLAY_DATE_FORMAT),
                             'total_pages': total_pages,

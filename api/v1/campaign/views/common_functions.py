@@ -2,8 +2,8 @@ import traceback
 from v1.campaign.models.campaign import Campaign
 from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.advert_status import get_advert_status_by_id_string
-from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from v1.commonapp.models.consumer_category import get_consumer_category_by_id_string
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from django.core.paginator import Paginator
 from django.db import transaction
 from v1.commonapp.models.area import get_area_by_id_string
@@ -13,49 +13,52 @@ from v1.campaign.models.campaign import get_campaign_by_id_string
 
 
 # getting list data
-def get_filtered_campaign(request, user):
+def get_filtered_campaign(user,request):
     total_pages = ''
     page_no = ''
     campaigns = ''
     error = ''
     try:
-        campaign = Campaign.objects.filter(tenant_id=user.tenant)
+        campaign = Campaign.objects.filter(tenant=user.tenant)
+
         if "utility" in request.data:
-            campaign = campaign.filter(utility_id=request.data['utility'])
+            campaign = campaign.objects.filter(utility=request.data['utility'])
 
         if "group" in request.data:
-            campaign = campaign.filter(group_id=request.data['group'])
+            campaign = campaign.objects.filter(group_id=request.data['group'])
 
         if "objective" in request.data:
-            campaign = campaign.filter(objective_id=request.data['objective'])
+            campaign = campaign.objects.filter(objective_id=request.data['objective'])
 
         if "frequency" in request.data:
-            campaign = campaign.filter(frequency_id=request.data['frequency'])
+            campaign = campaign.objects.filter(frequency_id=request.data['frequency'])
 
         if "category" in request.data:
-            campaign = campaign.filter(category_id=request.data['category'])
+            campaign = campaign.objects.filter(category_id=request.data['category'])
 
         if "sub_category" in request.data:
-            campaign = campaign.filter(sub_category_id=request.data['sub_category'])
+            campaign = campaign.objects.filter(sub_category_id=request.data['sub_category'])
 
         if "status" in request.data:
-            campaign = campaign.filter(status_id=request.data['status'])
+            campaign = campaign.objects.filter(status_id=request.data['status'])
 
-        if request.data['search_text'] == '':
-            pass
-        else:
-            campaign = campaign.filter(name__icontains=request.data['search_text'])
+        if "search_text" in request.data:
+            if request.data['search_text'] == '':
+                pass
+            else:
+                campaign = campaign.objects.filter(name__icontains=request.data['search_text'])
 
         if "page_number" in request.data:
-            paginator = Paginator(campaign,int(request.data['page_size']))
-            total_pages = str(paginator.num_pages)
-            page_no = '1'
-            campaigns = paginator.page(1)
-        else:
-            paginator = Paginator(campaign, int(request.data['page_size']))
-            total_pages = str(paginator.num_pages)
-            page_no = request.data['page_number']
-            campaigns = paginator.page(int(page_no))
+            if request.data['page_number'] == '':
+                paginator = Paginator(campaign,int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = '1'
+                campaigns = paginator.page(1)
+            else:
+                paginator = Paginator(campaign, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = request.data['page_number']
+                campaigns = paginator.page(int(page_no))
         return campaigns,total_pages, page_no, True, error
     except Exception as e:
         print("Exception occured ",str(traceback.print_exc(e)))
@@ -91,7 +94,7 @@ def save_campaign_details(request, user):
         # Code for lookups start
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
         status = get_advert_status_by_id_string(request.data['camp_status'])
-        category = get_consumer_category_by_id_string(request.data['consumer_category'])
+        category = get_consumer_category_by_id(request.data['consumer_category'])
         sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
         frequency = get_frequency_by_id_string(request.data['frequency'])
         area = get_area_by_id_string(request.data['area'])
