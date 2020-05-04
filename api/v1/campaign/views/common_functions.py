@@ -34,6 +34,20 @@ def get_filtered_campaign(request, user):
     if request.data['status_id']:
         campaign = campaign.objects.filter(status_id=request.data['status_id'])
 
+    if "utillity" in request.data:
+        registrations = registrations.objects.filter(utility_id=
+                                                     request.data['utillity'])
+    if "category" in request.data:
+        registrations = registrations.objects.filter(consumer_category_id=
+                                                     request.data['category'])
+    if "sub_category" in request.data:
+        registrations = registrations.objects.filter(sub_category_id=
+                                                     request.data['sub_category'])
+
+
+
+
+
     if request.data['search_text'] == '':
         pass
     else:
