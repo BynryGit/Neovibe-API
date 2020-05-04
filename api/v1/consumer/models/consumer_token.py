@@ -25,7 +25,7 @@ class ConsumerToken(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer = models.BigIntegerField(null=True, blank=True)
-    token = models.CharField(max_lenth=500, null=True, blank=True)
+    token = models.CharField(max_length=500, null=True, blank=True)
     form_factor = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
