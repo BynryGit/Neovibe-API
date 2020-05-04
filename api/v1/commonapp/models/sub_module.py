@@ -32,10 +32,10 @@ class SubModule(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.sub_module
+        return self.name
 
     def __unicode__(self):
-        return self.sub_module
+        return self.name
 
 
 # Create Sub Module table end

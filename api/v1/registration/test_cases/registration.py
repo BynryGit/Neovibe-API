@@ -10,13 +10,15 @@ __author__ = 'aki'
 
 
 import json
-from django.test import TestCase, Client
+from django.test import TestCase, Client, client
 from django.urls import reverse
+from rest_framework import status
 
 
 class RegistrationTestCase(TestCase):
     # initialize the APIClient app
     client = Client()
+
 
     def setUp(self):
         self.valid_payload = {
