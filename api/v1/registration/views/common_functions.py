@@ -9,13 +9,13 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.consumer_category import get_consumer_category_by_id_string
 from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
-from v1.commonapp.models.payment_type import get_payment_type_by_id_string
+from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
-from v1.lookup.models.service_type import get_service_type_by_id_string
+from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.registration.models.registrations import Registration, get_registration_by_id_string

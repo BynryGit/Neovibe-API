@@ -27,8 +27,8 @@ class UtilitySubModule(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     module_id =  models.BigIntegerField(null=True, blank=True)
-    sub_module_name  = models.CharField(max_length=200, blank=False, null=False)
-    sub_module_desc  = models.CharField(max_length=500, blank=False, null=False)
+    submodule_name  = models.CharField(max_length=200, blank=False, null=False)
+    submodule_desc  = models.CharField(max_length=500, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -36,10 +36,10 @@ class UtilitySubModule(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id_string
+        return self.submodule_name
 
 
     def __unicode__(self):
-        return self.id_string
+        return self.submodule_name
 
 # Create Utility Sub Module table end.

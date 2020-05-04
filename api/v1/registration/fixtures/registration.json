@@ -1,0 +1,57 @@
+[
+      {
+            "pk": "1",
+		    "model": "registration.Registration",
+            "fields": {
+              "tenant": 1,
+              "utility": 2,
+              "first_name": "Rohan",
+              "last_name": "Wagh",
+              "email_id": "xyz@bynry.com",
+              "registration_no": "160219",
+              "status_id": 1,
+              "country_id": 3,
+              "state_id": 3,
+              "city_id": 1,
+              "source_id": 1,
+              "registration_type_id": 1,
+              "phone_mobile": 4545454555,
+              "area_id": 1,
+              "sub_area_id": 1,
+              "registration_date": "2020-04-01"
+            }
+        },
+        {
+            "pk": "2",
+		    "model": "registration.Registration",
+            "fields": {
+              "tenant": 1,
+              "utility": 2,
+              "first_name": "Virat",
+              "last_name": "Kohali",
+              "email_id": "xyfz@bynry.com",
+              "registration_no": "160220",
+              "status_id": 1,
+              "country_id": 3,
+              "state_id": 3,
+              "city_id": 1,
+              "source_id": 1,
+              "registration_type_id": 1,
+              "phone_mobile": 4578745555,
+              "area_id": 1,
+              "sub_area_id": 2,
+              "registration_date": "2020-04-01"
+            }
+        },
+        {
+            "pk": "1",
+		    "model": "registration.RegistrationStatus",
+            "fields": {
+              "tenant": 1,
+              "utility": 2,
+              "name": "Registered",
+              "is_active": "True",
+              "created_by": 3
+            }
+        }
+]

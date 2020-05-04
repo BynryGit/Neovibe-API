@@ -29,7 +29,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
-# API end Point: api/v1/registration/list
+# API end Point: api/v1/registration/list api/v1/registrations
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -114,7 +114,7 @@ class RegistrationListApiView(APIView):
 
 
 # API Header
-# API end Point: api/v1/registration/
+# API end Point: api/v1/registration
 # API verb: GET, POST, PUT
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -131,14 +131,14 @@ class RegistrationApiView(APIView):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
             # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                 # Checking authorization end
 
                     # Code for lookups start

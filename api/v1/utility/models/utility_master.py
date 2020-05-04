@@ -4,7 +4,7 @@
 # table name : 2.1  Utility Master
 # table description : It is Utility Master table. It will contain details for Utility details
 # frequency of data changes : Low
-# sample tale data : "BGL",
+# sample tale data : "BGCL1","BGCL2","BGCL3",
 # reference tables :
 # author : Gauri Deshmukh
 # created on : 24/04/2020
