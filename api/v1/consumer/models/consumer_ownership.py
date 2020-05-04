@@ -20,12 +20,15 @@ class ConsumerOwnership(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.ownership
 
     def __unicode__(self):
-        return self.status
+        return self.ownership
 
 def get_consumer_ownership_by_id_string(id_string):
     return ConsumerOwnership.objects.get(id_string = id_string)
 
+
+def get_consumer_ownership_by_id(id):
+    return ConsumerOwnership.objects.get(id = id)
  # Create ComplaintStatus table end
