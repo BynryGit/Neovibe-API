@@ -36,10 +36,10 @@ class UtilitySubModule(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id_string
+        return self.submodule_name
 
 
     def __unicode__(self):
-        return self.id_string
+        return self.submodule_name
 
 # Create Utility Sub Module table end.
