@@ -40,8 +40,8 @@ class AdvertStatus(models.Model):
 
 # Create Campaign Status table end.
 
-def get_cam_status_by_tenant_id_string(tenant_id_string):
+def get_advert_status_by_tenant_id_string(tenant_id_string):
     return AdvertStatus.objects.filter(tenant__id_string=tenant_id_string)
 
-def get_cam_status_by_id_string(id_string):
+def get_advert_status_by_id_string(id_string):
     return AdvertStatus.objects.get(id_string = id_string)

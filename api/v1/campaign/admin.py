@@ -7,7 +7,7 @@ from v1.campaign.models.advertisement_type import AdvertisementType
 from v1.campaign.models.campaign import Campaign
 from v1.campaign.models.campaign_group import CampaignGroup
 from v1.campaign.models.campaign_objective import CampaignObjective
-from v1.campaign.models.frequency import Frequency
+from v1.campaign.models.campign_frequency import CampaignFrequency
 
 admin.site.register(AdAssignStatus)
 admin.site.register(AdvertisementAssignment)
@@ -17,4 +17,4 @@ admin.site.register(AdvertisementType)
 admin.site.register(Campaign)
 admin.site.register(CampaignGroup)
 admin.site.register(CampaignObjective)
-admin.site.register(Frequency)
+admin.site.register(CampaignFrequency)
