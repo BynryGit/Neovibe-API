@@ -1,0 +1,256 @@
+[
+  {
+		"pk": "1",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"code": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"code": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"code": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"code": 4,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "meter_reading.Routes",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"code": 1,
+			"name": "R1",
+			"city": 1,
+			"area": 1,
+			"subarea": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Routes",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"code": 2,
+			"name": "R2",
+			"city": 1,
+			"area": 2,
+			"subarea": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.Routes",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"code": 3,
+			"name": "R3",
+			"city": 3,
+			"area": 3,
+			"subarea": 4,
+			"is_active": "True"
+		}
+	},
+
+  {
+		"pk": "1",
+		"model": "consumer.ConsumerSchemeMaster",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"scheme_name": "Total Paid",
+			"description": "It is a deposit scheme.The consumer should have to pay 5000 when he do the registartion.The amount is refundable",
+			"effective_date": "1-Jun",
+			"expiry_date": "30-Jul",
+			"total_deposit_amt": 5000,
+			"scheme_tax_percentage": 10,
+			"monthly_emi": 500,
+			"is_verified": "True",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerSchemeMaster",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"scheme_name": "Rental Scheme 50/- month",
+			"description": "The consumer should have the rental amount it should not be refundable",
+			"effective_date": "1-Jun",
+			"expiry_date": "30-Jul",
+			"total_deposit_amt": 5000,
+			"scheme_tax_percentage": 10,
+			"monthly_emi": 500,
+			"is_verified": "True",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "3",
+		"model": "consumer.ConsumerSchemeMaster",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"scheme_name": "Total Paid",
+			"description": "It is a deposit scheme.The consumer should have to pay 5000 when he do the registartion.The amount is refundable",
+			"effective_date": "1-Jun",
+			"expiry_date": "30-Jul",
+			"total_deposit_amt": 5000,
+			"scheme_tax_percentage": 10,
+			"monthly_emi": 500,
+			"is_verified": "True",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerSchemeMaster",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"scheme_name": "Rental Scheme 50/- month",
+			"description": "The consumer should have the rental amount it should not be refundable",
+			"effective_date": "1-Jun",
+			"expiry_date": "30-Jul",
+			"total_deposit_amt": 5000,
+			"scheme_tax_percentage": 10,
+			"monthly_emi": 500,
+			"is_verified": "True",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "1",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Connected",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "2",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Disconnected",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "3",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Temp disconnected",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "4",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Hold",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "5",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Registered",
+			"is_active": "True"
+		}
+	},
+
+  {
+		"pk": "6",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Connected",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "7",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Disconnected",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "8",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Temp disconnected",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "9",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Hold",
+			"is_active": "True"
+		}
+	},
+  {
+		"pk": "10",
+		"model": "consumer.ConsumerStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Registered",
+			"is_active": "True"
+		}
+	}
+]

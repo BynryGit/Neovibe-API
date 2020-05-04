@@ -1689,5 +1689,227 @@
 			"category": 4,
 			"is_active": "True"
 		}
+	},
+
+	{
+		"pk": "1",
+		"model": "utility.UtilityServicePlan",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Domestic-Tarrif",
+			"description": "Domestic-Tarrif is for domestic consumers",
+			"is_valid": "True",
+			"validity": 30,
+			"start_date": "1-Jun",
+			"end_date": "30-Jul",
+			"location": "location-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "utility.UtilityServicePlan",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Commercial",
+			"description": "Commercial-Tarrif is for Commercial consumers",
+			"is_valid": "True",
+			"validity": 30,
+			"start_date": "1-Jun",
+			"end_date": "30-Jul",
+			"location": "location-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "utility.UtilityServicePlan",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Industrial",
+			"description": "Industrial-Tarrif is for Industrial consumers",
+			"is_valid": "True",
+			"validity": 30,
+			"start_date": "1-Jun",
+			"end_date": "30-Jul",
+			"location": "location-3",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "utility.UtilityServicePlan",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Domestic-Tarrif",
+			"description": "Domestic-Tarrif is for domestic consumers",
+			"is_valid": "True",
+			"validity": 30,
+			"start_date": "1-Jun",
+			"end_date": "30-Jul",
+			"location": "location-4",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "utility.UtilityServicePlan",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Commercial",
+			"description": "Commercial-Tarrif is for Commercial consumers",
+			"is_valid": "True",
+			"validity": 30,
+			"start_date": "1-Jun",
+			"end_date": "30-Jul",
+			"location": "location-5",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "utility.UtilityServicePlan",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Industrial",
+			"description": "Industrial-Tarrif is for Industrial consumers",
+			"is_valid": "True",
+			"validity": 30,
+			"start_date": "1-Jun",
+			"end_date": "30-Jul",
+			"location": "location-6",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "utility.UtilityServicePlanRate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_service_plan_id": 1,
+			"city_id": 1,
+			"max_unit_range": 50,
+			"unit_id": 10,
+			"base_rate": 5,
+			"is_taxable": "True",
+			"tax": 2,
+			"currency": 1,
+			"region": 3,
+			"country": 3,
+			"effective_date": "1-Jun",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "utility.UtilityServicePlanRate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_service_plan_id": 1,
+			"city_id": 1,
+			"max_unit_range": 50,
+			"unit_id": 10,
+			"base_rate": 10,
+			"is_taxable": "True",
+			"tax": 5,
+			"currency": 1,
+			"region": 3,
+			"country": 3,
+			"effective_date": "1-Jun",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "utility.UtilityServicePlanRate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_service_plan_id": 1,
+			"city_id": 1,
+			"max_unit_range": 50,
+			"unit_id": 10,
+			"base_rate": 10,
+			"is_taxable": "True",
+			"tax": 10,
+			"currency": 1,
+			"region": 3,
+			"country": 3,
+			"effective_date": "1-Jun",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "utility.UtilityServicePlanRate",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"utility_service_plan_id": 1,
+			"city_id": 3,
+			"max_unit_range": 50,
+			"unit_id": 10,
+			"base_rate": 5,
+			"is_taxable": "True",
+			"tax": 2,
+			"currency": 1,
+			"region": 3,
+			"country": 3,
+			"effective_date": "1-Jun",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "utility.UtilityServicePlanRate",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"utility_service_plan_id": 1,
+			"city_id": 3,
+			"max_unit_range": 50,
+			"unit_id": 10,
+			"base_rate": 10,
+			"is_taxable": "True",
+			"tax": 5,
+			"currency": 1,
+			"region": 3,
+			"country": 3,
+			"effective_date": "1-Jun",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "utility.UtilityServicePlanRate",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"utility_service_plan_id": 1,
+			"city_id": 3,
+			"max_unit_range": 50,
+			"unit_id": 10,
+			"base_rate": 10,
+			"is_taxable": "True",
+			"tax": 10,
+			"currency": 1,
+			"region": 3,
+			"country": 3,
+			"effective_date": "1-Jun",
+			"is_active": "True"
+		}
 	}
+
+
 ]
