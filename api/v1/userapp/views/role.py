@@ -37,8 +37,8 @@ class RoleList(APIView):
                     # Checking authorization end
 
                     # Code for filtering roles start
-                    user = UserDetail.objects.get(id=3)
-                    roles, total_pages, page_no, result, error = get_filtered_roles(user, request)
+                    user = UserDetail.objects.get(id_string=request.data['user'])
+                    result, roles, total_pages, page_no, error = get_filtered_roles(user, request)
                     if not result:
                         return Response({
                             STATE: EXCEPTION,

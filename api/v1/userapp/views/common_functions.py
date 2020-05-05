@@ -6,11 +6,17 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from api.settings import SECRET_KEY
 from v1.userapp.models.role import Role
+
+from v1.commonapp.models.department import Department
+from v1.commonapp.models.form_factor import FormFactor
 from v1.userapp.models.role_privilege import RolePrivilege
+from v1.userapp.models.role_sub_type import RoleSubType
+from v1.userapp.models.role_type import RoleType
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string
 from v1.userapp.models.user_role import get_role_by_id, UserRole
 from v1.userapp.models.user_token import UserToken
+from v1.utility.models.utility_master import UtilityMaster
 
 
 def get_filtered_roles(user, request):
@@ -20,16 +26,25 @@ def get_filtered_roles(user, request):
     error = ''
     try:
         roles = UserRole.objects.filter(tenant=user.tenant)
-        if "utillity" in request.data:
-            roles = roles.objects.filter(utility_id=request.data['utility'])
+
+        # fetch records using id_string start
+        utility = UtilityMaster.objects.get(id_string=request.data['utility'])
+        type = RoleType.objects.get(id_string=request.data['type'])
+        sub_type = RoleSubType.objects.get(id_string=request.data['sub_type'])
+        form_factor = FormFactor.objects.get(id_string=request.data['form_factor'])
+        department = Department.objects.get(id_string=request.data['department'])
+        # fetch records using id_string end
+
+        if "utility" in request.data:
+            roles = roles.objects.filter(utility_id=utility.id)
         if "type" in request.data:
-            roles = roles.objects.filter(type_id_id= request.data['type'])
+            roles = roles.objects.filter(type_id= type.id)
         if "sub_type" in request.data:
-            roles = roles.objects.filter(sub_type_id=request.data['sub_type'])
+            roles = roles.objects.filter(sub_type_id=sub_type.id)
         if "form_factor" in request.data:
-            roles = roles.objects.filter(form_factor_id=request.data['form_factor'])
+            roles = roles.objects.filter(form_factor_id=form_factor.id)
         if "department" in request.data:
-            roles = roles.objects.filter(department_id=request.data['department'])
+            roles = roles.objects.filter(department_id=department.id)
 
         if "search_text" in request.data:
             if request.data['search_text'] == '':
@@ -48,11 +63,11 @@ def get_filtered_roles(user, request):
                 total_pages = str(paginator.num_pages)
                 page_no = request.data['page_number']
                 roles = paginator.page(int(page_no))
-        return roles, total_pages, page_no, True, error
+        return True, roles, total_pages, page_no, error
     except Exception as e:
-        print("Exception occured ",str(traceback.print_exc(e)))
+        print("Exception occurred ",str(traceback.print_exc(e)))
         error = str(traceback.print_exc(e))
-        return roles, total_pages, page_no, False, error
+        return False, roles, total_pages, page_no, error
 
 
 def is_authenticate(validated_data):
