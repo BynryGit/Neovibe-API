@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
-from v1.userapp.models.user_master import SystemUser
+from v1.userapp.models.user_master import UserDetail
 from v1.commonapp.models.city import get_city_by_id
 from v1.consumer.models.consumer_category import get_consumer_category_by_id
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
@@ -59,7 +59,7 @@ class RegistrationList(APIView):
                     # Checking authorization end
 
                     # Code for filtering registrations start
-                    user = SystemUser.objects.get(id=3)
+                    user = UserDetail.objects.get(id=3)
                     registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
                     if result == False:
                         return Response({
@@ -228,7 +228,7 @@ class Registration(APIView):
                         # Request data verification end
 
                         # Save basic and payment details start
-                        user = SystemUser.objects.get(id=3)
+                        user = UserDetail.objects.get(id=3)
                         sid = transaction.savepoint()
                         registration, result = add_basic_registration_details(request, user, sid)
                         if result == False:
@@ -285,7 +285,7 @@ class Registration(APIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = SystemUser.objects.get(id=3)
+                        user = UserDetail.objects.get(id=3)
                         registration, result = save_edited_basic_registration_details(request, user)
                         if result == False:
                             return Response({

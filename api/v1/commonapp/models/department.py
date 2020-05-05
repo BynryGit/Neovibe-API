@@ -39,3 +39,7 @@ class Department(models.Model):
     def __unicode__(self):
         return self.name
 # Create Department table end
+
+
+def get_department_by_tenant_id_string(id_string):
+    return Department.objects.filter(tenant__id_string=id_string)

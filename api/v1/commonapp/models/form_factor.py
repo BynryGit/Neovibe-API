@@ -36,3 +36,7 @@ class FormFactor(models.Model):
     def __unicode__(self):
         return self.name
 # Create Form Factor table end
+
+
+def get_form_factor_by_tenant_id_string(id_string):
+    return FormFactor.objects.filter(tenant__id_string=id_string)
