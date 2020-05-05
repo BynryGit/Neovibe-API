@@ -43,3 +43,7 @@ def get_all_modules():
 
 def get_module_by_id(id):
     return Module.objects.get(id=id,is_active=True)
+
+
+def get_module_by_id_string(id_string):
+    return Module.objects.get(id_string=id_string,is_active=True)

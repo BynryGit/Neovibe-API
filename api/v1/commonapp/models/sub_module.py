@@ -46,3 +46,7 @@ def get_sub_module_by_id(id):
 
 def get_submodule_by_module_id(id):
     return SubModule.objects.filter(module_id=id,is_active=True)
+
+
+def get_sub_module_by_id_string(id_string):
+    return SubModule.objects.filter(id_string=id_string,is_active=True)

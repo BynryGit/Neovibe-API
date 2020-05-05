@@ -48,3 +48,7 @@ def get_privilege_by_id(id):
 
 def get_privilege_by_utility_id(id):
     return Privilege.objects.get(utility_id=id)
+
+
+def get_privilege_by_id_string(id_string):
+    return Privilege.objects.get(id_string=id_string)

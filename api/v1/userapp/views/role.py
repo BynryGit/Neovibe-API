@@ -18,7 +18,8 @@ from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_te
 from v1.userapp.models.role_type import RoleType, get_role_type_by_tenant_id_string, get_role_type_by_id
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_role import get_role_by_id_string
-from v1.userapp.views.common_functions import get_filtered_roles, is_data_verified
+from v1.userapp.views.common_functions import get_filtered_roles, is_data_verified, add_basic_role_details, \
+    save_privilege_details
 
 
 # API Header
@@ -220,18 +221,18 @@ class Roles(APIView):
                         # Save basic and payment details start
                         user = UserDetail.objects.get(id_string=request.data['user'])
                         sid = transaction.savepoint()
-                        registration, result = add_basic_role_details(request, user, sid)
-                        if result == False:
+                        role, result = add_basic_role_details(request, user, sid)
+                        if not result:
                             return Response({
                                 STATE: EXCEPTION,
                                 ERROR: ERROR
                             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        result = save_payment_details(request, user, registration, sid)
-                        if result == True:
+                        result = save_privilege_details(request, user, role, sid)
+                        if result:
                             transaction.savepoint_commit(sid)
                         else:
                             data = {
-                                "registration_id_string": registration.id_string
+                                "role_id_string": role.id_string
                             }
                             return Response({
                                 STATE: SUCCESS,
