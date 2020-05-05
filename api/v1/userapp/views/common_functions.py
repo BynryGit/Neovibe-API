@@ -18,7 +18,7 @@ from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id
 from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string
-from v1.userapp.models.user_role import get_role_by_id, UserRole
+from v1.userapp.models.user_role import get_role_by_id, UserRole, get_role_by_id_string
 from v1.userapp.models.user_token import UserToken
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -139,6 +139,30 @@ def save_privilege_details(request, user, role, sid):
     except Exception as e:
         transaction.rollback(sid)
         return False
+
+
+def save_edited_basic_role_details(request, user):
+    role = ''
+    try:
+        if "role_id_string" in request.data:
+            role = get_role_by_id_string(request.data["role_id_string"])
+        if "role" in request.data:
+            role.role = request.data["role"]
+        if "type" in request.data:
+            role.type_id = request.data["type"]
+        if "sub_type" in request.data:
+            role.sub_type_id = request.data["sub_type"]
+        if "form_factor" in request.data:
+            role.form_factor_id = request.data["form_factor"]
+        if "department" in request.data:
+            role.department_id = request.data["department"]
+        role.updated_by = user.id
+        role.updated_date = datetime.now()
+        role.save()
+        return role, True
+    except Exception as e:
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        return role,False
 
 
 def is_authenticate(validated_data):

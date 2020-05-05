@@ -19,7 +19,7 @@ from v1.userapp.models.role_type import RoleType, get_role_type_by_tenant_id_str
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_role import get_role_by_id_string
 from v1.userapp.views.common_functions import get_filtered_roles, is_data_verified, add_basic_role_details, \
-    save_privilege_details
+    save_privilege_details, save_edited_basic_role_details
 
 
 # API Header
@@ -276,8 +276,8 @@ class Roles(APIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=3)
-                        registration, result = save_edited_basic_registration_details(request, user)
+                        user = UserDetail.objects.get(id_string=request.data['user'])
+                        registration, result = save_edited_basic_role_details(request, user)
                         if result == False:
                             return Response({
                                 STATE: EXCEPTION,
