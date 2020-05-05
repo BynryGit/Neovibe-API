@@ -2,27 +2,27 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
+from api.settings import DISPLAY_DATE_FORMAT
 
-from api.v1.smart360_API.campaign.views.common_functions import is_token_valid, get_payload, \
-    get_user,get_filtered_campaign,is_data_verified,is_advertisement_verified,\
+from v1.campaign.views.common_functions import get_filtered_campaign,is_data_verified,is_advertisement_verified,\
     save_advertisement_details,save_campaign_details
-from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
-from api.v1.smart360_API.smart360_API.campaign.models.advert_status import get_cam_status_by_tenant_id_string
 
-from api.v1.smart360_API.userapp.models.privilege import get_privilege_by_id
-from api.v1.smart360_API.commonapp.models.sub_module import get_sub_module_by_id
-from api.v1.smart360_API.commonapp.models.consumer_category import get_consumer_category_by_id_string,get_category_by_tenant_id_string
-from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_sub_category_by_tenant_id_string
-from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
-from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_tenant_id_string,get_camp_type_by_id_string
-from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
-from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
-from api.v1.smart360_API.commonapp.models.campaign import get_campaign_by_id_string
+from v1.campaign.models.advertisement import Advertisements
+from v1.campaign.models.campaign_status import get_cam_status_by_tenant_id_string
+from v1.userapp.models.user_master import SystemUser
+from v1.userapp.models.privilege import get_privilege_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 
-from api.v1.smart360_API.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
-from api.v1.smart360_API.smart360_API.messages import STATE,SUCCESS,ERROR,EXCEPTION,DATA
-from api.v1.smart360_API.campaign.models.campaign import Campaign
+from v1.commonapp.models.frequency import get_frequency_by_tenant_id_string,get_frequency_by_id_string
+from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string,get_sub_area_by_id
+from v1.campaign.models.campaign import get_campaign_by_id_string
+
+from v1.commonapp.common_functions import get_payload,get_user,is_authorized,is_token_valid
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
+from v1.campaign.models.campaign import Campaign
 
 # API Header
 # API end Point: api/v1/campaign/list
@@ -44,36 +44,41 @@ class CampaignListApiView(APIView):
             campaign_list = []
 
             # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+            if is_token_valid():
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                # if is_authorized(user, privilege, sub_module):
+                if is_authorized():
                 # Checking authorization end
 
                     # Code for filtering campaign start
-                    campaigns,total_pages, page_no = get_filtered_campaign(user, request)
+                    user = SystemUser.objects.get(id=2)
+                    campaigns,total_pages, page_no, result, error = get_filtered_campaign(user, request)
+                    if result == False:
+                        return Response({
+                            STATE: EXCEPTION,
+                            ERROR: error
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     # Code for filtering campaign end
 
                     # Code for lookups start
-                    status = get_cam_status_by_tenant_id_string(user.tenant)
-                    campaigns_type = get_camp_type_by_tenant_id_string(user.tenant.id_string)
-                    category = get_category_by_tenant_id_string(user.tenant.id_string)
-                    sub_category = get_sub_category_by_tenant_id_string(user.tenant.id_string)
+                    statususe = get_cam_status_by_tenant_id_string(user.tenant.id_string)
+                    # category = get_consumer_category_by_id_string(user.tenant.id_string)
+                    # sub_category = get_consumer_sub_category_by_id_string(user.tenant.id_string)
                     frequency = get_frequency_by_tenant_id_string(user.tenant.id_string)
                     # Code for lookups end
 
                     # Code for sending campaigns in response
                     for campaign in campaigns:
                         campaign_list.append({
-                            'cam_type': campaigns_type.objects.get(id = campaign.type_id).campaign_type,
-                            'category': category.objects.get(id = campaign.category_id).category_name,
-                            'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
-                            'frequency':frequency.objects.get(id = campaign.frequency_id).frequency_name,
-                            'status': status.objects.get(id = campaign.status_id).status_name,
+                            # 'category': category.objects.get(id = campaign.category_id).category_name,
+                            # 'sub_category': sub_category.objects.get(id= campaign.sub_category_id).sub_category_name,
+                            'frequency':frequency.get(id = campaign.frequency_id).frequency_name,
+                            'status': statususe.get(id = campaign.status_id).status_name,
                             'name':campaign.name,
                             'raised_on': campaign.created_date.strftime(DISPLAY_DATE_FORMAT),
                             'total_pages': total_pages,
@@ -133,10 +138,9 @@ class CampaignApiView(APIView):
                     # Code for lookups start
                     campaign_obj = get_campaign_by_id_string(request.data['id_string'])
                     frequency_obj = get_frequency_by_id_string(campaign_obj.frequency_id)
-                    camp_type_obj = get_camp_type_by_id_string(campaign_obj.type_id)
-                    category_obj = get_consumer_category_by_id_string(campaign_obj.category_id)
-                    area = get_area_by_id_string(campaign_obj.area_id)
-                    sub_area = get_sub_area_by_id_string(campaign_obj.sub_area_id)
+                    category_obj = get_consumer_category_by_id(campaign_obj.category_id)
+                    area = get_areas_by_tenant_id_string(campaign_obj.area_id)
+                    sub_area = get_sub_area_by_id(campaign_obj.sub_area_id)
                     # Code for lookups end
 
                     # Code for sending campaign and advertisement details in response start
@@ -147,7 +151,6 @@ class CampaignApiView(APIView):
                         'frequency_id_string': frequency_obj.id_string,
                         'tenant_id_string': campaign_obj.tenant.id_string,
                         'utility_id_string': campaign_obj.utility.id_string,
-                        'type_id_string': camp_type_obj.id_string,
                         'category_id_string': category_obj.id_string,
                         'area_id_string': area.id_string,
                         'sub_area_id_string': sub_area.id_string,

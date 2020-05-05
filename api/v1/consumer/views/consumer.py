@@ -10,8 +10,8 @@ from v1.commonapp.common_functions import is_token_valid, get_payload, get_user,
 
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
-from v1.commonapp.models.consumer_category import get_consumer_category_by_id
-from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id

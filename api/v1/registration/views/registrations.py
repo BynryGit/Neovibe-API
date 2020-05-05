@@ -9,27 +9,26 @@ from v1.commonapp.common_functions import is_token_valid, get_payload, get_user,
 from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
 from v1.userapp.models.user_master import SystemUser
 from v1.commonapp.models.city import get_city_by_id
-from v1.commonapp.models.consumer_category import get_consumer_category_by_id
-from v1.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string, get_sub_area_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
-from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
-from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
+from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id
 from v1.consumer.models.source_type import get_source_type_by_id
-from v1.registration.models.registration_status import get_registration_status_by_id_string, \
-    get_registration_statuses_by_tenant_id_string, RegistrationStatus
+from v1.registration.models.registration_status import get_registration_statuses_by_tenant_id_string,\
+    get_registration_status_by_id
 from v1.registration.models.registration_type import get_registration_type_by_id
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
-    save_basic_registration_details, save_payment_details
+    save_payment_details, add_basic_registration_details, save_edited_basic_registration_details
 from v1.userapp.models.privilege import get_privilege_by_id
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
-# API end Point: api/v1/registration/list
+# API end Point: api/v1/registration/list api/v1/registrations
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -39,7 +38,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
-class RegistrationListApiView(APIView):
+class RegistrationList(APIView):
 
     def get(self, request, format=None):
         try:
@@ -92,19 +91,19 @@ class RegistrationListApiView(APIView):
                         })
                     return Response({
                         STATE: SUCCESS,
-                        'data': registrations_list,
+                        DATA: registrations_list,
                     }, status=status.HTTP_200_OK)
                     # Code for sending registrations in response end
 
                 else:
                     return Response({
                         STATE: ERROR,
-                        'data': '',
+                        DATA: '',
                     }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                    'data': '',
+                    DATA: '',
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({
@@ -114,7 +113,7 @@ class RegistrationListApiView(APIView):
 
 
 # API Header
-# API end Point: api/v1/registration/
+# API end Point: api/v1/registration
 # API verb: GET, POST, PUT
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -125,36 +124,36 @@ class RegistrationListApiView(APIView):
 # Auther: Rohan
 # Created on: 23/04/2020
 
-class RegistrationApiView(APIView):
+class Registration(APIView):
 
     def get(self, request, format=None):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
             # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                 # Checking authorization end
 
                     # Code for lookups start
-                    registration = get_registration_by_id_string(request.data['id_string'])
+                    registration = get_registration_by_id_string(request.data['registration_id_string'])
                     country = get_country_by_id(registration.country_id)
                     state = get_state_by_id(registration.state_id)
                     city = get_city_by_id(registration.city_id)
                     area = get_area_by_id(registration.area_id)
                     sub_area = get_sub_area_by_id(registration.sub_area_id)
-                    scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
-                    ownership = get_consumer_ownership_by_id_string(request.data["ownership_id_string"])
+                    # scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
+                    ownership = get_consumer_ownership_by_id(registration.ownership_id)
                     consumer_category = get_consumer_category_by_id(registration.consumer_category_id)
                     sub_category = get_consumer_sub_category_by_id(registration.sub_category_id)
                     registration_type = get_registration_type_by_id(registration.registration_type_id)
                     source = get_source_type_by_id(registration.source_id)
-                    registration_status = get_registration_status_by_id_string(request.data["status_id_string"])
+                    registration_status = get_registration_status_by_id(registration.status_id)
                     # Code for lookups end
 
                     # Code for sending registrations in response start
@@ -177,7 +176,7 @@ class RegistrationApiView(APIView):
                         'area_id_string': area.id_string,
                         'sub_area_id_string': sub_area.id_string,
                         'ownership_id_string': ownership.id_string,
-                        'scheme_id_string': scheme.id_string,
+                        # 'scheme_id_string': scheme.id_string,
                         'consumer_category_id_string': consumer_category.id_string,
                         'sub_category_id_string': sub_category.id_string,
                         'status_id_string': registration_status.id_string,
@@ -214,14 +213,14 @@ class RegistrationApiView(APIView):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
@@ -229,14 +228,25 @@ class RegistrationApiView(APIView):
                         # Request data verification end
 
                         # Save basic and payment details start
+                        user = SystemUser.objects.get(id=3)
                         sid = transaction.savepoint()
-                        registration, result, error = save_basic_registration_details(request, user, sid)
+                        registration, result = add_basic_registration_details(request, user, sid)
                         if result == False:
                             return Response({
                                 STATE: EXCEPTION,
-                                ERROR: error
+                                ERROR: ERROR
                             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        payment = save_payment_details(request, user, registration, sid)
+                        result = save_payment_details(request, user, registration, sid)
+                        if result == True:
+                            transaction.savepoint_commit(sid)
+                        else:
+                            data = {
+                                "registration_id_string": registration.id_string
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
                         # Save basic and payment details start
                     else:
                         return Response({
@@ -260,14 +270,14 @@ class RegistrationApiView(APIView):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
@@ -275,12 +285,21 @@ class RegistrationApiView(APIView):
                         # Request data verification end
 
                         # Save basic details start
-                        registration, result, error = save_basic_registration_details(request, user)
+                        user = SystemUser.objects.get(id=3)
+                        registration, result = save_edited_basic_registration_details(request, user)
                         if result == False:
                             return Response({
                                 STATE: EXCEPTION,
-                                ERROR: error
+                                ERROR: ERROR
                             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        else:
+                            data = {
+                                "registration_id_string": registration.id_string
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
                         # Save basic details start
                     else:
                         return Response({
@@ -303,7 +322,7 @@ class RegistrationApiView(APIView):
 
 
 
-class RegistrationStatusApiView(APIView):
+class RegistrationStatus(APIView):
 
     def get(self, request, format=None):
         try:

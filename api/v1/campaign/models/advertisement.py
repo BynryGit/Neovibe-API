@@ -20,14 +20,15 @@ from django.db import models
 
 class Advertisements(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, null=True, blank=True,on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, null=True, blank=True,on_delete=models.SET_NULL)
     campaign_id = models.BigIntegerField(default=1, null=True, blank=True)
     group_id = models.BigIntegerField(default=1, null=True, blank=True)
     name = models.CharField(max_length=200, null=False, blank=False)
     objective_id = models.BigIntegerField(default=1, null=True, blank=True)
     description = models.TextField(max_length=1000, null=True, blank=True)
     frequency_id = models.BigIntegerField(default=1, null=True, blank=True)
+    type_id = models.BigIntegerField(default=1, null=True, blank=True)
     potential_consumers = models.BigIntegerField(default=0, null=True, blank=True)
     actual_consumers = models.BigIntegerField(default=0, null=True, blank=True)
     budget_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)

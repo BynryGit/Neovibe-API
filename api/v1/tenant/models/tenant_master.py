@@ -25,7 +25,7 @@ class TenantMaster(models.Model):
     short_name = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     email_id = models.CharField(max_length=200, null=True, blank=True)
-    mobile_no = models.CharField(max_length=200, blank=False, null=False)
+    mobile_no = models.CharField(max_length=200, blank=True, null=True)
     region_id = models.BigIntegerField(null=True, blank=True)
     country_id = models.BigIntegerField(null=True, blank=True)
     state_id = models.BigIntegerField(null=True, blank=True)

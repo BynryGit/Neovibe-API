@@ -61,7 +61,6 @@ class TenantApiView(APIView):
                             'phone_no': tenant.phone_no,
                             'email_id': tenant.email_id,
                             'status': statuses.objects.get(id_string=tenant.status_id).status_name,
-                            # 'area': areas.objects.get(id_string=registration.area_id).area_name,
                             'country_id': countries.objects.get(id_string=tenant.country_id).country_name,
                             'state_id': state.objects.get(id_string=tenant.state_id).state_name,
                             'total_pages': total_pages,
