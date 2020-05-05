@@ -1,0 +1,577 @@
+[
+	{
+		"pk" : "1",
+		"model" : "campaign.CampaignGroup",
+		"fields" : {
+			"tenant": 4,
+			"utility": 1,
+			"name" : "campaign_group_1",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk" : "2",
+		"model" : "campaign.CampaignGroup",
+		"fields" : {
+			"tenant": 4,
+			"utility": 1,
+			"name" : "campaign_group_2",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk" : "3",
+		"model" : "campaign.CampaignGroup",
+		"fields" : {
+			"tenant": 4,
+			"utility": 1,
+			"name" : "campaign_group_3",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.CampaignObjective",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name" : "brand awareness",
+			"description" : "This is brand awareness",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.CampaignObjective",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name" : "increasing consumer capacity",
+			"description" : "This is increasing consumer capacity",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.AdvertStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "created",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.AdvertStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "assigned",
+			"is_active" : "True"
+		}
+
+	},
+	{
+		"pk": "3",
+		"model": "campaign.AdvertStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "started",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.AdvertStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "completed",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "5",
+		"model": "campaign.AdvertStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "cancel",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "6",
+		"model": "campaign.AdvertStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "hold",
+			"is_active" : "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "campaign.CampaignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "created",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.CampaignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "assigned",
+			"is_active" : "True"
+		}
+
+	},
+	{
+		"pk": "3",
+		"model": "campaign.CampaignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "started",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.CampaignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "completed",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "5",
+		"model": "campaign.CampaignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "cancel",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "6",
+		"model": "campaign.CampaignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "hold",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.CampaignFrequency",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"frequency" : "10",
+			"is_active" : "True"
+		}
+
+	},
+	{
+		"pk": "2",
+		"model": "campaign.CampaignFrequency",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"frequency" : "20",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.Campaign",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"group_id": 1,
+			"name": "Smart360",
+			"objective_id":1,
+			"description": "This is Smart360 campaign",
+			"frequency_id": 1,
+			"potential_consumers": 100,
+			"actual_consumers": 50,
+			"budget_amount": 1000,
+			"actual_amount": 1050,
+			"category_id": 1,
+			"sub_category_id": 2,
+			"start_date": "2020-02-12",
+			"end_date": "2020-03-25",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.Campaign",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"group_id": 1,
+			"name": "Awareness",
+			"objective_id":1,
+			"description": "This is Awareness campaign",
+			"frequency_id": 1,
+			"potential_consumers": 100,
+			"actual_consumers": 50,
+			"budget_amount": 2000,
+			"actual_amount": 1020,
+			"category_id": 1,
+			"sub_category_id": 2,
+			"start_date": "2020-06-13",
+			"end_date": "2020-07-13",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "campaign.Campaign",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"group_id": 1,
+			"name": "Degital Marketing",
+			"objective_id":1,
+			"description": "This is Degital Marketing campaign",
+			"frequency_id": 1,
+			"potential_consumers": 100,
+			"actual_consumers": 50,
+			"budget_amount": 5000,
+			"actual_amount": 4050,
+			"category_id": 1,
+			"sub_category_id": 1,
+			"start_date": "2020-01-26",
+			"end_date": "2020-02-14",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 1,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "campaign.Campaign",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"group_id": 1,
+			"name": "Smart360 Awareness",
+			"objective_id":1,
+			"description": "This is Smart360 Awareness campaign",
+			"frequency_id": 1,
+			"potential_consumers": 100,
+			"actual_consumers": 50,
+			"budget_amount": 1500,
+			"actual_amount": 1000,
+			"category_id": 1,
+			"sub_category_id": 3,
+			"start_date": "2020-05-15",
+			"end_date": "2020-06-16",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 1,
+			"is_active": "True"
+
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "campaign.AdvertisementType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "tv_ads",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.AdvertisementType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "canopy",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "3",
+		"model": "campaign.AdvertisementType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "fm_radio",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.AdvertisementType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "linkedin",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.Advertisements",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"campaign_id": 1,
+			"group_id": 1,
+			"name": "Smart360-Awareness-Gas",
+			"objective_id":1,
+			"description": "This is Smart360 Awareness of gas advertisement",
+			"frequency_id": 1,
+			"type_id": 1,
+			"potential_consumers": 100,
+			"actual_consumers": 50,
+			"budget_amount": 1500,
+			"actual_amount": 1000,
+			"start_date": "2020-08-30",
+			"end_date": "2020-09-30",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 1,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.Advertisements",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"campaign_id": 1,
+			"group_id": 1,
+			"name": "Smart360-Awareness-Power",
+			"objective_id":1,
+			"description": "This is Smart360 Awareness of power advertisement",
+			"frequency_id": 1,
+			"type_id": 1,
+			"potential_consumers": 50,
+			"actual_consumers": 20,
+			"budget_amount": 2000,
+			"actual_amount": 1500,
+			"start_date": "2020-03-23",
+			"end_date": "2020-05-30",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 1,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "3",
+		"model": "campaign.Advertisements",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"campaign_id": 2,
+			"group_id": 1,
+			"name": "Smart360",
+			"objective_id":1,
+			"description": "This is Smart360 advertisement",
+			"frequency_id": 1,
+			"type_id": 2,
+			"potential_consumers": 500,
+			"actual_consumers": 400,
+			"budget_amount": 4000,
+			"actual_amount": 2000,
+			"start_date": "2020-10-01",
+			"end_date": "2020-11-01",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 2,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.Advertisements",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"campaign_id": 2,
+			"group_id": 1,
+			"name": "Smart360-Awareness-water",
+			"objective_id":1,
+			"description": "This is Smart360 Awareness of water advertisement",
+			"frequency_id": 1,
+			"type_id": 2,
+			"potential_consumers": 200,
+			"actual_consumers": 100,
+			"budget_amount": 6000,
+			"actual_amount": 5500,
+			"start_date": "2020-02-15",
+			"end_date": "2020-03-16",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 2,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.AdAssignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "created",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.AdAssignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "assigned",
+			"is_active" : "True"
+		}
+
+	},
+	{
+		"pk": "3",
+		"model": "campaign.AdAssignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "started",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.AdAssignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "completed",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "5",
+		"model": "campaign.AdAssignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "cancel",
+			"is_active" : "True"
+
+		}
+	},
+	{
+		"pk": "6",
+		"model": "campaign.AdAssignStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"status" : "hold",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "campaign.AdvertisementAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"campaign_id": 1,
+			"group_id": 1,
+			"vendor_id": 1,
+			"assigned_date": "2020-02-12",
+			"completion_date": "2020-03-12",
+			"status_id" : 1,
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "campaign.AdvertisementAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"campaign_id": 1,
+			"group_id": 1,
+			"vendor_id": 1,
+			"assigned_date": "2020-11-10",
+			"completion_date": "2020-12-12",
+			"status_id" : 1,
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "campaign.AdvertisementAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"campaign_id": 2,
+			"group_id": 2,
+			"vendor_id": 2,
+			"assigned_date": "2020-10-15",
+			"completion_date": "2020-11-10",
+			"status_id" : 2,
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.AdvertisementAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"campaign_id": 3,
+			"group_id": 3,
+			"vendor_id": 3,
+			"assigned_date": "2020-01-01",
+			"completion_date": "2020-02-02",
+			"status_id" : 3,
+			"is_active" : "True"
+		}
+	}
+]

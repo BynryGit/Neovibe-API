@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from v1.registration import urls as registration_urls
+from v1.campaign import urls as campaign_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/registration/', include(registration_urls)),
+    path('api/v1/campaign/', include(campaign_urls)),
 ]
