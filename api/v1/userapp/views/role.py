@@ -62,8 +62,8 @@ class RoleList(APIView):
                             'type': types.get(id=role.type).name,
                             'sub_type': sub_types.get(id=role.sub_type).name,
                             'status': '',
-                            'form_factor': form_factors.get(id=user.form_factor_id).name,
-                            'department': departments.get(id=user.department).name,
+                            'form_factor': form_factors.get(id=role.form_factor_id).name,
+                            'department': departments.get(id=role.department_id).name,
                             'created_on': role.created_date,
                             'total_pages': total_pages,
                             'page_no': page_no
