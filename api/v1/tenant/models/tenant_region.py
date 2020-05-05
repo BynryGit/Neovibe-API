@@ -22,7 +22,6 @@ from django.db import models  # importing package for database
 
 class TenantRegion(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=True, on_delete=models.SET_NULL)
     region = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)

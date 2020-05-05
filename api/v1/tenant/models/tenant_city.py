@@ -24,7 +24,6 @@ from v1.tenant.models.tenant_master import TenantMaster
 
 class TenantCity(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     city = models.BigIntegerField(null=True, blank=True)
     tenant_state = models.BigIntegerField(blank=False, null=False)
     tenant_country = models.BigIntegerField(null=True, blank=True)

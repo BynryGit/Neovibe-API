@@ -19,7 +19,6 @@ from django.db import models  # importing package for database
 
 class TenantState(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     state = models.BigIntegerField(null=True, blank=True)
     tenant_country = models.BigIntegerField(blank=False, null=False)
     tenant_region = models.BigIntegerField(blank=False, null=False)

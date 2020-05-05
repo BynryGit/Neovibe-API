@@ -24,7 +24,6 @@ from v1.tenant.models.tenant_master import TenantMaster
 
 class TenantCurrency(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     currency = models.BigIntegerField(blank=False, null=False)
     tenant_country = models.BigIntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=False)
