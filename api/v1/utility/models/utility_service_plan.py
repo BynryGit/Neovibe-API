@@ -26,8 +26,8 @@ from django.db import models  # importing package for database
 
 class UtilityServicePlan(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=500, blank=False, null=False)
     category = models.BigIntegerField(null=True, blank=True) # CNG, PNG

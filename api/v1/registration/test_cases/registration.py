@@ -1,9 +1,16 @@
 __author__ = 'aki'
-
-# Test Case header
-# module : All Modules | Sub-Module : Registration
-# Author : Akshay Nibrad
-# Creation Date : 29/04/2020
+# TestCase header
+# module: S&M, Consumer care &Ops | sub-module - Registration
+# Test case : API testing
+# Test Case description :
+# Black box testing for registration APIs for
+# 1. Registration list - Total pages, Next and back operations, Filter, Search, Single Utility, Multiple Utility (Valid and Invalid data)
+# 2. Add registration: Create registration, success message, fail message, duplicate entry, Payment entry, Documents entry, Notes entry, Valid and invalid data
+# 3. View registration: Get valid data, payment, documents, Notes, Address, status, valid and invalid data
+# 4. Edit registration: Get valid data, update valid and invalid data, duplicate records
+# # reference tables : registration master, payments, documents, notes
+# author : Akshay Nirbad
+# created on : 29/04/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -18,7 +25,6 @@ from rest_framework import status
 class RegistrationTestCase(TestCase):
     # initialize the APIClient app
     client = Client()
-
 
     def setUp(self):
         self.valid_payload = {

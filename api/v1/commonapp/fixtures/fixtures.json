@@ -58,7 +58,7 @@
 			"subscription_id": 1,
 			"subcription_type": "Basic",
 			"description": "If you chooses basic plan you will get only 3 module",
-			"max_Utility": 1,
+			"max_utility": 1,
 			"max_user": 120,
 			"max_consumer": 50000,
 			"is_active": "True"
@@ -72,7 +72,7 @@
 			"subscription_id": 2,
 			"subcription_type": "Advance",
 			"description": "If you choose advance plan you will get",
-			"max_Utility": 2,
+			"max_utility": 2,
 			"max_user": 500,
 			"max_consumer": 100000,
 			"is_active": "True"
@@ -83,7 +83,7 @@
 		"pk": "1",
 		"model": "tenant.TenantSubscriptionPlanRate",
 		"fields": {
-			"TenantSubscriptionPlan_id": 1,
+			"tenantsubscriptionplan_id": 1,
 			"base_rate": 50,
 			"currency": 1,
 			"region": 3,
@@ -99,7 +99,7 @@
 		"pk": "2",
 		"model": "tenant.TenantSubscriptionPlanRate",
 		"fields": {
-			"TenantSubscriptionPlan_id": 2,
+			"tenantsubscriptionplan_id": 2,
 			"base_rate": 100,
 			"currency": 1,
 			"region": 3,
@@ -1348,7 +1348,6 @@
 		"fields": {
           "tenant": 1,
           "utility": 1,
-          "user": 1,
           "role": "Admin",
           "is_active": "True"
 
@@ -1360,7 +1359,6 @@
 		"fields": {
           "tenant": 1,
           "utility": 1,
-          "user": 2,
           "role": "Executive",
           "is_active": "True"
 
@@ -1530,7 +1528,7 @@
   	},
 	{
 		"pk": "1",
-		"model": "commonapp.ConsumerCategory",
+		"model": "consumer.ConsumerCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1541,7 +1539,7 @@
 
 	{
 		"pk": "2",
-		"model": "commonapp.ConsumerCategory",
+		"model": "consumer.ConsumerCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1552,7 +1550,7 @@
 
 	{
 		"pk": "3",
-		"model": "commonapp.ConsumerCategory",
+		"model": "consumer.ConsumerCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1560,10 +1558,9 @@
 			"is_active": "True"
 		}
 	},
-
 	{
 		"pk": "4",
-		"model": "commonapp.ConsumerCategory",
+		"model": "consumer.ConsumerCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1573,7 +1570,7 @@
 	},
 	{
 		"pk": "1",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1584,7 +1581,7 @@
 	},
 	{
 		"pk": "2",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1595,7 +1592,7 @@
 	},
 	{
 		"pk": "3",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1606,7 +1603,7 @@
 	},
 	{
 		"pk": "4",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1618,7 +1615,7 @@
 
 	{
 		"pk": "5",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -1630,7 +1627,7 @@
 
 	{
 		"pk": "6",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1641,7 +1638,7 @@
 	},
 	{
 		"pk": "7",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1652,7 +1649,7 @@
 	},
 	{
 		"pk": "8",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1663,7 +1660,7 @@
 	},
 	{
 		"pk": "9",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1675,7 +1672,7 @@
 
 	{
 		"pk": "10",
-		"model": "commonapp.ConsumerSubCategory",
+		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 2,
 			"utility": 3,
@@ -1684,7 +1681,6 @@
 			"is_active": "True"
 		}
 	},
-
 	{
 		"pk": "1",
 		"model": "utility.UtilityServicePlan",
@@ -1693,12 +1689,9 @@
 			"utility": 1,
 			"name": "Domestic-Tarrif",
 			"description": "Domestic-Tarrif is for domestic consumers",
-			"is_valid": "True",
-			"validity": 30,
-			"start_date": "1-Jun",
-			"end_date": "30-Jul",
-			"location": "location-1",
-			"is_active": "True"
+			"is_active": "True",
+			"start_date": "2020-04-05",
+			"end_date": "2020-07-05"
 		}
 	},
 	{
@@ -1709,12 +1702,9 @@
 			"utility": 1,
 			"name": "Commercial",
 			"description": "Commercial-Tarrif is for Commercial consumers",
-			"is_valid": "True",
-			"validity": 30,
-			"start_date": "1-Jun",
-			"end_date": "30-Jul",
-			"location": "location-2",
-			"is_active": "True"
+			"is_active": "True",
+			"start_date": "2020-04-05",
+			"end_date": "2020-07-05"
 		}
 	},
 	{
@@ -1725,12 +1715,9 @@
 			"utility": 1,
 			"name": "Industrial",
 			"description": "Industrial-Tarrif is for Industrial consumers",
-			"is_valid": "True",
-			"validity": 30,
-			"start_date": "1-Jun",
-			"end_date": "30-Jul",
-			"location": "location-3",
-			"is_active": "True"
+			"is_active": "True",
+			"start_date": "2020-04-05",
+			"end_date": "2020-07-05"
 		}
 	},
 
@@ -1742,12 +1729,9 @@
 			"utility": 3,
 			"name": "Domestic-Tarrif",
 			"description": "Domestic-Tarrif is for domestic consumers",
-			"is_valid": "True",
-			"validity": 30,
-			"start_date": "1-Jun",
-			"end_date": "30-Jul",
-			"location": "location-4",
-			"is_active": "True"
+			"is_active": "True",
+			"start_date": "2020-04-05",
+			"end_date": "2020-07-05"
 		}
 	},
 	{
@@ -1758,12 +1742,9 @@
 			"utility": 3,
 			"name": "Commercial",
 			"description": "Commercial-Tarrif is for Commercial consumers",
-			"is_valid": "True",
-			"validity": 30,
-			"start_date": "1-Jun",
-			"end_date": "30-Jul",
-			"location": "location-5",
-			"is_active": "True"
+			"is_active": "True",
+			"start_date": "2020-04-05",
+			"end_date": "2020-07-05"
 		}
 	},
 	{
@@ -1774,12 +1755,9 @@
 			"utility": 3,
 			"name": "Industrial",
 			"description": "Industrial-Tarrif is for Industrial consumers",
-			"is_valid": "True",
-			"validity": 30,
-			"start_date": "1-Jun",
-			"end_date": "30-Jul",
-			"location": "location-6",
-			"is_active": "True"
+			"is_active": "True",
+			"start_date": "2020-04-05",
+			"end_date": "2020-07-05"
 		}
 	},
 
@@ -1790,16 +1768,10 @@
 			"tenant": 1,
 			"utility": 1,
 			"utility_service_plan_id": 1,
-			"city_id": 1,
 			"max_unit_range": 50,
 			"unit_id": 10,
 			"base_rate": 5,
 			"is_taxable": "True",
-			"tax": 2,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"effective_date": "1-Jun",
 			"is_active": "True"
 		}
 	},
@@ -1810,16 +1782,10 @@
 			"tenant": 1,
 			"utility": 1,
 			"utility_service_plan_id": 1,
-			"city_id": 1,
 			"max_unit_range": 50,
 			"unit_id": 10,
 			"base_rate": 10,
 			"is_taxable": "True",
-			"tax": 5,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"effective_date": "1-Jun",
 			"is_active": "True"
 		}
 	},
@@ -1830,16 +1796,10 @@
 			"tenant": 1,
 			"utility": 1,
 			"utility_service_plan_id": 1,
-			"city_id": 1,
 			"max_unit_range": 50,
 			"unit_id": 10,
 			"base_rate": 10,
 			"is_taxable": "True",
-			"tax": 10,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"effective_date": "1-Jun",
 			"is_active": "True"
 		}
 	},
@@ -1851,16 +1811,10 @@
 			"tenant": 2,
 			"utility": 3,
 			"utility_service_plan_id": 1,
-			"city_id": 3,
 			"max_unit_range": 50,
 			"unit_id": 10,
 			"base_rate": 5,
 			"is_taxable": "True",
-			"tax": 2,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"effective_date": "1-Jun",
 			"is_active": "True"
 		}
 	},
@@ -1871,16 +1825,10 @@
 			"tenant": 2,
 			"utility": 3,
 			"utility_service_plan_id": 1,
-			"city_id": 3,
 			"max_unit_range": 50,
 			"unit_id": 10,
 			"base_rate": 10,
 			"is_taxable": "True",
-			"tax": 5,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"effective_date": "1-Jun",
 			"is_active": "True"
 		}
 	},
@@ -1891,19 +1839,11 @@
 			"tenant": 2,
 			"utility": 3,
 			"utility_service_plan_id": 1,
-			"city_id": 3,
 			"max_unit_range": 50,
 			"unit_id": 10,
 			"base_rate": 10,
 			"is_taxable": "True",
-			"tax": 10,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"effective_date": "1-Jun",
 			"is_active": "True"
 		}
 	}
-
-
 ]
