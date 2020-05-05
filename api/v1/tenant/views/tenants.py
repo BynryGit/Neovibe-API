@@ -645,3 +645,295 @@ class TenantStatusApiView(APIView):
                                 pass
                             except Exception as e:
                                 pass
+
+                    # API Header
+                    # API end Point: api/v1/tenant/bank
+                    # API verb: GET, POST, PUT
+                    # Package: Basic
+                    # Modules: All
+                    # Sub Module: Tenant Bank Details
+                    # Interaction: View Tenant Bank, Add Tenant Bank, Edit Tenants Bank
+                    # Usage: View, Add, Edit Tenants Bank
+                    # Tables used: 1.3 Tenant Bank Details
+                    # Auther: Gauri
+                    # Created on: 04/05/2020
+
+                    class TenantBankDetailsApiView(APIView):
+
+                        def get(self, request, format=None):
+                            try:
+                                tenant_bank_list = []
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    sub_module = get_sub_module_by_id(1)
+                                    if is_authorized(user, privilege, sub_module):
+                                        # Checking authorization end
+
+                                        # Get Tenant Bank Details
+                                        tenant_bank_details = get_tenant_bank_details_by_tenant_id_string(
+                                            request.data['tenant_id_string'])
+
+                                        for tenant_bank in tenant_bank:
+                                            tenant_bank_list.append
+                                            ({
+                                                'id_string': tenant_bank.id_string,
+                                                'bank_name': tenant_bank.bank_name,
+                                                'branch_name': tenant_bank.branch_name,
+                                                'branch_city': tenant_bank.branch_city,
+                                                'account_number': tenant_bank.account_number,
+                                                'account_type': tenant_bank.account_type,
+                                                'account_name': tenant_bank.account_name,
+                                                'ifsc_no': tenant_bank.ifsc_no,
+                                                'pan_no': tenant_bank.pan_no,
+                                                'gst_no': tenant_bank.gst_no,
+                                                'tax_id_no': tenant_bank.tax_id_no,
+                                                'is_active': tenant_bank.is_active,
+                                                'created_by': tenant_bank.created_by,
+                                                'updated_by': tenant_bank.updated_by,
+                                                'created_date': tenant_bank.created_date,
+                                                'updated_date': tenant_bank.updated_date,
+                                            })
+                                        return Response({
+                                            STATE: SUCCESS,
+                                            'data': tenant_bank_list,
+                                        }, status=status.HTTP_200_OK)
+                            except Exception as e:
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    DATA: '',
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                        def post(self, request, format=None):
+                            try:
+                                pass
+                            except Exception as e:
+                                pass
+
+                        def put(self, request, format=None):
+                            try:
+                                pass
+                            except Exception as e:
+                                pass
+
+
+                    # API Header
+                    # API end Point: api/v1/tenant/summary
+                    # API verb: GET, POST, PUT
+                    # Package: Basic
+                    # Modules: All
+                    # Sub Module: Tenant Monthly Summary
+                    # Interaction: View Tenant Monthly Summary, Add Tenant Monthly Summary, Edit Tenants Monthly Summary
+                    # Usage: View, Add, Edit Tenants Monthly Summary
+                    # Tables used: 1.8 Tenant Summary on monthly basis
+                    # Auther: Gauri
+                    # Created on: 04/05/2020
+
+                    class TenantMonthlySummaryApiView(APIView):
+
+                        def get(self, request, format=None):
+                            try:
+                                tenant_summary_list = []
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    sub_module = get_sub_module_by_id(1)
+                                    if is_authorized(user, privilege, sub_module):
+                                        # Checking authorization end
+
+                                        # Get Tenant Summary
+                                        tenant_summary = get_tenant_summary_by_tenant_id_string(
+                                            request.data['tenant_id_string'])
+
+                                        for tenant_summary in tenant_summary:
+                                            tenant_summary_list.append
+                                            ({
+                                                'id_string': tenant_summary.id_string,
+                                                'no_of_utilities': tenant_summary.no_of_utilities,
+                                                'no_of_users': tenant_summary.no_of_users,
+                                                'no_of_consumers': tenant_summary.no_of_consumers,
+                                                'total_no_of_transaction': tenant_summary.total_no_of_transaction,
+                                                'no_of_cities': tenant_summary.no_of_cities,
+                                                'no_of_documents': tenant_summary.no_of_documents,
+                                                'total_storage_in_use': tenant_summary.total_storage_in_use,
+                                                'month': tenant_summary.month,
+                                                'is_active': tenant_summary.is_active,
+                                                'created_by': tenant_summary.created_by,
+                                                'updated_by': tenant_summary.updated_by,
+                                                'created_date': tenant_summary.created_date,
+                                                'updated_date': tenant_summary.updated_date,
+                                            })
+                                        return Response({
+                                            STATE: SUCCESS,
+                                            'data': tenant_summary_list,
+                                        }, status=status.HTTP_200_OK)
+                            except Exception as e:
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    DATA: '',
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                        def post(self, request, format=None):
+                            try:
+                                pass
+                            except Exception as e:
+                                pass
+
+                        def put(self, request, format=None):
+                            try:
+                                pass
+                            except Exception as e:
+                                pass
+
+
+                    # API Header
+                    # API end Point: api/v1/tenant/submodules
+                    # API verb: GET, POST, PUT
+                    # Package: Basic
+                    # Modules: All
+                    # Sub Module: Tenant System Sub Modules
+                    # Interaction: View Tenant System Sub Modules, Add Tenant System Sub Modules, Edit Tenants System Sub Modules
+                    # Usage: View, Add, Edit Tenants System Sub Modules
+                    # Tables used: 1.7 Tenant System Sub Modules
+                    # Auther: Gauri
+                    # Created on: 04/05/2020
+
+                    class TenantSubModulesApiView(APIView):
+
+                        def get(self, request, format=None):
+                            try:
+                                tenant_sub_modules_list = []
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    sub_module = get_sub_module_by_id(1)
+                                    if is_authorized(user, privilege, sub_module):
+                                        # Checking authorization end
+
+                                        # Get Tenant Modules
+                                        tenant_sub_modules = get_tenant_sub_modules_by_tenant_id_string(
+                                            request.data['tenant_id_string'])
+
+                                        for tenant_sub_modules in tenant_sub_modules:
+                                            tenant_sub_modules_list.append
+                                            ({
+                                                'id_string': tenant_sub_modules.id_string,
+                                                'subscription_id': tenant_sub_modules.subscription_id,
+                                                'module_id': tenant_sub_modules.module_id,
+                                                'sub_module_id': tenant_sub_modules.sub_module_id,
+                                                'sub_module_name': tenant_sub_modules.sub_module_name,
+                                                'is_active': tenant_sub_modules.is_active,
+                                                'created_by': tenant_sub_modules.created_by,
+                                                'updated_by': tenant_sub_modules.updated_by,
+                                                'created_date': tenant_sub_modules.created_date,
+                                                'updated_date': tenant_sub_modules.updated_date,
+                                            })
+                                        return Response({
+                                            STATE: SUCCESS,
+                                            'data': tenant_sub_modules_list,
+                                        }, status=status.HTTP_200_OK)
+                            except Exception as e:
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    DATA: '',
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                        def post(self, request, format=None):
+                            try:
+                                pass
+                            except Exception as e:
+                                pass
+
+                        def put(self, request, format=None):
+                            try:
+                                pass
+                            except Exception as e:
+                                pass
+
+                            # API Header
+                            # API end Point: api/v1/tenant/documents
+                            # API verb: GET, POST, PUT
+                            # Package: Basic
+                            # Modules: All
+                            # Sub Module: Tenant Documents
+                            # Interaction: View Tenant Documents, Add Tenant Documents , Edit Tenants System Sub Modules
+                            # Usage: View, Add, Edit Tenants System Sub Modules
+                            # Tables used: 1.7 Tenant System Sub Modules
+                            # Auther: Gauri
+                            # Created on: 04/05/2020
+
+                            class TenantSubModulesApiView(APIView):
+
+                                def get(self, request, format=None):
+                                    try:
+                                        tenant_sub_modules_list = []
+                                        # Checking authentication start
+                                        if is_token_valid(request.data['token']):
+                                            payload = get_payload(request.data['token'])
+                                            user = get_user(payload['id_string'])
+                                            # Checking authentication end
+
+                                            # Checking authorization start
+                                            privilege = get_privilege_by_id(1)
+                                            sub_module = get_sub_module_by_id(1)
+                                            if is_authorized(user, privilege, sub_module):
+                                                # Checking authorization end
+
+                                                # Get Tenant Modules
+                                                tenant_sub_modules = get_tenant_sub_modules_by_tenant_id_string(
+                                                    request.data['tenant_id_string'])
+
+                                                for tenant_sub_modules in tenant_sub_modules:
+                                                    tenant_sub_modules_list.append
+                                                    ({
+                                                        'id_string': tenant_sub_modules.id_string,
+                                                        'subscription_id': tenant_sub_modules.subscription_id,
+                                                        'module_id': tenant_sub_modules.module_id,
+                                                        'sub_module_id': tenant_sub_modules.sub_module_id,
+                                                        'sub_module_name': tenant_sub_modules.sub_module_name,
+                                                        'is_active': tenant_sub_modules.is_active,
+                                                        'created_by': tenant_sub_modules.created_by,
+                                                        'updated_by': tenant_sub_modules.updated_by,
+                                                        'created_date': tenant_sub_modules.created_date,
+                                                        'updated_date': tenant_sub_modules.updated_date,
+                                                    })
+                                                return Response({
+                                                    STATE: SUCCESS,
+                                                    'data': tenant_sub_modules_list,
+                                                }, status=status.HTTP_200_OK)
+                                    except Exception as e:
+                                        return Response({
+                                            STATE: EXCEPTION,
+                                            DATA: '',
+                                            ERROR: str(traceback.print_exc(e))
+                                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                                def post(self, request, format=None):
+                                    try:
+                                        pass
+                                    except Exception as e:
+                                        pass
+
+                                def put(self, request, format=None):
+                                    try:
+                                        pass
+                                    except Exception as e:
+                                        pass
