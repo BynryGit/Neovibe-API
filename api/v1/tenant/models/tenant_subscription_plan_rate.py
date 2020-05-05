@@ -24,7 +24,7 @@ from django.db import models  # importing package for database
 
 class TenantSubscriptionPlanRate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    TenantSubscriptionPlan_id = models.BigIntegerField(null=True, blank=True)
+    tenantsubscriptionplan_id = models.BigIntegerField(null=True, blank=True)
     base_rate = models.FloatField(null=True, blank=True)
     currency = models.CharField(max_length=200, blank=False, null=False)
     region = models.CharField(max_length=200, blank=False, null=False)

@@ -39,3 +39,7 @@ class RoleSubType(models.Model):
         return self.name
 
 # Create Role Sub Type table end
+
+
+def get_role_sub_type_by_tenant_id_string(id_string):
+    return RoleSubType.objects.filter(tenant__id_string=id_string)

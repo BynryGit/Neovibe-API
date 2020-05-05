@@ -9,7 +9,7 @@ from v1.campaign.views.common_functions import get_filtered_campaign,is_data_ver
 
 from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.campaign_status import get_cam_status_by_tenant_id_string
-from v1.userapp.models.user_master import SystemUser
+from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
@@ -56,7 +56,7 @@ class CampaignListApiView(APIView):
                 # Checking authorization end
 
                     # Code for filtering campaign start
-                    user = SystemUser.objects.get(id=2)
+                    user = UserDetail.objects.get(id=2)
                     campaigns,total_pages, page_no, result, error = get_filtered_campaign(user, request)
                     if result == False:
                         return Response({
