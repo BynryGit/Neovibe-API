@@ -1,57 +1,69 @@
-from api.v1.smart360_API.smart360_API.campaign.models.campaign_master import Campaign
-from api.v1.smart360_API.smart360_API.campaign.models.advertisements import Advertisements
-from api.v1.smart360_API.campaign.models.advert_status import get_cam_status_by_id_string
-from api.v1.smart360_API.commonapp.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from api.v1.smart360_API.lookup.models.camp_type import get_camp_type_by_id_string
-from api.v1.smart360_API.lookup.models.consumer_category import get_consumer_category_by_id_string
-from api.v1.smart360_API.lookup.models.area import get_area_by_id_string
+import traceback
+from v1.campaign.models.campaign import Campaign
+from v1.campaign.models.advertisement import Advertisements
+from v1.campaign.models.advert_status import get_advert_status_by_id_string
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from django.core.paginator import Paginator
 from django.db import transaction
-
-from api.v1.smart360_API.commonapp.models.sub_area import get_sub_area_by_id_string
-from api.v1.smart360_API.commonapp.models.frequency import get_frequency_by_id_string
-from api.v1.smart360_API.commonapp.models.campaign import get_campaign_by_id_string
-
+from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.frequency import get_frequency_by_id_string
+from v1.campaign.models.campaign import get_campaign_by_id_string
 
 
 # getting list data
-def get_filtered_campaign(request, user):
-    campaign = Campaign.objects.filter(tenant_id=user.tenant_id,
-                                                utility_id__in=user.data_access.all())
+def get_filtered_campaign(user,request):
+    total_pages = ''
+    page_no = ''
+    campaigns = ''
+    error = ''
+    try:
+        campaign = Campaign.objects.filter(tenant=user.tenant)
 
-    if request.data['cam_type_id']:
-        campaign = campaign.objects.filter(type_id=request.data['cam_type_id'])
+        if "utility" in request.data:
+            campaign = campaign.objects.filter(utility=request.data['utility'])
 
-    if request.data['frequency_id']:
-        campaign = campaign.objects.filter(frequency_id=request.data['frequency_id'])
+        if "group" in request.data:
+            campaign = campaign.objects.filter(group_id=request.data['group'])
 
-    if request.data['category_id']:
-        campaign = campaign.objects.filter(category_id=request.data['category_id'])
+        if "objective" in request.data:
+            campaign = campaign.objects.filter(objective_id=request.data['objective'])
 
-    if request.data['sub_category_id']:
-        campaign = campaign.objects.filter(sub_category_id=request.data['sub_category_id'])
+        if "frequency" in request.data:
+            campaign = campaign.objects.filter(frequency_id=request.data['frequency'])
 
-    if request.data['status_id']:
-        campaign = campaign.objects.filter(status_id=request.data['status_id'])
+        if "category" in request.data:
+            campaign = campaign.objects.filter(category_id=request.data['category'])
 
-    if request.data['search_text'] == '':
-        pass
-    else:
-        campaign = campaign.filter(name__icontains=request.data['search_text'])
+        if "sub_category" in request.data:
+            campaign = campaign.objects.filter(sub_category_id=request.data['sub_category'])
 
-    if request.data['page_number'] == '':
-        paginator = Paginator(campaign,int(request.data['page_size']))
-        total_pages = str(paginator.num_pages)
-        page_no = '1'
-        campaigns = paginator.page(1)
-        return campaigns,total_pages,page_no
-    else:
-        paginator = Paginator(campaign, int(request.data['page_size']))
-        total_pages = str(paginator.num_pages)
-        page_no = request.data['page_number']
-        campaigns = paginator.page(int(page_no))
+        if "status" in request.data:
+            campaign = campaign.objects.filter(status_id=request.data['status'])
 
-    return campaigns,total_pages, page_no
+        if "search_text" in request.data:
+            if request.data['search_text'] == '':
+                pass
+            else:
+                campaign = campaign.objects.filter(name__icontains=request.data['search_text'])
+
+        if "page_number" in request.data:
+            if request.data['page_number'] == '':
+                paginator = Paginator(campaign,int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = '1'
+                campaigns = paginator.page(1)
+            else:
+                paginator = Paginator(campaign, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = request.data['page_number']
+                campaigns = paginator.page(int(page_no))
+        return campaigns,total_pages, page_no, True, error
+    except Exception as e:
+        print("Exception occured ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return campaigns, total_pages, page_no, False, error
 
 
 # verify the campaign data
@@ -81,9 +93,8 @@ def save_campaign_details(request, user):
     try:
         # Code for lookups start
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
-        status = get_cam_status_by_id_string(request.data['camp_status'])
-        campaigns_type = get_camp_type_by_id_string(request.data['campaigns_type'])
-        category = get_consumer_category_by_id_string(request.data['consumer_category'])
+        status = get_advert_status_by_id_string(request.data['camp_status'])
+        category = get_consumer_category_by_id(request.data['consumer_category'])
         sub_category = get_consumer_sub_category_by_id_string(request.data['consumer_sub_category'])
         frequency = get_frequency_by_id_string(request.data['frequency'])
         area = get_area_by_id_string(request.data['area'])
@@ -95,7 +106,6 @@ def save_campaign_details(request, user):
                 tenant=user.tenant,
                 utility=utility,
                 name=request.data['campaign_name'],
-                cam_type_id=campaigns_type.id,
                 start_date=request.data['start_date'],
                 end_date=request.data['end_date'],
                 description=request.data['description'],

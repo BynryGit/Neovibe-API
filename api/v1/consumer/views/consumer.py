@@ -20,7 +20,7 @@ from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
 from v1.userapp.models.privilege import get_privilege_by_id
-from v1.userapp.models.user_master import SystemUser
+from v1.userapp.models.user_master import UserDetail
 from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id
 
 
@@ -89,7 +89,7 @@ class ConsumerBillListApiView(APIView):
     def get(self, request, format=None):
         bill_list = []
         try:
-            user = SystemUser.objects.get(id=4)
+            user = UserDetail.objects.get(id=4)
             if "consumer_id_string" in request.data:
                 consumer = get_consumer_by_id_string(request.data["consumer_id_string"])
                 bills = get_invoice_bills_by_consumer_no(consumer.cosumer_no)
