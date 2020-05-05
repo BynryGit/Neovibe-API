@@ -8,18 +8,18 @@ from rest_framework.views import APIView
 from api.messages import *
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.department import Department, get_department_by_tenant_id_string, get_department_by_id
-from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_tenant_id_string, get_form_factor_by_id
-from v1.commonapp.models.module import Module, get_all_modules, get_module_by_id
-from v1.commonapp.models.sub_module import SubModule, get_submodule_by_module_id, get_sub_module_by_id
-from v1.userapp.models.privilege import Privilege, get_privilege_by_utility_id, get_privilege_by_id
+from v1.commonapp.models.department import get_department_by_tenant_id_string, get_department_by_id
+from v1.commonapp.models.form_factor import get_form_factor_by_tenant_id_string, get_form_factor_by_id
+from v1.commonapp.models.module import get_module_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
-from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_tenant_id_string, get_role_sub_type_by_id
-from v1.userapp.models.role_type import RoleType, get_role_type_by_tenant_id_string, get_role_type_by_id
-from v1.userapp.models.user_master import UserDetail
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_tenant_id_string, get_role_sub_type_by_id
+from v1.userapp.models.role_type import get_role_type_by_tenant_id_string, get_role_type_by_id
+from v1.userapp.models.user_master import get_user_by_id_string
 from v1.userapp.models.user_role import get_role_by_id_string
 from v1.userapp.views.common_functions import get_filtered_roles, is_data_verified, add_basic_role_details, \
-    save_privilege_details, save_edited_basic_role_details
+    save_privilege_details, save_edited_basic_role_details, save_edited_privilege_details
 
 
 # API Header
@@ -56,7 +56,7 @@ class RoleList(APIView):
                     # Checking authorization end
 
                     # Code for filtering roles start
-                    user = UserDetail.objects.get(id_string=request.data['user'])
+                    user = get_user_by_id_string(request.data['user'])
                     result, roles, total_pages, page_no, error = get_filtered_roles(user, request)
                     if not result:
                         return Response({
@@ -73,7 +73,7 @@ class RoleList(APIView):
                     departments = get_department_by_tenant_id_string(user.tenant.id_string)
                     # Code for lookups end
 
-                    # Code for sending registrations in response start
+                    # Code for sending role in response start
                     for role in roles:
                         role_list.append({
                             'registration_id_string': role.id_string,
@@ -91,7 +91,7 @@ class RoleList(APIView):
                         STATE: SUCCESS,
                         DATA: role_list,
                     }, status=status.HTTP_200_OK)
-                    # Code for sending registrations in response end
+                    # Code for sending role in response end
 
                 else:
                     return Response({
@@ -161,7 +161,7 @@ class Roles(APIView):
                         })
                     # Code for lookups end
 
-                    # Code for sending registrations in response start
+                    # Code for sending role in response start
                     data = {
                         'tenant_id_string': role.tenant.id_string,
                         'utility_id_string': role.utility.id_string,
@@ -181,7 +181,7 @@ class Roles(APIView):
                         STATE: SUCCESS,
                         DATA: data,
                     }, status=status.HTTP_200_OK)
-                    # Code for sending registrations in response end
+                    # Code for sending role in response end
 
                 else:
                     return Response({
@@ -218,19 +218,10 @@ class Roles(APIView):
                     if is_data_verified(request):
                         # Request data verification end
 
-                        # Save basic and payment details start
-                        user = UserDetail.objects.get(id_string=request.data['user'])
-                        sid = transaction.savepoint()
-                        role, result = add_basic_role_details(request, user, sid)
-                        if not result:
-                            return Response({
-                                STATE: EXCEPTION,
-                                ERROR: ERROR
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        result = save_privilege_details(request, user, role, sid)
+                        # Save basic role details start
+                        user = get_user_by_id_string(request.data['user'])
+                        role, result, error = add_basic_role_details(request, user)
                         if result:
-                            transaction.savepoint_commit(sid)
-                        else:
                             data = {
                                 "role_id_string": role.id_string
                             }
@@ -238,7 +229,12 @@ class Roles(APIView):
                                 STATE: SUCCESS,
                                 DATA: data,
                             }, status=status.HTTP_200_OK)
-                        # Save basic and payment details start
+                        else:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: error
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        # Save basic role details start
                     else:
                         return Response({
                             STATE: ERROR,
@@ -276,22 +272,134 @@ class Roles(APIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id_string=request.data['user'])
-                        registration, result = save_edited_basic_role_details(request, user)
-                        if result == False:
-                            return Response({
-                                STATE: EXCEPTION,
-                                ERROR: ERROR
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        else:
+                        user = get_user_by_id_string(request.data['user'])
+                        role, result, error = save_edited_basic_role_details(request, user)
+                        if result:
                             data = {
-                                "registration_id_string": registration.id_string
+                                "role_id_string": role.id_string
                             }
                             return Response({
                                 STATE: SUCCESS,
                                 DATA: data,
                             }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: error
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                         # Save basic details start
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class PrivilegeDetail(APIView):
+
+    def post(self, request, format=None):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.data['token']):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
+                    # Checking authorization end
+
+                    # Request data verification start
+                    if is_data_verified(request):
+                        # Request data verification end
+
+                        # Save privilege details start
+                        user = get_user_by_id_string(request.data['user'])
+                        role = get_role_by_id_string(request.data['role'])
+                        role_privilege, result, error = save_privilege_details(request, user, role)
+                        if result:
+                            data = {
+                                "role_id_string": role.id_string
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: error
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        # Save privilege details start
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, format=None):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.data['token']):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
+                    # Checking authorization end
+
+                    # Request data verification start
+                    if is_data_verified(request):
+                        # Request data verification end
+
+                        # Save privilege details start
+                        user = get_user_by_id_string(request.data['user'])
+                        role = get_role_by_id_string(request.data['role'])
+                        role_privilege, result, error = save_edited_privilege_details(request, user, role)
+                        if result:
+                            data = {
+                                "role_id_string": role.id_string
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: error
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        # Save privilege details start
                     else:
                         return Response({
                             STATE: ERROR,

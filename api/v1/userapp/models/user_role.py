@@ -50,5 +50,6 @@ class UserRole(models.Model):
 def get_role_by_id(id):
     return UserRole.objects.get(id=id)
 
+
 def get_role_by_id_string(id_string):
     return UserRole.objects.get(id_string=id_string)

@@ -52,3 +52,10 @@ def get_privilege_by_utility_id(id):
 
 def get_privilege_by_id_string(id_string):
     return Privilege.objects.get(id_string=id_string)
+
+
+def filter_privilege_by_id_string(id_string):
+    if Privilege.objects.filter(id_string=id_string).exists():
+        return True
+    else:
+        return False

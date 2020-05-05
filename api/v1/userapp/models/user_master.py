@@ -54,8 +54,7 @@ class UserDetail(User):
 
 
 def get_user_by_id_string(id_string):
-    user = UserDetail.objects.get(id_string = id_string)
-    return user
+    return UserDetail.objects.get(id_string = id_string)
 
 
 def get_user_by_id(id):

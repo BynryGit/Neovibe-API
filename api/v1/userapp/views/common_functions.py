@@ -13,7 +13,9 @@ from v1.commonapp.models.department import Department, get_department_by_id_stri
 from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
-from v1.userapp.models.role_privilege import RolePrivilege
+from v1.userapp.models.privilege import filter_privilege_by_id_string
+from v1.userapp.models.role_privilege import RolePrivilege, get_role_privilege_by_id_string, \
+    get_role_privilege_by_role_id
 from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
 from v1.userapp.models.user_master import UserDetail
@@ -84,7 +86,7 @@ def is_data_verified(request):
 
 
 @transaction.atomic
-def add_basic_role_details(request, user, sid):
+def add_basic_role_details(request, user):
     role = ""
     try:
         role = Role()
@@ -109,14 +111,15 @@ def add_basic_role_details(request, user, sid):
         role.save()
         role.role_ID = role.id
         role.save()
-        return role, True
+        return role, True, ''
     except Exception as e:
-        print("Exception occured ",str(traceback.print_exc(e)))
-        transaction.rollback(sid)
-        return role, False
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return role, False, error
 
 
-def save_privilege_details(request, user, role, sid):
+def save_privilege_details(request, user, role):
+    role_privilege = ''
     try:
         if request.data['privilege_details'] == '':
             return True
@@ -135,10 +138,11 @@ def save_privilege_details(request, user, role, sid):
                     created_by = user.id,
                     created_date = datetime.now()
                 ).save
-            return True
+            return role, True, ''
     except Exception as e:
-        transaction.rollback(sid)
-        return False
+        print("Exception occurred ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return role, False, error
 
 
 def save_edited_basic_role_details(request, user):
@@ -159,10 +163,48 @@ def save_edited_basic_role_details(request, user):
         role.updated_by = user.id
         role.updated_date = datetime.now()
         role.save()
-        return role, True
+        return role, True, ''
     except Exception as e:
         print("Exception occurred ",str(traceback.print_exc(e)))
-        return role,False
+        error = str(traceback.print_exc(e))
+        return role, False, error
+
+
+def save_edited_privilege_details(request, user, role):
+    try:
+        if request.data['privilege_details'] == '':
+            return True
+        else:
+            for privilege_detail in request.data['privilege_details']:
+                role_privilege = get_role_privilege_by_role_id(role.id)
+                role_privilege.update(is_active=False)
+
+                role_privilege = get_role_privilege_by_id_string(request.data["role_privilege_id_string"])
+                if filter_privilege_by_id_string(privilege_detail['privilege_id_string']):
+                    privilege = get_privilege_by_id_string(privilege_detail['privilege_id_string'])
+                    role_privilege.privilege_id = privilege.id
+                    role_privilege.is_active = True
+                    role_privilege.updated_by = user.id
+                    role.updated_date = datetime.now()
+                else:
+                    module = get_module_by_id_string(privilege_detail['module_id_string'])
+                    sub_module = get_sub_module_by_id_string(privilege_detail['sub_module_id_string'])
+                    privilege = get_privilege_by_id_string(privilege_detail['privilege_id_string'])
+                    role_privilege = RolePrivilege(
+                        tenant=role.tenant,
+                        utility=role.utility,
+                        role_id=role.id,
+                        module_=module.id,
+                        sub_module_id=sub_module.id,
+                        privilege_id=privilege.id,
+                        created_by=user.id,
+                        created_date=datetime.now()
+                    ).save
+            return role, True, ''
+    except Exception as e:
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return role, False, error
 
 
 def is_authenticate(validated_data):
