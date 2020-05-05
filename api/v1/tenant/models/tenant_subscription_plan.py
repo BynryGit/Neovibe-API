@@ -28,7 +28,7 @@ class TenantSubscriptionPlan(models.Model):
     short_name = models.BigIntegerField(null=True, blank=True)
     subcription_type = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=500, blank=False, null=False)
-    max_Utility  = models.BigIntegerField(null=True, blank=True)
+    max_utility  = models.BigIntegerField(null=True, blank=True)
     max_user = models.BigIntegerField(null=True, blank=True)
     max_consumer = models.BigIntegerField(null=True, blank=True)
     max_storage = models.BigIntegerField(null=True, blank=True)
