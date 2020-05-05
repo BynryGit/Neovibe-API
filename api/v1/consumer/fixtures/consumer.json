@@ -253,6 +253,7 @@
 			"is_active": "True"
 		}
 	},
+<<<<<<< HEAD
 
 
 
@@ -338,11 +339,76 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+	{
+		"pk": "1",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "CNG",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 1,
+			"name": "PNG",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "3",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "CNG",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "PNG",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "CNG1",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 1,
+			"name": "CNG2",
+			"category": 1,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "3",
+<<<<<<< HEAD
 		"model": "consumer.ConsumerMaster",
 		"fields": {
 			"tenant": 1,
@@ -423,12 +489,32 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 3,
+			"utility": 1,
+			"name": "Commercial",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "Domestic",
+			"category": 2,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	},
 
 	{
 		"pk": "5",
+<<<<<<< HEAD
 		"model": "consumer.ConsumerMaster",
 		"fields": {
 			"tenant": 1,
@@ -466,12 +552,21 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "Industrial",
+			"category": 2,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	},
 
 	{
 		"pk": "6",
+<<<<<<< HEAD
 		"model": "consumer.ConsumerMaster",
 		"fields": {
 			"tenant": 2,
@@ -509,11 +604,20 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "CNG1",
+			"category": 3,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "7",
+<<<<<<< HEAD
 		"model": "consumer.ConsumerMaster",
 		"fields": {
 			"tenant": 2,
@@ -551,11 +655,20 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "CNG2",
+			"category": 3,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "8",
+<<<<<<< HEAD
 		"model": "consumer.ConsumerMaster",
 		"fields": {
 			"tenant": 2,
@@ -593,11 +706,20 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "Commercial",
+			"category": 4,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "9",
+<<<<<<< HEAD
 		"model": "consumer.ConsumerMaster",
 		"fields": {
 			"tenant": 2,
@@ -677,6 +799,26 @@
 			"invoice_amount_ltd": ,
 			"payment_ltd": ,
 			"outstanding_ltd": ,
+=======
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "Domestic",
+			"category": 4,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "10",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Industrial",
+			"category": 4,
+>>>>>>> cae11321af44c65a65e3bc8b6b11ced12a3384e4
 			"is_active": "True"
 		}
 	}

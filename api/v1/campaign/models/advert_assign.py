@@ -22,8 +22,8 @@ from django.db import models
 
 class AdvertisementAssignment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, null=True, blank=True,on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, null=True, blank=True,on_delete=models.SET_NULL)
     campaign_id = models.BigIntegerField(default=1, null=True, blank=True)
     group_id = models.BigIntegerField(default=1, null=True, blank=True)
     vendor_id = models.BigIntegerField(default=1, null=True, blank=True)  # todo: check actual name

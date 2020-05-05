@@ -38,3 +38,7 @@ class RoleType(models.Model):
         return self.name
 
 # Create Role Type table end
+
+
+def get_role_type_by_tenant_id_string(id_string):
+    return RoleType.objects.filter(tenant__id_string=id_string)
