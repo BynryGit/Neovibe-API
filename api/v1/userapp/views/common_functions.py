@@ -107,6 +107,8 @@ def add_basic_role_details(request, user, sid):
         role.created_by = user.id
         role.created_date = datetime.now()
         role.save()
+        role.role_ID = role.id
+        role.save()
         return role, True
     except Exception as e:
         print("Exception occured ",str(traceback.print_exc(e)))
