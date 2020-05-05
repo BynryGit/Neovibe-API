@@ -37,3 +37,9 @@ class Module(models.Model):
 
 # Create Module table start
 
+def get_all_modules():
+    return Module.objects.filter(is_active=True)
+
+
+def get_module_by_id(id):
+    return Module.objects.get(id=id,is_active=True)

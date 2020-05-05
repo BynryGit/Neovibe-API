@@ -42,3 +42,11 @@ class RoleType(models.Model):
 
 def get_role_type_by_tenant_id_string(id_string):
     return RoleType.objects.filter(tenant__id_string=id_string)
+
+
+def get_role_type_by_id_string(id_string):
+    return RoleType.objects.filter(id_string=id_string)
+
+
+def get_role_type_by_id(id):
+    return RoleType.objects.filter(id=id)

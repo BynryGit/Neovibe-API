@@ -43,4 +43,8 @@ class Privilege(models.Model):
 
 
 def get_privilege_by_id(id):
-    return Privilege.objects.get(id=id)
+    return Privilege.objects.get(id=id,is_active=True)
+
+
+def get_privilege_by_utility_id(id):
+    return Privilege.objects.get(utility_id=id)

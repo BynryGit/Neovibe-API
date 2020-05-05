@@ -8,13 +8,31 @@ from rest_framework.views import APIView
 from api.messages import *
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.department import Department, get_department_by_tenant_id_string
-from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_tenant_id_string
-from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_tenant_id_string
-from v1.userapp.models.role_type import RoleType, get_role_type_by_tenant_id_string
+from v1.commonapp.models.department import Department, get_department_by_tenant_id_string, get_department_by_id
+from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_tenant_id_string, get_form_factor_by_id
+from v1.commonapp.models.module import Module, get_all_modules, get_module_by_id
+from v1.commonapp.models.sub_module import SubModule, get_submodule_by_module_id, get_sub_module_by_id
+from v1.userapp.models.privilege import Privilege, get_privilege_by_utility_id, get_privilege_by_id
+from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
+from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_tenant_id_string, get_role_sub_type_by_id
+from v1.userapp.models.role_type import RoleType, get_role_type_by_tenant_id_string, get_role_type_by_id
 from v1.userapp.models.user_master import UserDetail
+from v1.userapp.models.user_role import get_role_by_id_string
 from v1.userapp.views.common_functions import get_filtered_roles
 
+
+# API Header
+# API end Point: api/v1/role/list
+# API verb: GET
+# Package: Basic
+# Modules: Roles & Privileges
+# Sub Module: Role
+# Interaction: View role list
+# Usage: Used for role list. Gets all the records in pagination mode. It also have input params to filter/search and
+# sort in addition to pagination.
+# Tables used: 2.5.1. Users & Privileges - Role Master
+# Author: Arpita
+# Created on: 04/05/2020
 
 class RoleList(APIView):
 
@@ -64,7 +82,7 @@ class RoleList(APIView):
                             'status': '',
                             'form_factor': form_factors.get(id=role.form_factor_id).name,
                             'department': departments.get(id=role.department_id).name,
-                            'created_on': role.created_date,
+                            'created_on': role.created_date.strftime(DISPLAY_DATE_FORMAT),
                             'total_pages': total_pages,
                             'page_no': page_no
                         })
@@ -83,6 +101,208 @@ class RoleList(APIView):
                 return Response({
                     STATE: ERROR,
                     DATA: '',
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/registration
+# API verb: GET, POST, PUT
+# Package: Basic
+# Modules: Roles & Privileges
+# Sub Module: Role
+# Interaction: View roles, Add roles, Edit roles
+# Usage: View, Add, Edit role
+# Tables used: 2.5.1. Users & Privileges - Role Master
+# Author: Arpita
+# Created on: 05/05/2020
+
+class Roles(APIView):
+
+    def get(self, request, format=None):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.data['token']):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
+            # Checking authentication end
+
+                # Checking authorization start
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
+                # Checking authorization end
+
+                    # Declare local variables start
+                    privilege_list = []
+                    # Declare local variables end
+
+                    # Code for lookups start
+                    role = get_role_by_id_string(request.data['role_id_string'])
+                    type = get_role_type_by_id(role.type_id)
+                    sub_type = get_role_sub_type_by_id(role.state_id)
+                    form_factor = get_form_factor_by_id(role.city_id)
+                    department = get_department_by_id(role.area_id)
+                    role_privileges = get_role_privilege_by_role_id(role.id)
+
+                    for role_privilege in role_privileges:
+                        module = get_module_by_id(role_privilege.module_id)
+                        sub_module = get_sub_module_by_id(role_privilege.sub_module_id)
+                        privilege = get_privilege_by_id(role_privilege.privilege_id)
+                        privilege_list.append({
+                            'module': module.name,
+                            'sub_module': sub_module.name,
+                            'privilege' : privilege.name
+                        })
+                    # Code for lookups end
+
+                    # Code for sending registrations in response start
+                    data = {
+                        'tenant_id_string': role.tenant.id_string,
+                        'utility_id_string': role.utility.id_string,
+                        'type_id_string': type.id_string,
+                        'sub_type_id_string': sub_type.id_string,
+                        'form_factor_id_string': form_factor.id_string,
+                        'department_id_string': department.id_string,
+                        'role_no': role.role_ID,
+                        'role_name': role.role,
+                        'form_factor': form_factor.name,
+                        'department': department.name,
+                        'created_on': role.created_date.strftime(DISPLAY_DATE_FORMAT),
+                        'privilege_list': privilege_list,
+                        'is_active': role.is_active,
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
+                    # Code for sending registrations in response end
+
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        DATA: '',
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    DATA: '',
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request, format=None):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.data['token']):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
+                    # Checking authorization end
+
+                    # Request data verification start
+                    if is_data_verified(request):
+                        # Request data verification end
+
+                        # Save basic and payment details start
+                        user = UserDetail.objects.get(id=3)
+                        sid = transaction.savepoint()
+                        registration, result = add_basic_registration_details(request, user, sid)
+                        if result == False:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: ERROR
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        result = save_payment_details(request, user, registration, sid)
+                        if result == True:
+                            transaction.savepoint_commit(sid)
+                        else:
+                            data = {
+                                "registration_id_string": registration.id_string
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
+                        # Save basic and payment details start
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, format=None):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.data['token']):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
+                    # Checking authorization end
+
+                    # Request data verification start
+                    if is_data_verified(request):
+                        # Request data verification end
+
+                        # Save basic details start
+                        user = UserDetail.objects.get(id=3)
+                        registration, result = save_edited_basic_registration_details(request, user)
+                        if result == False:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: ERROR
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        else:
+                            data = {
+                                "registration_id_string": registration.id_string
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
+                        # Save basic details start
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({

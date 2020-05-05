@@ -40,3 +40,11 @@ class FormFactor(models.Model):
 
 def get_form_factor_by_tenant_id_string(id_string):
     return FormFactor.objects.filter(tenant__id_string=id_string)
+
+
+def get_form_factor_by_id_string(id_string):
+    return FormFactor.objects.filter(id_string=id_string)
+
+
+def get_form_factor_by_id(id):
+    return FormFactor.objects.filter(id=id)

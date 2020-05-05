@@ -43,3 +43,11 @@ class Department(models.Model):
 
 def get_department_by_tenant_id_string(id_string):
     return Department.objects.filter(tenant__id_string=id_string)
+
+
+def get_department_by_id_string(id_string):
+    return Department.objects.filter(id_string=id_string)
+
+
+def get_department_by_id(id):
+    return Department.objects.filter(id=id)
