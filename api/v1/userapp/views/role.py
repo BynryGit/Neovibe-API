@@ -18,7 +18,7 @@ from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_te
 from v1.userapp.models.role_type import RoleType, get_role_type_by_tenant_id_string, get_role_type_by_id
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_role import get_role_by_id_string
-from v1.userapp.views.common_functions import get_filtered_roles
+from v1.userapp.views.common_functions import get_filtered_roles, is_data_verified
 
 
 # API Header
@@ -218,9 +218,9 @@ class Roles(APIView):
                         # Request data verification end
 
                         # Save basic and payment details start
-                        user = UserDetail.objects.get(id=3)
+                        user = UserDetail.objects.get(id_string=request.data['user'])
                         sid = transaction.savepoint()
-                        registration, result = add_basic_registration_details(request, user, sid)
+                        registration, result = add_basic_role_details(request, user, sid)
                         if result == False:
                             return Response({
                                 STATE: EXCEPTION,

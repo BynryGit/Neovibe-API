@@ -2,6 +2,7 @@ import traceback
 
 import jwt
 from django.contrib.auth import authenticate
+from django.db.models import transaction
 from django.db.models import Q
 from django.core.paginator import Paginator
 from api.settings import SECRET_KEY
@@ -38,7 +39,7 @@ def get_filtered_roles(user, request):
         if "utility" in request.data:
             roles = roles.objects.filter(utility_id=utility.id)
         if "type" in request.data:
-            roles = roles.objects.filter(type_id= type.id)
+            roles = roles.objects.filter(type_id=type.id)
         if "sub_type" in request.data:
             roles = roles.objects.filter(sub_type_id=sub_type.id)
         if "form_factor" in request.data:
@@ -54,7 +55,7 @@ def get_filtered_roles(user, request):
 
         if "page_number" in request.data:
             if request.data['page_number'] == '':
-                paginator = Paginator(roles,int(request.data['page_size']))
+                paginator = Paginator(roles, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
                 roles = paginator.page(1)
@@ -65,9 +66,98 @@ def get_filtered_roles(user, request):
                 roles = paginator.page(int(page_no))
         return True, roles, total_pages, page_no, error
     except Exception as e:
-        print("Exception occurred ",str(traceback.print_exc(e)))
+        print("Exception occurred ", str(traceback.print_exc(e)))
         error = str(traceback.print_exc(e))
         return False, roles, total_pages, page_no, error
+
+
+# Check only mandatory fields
+def is_data_verified(request):
+    if request.data['role'] and request.data['type'] and request.data['sub_type'] and request.data['form_factor'] and \
+            request.data['department'] and request.data['module'] and request.data['Sub_module'] and \
+            request.data['privilege']:
+        return False
+    else:
+        return True
+
+
+@transaction.atomic
+def add_basic_registration_details(request, user, sid):
+    registration = ""
+    try:
+        registration = Registration()
+        if "first_name" in request.data:
+            registration.first_name = request.data["first_name"]
+        if "middle_name" in request.data:
+            registration.middle_name = request.data["middle_name"]
+        if "last_name" in request.data:
+            registration.last_name = request.data["last_name"]
+        if "email_id" in request.data:
+            registration.email_id = request.data["email_id"]
+        if "phone_mobile" in request.data:
+            registration.phone_mobile = request.data["phone_mobile"]
+        if "phone_landline" in request.data:
+            registration.phone_landline = request.data["phone_landline"]
+        if "address_line_1" in request.data:
+            registration.address_line_1 = request.data["address_line_1"]
+        if "street" in request.data:
+            registration.street = request.data["street"]
+        if "zipcode" in request.data:
+            registration.zipcode = request.data["zipcode"]
+        if "is_vip" in request.data:
+            registration.is_vip = True if request.data["is_vip"] == '1' else False
+        if "connectivity" in request.data:
+            registration.connectivity = True if request.data["connectivity"] == '1' else False
+        if "registration_date" in request.data:
+            registration.registration_date = datetime.strptime(request.data["registration_date"],INPUT_DATE_FORMAT)
+        if "utility_id_string" in request.data:
+            utility = get_utility_by_id_string(request.data["utility_id_string"])
+            registration.utility = utility
+        if "registration_type_id_string" in request.data:
+            registration_type = get_registration_type_by_id_string(request.data["registration_type_id_string"])
+            registration.registration_type_id = registration_type.id
+        if "status_id_string" in request.data:
+            registration_status = get_registration_status_by_id_string(request.data["status_id_string"])
+            registration.status_id = registration_status.id
+        if "country_id_string" in request.data:
+            country = get_country_by_id_string(request.data["country_id_string"])
+            registration.country_id = country.id
+        if "state_id_string" in request.data:
+            state = get_state_by_id_string(request.data["state_id_string"])
+            registration.state_id = state.id
+        if "city_id_string" in request.data:
+            city = get_city_by_id_string(request.data["city_id_string"])
+            registration.city_id = city.id
+        if "area_id_string" in request.data:
+            area = get_area_by_id_string(request.data["area_id_string"])
+            registration.area_id = area.id
+        if "sub_area_id_string" in request.data:
+            sub_area = get_sub_area_by_id_string(request.data["sub_area_id_string"])
+            registration.sub_area_id = sub_area.id
+        if "scheme_id_string" in request.data:
+            scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
+            registration.scheme_id = scheme.id
+        if "ownership_id_string" in request.data:
+            ownership = get_consumer_ownership_by_id_string(request.data["ownership_id_string"])
+            registration.ownership_id = ownership.id
+        if "consumer_category_id_string" in request.data:
+            consumer_category = get_consumer_category_by_id_string(request.data["consumer_category_id_string"])
+            registration.consumer_category_id = consumer_category.id
+        if "sub_category_id_string" in request.data:
+            sub_category = get_consumer_sub_category_by_id_string(request.data["sub_category_id_string"])
+            registration.sub_category_id = sub_category.id
+        if "source_id_string" in request.data:
+            source = get_source_type_by_id_string(request.data['source_id_string'])
+            registration.source_id = source.id
+        registration.tenant = user.tenant
+        registration.created_by = user.id
+        registration.created_date = datetime.now()
+        registration.save()
+        return registration, True
+    except Exception as e:
+        print("Exception occured ",str(traceback.print_exc(e)))
+        transaction.rollback(sid)
+        return registration, False
 
 
 def is_authenticate(validated_data):
@@ -98,13 +188,13 @@ def is_authorized(token):
 
 
 def check_privilege(user, privilege, activity):
-    if Role.objects.filter(id=user.role,is_active=True).exists():
+    if Role.objects.filter(id=user.role, is_active=True).exists():
         role = get_role_by_id(user.role)
 
         received_privilege = get_privilege_by_id_string(privilege)
         received_activity = get_activity_by_id_string(activity)
 
-        privileges = UserPrivilege.objects.filter(role=role.id,is_active=True)
+        privileges = UserPrivilege.objects.filter(role=role.id, is_active=True)
 
         if received_privilege in privileges:
             if received_activity.privilege_id == received_privilege.id:
