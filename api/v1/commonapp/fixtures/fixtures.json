@@ -58,7 +58,7 @@
 			"subscription_id": 1,
 			"subcription_type": "Basic",
 			"description": "If you chooses basic plan you will get only 3 module",
-			"max_Utility": 1,
+			"max_utility": 1,
 			"max_user": 120,
 			"max_consumer": 50000,
 			"is_active": "True"
@@ -72,7 +72,7 @@
 			"subscription_id": 2,
 			"subcription_type": "Advance",
 			"description": "If you choose advance plan you will get",
-			"max_Utility": 2,
+			"max_utility": 2,
 			"max_user": 500,
 			"max_consumer": 100000,
 			"is_active": "True"
@@ -83,7 +83,7 @@
 		"pk": "1",
 		"model": "tenant.TenantSubscriptionPlanRate",
 		"fields": {
-			"TenantSubscriptionPlan_id": 1,
+			"tenantsubscriptionplan_id": 1,
 			"base_rate": 50,
 			"currency": 1,
 			"region": 3,
@@ -99,7 +99,7 @@
 		"pk": "2",
 		"model": "tenant.TenantSubscriptionPlanRate",
 		"fields": {
-			"TenantSubscriptionPlan_id": 2,
+			"tenantsubscriptionplan_id": 2,
 			"base_rate": 100,
 			"currency": 1,
 			"region": 3,
@@ -1348,7 +1348,6 @@
 		"fields": {
           "tenant": 1,
           "utility": 1,
-          "user": 1,
           "role": "Admin",
           "is_active": "True"
 
@@ -1360,7 +1359,6 @@
 		"fields": {
           "tenant": 1,
           "utility": 1,
-          "user": 2,
           "role": "Executive",
           "is_active": "True"
 
@@ -1848,6 +1846,4 @@
 			"is_active": "True"
 		}
 	}
-
-
 ]
