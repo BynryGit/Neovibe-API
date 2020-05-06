@@ -1,5 +1,4 @@
 import traceback
-
 from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
@@ -59,7 +58,7 @@ class RegistrationList(APIView):
                     # Checking authorization end
 
                     # Code for filtering registrations start
-                    user = UserDetail.objects.get(id=3)
+                    user = UserDetail.objects.get(id=2)
                     registrations, total_pages, page_no, result, error = get_filtered_registrations(user, request)
                     if result == False:
                         return Response({
@@ -228,7 +227,7 @@ class Registration(APIView):
                         # Request data verification end
 
                         # Save basic and payment details start
-                        user = UserDetail.objects.get(id=3)
+                        user = UserDetail.objects.get(id=2)
                         sid = transaction.savepoint()
                         registration, result = add_basic_registration_details(request, user, sid)
                         if result == False:
@@ -285,7 +284,8 @@ class Registration(APIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=3)
+                        user = UserDetail.objects.get(id=2)
+
                         registration, result = save_edited_basic_registration_details(request, user)
                         if result == False:
                             return Response({

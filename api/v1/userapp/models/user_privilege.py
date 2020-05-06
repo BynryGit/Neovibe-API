@@ -45,5 +45,6 @@ class UserPrivilege(models.Model):
 
 # Create User Privilege table end
 
+
 def get_privilege_by_id_string(id_string):
-    return UserPrivilege.objects.get(id_string=id_string)
+    return UserPrivilege.objects.filter(id_string=id_string, is_active=True).last()
