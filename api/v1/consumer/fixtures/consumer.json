@@ -720,5 +720,1066 @@
 			"outstanding_ltd": "",
 			"is_active": "True"
 		}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "utility.UtilityUsageSummary",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"no_of_users": 10,
+			"no_of_consumers": 20,
+			"total_no_of_transaction": 30,
+			"no_of_cities": 1,
+			"no_of_documents": 10,
+			"total_storage_in_use": 50,
+			"month": "May",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "utility.UtilityUsageSummary",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"no_of_users": 10,
+			"no_of_consumers": 20,
+			"total_no_of_transaction": 30,
+			"no_of_cities": 1,
+			"no_of_documents": 10,
+			"total_storage_in_use": 50,
+			"month": "May",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Survey",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Campaign",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Registration",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Consumer",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Receipt",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Contract",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "7",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Role",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Users",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "9",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Meter Data",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "10",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Billing",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "11",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Payment",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "12",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Services",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "13",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Complaints",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "14",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Supplier",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "15",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Dispatcher",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "16",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Assets",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "17",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Requests",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "18",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Tender",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "19",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Store",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "20",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Employee",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "21",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"item": "Payroll",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "22",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Survey",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "23",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Campaign",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "24",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Registration",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "25",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Consumer",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "26",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Receipt",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "27",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Contract",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "28",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Role",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "29",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Users",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "30",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Meter Data",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "31",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Billing",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "32",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Payment",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "33",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Services",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "34",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Complaints",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "35",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Supplier",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "36",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Dispatcher",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "37",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Assets",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "38",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Requests",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "39",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Tender",
+			"is_prefix": "True",
+			"prefix": "TEC",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "40",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Store",
+			"is_prefix": "False",
+			"prefix": "Emp",
+			"startingno": 0,
+			"currentno": 0,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "41",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Employee",
+			"is_prefix": "False",
+			"prefix": "TEC",
+			"startingno": 1,
+			"currentno": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "42",
+		"model": "utility.UtilityServiceNumberFormat",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"item": "Payroll",
+			"is_prefix": "True",
+			"prefix": "Emp",
+			"startingno": 1001,
+			"currentno": 1001,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "utility.UtilityStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Activate",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "2",
+		"model": "utility.UtilityStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Inactive",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "utility.UtilityStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Trial",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "utility.UtilityStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Activate",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "5",
+		"model": "utility.UtilityStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Inactive",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "utility.UtilityStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Trial",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "DMA",
+			"description": "DMA",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Marketing",
+			"description": "Marketing",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Survey",
+			"description": "Survey",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "campaign",
+			"description": "campaign",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Meter reading",
+			"description": "Meter reading",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Bill distribution",
+			"description": "Bill distribution",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Notice Distribution",
+			"description": "Notice Distribution",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Installation",
+			"description": "Installation",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "9",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "Coversion",
+			"description": "Coversion",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "10",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"skill": "maintenance",
+			"description": "maintenance",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "11",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "DMA",
+			"description": "DMA",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "12",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Marketing",
+			"description": "Marketing",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "13",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Survey",
+			"description": "Survey",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "14",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "campaign",
+			"description": "campaign",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "15",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Meter reading",
+			"description": "Meter reading",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "16",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Bill distribution",
+			"description": "Bill distribution",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "17",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Notice Distribution",
+			"description": "Notice Distribution",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "18",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Installation",
+			"description": "Installation",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "19",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "Coversion",
+			"description": "Coversion",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "20",
+		"model": "commonapp.Skills",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"skill": "maintenance",
+			"description": "maintenance",
+			"service_type_id": "",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "commonapp.DocumentType",
+		"fields": {
+			"tenant": 1,
+			"name": "ID Proof",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "commonapp.DocumentType",
+		"fields": {
+			"tenant": 1,
+			"name": "Address Proof",
+			"is_active": "True"
+		}
+	},
+	{
+
+		"pk": "3",
+		"model": "commonapp.DocumentType",
+		"fields": {
+			"tenant": 2,
+			"name": "ID Proof",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "commonapp.DocumentType",
+		"fields": {
+			"tenant": 2,
+			"name": "Address Proof",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "consumer.ConsumerComplaints",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"complaint_no": 1024,
+			"complaint_name": "Complaint-1",
+			"description": "Complaint-1",
+			"consumer_no": ,
+			"complaint_type": "Complaint type-1",
+			"complaint_subtype": "Complaint subtype-1",
+			"complaint_date": "10/6/2020",
+			"channel": ,
+			"consumer_remark": "Remark-1",
+			"admin_remark": "Remark-1",
+			"complaint_raised_by": ,
+			"complaint_status": ,
+			"close_date": "15/06/2020",
+			"closure_remark": "Remark-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerComplaints",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"complaint_no": 1025,
+			"complaint_name": "Complaint-2",
+			"description": "Complaint-2",
+			"consumer_no": ,
+			"complaint_type": "Complaint type-2",
+			"complaint_subtype": "Complaint subtype-2",
+			"complaint_date": "10/05/2020",
+			"channel": ,
+			"consumer_remark": "Remark-2",
+			"admin_remark": "Remark-2",
+			"complaint_raised_by": ,
+			"complaint_status": ,
+			"close_date": "20/05/2020",
+			"closure_remark": "Remark-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "consumer.ConsumerComplaints",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"complaint_no": 1026,
+			"complaint_name": "Complaint-3",
+			"description": "Complaint-3",
+			"consumer_no": ,
+			"complaint_type": "Complaint type-3",
+			"complaint_subtype": "Complaint subtype-3",
+			"complaint_date": "20/06/2020",
+			"channel": ,
+			"consumer_remark": "Remark-3",
+			"admin_remark": "Remark-3",
+			"complaint_raised_by": ,
+			"complaint_status": ,
+			"close_date": "25/06/2020",
+			"closure_remark": "Remark-3",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerComplaints",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"complaint_no": 1027,
+			"complaint_name": "Complaint-4",
+			"description": "Complaint-4",
+			"consumer_no": ,
+			"complaint_type": "Complaint type-4",
+			"complaint_subtype": "Complaint subtype-4",
+			"complaint_date": "20/05/2020",
+			"channel": ,
+			"consumer_remark": "Remark-4",
+			"admin_remark": "Remark-4",
+			"complaint_raised_by": ,
+			"complaint_status": ,
+			"close_date": "30/05/2020",
+			"closure_remark": "Remark-4",
+			"is_active": "True"
+		}
 	}
 ]
