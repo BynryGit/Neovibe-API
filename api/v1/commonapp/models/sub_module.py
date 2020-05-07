@@ -40,6 +40,11 @@ class SubModule(models.Model):
 
 # Create Sub Module table end
 
+
+def get_all_sub_modules():
+    return SubModule.objects.filter(is_active=True)
+
+
 def get_sub_module_by_id(id):
     return SubModule.objects.get(id=id,is_active=True)
 

@@ -41,6 +41,10 @@ class Department(models.Model):
 # Create Department table end
 
 
+def get_all_departments():
+    return Department.objects.filter(is_active=True)
+
+
 def get_department_by_tenant_id_string(id_string):
     return Department.objects.filter(tenant__id_string=id_string)
 

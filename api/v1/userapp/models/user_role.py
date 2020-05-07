@@ -48,8 +48,8 @@ class UserRole(models.Model):
 
 
 def get_role_by_id(id):
-    return UserRole.objects.get(id=id)
+    return UserRole.objects.filter(id=id, is_active=True).last()
 
 
 def get_role_by_id_string(id_string):
-    return UserRole.objects.get(id_string=id_string)
+    return UserRole.objects.filter(id_string=id_string, is_active=True).last()

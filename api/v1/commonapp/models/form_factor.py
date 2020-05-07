@@ -19,6 +19,8 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 # Create Form Factor table start
+
+
 class FormFactor(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -36,6 +38,10 @@ class FormFactor(models.Model):
     def __unicode__(self):
         return self.name
 # Create Form Factor table end
+
+
+def get_all_form_factors():
+    return FormFactor.objects.filter(is_active=True)
 
 
 def get_form_factor_by_tenant_id_string(id_string):

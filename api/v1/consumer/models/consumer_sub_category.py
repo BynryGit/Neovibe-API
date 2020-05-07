@@ -43,9 +43,11 @@ class ConsumerSubCategory(models.Model):
 
 # Create Consumer Sub Category table end
 
-
 def get_consumer_sub_category_by_id_string(id_string):
     return ConsumerSubCategory.objects.get(id_string = id_string)
+
+def get_consumer_sub_category_by_tenant_id_string(id_string):
+    return ConsumerSubCategory.objects.filter(tenant__id_string = id_string)
 
 
 def get_consumer_sub_category_by_id(id):

@@ -170,6 +170,7 @@ class Registration(APIView):
                         'street': registration.street,
                         'zipcode': registration.zipcode,
                         'country_id_string': country.id_string,
+                        'country':country.name,
                         'state_id_string': state.id_string,
                         'city_id_string': city.id_string,
                         'area_id_string': area.id_string,

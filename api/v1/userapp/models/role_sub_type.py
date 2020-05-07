@@ -25,7 +25,7 @@ class RoleSubType(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    role_type = models.BigIntegerField(null=True, blank=True)
+    role_type_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -42,12 +42,16 @@ class RoleSubType(models.Model):
 
 
 def get_role_sub_type_by_tenant_id_string(id_string):
-    return RoleSubType.objects.filter(tenant__id_string=id_string)
+    return RoleSubType.objects.filter(tenant__id_string=id_string, is_active=True)
 
 
 def get_role_sub_type_by_id_string(id_string):
-    return RoleSubType.objects.filter(id_string=id_string)
+    return RoleSubType.objects.filter(id_string=id_string, is_active=True).last()
 
 
 def get_role_sub_type_by_id(id):
-    return RoleSubType.objects.filter(id=id)
+    return RoleSubType.objects.filter(id=id, is_active=True).last()
+
+
+def get_sub_type_by_type_id(id):
+    return RoleSubType.objects.filter(role_type_id=id, is_active=True)
