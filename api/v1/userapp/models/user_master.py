@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 
 # Create User Details table start
 
-class SystemUser(User):
+class UserDetail(User):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -51,3 +51,12 @@ class SystemUser(User):
         return self.first_name
 
 # Create User Details table end
+
+
+def get_user_by_id_string(id_string):
+    return UserDetail.objects.filter(id_string = id_string, is_active=True).last()
+
+
+def get_user_by_id(id):
+    user = UserDetail.objects.filter(id = id, is_active=True).last()
+    return user

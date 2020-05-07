@@ -38,3 +38,19 @@ class RoleType(models.Model):
         return self.name
 
 # Create Role Type table end
+
+
+def get_all_role_type():
+    return RoleType.objects.filter(is_active=True)
+
+
+def get_role_type_by_tenant_id_string(id_string):
+    return RoleType.objects.filter(tenant__id_string=id_string, is_active=True)
+
+
+def get_role_type_by_id_string(id_string):
+    return RoleType.objects.filter(id_string=id_string, is_active=True).last()
+
+
+def get_role_type_by_id(id):
+    return RoleType.objects.filter(id=id, is_active=True).last()

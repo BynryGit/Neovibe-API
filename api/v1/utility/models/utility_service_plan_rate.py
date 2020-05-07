@@ -15,17 +15,20 @@
 
 
 import uuid  # importing package for guid
-import datetime  # importing package for datetime
+from datetime import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
 
 # Create Utility Service Plan Rate table start.
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
+
 
 class UtilityServicePlanRate(models.Model):
         id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-        tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
-        utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
+        tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+        utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
         utility_service_plan_id = models.BigIntegerField(null=True, blank=True)
         max_unit_range = models.BigIntegerField(null=True, blank=True)
         unit_id = models.FloatField(null=True, blank=True)

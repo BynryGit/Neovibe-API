@@ -43,4 +43,19 @@ class Privilege(models.Model):
 
 
 def get_privilege_by_id(id):
-    return Privilege.objects.get(id=id)
+    return Privilege.objects.filter(id=id, is_active=True).last()
+
+
+def get_privilege_by_utility_id(id):
+    return Privilege.objects.filter(utility_id=id, is_active=True)
+
+
+def get_privilege_by_id_string(id_string):
+    return Privilege.objects.filter(id_string=id_string, is_active=True).last()
+
+
+def filter_privilege_by_id_string(id_string):
+    if Privilege.objects.filter(id_string=id_string, is_active=True).exists():
+        return True
+    else:
+        return False

@@ -26,7 +26,11 @@ class UserRole(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    user = models.BigIntegerField(blank=False, null=False)
+    type_id = models.BigIntegerField(blank=False, null=False)
+    sub_type_id = models.BigIntegerField(blank=False, null=False)
+    form_factor_id = models.BigIntegerField(blank=False, null=False)
+    department_id = models.BigIntegerField(blank=False, null=False)
+    role_ID = models.CharField(max_length=200,blank=False, null=False)
     role = models.CharField(max_length=200,blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -44,4 +48,8 @@ class UserRole(models.Model):
 
 
 def get_role_by_id(id):
-    return UserRole.objects.get(id=id)
+    return UserRole.objects.filter(id=id, is_active=True).last()
+
+
+def get_role_by_id_string(id_string):
+    return UserRole.objects.filter(id_string=id_string, is_active=True).last()

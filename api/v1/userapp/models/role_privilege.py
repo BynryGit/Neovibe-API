@@ -27,8 +27,8 @@ class RolePrivilege(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     role_id = models.BigIntegerField(null=False, blank=False)
-    module = models.BigIntegerField(null=False, blank=False)
-    sub_module = models.BigIntegerField(null=False, blank=False)
+    module_id = models.BigIntegerField(null=False, blank=False)
+    sub_module_id = models.BigIntegerField(null=False, blank=False)
     privilege_id = models.BigIntegerField(null=False, blank=False) # View, Edit
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -43,3 +43,11 @@ class RolePrivilege(models.Model):
         return self.self.roleprivilege.id
 
 # Create Role Privilege table end
+
+
+def get_role_privilege_by_role_id(id):
+    return RolePrivilege.objects.filter(role_id=id, is_active=True)
+
+
+def get_role_privilege_by_id_string(id_string):
+    return RolePrivilege.objects.filter(id=id_string, is_active=True).last()

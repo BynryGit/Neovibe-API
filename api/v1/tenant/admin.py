@@ -7,4 +7,3 @@ from v1.utility.models.utility_master import UtilityMaster
 admin.site.register(TenantMaster)
 admin.site.register(TenantSubscriptionPlan)
 admin.site.register(TenantSubscriptionPlanRate)
-admin.site.register(UtilityMaster)
