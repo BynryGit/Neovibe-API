@@ -24,14 +24,26 @@ from django.db import models  # importing package for database
 
 class SurveyConsumer(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, null=True, blank=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, null=True, blank=True, on_delete=models.SET_NULL)
     survey_id = models.BigIntegerField(null=False, blank=False)
     vendor_id = models.BigIntegerField(null=False, blank=False)
     consumer_no = models.CharField(max_length=200, null=False, blank=False)
-    field_name = models.CharField(max_length=200, null=False, blank=False)
-    field_type = models.BigIntegerField(null=False, blank=False)
-    field_value = models.CharField(max_length=500, null=False, blank=False)
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    middle_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
+    email_id = models.CharField(max_length=200, null=True, blank=True)
+    phone_mobile = models.CharField(max_length=200, null=True, blank=True)
+    address_line_1 = models.CharField(max_length=500, null=True, blank=True)
+    street = models.CharField(max_length=200, null=True, blank=True)
+    zipcode = models.BigIntegerField(null=True, blank=True)
+    area_id = models.BigIntegerField(null=True, blank=True)
+    sub_area_id = models.BigIntegerField(null=True, blank=True)
+    category_id = models.BigIntegerField(null=True, blank=True)
+    sub_category_id = models.BigIntegerField(null=True, blank=True)
+    # field_name = models.CharField(max_length=200, null=False, blank=False)
+    # field_type = models.BigIntegerField(null=False, blank=False)
+    # field_value = models.CharField(max_length=500, null=False, blank=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -39,13 +51,19 @@ class SurveyConsumer(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.survey
+        return self.consumer_no
 
     def __unicode__(self):
-        return self.survey
+        return self.consumer_no
 
 def get_survey_consumer_by_id_string(id_string):
+    return SurveyConsumer.objects.filter(tenant__id_string = id_string)
+
+def get_survey_consumer_by_tenant_id_string(id_string):
     return SurveyConsumer.objects.get(id_string = id_string)
+
+def get_survey_consumer_by_id(id):
+    return SurveyConsumer.objects.get(id = id)
 
 
 # Create Survey Consumer table end

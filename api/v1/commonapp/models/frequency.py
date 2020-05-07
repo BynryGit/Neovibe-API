@@ -42,3 +42,6 @@ def get_frequency_by_tenant_id_string(tenant_id_string):
 
 def get_frequency_by_id_string(id_string):
     return Frequency.objects.get(id_string = id_string)
+
+def get_frequency_by_id(id):
+    return Frequency.objects.get(id = id)

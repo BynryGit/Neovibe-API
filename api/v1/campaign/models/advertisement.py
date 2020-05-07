@@ -50,4 +50,7 @@ class Advertisements(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_advertisements_by_id_string(id_string):
+    return Advertisements.objects.get(id_string=id_string)
+
 # Create advertisement master table ends
