@@ -23,7 +23,7 @@ from v1.userapp.views.common_functions import get_filtered_roles, is_data_verifi
 
 
 # API Header
-# API end Point: api/v1/role/list
+# API end Point: api/v1/roles
 # API verb: GET
 # Package: Basic
 # Modules: Roles & Privileges
