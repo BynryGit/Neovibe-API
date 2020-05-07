@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    sub_module = models.BigIntegerField(null=False, blank=False)
+    # sub_module = models.BigIntegerField(null=False, blank=False)
     module_id = models.BigIntegerField(null=False, blank=False)
     name = models.CharField(max_length=200, null=False, blank=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -40,5 +40,18 @@ class SubModule(models.Model):
 
 # Create Sub Module table end
 
+
+def get_all_sub_modules():
+    return SubModule.objects.filter(is_active=True)
+
+
 def get_sub_module_by_id(id):
-    return SubModule.objects.get(id=id)
+    return SubModule.objects.get(id=id,is_active=True)
+
+
+def get_submodule_by_module_id(id):
+    return SubModule.objects.filter(module_id=id,is_active=True)
+
+
+def get_sub_module_by_id_string(id_string):
+    return SubModule.objects.filter(id_string=id_string,is_active=True)
