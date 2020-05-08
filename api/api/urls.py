@@ -25,5 +25,5 @@ urlpatterns = [
     path('api/v1/registration/', include(registration_urls)),
     path('api/v1/campaign/', include(campaign_urls)),
     path('api/v1/survey/', include(survey_urls)),
-    path('api/v1/utility/', include(utility_urls)),
+    path('api/v1/utilities/', include(utility_urls)),
 ]
