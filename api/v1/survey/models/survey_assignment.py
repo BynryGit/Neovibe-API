@@ -24,8 +24,8 @@ from django.db import models  # importing package for database
 
 class SurveyAssignment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, null=True, blank=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, null=True, blank=True, on_delete=models.SET_NULL)
     survey_id = models.BigIntegerField(null=False, blank=False)
     vendor_id = models.BigIntegerField(null=False, blank=False)
     assigned_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -42,5 +42,14 @@ class SurveyAssignment(models.Model):
 
     def __unicode__(self):
         return self.vendor
+
+def get_survey_assignment_by_id_string(id_string):
+    return SurveyAssignment.objects.filter(tenant__id_string = id_string)
+
+def get_survey_assignment_by_tenant_id_string(id_string):
+    return SurveyAssignment.objects.get(id_string = id_string)
+
+def get_survey_assignment_by_id(id):
+    return SurveyAssignment.objects.get(id = id)
 
 # Create Survey assignment table end

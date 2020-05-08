@@ -50,4 +50,6 @@ class SupplierMaster(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_supplier_by_tenant_id_string(id_string):
+    return SupplierMaster.objects.filter(tenant__id_string = id_string)
 # Create Supplier Master table end.

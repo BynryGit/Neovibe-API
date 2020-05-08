@@ -23,8 +23,8 @@ from django.db import models  # importing package for database
 
 class Survey(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, null=True, blank=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, null=True, blank=True)
     objective_id = models.BigIntegerField(null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
@@ -49,6 +49,9 @@ class Survey(models.Model):
 
     def __unicode__(self):
         return self.name
+
+def get_survey_by_tenant_id_string(id_string):
+    return Survey.objects.filter(tenant__id_string = id_string)
 
 def get_survey_by_id_string(id_string):
     return Survey.objects.get(id_string = id_string)
