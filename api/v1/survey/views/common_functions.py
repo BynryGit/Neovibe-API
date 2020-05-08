@@ -133,7 +133,7 @@ def get_filtered_consumer_survey(user,request):
         return survey_consumer, total_pages, page_no, False, error
 
 
-def is_data_verified(request, user):
+def is_data_verified(user,request):
     if request.data['survey_name'] == "" and request.data['survey_type'] == "" and request.data['start_date'] == "" and \
        request.data['end_date'] == "" and request.data['discription'] == "" and request.data['objective'] == "" and request.data['utility'] == ""\
        and request.data['category'] == "" and request.data['area'] == "" and request.data['sub_area'] == "":
@@ -142,7 +142,7 @@ def is_data_verified(request, user):
         return True
 
 @transaction.atomic
-def save_location_survey_details(request, user):
+def save_location_survey_details(user,request):
     sid = transaction.savepoint()
     try:
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table

@@ -3,7 +3,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from api.settings import DISPLAY_DATE_FORMAT
-from v1.userapp.models.user_master import SystemUser
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
+from v1.userapp.models.user_master import UserDetail
 from v1.consumer.models.consumer_category import get_consumer_category_by_tenant_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_tenant_id_string
 from v1.supplier.models.supplier_master import get_supplier_by_tenant_id_string
@@ -61,7 +63,7 @@ class SurveyListApiView(APIView):
                     if type_id ==1:
 
                         # Code for filtering location survey start
-                        user = SystemUser.objects.get(id=2)
+                        user = UserDetail.objects.get(id=2)
                         surveys, total_pages, page_no, result, error = get_filtered_location_survey(user, request)
                         if result == False:
                             return Response({
@@ -106,7 +108,7 @@ class SurveyListApiView(APIView):
 
                     else:
                         # Code for filtering consumer survey start
-                        user = SystemUser.objects.get(id=2)
+                        user = UserDetail.objects.get(id=2)
                         survey_consumer, total_pages, page_no, result, error = get_filtered_consumer_survey(user, request)
                         if result == False:
                             return Response({
@@ -200,12 +202,13 @@ class LocationSurveyApiView(APIView):
                     # Checking authorization end
 
                     # Code for lookups start
-                    survey = get_survey_by_id_string(request.data['id_string'])
+                    # survey = get_survey_by_id_string(request.data['id_string'])
+                    survey = get_survey_by_id_string('8b987337-2a38-4ba6-a589-e87b4c07c714')
                     area = get_area_by_id(survey.area_id)
                     sub_area = get_sub_area_by_id(survey.sub_area_id)
                     type = get_survey_type_by_id(survey.type_id)
                     objective = get_survey_type_by_id(survey.objective_id)
-                    status = get_survey_status_by_id(survey.status_id)
+                    statususe = get_survey_status_by_id(survey.status_id)
                     consumer_category = get_consumer_category_by_id(survey.category_id)
                     sub_category = get_consumer_sub_category_by_id(survey.sub_category_id)
 
@@ -216,18 +219,26 @@ class LocationSurveyApiView(APIView):
                         'tenant_id_string': survey.tenant.id_string,
                         'utility_id_string': survey.utility.id_string,
                         'name':survey.name,
-                        'objective':objective.id_string,
+                        'objective_id_string':objective.id_string,
+                        'objective':objective.name,
+                        'discription_id_string':survey.id_string,
                         'discription':survey.description,
-                        'type':type.id_string,
+                        'type_id_string':type.id_string,
+                        'type':type.name,
                         'start_date': survey.start_date.strftime(DISPLAY_DATE_FORMAT),
                         'end_date': survey.end_date.strftime(DISPLAY_DATE_FORMAT),
                         'completion_date': survey.completion_date.strftime(DISPLAY_DATE_FORMAT),
                         'area_id_string': area.id_string,
+                        'area': area.name,
                         'sub_area_id_string': sub_area.id_string,
+                        'sub_area_name': sub_area.name,
                         'category_id_string':consumer_category.id_string,
-                        'category':consumer_category.id_string,
+                        'category':consumer_category.name,
+                        'sub_category_id_string':sub_category.id_string,
+                        'sub_category':sub_category.name,
                         'is_active': survey.is_active,
-                        'status':status.id_string,
+                        'status_id_string':statususe.id_string,
+                        'status':statususe.status,
                     }
                     return Response({
                         STATE: SUCCESS,
@@ -255,24 +266,26 @@ class LocationSurveyApiView(APIView):
     def post(self, request, format=None):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+            # if is_token_valid(request.data['token']):
+            if is_token_valid(1):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request, user):
+                    user = UserDetail.objects.get(id=2)
+                    if is_data_verified(user,request):
                         # Request data verification end
 
                         # check Survey is Already Exists or not
                         if Survey.objects.get(name=request.data['survey_name'],area=request.data['area'],sub_area=request.data['sub_area'],
-                                            start_date=request.data['start_date'],end_date=request.data['end_date']):
+                                            start_date=request.data['start_date'],end_date=request.data['end_date']).exists():
 
                             survey_data = {'survey_name':request.data['survey_name'],'area':request.data['area'],'sub_area':request.data['sub_area'],\
                                             'start_date':request.data['start_date'],'end_date':request.data['end_date']}
@@ -284,7 +297,7 @@ class LocationSurveyApiView(APIView):
 
                         else:
                             # Save Location Survey start
-                            location_survey = save_location_survey_details(request, user)
+                            location_survey = save_location_survey_details(user,request)
                             # Save Location Survey start
 
                             return Response({
