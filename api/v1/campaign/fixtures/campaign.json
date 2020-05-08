@@ -181,27 +181,6 @@
 	},
 	{
 		"pk": "1",
-		"model": "campaign.CampaignFrequency",
-		"fields": {
-			"tenant": 4,
-			"utility": 1,
-			"frequency" : "10",
-			"is_active" : "True"
-		}
-
-	},
-	{
-		"pk": "2",
-		"model": "campaign.CampaignFrequency",
-		"fields": {
-			"tenant": 4,
-			"utility": 1,
-			"frequency" : "20",
-			"is_active" : "True"
-		}
-	},
-	{
-		"pk": "1",
 		"model": "campaign.Campaign",
 		"fields": {
 			"tenant": 4,
@@ -216,7 +195,7 @@
 			"budget_amount": 1000,
 			"actual_amount": 1050,
 			"category_id": 1,
-			"sub_category_id": 2,
+			"sub_category_id": 1,
 			"start_date": "2020-02-12",
 			"end_date": "2020-03-25",
 			"area_id": 1,
@@ -235,18 +214,18 @@
 			"name": "Awareness",
 			"objective_id":1,
 			"description": "This is Awareness campaign",
-			"frequency_id": 1,
+			"frequency_id": 2,
 			"potential_consumers": 100,
 			"actual_consumers": 50,
 			"budget_amount": 2000,
 			"actual_amount": 1020,
-			"category_id": 1,
+			"category_id": 2,
 			"sub_category_id": 2,
 			"start_date": "2020-06-13",
 			"end_date": "2020-07-13",
 			"area_id": 1,
 			"sub_area_id": 1,
-			"status_id": 1,
+			"status_id": 2,
 			"is_active": "True"
 		}
 	},
@@ -265,13 +244,13 @@
 			"actual_consumers": 50,
 			"budget_amount": 5000,
 			"actual_amount": 4050,
-			"category_id": 1,
-			"sub_category_id": 1,
+			"category_id": 2,
+			"sub_category_id": 3,
 			"start_date": "2020-01-26",
 			"end_date": "2020-02-14",
 			"area_id": 1,
 			"sub_area_id": 1,
-			"status_id": 1,
+			"status_id": 3,
 			"is_active": "True"
 		}
 	},
@@ -286,18 +265,18 @@
 			"name": "Smart360 Awareness",
 			"objective_id":1,
 			"description": "This is Smart360 Awareness campaign",
-			"frequency_id": 1,
+			"frequency_id": 2,
 			"potential_consumers": 100,
 			"actual_consumers": 50,
 			"budget_amount": 1500,
 			"actual_amount": 1000,
 			"category_id": 1,
-			"sub_category_id": 3,
+			"sub_category_id": 2,
 			"start_date": "2020-05-15",
 			"end_date": "2020-06-16",
 			"area_id": 1,
 			"sub_area_id": 1,
-			"status_id": 1,
+			"status_id": 4,
 			"is_active": "True"
 
 		}
@@ -572,6 +551,150 @@
 			"completion_date": "2020-02-02",
 			"status_id" : 3,
 			"is_active" : "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "CNG",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "PNG",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "3",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "CNG",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 3,
+			"name": "PNG",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "CNG1",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "CNG2",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "Commercial",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 1,
+			"name": "Domestic",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "5",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Industrial",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "6",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 3,
+			"name": "CNG1",
+			"category": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 3,
+			"name": "CNG2",
+			"category": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 3,
+			"utility": 3,
+			"name": "Commercial",
+			"category": 4,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "9",
+		"model": "consumer.ConsumerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 3,
+			"name": "Domestic",
+			"category": 4,
+			"is_active": "True"
 		}
 	}
 ]

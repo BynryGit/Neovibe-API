@@ -1,15 +1,16 @@
+import traceback
 from django.db.models import Q
 from django.core.paginator import Paginator
-from v1.registration.models.survey import Survey, get_registration_by_id_string
-from v1.registration.models.survey_consumer import SurveyConsumer
+from v1.survey.models.survey import Survey
+from v1.survey.models.survey_consumer import SurveyConsumer
 from django.db import transaction
 from api.settings import DISPLAY_DATE_FORMAT
 
-from v1.commonapp.models.Survey import get_survey_by_id_string
-from v1.commonapp.models.survey_consumer import get_survey_consumer_by_id_string
-from v1.commonapp.models.survey_status import get_survey_status_by_id_string,get_survey_status_by_id
-from v1.commonapp.models.survey_type import get_survey_type_by_id_string,get_survey_type_by_id
-from v1.commonapp.models.survey_assignment import SurveyAssignment
+from v1.survey.models.survey import get_survey_by_id_string
+from v1.survey.models.survey_consumer import get_survey_consumer_by_id_string
+from v1.survey.models.survey_status import get_survey_status_by_id_string,get_survey_status_by_id
+from v1.survey.models.survey_type import get_survey_type_by_id_string,get_survey_type_by_id
+from v1.survey.models.survey_assignment import SurveyAssignment
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 
@@ -17,102 +18,122 @@ from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 
 
 
-def get_filtered_location_survey(request, user):
+def get_filtered_location_survey(user,request):
     total_pages = ''
     page_no = ''
-    surveys = Survey.objects.filter(tenant_id=user.tenant_id,
-                                                utility_id__in=user.data_access.all())
-    if request.data['utillity']:
-        surveys = surveys.objects.filter(utility_id= request.data['utillity'])
+    survey = ''
+    error = ''
+    try:
+        survey = Survey.objects.filter(tenant=user.tenant)
 
-    if request.data['category']:
-        surveys = surveys.objects.filter(category=request.data['category'])
+        if "utility" in request.data:
+            survey = survey.objects.filter(utility=request.data['utility'])
 
-    if request.data['sub_category']:
-        surveys = surveys.objects.filter(sub_category=request.data['sub_category'])
+        if "category" in request.data:
+            survey = survey.objects.filter(category_id=request.data['category'])
 
-    if request.data['objective']:
-        surveys = surveys.objects.filter(objective= request.data['objective'])
+        if "sub_category" in request.data:
+            survey = survey.objects.filter(sub_category_id=request.data['sub_category'])
 
-    if request.data['area']:
-        surveys = surveys.objects.filter(area= request.data['area'])
+        if "status" in request.data:
+            survey = survey.objects.filter(status_id=request.data['status'])
 
-    if request.data['sub_area']:
-        surveys = surveys.objects.filter(sub_area= request.data['subarea'])
+        if "type" in request.data:
+            survey = survey.objects.filter(type_id=request.data['type'])
 
-    if request.data['status']:
-        surveys = surveys.objects.filter(status= request.data['status'])
+        if "area" in request.data:
+            survey = survey.objects.filter(area_id=request.data['area'])
 
-    if request.data['search_text'] == '':
-        pass
-    else:
-        surveys = surveys.filter(
-            Q(name__icontains=request.data['search_text']) |
-            Q(area__icontains=request.data['search_text']))
+        if "subarea" in request.data:
+            survey = survey.objects.filter(sub_area_id=request.data['subarea'])
 
-    if request.data['page_number'] == '':
-        paginator = Paginator(surveys,int(request.data['page_size']))
-        total_pages = str(paginator.num_pages)
-        page_no = '1'
-        surveys = paginator.page(1)
-        return surveys,total_pages,page_no
-    else:
-        paginator = Paginator(surveys, int(request.data['page_size']))
-        total_pages = str(paginator.num_pages)
-        page_no = request.data['page_number']
-        surveys = paginator.page(int(page_no))
+        if "objective" in request.data:
+            survey = survey.objects.filter(objective_id=request.data['objective'])
 
-        return surveys, total_pages, page_no
+        if "search_text" in request.data:
+            if request.data['search_text'] == '':
+                pass
+            else:
+                survey = survey.filter(
+                    Q(name__icontains=request.data['search_text']) |
+                    Q(no_of_consumers__icontains=request.data['search_text']))
+
+        if "page_number" in request.data:
+            if request.data['page_number'] == '':
+                paginator = Paginator(survey, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = '1'
+                survey = paginator.page(1)
+            else:
+                paginator = Paginator(survey, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = request.data['page_number']
+                survey = paginator.page(int(page_no))
+        return survey, total_pages, page_no, True, error
+    except Exception as e:
+        print("Exception occured ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return survey, total_pages, page_no, False, error
 
 
-def get_filtered_consumer_survey(request,user):
+def get_filtered_consumer_survey(user,request):
     total_pages = ''
     page_no = ''
-    surveys = SurveyConsumer.objects.filter(tenant_id=user.tenant_id,
-                                    utility_id__in=user.data_access.all(),survey_id=request.data['survey_id'])
-    if request.data['utillity']:
-        surveys = surveys.objects.filter(utility_id=request.data['utillity'])
+    survey_consumer = ''
+    error = ''
+    try:
+        # if 'survey_id' in request.headers:
+        #     survey_consumer = SurveyConsumer.objects.filter(tenant=user.tenant,survey_id=request.data['survey_id'])
+        # else:
+        survey_consumer = SurveyConsumer.objects.filter(tenant=user.tenant)
 
-    if request.data['category']:
-        surveys = surveys.objects.filter(category=request.data['category'])
+        if "utility" in request.data:
+            survey_consumer = survey_consumer.objects.filter(utility=request.data['utility'])
 
-    if request.data['sub_category']:
-        surveys = surveys.objects.filter(sub_category=request.data['sub_category'])
+        if "category" in request.data:
+            survey_consumer = survey_consumer.objects.filter(category_id=request.data['category'])
 
-    if request.data['objective']:
-        surveys = surveys.objects.filter(objective=request.data['objective'])
+        if "sub_category" in request.data:
+            survey_consumer = survey_consumer.objects.filter(sub_category_id=request.data['sub_category'])
 
-    if request.data['area']:
-        surveys = surveys.objects.filter(area=request.data['area'])
+        if "area" in request.data:
+            survey_consumer = survey_consumer.objects.filter(area_id=request.data['area'])
 
-    if request.data['sub_area']:
-        surveys = surveys.objects.filter(sub_area=request.data['subarea'])
+        if "subarea" in request.data:
+            survey_consumer = survey_consumer.objects.filter(sub_area_id=request.data['subarea'])
 
-    if request.data['status']:
-        surveys = surveys.objects.filter(status=request.data['status'])
+        if "survey_id" in request.data:
+            survey_consumer = survey_consumer.objects.filter(survey_id=request.data['survey_id'])
 
-    if request.data['search_text'] == '':
-        pass
-    else:
-        surveys = surveys.filter(
-            Q(name__icontains=request.data['search_text']) |
-            Q(consumer_no__icontains=request.data['search_text']))
+        if "vendor_id" in request.data:
+            survey_consumer = survey_consumer.objects.filter(vendor_id=request.data['vendor_id'])
+        if "search_text" in request.data:
+            if request.data['search_text'] == '':
+                pass
+            else:
+                survey_consumer = survey_consumer.filter(
+                    Q(name__icontains=request.data['search_text']) |
+                    Q(consumer_no__icontains=request.data['search_text']))
 
-    if request.data['page_number'] == '':
-        paginator = Paginator(surveys, int(request.data['page_size']))
-        total_pages = str(paginator.num_pages)
-        page_no = '1'
-        surveys = paginator.page(1)
-        return surveys, total_pages, page_no
-    else:
-        paginator = Paginator(surveys, int(request.data['page_size']))
-        total_pages = str(paginator.num_pages)
-        page_no = request.data['page_number']
-        surveys = paginator.page(int(page_no))
+        if "page_number" in request.data:
+            if request.data['page_number'] == '':
+                paginator = Paginator(survey_consumer, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = '1'
+                survey_consumer = paginator.page(1)
+            else:
+                paginator = Paginator(survey_consumer, int(request.data['page_size']))
+                total_pages = str(paginator.num_pages)
+                page_no = request.data['page_number']
+                survey_consumer = paginator.page(int(page_no))
+        return survey_consumer, total_pages, page_no, True, error
+    except Exception as e:
+        print("Exception occured ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return survey_consumer, total_pages, page_no, False, error
 
-        return surveys, total_pages, page_no
 
-def is_data_verified(request, user):
+def is_data_verified(user,request):
     if request.data['survey_name'] == "" and request.data['survey_type'] == "" and request.data['start_date'] == "" and \
        request.data['end_date'] == "" and request.data['discription'] == "" and request.data['objective'] == "" and request.data['utility'] == ""\
        and request.data['category'] == "" and request.data['area'] == "" and request.data['sub_area'] == "":
@@ -121,7 +142,7 @@ def is_data_verified(request, user):
         return True
 
 @transaction.atomic
-def save_location_survey_details(request, user):
+def save_location_survey_details(user,request):
     sid = transaction.savepoint()
     try:
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
