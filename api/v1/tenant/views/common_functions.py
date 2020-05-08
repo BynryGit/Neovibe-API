@@ -1013,6 +1013,242 @@ def save_basic_tenant_bank_details(request, user):
         error = str(traceback.print_exc(e))
         return tenant_bank, False, error
 
+@transaction.atomic
+def save_basic_tenant_bank_details(request, user):
+    sid = transaction.savepoint()
+    tenant_bank = ""
+    error = ''
+    try:
+        tenant_bank = tenant_bank()
+        if request.method == "POST":
+            if "bank_name" in request.POST:
+                tenant_bank.bank_name = request.data["bank_name"]
+            if "branch_name" in request.POST:
+                tenant_bank.branch_name = request.data["branch_name"]
+            if "branch_city" in request.POST:
+                tenant_bank.branch_city = request.data["branch_city"]
+            if "account_number" in request.POST:
+                tenant_bank.account_number = request.data["account_number"]
+            if "account_type" in request.POST:
+                tenant_bank.account_type = request.data["account_type"]
+            if "account_name" in request.POST:
+                tenant_bank.account_name = request.data["account_name"]
+            if "ifsc_no" in request.POST:
+                tenant_bank.ifsc_no = request.data["ifsc_no"]
+            if "pan_no" in request.POST:
+                tenant_bank.pan_no = request.data["pan_no"]
+            if "gst_no" in request.POST:
+                tenant_bank.gst_no = request.data["gst_no"]
+            if "tax_id_no" in request.POST:
+                tenant_bank.tax_id_no = request.data["tax_id_no"]
+            if "is_active" in request.POST:
+                tenant_bank.is_active = request.data["is_active"]
+
+            tenant_bank.created_by = user.id
+            tenant_bank.created_date = datetime.now()
+            tenant_bank.save()
+        if request.method == "PUT" and "tenant_id_string" in request.PUT:
+            tenant_bank = tenant_bank.objects.get(id_string=request.data["tenant_id_string"])
+            if "bank_name" in request.POST:
+                tenant_bank.bank_name = request.data["bank_name"]
+            if "branch_name" in request.POST:
+                tenant_bank.branch_name = request.data["branch_name"]
+            if "branch_city" in request.POST:
+                tenant_bank.branch_city = request.data["branch_city"]
+            if "account_number" in request.POST:
+                tenant_bank.account_number = request.data["account_number"]
+            if "account_type" in request.POST:
+                tenant_bank.account_type = request.data["account_type"]
+            if "account_name" in request.POST:
+                tenant_bank.account_name = request.data["account_name"]
+            if "ifsc_no" in request.POST:
+                tenant_bank.ifsc_no = request.data["ifsc_no"]
+            if "pan_no" in request.POST:
+                tenant_bank.pan_no = request.data["pan_no"]
+            if "gst_no" in request.POST:
+                tenant_bank.gst_no = request.data["gst_no"]
+            if "tax_id_no" in request.POST:
+                tenant_bank.tax_id_no = request.data["tax_id_no"]
+            if "is_active" in request.POST:
+                tenant_bank.is_active = request.data["is_active"]
+
+            tenant_bank.updated_by = user.id
+            tenant_bank.updated_date = datetime.now()
+            tenant_bank.save()
+        transaction.savepoint_commit(sid)
+        return tenant_bank, True, error
+    except Exception as e:
+        print("Exception occured ", str(traceback.print_exc(e)))
+        transaction.rollback(sid)
+        error = str(traceback.print_exc(e))
+        return tenant_bank, False, error
+
+   #Save Tenant Docuement
+    @transaction.atomic
+    def save_basic_tenant_document_details(request, user):
+        sid = transaction.savepoint()
+        tenant_document = ""
+        error = ''
+        try:
+            tenant_document = tenant_document()
+            if request.method == "POST":
+                if "document_name" in request.POST:
+                    tenant_document.document_name = request.data["document_name"]
+                if "document_type" in request.POST:
+                    tenant_document.document_type = request.data["document_type"]
+                if "sub_module_id" in request.POST:
+                    tenant_document.sub_module_id = request.data["sub_module_id"]
+                if "document_extension" in request.POST:
+                    tenant_document.document_extension = request.data["document_extension"]
+                if "document_link" in request.POST:
+                    tenant_document.document_link = request.data["document_link"]
+                if "is_active" in request.POST:
+                    tenant_document.is_active = request.data["is_active"]
+                tenant_document.created_by = user.id
+                tenant_document.created_date = datetime.now()
+                tenant_document.save()
+            if request.method == "PUT" and "tenant_id_string" in request.PUT:
+                tenant_document = tenant_document.objects.get(id_string=request.data["tenant_id_string"])
+                if "document_name" in request.POST:
+                    tenant_document.document_name = request.data["document_name"]
+                if "document_type" in request.POST:
+                    tenant_document.document_type = request.data["document_type"]
+                if "sub_module_id" in request.POST:
+                    tenant_document.sub_module_id = request.data["sub_module_id"]
+                if "document_extension" in request.POST:
+                    tenant_document.document_extension = request.data["document_extension"]
+                if "document_link" in request.POST:
+                    tenant_document.document_link = request.data["document_link"]
+                if "is_active" in request.POST:
+                    tenant_document.is_active = request.data["is_active"]
+
+                tenant_document.updated_by = user.id
+                tenant_document.updated_date = datetime.now()
+                tenant_document.save()
+            transaction.savepoint_commit(sid)
+            return tenant_document, True, error
+        except Exception as e:
+            print("Exception occured ", str(traceback.print_exc(e)))
+            transaction.rollback(sid)
+            error = str(traceback.print_exc(e))
+            return tenant_document, False, error
+        #################
+
+
+        # Save Tenant Sub modules
+        @transaction.atomic
+        def save_basic_tenant_sub_modules_details(request, user):
+            sid = transaction.savepoint()
+            tenant_sub_modules = ""
+            error = ''
+            try:
+                tenant_sub_modules = tenant_sub_modules()
+                if request.method == "POST":
+                    if "subscription_id" in request.POST:
+                        tenant_sub_modules.subscription_id = request.data["subscription_id"]
+                    if "module_id" in request.POST:
+                        tenant_sub_modules.module_id = request.data["module_id"]
+                    if "sub_module_id" in request.POST:
+                        tenant_sub_modules.sub_module_id = request.data["sub_module_id"]
+                    if "sub_module_name" in request.POST:
+                        tenant_sub_modules.sub_module_name = request.data["sub_module_name"]
+                    if "is_active" in request.POST:
+                        tenant_sub_modules.is_active = request.data["is_active"]
+
+                    tenant_sub_modules.created_by = user.id
+                    tenant_sub_modules.created_date = datetime.now()
+                    tenant_sub_modules.save()
+                if request.method == "PUT" and "tenant_id_string" in request.PUT:
+                    tenant_sub_modules = tenant_sub_modules.objects.get(id_string=request.data["tenant_id_string"])
+                    if "subscription_id" in request.POST:
+                        tenant_sub_modules.subscription_id = request.data["subscription_id"]
+                    if "module_id" in request.POST:
+                        tenant_sub_modules.module_id = request.data["module_id"]
+                    if "sub_module_id" in request.POST:
+                        tenant_sub_modules.sub_module_id = request.data["sub_module_id"]
+                    if "sub_module_name" in request.POST:
+                        tenant_sub_modules.sub_module_name = request.data["sub_module_name"]
+                    if "is_active" in request.POST:
+                        tenant_sub_modules.is_active = request.data["is_active"]
+
+                    tenant_sub_modules.updated_by = user.id
+                    tenant_sub_modules.updated_date = datetime.now()
+                    tenant_sub_modules.save()
+                transaction.savepoint_commit(sid)
+                return tenant_sub_modules, True, error
+            except Exception as e:
+                print("Exception occured ", str(traceback.print_exc(e)))
+                transaction.rollback(sid)
+                error = str(traceback.print_exc(e))
+                return tenant_sub_modules, False, error
+
+
+
+        # Save Tenant Payments aginast Invoices
+        @transaction.atomic
+        def save_basic_tenant_payments_details(request, user):
+            sid = transaction.savepoint()
+            tenant_basic_payments = ""
+            error = ''
+            try:
+                tenant_basic_payments = tenant_basic_payments()
+                if request.method == "POST":
+                    if "invoice_number" in request.POST:
+                        tenant_basic_payments.invoice_number = request.data["invoice_number"]
+                    if "payment_method" in request.POST:
+                        tenant_basic_payments.payment_method = request.data["payment_method"]
+                        if "payment_channel" in request.POST:
+                            tenant_basic_payments.payment_channel = request.data["payment_channel"]
+                        if "transaction_no" in request.POST:
+                            tenant_basic_payments.transaction_no = request.data["transaction_no"]
+                        if "transaction_date" in request.POST:
+                            tenant_basic_payments.transaction_date = request.data["transaction_date"]
+                        if "amount" in request.POST:
+                            tenant_basic_payments.amount = request.data["amount"]
+                        if "tax_amount" in request.POST:
+                            tenant_basic_payments.tax_amount = request.data["tax_amount"]
+                        if "currency" in request.POST:
+                            tenant_basic_payments.currency = request.data["currency"]
+                        if "is_active" in request.POST:
+                            tenant_basic_payments.is_active = request.data["is_active"]
+
+                    tenant_basic_payments.created_by = user.id
+                    tenant_basic_payments.created_date = datetime.now()
+                    tenant_basic_payments.save()
+                if request.method == "PUT" and "tenant_id_string" in request.PUT:
+                    tenant_basic_payments = tenant_basic_payments.objects.get(id_string=request.data["tenant_id_string"])
+
+                    if "invoice_number" in request.POST:
+                        tenant_basic_payments.invoice_number = request.data["invoice_number"]
+                    if "payment_method" in request.POST:
+                        tenant_basic_payments.payment_method = request.data["payment_method"]
+                    if "payment_channel" in request.POST:
+                        tenant_basic_payments.payment_channel = request.data["payment_channel"]
+                    if "transaction_no" in request.POST:
+                        tenant_basic_payments.transaction_no = request.data["transaction_no"]
+                    if "transaction_date" in request.POST:
+                         tenant_basic_payments.transaction_date = request.data["transaction_date"]
+                    if "amount" in request.POST:
+                         tenant_basic_payments.amount = request.data["amount"]
+                    if "tax_amount" in request.POST:
+                         tenant_basic_payments.tax_amount = request.data["tax_amount"]
+                    if "currency" in request.POST:
+                        tenant_basic_payments.currency = request.data["currency"]
+                    if "is_active" in request.POST:
+                        tenant_basic_payments.is_active = request.data["is_active"]
+
+                    tenant_basic_payments.updated_by = user.id
+                    tenant_basic_payments.updated_date = datetime.now()
+                    tenant_basic_payments.save()
+                transaction.savepoint_commit(sid)
+                return tenant_basic_payments, True, error
+            except Exception as e:
+                print("Exception occured ", str(traceback.print_exc(e)))
+                transaction.rollback(sid)
+                error = str(traceback.print_exc(e))
+                return tenant_basic_payments, False, error
+
+
 def save_payment_details(request, user, tenant):
     try:
         if request.data['payment_details'] == '':
@@ -1021,7 +1257,7 @@ def save_payment_details(request, user, tenant):
             for payment_detail in request.data['payment_details']:
                 service_type = get_service_type_by_id_string(payment_detail['service_type_id_string'])
                 payment_type = get_payment_type_by_id_string(payment_detail['payment_type_id_string'])
-                payment = Payment( # TODO: Payment table is missing
+                payment = Payment( # TODO: Payment  table is missing
                     tenant = tenant,
                     identification_id = tenant.id,
                     service_type_id = service_type.id,
