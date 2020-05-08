@@ -6,6 +6,7 @@ from api.settings import DISPLAY_DATE_FORMAT
 from django.db import transaction
 from v1.campaign.views.common_functions import get_filtered_campaign,is_data_verified,is_advertisement_verified,\
     save_advertisement_details,save_campaign_details,save_edited_basic_campaign_details,save_edited_basic_advertisement_details
+from v1.userapp.models.user_master import UserDetail
 
 from v1.campaign.models.advertisement import Advertisements,get_advertisements_by_id_string
 from v1.campaign.models.campaign_status import get_cam_status_by_tenant_id_string
@@ -238,7 +239,7 @@ class CampaignApiView(APIView):
                     # Code for add campaign start
 
                     # Request data verification start
-                    user = SystemUser.objects.get(id=2)
+                    user = UserDetail.objects.get(id=2)
                     if is_data_verified(request):
                     # Request data verification end
 
@@ -319,7 +320,7 @@ class CampaignApiView(APIView):
                     if is_data_verified(request):
                     # Request data verification end
 
-                        user = SystemUser.objects.get(id=2)
+                        user = UserDetail.objects.get(id=2)
                         campaign, result = save_edited_basic_campaign_details(request, user)
                         if result == False:
                             return Response({
