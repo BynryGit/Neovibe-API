@@ -40,7 +40,7 @@ from v1.campaign.models.campaign import Campaign
 # Api for getting campaign  filter
 class CampaignListApiView(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request):
         try:
             campaign_list = []
 
@@ -57,7 +57,7 @@ class CampaignListApiView(APIView):
                 # Checking authorization end
 
                     # Code for filtering campaign start
-                    user = UserDetail.objects.get(id=2)
+                    user = UserDetail.objects.get(id=1)
                     campaigns,total_pages, page_no, result, error = get_filtered_campaign(user, request)
                     if result == False:
                         return Response({
@@ -124,7 +124,7 @@ class CampaignListApiView(APIView):
 # API for add, edit, view campaign details
 class CampaignApiView(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(1):
@@ -140,11 +140,11 @@ class CampaignApiView(APIView):
 
                     # Code for lookups start
                     # campaign_obj = get_campaign_by_id_string(request.data['id_string'])
-                    campaign_obj = get_campaign_by_id_string('31950b44-6f5a-4551-9058-95f4bdddb08f')
-                    frequency_obj = get_frequency_by_id(campaign_obj.frequency_id)
-                    category_obj = get_consumer_category_by_id(campaign_obj.category_id)
-                    area = get_area_by_id(campaign_obj.area_id)
-                    sub_area = get_sub_area_by_id(campaign_obj.sub_area_id)
+                    campaign_obj = get_campaign_by_id_string(id_string=id_string)
+                    # frequency_obj = get_frequency_by_id(campaign_obj.frequency_id)
+                    # category_obj = get_consumer_category_by_id(campaign_obj.category_id)
+                    # area = get_area_by_id(campaign_obj.area_id)
+                    # sub_area = get_sub_area_by_id(campaign_obj.sub_area_id)
                     # Code for lookups end
 
                     # Code for sending campaign and advertisement details in response start
@@ -159,10 +159,10 @@ class CampaignApiView(APIView):
                             'budget_amount': advertisement.budget_amount,
                             'start_date': advertisement.start_date,
                             'end_date': advertisement.end_date,
-                            'area_id_string': area.id_string,
-                            'sub_area_id_string': sub_area.id_string,
-                            'category_id_string': category_obj.id_string,
-                            'frequency_id_string': frequency_obj.id_string,
+                            # 'area_id_string': area.id_string,
+                            # 'sub_area_id_string': sub_area.id_string,
+                            # 'category_id_string': category_obj.id_string,
+                            # 'frequency_id_string': frequency_obj.id_string,
                         }
 
                     else:
@@ -239,7 +239,8 @@ class CampaignApiView(APIView):
                     # Code for add campaign start
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id=2)
+
+                    user = UserDetail.objects.get(id=1)
                     if is_data_verified(request):
                     # Request data verification end
 
