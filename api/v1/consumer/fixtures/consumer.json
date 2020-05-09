@@ -2448,6 +2448,220 @@
 			"name": "Inactive",
 			"is_active": "True"
 		}
+	},
+
+  {
+		"pk": "1",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "CNG Station",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Pipe",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "CNG Station",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Pipe",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "Digital meter",
+			"name": "Digital meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "Analog Meter",
+			"name": "Analog Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "steel",
+			"name": "steel",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "plastic",
+			"name": "plastic",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "CNG Station-1",
+			"name": "CNG Station-1",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "6",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "Digital meter",
+			"name": "Digital meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "Analog Meter",
+			"name": "Analog Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "steel",
+			"name": "steel",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "plastic",
+			"name": "plastic",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "CNG Station-1",
+			"name": "CNG Station-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Sop-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Sop-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Sop-3",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Sop-4",
+			"is_active": "True"
+		}
 	}
 ]
 
