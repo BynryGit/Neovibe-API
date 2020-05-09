@@ -1221,28 +1221,7 @@
           "is_active": "True"
         }
   },
-  {
-    "pk": "1",
-    "model": "userapp.UserDetails",
-    "fields": {
-        "tenant": 1,
-        "utility": 1,
-        "imei_no": 121212121212121,
-        "phone_mobile": 2222222222,
-        "is_active": "True"
-    }
-  },
-  {
-    "pk": "2",
-    "model": "userapp.UserDetails",
-    "fields": {
-        "tenant": 1,
-        "utility": 1,
-        "imei_no": 131516589675326,
-        "phone_mobile": 2222222222,
-        "is_active": "True"
-    }
-  },
+
   {
         "pk": "1",
 		"model": "userapp.UserPrivilege",

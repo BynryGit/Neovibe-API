@@ -49,26 +49,7 @@
 			"is_active" : "True"
 		}
 	},
-  {
-		"pk" : "1",
-		"model" : "survey.SurveyType",
-		"fields" : {
-			"tenant": 4,
-			"utility": 1,
-			"name" : "Location",
-			"is_active" : "True"
-		}
-	},
-  {
-		"pk" : "2",
-		"model" : "survey.SurveyType",
-		"fields" : {
-			"tenant": 4,
-			"utility": 1,
-			"name" : "Location",
-			"is_active" : "True"
-		}
-	},
+
   {
 		"pk" : "1",
 		"model" : "survey.SurveyStatus",
@@ -192,7 +173,7 @@
 		"fields" : {
 			"tenant": 4,
 			"utility": 1,
-			"survey_id": 2,
+			"survey_id": 1,
 			"vendor_id": 2,
 			"consumer_no": "587954544567",
 			"first_name" : "Akshay",
@@ -204,8 +185,8 @@
             "zipcode": 556310,
             "category_id": 2,
             "sub_category_id": 2,
-            "area_id": 4,
-            "sub_area_id": 4,
+            "area_id": 1,
+            "sub_area_id": 1,
 			"is_active" : "True"
 		}
 	},
@@ -286,5 +267,25 @@
 			"status" : "completed",
 			"is_active" : "True"
 		}
-	}
+	},
+	  {
+    "pk": "1",
+    "model": "userapp.UserDetail",
+    "fields": {
+        "tenant": 4,
+        "utility": 1,
+        "phone_mobile": 2222222222,
+        "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.UserDetail",
+    "fields": {
+        "tenant": 4,
+        "utility": 1,
+        "phone_mobile": 2222222222,
+        "is_active": "True"
+    }
+  }
 ]

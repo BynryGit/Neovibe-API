@@ -239,7 +239,8 @@ class CampaignApiView(APIView):
                     # Code for add campaign start
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id=2)
+
+                    user = UserDetail.objects.get(id=1)
                     if is_data_verified(request):
                     # Request data verification end
 
