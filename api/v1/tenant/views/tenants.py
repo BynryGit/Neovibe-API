@@ -18,7 +18,8 @@ from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.commonapp.models.state import get_state_by_id
-from v1.tenant.views.common_functions import get_tenant, is_data_verified, save_basic_tenant_details, save_payment_details,save_basic_subscription_details,save_basic_subscription_plan_details,save_basic_subscription_rate_details,save_basic_tenant_invoices_details
+from v1.tenant.views.common_functions import get_tenant, is_data_verified, save_basic_tenant_details, save_payment_details,save_basic_subscription_details,save_basic_subscription_plan_details,save_basic_subscription_rate_details,save_basic_tenant_bank_details,save_basic_tenant_invoices_details,save_basic_tenant_document_details,save_basic_tenant_sub_modules_details,save_basic_tenant_payments_details
+
 # API Header
 # API end Point: api/v1/tenant/list
 # API verb: GET
@@ -927,7 +928,7 @@ class TenantStatusApiView(APIView):
                                     if is_data_verified(request):
                                         # Request data verification end
                                         # Save basic and payment details start
-                                        tenant_invoices, result, error = save_basic_tenant_invoices_details(request,
+                                        tenant_payment, result, error = save_basic_tenant_payments_details(request,
                                                                                                             user)
                                         if result == False:
                                             return Response({
@@ -969,7 +970,7 @@ class TenantStatusApiView(APIView):
                                     if is_data_verified(request):
                                         # Request data verification end
                                         # Save basic details start
-                                        tenant_invoices, result, error = save_basic_tenant_invoices_details(request,
+                                        tenant_payment, result, error = save_basic_tenant_payments_details(request,
                                                                                                             user)
                                         if result == False:
                                             return Response({
@@ -1203,17 +1204,18 @@ class TenantStatusApiView(APIView):
                                     ERROR: str(traceback.print_exc(e))
                                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-                        def post(self, request, format=None):
-                            try:
-                                pass
-                            except Exception as e:
-                                pass
+                            def post(self, request, format=None):
+                                try:
+                                    pass
+                                except Exception as e:
+                                    pass
 
-                        def put(self, request, format=None):
-                            try:
-                                pass
-                            except Exception as e:
-                                pass
+                            def put(self, request, format=None):
+                                try:
+                                    pass
+                                except Exception as e:
+                                    pass
+
 
 
                     # API Header
@@ -1276,15 +1278,165 @@ class TenantStatusApiView(APIView):
 
                         def post(self, request, format=None):
                             try:
-                                pass
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    if is_authorized(user, privilege):
+                                        # Checking authorization end
+                                        # Request data verification start
+                                        if is_data_verified(request):
+                                            # Request data verification end
+                                            # Save basic and payment details start
+                                            tenant_sub_modules, result, error = save_basic_tenant_sub_modules_details(request, user)
+                                            if result == False:
+                                                return Response({
+                                                    STATE: EXCEPTION,
+                                                    ERROR: error
+                                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                                            # Save subscription details start
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                            }, status=status.HTTP_400_BAD_REQUEST)
+                                    else:
+                                        return Response({
+                                            STATE: ERROR,
+                                        }, status=status.HTTP_403_FORBIDDEN)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                    }, status=status.HTTP_401_UNAUTHORIZED)
                             except Exception as e:
-                                pass
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
                         def put(self, request, format=None):
                             try:
-                                pass
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    if is_authorized(user, privilege):
+                                        # Checking authorization end
+                                        # Request data verification start
+                                        if is_data_verified(request):
+                                            # Request data verification end
+                                            # Save basic details start
+                                            tenant_sub_modules, result, error = save_basic_tenant_sub_modules_details(request, user)
+                                            if result == False:
+                                                return Response({
+                                                    STATE: EXCEPTION,
+                                                    ERROR: error
+                                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                                            # Save basic details start
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                            }, status=status.HTTP_400_BAD_REQUEST)
+                                    else:
+                                        return Response({
+                                            STATE: ERROR,
+                                        }, status=status.HTTP_403_FORBIDDEN)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                    }, status=status.HTTP_401_UNAUTHORIZED)
                             except Exception as e:
-                                pass
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                            def post(self, request, format=None):
+                            try:
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    if is_authorized(user, privilege):
+                                        # Checking authorization end
+                                        # Request data verification start
+                                        if is_data_verified(request):
+                                            # Request data verification end
+                                            # Save basic and payment details start
+                                            tenant_sub_modules, result, error = save_basic_tenant_sub_modules_details(request, user)
+                                            if result == False:
+                                                return Response({
+                                                    STATE: EXCEPTION,
+                                                    ERROR: error
+                                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                                            # Save subscription details start
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                            }, status=status.HTTP_400_BAD_REQUEST)
+                                    else:
+                                        return Response({
+                                            STATE: ERROR,
+                                        }, status=status.HTTP_403_FORBIDDEN)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                    }, status=status.HTTP_401_UNAUTHORIZED)
+                            except Exception as e:
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                        def put(self, request, format=None):
+                            try:
+                                # Checking authentication start
+                                if is_token_valid(request.data['token']):
+                                    payload = get_payload(request.data['token'])
+                                    user = get_user(payload['id_string'])
+                                    # Checking authentication end
+                                    # Checking authorization start
+                                    privilege = get_privilege_by_id(1)
+                                    if is_authorized(user, privilege):
+                                        # Checking authorization end
+                                        # Request data verification start
+                                        if is_data_verified(request):
+                                            # Request data verification end
+                                            # Save basic details start
+                                            tenant_sub_modules, result, error = save_basic_tenant_sub_modules_details(request, user)
+                                            if result == False:
+                                                return Response({
+                                                    STATE: EXCEPTION,
+                                                    ERROR: error
+                                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                                            # Save basic details start
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                            }, status=status.HTTP_400_BAD_REQUEST)
+                                    else:
+                                        return Response({
+                                            STATE: ERROR,
+                                        }, status=status.HTTP_403_FORBIDDEN)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                    }, status=status.HTTP_401_UNAUTHORIZED)
+                            except Exception as e:
+                                return Response({
+                                    STATE: EXCEPTION,
+                                    ERROR: str(traceback.print_exc(e))
+                                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
                             # API Header
                             # API end Point: api/v1/tenant/documents
@@ -1348,33 +1500,104 @@ class TenantStatusApiView(APIView):
 
                                 def post(self, request, format=None):
                                     try:
-                                        pass
+                                        # Checking authentication start
+                                        if is_token_valid(request.data['token']):
+                                            payload = get_payload(request.data['token'])
+                                            user = get_user(payload['id_string'])
+                                            # Checking authentication end
+                                            # Checking authorization start
+                                            privilege = get_privilege_by_id(1)
+                                            if is_authorized(user, privilege):
+                                                # Checking authorization end
+                                                # Request data verification start
+                                                if is_data_verified(request):
+                                                    # Request data verification end
+                                                    # Save basic and payment details start
+                                                    tenant_document, result, error = save_basic_tenant_document_details(request,
+                                                                                                                user)
+                                                    if result == False:
+                                                        return Response({
+                                                            STATE: EXCEPTION,
+                                                            ERROR: error
+                                                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                                                    # Save subscription details start
+                                                else:
+                                                    return Response({
+                                                        STATE: ERROR,
+                                                    }, status=status.HTTP_400_BAD_REQUEST)
+                                            else:
+                                                return Response({
+                                                    STATE: ERROR,
+                                                }, status=status.HTTP_403_FORBIDDEN)
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                            }, status=status.HTTP_401_UNAUTHORIZED)
                                     except Exception as e:
-                                        pass
+                                        return Response({
+                                            STATE: EXCEPTION,
+                                            ERROR: str(traceback.print_exc(e))
+                                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
                                 def put(self, request, format=None):
                                     try:
-                                        pass
+                                        # Checking authentication start
+                                        if is_token_valid(request.data['token']):
+                                            payload = get_payload(request.data['token'])
+                                            user = get_user(payload['id_string'])
+                                            # Checking authentication end
+                                            # Checking authorization start
+                                            privilege = get_privilege_by_id(1)
+                                            if is_authorized(user, privilege):
+                                                # Checking authorization end
+                                                # Request data verification start
+                                                if is_data_verified(request):
+                                                    # Request data verification end
+                                                    # Save basic details start
+                                                    tenant_document, result, error = save_basic_tenant_document_details(request,
+                                                                                                                user)
+                                                    if result == False:
+                                                        return Response({
+                                                            STATE: EXCEPTION,
+                                                            ERROR: error
+                                                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                                                    # Save basic details start
+                                                else:
+                                                    return Response({
+                                                        STATE: ERROR,
+                                                    }, status=status.HTTP_400_BAD_REQUEST)
+                                            else:
+                                                return Response({
+                                                    STATE: ERROR,
+                                                }, status=status.HTTP_403_FORBIDDEN)
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                            }, status=status.HTTP_401_UNAUTHORIZED)
                                     except Exception as e:
-                                        pass
+                                        return Response({
+                                            STATE: EXCEPTION,
+                                            ERROR: str(traceback.print_exc(e))
+                                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
                                         # API Header
-                                        # API end Point: api/v1/tenant/Notes
-                                        # API verb: GET, POST, PUT
+                                        # API end Point: api/v1/countries
+                                        # API verb: GET
                                         # Package: Basic
                                         # Modules: All
-                                        # Sub Module: Tenant Documents
-                                        # Interaction: View Tenant Documents, Add Tenant Documents , Edit Tenants System Sub Modules
-                                        # Usage: View, Add, Edit Tenants System Sub Modules
-                                        # Tables used: 1.7 Tenant System Sub Modules
+                                        # Sub Module: Get Countries
+                                        # Interaction: All
+                                        # Usage: View
+                                        # Tables used: All
                                         # Auther: Gauri
-                                        # Created on: 04/05/2020
+                                        # Created on: 08/05/2020
 
-                                        class TenantSubModulesApiView(APIView):
+                                        class getCountries(APIView):
 
                                             def get(self, request, format=None):
                                                 try:
-                                                    tenant_sub_modules_list = []
+                                                    country_list = []
                                                     # Checking authentication start
                                                     if is_token_valid(request.data['token']):
                                                         payload = get_payload(request.data['token'])
