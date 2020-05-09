@@ -1,24 +1,29 @@
 import traceback
 
-from django.db import transaction
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.messages import *
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.department import get_department_by_tenant_id_string, get_department_by_id
-from v1.commonapp.models.form_factor import get_form_factor_by_tenant_id_string, get_form_factor_by_id
+from v1.commonapp.models.department import get_department_by_id, \
+    get_department_by_id_string
+from v1.commonapp.models.form_factor import get_form_factor_by_id, \
+    get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
-from v1.userapp.models.role_sub_type import get_role_sub_type_by_tenant_id_string, get_role_sub_type_by_id
-from v1.userapp.models.role_type import get_role_type_by_tenant_id_string, get_role_type_by_id
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, \
+    get_role_sub_type_by_id_string
+from v1.userapp.models.role_type import get_role_type_by_id, \
+    get_role_type_by_id_string
 from v1.userapp.models.user_master import get_user_by_id_string
-from v1.userapp.models.user_role import get_role_by_id_string
-from v1.userapp.views.common_functions import get_filtered_roles, is_data_verified, add_basic_role_details, \
+from v1.userapp.models.user_role import get_role_by_id_string, UserRole, get_role_by_tenant_id_string
+from v1.userapp.serializers.role import RoleListSerializer
+from v1.userapp.views.common_functions import is_data_verified, add_basic_role_details, \
     save_privilege_details, save_edited_basic_role_details, save_edited_privilege_details
 
 
@@ -34,80 +39,36 @@ from v1.userapp.views.common_functions import get_filtered_roles, is_data_verifi
 # Tables used: 2.5.1. Users & Privileges - Role Master
 # Author: Arpita
 # Created on: 04/05/2020
+# Updated on: 09/05/2020
 
-class RoleList(APIView):
+class RoleList(generics.ListAPIView):
+    serializer_class = RoleListSerializer
+    pagination_class = StandardResultsSetPagination
 
-    def get(self, request, format=None):
-        try:
-            # Initializing output list start
-            role_list = []
-            # Initializing output list end
+    def get_queryset(self):
 
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
+        queryset = get_role_by_tenant_id_string(1)
+        utility_id_string = self.requestUserRole.objects.filter(tenant_id=1).query_params.get('utility', None)
+        type_id_string = self.request.query_params.get('type', None)
+        sub_type_id_string = self.request.query_params.get('sub_type', None)
+        form_factor_id_string = self.request.query_params.get('form_factor', None)
+        department_id_string = self.request.query_params.get('department', None)
 
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
-                if is_authorized():
-                    # Checking authorization end
-
-                    # Code for filtering roles start
-                    user = get_user_by_id_string(request.data['user'])
-                    result, roles, total_pages, page_no, error = get_filtered_roles(user, request)
-                    if not result:
-                        return Response({
-                            STATE: EXCEPTION,
-                            ERROR: error
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                    # Code for filtering roles end
-
-                    # Code for lookups start
-                    types = get_role_type_by_tenant_id_string(user.tenant.id_string)
-                    sub_types = get_role_sub_type_by_tenant_id_string(user.tenant.id_string)
-                    # statuses = get_registration_statuses_by_tenant_id_string(user.tenant.id_string)
-                    form_factors = get_form_factor_by_tenant_id_string(user.tenant.id_string)
-                    departments = get_department_by_tenant_id_string(user.tenant.id_string)
-                    # Code for lookups end
-
-                    # Code for sending role in response start
-                    for role in roles:
-                        role_list.append({
-                            'registration_id_string': role.id_string,
-                            'name': role.role,
-                            'type': types.get(id=role.type).name,
-                            'sub_type': sub_types.get(id=role.sub_type).name,
-                            'status': '',
-                            'form_factor': form_factors.get(id=role.form_factor_id).name,
-                            'department': departments.get(id=role.department_id).name,
-                            'created_on': role.created_date.strftime(DISPLAY_DATE_FORMAT),
-                            'total_pages': total_pages,
-                            'page_no': page_no
-                        })
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: role_list,
-                    }, status=status.HTTP_200_OK)
-                    # Code for sending role in response end
-
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        DATA: '',
-                    }, status=status.HTTP_403_FORBIDDEN)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    DATA: '',
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as e:
-            return Response({
-                STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if utility_id_string is not None:
+            queryset = queryset.filter(utility__id_string=utility_id_string)
+        if type_id_string is not None:
+            role_type = get_role_type_by_id_string(type_id_string)
+            queryset = queryset.filter(type_id=role_type.id)
+        if sub_type_id_string is not None:
+            role_sub_type = get_role_sub_type_by_id_string(sub_type_id_string)
+            queryset = queryset.filter(sub_type_id=role_sub_type.id)
+        if form_factor_id_string is not None:
+            form_factor = get_form_factor_by_id_string(form_factor_id_string)
+            queryset = queryset.filter(form_factor_id=form_factor.id)
+        if department_id_string is not None:
+            department = get_department_by_id_string(department_id_string)
+            queryset = queryset.filter(department_id=department.id)
+        return queryset
 
 
 # API Header
