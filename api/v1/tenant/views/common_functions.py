@@ -4,8 +4,8 @@ from django.db import transaction
 from django.db.models import Q
 from django.core.paginator import Paginator
 from api.settings import INPUT_DATE_FORMAT
-from v1.lookup.models.service_type import get_service_type_by_id_string
-from v1.commonapp.models.payment_type import get_payment_type_by_id_string
+from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.supplier.models.supplier_payment import Payment
 
 
@@ -53,7 +53,7 @@ def get_tenant(request, user):
         error = str(traceback.print_exc(e))
         return tenants, total_pages, page_no, False, error
 
-    def get_tenant_subscription_by_tenant_id_string(request, user):
+def get_tenant_subscription_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         subscription = ''
@@ -101,7 +101,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return subscription, total_pages, page_no, False, error
 
-    def get_tenant_subscription_plan_by_tenant_id_string(request, user):
+def get_tenant_subscription_plan_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         subscription_plan = ''
@@ -144,7 +144,7 @@ def get_tenant(request, user):
                 paginator = Paginator(subscription_plan, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
-                registrations = paginator.page(1)
+                subscription_plan = paginator.page(1)
             else:
                 paginator = Paginator(subscription_plan, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
@@ -156,7 +156,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return subscription_plan, total_pages, page_no, False, error
 
-        def TenantSubscriptionRateApiView(request, user):
+def get_tenant_subscription_rate_by_tenant_id_string(request, user):
             total_pages = ''
             page_no = ''
             subscription_rate = ''
@@ -199,7 +199,7 @@ def get_tenant(request, user):
                     paginator = Paginator(subscription_rate, int(request.data['page_size']))
                     total_pages = str(paginator.num_pages)
                     page_no = '1'
-                    registrations = paginator.page(1)
+                    subscription_rate = paginator.page(1)
                 else:
                     paginator = Paginator(subscription_rate, int(request.data['page_size']))
                     total_pages = str(paginator.num_pages)
@@ -211,7 +211,44 @@ def get_tenant(request, user):
                 error = str(traceback.print_exc(e))
                 return subscription_rate, total_pages, page_no, False, error
 
-    def get_tenant_invoices_by_tenant_id_string(request, user):
+
+def get_tenant_statuses_by_tenant_id_string(request, user):
+    total_pages = ''
+    page_no = ''
+    tenant_status = ''
+    error = ''
+    try:
+        tenant_status = tenant_status.objects.filter(tenant_id=user.tenant_id)
+        if request.data['name']:
+            tenant_status = tenant_status.objects.filter(name=
+                                                                 request.data['name'])
+        if request.data['is_active']:
+            tenant_status = tenant_status.objects.filter(is_active=
+                                                                 request.data['is_active'])
+            if request.data['search_text'] == '':
+                pass
+            else:
+                tenant_status = tenant_status.filter(
+                    Q(tenant_id__icontains=request.data['search_text']) |
+                    Q(first_name__icontains=request.data['search_text']))
+
+        if request.data['page_number'] == '':
+            paginator = Paginator(tenant_status, int(request.data['page_size']))
+            total_pages = str(paginator.num_pages)
+            page_no = '1'
+            tenant_status = paginator.page(1)
+        else:
+            paginator = Paginator(tenant_status, int(request.data['page_size']))
+            total_pages = str(paginator.num_pages)
+            page_no = request.data['page_number']
+            tenant_status = paginator.page(int(page_no))
+        return tenant_status, total_pages, page_no, True, error
+    except Exception as e:
+        print("Exception occured ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return tenant_status, total_pages, page_no, False, error
+
+def get_tenant_invoices_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         tenant_invoices = ''
@@ -261,18 +298,18 @@ def get_tenant(request, user):
                 tenant_invoices = tenant_invoices.objects.filter(address=
                                                                      request.data['address'])
 
-                if request.data['search_text'] == '':
-                    pass
-                else:
-                    tenant_invoices = tenant_invoices.filter(
-                        Q(tenant_id__icontains=request.data['search_text']) |
-                        Q(first_name__icontains=request.data['search_text']))
+            if request.data['search_text'] == '':
+                pass
+            else:
+                tenant_invoices = tenant_invoices.filter(
+                    Q(tenant_id__icontains=request.data['search_text']) |
+                    Q(first_name__icontains=request.data['search_text']))
 
             if request.data['page_number'] == '':
                 paginator = Paginator(tenant_invoices, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
-                registrations = paginator.page(1)
+                tenant_invoices = paginator.page(1)
             else:
                 paginator = Paginator(tenant_invoices, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
@@ -284,7 +321,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return tenant_invoices, total_pages, page_no, False, error
 
-    def get_tenant_payment_by_tenant_id_string(request, user):
+def get_tenant_payment_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         tenant_payments = ''
@@ -330,18 +367,17 @@ def get_tenant(request, user):
             if request.data['updated_date']:
                 tenant_payments = tenant_payments.objects.filter(updated_date=
                                                                  request.data['updated_date'])
-                if request.data['search_text'] == '':
-                    pass
-                else:
-                    tenant_payments = tenant_payments.filter(
-                        Q(tenant_id__icontains=request.data['search_text']) |
-                        Q(first_name__icontains=request.data['search_text']))
-
+            if request.data['search_text'] == '':
+                pass
+            else:
+                tenant_payments = tenant_payments.filter(
+                Q(tenant_id__icontains=request.data['search_text']) |
+                Q(first_name__icontains=request.data['search_text']))
             if request.data['page_number'] == '':
                 paginator = Paginator(tenant_payments, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
-                registrations = paginator.page(1)
+                tenant_payments = paginator.page(1)
             else:
                 paginator = Paginator(tenant_payments, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
@@ -353,7 +389,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return tenant_payments, total_pages, page_no, False, error
 
-    def get_tenant_bank_details_by_tenant_id_string(request, user):
+def get_tenant_bank_details_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         tenant_bank = ''
@@ -405,18 +441,18 @@ def get_tenant(request, user):
             if request.data['updated_date']:
                 tenant_bank = tenant_bank.objects.filter(updated_date=
                                                                  request.data['updated_date'])
-                if request.data['search_text'] == '':
-                    pass
-                else:
-                    tenant_bank = tenant_bank.filter(
-                        Q(tenant_id__icontains=request.data['search_text']) |
-                        Q(first_name__icontains=request.data['search_text']))
+            if request.data['search_text'] == '':
+                pass
+            else:
+                tenant_bank = tenant_bank.filter(
+                Q(tenant_id__icontains=request.data['search_text']) |
+                Q(first_name__icontains=request.data['search_text']))
 
             if request.data['page_number'] == '':
                 paginator = Paginator(tenant_bank, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
-                registrations = paginator.page(1)
+                tenant_bank = paginator.page(1)
             else:
                 paginator = Paginator(tenant_bank, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
@@ -428,7 +464,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return tenant_bank, total_pages, page_no, False, error
 
-    def get_tenant_summary_by_tenant_id_string(request, user):
+def get_tenant_summary_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         tenant_summary = ''
@@ -485,7 +521,7 @@ def get_tenant(request, user):
                 paginator = Paginator(tenant_summary, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
-                registrations = paginator.page(1)
+                tenant_summary = paginator.page(1)
             else:
                 paginator = Paginator(tenant_summary, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
@@ -497,7 +533,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return tenant_summary, total_pages, page_no, False, error
 
-    def get_tenant_sub_modules_by_tenant_id_string(request, user):
+def get_tenant_sub_modules_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         tenant_sub_modules = ''
@@ -542,7 +578,7 @@ def get_tenant(request, user):
                 paginator = Paginator(tenant_sub_modules, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
                 page_no = '1'
-                registrations = paginator.page(1)
+                tenant_sub_modules = paginator.page(1)
             else:
                 paginator = Paginator(tenant_sub_modules, int(request.data['page_size']))
                 total_pages = str(paginator.num_pages)
@@ -554,18 +590,7 @@ def get_tenant(request, user):
             error = str(traceback.print_exc(e))
             return tenant_sub_modules, total_pages, page_no, False, error
 
-    # only check only mandatory fields
-    def is_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
-        if request.data['name'] == '' and  \
-                request.data['mobile_number'] == '' and request.data['email'] == '' and \
-               request.data['is_vip'] == '' and request.data['address'] \
-                and request.data['street'] == '' and request.data['zipcode'] == '' and \
-                request.data['connectivity'] == '':
-            return False
-        else:
-            return True
-
-    def get_tenant_documents_by_tenant_id_string(request, user):
+def get_tenant_documents_by_tenant_id_string(request, user):
         total_pages = ''
         page_no = ''
         tenant_document = ''
@@ -1083,9 +1108,8 @@ def save_basic_tenant_bank_details(request, user):
         error = str(traceback.print_exc(e))
         return tenant_bank, False, error
 
-   #Save Tenant Docuement
-    @transaction.atomic
-    def save_basic_tenant_document_details(request, user):
+@transaction.atomic
+def save_basic_tenant_document_details(request, user):
         sid = transaction.savepoint()
         tenant_document = ""
         error = ''
@@ -1132,12 +1156,10 @@ def save_basic_tenant_bank_details(request, user):
             transaction.rollback(sid)
             error = str(traceback.print_exc(e))
             return tenant_document, False, error
-        #################
 
-
-        # Save Tenant Sub modules
-        @transaction.atomic
-        def save_basic_tenant_sub_modules_details(request, user):
+# Save Tenant Sub modules
+@transaction.atomic
+def save_basic_tenant_sub_modules_details(request, user):
             sid = transaction.savepoint()
             tenant_sub_modules = ""
             error = ''
@@ -1182,11 +1204,9 @@ def save_basic_tenant_bank_details(request, user):
                 error = str(traceback.print_exc(e))
                 return tenant_sub_modules, False, error
 
-
-
-        # Save Tenant Payments aginast Invoices
-        @transaction.atomic
-        def save_basic_tenant_payments_details(request, user):
+ # Save Tenant Payments aginast Invoices
+@transaction.atomic
+def save_basic_tenant_payments_details(request, user):
             sid = transaction.savepoint()
             tenant_basic_payments = ""
             error = ''
@@ -1271,7 +1291,15 @@ def save_payment_details(request, user, tenant):
     except Exception as e:
         return False
 
-
+def is_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
+        if request.data['name'] == '' and  \
+                request.data['mobile_number'] == '' and request.data['email'] == '' and \
+               request.data['is_vip'] == '' and request.data['address'] \
+                and request.data['street'] == '' and request.data['zipcode'] == '' and \
+                request.data['connectivity'] == '':
+            return False
+        else:
+            return True
 
 
 
