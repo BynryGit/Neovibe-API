@@ -100,6 +100,17 @@
             }
         },
         {
+            "pk": "3",
+		    "model": "registration.RegistrationStatus",
+            "fields": {
+              "tenant": 1,
+              "utility": 2,
+              "name": "Payment Pending",
+              "is_active": "True",
+              "created_by": 3
+            }
+        },
+        {
             "pk": "1",
 		    "model": "consumer.ConsumerOwnership",
             "fields": {
