@@ -25,57 +25,6 @@ from v1.userapp.models.user_token import UserToken
 from v1.utility.models.utility_master import UtilityMaster
 
 
-def get_filtered_roles(user, request):
-    total_pages = ''
-    page_no = ''
-    roles = ''
-    error = ''
-    try:
-        roles = UserRole.objects.filter(tenant=user.tenant)
-
-        # fetch records using id_string start
-        utility = UtilityMaster.objects.get(id_string=request.data['utility'])
-        type = RoleType.objects.get(id_string=request.data['type'])
-        sub_type = RoleSubType.objects.get(id_string=request.data['sub_type'])
-        form_factor = FormFactor.objects.get(id_string=request.data['form_factor'])
-        department = Department.objects.get(id_string=request.data['department'])
-        # fetch records using id_string end
-
-        if "utility" in request.data:
-            roles = roles.objects.filter(utility_id=utility.id)
-        if "type" in request.data:
-            roles = roles.objects.filter(type_id=type.id)
-        if "sub_type" in request.data:
-            roles = roles.objects.filter(sub_type_id=sub_type.id)
-        if "form_factor" in request.data:
-            roles = roles.objects.filter(form_factor_id=form_factor.id)
-        if "department" in request.data:
-            roles = roles.objects.filter(department_id=department.id)
-
-        if "search_text" in request.data:
-            if request.data['search_text'] == '':
-                pass
-            else:
-                roles = roles.filter(name__icontains=request.data['search_text'])
-
-        if "page_number" in request.data:
-            if request.data['page_number'] == '':
-                paginator = Paginator(roles, int(request.data['page_size']))
-                total_pages = str(paginator.num_pages)
-                page_no = '1'
-                roles = paginator.page(1)
-            else:
-                paginator = Paginator(roles, int(request.data['page_size']))
-                total_pages = str(paginator.num_pages)
-                page_no = request.data['page_number']
-                roles = paginator.page(int(page_no))
-        return True, roles, total_pages, page_no, error
-    except Exception as e:
-        print("Exception occurred ", str(traceback.print_exc(e)))
-        error = str(traceback.print_exc(e))
-        return False, roles, total_pages, page_no, error
-
-
 # Check only mandatory fields
 def is_data_verified(request):
     if request.data['role'] and request.data['type'] and request.data['sub_type'] and request.data['form_factor'] and \

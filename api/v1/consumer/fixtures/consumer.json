@@ -1703,7 +1703,7 @@
 			"complaint_type": "Complaint type-1",
 			"complaint_subtype": "Complaint subtype-1",
 			"complaint_date": "10/6/2020",
-			"channel": ,
+			"channel": 1,
 			"consumer_remark": "Remark-1",
 			"admin_remark": "Remark-1",
 			"complaint_raised_by": ,
@@ -1726,7 +1726,7 @@
 			"complaint_type": "Complaint type-2",
 			"complaint_subtype": "Complaint subtype-2",
 			"complaint_date": "10/05/2020",
-			"channel": ,
+			"channel": 2,
 			"consumer_remark": "Remark-2",
 			"admin_remark": "Remark-2",
 			"complaint_raised_by": ,
@@ -1749,7 +1749,7 @@
 			"complaint_type": "Complaint type-3",
 			"complaint_subtype": "Complaint subtype-3",
 			"complaint_date": "20/06/2020",
-			"channel": ,
+			"channel": 3,
 			"consumer_remark": "Remark-3",
 			"admin_remark": "Remark-3",
 			"complaint_raised_by": ,
@@ -1772,7 +1772,7 @@
 			"complaint_type": "Complaint type-4",
 			"complaint_subtype": "Complaint subtype-4",
 			"complaint_date": "20/05/2020",
-			"channel": ,
+			"channel": 4,
 			"consumer_remark": "Remark-4",
 			"admin_remark": "Remark-4",
 			"complaint_raised_by": ,
@@ -1781,5 +1781,887 @@
 			"closure_remark": "Remark-4",
 			"is_active": "True"
 		}
+	},
+
+	{
+		"pk": "1",
+		"model": "consumer.SourceType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Source-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.SourceType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Source-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "consumer.SourceType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Source-3",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "consumer.SourceType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Source-4",
+			"is_active": "True"
+		}
+	},
+
+	{
+
+		"pk": "1",
+		"model": "meter_reading.ScheduleType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Reading",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "2",
+		"model": "meter_reading.ScheduleType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Bill Distribution",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "3",
+		"model": "meter_reading.ScheduleType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Notices",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "4",
+		"model": "meter_reading.ScheduleType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Reading",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "5",
+		"model": "meter_reading.ScheduleType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Bill Distribution",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "6",
+		"model": "meter_reading.ScheduleType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Notices",
+			"is_active": "True"
+			}
+	},
+
+	{
+
+		"pk": "1",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Confirm",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "2",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Reject",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "3",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Pending",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "4",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Consumer Imported",
+			"is_active": "True"
+			}
+	},
+{
+
+		"pk": "5",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Confirm",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "6",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Reject",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "7",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Pending",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "8",
+		"model": "meter_reading.ScheduleStatus",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Consumer Imported",
+			"is_active": "True"
+			}
+	},
+
+	{
+
+		"pk": "1",
+		"model": "contract.ContractType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Valid Contract",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "2",
+		"model": "contract.ContractType",
+		"fields":{
+			"tenant": 1,
+			"utility": 1,
+			"name": "Voidable Contract",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "3",
+		"model": "contract.ContractType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Valid Contract",
+			"is_active": "True"
+			}
+	},
+	{
+
+		"pk": "4",
+		"model": "contract.ContractType",
+		"fields":{
+			"tenant": 2,
+			"utility": 3,
+			"name": "Voidable Contract",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "consumer.ServiceDetails",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request_no": 1024,
+			"consumer_no": ,
+			"service_request": "",
+			"service_type": "",
+			"consumer_remark": "",
+			"admin_remark": "",
+			"request_date": "10/6/2020",
+			"request_due_date": "15/06/2020",
+			"request_channel": 1,
+			"is_field_appointment": "False",
+			"status": ,
+			"is_active": "True"
+
+		}
+	},
+	{
+
+		"pk": "2",
+		"model": "consumer.ServiceDetails",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request_no": 1025,
+			"consumer_no": "",
+			"service_request": ,
+			"service_type": ,
+			"consumer_remark": ,
+			"admin_remark": ,
+			"request_date": "10/05/2020",
+			"request_due_date": "20/05/2020",
+			"request_channel": 2,
+			"is_field_appointment": "False",
+			"status": ,
+			"is_active": "True"
+
+		}
+	},
+	{
+
+		"pk": "3",
+		"model": "consumer.ServiceDetails",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request_no": 1026,
+			"consumer_no": ,
+			"service_request": ,
+			"service_type": ,
+			"consumer_remark": ,
+			"admin_remark": ,
+			"request_date": "20/06/2020",
+			"request_due_date": "25/06/2020",
+			"request_channel": 3,
+			"is_field_appointment": "False",
+			"status": ,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ServiceDetails",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request_no": 1027,
+			"consumer_no": ,
+			"service_request": ,
+			"service_type": ,
+			"consumer_remark": ,
+			"admin_remark": ,
+			"request_date": "20/05/2020",
+			"request_due_date": "30/05/2020",
+			"request_channel": 4,
+			"is_field_appointment": "False",
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "commonapp.Channel",
+		"fields": {
+			"tenant": 1,
+			"name": "branch",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "commonapp.Channel",
+		"fields": {
+			"tenant": 1,
+			"name": "mobile",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "commonapp.Channel",
+		"fields": {
+			"tenant": 2,
+			"name": "branch",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "commonapp.Channel",
+		"fields": {
+			"tenant": 2,
+			"name": "mobile",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "supplier.ProductCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Category-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.ProductCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Category-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "supplier.ProductCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Category-3",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "supplier.ProductCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Category-4",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-1",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-2",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-3",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-4",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-5",
+			"category": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-6",
+			"category": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-7",
+			"category": 4,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-8",
+			"category": 4,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "supplier.SupServiceCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Category-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupServiceCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Category-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "supplier.SupServiceCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Category-3",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "supplier.SupServiceCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Category-4",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-1",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-2",
+			"category": 1,
+			"is_active": "True"
+		}
+	},
+
+{
+		"pk": "3",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-3",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "SubCategory-4",
+			"category": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-5",
+			"category": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-6",
+			"category": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-7",
+			"category": 4,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "supplier.SupSerSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "SubCategory-8",
+			"category": 4,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "supplier.SupplierStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "active",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupplierStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Inactive",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "supplier.SupplierStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "active",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "supplier.SupplierStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Inactive",
+			"is_active": "True"
+		}
+	},
+
+  {
+		"pk": "1",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "CNG Station",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Pipe",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "CNG Station",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Pipe",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "Digital meter",
+			"name": "Digital meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "Analog Meter",
+			"name": "Analog Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "steel",
+			"name": "steel",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "plastic",
+			"name": "plastic",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "CNG Station-1",
+			"name": "CNG Station-1",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "6",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "Digital meter",
+			"name": "Digital meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "Analog Meter",
+			"name": "Analog Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "steel",
+			"name": "steel",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "plastic",
+			"name": "plastic",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "CNG Station-1",
+			"name": "CNG Station-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Sop-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Sop-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Sop-3",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Sop-4",
+			"is_active": "True"
+		}
 	}
 ]
+

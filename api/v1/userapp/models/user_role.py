@@ -15,7 +15,12 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.commonapp.models.department import get_department_by_id
+from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
+from v1.userapp.models.role_type import get_role_type_by_id
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
@@ -44,6 +49,27 @@ class UserRole(models.Model):
     def __unicode__(self):
         return self.id
 
+    @property
+    def get_role_type(self):
+        role_type = get_role_type_by_id(self.type_id)
+        return role_type.name
+
+    @property
+    def get_role_sub_type(self):
+        sub_type = get_role_sub_type_by_id(self.sub_type_id)
+        return sub_type.name
+
+    @property
+    def get_form_factor(self):
+        form_factor = get_form_factor_by_id(self.form_factor_id)
+        return form_factor.name
+
+    @property
+    def get_department(self):
+        department = get_department_by_id(self.department_id)
+        return department.name
+
+
 # Create User Role table end
 
 
@@ -53,3 +79,7 @@ def get_role_by_id(id):
 
 def get_role_by_id_string(id_string):
     return UserRole.objects.filter(id_string=id_string, is_active=True).last()
+
+
+def get_role_by_tenant_id_string(id_string):
+    return UserRole.objects.filter(tenant__id_string=id_string, is_active=True)

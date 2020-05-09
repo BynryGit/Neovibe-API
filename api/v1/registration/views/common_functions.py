@@ -161,6 +161,7 @@ def add_basic_registration_details(request, user, sid):
             source = get_source_type_by_id_string(request.data['source_id_string'])
             registration.source_id = source.id
         registration.tenant = user.tenant
+        registration.status_id = 1
         registration.created_by = user.id
         registration.created_date = datetime.now()
         registration.save()

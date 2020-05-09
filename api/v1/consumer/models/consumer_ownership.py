@@ -2,7 +2,6 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
-
 from django.db import models  # importing package for database
 
 

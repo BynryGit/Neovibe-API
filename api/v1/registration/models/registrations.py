@@ -13,6 +13,8 @@
 # <ddmmyyyy><changes><author>
 
 from datetime import datetime # importing package for datetime
+
+from v1.registration.models.registration_status import get_registration_status_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
@@ -61,6 +63,16 @@ class Registration(models.Model):
 
     def __unicode__(self):
         return self.first_name
+
+    @property
+    def get_status(self):
+        status = get_registration_status_by_id(self.status_id)
+        return status.name
+
+    @property
+    def get_status_id_string(self):
+        status = get_registration_status_by_id(self.status_id)
+        return status.id_string
 
 
 def get_registration_by_id_string(id_string):
