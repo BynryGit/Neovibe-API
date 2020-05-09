@@ -8,6 +8,10 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.userapp.models.user_master import UserDetail
 from v1.campaign.models.campaign import Campaign
+from v1.campaign.models.campaign_status import CampaignStatus
+from v1.consumer.models.consumer_category import ConsumerCategory
+from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
+from v1.commonapp.models.frequency import Frequency
 
 
 
@@ -65,6 +69,10 @@ class CampaignTestCase(APITestCase):
     def get_all_campaign(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         UserDetail.objects.create(tenant=tenant_obj,user_type=1,user_subtype=1,form_factor_id=1,user_name="Testing")
+        CampaignStatus.objects.create(tenant=tenant_obj,status="Created")
+        ConsumerCategory.objects.create(tenant=tenant_obj,name="Domestic")
+        ConsumerSubCategory.objects.create(tenant=tenant_obj,name="Builder",category=1)
+        Frequency.objects.create(tenant=tenant_obj,name="Frequency")
         response = self.client.get(reverse('campaign_list'))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -72,7 +80,10 @@ class CampaignTestCase(APITestCase):
     # for getting single campaign details
     def get_single_campaign(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
-        campaign_obj = Campaign.objects.create(tenant=tenant_obj)
+        campaign_obj = Campaign.objects.create(tenant=tenant_obj,category_id=1,sub_category_id=1,frequency_id=1)
+        ConsumerCategory.objects.create(tenant=tenant_obj, name="Domestic")
+        ConsumerSubCategory.objects.create(tenant=tenant_obj, name="Builder",category=1)
+        Frequency.objects.create(tenant=tenant_obj, name="Frequency")
         response = self.client.get(reverse('campaign_data', args=[campaign_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

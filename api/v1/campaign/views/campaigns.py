@@ -141,10 +141,10 @@ class CampaignApiView(APIView):
                     # Code for lookups start
                     # campaign_obj = get_campaign_by_id_string(request.data['id_string'])
                     campaign_obj = get_campaign_by_id_string(id_string=id_string)
-                    # frequency_obj = get_frequency_by_id(campaign_obj.frequency_id)
-                    # category_obj = get_consumer_category_by_id(campaign_obj.category_id)
-                    # area = get_area_by_id(campaign_obj.area_id)
-                    # sub_area = get_sub_area_by_id(campaign_obj.sub_area_id)
+                    frequency_obj = get_frequency_by_id(campaign_obj.frequency_id)
+                    category_obj = get_consumer_category_by_id(campaign_obj.category_id)
+                    area = get_area_by_id(campaign_obj.area_id)
+                    sub_area = get_sub_area_by_id(campaign_obj.sub_area_id)
                     # Code for lookups end
 
                     # Code for sending campaign and advertisement details in response start
@@ -159,10 +159,10 @@ class CampaignApiView(APIView):
                             'budget_amount': advertisement.budget_amount,
                             'start_date': advertisement.start_date,
                             'end_date': advertisement.end_date,
-                            # 'area_id_string': area.id_string,
-                            # 'sub_area_id_string': sub_area.id_string,
-                            # 'category_id_string': category_obj.id_string,
-                            # 'frequency_id_string': frequency_obj.id_string,
+                            'area_id_string': area.id_string,
+                            'sub_area_id_string': sub_area.id_string,
+                            'category_id_string': category_obj.id_string,
+                            'frequency_id_string': frequency_obj.id_string,
                         }
 
                     else:
