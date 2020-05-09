@@ -7,6 +7,7 @@ RESPONSE_DATA='response_data'
 Token = 'token'
 STATE = 'state'
 DATA = 'data'
+ERROR = 'error'
 
 
 
@@ -26,5 +27,4 @@ USER_ALREADY_EXIST='User all ready exit with this name.'
 SERVER_ERROR='Server error occurred {0}'
 INVALID_CREDENTIALS='Provided credentials are wrong.'
 SUCCESS = 'success'
-ERROR = 'error'
 EXCEPTION = 'exception'

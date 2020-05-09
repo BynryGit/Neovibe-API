@@ -1430,7 +1430,7 @@
 		"pk": "1",
 		"model": "commonapp.Area",
 		"fields": {
-          "tenant": 1,
+          "tenant": 4,
           "utility": 1,
           "name": "Kothrud",
 			"city": 1,
@@ -1463,7 +1463,7 @@
 		"pk": "4",
 		"model": "commonapp.Area",
 		"fields": {
-          "tenant": 2,
+          "tenant": 4,
           "utility": 3,
           "name": "Bhowanipur",
 			"city": 3,
@@ -1475,7 +1475,7 @@
 		"pk": "1",
 		"model": "commonapp.SubArea",
 		"fields": {
-          "tenant": 1,
+          "tenant": 4,
           "utility": 1,
           "name": "Righ bhusari colony",
 			"area": 1,
@@ -1508,7 +1508,7 @@
 		"pk": "4",
 		"model": "commonapp.SubArea",
 		"fields": {
-          "tenant": 2,
+          "tenant": 4,
           "utility": 3,
           "name": "Alipur Road",
 			"area": 3,
