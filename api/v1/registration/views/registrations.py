@@ -75,6 +75,7 @@ class RegistrationList(APIView):
 
                     # Code for sending registrations in response start
                     for registration in registrations:
+                        print("##########", registration)
                         registrations_list.append({
                             'registration_id_string': registration.id_string,
                             'first_name': registration.first_name,
@@ -172,17 +173,26 @@ class Registration(APIView):
                         'country_id_string': country.id_string,
                         'country':country.name,
                         'state_id_string': state.id_string,
+                        'state': state.name,
                         'city_id_string': city.id_string,
+                        'city': city.name,
                         'area_id_string': area.id_string,
+                        'area': area.name,
                         'sub_area_id_string': sub_area.id_string,
+                        'sub_area': sub_area.name,
                         'ownership_id_string': ownership.id_string,
+                        'ownership': ownership.ownership,
                         # 'scheme_id_string': scheme.id_string,
                         'consumer_category_id_string': consumer_category.id_string,
+                        'consumer_category': consumer_category.name,
                         'sub_category_id_string': sub_category.id_string,
+                        'sub_category': sub_category.name,
                         'status_id_string': registration_status.id_string,
+                        'status': registration_status.name,
                         'is_vip': registration.is_vip,
                         'connectivity': registration.connectivity,
                         'source_id_string': source.id_string,
+                        'source': source.name,
                         'registration_date': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
                         'is_active': registration.is_active,
                     }
@@ -240,8 +250,56 @@ class Registration(APIView):
                         if result == True:
                             transaction.savepoint_commit(sid)
                         else:
+                            country = get_country_by_id(registration.country_id)
+                            state = get_state_by_id(registration.state_id)
+                            city = get_city_by_id(registration.city_id)
+                            area = get_area_by_id(registration.area_id)
+                            sub_area = get_sub_area_by_id(registration.sub_area_id)
+                            # scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
+                            ownership = get_consumer_ownership_by_id(registration.ownership_id)
+                            consumer_category = get_consumer_category_by_id(registration.consumer_category_id)
+                            sub_category = get_consumer_sub_category_by_id(registration.sub_category_id)
+                            registration_type = get_registration_type_by_id(registration.registration_type_id)
+                            source = get_source_type_by_id(registration.source_id)
+                            registration_status = get_registration_status_by_id(registration.status_id)
                             data = {
-                                "registration_id_string": registration.id_string
+                                'tenant_id_string': registration.tenant.id_string,
+                                'utility_id_string': registration.utility.id_string,
+                                'registration_no': registration.registration_no,
+                                'registration_type_id_string': registration_type.id_string,
+                                'first_name': registration.first_name,
+                                'middle_name': registration.middle_name,
+                                'last_name': registration.last_name,
+                                'email_id': registration.email_id,
+                                'mobile_no': registration.phone_mobile,
+                                'address_line_1': registration.address_line_1,
+                                'street': registration.street,
+                                'zipcode': registration.zipcode,
+                                'country_id_string': country.id_string,
+                                'country': country.name,
+                                'state_id_string': state.id_string,
+                                'state': state.name,
+                                'city_id_string': city.id_string,
+                                'city': city.name,
+                                'area_id_string': area.id_string,
+                                'area': area.name,
+                                'sub_area_id_string': sub_area.id_string,
+                                'sub_area': sub_area.name,
+                                'ownership_id_string': ownership.id_string,
+                                'ownership': ownership.ownership,
+                                # 'scheme_id_string': scheme.id_string,
+                                'consumer_category_id_string': consumer_category.id_string,
+                                'consumer_category': consumer_category.name,
+                                'sub_category_id_string': sub_category.id_string,
+                                'sub_category': sub_category.name,
+                                'status_id_string': registration_status.id_string,
+                                'status': registration_status.name,
+                                'is_vip': registration.is_vip,
+                                'connectivity': registration.connectivity,
+                                'source_id_string': source.id_string,
+                                'source': source.name,
+                                'registration_date': registration.registration_date.strftime(DISPLAY_DATE_FORMAT),
+                                'is_active': registration.is_active,
                             }
                             return Response({
                                 STATE: SUCCESS,
