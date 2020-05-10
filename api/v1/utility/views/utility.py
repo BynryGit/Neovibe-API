@@ -34,15 +34,15 @@ class UtilityListDetail(generics.ListAPIView):
             filter_str = 'ALL'
 
         if search_str and filter_str != 'ALL':
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False, name__icontains=search_str,
+            queryset = UtilityMasterTbl.objects.filter(is_active=True, name__icontains=search_str,
                                                  tenant_id=filter_str).order_by('-id')
         elif search_str and filter_str == 'ALL':
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False, name__icontains=search_str).order_by('-id')
+            queryset = UtilityMasterTbl.objects.filter(is_active=True, name__icontains=search_str).order_by('-id')
 
         elif not search_str and filter_str != 'ALL':
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False, tenant_id=filter_str).order_by('-id')
+            queryset = UtilityMasterTbl.objects.filter(is_active=True, tenant_id=filter_str).order_by('-id')
         else:
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False).order_by('-id')
+            queryset = UtilityMasterTbl.objects.filter(is_active=True).order_by('-id')
 
         return queryset
 
@@ -74,9 +74,8 @@ class UtilityDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    utility_obj = UtilityMasterTbl.objects.filter(id_string=id_string)
+                    utility_obj = UtilityMasterTbl.objects.filter(id_string=id_string, is_active=True)
                     if utility_obj:
-                        utility_obj = UtilityMasterTbl.objects.get(id_string=id_string)
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
