@@ -24,22 +24,20 @@ from django.db import models  # importing package for database
 class UtilityMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    short_name = models.CharField(max_length=200, blank=False, null=False)
-    name = models.CharField(max_length=200, blank=False, null=False)
-    phone_no = models.CharField(max_length=200, blank=False, null=False)
-    email_id = models.CharField(max_length=200, blank=False, null=False)
+    short_name = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    phone_no = models.CharField(max_length=200, blank=True, null=True)
+    email_id = models.CharField(max_length=200, blank=True, null=True)
     region_id = models.BigIntegerField(null=True, blank=True)
     country_id = models.BigIntegerField(null=True, blank=True)
     state_id = models.BigIntegerField(null=True, blank=True)
     city_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    is_deleted = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
-
 
     def __str__(self):
         return self.name
