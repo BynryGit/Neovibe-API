@@ -3,10 +3,10 @@ __author__ = "aki"
 import traceback
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl
+from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -67,12 +67,12 @@ class UtilityDetail(GenericAPIView):
                     # choices = {'key1': 'val1', 'key2': 'val2'}
                     # logger.log("info", "Getting utility details", None, choices)
 
-                    utility_obj = UtilityMasterTbl.objects.filter(id_string=id_string, is_active=True)
+                    utility_obj = get_utility_by_id_string(id_string)
                     if utility_obj:
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            DATA: serializer.data,
+                            RESULTS: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({

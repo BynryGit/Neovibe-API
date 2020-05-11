@@ -46,6 +46,9 @@ class UtilityMaster(models.Model):
         return self.name
 
 def get_utility_by_id_string(id_string):
-    return UtilityMaster.objects.get(id_string = id_string)
+    try:
+        return UtilityMaster.objects.get(id_string = id_string)
+    except:
+        return False
 
 # Create Utility Master table end.
