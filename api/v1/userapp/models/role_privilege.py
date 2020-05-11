@@ -26,10 +26,10 @@ class RolePrivilege(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    role_id = models.BigIntegerField(null=False, blank=False)
-    module_id = models.BigIntegerField(null=False, blank=False)
-    sub_module_id = models.BigIntegerField(null=False, blank=False)
-    privilege_id = models.BigIntegerField(null=False, blank=False) # View, Edit
+    role_id = models.BigIntegerField(null=True, blank=True)
+    module_id = models.BigIntegerField(null=True, blank=True)
+    sub_module_id = models.BigIntegerField(null=True, blank=True)
+    privilege_id = models.BigIntegerField(null=True, blank=True) # View, Edit
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
