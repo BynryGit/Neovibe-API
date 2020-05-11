@@ -85,7 +85,7 @@ class RegistrationList(generics.ListAPIView):
 # Auther: Rohan
 # Created on: 23/04/2020
 
-class Registration(APIView):
+class Registration():
 
     def get(self, request):
         try:
