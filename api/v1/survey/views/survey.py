@@ -2,6 +2,7 @@ import traceback
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db import transaction
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.consumer.models.consumer_category import get_consumer_category_by_id
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
@@ -18,8 +19,9 @@ from v1.survey.models.survey_type import get_survey_type_by_id_string,get_survey
 from v1.commonapp.models.area import get_area_by_id,get_areas_by_tenant_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id,get_sub_areas_by_tenant_id_string
 from v1.survey.views.common_functions import get_filtered_location_survey,get_filtered_consumer_survey,\
-    is_data_verified,save_location_survey_details,get_consumer_survey_list,is_consumer_data_verified,save_consumer_survey_details,\
-    save_consumer_details,is_assignment_verified,save_vendor_assignment_details
+    is_data_verified,save_survey_details,get_consumer_survey_list,is_consumer_data_verified,save_consumer_survey_details,\
+    save_consumer_details,is_assignment_verified,save_vendor_assignment_details,save_edit_location_survey_details,\
+    save_edit_consumer_details
 from v1.userapp.models.privilege import get_privilege_by_id
 from api.messages import SUCCESS,STATE,ERROR,EXCEPTION,DATA
 
@@ -276,33 +278,44 @@ class LocationSurveyApiView(APIView):
                 # privilege = get_privilege_by_id(1)
                 # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
+
                     # Checking authorization end
 
                     # Request data verification start
                     user = UserDetail.objects.get(id=2)
-                    if is_data_verified(user,request):
+
+                    if is_data_verified(request):
                         # Request data verification end
 
                         # check Survey is Already Exists or not
-                        if Survey.objects.get(name=request.data['survey_name'],area=request.data['area'],sub_area=request.data['sub_area'],
-                                            start_date=request.data['start_date'],end_date=request.data['end_date']).exists():
-
-                            survey_data = {'survey_name':request.data['survey_name'],'area':request.data['area'],'sub_area':request.data['sub_area'],\
-                                            'start_date':request.data['start_date'],'end_date':request.data['end_date']}
-
+                        # if Survey.objects.get(name=request.data['survey_name'],area_id=request.data['area'],sub_area_id=request.data['sub_area'],\
+                        #                     start_date=request.data['start_date'],end_date=request.data['end_date']).exists():
+                        #
+                        #     survey_data = {'survey_name':request.data['survey_name'],'area':request.data['area'],'sub_area':request.data['sub_area'],\
+                        #                     'start_date':request.data['start_date'],'end_date':request.data['end_date']}
+                        #
+                        #     return Response({
+                        #         STATE: ERROR,
+                        #         'data': survey_data,
+                        #     }, status=status.HTTP_409_CONFLICT)
+                        #
+                        # else:
+                        # Save Location Survey start
+                        sid = transaction.savepoint()
+                        location_survey,result = save_survey_details(user,request,sid)
+                        if result == False:
                             return Response({
-                                STATE: ERROR,
-                                'data': survey_data,
-                            }, status=status.HTTP_409_CONFLICT)
-
+                                STATE: EXCEPTION,
+                                ERROR: ERROR
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                         else:
-                            # Save Location Survey start
-                            location_survey = save_location_survey_details(user,request)
-                            # Save Location Survey start
-
+                            transaction.savepoint_commit(sid)
+                            data = {
+                                "Message": "Data Save Successfully !"
+                            }
                             return Response({
                                 STATE: SUCCESS,
-                                DATA: location_survey,
+                                DATA: data,
                             }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -325,29 +338,40 @@ class LocationSurveyApiView(APIView):
     def put(self, request, format=None):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+            if is_token_valid(1):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request, user):
+
+                    if is_data_verified(request):
                         # Request data verification end
 
                         # Update Location Survey start
-                        location_survey = save_location_survey_details(request, user)
+                        user = UserDetail.objects.get(id=2)
+                        location_survey,result = save_edit_location_survey_details(user,request)
+                        if result == False:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: ERROR
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        else:
                         # Update Location Survey start
+                            data = {
+                                "message":"update successfully !"
+                            }
 
-                        return Response({
-                            STATE: SUCCESS,
-                            DATA: location_survey,
-                        }, status=status.HTTP_200_OK)
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: ERROR,
@@ -370,7 +394,7 @@ class LocationSurveyApiView(APIView):
 
 
 # API Header
-# API end Point: api/v1/consumer-survey/
+# API end Point: api/v1/consumer/
 # API verb: GET, POST, PUT
 # Package: Basic
 # Modules: S&M
@@ -386,25 +410,28 @@ class ConsumerSurveyApiView(APIView):
     def get(self, request, format=None):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+            if is_token_valid(1):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
-                    if request.data['consumer_id_string']:
+                    # if request.data['consumer_id_string']:
+                    a = 0
+                    if a == 1:
                         # Code for lookups start
-                        survey = get_survey_by_id_string(request.data['consumer_id_string'])
-                        area = get_area_by_id(survey.area)
-                        sub_area = get_sub_area_by_id(survey.sub_area)
-                        type = get_survey_type_by_id(survey.type)
-                        objective = get_survey_type_by_id(survey.objective)
-                        status = get_survey_status_by_id(survey.status)
+                        survey = get_survey_by_id_string("acf21e66-a9ff-4c07-989e-354b2817ef30")
+                        # survey = get_survey_by_id_string(request.data['consumer_id_string'])
+                        area = get_area_by_id(survey.area_id)
+                        sub_area = get_sub_area_by_id(survey.sub_area_id)
+                        type = get_survey_type_by_id(survey.type_id)
+                        objective = get_survey_type_by_id(survey.objective_id)
+                        statususe = get_survey_status_by_id(survey.status_id)
                         # Code for lookups end
 
                         # Code for sending Consumer Survey in response start
@@ -414,15 +441,18 @@ class ConsumerSurveyApiView(APIView):
                             'name':survey.name,
                             'objective':objective.id_string,
                             'discription':survey.description,
-                            'type':type.id_string,
+                            'type_id_string':type.id_string,
+                            'type':type.name,
                             'no_of_consumers':survey.no_of_consumers,
                             'start_date': survey.start_date.strftime(DISPLAY_DATE_FORMAT),
                             'end_date': survey.end_date.strftime(DISPLAY_DATE_FORMAT),
                             'completion_date': survey.completion_date.strftime(DISPLAY_DATE_FORMAT),
                             'area_id_string': area.id_string,
+                            'area': area.name,
                             'sub_area_id_string': sub_area.id_string,
+                            'sub_area': sub_area.name,
                             'is_active': survey.is_active,
-                            'status':status.id_string,
+                            'status':statususe.id_string,
                         }
 
                         return Response({
@@ -431,7 +461,7 @@ class ConsumerSurveyApiView(APIView):
                         }, status=status.HTTP_200_OK)
                         # Code for sending Consumer Survey in response end
                     else:
-                        data = get_consumer_survey_list(request,user)
+                        data = get_consumer_survey_list()
                         return Response({
                             STATE: SUCCESS,
                             DATA: data,
@@ -457,51 +487,63 @@ class ConsumerSurveyApiView(APIView):
     def post(self, request, format=None):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+            if is_token_valid(1):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_consumer_data_verified(request, user):
+                    if is_consumer_data_verified(request):
                         # Request data verification end
 
                         # check Survey is Already Exists or not
-                        if Survey.objects.get(name=request.data['survey_name'],area=request.data['area'],sub_area=request.data['sub_area'],
-                                            start_date=request.data['start_date'],end_date=request.data['end_date']):
-
-                            survey_data = {'survey_name':request.data['survey_name'],'area':request.data['area'],'sub_area':request.data['sub_area'],\
-                                            'start_date':request.data['start_date'],'end_date':request.data['end_date']}
-
+                        # if Survey.objects.get(name=request.data['survey_name'],area=request.data['area'],sub_area=request.data['sub_area'],
+                        #                     start_date=request.data['start_date'],end_date=request.data['end_date']):
+                        #
+                        #     survey_data = {'survey_name':request.data['survey_name'],'area':request.data['area'],'sub_area':request.data['sub_area'],\
+                        #                     'start_date':request.data['start_date'],'end_date':request.data['end_date']}
+                        #
+                        #     return Response({
+                        #         STATE: ERROR,
+                        #         'data': survey_data,
+                        #     }, status=status.HTTP_409_CONFLICT)
+                        #
+                        # else:
+                        survey_list = {}
+                        # Save Consumer Survey start
+                        sid = transaction.savepoint()
+                        user = UserDetail.objects.get(id=2)
+                        consumer_survey,result = save_survey_details(user,request,sid)
+                        if result == False:
                             return Response({
-                                STATE: ERROR,
-                                'data': survey_data,
-                            }, status=status.HTTP_409_CONFLICT)
+                                STATE: EXCEPTION,
+                                ERROR: ERROR
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+                        consumenr,result= save_consumer_details(request, user, consumer_survey)
+                        survey_list['consumer_survey'] = consumer_survey
+                        survey_list['consumer_details'] = result
+                        if result == True:
+                            transaction.savepoint_commit(sid)
+                            data = {
+                                "Message": "Data save successfully"
+                            }
                         else:
-                            survey_list = {}
-                            # Save Consumer Survey start
-                            consumer_survey = save_consumer_survey_details(request, user)
+                            data = {
+                                "Message": "No Data save"
+                            }
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: data,
+                        }, status=status.HTTP_200_OK)
 
-                            # save all consumer details
-                            consumer_details = []
-                            if consumer_survey and request.data['consumer_datas']:
-                                consumer_details = save_consumer_details(request, user,consumer_survey)
-
-                            # Save Consumer Survey end
-                            survey_list['consumer_survey'] = consumer_survey
-                            survey_list['consumer_details'] = consumer_details
-
-                            return Response({
-                                STATE: SUCCESS,
-                                DATA: survey_list,
-                            }, status=status.HTTP_200_OK)
+                        # save all consumer details
                     else:
                         return Response({
                             STATE: ERROR,
@@ -523,37 +565,42 @@ class ConsumerSurveyApiView(APIView):
     def put(self, request, format=None):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
+            if is_token_valid(1):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_consumer_data_verified(request, user):
+                    if is_consumer_data_verified(request):
                         # Request data verification end
                         survey_list = {}
                         # Update Consumer Survey start
-                        consumer_survey = save_consumer_survey_details(request, user)
+                        user = UserDetail.objects.get(id=2)
+                        if request.data['consumer_id_string']:
+                            consumer_survey,result = save_edit_consumer_details(user,request)
+                        else:
+                            survey, result = save_edit_location_survey_details(user, request)
+
+                        if result == False:
+                            return Response({
+                                STATE: EXCEPTION,
+                                ERROR: ERROR
+                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        else:
+                            data = {
+                                "message ": "Update Sucessfully !"
+                            }
+                            return Response({
+                                STATE: SUCCESS,
+                                DATA: data,
+                            }, status=status.HTTP_200_OK)
                         # Update Consumer Survey start
-
-                        consumer_details = []
-                        if consumer_survey and request.data['consumer_datas']:
-                            consumer_details = save_consumer_details(request, user, consumer_survey)
-
-                        survey_list['consumer_survey'] = consumer_survey
-                        survey_list['consumer_details'] = consumer_details
-
-
-                        return Response({
-                            STATE: SUCCESS,
-                            DATA: survey_list,
-                        }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: ERROR,

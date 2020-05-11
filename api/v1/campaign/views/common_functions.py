@@ -72,6 +72,7 @@ def get_filtered_campaign(user,request):
 
 # verify the campaign data
 def is_data_verified(request):
+    return True
     if request.data['campaign_name'] == '' and request.data['area'] == ''and \
         request.data['sub_area'] == '' and request.data['start_date'] == '' and request.data['end_date'] == '' and \
         request.data['description'] == ''and \
@@ -82,6 +83,7 @@ def is_data_verified(request):
 
 # verify the advertisement data
 def is_advertisement_verified(request):
+    return True
     if request.data['advertisements_name'] == '' and request.data['budget_amount'] == '' and request.data['actual_amount'] == ''and \
         request.data['area'] == '' and request.data['sub_area'] == '' and request.data['start_date'] == '' and request.data['end_date'] == '' and \
         request.data['description'] == ''and request.data['campaign_id_string'] == '' and request.data['frequency_id_string'] == '':
@@ -154,12 +156,14 @@ def save_advertisement_details(user,campaign,sid):
                        'start_date':'2020-01-22','end_date':'2020-03-21','budget_amount':3000,'actual_amount':6000,
                         'description':'This campaign for Awareness of Power','campaign_id_string':'31950b44-6f5a-4551-9058-95f4bdddb08f',
                         'frequency_id_string':'1874cf50-c3d7-478f-b6c3-5814062f1873',"utility_id_string":"20f7fd7f-0750-4531-8a54-2a8a172c678c",
-                       'area_id_string':'4a4ca7eb-893b-403d-8b09-008f28c13fbd','sub_area_id_string':'7edf632e-c7dc-41c2-b903-fcd280736b6f'},
+                       "area_id_string":"1c2da9b5-eb4b-4c47-b1dd-84e085d9d1b7",
+                        "sub_area_id_string":"4c96a5ee-03f9-49d3-8dbf-559b4cdc756e",},
                       {'advertisements_name': 'Smart360-Awareness-Gas', 'area': 'Kothrud', 'sub_area': 'bhusari colony',
                        'start_date': '2020-01-01', 'end_date': '2020-03-30','budget_amount':4000,'actual_amount':7000,
                         'description':'This campaign for Awareness of Gas','campaign_id_string':'31950b44-6f5a-4551-9058-95f4bdddb08f',
                         'frequency_id_string':'8b563e69-5250-494f-8900-f92e59b8388d',"utility_id_string":"aaa573b6-bde1-44af-921a-cf0a5a49a4a9",
-                       'area_id_string':'bf476b25-cc7f-4909-bc48-f99b4a52037c','sub_area_id_string':'09d4675d-84eb-4b61-b0c1-f69a5c38d23a'}]
+                       "area_id_string":"1c2da9b5-eb4b-4c47-b1dd-84e085d9d1b7",
+                        "sub_area_id_string":"4c96a5ee-03f9-49d3-8dbf-559b4cdc756e",}]
 
         for advertise in advertises:
             advertisement = Advertisements()

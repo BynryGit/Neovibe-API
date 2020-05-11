@@ -3,22 +3,28 @@ from pyatspi import state
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from api.v1.smart360_API.commonapp.models.state import get_state_by_id_string
-from api.v1.smart360_API.smart360_API.messages import STATE, SUCCESS, ERROR, EXCEPTION, DATA
-from api.v1.smart360_API.smart360_API.settings import DISPLAY_DATE_FORMAT
-from api.v1.smart360_API.commonapp.common_functions import get_payload, get_user, is_authorized, is_token_valid
-from api.v1.smart360_API.tenant.models.tenant_master import get_tenant,get_tenant_subscription_by_tenant_id_string,get_tenant_subscription_plan_by_tenant_id_string,get_tenant_invoices_by_tenant_id_string,get_tenant_subscription_rate_by_tenant_id_string,get_tenant_payment_by_tenant_id_string,get_tenant_bank_details_by_tenant_id_string,get_tenant_summary_by_tenant_id_string,get_tenant_sub_modules_by_tenant_id_string,get_tenant_documents_by_tenant_id_string
-from api.v1.smart360_API.userapp.models.privilege import get_privilege_by_id
-from api.v1.smart360_API.commonapp.models.sub_module import get_sub_module_by_id
-from api.v1.smart360_API.commonapp.models.country import get_country_by_id_string, get_country_by_id
-from api.v1.smart360_API.commonapp.models.city import get_city_by_id_string, get_city_by_id
+from v1.commonapp.models.state import get_state_by_id_string
+from v1.commonapp.models.state import get_state_by_id_string
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
+from api.settings import DISPLAY_DATE_FORMAT
+from v1.commonapp.common_functions import get_payload, get_user, is_authorized, is_token_valid
+from v1.tenant.views.common_functions import get_tenant, get_tenant_subscription_by_tenant_id_string, \
+    get_tenant_subscription_plan_by_tenant_id_string, get_tenant_invoices_by_tenant_id_string, \
+    get_tenant_subscription_rate_by_tenant_id_string, get_tenant_payment_by_tenant_id_string, \
+    get_tenant_bank_details_by_tenant_id_string, get_tenant_summary_by_tenant_id_string, \
+    get_tenant_sub_modules_by_tenant_id_string, get_tenant_documents_by_tenant_id_string, is_data_verified,get_tenant_statuses_by_tenant_id_string
+from v1.userapp.models.privilege import get_privilege_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.commonapp.models.country import get_country_by_id_string, get_country_by_id
+from v1.commonapp.models.city import get_city_by_id_string, get_city_by_id
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.commonapp.models.state import get_state_by_id
-from v1.tenant.views.common_functions import get_tenant, is_data_verified, save_basic_tenant_details, save_payment_details,save_basic_subscription_details,save_basic_subscription_plan_details,save_basic_subscription_rate_details,save_basic_tenant_bank_details,save_basic_tenant_invoices_details,save_basic_tenant_document_details,save_basic_tenant_sub_modules_details,save_basic_tenant_payments_details
+from v1.tenant.views.common_functions import get_tenant, save_basic_tenant_details, save_payment_details,save_basic_subscription_details,save_basic_subscription_plan_details,save_basic_subscription_rate_details,save_basic_tenant_bank_details,save_basic_tenant_invoices_details
+from v1.tenant.views.common_functions import  save_basic_tenant_document_details,save_basic_tenant_sub_modules_details,save_basic_tenant_payments_details
 
 # API Header
 # API end Point: api/v1/tenant/list
@@ -51,7 +57,7 @@ class TenantApiView(APIView):
                     tenants, total_pages, page_no = get_tenant(user, request)
                     # Code for filtering tenant end
                     # Code for lookups start
-                    statuses = Status.objects.all()
+                   # statuses = Status.objects.all()
                     countries = get_country_by_id_string(user.tenant.id_string)
                     state = get_state_by_id_string(user.tenant.id_string)
                     # Code for lookups end
@@ -61,7 +67,7 @@ class TenantApiView(APIView):
                             'first_name': tenant.first_name,
                             'phone_no': tenant.phone_no,
                             'email_id': tenant.email_id,
-                            'status': statuses.objects.get(id_string=tenant.status_id).status_name,
+                            #'status': statuses.objects.get(id_string=tenant.status_id).status_name,
                             'country_id': countries.objects.get(id_string=tenant.country_id).country_name,
                             'state_id': state.objects.get(id_string=tenant.state_id).state_name,
                             'total_pages': total_pages,
@@ -98,7 +104,7 @@ class TenantApiView(APIView):
         # Tables used: 1.1 Tenant
         # Auther: Gauri
         # Created on: 29/04/2020
-class TenantApiView(APIView)
+class TenantApiView(APIView):
     def get(self, request, format=None):
         try:
         # Checking authentication start
@@ -150,7 +156,8 @@ class TenantApiView(APIView)
             DATA: '',
             ERROR: str(traceback.print_exc(e))
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
- def post(self, request, format=None):
+
+def post(self, request, format=None):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
@@ -190,7 +197,8 @@ class TenantApiView(APIView)
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    def put(self, request, format=None):
+
+def put(self, request, format=None):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
@@ -575,7 +583,7 @@ class TenantStatusApiView(APIView):
         # Tables used: 1.2 Tenant Subscription Rate
         # Auther: Gauri
         # Created on: 04/05/2020
-    class TenantSubscriptionRateApiView(APIView):
+class TenantSubscriptionRateApiView(APIView):
 
         def get(self, request, format=None):
             try:
@@ -1357,7 +1365,7 @@ class TenantStatusApiView(APIView):
                                     ERROR: str(traceback.print_exc(e))
                                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-                            def post(self, request, format=None):
+                        def post(self, request, format=None):
                             try:
                                 # Checking authentication start
                                 if is_token_valid(request.data['token']):
@@ -1581,72 +1589,3 @@ class TenantStatusApiView(APIView):
                                             ERROR: str(traceback.print_exc(e))
                                         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-                                        # API Header
-                                        # API end Point: api/v1/countries
-                                        # API verb: GET
-                                        # Package: Basic
-                                        # Modules: All
-                                        # Sub Module: Get Countries
-                                        # Interaction: All
-                                        # Usage: View
-                                        # Tables used: All
-                                        # Auther: Gauri
-                                        # Created on: 08/05/2020
-
-                                        class getCountries(APIView):
-
-                                            def get(self, request, format=None):
-                                                try:
-                                                    country_list = []
-                                                    # Checking authentication start
-                                                    if is_token_valid(request.data['token']):
-                                                        payload = get_payload(request.data['token'])
-                                                        user = get_user(payload['id_string'])
-                                                        # Checking authentication end
-
-                                                        # Checking authorization start
-                                                        privilege = get_privilege_by_id(1)
-                                                        sub_module = get_sub_module_by_id(1)
-                                                        if is_authorized(user, privilege, sub_module):
-                                                            # Checking authorization end
-
-                                                            # Get Tenant Modules
-                                                            tenant_sub_modules = get_tenant_sub_modules_by_tenant_id_string(
-                                                                request.data['tenant_id_string'])
-
-                                                            for tenant_sub_modules in tenant_sub_modules:
-                                                                tenant_sub_modules_list.append
-                                                                ({
-                                                                    'id_string': tenant_sub_modules.id_string,
-                                                                    'subscription_id': tenant_sub_modules.subscription_id,
-                                                                    'module_id': tenant_sub_modules.module_id,
-                                                                    'sub_module_id': tenant_sub_modules.sub_module_id,
-                                                                    'sub_module_name': tenant_sub_modules.sub_module_name,
-                                                                    'is_active': tenant_sub_modules.is_active,
-                                                                    'created_by': tenant_sub_modules.created_by,
-                                                                    'updated_by': tenant_sub_modules.updated_by,
-                                                                    'created_date': tenant_sub_modules.created_date,
-                                                                    'updated_date': tenant_sub_modules.updated_date,
-                                                                })
-                                                            return Response({
-                                                                STATE: SUCCESS,
-                                                                'data': tenant_sub_modules_list,
-                                                            }, status=status.HTTP_200_OK)
-                                                except Exception as e:
-                                                    return Response({
-                                                        STATE: EXCEPTION,
-                                                        DATA: '',
-                                                        ERROR: str(traceback.print_exc(e))
-                                                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-                                            def post(self, request, format=None):
-                                                try:
-                                                    pass
-                                                except Exception as e:
-                                                    pass
-
-                                            def put(self, request, format=None):
-                                                try:
-                                                    pass
-                                                except Exception as e:
-                                                    pass

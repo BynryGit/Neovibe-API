@@ -50,17 +50,16 @@ class SurveyConsumer(models.Model):
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
-    def __str__(self):
-        return self.consumer_no
+
 
     def __unicode__(self):
         return self.consumer_no
 
 def get_survey_consumer_by_id_string(id_string):
-    return SurveyConsumer.objects.filter(tenant__id_string = id_string)
+    return SurveyConsumer.objects.get(id_string = id_string)
 
 def get_survey_consumer_by_tenant_id_string(id_string):
-    return SurveyConsumer.objects.get(id_string = id_string)
+    return SurveyConsumer.objects.filter(tenant__id_string = id_string)
 
 def get_survey_consumer_by_id(id):
     return SurveyConsumer.objects.get(id = id)

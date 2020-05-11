@@ -40,7 +40,7 @@ from v1.campaign.models.campaign import Campaign
 # Api for getting campaign  filter
 class CampaignListApiView(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request):
         try:
             campaign_list = []
 
@@ -57,7 +57,7 @@ class CampaignListApiView(APIView):
                 # Checking authorization end
 
                     # Code for filtering campaign start
-                    user = UserDetail.objects.get(id=2)
+                    user = UserDetail.objects.get(id=1)
                     campaigns,total_pages, page_no, result, error = get_filtered_campaign(user, request)
                     if result == False:
                         return Response({
@@ -124,7 +124,7 @@ class CampaignListApiView(APIView):
 # API for add, edit, view campaign details
 class CampaignApiView(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(1):
@@ -140,7 +140,7 @@ class CampaignApiView(APIView):
 
                     # Code for lookups start
                     # campaign_obj = get_campaign_by_id_string(request.data['id_string'])
-                    campaign_obj = get_campaign_by_id_string('31950b44-6f5a-4551-9058-95f4bdddb08f')
+                    campaign_obj = get_campaign_by_id_string(id_string=id_string)
                     frequency_obj = get_frequency_by_id(campaign_obj.frequency_id)
                     category_obj = get_consumer_category_by_id(campaign_obj.category_id)
                     area = get_area_by_id(campaign_obj.area_id)
@@ -239,7 +239,8 @@ class CampaignApiView(APIView):
                     # Code for add campaign start
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id=2)
+
+                    user = UserDetail.objects.get(id=1)
                     if is_data_verified(request):
                     # Request data verification end
 
