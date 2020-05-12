@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 # table header
 # module: Utility | sub-module - Utility Usage
 # table type : Transactional
@@ -40,9 +42,30 @@ class UtilityUsageSummary(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id_string
+        return self.month
 
     def __unicode__(self):
-        return self.id_string
+        return self.month
 
 # Create Utility Usage Summary table end.
+
+
+def get_utility_usage_summary_by_id(id):
+    try:
+        return UtilityUsageSummary.objects.get(id = id)
+    except:
+        return False
+
+
+def get_utility_usage_summary_by_id_string(id_string):
+    try:
+        return UtilityUsageSummary.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_utility_usage_summary_by_utility_id_string(id_string):
+    try:
+        return UtilityUsageSummary.objects.get(utility__id_string = id_string)
+    except:
+        return False

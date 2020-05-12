@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 # table header
 # module: Utility | sub-module - All
 # table type : Master
@@ -45,10 +47,17 @@ class UtilityMaster(models.Model):
     def __unicode__(self):
         return self.name
 
+# Create Utility Master table end.
+
+def get_utility_by_id(id):
+    try:
+        return UtilityMaster.objects.get(id = id)
+    except:
+        return False
+
+
 def get_utility_by_id_string(id_string):
     try:
         return UtilityMaster.objects.get(id_string = id_string)
     except:
         return False
-
-# Create Utility Master table end.
