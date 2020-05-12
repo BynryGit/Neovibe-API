@@ -1,17 +1,22 @@
 import traceback
 from django.db.models import Q
+from datetime import datetime
 from django.core.paginator import Paginator
 from v1.survey.models.survey import Survey
 from v1.survey.models.survey_consumer import SurveyConsumer
 from django.db import transaction
 from api.settings import DISPLAY_DATE_FORMAT
+from v1.consumer.models.consumer_category import get_consumer_category_by_id,get_consumer_category_by_id_string
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import get_survey_consumer_by_id_string
 from v1.survey.models.survey_status import get_survey_status_by_id_string,get_survey_status_by_id
 from v1.survey.models.survey_type import get_survey_type_by_id_string,get_survey_type_by_id
 from v1.survey.models.survey_assignment import SurveyAssignment
-from v1.commonapp.models.area import get_area_by_id_string
+from v1.survey.models.survey_objective import get_survey_objective_by_id_string,get_survey_objective_by_id
+from v1.commonapp.models.area import get_area_by_id_string,get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 
 
@@ -133,102 +138,141 @@ def get_filtered_consumer_survey(user,request):
         return survey_consumer, total_pages, page_no, False, error
 
 
-def is_data_verified(user,request):
+def is_data_verified(request):
+    return True
     if request.data['survey_name'] == "" and request.data['survey_type'] == "" and request.data['start_date'] == "" and \
-       request.data['end_date'] == "" and request.data['discription'] == "" and request.data['objective'] == "" and request.data['utility'] == ""\
-       and request.data['category'] == "" and request.data['area'] == "" and request.data['sub_area'] == "":
+       request.data['end_date'] == "" and request.data['discription'] == "" and request.data['objective'] == "" \
+       and request.data['category'] == "" and request.data['sub_category'] == "" and request.data['area'] == "" and request.data['sub_area'] == "":
         return False
     else:
         return True
 
-@transaction.atomic
-def save_location_survey_details(user,request):
-    sid = transaction.savepoint()
+def save_survey_details(user,request,sid):
+    survey= ''
     try:
-        utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
-        area = get_area_by_id_string(request.data['area'])
-        sub_area = get_sub_area_by_id_string(request.data['sub_area'])
-        type = get_survey_type_by_id_string(request.data['type'])
-        objective = get_survey_type_by_id_string(request.data['objective'])
-        status = get_survey_status_by_id_string(request.data['status'])
+        survey = Survey()
+        if "survey_name" in request.data:
+            survey.name = request.data['survey_name']
+        if "objective_id_string" in request.data:
+            objective = get_survey_objective_by_id_string(request.data['objective_id_string'])
+            survey.objective_id = objective.id
+        if "description" in request.data:
+            survey.description = request.data['description']
+        if "type_id_string" in request.data:
+            type = get_survey_type_by_id_string(request.data['type_id_string'])
+            survey.type_id = type.id
+        if "category_id_string" in request.data:
+            consumer_category = get_consumer_category_by_id_string(request.data['category_id_string'])
+            survey.category_id = consumer_category.id
+        if "sub_category_id_string" in request.data:
+            sub_category = get_consumer_sub_category_by_id_string(request.data['sub_category_id_string'])
+            survey.sub_category_id = sub_category.id
+        if "area_id_string" in request.data:
+            area = get_area_by_id_string(request.data['area_id_string'])
+            survey.area_id = area.id
+        if "sub_area_id_string" in request.data:
+            sub_area = get_sub_area_by_id_string(request.data['sub_area_id_string'])
+            survey.sub_area_id = sub_area.id
+        if "status_id_string" in request.data:
+            status = get_survey_status_by_id_string(request.data['status_id_string'])
+            survey.status_id = status.id
+        if "no_of_consumers" in request.data:
+            survey.no_of_consumers = request.data['no_of_consumers']
+        if "start_date" in request.data:
+            survey.start_date = request.data['start_date']
+        if "end_date" in request.data:
+            survey.end_date = request.data['end_date']
+        if "completion_date" in request.data:
+            survey.completion_date = request.data['completion_date']
 
-        if request.data['survey_id_string'] == "":
-            location_survey = Survey(
-                tenant=user.tenant,
-                utility=utility,
-                name=request.data['survey_name'],
-                start_date=request.data['start_date'],
-                end_date=request.data['end_date'],
-                description=request.data['description'],
-                objective = objective.id,
-                completion_date = request.data['completion_date'],
-                type = type.id,
-                area=area.id,
-                sub_area=sub_area.id,
-                status_id=status.id,
-                is_active = True
-            )
-            location_survey.save()
-            transaction.savepoint_commit(sid)
-            return location_survey
-        else:
-            location_survey = get_survey_by_id_string(request.data['survey_id_string'])
-            location_survey.tenant = user.tenant
-            location_survey.utility = utility
-            location_survey.name = request.data['survey_name']
-            location_survey.start_date = request.data['start_date']
-            location_survey.end_date = request.data['end_date']
-            location_survey.description = request.data['description']
-            location_survey.objective = objective.id
-            location_survey.completion_date = request.data['completion_date'],
-            location_survey.type = type.id
-            location_survey.area = area.id
-            location_survey.sub_area = sub_area.id
-            location_survey.status_id = status.id
-            location_survey.save()
-            transaction.savepoint_commit(sid)
-            return location_survey
+        survey.tenant = user.tenant
+        survey.created_by = user.id
+        survey.created_date = datetime.now()
+        survey.save()
+        return survey, True
     except Exception as e:
+        print("Exception occured ", str(traceback.print_exc(e)))
         transaction.rollback(sid)
-        location_survey = ''
-        return location_survey
+        return survey, False
 
-
-def get_consumer_survey_list(request,user):
+def save_edit_location_survey_details(user,request):
+    survey = ''
     try:
-        consumer_obj = SurveyConsumer.objects.filter(survey_id=request.data['survey_id'])
+        if "survey_id_string" in request.data:
+            survey = get_survey_by_id_string(request.data['survey_id_string'])
+        if "survey_name" in request.data:
+            survey.name = request.data['survey_name']
+        if "objective_id_string" in request.data:
+            objective = get_survey_objective_by_id_string(request.data['objective_id_string'])
+            survey.objective_id = objective.id
+        if "description" in request.data:
+            survey.description = request.data['description']
+        if "type_id_string" in request.data:
+            type = get_survey_type_by_id_string(request.data['type_id_string'])
+            survey.type_id = type.id
+        if "category_id_string" in request.data:
+            consumer_category = get_consumer_category_by_id_string(request.data['category_id_string'])
+            survey.category_id = consumer_category.id
+        if "sub_category_id_string" in request.data:
+            sub_category = get_consumer_sub_category_by_id_string(request.data['sub_category_id_string'])
+            survey.sub_category_id = sub_category.id
+        if "area_id_string" in request.data:
+            area = get_area_by_id_string(request.data['area_id_string'])
+            survey.area_id = area.id
+        if "sub_area_id_string" in request.data:
+            sub_area = get_sub_area_by_id_string(request.data['sub_area_id_string'])
+            survey.sub_area_id = sub_area.id
+        if "status_id_string" in request.data:
+            status = get_survey_status_by_id_string(request.data['status_id_string'])
+            survey.status_id = status.id
+        if "no_of_consumers" in request.data:
+            survey.no_of_consumers = request.data['no_of_consumers']
+        if "start_date" in request.data:
+            survey.start_date = request.data['start_date']
+        if "end_date" in request.data:
+            survey.end_date = request.data['end_date']
+        if "completion_date" in request.data:
+            survey.completion_date = request.data['completion_date']
+
+        survey.tenant = user.tenant
+        survey.updated_by = user.id
+        survey.updated_date = datetime.now()
+        survey.save()
+        return survey, True
+    except Exception as e:
+        print("Exception occured ", str(traceback.print_exc(e)))
+        transaction.rollback(sid)
+        return survey, False
+
+
+
+def get_consumer_survey_list():
+    try:
+        consumer_obj = SurveyConsumer.objects.filter(survey_id=1)
         consumer_list = []
+
         for consumer in consumer_obj:
             consumer_data = {}
             # Code for lookups start
-            area = get_area_by_id_string(consumer.id_string)
-            sub_area = get_sub_area_by_id_string(consumer.id_string)
-            type = get_survey_type_by_id_string(consumer.id_string)
-            objective = get_survey_type_by_id_string(consumer.id_string)
-            status = get_survey_status_by_id_string(consumer.id_string)
+            area = get_area_by_id(consumer.area_id)
+            sub_area = get_sub_area_by_id(consumer.sub_area_id)
             # Code for lookups end
 
-            consumer_data['tenant_id_string']: consumer.tenant.id_string
-            consumer_data['utility_id_string']: consumer.utility.id_string
-            consumer_data['name']: consumer.name
-            consumer_data['objective']: objective.id_string
-            consumer_data['discription']: consumer.description
-            consumer_data['type']: type.id_string
-            consumer_data['no_of_consumers']: consumer.no_of_consumers
-            consumer_data['start_date']: consumer.start_date.strftime(DISPLAY_DATE_FORMAT)
-            consumer_data['end_date']: consumer.end_date.strftime(DISPLAY_DATE_FORMAT)
-            consumer_data['completion_date']: consumer.completion_date.strftime(DISPLAY_DATE_FORMAT)
-            consumer_data['area_id_string']: area.id_string
-            consumer_data['sub_area_id_string']: sub_area.id_string
-            consumer_data['status']: status.id_string
+            consumer_data['tenant_id_string'] = consumer.tenant.id_string
+            consumer_data['utility_id_string']= consumer.utility.id_string
+            consumer_data['first_name']= consumer.first_name
+            consumer_data['last_name']= consumer.last_name
+            consumer_data['consumer_no']= consumer.consumer_no
+            consumer_data['survey_id']= consumer.survey_id
+            consumer_data['area_id_string']= area.id_string
+            consumer_data['sub_area_id_string']= sub_area.id_string
             consumer_list.append(consumer_data)
-
         return consumer_list
-
     except Exception as e:
         pass
 
-def is_consumer_data_verified(request,user):
+def is_consumer_data_verified(request):
+    return True
     if request.data['survey_name'] == "" and request.data['survey_type'] == "" and request.data['start_date'] == "" and \
        request.data['end_date'] == "" and request.data['discription'] == "" and request.data['objective'] == "" and request.data['utility'] == ""\
        and request.data['category'] == "" and request.data['area'] == "" and request.data['sub_area'] == "" \
@@ -238,10 +282,9 @@ def is_consumer_data_verified(request,user):
         return True
 
 
-@transaction.atomic
-def save_consumer_survey_details(request,user):
-    sid = transaction.savepoint()
+def save_consumer_survey_details(user,request,sid):
     try:
+
         utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
         area = get_area_by_id_string(request.data['area'])
         sub_area = get_sub_area_by_id_string(request.data['sub_area'])
@@ -293,65 +336,90 @@ def save_consumer_survey_details(request,user):
         consumer_survey = ''
         return consumer_survey
 
-@transaction.atomic
 def save_consumer_details(request, user,consumer_survey):
-    sid = transaction.savepoint()
+    consumer_data_list = []
     try:
-        utility = UtilityMaster.objects.get(id_string=request.data['utility'])  # Don't have table
-        survey_id = get_survey_by_id_string(request.data['id_string'])
-        status = get_survey_status_by_id_string(request.data['status'])
 
-        if request.data['consumer_id_string'] == "":
-            # Sample data of Consumers
-            consumer_datas = [{'consumer_name': 'priyanka', 'mobile_no': '9011613929', 'meter_no': '859756547895',
-                           'area': 'Kothrud', 'sub_area': 'bhusari colony','consumer_no':554811464894,
-                           'description': 'This updated information'},
-                            {'consumer_name': 'ravi', 'mobile_no': '7620983335', 'meter_no': '2568756547895',
-                           'area': 'nagar', 'sub_area': 'bhusari colony','consumer_no':895455546544,
-                           'description': 'This updated information'}]
+        # Sample data of Consumers
+        consumer_datas = [{'first_name': 'priyanka','last_name':'kachare','email_id':'priya@gmail.com', 'phone_mobile': '9011613929',
+                       'area_id_string': "42531c10-5c0b-439d-879a-31c5e2dd5c85", 'sub_area_id_string':"1c3f6828-f09c-48eb-9bb7-2661b4f48fe7",'consumer_no':554811464894,
+                           'category_id_id_string': "2f2433db-db13-409d-a297-3819c919417a", 'sub_category_id_id_string':"8e3c0605-8ad9-4e0f-a6fb-29011ec57384"},
+                        {'first_name': 'ravi', 'last_name':'patil','email_id':'ravi@gmail.com','phone_mobile': '7620983335',
+                       'area_id_string': "42531c10-5c0b-439d-879a-31c5e2dd5c85", 'sub_area_id_string': "1c3f6828-f09c-48eb-9bb7-2661b4f48fe7",'consumer_no':895455546544,
+                         'category_id_string': "2f2433db-db13-409d-a297-3819c919417a", 'sub_category_id_string':"8e3c0605-8ad9-4e0f-a6fb-29011ec57384"}]
 
-            consumer_data_list = []
-            for consumer_data in consumer_datas:
-                consumer_survey = SurveyConsumer(
-                    tenant=user.tenant,
-                    utility=utility,
-                    survey_id=survey_id.id,
-                    consumer_no=consumer_data['consumer_no'],
-                    consumer_name=consumer_data['consumer_name'],
-                    mobile_no=consumer_data['mobile_no'],
-                    meter_no=consumer_data['meter_no'],
-                    area=consumer_data['area'],
-                    sub_area=consumer_data['sub_area'],
-                    description=consumer_data['description'],
-                    status_id=status.id,
-                    is_active=True
-                )
-                consumer_survey.save()
-                transaction.savepoint_commit(sid)
-                consumer_data_list.append(consumer_survey)
-            return consumer_data_list
-        else:
-            consumer_survey = get_survey_consumer_by_id_string(request.data['consumer_id_string'])
-            consumer_survey.tenant = user.tenant
-            consumer_survey.utility = utility
-            consumer_survey.survey_id = consumer_survey.id
-            consumer_survey.consumer_no = consumer_survey.consumer_no,
-            consumer_survey.consumer_name = consumer_survey.consumer_name,
-            consumer_survey.mobile_no = consumer_survey.mobile_no,
-            consumer_survey.meter_no = consumer_survey.meter_no,
-            consumer_survey.area = consumer_survey.area,
-            consumer_survey.sub_area = consumer_survey.sub_area,
-            consumer_survey.description = consumer_survey.description,
-            consumer_survey.status_id = status.id
-            consumer_survey.is_active = True
-            consumer_survey.save()
-            transaction.savepoint_commit(sid)
-            return consumer_survey
+        for consumer_data in consumer_datas:
+            surveyconsumer = SurveyConsumer()
+            if 'first_name' in consumer_data:
+                surveyconsumer.first_name = consumer_data['first_name']
+            if 'last_name' in consumer_data:
+                surveyconsumer.last_name = consumer_data['last_name']
+            if 'email_id' in consumer_data:
+                surveyconsumer.email_id = consumer_data['email_id']
+            if 'phone_mobile' in consumer_data:
+                surveyconsumer.phone_mobile = consumer_data['phone_mobile']
+            if 'consumer_no' in consumer_data:
+                surveyconsumer.consumer_no = consumer_data['consumer_no']
+            if 'area_id_string' in consumer_data:
+                area = get_area_by_id_string(consumer_data["area_id_string"])
+                surveyconsumer.area_id = area.id
+            if "sub_area_id_string" in consumer_data:
+                sub_area = get_sub_area_by_id_string(consumer_data["sub_area_id_string"])
+                surveyconsumer.sub_area_id = sub_area.id
+            if "category_id_string" in consumer_data:
+                consumer_category = get_consumer_category_by_id_string(consumer_data["category_id_string"])
+                surveyconsumer.category_id = consumer_category.id
+            if "sub_category_id_string" in consumer_data:
+                sub_category = get_consumer_sub_category_by_id_string(consumer_data["sub_category_id_string"])
+                surveyconsumer.sub_category_id = sub_category.id
 
+
+            surveyconsumer.tenant = user.tenant
+            surveyconsumer.survey_id = consumer_survey.id
+            surveyconsumer.vendor_id = 1
+            surveyconsumer.created_by = user.id
+            surveyconsumer.created_date = datetime.now()
+            surveyconsumer.save()
+            consumer_data_list.append(surveyconsumer)
+        return consumer_data_list,True
     except Exception as e:
-        transaction.rollback(sid)
-        consumer_data_list = ''
-        return consumer_data_list
+        print("Exception occured ", str(traceback.print_exc(e)))
+        return consumer_data_list, False
+
+def save_edit_consumer_details(user,request):
+    surveyconsumer = ''
+    try:
+        if "consumer_id_string" in request.data:
+            surveyconsumer = get_survey_consumer_by_id_string(request.data['consumer_id_string'])
+        if 'first_name' in request.data:
+            surveyconsumer.first_name = request.data['first_name']
+        if 'last_name' in request.data:
+            surveyconsumer.last_name = request.data['last_name']
+        if 'email_id' in request.data:
+            surveyconsumer.email_id = request.data['email_id']
+        if 'phone_mobile' in request.data:
+            surveyconsumer.phone_mobile = request.data['phone_mobile']
+        if 'consumer_no' in request.data:
+            surveyconsumer.consumer_no = request.data['consumer_no']
+        if 'area_id_string' in request.data:
+            area = get_area_by_id_string(request.data["area_id_string"])
+            surveyconsumer.area_id = area.id
+        if "sub_area_id_string" in request.data:
+            sub_area = get_sub_area_by_id_string(request.data["sub_area_id_string"])
+            surveyconsumer.sub_area_id = sub_area.id
+        if "category_id_string" in request.data:
+            consumer_category = get_consumer_category_by_id_string(request.data["category_id_string"])
+            surveyconsumer.category_id = consumer_category.id
+        if "sub_category_id_string" in request.data:
+            sub_category = get_consumer_sub_category_by_id_string(request.data["sub_category_id_string"])
+            surveyconsumer.sub_category_id = sub_category.id
+        surveyconsumer.updated_by = user.id
+        surveyconsumer.updated_date = datetime.now()
+        surveyconsumer.save()
+        return surveyconsumer,True
+    except Exception as e:
+        print("Exception occured ", str(traceback.print_exc(e)))
+        return surveyconsumer, False
 
 
 def is_assignment_verified(request):

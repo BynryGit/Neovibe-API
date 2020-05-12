@@ -22,7 +22,7 @@ from v1.utility import urls as utility_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/registrations/', include(registration_urls)),
+    path('api/v1/registration/', include(registration_urls)),
     path('api/v1/campaign/', include(campaign_urls)),
     path('api/v1/survey/', include(survey_urls)),
     path('api/v1/utilities/', include(utility_urls)),

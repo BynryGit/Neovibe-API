@@ -2448,6 +2448,1021 @@
 			"name": "Inactive",
 			"is_active": "True"
 		}
+	},
+
+  {
+		"pk": "1",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "CNG Station",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Pipe",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "CNG Station",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Pipe",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "Digital meter",
+			"name": "Digital meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "Analog Meter",
+			"name": "Analog Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "steel",
+			"name": "steel",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "plastic",
+			"name": "plastic",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sub_category": "CNG Station-1",
+			"name": "CNG Station-1",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "6",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "Digital meter",
+			"name": "Digital meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "Analog Meter",
+			"name": "Analog Meter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "steel",
+			"name": "steel",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "plastic",
+			"name": "plastic",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sub_category": "CNG Station-1",
+			"name": "CNG Station-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Sop-1",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Sop-2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Sop-3",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Sop-4",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "contract.Documents",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 2,
+			"servicetype":,
+			"identification":,
+			"document_type": 1,
+			"document_subtype":,
+			"name": "Doc-1",
+			"doc_link": "doc_link-1",
+			"status_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.Documents",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 3,
+			"servicetype":,
+			"identification":,
+			"document_type": 2,
+			"document_subtype":,
+			"name": "Doc-2",
+			"doc_link": "doc_link-2",
+			"status_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "contract.Documents",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 9,
+			"servicetype":,
+			"identification":,
+			"document_type": 1,
+			"document_subtype":,
+			"name": "Doc-3",
+			"doc_link": "doc_link-3",
+			"status_id": "",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "contract.Documents",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 11,
+			"servicetype":,
+			"identification":,
+			"document_type": 2,
+			"document_subtype":,
+			"name": "Doc-4",
+			"doc_link": "doc_link-4",
+			"status_id":,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "contract.Documents",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 26,
+			"servicetype":,
+			"identification":,
+			"document_type": 3,
+			"document_subtype":,
+			"name": "Doc-5",
+			"doc_link": "doc_link-5",
+			"status_id":,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "contract.Documents",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 28,
+			"servicetype":,
+			"identification":,
+			"document_type": 4,
+			"document_subtype":,
+			"name": "Doc-6",
+			"doc_link": "doc_link-6",
+			"status_id":,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "commonapp.Notes",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 2,
+			"servicetype":,
+			"identification":,
+			"note_name": "Note-1",
+			"note_color": "Color-1",
+			"note": "Note-1",
+			"status":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "commonapp.Notes",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 3,
+			"servicetype":,
+			"identification":,
+			"note_name": "Note-2",
+			"note_color": "Color-2",
+			"note": "Note-2",
+			"status":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "commonapp.Notes",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 9,
+			"servicetype":,
+			"identification":,
+			"note_name": "Note-3",
+			"note_color": "Color-3",
+			"note": "Note-3",
+			"status":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "commonapp.Notes",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 11,
+			"servicetype":,
+			"identification":,
+			"note_name": "Note-4",
+			"note_color": "Color-4",
+			"note": "Note-4",
+			"status":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "commonapp.Notes",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 26,
+			"servicetype":,
+			"identification":,
+			"note_name": "Note-5",
+			"note_color": "Color-5",
+			"note": "Note-5",
+			"status":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "commonapp.Notes",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 28,
+			"servicetype":,
+			"identification":,
+			"note_name": "Note-6",
+			"note_color": "Color-6",
+			"note": "Note-6",
+			"status":,
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "system.Help",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 2,
+			"help_file_url":"File-1",
+			"topic": "Topic-1",
+			"is_actionable": "False",
+			"action_id": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.Help",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 3,
+			"help_file_url":"File-2",
+			"topic": "Topic-2",
+			"is_actionable": "True",
+			"action_id": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.Help",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 9,
+			"help_file_url":"File-3",
+			"topic": "Topic-3",
+			"is_actionable": "False",
+			"action_id": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.Help",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 11,
+			"help_file_url":"File-4",
+			"topic": "Topic-4",
+			"is_actionable": "True",
+			"action_id": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.Help",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 26,
+			"help_file_url":"File-5",
+			"topic": "Topic-5",
+			"is_actionable": "False",
+			"action_id": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.Help",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 28,
+			"help_file_url":"File-6",
+			"topic": "Topic-6",
+			"is_actionable": "True",
+			"action_id": "",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "system.Labels",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 2,
+			"screen":,
+			"screen_name": ,
+			"label_id": ,
+			"name": "Lable-1",
+			"type": "T-1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.Labels",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"sub_module": 3,
+			"screen":,
+			"screen_name": ,
+			"label_id": ,
+			"name": "Lable-2",
+			"type": "T-2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.Labels",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 9,
+			"screen":,
+			"screen_name": ,
+			"label_id": ,
+			"name": "Lable-3",
+			"type": "T-3",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.Labels",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"sub_module": 11,
+			"screen":,
+			"screen_name": ,
+			"label_id": ,
+			"name": "Lable-4",
+			"type": "T-4",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.Labels",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 26,
+			"screen":,
+			"screen_name": ,
+			"label_id": ,
+			"name": "Lable-5",
+			"type": "T-5",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.Labels",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"sub_module": 28,
+			"screen":,
+			"screen_name": ,
+			"label_id": ,
+			"name": "Lable-6",
+			"type": "T-6",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "system.SuccessMessages",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 1,
+			"sub_module_id": 2,
+			"event_id":,
+			"event_name": "Event-1",
+			"success_msg_time": ,
+			"success_msg": "Successful sent",
+			"success_code": ,
+			"source": "Source-1",
+			"subsystem":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.SuccessMessages",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 1,
+			"sub_module_id": 3,
+			"event_id":,
+			"event_name": "Event-2",
+			"success_msg_time": ,
+			"success_msg": "Successful sent",
+			"success_code": ,
+			"source": "Source-2",
+			"subsystem":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.SuccessMessages",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 2,
+			"sub_module_id": 9,
+			"event_id":,
+			"event_name": "Event-3",
+			"success_msg_time": ,
+			"success_msg": "Successful sent",
+			"success_code": ,
+			"source": "Source-3",
+			"subsystem":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.SuccessMessages",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 2,
+			"sub_module_id": 11,
+			"event_id":,
+			"event_name": "Event-4",
+			"success_msg_time": ,
+			"success_msg": "Successful sent",
+			"success_code": ,
+			"source": "Source-4",
+			"subsystem":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.SuccessMessages",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module_id": 5,
+			"sub_module_id": 26,
+			"event_id":,
+			"event_name": "Event-5",
+			"success_msg_time": ,
+			"success_msg": "Successful sent",
+			"success_code": ,
+			"source": "Source-5",
+			"subsystem":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.SuccessMessages",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module_id": 5,
+			"sub_module_id": 28,
+			"event_id":,
+			"event_name": "Event-6",
+			"success_msg_time": ,
+			"success_msg": "Successful sent",
+			"success_code": ,
+			"source": "Source-6",
+			"subsystem":,
+			"is_active": "True"
+			}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "system.ToolTip",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 1,
+			"sub_module_id": 2,
+			"field":,
+			"text": "text-1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.ToolTip",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 1,
+			"sub_module_id": 3,
+			"field":,
+			"text": "text-2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.ToolTip",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 2,
+			"sub_module_id": 9,
+			"field":,
+			"text": "text-3",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.ToolTip",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 2,
+			"sub_module_id": 11,
+			"field":,
+			"text": "text-4",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.ToolTip",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module_id": 5,
+			"sub_module_id": 26,
+			"field":,
+			"text": "text-5",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.ToolTip",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module_id": 5,
+			"sub_module_id": 28,
+			"field":,
+			"text": "text-6",
+			"is_active": "True"
+			}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "system.Warning",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 1,
+			"sub_module_id": 2,
+			"event":,
+			"time": ,
+			"message": "Warning-1",
+			"code":,
+			"source": "Source-1",
+			"sub_system": "Subsystem-1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.Warning",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 1,
+			"sub_module_id": 3,
+			"event":,
+			"time": ,
+			"message": "Warning-2",
+			"code":,
+			"source": "Source-2",
+			"sub_system": "Subsystem-2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.Warning",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 2,
+			"sub_module_id": 9,
+			"event":,
+			"time": ,
+			"message": "Warning-3",
+			"code":,
+			"source": "Source-3",
+			"sub_system": "Subsystem-3",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.Warning",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module_id": 2,
+			"sub_module_id":11,
+			"event":,
+			"time": ,
+			"message": "Warning-4",
+			"code":,
+			"source": "Source-4",
+			"sub_system": "Subsystem-4",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.Warning",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module_id": 5,
+			"sub_module_id":26,
+			"event":,
+			"time": ,
+			"message": "Warning-5",
+			"code":,
+			"source": "Source-5",
+			"sub_system": "Subsystem-5",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.Warning",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module_id": 5,
+			"sub_module_id":28,
+			"event":,
+			"time": ,
+			"message": "Warning-6",
+			"code":,
+			"source": "Source-6",
+			"sub_system": "Subsystem-6",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "system.Notification",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"submodule":2,
+			"title": "Notification-1",
+			"description": "Notification-1",
+			"type": "type-1",
+			"frequency":,
+			"expiry_date": "",
+			"start_date": "",
+			"action": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.Notification",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"submodule":3,
+			"title": "Notification-2",
+			"description": "Notification-2",
+			"type": "type-2",
+			"frequency":,
+			"expiry_date": "",
+			"start_date": "",
+			"action": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.Notification",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"submodule":9,
+			"title": "Notification-3",
+			"description": "Notification-3",
+			"type": "type-3",
+			"frequency":,
+			"expiry_date": "",
+			"start_date": "",
+			"action": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.Notification",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"submodule":11,
+			"title": "Notification-4",
+			"description": "Notification-4",
+			"type": "type-4",
+			"frequency":,
+			"expiry_date": "",
+			"start_date": "",
+			"action": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.Notification",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"submodule": 26,
+			"title": "Notification-5",
+			"description": "Notification-5",
+			"type": "type-5",
+			"frequency":,
+			"expiry_date": "",
+			"start_date": "",
+			"action": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.Notification",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"submodule": 28,
+			"title": "Notification-6",
+			"description": "Notification-6",
+			"type": "type-6",
+			"frequency":,
+			"expiry_date": "",
+			"start_date": "",
+			"action": "False",
+			"is_active": "True"
+			}
 	}
 ]
 

@@ -49,11 +49,8 @@ class UserDetail(User):
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
-    def __str__(self):
-        return self.first_name
-
     def __unicode__(self):
-        return self.first_name
+        return self.id
 
     @property
     def get_user_status(self):

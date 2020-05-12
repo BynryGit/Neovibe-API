@@ -1221,28 +1221,7 @@
           "is_active": "True"
         }
   },
-  {
-    "pk": "1",
-    "model": "userapp.UserDetails",
-    "fields": {
-        "tenant": 1,
-        "utility": 1,
-        "imei_no": 121212121212121,
-        "phone_mobile": 2222222222,
-        "is_active": "True"
-    }
-  },
-  {
-    "pk": "2",
-    "model": "userapp.UserDetails",
-    "fields": {
-        "tenant": 1,
-        "utility": 1,
-        "imei_no": 131516589675326,
-        "phone_mobile": 2222222222,
-        "is_active": "True"
-    }
-  },
+
   {
         "pk": "1",
 		"model": "userapp.UserPrivilege",
@@ -1843,6 +1822,66 @@
 			"unit_id": 10,
 			"base_rate": 10,
 			"is_taxable": "True",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "userapp.UserToken",
+		"fields": {
+			"tenant": ,
+			"utility": ,
+			"token": "ag20202323366",
+			"form_factor": 1,
+			"user": ,
+			"ip_address": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+
+		"pk": "2",
+		"model": "userapp.UserToken",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"token": "tgur25598753693",
+			"form_factor": 2,
+			"user": ,
+			"ip_address": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+
+		"pk": "3",
+		"model": "userapp.UserToken",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"token": "agujy02323366",
+			"form_factor": 1,
+			"user": ,
+			"ip_address": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+
+		"pk": "4",
+		"model": "userapp.UserToken",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"token": "tguroli98753693",
+			"form_factor": 2,
+			"user": ,
+			"ip_address": ,
+			"status": ,
 			"is_active": "True"
 		}
 	}

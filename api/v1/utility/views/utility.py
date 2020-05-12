@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 import traceback
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
@@ -7,10 +9,12 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 
 # API Header
-# API end Point: api/v1/utility
+# API end Point: api/v1/utilities
 # API verb: GET
 # Package: Basic
 # Modules:
@@ -25,30 +29,16 @@ class UtilityListDetail(generics.ListAPIView):
     serializer_class = UtilityMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 
-    def get_queryset(self):
-        search_str = self.request.query_params.get('search', None)
-        filter_str = self.request.query_params.get('filter', None)
-        print(search_str, filter_str)
-
-        if not filter_str:
-            filter_str = 'ALL'
-
-        if search_str and filter_str != 'ALL':
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False, name__icontains=search_str,
-                                                 tenant_id=filter_str).order_by('-id')
-        elif search_str and filter_str == 'ALL':
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False, name__icontains=search_str).order_by('-id')
-
-        elif not search_str and filter_str != 'ALL':
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False, tenant_id=filter_str).order_by('-id')
-        else:
-            queryset = UtilityMasterTbl.objects.filter(is_deleted=False).order_by('-id')
-
-        return queryset
+    queryset = UtilityMasterTbl.objects.filter(is_active=True)
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_fields = ('name', 'tenant__id_string',)
+    ordering_fields = ('name', 'tenant',)
+    ordering = ('name') # always give by default alphabetical order
+    search_fields = ('name', 'tenant__name',)
 
 
 # API Header
-# API end Point: api/v1/utility
+# API end Point: api/v1/utilities
 # API verb: GET
 # Package: Basic
 # Modules:
@@ -73,10 +63,12 @@ class UtilityDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
+                    # never pass token in logger
+                    # choices = {'key1': 'val1', 'key2': 'val2'}
+                    # logger.log("info", "Getting utility details", None, choices)
 
-                    utility_obj = UtilityMasterTbl.objects.filter(id_string=id_string)
+                    utility_obj = UtilityMasterTbl.objects.filter(id_string=id_string, is_active=True)
                     if utility_obj:
-                        utility_obj = UtilityMasterTbl.objects.get(id_string=id_string)
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
@@ -95,6 +87,7 @@ class UtilityDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
+            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
