@@ -31,9 +31,9 @@ class UserDetail(User):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    city = models.BigIntegerField(blank=True, null=True)
-    user_type = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
-    user_subtype = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
+    city_id = models.BigIntegerField(blank=True, null=True)
+    user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
+    user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
     user_ID = models.CharField(null=True, blank=True)  # Web, Mobile
     middle_name = models.CharField(max_length=200, null=True, blank=True)
@@ -41,9 +41,9 @@ class UserDetail(User):
     salt = models.CharField(max_length=200, null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
-    department = models.BigIntegerField(null=True, blank=True)
-    role = models.BigIntegerField(null=True, blank=True)
-    status = models.BigIntegerField(null=True, blank=True)
+    department_id = models.BigIntegerField(null=True, blank=True)
+    role_id = models.BigIntegerField(null=True, blank=True)
+    status_id = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())

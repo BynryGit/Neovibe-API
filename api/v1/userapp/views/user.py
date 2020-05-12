@@ -1,64 +1,14 @@
-import traceback
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status, generics
-from api import messages
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.department import get_department_by_id_string
+from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.user_master import get_users_by_tenant_id_string
+from v1.userapp.models.user_role import get_role_by_id_string
+from v1.userapp.models.user_status import get_user_status_by_id_string
+from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
+from v1.userapp.models.user_type import get_user_type_by_id_string
 from v1.userapp.serializers.user import UserListSerializer
-from v1.userapp.views.common_functions import login, authentication
-
-
-# API Header
-# API end Point: api/v1/user/login
-# API verb: GET
-# Package: Basic
-# Modules: User
-# Interaction: user list
-# Usage: API will fetch required data for user list
-# Tables used: 2.5.3. User Details
-# Author: Arpita
-# Created on: 29/04/2020
-
-
-class LoginApiView(APIView):
-    """Login Api View"""
-    def post(self, request, format=None):
-        try:
-            validated_data = {
-                'username': request.data['username'],
-                'password': request.data['password']
-            }
-
-            auth = authentication(validated_data)
-
-            if auth:
-                token = login(auth) # Call Login function
-
-                if not token:
-                    return Response({
-                        messages.RESULT: messages.FAIL,
-                        messages.MESSAGE: messages.INVALID_CREDENTIALS,
-                    }, status=status.HTTP_401_UNAUTHORIZED)
-                else:
-                    return Response({
-                        messages.RESULT: messages.SUCCESS,
-                        messages.MESSAGE: messages.SUCCESSFULLY_DATA_RETRIEVE,
-                        messages.Token: token,
-                    }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    messages.RESULT: messages.FAIL,
-                    messages.MESSAGE: messages.INVALID_CREDENTIALS,
-                }, status=status.HTTP_401_UNAUTHORIZED)
-
-        except Exception as ex:
-            print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            return Response({
-                messages.RESULT: messages.FAIL,
-                messages.MESSAGE: messages.SERVER_ERROR.format(str(ex)),
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 # API Header
 # API end Point: api/v1/role/list
@@ -81,24 +31,36 @@ class UserList(generics.ListAPIView):
     def get_queryset(self):
 
         queryset = get_users_by_tenant_id_string(1)
-        utility_id_string = self.requestUserRole.objects.filter(tenant_id=1).query_params.get('utility', None)
-        type_id_string = self.request.query_params.get('type', None)
-        sub_type_id_string = self.request.query_params.get('sub_type', None)
+        utility_id_string = self.request.query_params.get('utility', None)
+        city_id_string = self.request.query_params.get('city', None)
+        user_type_id_string = self.request.query_params.get('user_type', None)
+        user_sub_type_id_string = self.request.query_params.get('user_sub_type', None)
         form_factor_id_string = self.request.query_params.get('form_factor', None)
         department_id_string = self.request.query_params.get('department', None)
+        role_id_string = self.request.query_params.get('role', None)
+        status_id_string = self.request.query_params.get('status', None)
 
         if utility_id_string is not None:
             queryset = queryset.filter(utility__id_string=utility_id_string)
-        if type_id_string is not None:
-            role_type = get_role_type_by_id_string(type_id_string)
-            queryset = queryset.filter(type_id=role_type.id)
-        if sub_type_id_string is not None:
-            role_sub_type = get_role_sub_type_by_id_string(sub_type_id_string)
-            queryset = queryset.filter(sub_type_id=role_sub_type.id)
+        if city_id_string is not None:
+            city = get_city_by_id_string(city_id_string)
+            queryset = queryset.filter(city_id=city.id)
+        if user_type_id_string is not None:
+            user_type = get_user_type_by_id_string(user_type_id_string)
+            queryset = queryset.filter(user_type_id=user_type.id)
+        if user_sub_type_id_string is not None:
+            user_sub_type = get_user_sub_type_by_id_string(user_sub_type_id_string)
+            queryset = queryset.filter(user_subtype_id=user_sub_type.id)
         if form_factor_id_string is not None:
             form_factor = get_form_factor_by_id_string(form_factor_id_string)
             queryset = queryset.filter(form_factor_id=form_factor.id)
         if department_id_string is not None:
             department = get_department_by_id_string(department_id_string)
             queryset = queryset.filter(department_id=department.id)
+        if role_id_string is not None:
+            role = get_role_by_id_string(role_id_string)
+            queryset = queryset.filter(role_id=role.id)
+        if status_id_string is not None:
+            status = get_user_status_by_id_string(status_id_string)
+            queryset = queryset.filter(status_id=status.id)
         return queryset

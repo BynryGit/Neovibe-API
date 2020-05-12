@@ -2,15 +2,13 @@
 # module : All modules & sub-modules
 # Table Type : Lookup (local)
 # Table Name : 2.12.17 User Type
-# Description : It is a global lookup table that stores various types of users
+# Description : It is a global lookup table that stores various sub types of users
 # Frequency of data changes : Low
 # Sample Table Data : "Employee" ,  "Vendor" , "Supplier"
 # Reference Table : 2.5.5 User Documents.
-# Author : Jayshree Kumbhare
-# Creation Date : 21/04/2020
+# Author : Arpita Badwaik
+# Creation Date : 11/05/2020
 
-# change history
-# <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
@@ -19,9 +17,9 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
-# Create User Type table start
+# Create User Sub Type table start
 
-class UserType(models.Model):
+class UserSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -38,12 +36,12 @@ class UserType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create User Type table end
+# Create User sub Type table end
 
 
-def get_user_type_by_id_string(id_string):
-    return UserType.objects.filter(id_string=id_string).last()
+def get_user_sub_type_by_id_string(id_string):
+    return UserSubType.objects.filter(id_string=id_string).last()
 
 
-def get_user_type_by_id(id):
-    return UserType.objects.filter(id_string=id).last()
+def get_user_sub_type_by_id(id):
+    return UserSubType.objects.filter(id_string=id).last()
