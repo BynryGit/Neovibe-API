@@ -1,13 +1,12 @@
 import traceback
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from api.messages import STATE, DATA, ERROR, EXCEPTION, SUCCESS
 from v1.billing.models.bill_status import get_bill_statuses_by_tenant_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
-
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.consumer.models.consumer_category import get_consumer_category_by_id
@@ -18,10 +17,40 @@ from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id
+from v1.consumer.serializers.consumer import ConsumerViewSerializer
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.user_master import UserDetail
 from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id
+
+
+
+
+
+
+
+class Consumer(GenericAPIView):
+
+    def get(self, request, id_string):
+        try:
+            consumer = get_consumer_by_id_string(id_string)
+            if consumer:
+                serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: '',
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ConsumerApiView(APIView):

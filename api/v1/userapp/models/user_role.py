@@ -19,6 +19,7 @@ from datetime import datetime # importing package for datetime
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.role_status import get_role_status_by_id
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
 from v1.userapp.models.role_type import get_role_type_by_id
 from v1.utility.models.utility_master import UtilityMaster
@@ -58,6 +59,10 @@ class UserRole(models.Model):
     def get_role_sub_type(self):
         sub_type = get_role_sub_type_by_id(self.sub_type_id)
         return sub_type.name
+
+    @property
+    def get_user_status(self):
+        return get_role_status_by_id(self.status_id)
 
     @property
     def get_form_factor(self):

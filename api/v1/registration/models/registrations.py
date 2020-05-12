@@ -14,6 +14,7 @@
 
 from datetime import datetime # importing package for datetime
 
+from v1.commonapp.models.country import get_country_by_id
 from v1.registration.models.registration_status import get_registration_status_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
@@ -67,14 +68,13 @@ class Registration(models.Model):
     @property
     def get_status(self):
         status = get_registration_status_by_id(self.status_id)
-        return status.name
+        return status
 
-    @property
-    def get_status_id_string(self):
-        status = get_registration_status_by_id(self.status_id)
-        return status.id_string
 
 
 def get_registration_by_id_string(id_string):
-    return Registration.objects.get(id_string = id_string)
+    try:
+        return Registration.objects.get(id_string = id_string)
+    except:
+        return  False
 # Create Consumer Registration table end.

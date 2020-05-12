@@ -48,7 +48,7 @@ class RoleList(generics.ListAPIView):
     def get_queryset(self):
 
         queryset = get_role_by_tenant_id_string(1)
-        utility_id_string = self.requestUserRole.objects.filter(tenant_id=1).query_params.get('utility', None)
+        utility_id_string = self.request.query_params.get('utility', None)
         type_id_string = self.request.query_params.get('type', None)
         sub_type_id_string = self.request.query_params.get('sub_type', None)
         form_factor_id_string = self.request.query_params.get('form_factor', None)
