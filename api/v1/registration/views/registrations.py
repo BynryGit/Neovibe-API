@@ -33,7 +33,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
-# API end Point: api/v1/registration/list api/v1/registrations
+# API end Point: api/v1/registration/list
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
