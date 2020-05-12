@@ -7,21 +7,17 @@ from rest_framework.views import APIView
 from api.messages import *
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.department import get_department_by_id, \
-    get_department_by_id_string
-from v1.commonapp.models.form_factor import get_form_factor_by_id, \
-    get_form_factor_by_id_string
+from v1.commonapp.models.department import get_department_by_id, get_department_by_id_string
+from v1.commonapp.models.form_factor import get_form_factor_by_id, get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
-from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, \
-    get_role_sub_type_by_id_string
-from v1.userapp.models.role_type import get_role_type_by_id, \
-    get_role_type_by_id_string
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, get_role_sub_type_by_id_string
+from v1.userapp.models.role_type import get_role_type_by_id, get_role_type_by_id_string
 from v1.userapp.models.user_master import get_user_by_id_string
-from v1.userapp.models.user_role import get_role_by_id_string, UserRole, get_role_by_tenant_id_string
+from v1.userapp.models.user_role import get_role_by_id_string, get_role_by_tenant_id_string
 from v1.userapp.serializers.role import RoleListSerializer
 from v1.userapp.views.common_functions import is_data_verified, add_basic_role_details, \
     save_privilege_details, save_edited_basic_role_details, save_edited_privilege_details
@@ -48,7 +44,7 @@ class RoleList(generics.ListAPIView):
     def get_queryset(self):
 
         queryset = get_role_by_tenant_id_string(1)
-        utility_id_string = self.requestUserRole.objects.filter(tenant_id=1).query_params.get('utility', None)
+        utility_id_string = self.request.query_params.get('utility', None)
         type_id_string = self.request.query_params.get('type', None)
         sub_type_id_string = self.request.query_params.get('sub_type', None)
         form_factor_id_string = self.request.query_params.get('form_factor', None)

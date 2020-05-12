@@ -18,11 +18,25 @@ from v1.userapp.models.role_privilege import RolePrivilege, get_role_privilege_b
     get_role_privilege_by_role_id
 from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
-from v1.userapp.models.user_master import UserDetail
+from v1.userapp.models.user_master import UserDetail, get_user_by_username
 from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string
 from v1.userapp.models.user_role import get_role_by_id, UserRole, get_role_by_id_string
-from v1.userapp.models.user_token import UserToken
-from v1.utility.models.utility_master import UtilityMaster
+from v1.userapp.models.user_token import UserToken, get_token_by_user_id
+
+
+def login(user):
+    try:
+        user_obj = get_user_by_username(user.username)
+        if UserToken.objects.filter(user_id=user_obj).exists():
+            token = get_token_by_user_id(user_obj.id)
+            token.delete()
+        payload = {'id_string': str(user_obj.id_string)}
+        encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        token_obj = UserToken(user=user_obj.id, token=encoded_jwt)
+        token_obj.save()
+        return token_obj.token
+    except:
+        return False
 
 
 # Check only mandatory fields
@@ -200,19 +214,4 @@ def check_privilege(user, privilege, activity):
         else:
             return False
     else:
-        return False
-
-
-def login(user):
-    try:
-        user_obj = UserDetail.objects.get(username=user.username)
-        if UserToken.objects.filter(user_id=user_obj).exists():
-            token = UserToken.objects.get(user_id=user_obj)
-            token.delete()
-        payload = {'id_string': str(user_obj.id_string)}
-        encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
-        token_obj = UserToken(user=user_obj.id, token=encoded_jwt)
-        token_obj.save()
-        return token_obj.token
-    except:
         return False

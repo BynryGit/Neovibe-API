@@ -2,55 +2,28 @@ __author__ = "aki"
 
 import traceback
 from rest_framework.generics import GenericAPIView
-from rest_framework import generics, status
+from rest_framework import status
+from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
-from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
-from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.utility.models.utility_module import get_utility_modules_by_utility_id_string
+from v1.utility.serializers.utility_module import UtilityModuleViewSerializer
 
 
 # API Header
-# API end Point: api/v1/utilities
+# API end Point: api/v1/utilities/id_string/module
 # API verb: GET
 # Package: Basic
-# Modules:
-# Sub Module:
-# Interaction: Utility list
-# Usage: API will fetch required data for utility list against filter and search
-# Tables used: 2.1. Utility Master
+# Modules: Utility
+# Sub Module: Module
+# Interaction: Utility module list
+# Usage: API will fetch required data for utility module list against single utility
+# Tables used: 2.3 Utility Module
 # Author: aki
-# Created on: 08/05/2020
-
-class UtilityListDetail(generics.ListAPIView):
-    serializer_class = UtilityMasterViewSerializer
-    pagination_class = StandardResultsSetPagination
-
-    queryset = UtilityMasterTbl.objects.filter(is_active=True)
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string',)
-    ordering_fields = ('name', 'tenant',)
-    ordering = ('name',) # always give by default alphabetical order
-    search_fields = ('name', 'tenant__name',)
+# Created on: 12/05/2020
 
 
-# API Header
-# API end Point: api/v1/utilities
-# API verb: GET
-# Package: Basic
-# Modules:
-# Sub Module:
-# Interaction: Utility fot get and edit
-# Usage: API will fetch required data for utility list against single utility id_string and edit the existing utility
-# Tables used: 2.1. Utility Master
-# Author: aki
-# Created on: 08/05/2020
-
-class UtilityDetail(GenericAPIView):
-    serializer_class = UtilityMasterSerializer
+class UtilityModuleDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -67,9 +40,9 @@ class UtilityDetail(GenericAPIView):
                     # choices = {'key1': 'val1', 'key2': 'val2'}
                     # logger.log("info", "Getting utility details", None, choices)
 
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
-                        serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                    utility_module_obj = get_utility_modules_by_utility_id_string(id_string)
+                    if utility_module_obj:
+                        serializer = UtilityModuleViewSerializer(utility_module_obj, many=True, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: serializer.data,
