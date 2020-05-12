@@ -30,7 +30,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.survey.models.survey import Survey as SurveyTbl
-from v1.survey.serializers.survey import SurveyViewSerializer
+from v1.survey.serializers.survey import SurveyViewSerializer,SurveyListSerializer,ConsumerViewSerializer,\
+ConsumerListSerializer
 
 
 
@@ -49,7 +50,7 @@ from v1.survey.serializers.survey import SurveyViewSerializer
 
 # API for getting list data of Location Survey
 class SurveyListApiView(generics.ListAPIView):
-    serializer_class = SurveyViewSerializer
+    serializer_class = SurveyListSerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
@@ -108,77 +109,22 @@ class SurveyListApiView(generics.ListAPIView):
 # Auther: Priyanka
 # Created on: 29/04/2020
 
-class LocationSurveyApiView(GenericAPIView):
-    def get(self, request,id_string):
+class Surveys(GenericAPIView):
+
+    def get(self, request, id_string):
         try:
-            # Checking authentication start
-            # if is_token_valid(request.data['token']):
-            if is_token_valid(1):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
-                if is_authorized():
-                    # Checking authorization end
-
-                    # Code for lookups start
-                    # survey = get_survey_by_id_string(request.data['id_string'])
-                    survey = get_survey_by_id_string(id_string=id_string)
-                    area = get_area_by_id(survey.area_id)
-                    sub_area = get_sub_area_by_id(survey.sub_area_id)
-                    type = get_survey_type_by_id(survey.type_id)
-                    objective = get_survey_type_by_id(survey.objective_id)
-                    statususe = get_survey_status_by_id(survey.status_id)
-                    consumer_category = get_consumer_category_by_id(survey.category_id)
-                    sub_category = get_consumer_sub_category_by_id(survey.sub_category_id)
-
-                    # Code for lookups end
-
-                    # Code for sending Location Survey in response start
-                    data = {
-                        'tenant_id_string': survey.tenant.id_string,
-                        'utility_id_string': survey.utility.id_string,
-                        'name':survey.name,
-                        'objective_id_string':objective.id_string,
-                        'objective':objective.name,
-                        'discription_id_string':survey.id_string,
-                        'discription':survey.description,
-                        'type_id_string':type.id_string,
-                        'type':type.name,
-                        'start_date': survey.start_date.strftime(DISPLAY_DATE_FORMAT),
-                        'end_date': survey.end_date.strftime(DISPLAY_DATE_FORMAT),
-                        'completion_date': survey.completion_date.strftime(DISPLAY_DATE_FORMAT),
-                        'area_id_string': area.id_string,
-                        'area': area.name,
-                        'sub_area_id_string': sub_area.id_string,
-                        'sub_area_name': sub_area.name,
-                        'category_id_string':consumer_category.id_string,
-                        'category':consumer_category.name,
-                        'sub_category_id_string':sub_category.id_string,
-                        'sub_category':sub_category.name,
-                        'is_active': survey.is_active,
-                        'status_id_string':statususe.id_string,
-                        'status':statususe.status,
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
-                    # Code for sending Location Survey in response end
-
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        DATA: '',
-                    }, status=status.HTTP_403_FORBIDDEN)
+            survey = get_survey_by_id_string(id_string)
+            if survey:
+                serializer = SurveyViewSerializer(instance=survey, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
-                    STATE: ERROR,
+                    STATE: EXCEPTION,
                     DATA: '',
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
@@ -313,6 +259,44 @@ class LocationSurveyApiView(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+# API Header
+# API end Point: api/v1/consumer/
+# API verb: GET
+# Package: Basic
+# Modules: S&M
+# Sub Module: Consumer Survey
+# Interaction: View Consumer list
+# Usage: View
+# Tables used: 2.3.4 Survey Consumer
+# Auther: Priyanka
+# Created on: 29/04/2020
+
+class ConsumerList(GenericAPIView):
+
+    def get(self,request,id_string):
+        try:
+            survey = get_survey_by_id_string(id_string)
+
+            consumers = SurveyConsumer.objects.filter(survey_id=survey.id)
+
+            if consumers:
+                serializer = ConsumerListSerializer(instance=consumers, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: '',
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # API Header
 # API end Point: api/v1/consumer/
@@ -326,76 +310,29 @@ class LocationSurveyApiView(GenericAPIView):
 # Auther: Priyanka
 # Created on: 29/04/2020
 
-class ConsumerSurveyApiView(APIView):
+class ConsumerSurveyApiView(GenericAPIView):
 
-    def get(self, request,id_string):
+    def get(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(1):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
-                if is_authorized():
-                    # Checking authorization end
-
-                    # if request.data['consumer_id_string']:
-
-                    if SurveyConsumer.objects.get(id_string=id_string):
-                        # Code for lookups start
-                        consumer = get_survey_consumer_by_id_string(id_string=id_string)
-                        area = get_area_by_id(consumer.area_id)
-                        sub_area = get_sub_area_by_id(consumer.sub_area_id)
-                        # statususe = get_survey_status_by_id(consumer.status_id)
-                        # Code for lookups end
-
-                        # Code for sending Consumer Survey in response start
-                        data = {
-                            'tenant_id_string': consumer.tenant.id_string,
-                            'utility_id_string': consumer.utility.id_string,
-                            'consumer_no':consumer.consumer_no,
-                            'first_name':consumer.first_name,
-                            'last_name':consumer.last_name,
-                            'email_id':consumer.email_id,
-                            'phone_mobile':consumer.phone_mobile,
-                            'area_id_string': area.id_string,
-                            'area': area.name,
-                            'sub_area_id_string': sub_area.id_string,
-                            'sub_area': sub_area.name,
-                            'is_active': consumer.is_active,
-                        }
-
-                        return Response({
-                            STATE: SUCCESS,
-                            DATA: data,
-                        }, status=status.HTTP_200_OK)
-                        # Code for sending Consumer Survey in response end
-                    else:
-                        data = get_consumer_survey_list()
-                        return Response({
-                            STATE: SUCCESS,
-                            DATA: data,
-                        }, status=status.HTTP_200_OK)
-                        # Code for sending Consumer Survey in response end
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        DATA: '',
-                    }, status=status.HTTP_403_FORBIDDEN)
+            consumer_survey = get_survey_consumer_by_id_string(id_string)
+            if consumer_survey:
+                serializer = ConsumerViewSerializer(instance=consumer_survey, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
-                    STATE: ERROR,
+                    STATE: EXCEPTION,
                     DATA: '',
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
     def post(self, request, format=None):
         try:

@@ -16,6 +16,13 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
 from django.db import models
+
+from v1.campaign.models.advertisement_type import get_advert_type_by_id
+from v1.campaign.models.advert_status import get_advert_status_by_id
+from v1.campaign.models.campaign import get_campaign_by_id
+from v1.campaign.models.campaign_group import get_camp_group_by_id
+from v1.campaign.models.campaign_objective import get_cam_objective_by_id
+from v1.commonapp.models.frequency import get_frequency_by_id
 # Create advertisement master table starts
 
 class Advertisements(models.Model):
@@ -50,7 +57,40 @@ class Advertisements(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def get_campaign(self):
+        campaign = get_campaign_by_id(self.group_id)
+        return campaign
+
+    @property
+    def get_group(self):
+        group = get_camp_group_by_id(self.group_id)
+        return group
+
+    @property
+    def get_objective(self):
+        objective = get_cam_objective_by_id(self.objective_id)
+        return objective
+
+    @property
+    def get_frequency(self):
+        frequency = get_frequency_by_id(self.frequency_id)
+        return frequency
+
+    @property
+    def get_advert_status(self):
+        status = get_advert_status_by_id(self.status_id)
+        return status
+
+    @property
+    def get_advert_type(self):
+        type = get_advert_type_by_id(self.status_id)
+        return type
+
 def get_advertisements_by_id_string(id_string):
-    return Advertisements.objects.get(id_string=id_string)
+    try:
+        return Advertisements.objects.get(id_string=id_string)
+    except:
+        return False
 
 # Create advertisement master table ends

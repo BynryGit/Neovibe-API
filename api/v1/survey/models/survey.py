@@ -18,6 +18,10 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
+from v1.survey.models.survey_objective import get_survey_objective_by_id
+from v1.survey.models.survey_type import get_survey_type_by_id
+from v1.survey.models.survey_status import get_survey_status_by_id
+
 
 # Create Survey table start
 
@@ -50,10 +54,28 @@ class Survey(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def get_objective(self):
+        objective = get_survey_objective_by_id(self.objective_id)
+        return objective
+
+    @property
+    def get_type(self):
+        type = get_survey_type_by_id(self.type_id)
+        return type
+
+    @property
+    def get_status(self):
+        status = get_survey_status_by_id(self.status_id)
+        return status
+
 def get_survey_by_tenant_id_string(id_string):
     return Survey.objects.filter(tenant__id_string = id_string)
 
 def get_survey_by_id_string(id_string):
-    return Survey.objects.get(id_string = id_string)
+    try:
+        return Survey.objects.get(id_string = id_string)
+    except:
+        return False
 
 # Create Survey table end

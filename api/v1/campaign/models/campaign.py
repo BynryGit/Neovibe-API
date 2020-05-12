@@ -17,6 +17,11 @@ from v1.utility.models.utility_master import UtilityMaster
 import uuid
 from django.db import models
 
+from v1.campaign.models.campaign_status import get_cam_status_by_id
+from v1.campaign.models.campaign_group import get_camp_group_by_id
+from v1.campaign.models.campaign_objective import get_cam_objective_by_id
+from v1.commonapp.models.frequency import get_frequency_by_id
+
 # Create Campaign Master table start
 
 class Campaign(models.Model):
@@ -51,6 +56,34 @@ class Campaign(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def get_group(self):
+        group = get_camp_group_by_id(self.group_id)
+        return group
+
+    @property
+    def get_objective(self):
+        objective = get_cam_objective_by_id(self.objective_id)
+        return objective
+
+    @property
+    def get_frequency(self):
+        frequency = get_frequency_by_id(self.frequency_id)
+        return frequency
+
+    @property
+    def get_status(self):
+        status = get_cam_status_by_id(self.status_id)
+        return status
+
+
+
 def get_campaign_by_id_string(id_string):
-    return Campaign.objects.get(id_string=id_string)
+    try:
+        return Campaign.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_campaign_by_id(id):
+    return Campaign.objects.get(id=id)
     # Create Campaign Master table ends
