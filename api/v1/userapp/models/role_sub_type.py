@@ -14,6 +14,7 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.role_type import get_role_type_by_id
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
@@ -37,6 +38,10 @@ class RoleSubType(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_role_type(self):
+        return get_role_type_by_id(self.role_type_id)
 
 # Create Role Sub Type table end
 
