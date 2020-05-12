@@ -39,4 +39,12 @@ class CampaignObjective(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_cam_objective_by_tenant_id_string(tenant_id_string):
+    return CampaignObjective.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_cam_objective_by_id_string(id_string):
+    return CampaignObjective.objects.get(id_string = id_string)
+
+def get_cam_objective_by_id(id):
+    return CampaignObjective.objects.get(id = id)
 # Create Campaign Objective table end.

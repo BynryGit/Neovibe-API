@@ -40,8 +40,11 @@ class CampaignGroup(models.Model):
 # Create Campaign Group table end.
 
 
-def get_camp_type_by_tenant_id_string(tenant_id_string):
+def get_camp_group_by_tenant_id_string(tenant_id_string):
     return CampaignGroup.objects.filter(tenant__id_string=tenant_id_string)
 
-def get_camp_type_by_id_string(id_string):
+def get_camp_group_by_id_string(id_string):
     return CampaignGroup.objects.get(id_string = id_string)
+
+def get_camp_group_by_id(id):
+    return CampaignGroup.objects.get(id = id)
