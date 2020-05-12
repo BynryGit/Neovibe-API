@@ -62,8 +62,7 @@ class UserRole(models.Model):
 
     @property
     def get_user_status(self):
-        status = get_role_status_by_id(self.status_id)
-        return status.status
+        return get_role_status_by_id(self.status_id)
 
     @property
     def get_form_factor(self):

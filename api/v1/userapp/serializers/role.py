@@ -12,7 +12,7 @@ class RoleStatusSerializer(serializers.ModelSerializer):
 
 
 class RoleListSerializer(serializers.ModelSerializer):
-    status = RoleStatusSerializer(many=False,required=True,source='get_role_status')
+    status = RoleStatusSerializer(many=False, required=True, source='get_role_status')
     role_type = serializers.ReadOnlyField(source='get_role_type')
     role_sub_type = serializers.ReadOnlyField(source='get_role_sub_type')
     form_factor = serializers.ReadOnlyField(source='get_form_factor')
