@@ -3463,6 +3463,599 @@
 			"action": "False",
 			"is_active": "True"
 			}
+	},
+
+	{
+		"pk": "1",
+		"model": "system.SmsConfiguration",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"submodule": 2,
+			"event": "",
+			"event_name": "",
+			"sms_text": "text-1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.SmsConfiguration",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"submodule": 3,
+			"event": "",
+			"event_name": "",
+			"sms_text": "text-2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.SmsConfiguration",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"submodule": 9,
+			"event": "",
+			"event_name": "",
+			"sms_text": "text-3",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.SmsConfiguration",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"submodule": 11,
+			"event": "",
+			"event_name": "",
+			"sms_text": "text-4",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.SmsConfiguration",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"submodule": 26,
+			"event": "",
+			"event_name": "",
+			"sms_text": "text-5",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.SmsConfiguration",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"submodule": 28,
+			"event": "",
+			"event_name": "",
+			"sms_text": "text-6",
+			"is_active": "True"
+			}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "system.EmailTemplate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"submodule": 2,
+			"event": "",
+			"email_template": "Email temp-1",
+			"email_header": "Header",
+			"email_footer": "Footer",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.EmailTemplate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 1,
+			"submodule": 3,
+			"event": "",
+			"email_template": "Email temp-2",
+			"email_header": "Header",
+			"email_footer": "Footer",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.EmailTemplate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"submodule": 9,
+			"event": "",
+			"email_template": "Email temp-3",
+			"email_header": "Header",
+			"email_footer": "Footer",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.EmailTemplate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"module": 2,
+			"submodule": 11,
+			"event": "",
+			"email_template": "Email temp-4",
+			"email_header": "Header",
+			"email_footer": "Footer",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.EmailTemplate",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"submodule": 26,
+			"event": "",
+			"email_template": "Email temp-5",
+			"email_header": "Header",
+			"email_footer": "Footer",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.EmailTemplate",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"module": 5,
+			"submodule": 28,
+			"event": "",
+			"email_template": "Email temp-6",
+			"email_header": "Header",
+			"email_footer": "Footer",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "system.AuditLog",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"action_time": ,
+			"module": 1,
+			"submodule": 2,
+			"event": "",
+			"source": "source-1",
+			"sub_system": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "system.AuditLog",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"action_time": ,
+			"module": 1,
+			"submodule": 3,
+			"event": "",
+			"source": "source-2",
+			"sub_system": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "system.AuditLog",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"action_time": ,
+			"module": 2,
+			"submodule": 9,
+			"event": "",
+			"source": "source-3",
+			"sub_system": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "system.AuditLog",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"action_time": ,
+			"module": 2,
+			"submodule": 11,
+			"event": "",
+			"source": "source-4",
+			"sub_system": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "system.AuditLog",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"action_time": ,
+			"module": 5,
+			"submodule": 26,
+			"event": "",
+			"source": "source-5",
+			"sub_system": "",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "system.AuditLog",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"action_time": ,
+			"module": 5,
+			"submodule": 28,
+			"event": "",
+			"source": "source-6",
+			"sub_system": "",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "consumer.ConsumerMeter",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer": 1,
+			"meter": 10245,
+			"assign_date": "15/05/2020",
+			"initial_reading": 0,
+			"status": ,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ConsumerMeter",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer": 3,
+			"meter": 10255,
+			"assign_date": "25/05/2020",
+			"initial_reading": 0,
+			"status": ,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "consumer.ConsumerMeter",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer": 6,
+			"meter": 10265,
+			"assign_date": "15/05/2020",
+			"initial_reading": 0,
+			"status": ,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ConsumerMeter",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer": 8,
+			"meter": 10265,
+			"assign_date": "25/05/2020",
+			"initial_reading": 0,
+			"status": ,
+			"is_active": "True"
+			}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Received",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Assigned",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "3",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Inprogress",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Completed",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "5",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Rejected",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "6",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Hold",
+			"is_active": "True"
+
+			}
+	},
+
+	{
+		"pk": "7",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Received",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "8",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Assigned",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "9",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Inprogress",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "10",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Completed",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "11",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Rejected",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "12",
+		"model": "consumer.ServiceStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Hold",
+			"is_active": "True"
+
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Received",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "2",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Pending",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "3",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Inprogress",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "4",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Completed",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "5",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Rejected",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "6",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "Hold",
+			"is_active": "True"
+
+			}
+	},
+
+	{
+		"pk": "7",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Received",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "8",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Pending",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "9",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Inprogress",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "10",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Completed",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "11",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Rejected",
+			"is_active": "True"
+
+			}
+	},
+	{
+		"pk": "12",
+		"model": "consumer.ComplaintStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "Hold",
+			"is_active": "True"
+
+			}
 	}
 ]
 

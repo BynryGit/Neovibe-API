@@ -1,6 +1,7 @@
 import traceback
 from django.db import transaction
 from rest_framework import status, generics
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from api.settings import DISPLAY_DATE_FORMAT
@@ -46,6 +47,7 @@ class RegistrationList(generics.ListAPIView):
     serializer_class = RegistrationListSerializer
     pagination_class = StandardResultsSetPagination
 
+
     def get_queryset(self):
 
         queryset = RegTbl.objects.filter(registration_type_id=1)
@@ -85,16 +87,22 @@ class RegistrationList(generics.ListAPIView):
 # Auther: Rohan
 # Created on: 23/04/2020
 
-class Registration():
+class Registration(GenericAPIView):
 
-    def get(self, request):
+    def get(self, request, id_string):
         try:
-            registration = get_registration_by_id_string(request.GET.get('id_string'))
-            serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
-            return Response({
-                STATE: SUCCESS,
-                DATA: serializer.data,
-            }, status=status.HTTP_200_OK)
+            registration = get_registration_by_id_string(id_string)
+            if registration:
+                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: '',
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,

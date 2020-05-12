@@ -69,6 +69,9 @@ class ConsumerMaster(models.Model):
         return self.consumer_no
 
 def get_consumer_by_id_string(id_string):
-    return ConsumerMaster.objects.get(id_string = id_string)
+    try:
+        return ConsumerMaster.objects.get(id_string = id_string)
+    except Exception as e:
+        return False
 
 # Create Consumer Master table end.
