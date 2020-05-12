@@ -60,6 +60,14 @@ class UserDetail(User):
         return self.id
 
     @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
     def get_user_status(self):
         return get_user_status_by_id(self.status_id)
 
