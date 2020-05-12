@@ -44,3 +44,7 @@ class UserToken(models.Model):
         return self.token
 
 # Create User Token table end
+
+
+def get_token_by_user_id(id):
+    return UserToken.objects.get(user_id=id)

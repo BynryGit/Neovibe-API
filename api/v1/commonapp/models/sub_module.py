@@ -18,6 +18,7 @@ from django.db import models  # importing package for database
 
 
 # Create Sub Module table start
+from v1.commonapp.models.module import get_module_by_id
 
 
 class SubModule(models.Model):
@@ -36,6 +37,10 @@ class SubModule(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_module(self):
+        return get_module_by_id(self.module_id)
 
 
 # Create Sub Module table end
