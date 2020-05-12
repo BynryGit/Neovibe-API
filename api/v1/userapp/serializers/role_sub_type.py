@@ -4,6 +4,13 @@ from v1.commonapp.serializers.role_type import RoleTypeSerializer
 from v1.commonapp.views.role_sub_type import RoleSubType
 
 
+class RoleSubTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RoleSubType
+        fields = ('name', 'id_string')
+
+
 class RoleSubTypeListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

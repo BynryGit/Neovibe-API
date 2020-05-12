@@ -23,7 +23,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 # Updated on: 12/05/2020
 
 
-class SubModuleList(generics.APIView):
+class SubModuleList(generics.ListAPIView):
     serializer_class = SubModuleListSerializer
     pagination_class = StandardResultsSetPagination
 

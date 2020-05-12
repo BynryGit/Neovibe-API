@@ -24,7 +24,7 @@ from v1.userapp.models.role_sub_type import get_role_sub_type_by_tenant_id_strin
 # Updated on: 12/05/2020
 
 
-class RoleSubTypeList(generics.APIView):
+class RoleSubTypeList(generics.ListAPIView):
     serializer_class = RoleSubTypeListSerializer
     pagination_class = StandardResultsSetPagination
 

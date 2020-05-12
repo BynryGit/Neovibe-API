@@ -3,6 +3,13 @@ from rest_framework import serializers
 from v1.commonapp.models.form_factor import FormFactor
 
 
+class FormFactorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FormFactor
+        fields = ('status', 'id_string')
+
+
 class FormFactorListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

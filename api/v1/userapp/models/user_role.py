@@ -52,13 +52,11 @@ class UserRole(models.Model):
 
     @property
     def get_role_type(self):
-        role_type = get_role_type_by_id(self.type_id)
-        return role_type.name
+        return get_role_type_by_id(self.type_id)
 
     @property
     def get_role_sub_type(self):
-        sub_type = get_role_sub_type_by_id(self.sub_type_id)
-        return sub_type.name
+        return get_role_sub_type_by_id(self.sub_type_id)
 
     @property
     def get_user_status(self):
@@ -66,13 +64,11 @@ class UserRole(models.Model):
 
     @property
     def get_form_factor(self):
-        form_factor = get_form_factor_by_id(self.form_factor_id)
-        return form_factor.name
+        return get_form_factor_by_id(self.form_factor_id)
 
     @property
     def get_department(self):
-        department = get_department_by_id(self.department_id)
-        return department.name
+        return get_department_by_id(self.department_id)
 
 
 # Create User Role table end
