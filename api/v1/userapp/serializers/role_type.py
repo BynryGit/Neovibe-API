@@ -1,3 +1,5 @@
+__author__ = "Arpita"
+
 from rest_framework import serializers
 
 from v1.userapp.models.role_type import RoleType
