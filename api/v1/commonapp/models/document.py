@@ -83,6 +83,10 @@ class Document(models.Model):
 # Create Document table end
 
 
+def get_documents_by_utility_id_string(id_string):
+    return Document.objects.filter(utility__id_string=id_string)
+
+
 def get_documents_by_user_id(id):
     return Document.objects.filter(identification=id)
 
