@@ -1,3 +1,4 @@
+import logging
 import traceback
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
@@ -42,18 +43,19 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
+logger = logging.getLogger(__name__)
 class RegistrationList(generics.ListAPIView):
     serializer_class = RegistrationListSerializer
     pagination_class = StandardResultsSetPagination
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string',)
-    ordering_fields = ('name', 'registration_no',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('name', 'email_id',)
+    # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    # filter_fields = ('name', 'tenant__id_string',)
+    # ordering_fields = ('name', 'registration_no',)
+    # ordering = ('created_date',)  # always give by default alphabetical order
+    # search_fields = ('name', 'email_id',)
 
 
     def get_queryset(self):
-
+        logger.info('In api/v1/registration/list')
         queryset = RegTbl.objects.filter(registration_type_id=1)
         utility_id_string = self.request.query_params.get('utility', None)
         category_id_string = self.request.query_params.get('category', None)
