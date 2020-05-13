@@ -2,10 +2,10 @@ from django.urls import path
 from v1.commonapp.views.area import AreaList, AreaView
 from v1.commonapp.views.department import Department, DepartmentList
 from v1.commonapp.views.form_factor import FormFactor, FormFactorList
-from v1.commonapp.views.role_sub_type import RoleSubType, RoleSubTypeList
-from v1.commonapp.views.role_type import RoleType, RoleTypeList
 from v1.commonapp.views.sub_area import SubAreaView, SubAreaList
 from v1.commonapp.views.sub_modules import SubModule, SubModuleList
+from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
+from v1.userapp.views.role_type import RoleType, RoleTypeList
 
 urlpatterns = [
     path('area/<uuid:id_string>', AreaView.as_view()),
