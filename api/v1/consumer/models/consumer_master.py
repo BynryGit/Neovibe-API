@@ -32,7 +32,7 @@ class ConsumerMaster(models.Model):
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     address_line_1 = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
-    zipcode = models.BigIntegerField(null=True, blank=True)
+    zipcode = models.CharField(max_length=200, null=True, blank=True)
     country = models.BigIntegerField(null=True, blank=True)
     state = models.BigIntegerField(null=True, blank=True)
     city = models.BigIntegerField(null=True, blank=True)

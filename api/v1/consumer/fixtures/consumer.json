@@ -580,7 +580,6 @@
 			"deposit_amt": 5000,
 			"collected_amt": 2000,
 			"utility_service_plan": 5,
-			"registration": ,
 			"category": 3,
 			"sub_category": 6,
 			"is_vip": "FALSE",

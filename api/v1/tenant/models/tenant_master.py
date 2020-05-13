@@ -17,7 +17,6 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
 
-
 # Create Tenant Master table start.
 
 class TenantMaster(models.Model):

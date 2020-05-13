@@ -50,9 +50,14 @@ def get_areas_by_tenant_id_string(id_string):
 
 
 def get_area_by_id(id):
-    return Area.objects.get(id = id)
+    try:
+        return Area.objects.get(id = id)
+    except:
+        False
 
 
 def get_area_by_id_string(id_string):
-    return Area.objects.get(id_string=id_string)
-
+    try:
+        return Area.objects.get(id_string=id_string)
+    except:
+        False

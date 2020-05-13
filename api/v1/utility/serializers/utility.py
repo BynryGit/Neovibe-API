@@ -5,6 +5,13 @@ from rest_framework import serializers
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl
 
 
+class UtilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UtilityMasterTbl
+        fields = ('name', 'id_string')
+
+
 class UtilityMasterViewSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
 

@@ -3,6 +3,7 @@ import traceback
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
@@ -86,7 +87,7 @@ class UserList(generics.ListAPIView):
 # Author: Arpita
 # Created on: 12/05/2020
 
-class Users(APIView):
+class Users(GenericAPIView):
 
     def get(self, request, id_string):
         try:

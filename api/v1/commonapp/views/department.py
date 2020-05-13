@@ -24,7 +24,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 # Updated on: 12/05/2020
 
 
-class DepartmentList(generics.APIView):
+class DepartmentList(generics.ListAPIView):
     serializer_class = DepartmentListSerializer
     pagination_class = StandardResultsSetPagination
 
