@@ -1,4 +1,6 @@
-__author__ = "Arpita"
+
+from rest_framework import serializers
+from v1.userapp.models.user_role import UserRole
 
 from rest_framework import serializers
 
@@ -10,3 +12,4 @@ class TenantSerializer(serializers.ModelSerializer):
     class Meta:
         model = TenantMaster
         fields = ('name', 'id_string')
+
