@@ -1,15 +1,17 @@
 import traceback
 from django.db import transaction
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
-from v1.commonapp.models.area import get_areas_by_tenant_id_string, get_area_by_id, get_area_by_id_string
-from v1.registration.serializers.registration import RegistrationListSerializer, RegistrationViewSerializer
+from v1.commonapp.models.area import get_area_by_id, get_area_by_id_string
+from v1.registration.serializers.registration import RegistrationListSerializer, RegistrationViewSerializer, \
+    RegistrationStatusViewSerializer
 from v1.userapp.models.user_master import UserDetail
 from v1.commonapp.models.city import get_city_by_id
 from v1.consumer.models.consumer_category import get_consumer_category_by_id, get_consumer_category_by_id_string
@@ -17,18 +19,15 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
     get_consumer_sub_category_by_id_string
 from v1.commonapp.models.country import get_country_by_id
 from v1.commonapp.models.state import get_state_by_id
-from v1.commonapp.models.sub_area import get_sub_areas_by_tenant_id_string, get_sub_area_by_id, \
-    get_sub_area_by_id_string
-from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id, get_sub_area_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id
 from v1.consumer.models.source_type import get_source_type_by_id
-from v1.registration.models.registration_status import get_registration_statuses_by_tenant_id_string,\
-    get_registration_status_by_id
+from v1.registration.models.registration_status import get_registration_status_by_id, \
+    get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id
 from v1.registration.models.registrations import get_registration_by_id_string
-from v1.registration.views.common_functions import get_filtered_registrations, is_data_verified, \
+from v1.registration.views.common_functions import is_data_verified, \
     save_payment_details, add_basic_registration_details, save_edited_basic_registration_details
-from v1.userapp.models.privilege import get_privilege_by_id
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
@@ -46,6 +45,11 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 class RegistrationList(generics.ListAPIView):
     serializer_class = RegistrationListSerializer
     pagination_class = StandardResultsSetPagination
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_fields = ('name', 'tenant__id_string',)
+    ordering_fields = ('name', 'registration_no',)
+    ordering = ('created_date',)  # always give by default alphabetical order
+    search_fields = ('name', 'email_id',)
 
 
     def get_queryset(self):
@@ -107,7 +111,6 @@ class Registration(GenericAPIView):
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
-                ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request, format=None):
@@ -272,40 +275,26 @@ class Registration(GenericAPIView):
 
 
 
-class RegistrationStatus(APIView):
+class RegistrationStatus(GenericAPIView):
 
-    def get(self, request, format=None):
+    def get(self, request, id_string):
         try:
-            registration_status_list = []
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                payload = get_payload(request.data['token'])
-                user = get_user(payload['id_string'])
-            # Checking authentication end
-
-                # Checking authorization start
-                privilege = get_privilege_by_id(1)
-                sub_module = get_sub_module_by_id(1)
-                if is_authorized(user, privilege, sub_module):
-                # Checking authorization end
-
-                    # Get registration statuses
-                    registration_statuses = get_registration_statuses_by_tenant_id_string(request.data['tenant_id_string'])
-
-                    for registration_status in registration_statuses:
-                        registration_status_list.append({
-                            'id_string': registration_status.id_string,
-                            'name': registration_status.name
-                        })
-                    return Response({
-                        STATE: SUCCESS,
-                        'data': registration_status_list,
-                    }, status=status.HTTP_200_OK)
+            registration_status = get_registration_status_by_id_string(id_string)
+            if registration_status:
+                serializer = RegistrationStatusViewSerializer(instance=registration_status, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: '',
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
-                ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request, format=None):
