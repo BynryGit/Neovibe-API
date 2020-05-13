@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 from v1.utility.models.utility_master import UtilityMaster
 
 
-class DocumentType(models.Model):
+class DocumentSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -42,9 +42,9 @@ class DocumentType(models.Model):
 # Create Document Type table end
 
 
-def get_document_type_by_id_string(id_string):
-    return DocumentType.objects.filter(id_string=id_string).last()
+def get_document_sub_type_by_id_string(id_string):
+    return DocumentSubType.objects.filter(id_string=id_string).last()
 
 
-def get_document_type_by_id(id):
-    return DocumentType.objects.filter(id=id).last()
+def get_document_sub_type_by_id(id):
+    return DocumentSubType.objects.filter(id=id).last()

@@ -10,6 +10,13 @@ from v1.userapp.models.user_status import UserStatus
 from v1.utility.serializers.utility import UtilitySerializer
 
 
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserDetail
+        fields = ('username', 'first_name', 'middle_name', 'last_name', 'id_string')
+
+
 class UserStatusSerializer(serializers.ModelSerializer):
 
     class Meta:

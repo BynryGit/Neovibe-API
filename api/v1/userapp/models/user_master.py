@@ -119,3 +119,8 @@ def get_users_by_tenant_id_string(id_string):
 def get_bank_by_user_id_string(id_string):
     user = UserDetail.objects.filter(id_string=id_string).last()
     return get_bank_by_id(user.bank_detail_id)
+
+
+def get_document_by_user_id_string(id_string):
+    user = UserDetail.objects.filter(id=id, is_active=True).last()
+    return get_document_by_user_id(user.id)

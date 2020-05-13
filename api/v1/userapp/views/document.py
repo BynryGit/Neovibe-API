@@ -2,6 +2,10 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
+from api.messages import *
+from v1.userapp.models.user_master import get_document_by_user_id_string
+from v1.userapp.serializers.document import DocumentListSerializer
+
 # API Header
 # API end Point: api/v1/user/documents
 # API verb: GET, POST, PUT
@@ -15,25 +19,10 @@ from rest_framework.generics import GenericAPIView
 # Created on: 13/05/2020
 
 
-class Document(GenericAPIView):
+class Document(generics.ListAPIView):
+    serializer_class = DocumentListSerializer
 
-    def get(self, request, id_string):
-        try:
-            bank = get_bank_by_user_id_string(id_string)
-            if bank:
-                serializer = BankViewSerializer(instance=bank, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def get_queryset(self):
+
+        queryset = get_document_by_user_id_string(1)
+        return queryset
