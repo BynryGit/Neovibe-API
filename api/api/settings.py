@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+import logging.config
 import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -150,12 +150,31 @@ INPUT_DATE_FORMAT = "%d-%b-%Y"
 
 STATIC_URL = '/static/'
 
+# Error tracking by sentry
+# sentry_sdk.init(
+#     dsn="https://804e668152394b0c9035f875c31198c8@o391307.ingest.sentry.io/5237334",
+#     integrations=[DjangoIntegration()],
+#
+#     # If you wish to associate users to errors (assuming you are using
+#     # django.contrib.auth) you may enable sending PII data.
+#     send_default_pii=False
+# )
 
-sentry_sdk.init(
-    dsn="https://804e668152394b0c9035f875c31198c8@o391307.ingest.sentry.io/5237334",
-    integrations=[DjangoIntegration()],
-
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=False
-)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR + '/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
