@@ -25,7 +25,7 @@ from v1.userapp.views.common_functions import is_data_verified, add_basic_role_d
 
 
 # API Header
-# API end Point: api/v1/role/list
+# API end Point: api/v1/roles
 # API verb: GET
 # Package: Basic
 # Modules: Roles & Privileges
