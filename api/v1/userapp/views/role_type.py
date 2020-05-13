@@ -25,7 +25,7 @@ from v1.userapp.models.role_type import get_role_type_by_tenant_id_string, get_r
 # Updated on: 12/05/2020
 
 
-class RoleTypeList(generics.APIView):
+class RoleTypeList(generics.ListAPIView):
     serializer_class = RoleTypeListSerializer
     pagination_class = StandardResultsSetPagination
 
