@@ -9,7 +9,6 @@ from v1.commonapp.models.skills import get_skills_by_utility_id_string
 from v1.userapp.serializers.skills import SkillListSerializer
 
 
-
 # API Header
 # API end Point: api/v1/user/skill
 # API verb: GET
