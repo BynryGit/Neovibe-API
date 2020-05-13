@@ -7,9 +7,35 @@ from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string
+from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string, get_bank_by_utility_id_string
 from v1.userapp.models.user_master import get_bank_by_user_id_string
 from v1.userapp.serializers.bank_detail import BankListSerializer, BankViewSerializer
+
+
+# API Header
+# API end Point: api/v1/user/bank/list
+# API verb: GET
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: View bank list
+# Usage: This will display list of bank.
+# Tables used: User - User Bank Details
+# Author: Arpita
+# Created on: 13/05/2020
+
+
+class BankList(generics.ListAPIView):
+    serializer_class = BankListSerializer
+
+    def get_queryset(self):
+
+        queryset = get_bank_by_tenant_id_string(1)
+        utility_id_string = self.request.query_params.get('utility', None)
+
+        if utility_id_string is not None:
+            queryset = queryset.filter(utility__id_string=utility_id_string)
+        return queryset
 
 
 # API Header
@@ -25,17 +51,12 @@ from v1.userapp.serializers.bank_detail import BankListSerializer, BankViewSeria
 # Created on: 13/05/2020
 
 
-class BankList(generics.ListAPIView):
+class GetBankList(generics.ListAPIView):
     serializer_class = BankListSerializer
-    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
 
-        queryset = get_bank_by_tenant_id_string(1)
-        utility_id_string = self.request.query_params.get('utility', None)
-
-        if utility_id_string is not None:
-            queryset = queryset.filter(utility__id_string=utility_id_string)
+        queryset = get_bank_by_utility_id_string(1)
         return queryset
 
 

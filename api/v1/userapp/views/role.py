@@ -18,7 +18,8 @@ from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import get_role_type_by_id, get_role_type_by_id_string
 from v1.userapp.models.user_master import get_user_by_id_string
-from v1.userapp.models.user_role import get_role_by_id_string, get_role_by_tenant_id_string
+from v1.userapp.models.user_role import get_role_by_id_string, get_role_by_tenant_id_string, \
+    get_role_by_utility_id_string
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer
 from v1.userapp.views.common_functions import is_data_verified, add_basic_role_details, \
     save_privilege_details, save_edited_basic_role_details, save_edited_privilege_details
@@ -65,6 +66,30 @@ class RoleList(generics.ListAPIView):
         if department_id_string is not None:
             department = get_department_by_id_string(department_id_string)
             queryset = queryset.filter(department_id=department.id)
+        return queryset
+
+
+# API Header
+# API end Point: api/v1/roles
+# API verb: GET
+# Package: Basic
+# Modules: Roles & Privileges
+# Sub Module: Role
+# Interaction: View role list
+# Usage: Used for role list. Gets all the records in pagination mode. It also have input params to filter/search and
+# sort in addition to pagination.
+# Tables used: 2.5.1. Users & Privileges - Role Master
+# Author: Arpita
+# Created on: 13/05/2020
+
+
+class GetRoleList(generics.ListAPIView):
+    serializer_class = RoleListSerializer
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+
+        queryset = get_role_by_utility_id_string(1)
         return queryset
 
 

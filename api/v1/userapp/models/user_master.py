@@ -131,3 +131,4 @@ def get_documents_by_user_id_string(id_string):
 def get_notes_by_user_id_string(id_string):
     user = UserDetail.objects.filter(id_string=id_string, is_active=True).last()
     return get_notes_by_user_id(user.id)
+
