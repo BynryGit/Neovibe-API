@@ -39,7 +39,7 @@ class UserDetail(User):
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
-    user_ID = models.CharField(null=True, blank=True)  # Web, Mobile
+    user_ID = models.CharField(max_length=200,null=True, blank=True)  # Web, Mobile
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     user_image = models.URLField(null=True, blank=True)
     salt = models.CharField(max_length=200, null=True, blank=True)
@@ -58,6 +58,14 @@ class UserDetail(User):
 
     def __unicode__(self):
         return self.id
+
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
 
     @property
     def get_user_status(self):
