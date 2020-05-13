@@ -87,6 +87,8 @@ class Advertisements(models.Model):
         type = get_advert_type_by_id(self.status_id)
         return type
 
+
+
 def get_advertisements_by_id_string(id_string):
     try:
         return Advertisements.objects.get(id_string=id_string)

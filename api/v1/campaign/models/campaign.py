@@ -85,5 +85,8 @@ def get_campaign_by_id_string(id_string):
         return False
 
 def get_campaign_by_id(id):
-    return Campaign.objects.get(id=id)
+    try:
+        return Campaign.objects.get(id=id)
+    except:
+        return False
     # Create Campaign Master table ends

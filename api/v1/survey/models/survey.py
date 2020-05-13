@@ -78,4 +78,10 @@ def get_survey_by_id_string(id_string):
     except:
         return False
 
+def get_survey_by_id(id):
+    try:
+        return Survey.objects.get(id = id)
+    except:
+        return False
+
 # Create Survey table end
