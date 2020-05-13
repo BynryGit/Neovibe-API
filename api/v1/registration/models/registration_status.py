@@ -23,7 +23,10 @@ class RegistrationStatus(models.Model):
         return self.name
 
 def get_registration_status_by_id_string(id_string):
-    return RegistrationStatus.objects.get(id_string = id_string)
+    try:
+        return RegistrationStatus.objects.get(id_string = id_string)
+    except:
+        return False
 
 
 def get_registration_status_by_id(id):

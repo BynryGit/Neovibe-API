@@ -3,7 +3,7 @@ from v1.registration.models.registration_status import RegistrationStatus
 from v1.registration.models.registrations import Registration
 
 
-class RegistrationStatusSerializer(serializers.ModelSerializer):
+class RegistrationStatusViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RegistrationStatus
@@ -11,7 +11,7 @@ class RegistrationStatusSerializer(serializers.ModelSerializer):
 
 
 class RegistrationListSerializer(serializers.ModelSerializer):
-    status = RegistrationStatusSerializer(many=False,required=True,source='get_status')
+    status = RegistrationStatusViewSerializer(many=False,required=True,source='get_status')
 
     class Meta:
         model = Registration
@@ -20,7 +20,7 @@ class RegistrationListSerializer(serializers.ModelSerializer):
 
 
 class RegistrationViewSerializer(serializers.ModelSerializer):
-    status = RegistrationStatusSerializer(many=False,required=True,source='get_status')
+    status = RegistrationStatusViewSerializer(many=False,required=True,source='get_status')
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')

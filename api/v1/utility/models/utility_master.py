@@ -49,6 +49,7 @@ class UtilityMaster(models.Model):
 
 # Create Utility Master table end.
 
+
 def get_utility_by_id(id):
     try:
         return UtilityMaster.objects.get(id = id)
