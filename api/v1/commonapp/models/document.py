@@ -77,12 +77,12 @@ class Document(models.Model):
         return get_document_sub_type_by_id(self.document_sub_type_id)
 
     @property
-    def get_identification(self):
+    def get_user_identification(self):
         return get_user_by_id(self.identification_id)
 
 # Create Document table end
 
 
-def get_document_by_user_id(id):
+def get_documents_by_user_id(id):
     return Document.objects.filter(identification=id)
 

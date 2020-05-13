@@ -39,6 +39,11 @@ class ServiceType(models.Model):
 
 # Create Service Type table end
 
+
 def get_service_type_by_id_string(id_string):
-    return ServiceType.objects.get(id_string = id_string)
+    return ServiceType.objects.get(id_string=id_string)
+
+
+def get_service_type_by_id(id):
+    return ServiceType.objects.get(id=id)
 # End the Code

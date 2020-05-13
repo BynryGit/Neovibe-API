@@ -4,7 +4,9 @@ from datetime import datetime # importing package for datetime
 
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.department import get_department_by_id
+from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
+from v1.commonapp.models.notes import get_notes_by_user_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.user_role import get_role_by_id
@@ -121,6 +123,11 @@ def get_bank_by_user_id_string(id_string):
     return get_bank_by_id(user.bank_detail_id)
 
 
-def get_document_by_user_id_string(id_string):
-    user = UserDetail.objects.filter(id=id, is_active=True).last()
-    return get_document_by_user_id(user.id)
+def get_documents_by_user_id_string(id_string):
+    user = UserDetail.objects.filter(id_string=id_string, is_active=True).last()
+    return get_documents_by_user_id(user.id)
+
+
+def get_notes_by_user_id_string(id_string):
+    user = UserDetail.objects.filter(id_string=id_string, is_active=True).last()
+    return get_notes_by_user_id(user.id)

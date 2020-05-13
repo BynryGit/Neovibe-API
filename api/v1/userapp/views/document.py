@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
-from v1.userapp.models.user_master import get_document_by_user_id_string
+from v1.userapp.models.user_master import get_documents_by_user_id_string
 from v1.userapp.serializers.document import DocumentListSerializer
 
 # API Header
@@ -24,5 +24,5 @@ class Document(generics.ListAPIView):
 
     def get_queryset(self):
 
-        queryset = get_document_by_user_id_string(1)
+        queryset = get_documents_by_user_id_string(1)
         return queryset
