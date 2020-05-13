@@ -38,4 +38,6 @@ class AdvertisementType(models.Model):
     def __unicode__(self):
         return self.status
 
+def get_advert_type_by_id(id):
+    return AdvertisementType.objects.get(id = id)
 # Create advertisement type table end.

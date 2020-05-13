@@ -19,6 +19,7 @@ from datetime import datetime # importing package for datetime
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.role_status import get_role_status_by_id
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
 from v1.userapp.models.role_type import get_role_type_by_id
 from v1.utility.models.utility_master import UtilityMaster
@@ -50,24 +51,32 @@ class UserRole(models.Model):
         return self.id
 
     @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
     def get_role_type(self):
-        role_type = get_role_type_by_id(self.type_id)
-        return role_type.name
+        return get_role_type_by_id(self.type_id)
 
     @property
     def get_role_sub_type(self):
-        sub_type = get_role_sub_type_by_id(self.sub_type_id)
-        return sub_type.name
+        return get_role_sub_type_by_id(self.sub_type_id)
+
+    @property
+    def get_user_status(self):
+        return get_role_status_by_id(self.status_id)
 
     @property
     def get_form_factor(self):
-        form_factor = get_form_factor_by_id(self.form_factor_id)
-        return form_factor.name
+        return get_form_factor_by_id(self.form_factor_id)
 
     @property
     def get_department(self):
-        department = get_department_by_id(self.department_id)
-        return department.name
+        return get_department_by_id(self.department_id)
 
 
 # Create User Role table end

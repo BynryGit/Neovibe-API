@@ -19,6 +19,8 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
+from v1.survey.models.survey import get_survey_by_id
+
 
 # Create Survey Consumer table start
 
@@ -55,6 +57,11 @@ class SurveyConsumer(models.Model):
     def __unicode__(self):
         return self.consumer_no
 
+    @property
+    def get_survey(self):
+        survey = get_survey_by_id(self.survey_id)
+        return survey.name
+
 def get_survey_consumer_by_id_string(id_string):
     return SurveyConsumer.objects.get(id_string = id_string)
 
@@ -63,6 +70,7 @@ def get_survey_consumer_by_tenant_id_string(id_string):
 
 def get_survey_consumer_by_id(id):
     return SurveyConsumer.objects.get(id = id)
+
 
 
 # Create Survey Consumer table end
