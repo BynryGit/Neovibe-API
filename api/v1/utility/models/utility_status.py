@@ -4,7 +4,7 @@
 # table name : Mandatory Fields
 # table description :  It will contain details for Utility Status
 # frequency of data changes : Low
-# sample tale data : "Activate", "Deactive"
+# sample table data : "Activate", "Deactive"
 # reference tables :
 # author : Gauri Deshmukh
 # created on : 27/04/2020
