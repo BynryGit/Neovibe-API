@@ -95,13 +95,13 @@ class UtilityListDetail(generics.ListAPIView, Utility):
 
 
 # API Header
-# API end Point: api/v1/utilities/id_string
+# API end Point: api/v1/utility/id_string
 # API verb: GET
 # Package: Basic
-# Modules:
-# Sub Module:
-# Interaction: Utility for get and edit
-# Usage: API will fetch required data for utility list against single utility id_string and edit the existing utility
+# Modules: All
+# Sub Module: All
+# Interaction: View Utility object
+# Usage: API will fetch required data for utility using id_string
 # Tables used: 2.1. Utility Master
 # Author: aki
 # Created on: 08/05/2020
@@ -125,8 +125,11 @@ class UtilityDetail(GenericAPIView):
                     # logger.log("info", "Getting utility details", None, choices)
 
                     utility_obj = get_utility_by_id_string(id_string)
+
                     if utility_obj:
+
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: serializer.data,
@@ -144,7 +147,7 @@ class UtilityDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            # logger.log("Error", "Exception at GET api/v1/utility/", ex )
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

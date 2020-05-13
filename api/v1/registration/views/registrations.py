@@ -33,7 +33,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
-# API end Point: api/v1/registration/list
+# API end Point: api/v1/registrations
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -43,7 +43,9 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
+
 logger = logging.getLogger(__name__)
+
 class RegistrationList(generics.ListAPIView):
     serializer_class = RegistrationListSerializer
     pagination_class = StandardResultsSetPagination
@@ -53,10 +55,11 @@ class RegistrationList(generics.ListAPIView):
     # ordering = ('created_date',)  # always give by default alphabetical order
     # search_fields = ('name', 'email_id',)
 
-
     def get_queryset(self):
         logger.info('In api/v1/registration/list')
+
         queryset = RegTbl.objects.filter(registration_type_id=1)
+
         utility_id_string = self.request.query_params.get('utility', None)
         category_id_string = self.request.query_params.get('category', None)
         sub_category_id_string = self.request.query_params.get('sub_category', None)
