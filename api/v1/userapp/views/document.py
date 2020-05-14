@@ -32,17 +32,16 @@ class Document(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/user
-# API verb: GET, POST, PUT
+# API end Point: api/v1/user/document
+# API verb: POST, PUT
 # Package: Basic
 # Modules: User
 # Sub Module: User
-# Interaction: View users, Add users, Edit users
-# Usage: View, Add, Edit User
+# Interaction: Add user documents, Edit user documents
+# Usage: Add, Edit User documents
 # Tables used: 2.12.13. Lookup - Document
 # Author: Arpita
-# Created on: 12/05/2020
-# Updated on: 13/05/2020
+# Created on: 14/05/2020
 
 class UserDocument(GenericAPIView):
 

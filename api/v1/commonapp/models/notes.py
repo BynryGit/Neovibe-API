@@ -25,6 +25,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 # Create Notes Table start
 
+
 class Notes(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -78,3 +79,11 @@ class Notes(models.Model):
 
 def get_notes_by_user_id(id):
     return Notes.objects.filter(identification=id)
+
+
+def get_note_by_id_string(id_string):
+    return Notes.objects.filter(id_string=id_string).last()
+
+
+def get_note_by_id(id):
+    return Notes.objects.filter(id=id).last()

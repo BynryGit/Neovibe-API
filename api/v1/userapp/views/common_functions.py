@@ -14,6 +14,7 @@ from v1.commonapp.models.department import Department, get_department_by_id_stri
 from v1.commonapp.models.document import Document, get_document_by_id_string
 from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
+from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.userapp.models.privilege import filter_privilege_by_id_string
 from v1.userapp.models.role_privilege import RolePrivilege, get_role_privilege_by_id_string, \
@@ -412,9 +413,75 @@ def save_edited_document(request, user):
         document.updated_date = datetime.now()
         document.save()
 
-        return document, True, ''
+        return user, True, ''
     except Exception as e:
-        document = ''
+        user = ''
         print("Exception occurred ",str(traceback.print_exc(e)))
         error = str(traceback.print_exc(e))
-        return document, False, error
+        return user, False, error
+
+
+# Check only mandatory fields for document api
+def is_note_data_verified(request):
+    if request.data['module'] and request.data['sub_module'] and request.data['service_type_id'] and \
+            request.data['note_name'] and request.data['note']:
+        return True
+    else:
+        return False
+
+
+def add_note_document(request, user):
+    try:
+        note = Notes()
+
+        note.module_id = request.data["module"]
+        note.sub_module_id = request.data["sub_module"]
+        note.service_type_id = request.data["service_type_id"]
+        note.identification_id = user.id
+        note.note_name = request.data["note_name"]
+        note.note = request.data["note"]
+        note.save()
+
+        if "note_color" in request.data:
+            note.note_color = request.data["note_color"]
+        if "status" in request.data:
+            note.status = request.data["status"]
+        note.save()
+
+        note.tenant = user.tenant
+        note.created_by = user.id
+        note.created_date = datetime.now()
+        note.save()
+
+        return user, True, ''
+    except Exception as e:
+        user = ''
+        print("Exception occurred ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user, False, error
+
+
+def save_edited_note(request, user):
+    try:
+        note = get_note_by_id_string(request.data["note"])
+
+        if 'note_name' in request.data:
+            note.note_name = request.data["note_name"]
+        if 'note_color' in request.data:
+            note.note_color = request.data["note_color"]
+        if 'note' in request.data:
+            note.note = request.data["note"]
+        if 'status' in request.data:
+            note.status = request.data["status"]
+        note.save()
+
+        note.updated_by = user.id
+        note.updated_date = datetime.now()
+        note.save()
+
+        return user, True, ''
+    except Exception as e:
+        user = ''
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user, False, error
