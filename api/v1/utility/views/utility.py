@@ -14,15 +14,39 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 
 # API Header
-# API end Point: api/v1/utilities
+# API end Point: api/v1/utility/list
+# API verb: GET
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: Utility list
+# Usage: API will fetch required data for utility list against filter and search
+# Tables used: 2.1. Utility Master
+# Author: Akshay
+# Created on: 08/05/2020
+
+class UtilityListDetail(generics.ListAPIView):
+    serializer_class = UtilityMasterViewSerializer
+    pagination_class = StandardResultsSetPagination
+
+    queryset = UtilityMasterTbl.objects.filter(is_active=True)
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_fields = ('name', 'tenant__id_string',)
+    ordering_fields = ('name', 'tenant',)
+    ordering = ('name',) # always give by default alphabetical order
+    search_fields = ('name', 'tenant__name',)
+
+
+# API Header
+# API end Point: api/v1/utility
 # API verb: POST
 # Package: Basic
-# Modules:
-# Sub Module:
-# Interaction: Utility
-# Usage: API will save utility details
+# Modules: All
+# Sub Module: All
+# Interaction: Create Utility object
+# Usage: API will create utility object based on valid data
 # Tables used: 2.1. Utility Master
-# Author: aki
+# Author: Akshay
 # Created on: 13/05/2020
 
 class Utility(GenericAPIView):
@@ -71,39 +95,15 @@ class Utility(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/utilities
-# API verb: GET
-# Package: Basic
-# Modules:
-# Sub Module:
-# Interaction: Utility list
-# Usage: API will fetch required data for utility list against filter and search
-# Tables used: 2.1. Utility Master
-# Author: aki
-# Created on: 08/05/2020
-
-class UtilityListDetail(generics.ListAPIView, Utility):
-    serializer_class = UtilityMasterViewSerializer
-    pagination_class = StandardResultsSetPagination
-
-    queryset = UtilityMasterTbl.objects.filter(is_active=True)
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string',)
-    ordering_fields = ('name', 'tenant',)
-    ordering = ('name',) # always give by default alphabetical order
-    search_fields = ('name', 'tenant__name',)
-
-
-# API Header
 # API end Point: api/v1/utility/id_string
-# API verb: GET
+# API verb: GET,PUT
 # Package: Basic
 # Modules: All
 # Sub Module: All
 # Interaction: View Utility object
-# Usage: API will fetch required data for utility using id_string
+# Usage: API will fetch and edit required data for utility using id_string
 # Tables used: 2.1. Utility Master
-# Author: aki
+# Author: Akshay
 # Created on: 08/05/2020
 
 class UtilityDetail(GenericAPIView):
