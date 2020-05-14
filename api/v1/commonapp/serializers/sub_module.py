@@ -1,7 +1,16 @@
+__author__ = "Arpita"
+
 from rest_framework import serializers
 
 from v1.commonapp.models.sub_module import SubModule
 from v1.commonapp.serializers.module import ModuleSerializer
+
+
+class SubModuleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SubModule
+        fields = ('name', 'id_string')
 
 
 class SubModuleListSerializer(serializers.ModelSerializer):

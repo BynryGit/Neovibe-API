@@ -1484,7 +1484,7 @@ class TenantSubscriptionRateApiView(APIView):
                                                     ({
                                                         'id_string': tenant_document.id_string,
                                                         'document_name':tenant_document.document_name,
-                                                        'document_type':tenant_document.document_type,
+                                                        'document_type.py':tenant_document.document_type,
                                                         'sub_module_id':tenant_document.sub_module_id,
                                                         'document_extension':tenant_document.document_extension,
                                                         'document_link':tenant_document.document_link,

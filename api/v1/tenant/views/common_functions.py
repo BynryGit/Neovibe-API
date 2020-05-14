@@ -600,9 +600,9 @@ def get_tenant_documents_by_tenant_id_string(request, user):
             if request.data['document_name']:
                 tenant_document = tenant_document.objects.filter(document_name=
                                                          request.data['document_name'])
-            if request.data['document_type']:
+            if request.data['document_type.py']:
                 tenant_document = tenant_document.objects.filter(document_type=
-                                                         request.data['document_type'])
+                                                         request.data['document_type.py'])
             if request.data['sub_module_id']:
                 tenant_document = tenant_document.objects.filter(sub_module_id=
                                                          request.data['sub_module_id'])
@@ -1118,8 +1118,8 @@ def save_basic_tenant_document_details(request, user):
             if request.method == "POST":
                 if "document_name" in request.POST:
                     tenant_document.document_name = request.data["document_name"]
-                if "document_type" in request.POST:
-                    tenant_document.document_type = request.data["document_type"]
+                if "document_type.py" in request.POST:
+                    tenant_document.document_type = request.data["document_type.py"]
                 if "sub_module_id" in request.POST:
                     tenant_document.sub_module_id = request.data["sub_module_id"]
                 if "document_extension" in request.POST:
@@ -1135,8 +1135,8 @@ def save_basic_tenant_document_details(request, user):
                 tenant_document = tenant_document.objects.get(id_string=request.data["tenant_id_string"])
                 if "document_name" in request.POST:
                     tenant_document.document_name = request.data["document_name"]
-                if "document_type" in request.POST:
-                    tenant_document.document_type = request.data["document_type"]
+                if "document_type.py" in request.POST:
+                    tenant_document.document_type = request.data["document_type.py"]
                 if "sub_module_id" in request.POST:
                     tenant_document.sub_module_id = request.data["sub_module_id"]
                 if "document_extension" in request.POST:

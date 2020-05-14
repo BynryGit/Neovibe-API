@@ -92,3 +92,7 @@ def get_role_by_id_string(id_string):
 
 def get_role_by_tenant_id_string(id_string):
     return UserRole.objects.filter(tenant__id_string=id_string, is_active=True)
+
+
+def get_role_by_utility_id_string(id_string):
+    return UserRole.objects.filter(utility__id_string=id_string, is_active=True)
