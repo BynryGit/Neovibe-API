@@ -197,7 +197,7 @@ class Roles(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_role_data_verified(request):
                         # Request data verification end
 
                         # Save basic details start
@@ -329,7 +329,7 @@ class PrivilegeDetail(APIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_role_data_verified(request):
                         # Request data verification end
 
                         # Save privilege details start
@@ -383,7 +383,7 @@ class PrivilegeDetail(APIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_role_data_verified(request):
                         # Request data verification end
 
                         # Save privilege details start

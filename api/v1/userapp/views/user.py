@@ -30,7 +30,8 @@ from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
 # Created on: 11/05/2020
-from v1.userapp.views.common_functions import is_user_data_verified, add_basic_user_details
+from v1.userapp.views.common_functions import is_user_data_verified, add_basic_user_details, \
+    save_edited_basic_user_details
 
 
 class UserList(generics.ListAPIView):
@@ -85,7 +86,8 @@ class UserList(generics.ListAPIView):
 # Usage: View, Add, Edit User
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
-# Created on: 12/05/2020
+# Created on: 13/05/2020
+# Updated on: 14/05/2020
 
 class Users(GenericAPIView):
 

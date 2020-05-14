@@ -6,26 +6,26 @@ from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.utility.models.utility_usage_summary import get_utility_usage_summary_by_utility_id_string
-from v1.utility.serializers.summary import UtilityUsageSummaryViewSerializer
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
+from v1.utility.serializers.numformat import NumformatSerializer
 
 
 # API Header
-# API end Point: api/v1/utility/id_string/summary
-# API verb: GET
+# API end Point: api/v1/utility/id_string/numformat
+# API verb: PUT
 # Package: Basic
-# Modules: All
-# Sub Module: All
-# Interaction: Utility summary
-# Usage: API will fetch all summary against utility
-# Tables used: 2.3  Utility Usage Summary
+# Modules: Utility
+# Sub Module: Numformat
+# Interaction: for edit numformat
+# Usage: API will edit numformat and return updated current number
+# Tables used: 2.5.12 Notes
 # Author: Akshay
-# Created on: 12/05/2020
+# Created on: 14/05/2020
 
 
-class UtilityUsageSummaryDetail(GenericAPIView):
+class Numformat(GenericAPIView):
 
-    def get(self, request, id_string):
+    def put(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(request.headers['token']):
@@ -35,18 +35,25 @@ class UtilityUsageSummaryDetail(GenericAPIView):
 
                 # Checking authorization start
                 if is_authorized():
-                # Checking authorization end
+                    # Checking authorization end
                     # never pass token in logger
                     # choices = {'key1': 'val1', 'key2': 'val2'}
                     # logger.log("info", "Getting utility details", None, choices)
 
-                    utility_summary_obj = get_utility_usage_summary_by_utility_id_string(id_string)
-                    if utility_summary_obj:
-                        serializer = UtilityUsageSummaryViewSerializer(instance=utility_summary_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: serializer.data,
-                        }, status=status.HTTP_200_OK)
+                    numformat_obj = UtilityServiceNumberFormat.objects.filter(utility__id_string=id_string,
+                                                                                 item=request.data['item'], is_active=True)
+                    if numformat_obj:
+                        serializer = NumformatSerializer(data=request.data)
+                        if serializer.is_valid():
+                            serializer.update(numformat_obj, serializer.validated_data, request.user)
+                            return Response({
+                                STATE: SUCCESS,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
