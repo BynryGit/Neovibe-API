@@ -144,5 +144,39 @@ class Users(GenericAPIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def put(self, request, format=None):
+        try:
+
+            # Request data verification start
+            if is_user_data_verified(request):
+                # Request data verification end
+
+                # Edit basic details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = save_edited_basic_user_details(request, user)
+                if result:
+                    data = {
+                        "user_detail_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Edit basic details start
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
