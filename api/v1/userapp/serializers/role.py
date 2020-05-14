@@ -6,7 +6,7 @@ from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.userapp.models.role_status import RoleStatus
-from v1.userapp.models.user_role import UserRole
+from v1.userapp.models.role import UserRole
 from v1.userapp.serializers.role_sub_type import RoleSubTypeSerializer
 from v1.userapp.serializers.role_type import RoleTypeSerializer
 from v1.utility.serializers.utility import UtilitySerializer

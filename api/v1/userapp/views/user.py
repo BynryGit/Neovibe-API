@@ -11,7 +11,7 @@ from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.user_master import get_users_by_tenant_id_string, get_user_by_id_string
-from v1.userapp.models.user_role import get_role_by_id_string
+from v1.userapp.models.role import get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_type import get_user_type_by_id_string
@@ -31,7 +31,7 @@ from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer
 # Author: Arpita
 # Created on: 11/05/2020
 from v1.userapp.views.common_functions import is_user_data_verified, add_basic_user_details, \
-    save_edited_basic_user_details
+    save_edited_basic_user_details, is_privilege_data_verified, add_user_privilege, save_edited_privilege
 
 
 class UserList(generics.ListAPIView):
@@ -181,4 +181,84 @@ class Users(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+# API Header
+# API end Point: api/v1/user/role
+# API verb: POST, PUT
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: Add user notes, Edit user role and privilege
+# Usage: Add, Edit User role and privileges
+# Tables used: 2.5.2. Users & Privileges - Role Privileges
+# Author: Arpita
+# Created on: 14/05/2020
 
+class UserRole(GenericAPIView):
+
+    def post(self, request, format=None):
+        try:
+
+            # Request data verification start
+            if is_privilege_data_verified(request):
+                # Request data verification end
+
+                # Save basic user details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = add_user_privilege(request, user)
+                if result:
+                    data = {
+                        "user_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Save basic role details start
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, format=None):
+        try:
+
+            # Request data verification start
+            if is_privilege_data_verified(request):
+                # Request data verification end
+
+                # Edit basic details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = save_edited_privilege(request, user)
+                if result:
+                    data = {
+                        "user_detail_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Edit basic details start
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
