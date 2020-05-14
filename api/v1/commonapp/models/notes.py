@@ -77,6 +77,17 @@ class Notes(models.Model):
 # Create Notes table end.
 
 
+def get_note_by_id_string(id_string):
+    try:
+        return Notes.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_notes_by_utility_id_string(id_string):
+    return Notes.objects.filter(utility__id_string=id_string)
+
+
 def get_notes_by_user_id(id):
     return Notes.objects.filter(identification=id)
 
