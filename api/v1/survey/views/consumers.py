@@ -1,5 +1,5 @@
 __author__ = "Priyanka"
-
+import logging
 import traceback
 from rest_framework.response import Response
 from api.messages import SUCCESS,STATE,ERROR,EXCEPTION,DATA
@@ -21,10 +21,12 @@ from v1.survey.serializers.consumers import ConsumerListSerializer,ConsumerViewS
 # Tables used: 2.3.4 Survey Consumer
 # Auther: Priyanka
 # Created on: 29/04/2020
+logger = logging.getLogger(__name__)
 
 class ConsumerList(GenericAPIView):
 
     def get(self,request,id_string):
+        logger.info('In api/v1/survey/consumer/list')
         try:
             survey_obj = get_survey_by_id_string(id_string)
             if survey_obj:
@@ -69,6 +71,7 @@ class ConsumerList(GenericAPIView):
 class ConsumerView(GenericAPIView):
 
     def get(self, request, id_string):
+        logger.info('In api/v1/survey/consumer/id_string')
         try:
             consumer_survey = get_survey_consumer_by_id_string(id_string)
             if consumer_survey:

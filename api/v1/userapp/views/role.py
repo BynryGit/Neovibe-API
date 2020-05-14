@@ -21,8 +21,8 @@ from v1.userapp.models.user_master import get_user_by_id_string
 from v1.userapp.models.user_role import get_role_by_id_string, get_role_by_tenant_id_string, \
     get_role_by_utility_id_string
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer
-from v1.userapp.views.common_functions import is_data_verified, add_basic_role_details, \
-    save_privilege_details, save_edited_basic_role_details, save_edited_privilege_details
+from v1.userapp.views.common_functions import add_basic_role_details, save_privilege_details, \
+    save_edited_basic_role_details, save_edited_privilege_details, is_role_data_verified
 
 
 # API Header
@@ -144,7 +144,7 @@ class Roles(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_role_data_verified(request):
                         # Request data verification end
 
                         # Save basic role details start

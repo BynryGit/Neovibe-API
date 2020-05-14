@@ -9,11 +9,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 # campaign-status/list/
-class CampaignList(generics.ListAPIView):
+class CampaignstatusList(generics.ListAPIView):
     serializer_class = CampaignStatusListSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = CampaignStatus.objects.filter(tenant=4, utility=1)
+    queryset = CampaignStatus.objects.filter(tenant=1, utility=1)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'tenant__id_string',)
     ordering_fields = ('name', 'tenant',)

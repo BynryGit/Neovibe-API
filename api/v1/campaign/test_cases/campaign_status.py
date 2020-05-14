@@ -6,22 +6,22 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.survey.models.survey import Survey
+from v1.campaign.models.campaign_status import CampaignStatus
 
 
-class SurveyTestCase(APITestCase):
-    def get_all_survey(self):
+class CampaignStatusTestCase(APITestCase):
+    def get_all_campaign_status(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
-        Survey.objects.create(tenant=tenant_obj,utility=utility_obj,name="Domestic consumer survey")
-        response = self.client.get(reverse('survey_list'))
+        CampaignStatus.objects.create(tenant=tenant_obj,utility=utility_obj,name="Hold")
+        response = self.client.get(reverse('campaign_status_list'))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def get_single_survey(self):
+    # for getting single campaign details
+    def get_single_campaign_status(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
-        utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
-        survey = Survey.objects.create(tenant=tenant_obj, utility=utility_obj, name="Domestic consumer survey")
-        response = self.client.get(reverse('survey_data', args=[survey.id_string]))
+        status_obj = CampaignStatus.objects.create(tenant=tenant_obj, name="Created")
+        response = self.client.get(reverse('campaign_status', args=[status_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
