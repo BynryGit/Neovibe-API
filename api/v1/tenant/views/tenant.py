@@ -59,7 +59,7 @@ class TenantListDetail(generics.ListAPIView):
 # Author: Gauri
 # Created on: 13/05/2020
 
-class UtilityDetail(GenericAPIView):
+class TenantDetail(GenericAPIView):
     serializer_class = TenantMasterSerializer
 
     def get(self, request, id_string):

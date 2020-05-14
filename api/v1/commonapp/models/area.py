@@ -16,6 +16,8 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
+
+from v1.commonapp.models.city import get_city_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -29,7 +31,7 @@ class Area(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    city = models.BigIntegerField(blank=False, null=False)
+    city_id = models.BigIntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -42,11 +44,27 @@ class Area(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
+    def get_city(self):
+        return get_city_by_id(self.city_id)
+
 
 # Create Area table end
 
 def get_areas_by_tenant_id_string(id_string):
     return Area.objects.filter(tenant__id_string=id_string)
+
+
+def get_areas_by_utility_id_string(id_string):
+    return Area.objects.filter(utility__id_string=id_string)
 
 
 def get_area_by_id(id):

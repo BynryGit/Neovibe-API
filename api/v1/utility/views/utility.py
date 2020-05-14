@@ -15,6 +15,63 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 # API Header
 # API end Point: api/v1/utilities
+# API verb: POST
+# Package: Basic
+# Modules:
+# Sub Module:
+# Interaction: Utility
+# Usage: API will save utility details
+# Tables used: 2.1. Utility Master
+# Author: aki
+# Created on: 13/05/2020
+
+class Utility(GenericAPIView):
+    serializer_class = UtilityMasterSerializer
+
+    def post(self, request):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.headers['token']):
+                # payload = get_payload(request.headers['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                if is_authorized():
+                # Checking authorization end
+                    # never pass token in logger
+                    # choices = {'key1': 'val1', 'key2': 'val2'}
+                    # logger.log("info", "Getting utility details", None, choices)
+                    serializer = UtilityMasterSerializer(data=request.data)
+                    if serializer.is_valid():
+                        utility_obj = serializer.create(serializer.validated_data, request.user)
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: {'utility_id_string': utility_obj.id_string},
+                        }, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            RESULTS:serializer.errors,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as ex:
+            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(ex))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/utilities
 # API verb: GET
 # Package: Basic
 # Modules:
@@ -25,7 +82,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 # Author: aki
 # Created on: 08/05/2020
 
-class UtilityListDetail(generics.ListAPIView):
+class UtilityListDetail(generics.ListAPIView, Utility):
     serializer_class = UtilityMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 
@@ -38,13 +95,13 @@ class UtilityListDetail(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/utilities
+# API end Point: api/v1/utility/id_string
 # API verb: GET
 # Package: Basic
-# Modules:
-# Sub Module:
-# Interaction: Utility fot get and edit
-# Usage: API will fetch required data for utility list against single utility id_string and edit the existing utility
+# Modules: All
+# Sub Module: All
+# Interaction: View Utility object
+# Usage: API will fetch required data for utility using id_string
 # Tables used: 2.1. Utility Master
 # Author: aki
 # Created on: 08/05/2020
@@ -68,12 +125,63 @@ class UtilityDetail(GenericAPIView):
                     # logger.log("info", "Getting utility details", None, choices)
 
                     utility_obj = get_utility_by_id_string(id_string)
+
                     if utility_obj:
+
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: serializer.data,
                         }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as ex:
+            # logger.log("Error", "Exception at GET api/v1/utility/", ex )
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(ex))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, id_string):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.headers['token']):
+                # payload = get_payload(request.headers['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                if is_authorized():
+                # Checking authorization end
+                    # never pass token in logger
+                    # choices = {'key1': 'val1', 'key2': 'val2'}
+                    # logger.log("info", "Getting utility details", None, choices)
+
+                    utility_obj = get_utility_by_id_string(id_string)
+                    if utility_obj:
+                        serializer = UtilityMasterSerializer(data=id_string)
+                        if serializer.is_valid():
+                            serializer.update(utility_obj, serializer.validated_data, request.user)
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: serializer.data,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,

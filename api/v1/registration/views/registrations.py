@@ -34,7 +34,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
-# API end Point: api/v1/registration/list
+# API end Point: api/v1/registrations
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -56,6 +56,7 @@ class RegistrationList(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = RegTbl.objects.filter(registration_type_id=1)
+
         utility_id_string = self.request.query_params.get('utility', None)
         category_id_string = self.request.query_params.get('category', None)
         sub_category_id_string = self.request.query_params.get('sub_category', None)

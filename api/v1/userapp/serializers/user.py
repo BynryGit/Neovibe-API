@@ -10,6 +10,13 @@ from v1.userapp.models.user_status import UserStatus
 from v1.utility.serializers.utility import UtilitySerializer
 
 
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserDetail
+        fields = ('username', 'first_name', 'middle_name', 'last_name', 'id_string')
+
+
 class UserStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -25,7 +32,8 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserDetail
-        fields = ('id_string', 'tenant', 'utility', 'name', 'user_ID', 'contact', 'status', 'email', 'department', 'role')
+        fields = ('id_string', 'tenant', 'utility', 'name', 'user_ID', 'contact', 'status', 'email', 'department',
+                  'role')
 
 
 class UserViewSerializer(serializers.ModelSerializer):
@@ -38,5 +46,5 @@ class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserDetail
         fields = ('id_string', 'tenant', 'utility', 'user_ID','first_name', 'middle_name','last_name', 'email', 'type',
-                  'sub_type', 'role', 'form_factor', 'city', 'department', 'street', 'status', 'roles', 'privileges',
-                  'skills', 'areas')
+                  'sub_type', 'role', 'form_factor', 'city', 'department', 'street', 'status', 'utilities', 'skills',
+                  'areas')

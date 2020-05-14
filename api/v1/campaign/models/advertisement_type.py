@@ -40,4 +40,10 @@ class AdvertisementType(models.Model):
 
 def get_advert_type_by_id(id):
     return AdvertisementType.objects.get(id = id)
+
+def get_advert_type_by_id_string(id_string):
+    try:
+        return AdvertisementType.objects.get(id_string = id_string)
+    except:
+        return False
 # Create advertisement type table end.
