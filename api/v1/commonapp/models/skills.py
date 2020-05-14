@@ -12,6 +12,8 @@
 # <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
+
+from v1.commonapp.models.service_type import get_service_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
@@ -38,4 +40,21 @@ class Skills(models.Model):
 
     def __unicode__(self):
         return self.skill
+
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
+    def get_service_type(self):
+        return get_service_type_by_id(self.service_type_id)
+
 # Create Skills table end
+
+
+def get_skills_by_utility_id_string(id_string):
+    return Skills.objects.filter(utility__id_string=id_string)

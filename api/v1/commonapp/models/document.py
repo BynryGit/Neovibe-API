@@ -15,18 +15,31 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id
+from v1.commonapp.models.document_type import get_document_type_by_id
+from v1.commonapp.models.module import get_module_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.user_master import get_user_by_id
 from v1.utility.models.utility_master import UtilityMaster
 
 from django.db import models  # importing package for database
 
 # Create Document table start
 
+
 class Document(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    module_id = models.BigIntegerField(null=True, blank=True)
+    sub_module_id = models.BigIntegerField(null=True, blank=True)
+    identification_id = models.BigIntegerField(null=True, blank=True)
+    document_type_id = models.BigIntegerField(blank=False, null=False)
+    document_sub_type_id = models.BigIntegerField(blank=False, null=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    document_type = models.BigIntegerField(blank=False, null=False)
+    link = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -39,5 +52,41 @@ class Document(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
+    def get_module(self):
+        return get_module_by_id(self.module_id)
+
+    @property
+    def get_sub_module(self):
+        return get_sub_module_by_id(self.sub_module_id)
+
+    @property
+    def get_type(self):
+        return get_document_type_by_id(self.document_type_id)
+
+    @property
+    def get_sub_type(self):
+        return get_document_sub_type_by_id(self.document_sub_type_id)
+
+    @property
+    def get_user_identification(self):
+        return get_user_by_id(self.identification_id)
+
 # Create Document table end
+
+
+def get_documents_by_utility_id_string(id_string):
+    return Document.objects.filter(utility__id_string=id_string)
+
+
+def get_documents_by_user_id(id):
+    return Document.objects.filter(identification=id)
 

@@ -1,27 +1,28 @@
-# table header
-# module: S&M | sub-module - Campaign
-# table type : lookup (Local)
-# table name : 2.12.43 advertisement type
-# table description : A lookup table that stores various types of advertisement for campaign.
-# frequency of data changes : Low
-# sample table data : "tv_ads" , "canopy" , "fm_radio", "email" "linkedin" "google"
-# reference tables : 2.3.6 advertisement master table
-# author : Saloni Monde
-# created on : 21/04/2020
+# Table Header
+# module : All modules & sub-modules
+# Table Type : Lookup (Global)
+# Table Name : 2.12.12 Document Type
+# Description : It is a global lookup table that will store types of documents
+# Frequency of data changes : Low
+# Sample Table Data : "ID Proof", "Address Proof"
+# Reference Table : 2.3.3 Survey Transaction Table, 2.3.8 Campaign Transaction Table, 2.3.1. Consumer Master,
+#                    2.3.2. Consumer - Registration, 2.7.1. Employee, 2.5.5 User Documents.
+# Author : Jayshree Kumbhare
+# Creation Date : 21-04-2020
 
 # change history
 # <ddmmyyyy><changes><author>
 
-
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
-# Create advertisement type table start.
+# Create Document Type table start
+from v1.utility.models.utility_master import UtilityMaster
 
-class AdvertisementType(models.Model):
+
+class DocumentSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -33,17 +34,17 @@ class AdvertisementType(models.Model):
     updated_date = models.DateField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
-def get_advert_type_by_id(id):
-    return AdvertisementType.objects.get(id = id)
+# Create Document Type table end
 
-def get_advert_type_by_id_string(id_string):
-    try:
-        return AdvertisementType.objects.get(id_string = id_string)
-    except:
-        return False
-# Create advertisement type table end.
+
+def get_document_sub_type_by_id_string(id_string):
+    return DocumentSubType.objects.filter(id_string=id_string).last()
+
+
+def get_document_sub_type_by_id(id):
+    return DocumentSubType.objects.filter(id=id).last()

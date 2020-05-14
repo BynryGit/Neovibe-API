@@ -7,6 +7,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from api.settings import DISPLAY_DATE_FORMAT
+from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
@@ -33,7 +34,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 
 
 # API Header
-# API end Point: api/v1/registration/list
+# API end Point: api/v1/registrations
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -43,20 +44,19 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 # Tables used: 2.4.2. Consumer - Registration
 # Author: Rohan
 # Created on: 21/04/2020
-logger = logging.getLogger(__name__)
 class RegistrationList(generics.ListAPIView):
     serializer_class = RegistrationListSerializer
     pagination_class = StandardResultsSetPagination
+
     # filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     # filter_fields = ('name', 'tenant__id_string',)
     # ordering_fields = ('name', 'registration_no',)
     # ordering = ('created_date',)  # always give by default alphabetical order
     # search_fields = ('name', 'email_id',)
 
-
     def get_queryset(self):
-        logger.info('In api/v1/registration/list')
         queryset = RegTbl.objects.filter(registration_type_id=1)
+
         utility_id_string = self.request.query_params.get('utility', None)
         category_id_string = self.request.query_params.get('category', None)
         sub_category_id_string = self.request.query_params.get('sub_category', None)
@@ -78,7 +78,6 @@ class RegistrationList(generics.ListAPIView):
             sub_area = get_sub_area_by_id_string(sub_area_id_string)
             queryset = queryset.filter(sub_area_id=sub_area.id)
         return queryset
-
 
 
 # API Header
@@ -110,6 +109,7 @@ class Registration(GenericAPIView):
                     DATA: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -276,14 +276,14 @@ class Registration(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class RegistrationStatus(GenericAPIView):
 
     def get(self, request, id_string):
         try:
             registration_status = get_registration_status_by_id_string(id_string)
             if registration_status:
-                serializer = RegistrationStatusViewSerializer(instance=registration_status, context={'request': request})
+                serializer = RegistrationStatusViewSerializer(instance=registration_status,
+                                                              context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     DATA: serializer.data,
@@ -310,4 +310,3 @@ class RegistrationStatus(GenericAPIView):
             pass
         except Exception as e:
             pass
-

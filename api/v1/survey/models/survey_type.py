@@ -43,7 +43,10 @@ def get_survey_type_by_tenant_id_string(id_string):
     return SurveyType.objects.filter(tenant__id_string = id_string)
 
 def get_survey_type_by_id_string(id_string):
-    return SurveyType.objects.get(id_string = id_string)
+    try:
+        return SurveyType.objects.get(id_string = id_string)
+    except:
+        return False
 
 def get_survey_type_by_id(id):
     return SurveyType.objects.get(id = id)

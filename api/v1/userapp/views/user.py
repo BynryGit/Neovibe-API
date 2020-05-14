@@ -6,7 +6,6 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
-from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
@@ -31,6 +30,7 @@ from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
 # Created on: 11/05/2020
+from v1.userapp.views.common_functions import is_user_data_verified, add_basic_user_details
 
 
 class UserList(generics.ListAPIView):
@@ -112,51 +112,32 @@ class Users(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
 
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
-                if is_authorized():
-                    # Checking authorization end
+            # Request data verification start
+            if is_user_data_verified(request):
+                # Request data verification end
 
-                    # Request data verification start
-                    if is_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic role details start
-                        user = get_user_by_id_string(request.data['user'])
-                        role, result, error = add_basic_role_details(request, user)
-                        if result:
-                            data = {
-                                "role_id_string": role.id_string
-                            }
-                            return Response({
-                                STATE: SUCCESS,
-                                DATA: data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: EXCEPTION,
-                                ERROR: error
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        # Save basic role details start
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                # Save basic user details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = add_basic_user_details(request, user)
+                if result:
+                    data = {
+                        "user_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Save basic role details start
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
@@ -165,54 +146,37 @@ class Users(GenericAPIView):
 
     def put(self, request, format=None):
         try:
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
 
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
-                if is_authorized():
-                    # Checking authorization end
+            # Request data verification start
+            if is_user_data_verified(request):
+                # Request data verification end
 
-                    # Request data verification start
-                    if is_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic details start
-                        user = get_user_by_id_string(request.data['user'])
-                        role, result, error = save_edited_basic_role_details(request, user)
-                        if result:
-                            data = {
-                                "role_id_string": role.id_string
-                            }
-                            return Response({
-                                STATE: SUCCESS,
-                                DATA: data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: EXCEPTION,
-                                ERROR: error
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        # Save basic details start
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                # Edit basic details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = save_edited_basic_user_details(request, user)
+                if result:
+                    data = {
+                        "user_detail_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Edit basic details start
             else:
                 return Response({
                     STATE: ERROR,
-
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
