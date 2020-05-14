@@ -6,22 +6,22 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.survey.models.survey import Survey
+from v1.campaign.models.campaign_group import CampaignGroup
 
 
-class SurveyTestCase(APITestCase):
-    def get_all_survey(self):
+class CampaignGroupTestCase(APITestCase):
+    def get_all_campaign_group(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
-        Survey.objects.create(tenant=tenant_obj,utility=utility_obj,name="Domestic consumer survey")
-        response = self.client.get(reverse('survey_list'))
+        CampaignGroup.objects.create(tenant=tenant_obj,utility=utility_obj,name="campaign_group_1")
+        response = self.client.get(reverse('campaign_gropu_list'))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def get_single_survey(self):
+    # for getting single campaign details
+    def get_single_campaign_group(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
-        utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
-        survey = Survey.objects.create(tenant=tenant_obj, utility=utility_obj, name="Domestic consumer survey")
-        response = self.client.get(reverse('survey_data', args=[survey.id_string]))
+        group_obj = CampaignGroup.objects.create(tenant=tenant_obj, name="campaign_group_2")
+        response = self.client.get(reverse('campaign_group', args=[group_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

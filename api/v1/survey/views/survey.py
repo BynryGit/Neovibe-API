@@ -1,5 +1,5 @@
 __author__ = "Priyanka"
-
+import logging
 import traceback
 from rest_framework.response import Response
 from api.messages import SUCCESS,STATE,ERROR,EXCEPTION,DATA
@@ -30,6 +30,7 @@ from v1.survey.serializers.survey import SurveyViewSerializer,SurveyListSerializ
 # Author: Priyanka
 # Created on: 28/04/2020
 
+logger = logging.getLogger(__name__)
 
 # API for getting list data of Location Survey
 class SurveyListApiView(generics.ListAPIView):
@@ -37,6 +38,7 @@ class SurveyListApiView(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
+        logger.info('In api/v1/survey/list')
         search_str = self.request.query_params.get('search', None)
 
         queryset = Survey.objects.filter(is_active=True)
@@ -95,6 +97,7 @@ class SurveyListApiView(generics.ListAPIView):
 class Surveys(GenericAPIView):
 
     def get(self, request, id_string):
+        logger.info('In api/v1/survey/id_string')
         try:
             survey = get_survey_by_id_string(id_string)
             if survey:

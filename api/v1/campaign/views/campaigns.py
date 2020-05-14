@@ -1,4 +1,5 @@
 import traceback
+import logging
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 from rest_framework.generics import GenericAPIView
@@ -28,11 +29,14 @@ from v1.campaign.serializers.campaign import CampaignViewSerializer,CampaignList
 # Created on: 22/04/2020
 
 # Api for getting campaign  filter
+logger = logging.getLogger(__name__)
+
 class CampaignList(generics.ListAPIView):
     serializer_class = CampaignListSerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
+        logger.info('In api/v1/campaign/list')
         search_str = self.request.query_params.get('search', None)
 
         queryset = CampaignTbl.objects.filter(is_active=True).order_by('-id')
@@ -88,6 +92,7 @@ class CampaignList(generics.ListAPIView):
 class Campaigns(GenericAPIView):
 
     def get(self, request, id_string):
+        logger.info('In api/v1/campaign/id_string')
         try:
             campaign = get_campaign_by_id_string(id_string)
             if campaign:

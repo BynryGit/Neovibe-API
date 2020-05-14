@@ -3,7 +3,7 @@
 		"pk" : "1",
 		"model" : "survey.SurveyObjective",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"objective" : "Update consumer data",
 			"is_active" : "True"
@@ -13,7 +13,7 @@
     "pk": "2",
     "model": "survey.SurveyObjective",
     "fields": {
-      "tenant": 4,
+      "tenant": 1,
       "utility": 1,
       "objective": "Save consumer data",
       "is_active": "True"
@@ -23,7 +23,7 @@
 		"pk" : "3",
 		"model" : "survey.SurveyObjective",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"objective" : "Delete consumer",
 			"is_active" : "True"
@@ -33,7 +33,7 @@
 		"pk" : "1",
 		"model" : "survey.SurveyType",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "Consumer",
 			"is_active" : "True"
@@ -43,7 +43,7 @@
 		"pk" : "2",
 		"model" : "survey.SurveyType",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "Location",
 			"is_active" : "True"
@@ -54,7 +54,7 @@
 		"pk" : "1",
 		"model" : "survey.SurveyStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "created",
 			"is_active" : "True"
@@ -64,7 +64,7 @@
 		"pk" : "2",
 		"model" : "survey.SurveyStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "assigned",
 			"is_active" : "True"
@@ -74,7 +74,7 @@
 		"pk" : "3",
 		"model" : "survey.SurveyStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "started",
 			"is_active" : "True"
@@ -84,7 +84,7 @@
 		"pk" : "4",
 		"model" : "survey.SurveyStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "hold",
 			"is_active" : "True"
@@ -94,7 +94,7 @@
 		"pk" : "5",
 		"model" : "survey.SurveyStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "completed",
 			"is_active" : "True"
@@ -104,7 +104,7 @@
 		"pk" : "1",
 		"model" : "survey.Survey",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "Domestic consumer survey",
             "objective_id": 1,
@@ -126,7 +126,7 @@
 		"pk" : "2",
 		"model" : "survey.Survey",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "New Location Survey",
             "objective_id": 1,
@@ -148,7 +148,7 @@
 		"pk" : "1",
 		"model" : "survey.SurveyConsumer",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"survey_id": 1,
 			"vendor_id": 1,
@@ -171,7 +171,7 @@
 		"pk" : "2",
 		"model" : "survey.SurveyConsumer",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"survey_id": 1,
 			"vendor_id": 2,
@@ -194,7 +194,7 @@
 		"pk" : "1",
 		"model" : "survey.SurveyAssignment",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"survey_id": 1,
 			"vendor_id": 1,
@@ -208,7 +208,7 @@
 		"pk" : "2",
 		"model" : "survey.SurveyAssignment",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"survey_id": 2,
 			"vendor_id": 2,
@@ -222,7 +222,7 @@
 		"pk" : "1",
 		"model" : "survey.SurveyTransactionStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "created",
 			"is_active" : "True"
@@ -232,7 +232,7 @@
 		"pk" : "2",
 		"model" : "survey.SurveyTransactionStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "assigned",
 			"is_active" : "True"
@@ -242,7 +242,7 @@
 		"pk" : "3",
 		"model" : "survey.SurveyTransactionStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "started",
 			"is_active" : "True"
@@ -252,7 +252,7 @@
 		"pk" : "4",
 		"model" : "survey.SurveyTransactionStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "hold",
 			"is_active" : "True"
@@ -262,27 +262,27 @@
 		"pk" : "5",
 		"model" : "survey.SurveyTransactionStatus",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "completed",
 			"is_active" : "True"
 		}
 	},
 	  {
-    "pk": "1",
+    "pk": "2",
     "model": "userapp.UserDetail",
     "fields": {
-        "tenant": 4,
+        "tenant": 1,
         "utility": 1,
         "phone_mobile": 2222222222,
         "is_active": "True"
     }
   },
   {
-    "pk": "2",
+    "pk": "3",
     "model": "userapp.UserDetail",
     "fields": {
-        "tenant": 4,
+        "tenant": 1,
         "utility": 1,
         "phone_mobile": 2222222222,
         "is_active": "True"
