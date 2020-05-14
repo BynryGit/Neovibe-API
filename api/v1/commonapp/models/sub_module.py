@@ -23,9 +23,9 @@ from v1.commonapp.models.module import get_module_by_id
 
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    # sub_module = models.BigIntegerField(null=False, blank=False)
-    module_id = models.BigIntegerField(null=False, blank=False)
-    name = models.CharField(max_length=200, null=False, blank=False)
+    sub_module = models.BigIntegerField(null=True, blank=True)
+    module_id = models.BigIntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())

@@ -134,14 +134,16 @@ class Registration(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
+                    user = UserDetail.objects.get(id = 2)
                     if is_data_verified(request):
                     # Request data verification end
                         serializer = RegistrationSerializer(data=request.data)
                         if serializer.is_valid():
-                            utility_obj = serializer.create(serializer.validated_data, request.user)
+                            registration_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'utility_id_string': utility_obj.id_string},
+                                RESULTS: view_serializer.data,
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({

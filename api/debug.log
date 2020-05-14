@@ -1,234 +1,95 @@
+/home/admin1/yy/Smart360-app/api/v1/commonapp/models/sub_module.py changed, reloading.
 Watching for file changes with StatReloader
+/home/admin1/yy/Smart360-app/api/v1/userapp/models/user_token.py changed, reloading.
 Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/api/urls.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/tenant/views/tenant.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/tenant/views/tenant.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/tenant/views/tenant.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/tenant/views/tenant.py changed, reloading.
-Watching for file changes with StatReloader
-"GET /api/v1/survey/objective/7c8a559d-736c-4263-b025-87367a02d213 HTTP/1.1" 301 0
-"GET /api/v1/survey/objective/7c8a559d-736c-4263-b025-87367a02d213/ HTTP/1.1" 200 271
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/advertisement.py changed, reloading.
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-"GET /admin/ HTTP/1.1" 302 0
-"GET /admin/login/?next=/admin/ HTTP/1.1" 200 1913
-"GET /static/admin/css/base.css HTTP/1.1" 200 16378
-"GET /static/admin/css/login.css HTTP/1.1" 200 1233
-"GET /static/admin/css/responsive.css HTTP/1.1" 200 18052
-"GET /static/admin/css/fonts.css HTTP/1.1" 200 423
-Not Found: /favicon.ico
-"GET /favicon.ico HTTP/1.1" 404 2773
-"POST /admin/login/?next=/admin/ HTTP/1.1" 200 2074
-"GET /static/admin/css/base.css HTTP/1.1" 304 0
-"GET /static/admin/css/responsive.css HTTP/1.1" 304 0
-"GET /static/admin/css/login.css HTTP/1.1" 200 1233
-"GET /static/admin/css/fonts.css HTTP/1.1" 304 0
-"POST /admin/login/?next=/admin/ HTTP/1.1" 200 2074
-Watching for file changes with StatReloader
-"POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
 "GET /admin/ HTTP/1.1" 200 38628
-"GET /static/admin/css/dashboard.css HTTP/1.1" 200 412
-"GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
-"GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
-"GET /admin/tenant/tenantmaster/ HTTP/1.1" 200 3216
-"GET /static/admin/css/changelists.css HTTP/1.1" 200 6190
+"GET /admin/campaign/adassignstatus/ HTTP/1.1" 200 3243
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/js/jquery.init.js HTTP/1.1" 200 363
-"GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
-"GET /static/admin/js/core.js HTTP/1.1" 304 0
-"GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
-"GET /static/admin/js/actions.js HTTP/1.1" 304 0
-"GET /static/admin/js/urlify.js HTTP/1.1" 304 0
-"GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
-"GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
-"GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
-"GET /admin/tenant/tenantmaster/add/ HTTP/1.1" 200 10169
-"GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/commonapp/area/ HTTP/1.1" 200 4998
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/consumer/complaintstatus/ HTTP/1.1" 200 3245
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/consumer/consumerstatus/ HTTP/1.1" 200 3238
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/survey/surveystatus/ HTTP/1.1" 200 3216
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/userapp/roletype/ HTTP/1.1" 200 4586
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/tenant/tenantmaster/ HTTP/1.1" 200 5071
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/registration/registration/ HTTP/1.1" 200 4881
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/registration/registration/3/change/ HTTP/1.1" 200 23414
 "GET /static/admin/css/forms.css HTTP/1.1" 200 8518
-"GET /static/admin/js/change_form.js HTTP/1.1" 200 712
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/js/calendar.js HTTP/1.1" 304 0
-"GET /static/admin/css/widgets.css HTTP/1.1" 200 10322
-"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 495
-"GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
-"GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
-"POST /admin/tenant/tenantmaster/add/ HTTP/1.1" 302 0
-"GET /admin/tenant/tenantmaster/ HTTP/1.1" 200 4590
-"GET /static/admin/css/changelists.css HTTP/1.1" 304 0
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
-"GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
-"GET /admin/tenant/ HTTP/1.1" 200 3519
-"GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
-"GET /admin/ HTTP/1.1" 200 38956
-"GET /admin/utility/utilitymaster/ HTTP/1.1" 200 3227
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/utility/utilitymaster/add/ HTTP/1.1" 200 12030
+"GET /static/admin/js/calendar.js HTTP/1.1" 200 7777
+"GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 20232
 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
-"GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+"GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+"GET /static/admin/css/widgets.css HTTP/1.1" 200 10322
 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
-"POST /admin/utility/utilitymaster/add/ HTTP/1.1" 302 0
-"GET /admin/utility/utilitymaster/ HTTP/1.1" 200 4608
+"GET /admin/registration/registration/ HTTP/1.1" 200 4881
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/userapp/userdetail/ HTTP/1.1" 200 3171
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/userapp/userdetail/add/ HTTP/1.1" 200 54457
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/commonapp/city/ HTTP/1.1" 200 4765
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/userapp/usertype/ HTTP/1.1" 200 4586
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/utility/utilityservicenumberformat/ HTTP/1.1" 200 3328
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 38628
+"GET /admin/commonapp/formfactor/ HTTP/1.1" 200 4616
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"POST /admin/userapp/userdetail/add/ HTTP/1.1" 302 0
+"GET /admin/userapp/userdetail/ HTTP/1.1" 200 4518
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
-"GET /static/admin/fonts/Roboto-Bold-webfont.woff HTTP/1.1" 200 86184
-Watching for file changes with StatReloader
-"GET /api/v1/survey/objective/7c8a559d-736c-4263-b025-87367a02d213 HTTP/1.1" 301 0
-Internal Server Error: /api/v1/survey/objective/7c8a559d-736c-4263-b025-87367a02d213/
-"GET /api/v1/survey/objective/7c8a559d-736c-4263-b025-87367a02d213/ HTTP/1.1" 500 31
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-"GET /api/v1/survey/objective/8b00e73b-ab7b-4f5e-9071-d5a824c4ce8e HTTP/1.1" 301 0
-"GET /api/v1/survey/objective/8b00e73b-ab7b-4f5e-9071-d5a824c4ce8e/ HTTP/1.1" 200 262
-"GET /api/v1/survey/objective/8b00e73b-ab7b-4f5e-9071-d5a824c4ce8e HTTP/1.1" 301 0
-"GET /api/v1/survey/objective/8b00e73b-ab7b-4f5e-9071-d5a824c4ce8e/ HTTP/1.1" 200 262
-/home/mccia/Documents/Smart360-app/api/v1/survey/views/survey_status.py changed, reloading.
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-"GET /api/v1/campaign/ HTTP/1.1" 200 470
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaign_status.py changed, reloading.
-Watching for file changes with StatReloader
-"GET /api/v1/campaign/ HTTP/1.1" 200 2646
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/models/campaign.py changed, reloading.
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/views/campaigns.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/serializers/campaign.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/urls.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/campaign/urls.py changed, reloading.
-Watching for file changes with StatReloader
-"GET /admin/ HTTP/1.1" 200 39254
-"GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
-"GET /static/admin/css/base.css HTTP/1.1" 304 0
-"GET /static/admin/css/responsive.css HTTP/1.1" 304 0
-"GET /static/admin/css/fonts.css HTTP/1.1" 304 0
-"GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
-"GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
-"GET /static/admin/fonts/Roboto-Light-webfont.woff HTTP/1.1" 200 85692
-"GET /static/admin/fonts/Roboto-Regular-webfont.woff HTTP/1.1" 200 85876
-"GET /static/admin/fonts/Roboto-Bold-webfont.woff HTTP/1.1" 200 86184
-"GET /admin/campaign/advertisements/ HTTP/1.1" 200 5162
+"GET /admin/ HTTP/1.1" 200 38947
+"GET /admin/auth/user/ HTTP/1.1" 200 7028
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/campaign/advertisements/4/change/ HTTP/1.1" 200 17659
-"GET /static/admin/css/forms.css HTTP/1.1" 200 8518
+"GET /static/admin/img/search.svg HTTP/1.1" 304 0
+"GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+"GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+"GET /admin/auth/user/2/change/ HTTP/1.1" 200 42231
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 495
-"GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
-"GET /admin/campaign/advertisements/ HTTP/1.1" 200 5162
+"GET /static/admin/js/SelectBox.js HTTP/1.1" 200 5753
+"GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 12318
+"GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+"GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+"GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 200 655
+"GET /admin/auth/user/2/password/ HTTP/1.1" 200 3245
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/campaign/advertisements/4/change/ HTTP/1.1" 200 17659
+"POST /admin/auth/user/2/password/ HTTP/1.1" 302 0
+"GET /admin/auth/user/2/change/ HTTP/1.1" 200 42467
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/campaign/ HTTP/1.1" 200 5884
-"GET /admin/campaign/campaign/ HTTP/1.1" 200 5058
+"GET /admin/auth/user/2/password/ HTTP/1.1" 200 3245
+"GET /admin/auth/user/2/change/ HTTP/1.1" 200 42345
+"GET /admin/auth/user/ HTTP/1.1" 200 7028
+"GET /admin/ HTTP/1.1" 200 39227
+"GET /admin/commonapp/module/ HTTP/1.1" 200 5025
 "GET /admin/jsi18n/ HTTP/1.1" 200 3223
-Internal Server Error: /api/v1/campaign/a25fedf0-3362-418c-827c-0a7290b2c8e3/adverts/
-Internal Server Error: /api/v1/campaign/advert/76e43b00-812c-4fb2-980d-39cc78d112d4/
-Traceback (most recent call last):
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/fields.py", line 454, in get_attribute
-    return get_attribute(instance, self.source_attrs)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/fields.py", line 94, in get_attribute
-    instance = getattr(instance, attr)
-AttributeError: 'bool' object has no attribute 'name'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/mccia/Documents/Smart360-app/api/v1/campaign/views/advertisement.py", line 85, in get
-    DATA: serializer.data,
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/serializers.py", line 562, in data
-    ret = super().data
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/serializers.py", line 260, in data
-    self._data = self.to_representation(self.instance)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/serializers.py", line 529, in to_representation
-    ret[field.field_name] = field.to_representation(attribute)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/serializers.py", line 516, in to_representation
-    attribute = field.get_attribute(instance)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/fields.py", line 487, in get_attribute
-    raise type(exc)(msg)
-AttributeError: Got AttributeError when attempting to get a value for field `name` on serializer `CampaignSerializer`.
-The serializer field might be named incorrectly and not match any attribute or key on the `bool` instance.
-Original exception text was: 'bool' object has no attribute 'name'.
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
-    response = get_response(request)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
-    response = self.process_exception_by_middleware(e, request)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
-    return view_func(*args, **kwargs)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/django/views/generic/base.py", line 71, in view
-    return self.dispatch(request, *args, **kwargs)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/views.py", line 505, in dispatch
-    response = self.handle_exception(exc)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/views.py", line 465, in handle_exception
-    self.raise_uncaught_exception(exc)
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
-    raise exc
-  File "/home/mccia/smart360_new_project/lib/python3.7/site-packages/rest_framework/views.py", line 502, in dispatch
-    response = handler(request, *args, **kwargs)
-  File "/home/mccia/Documents/Smart360-app/api/v1/campaign/views/advertisement.py", line 96, in get
-    ERROR: str(traceback.print_exc(e))
-  File "/usr/lib/python3.7/traceback.py", line 163, in print_exc
-    print_exception(*sys.exc_info(), limit=limit, file=file, chain=chain)
-  File "/usr/lib/python3.7/traceback.py", line 104, in print_exception
-    type(value), value, tb, limit=limit).format(chain=chain):
-  File "/usr/lib/python3.7/traceback.py", line 497, in __init__
-    _seen=_seen)
-  File "/usr/lib/python3.7/traceback.py", line 508, in __init__
-    capture_locals=capture_locals)
-  File "/usr/lib/python3.7/traceback.py", line 337, in extract
-    if limit >= 0:
-TypeError: '>=' not supported between instances of 'AttributeError' and 'int'
-Internal Server Error: /api/v1/campaign/6256206b-6eee-421f-abe8-568137866777/adverts/
-/home/mccia/Documents/Smart360-app/api/v1/survey/urls.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/survey/views/survey.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/survey/models/survey.py changed, reloading.
-Watching for file changes with StatReloader
-/home/mccia/Documents/Smart360-app/api/v1/survey/urls.py changed, reloading.
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/api/settings.py changed, reloading.
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/api/settings.py changed, reloading.
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/api/settings.py changed, reloading.
-Watching for file changes with StatReloader
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/api/settings.py changed, reloading.
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/api/settings.py changed, reloading.
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/v1/registration/serializers/registration.py changed, reloading.
-Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/v1/registration/views/registrations.py changed, reloading.
-Watching for file changes with StatReloader
+"GET /admin/ HTTP/1.1" 200 39227
+"GET /admin/campaign/advertisementtype/ HTTP/1.1" 200 3259
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 39227
+"GET /admin/commonapp/area/ HTTP/1.1" 200 4998
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 39227
+"GET /admin/commonapp/subarea/ HTTP/1.1" 200 5302
+"GET /admin/jsi18n/ HTTP/1.1" 200 3223
+"GET /admin/ HTTP/1.1" 200 39227

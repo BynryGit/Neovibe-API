@@ -938,7 +938,7 @@
 			"tenant": 1,
 			"utility": 2,
 			"name": "Kothrud",
-			"city": 1,
+			"city_id": 1,
 			"is_active": "True"
 		}
 	},
@@ -1067,8 +1067,8 @@
           "tenant": 1,
           "utility": 1,
           "role_id": 1,
-          "module": 1,
-          "sub_module":1,
+          "module_id": 1,
+          "sub_module_id":1,
           "privilege_id": 1,
           "is_active": "True"
 
@@ -1081,8 +1081,8 @@
           "tenant": 1,
           "utility": 1,
           "role_id": 1,
-          "module": 1,
-          "sub_module":2,
+          "module_id": 1,
+          "sub_module_id":2,
           "privilege_id": 2,
           "is_active": "True"
 
@@ -1095,8 +1095,8 @@
           "tenant": 1,
           "utility": 1,
           "role_id": 2,
-          "module": 1,
-          "sub_module":3,
+          "module_id": 1,
+          "sub_module_id":3,
           "privilege_id": 1,
           "is_active": "True"
 
@@ -1109,8 +1109,8 @@
           "tenant": 1,
           "utility": 1,
           "role_id": 2,
-          "module": 1,
-          "sub_module":4,
+          "module_id": 1,
+          "sub_module_id":4,
           "privilege_id": 2,
           "is_active": "True"
 
@@ -1123,8 +1123,8 @@
           "tenant": 2,
           "utility": 3,
           "role_id": 1,
-          "module": 5,
-          "sub_module":1,
+          "module_id": 5,
+          "sub_module_id":1,
           "privilege_id": 1,
           "is_active": "True"
 
@@ -1138,8 +1138,8 @@
           "tenant": 2,
           "utility": 3,
           "role_id": 2,
-          "module": 5,
-          "sub_module":2,
+          "module_id": 5,
+          "sub_module_id":2,
           "privilege_id": 2,
           "is_active": "True"
 
@@ -1153,7 +1153,7 @@
           "tenant": 1,
           "utility": 1,
           "name": "employee",
-          "role_type": 2,
+          "role_type_id": 2,
           "is_active": "True"
         }
   },
@@ -1164,7 +1164,7 @@
           "tenant": 1,
           "utility": 1,
           "name": "vendor",
-          "role_type": 2,
+          "role_type_id": 2,
           "is_active": "True"
         }
   },
@@ -1175,7 +1175,7 @@
           "tenant": 1,
           "utility": 1,
           "name": "supplier",
-          "role_type": 2,
+          "role_type_id": 2,
           "is_active": "True"
         }
   },
@@ -1412,7 +1412,7 @@
           "tenant": 4,
           "utility": 1,
           "name": "Kothrud",
-			"city": 1,
+		  "city_id": 1,
           "is_active": "True"
         }
   	},
@@ -1423,7 +1423,7 @@
           "tenant": 1,
           "utility": 1,
           "name": "Shivaji Nagar",
-			"city": 1,
+		  "city_id": 1,
           "is_active": "True"
         }
   	},
@@ -1434,7 +1434,7 @@
           "tenant": 2,
           "utility": 3,
           "name": "Alipur",
-			"city": 3,
+		  "city_id": 3,
           "is_active": "True"
         }
   	},
@@ -1445,7 +1445,7 @@
           "tenant": 4,
           "utility": 3,
           "name": "Bhowanipur",
-			"city": 3,
+		  "city_id": 3,
           "is_active": "True"
         }
   	},
@@ -1830,13 +1830,8 @@
 		"pk": "1",
 		"model": "userapp.UserToken",
 		"fields": {
-			"tenant": ,
-			"utility": ,
 			"token": "ag20202323366",
 			"form_factor": 1,
-			"user": ,
-			"ip_address": ,
-			"status": ,
 			"is_active": "True"
 		}
 	},
@@ -1849,9 +1844,6 @@
 			"utility": 1,
 			"token": "tgur25598753693",
 			"form_factor": 2,
-			"user": ,
-			"ip_address": ,
-			"status": ,
 			"is_active": "True"
 		}
 	},
@@ -1864,9 +1856,6 @@
 			"utility": 3,
 			"token": "agujy02323366",
 			"form_factor": 1,
-			"user": ,
-			"ip_address": ,
-			"status": ,
 			"is_active": "True"
 		}
 	},
@@ -1879,9 +1868,6 @@
 			"utility": 3,
 			"token": "tguroli98753693",
 			"form_factor": 2,
-			"user": ,
-			"ip_address": ,
-			"status": ,
 			"is_active": "True"
 		}
 	}
