@@ -29,6 +29,6 @@ urlpatterns = [
     path('api/v1/campaign/', include(campaign_urls)),
     path('api/v1/survey/', include(survey_urls)),
     path('api/v1/utilities/', include(utility_urls)),
-    path('api/v1/tenant/', include(tenant_urls)),
+    # path('api/v1/tenant/', include(tenant_urls)),
     path('api/v1/consumer/', include(consumer_urls)),
 ]
