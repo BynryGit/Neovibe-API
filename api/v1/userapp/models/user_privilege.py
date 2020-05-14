@@ -54,3 +54,7 @@ def get_privilege_by_id_string(id_string):
 
 def get_user_privilege_by_user_id(id):
     return UserPrivilege.objects.filter(user_id=id, is_active=True)
+
+
+def get_user_privilege_by_role_id(id):
+    return UserPrivilege.objects.filter(role_id=id, is_active=True)
