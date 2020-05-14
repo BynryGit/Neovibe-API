@@ -12,11 +12,11 @@ from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.user_master import get_users_by_tenant_id_string, get_user_by_id_string
 from v1.userapp.models.role import get_role_by_id_string
+from v1.userapp.models.user_privilege import get_user_privilege_by_user_id
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_type import get_user_type_by_id_string
-from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer
-
+from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer
 
 # API Header
 # API end Point: api/v1/user/list
@@ -177,6 +177,47 @@ class Users(GenericAPIView):
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/user/role
+# API verb: GET
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: Get user role list
+# Usage: get User role and privileges
+# Tables used: 2.5.2. Users & Privileges - Role Privileges
+# Author: Arpita
+# Created on: 14/05/2020
+
+
+class UserPrivilege(GenericAPIView):
+
+    def get(self, request, id_string):
+        try:
+            user = get_user_by_id_string(id_string)
+            privileges = get_user_privilege_by_user_id(user.id)
+            for privilege in privileges:
+                serializer = UserPrivilegeViewSerializer(instance=privilege, context={'request': request})
+
+            if user:
+                serializer = UserPrivilegeViewSerializer(instance=user, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: '',
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
