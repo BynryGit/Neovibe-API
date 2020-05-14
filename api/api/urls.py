@@ -21,6 +21,7 @@ from v1.survey import urls as survey_urls
 from v1.utility import urls as utility_urls
 from v1.consumer import urls as consumer_urls
 from v1.commonapp import urls as common_urls
+from v1.tenant import urls as tenant_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),

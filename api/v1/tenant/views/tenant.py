@@ -5,7 +5,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import TenantMaster as TenantMasterTbl
-from v1.tenant.serializers.tenant import TenantMasterViewSerializer, TenantMasterSerializer
+# from v1.tenant.serializers.tenant import TenantMasterViewSerializer, TenantMasterSerializer
 from rest_framework.response import Response
 
 
@@ -22,7 +22,7 @@ from rest_framework.response import Response
 # Created on: 13/05/2020
 
 class TenantListDetail(generics.ListAPIView):
-    serializer_class = TenantMasterViewSerializer
+    # serializer_class = TenantMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
@@ -60,7 +60,7 @@ class TenantListDetail(generics.ListAPIView):
 # Created on: 13/05/2020
 
 class TenantDetail(GenericAPIView):
-    serializer_class = TenantMasterSerializer
+    # serializer_class = TenantMasterSerializer
 
     def get(self, request, id_string):
         try:
@@ -76,7 +76,7 @@ class TenantDetail(GenericAPIView):
 
                     tenant_obj = TenantMasterTbl.objects.filter(id_string=id_string, is_active=True)
                     if tenant_obj:
-                        serializer = TenantMasterViewSerializer(instance=tenant_obj, context={'request': request})
+                        # serializer = TenantMasterViewSerializer(instance=tenant_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             DATA: serializer.data,

@@ -1,3 +1,4 @@
+import logging
 import traceback
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
@@ -21,10 +22,13 @@ from v1.campaign.serializers.advertisment import AdvertismentViewSerializer,Adve
 # Auther: Priyanka
 # Created on: 12/05/2020
 
+logger = logging.getLogger(__name__)
+
 # API for  view advertisment list
 class AdvertismentList(GenericAPIView):
 
     def get(self, request, id_string):
+        logger.info('In api/v1/campaign/:id_string/adverts')
         try:
             campaign = get_campaign_by_id_string(id_string)
             if campaign:
@@ -71,6 +75,7 @@ class AdvertismentList(GenericAPIView):
 class Advertisment(GenericAPIView):
 
     def get(self, request, id_string):
+        logger.info('In api/v1/campaign/adverts/:id_string/')
         try:
             advert = get_advertisements_by_id_string(id_string=id_string)
             if advert:
