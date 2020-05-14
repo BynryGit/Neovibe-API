@@ -498,19 +498,28 @@ def is_privilege_data_verified(request):
 
 def add_user_privilege(request, user):
     try:
-        user_privilege = UserPrivilege()
+        
+        for role in request.data['role']:
+            role_id = get_role_by_id_string(role)
+            for module in role['module']:
+                module_id = get_module_by_id_string(module)
+                for sub_module in module['sub_module']:
+                    sub_module_id = get_sub_module_by_id_string(sub_module)
+                    privilege_id = get_privilege_by_id_string(sub_module['privilege'])
 
-        user_privilege.user_id = request.data["user"]
-        user_privilege.module_id = request.data["module"]
-        user_privilege.sub_module_id = request.data["sub_module"]
-        user_privilege.role_id = request.data["role"]
-        user_privilege.privilege_id = request.data["privilege"]
-        user_privilege.save()
+                    user_privilege = UserPrivilege()
 
-        user_privilege.tenant = user.tenant
-        user_privilege.created_by = user.id
-        user_privilege.created_date = datetime.now()
-        user_privilege.save()
+                    user_privilege.user_id = request.data["user"]
+                    user_privilege.module_id = module_id
+                    user_privilege.sub_module_id = sub_module_id
+                    user_privilege.role_id = role_id
+                    user_privilege.privilege_id = privilege_id
+                    user_privilege.save()
+
+                    user_privilege.tenant = user.tenant
+                    user_privilege.created_by = user.id
+                    user_privilege.created_date = datetime.now()
+                    user_privilege.save()
 
         return user, True, ''
     except Exception as e:
