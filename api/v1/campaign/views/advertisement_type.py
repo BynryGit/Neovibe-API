@@ -13,7 +13,7 @@ class AdvertisementTypeList(generics.ListAPIView):
     serializer_class = AdvertisementListSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = AdvertisementType.objects.filter(tenant=4, utility=1)
+    queryset = AdvertisementType.objects.filter(tenant=1, utility=1)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'tenant__id_string',)
     ordering_fields = ('name', 'tenant',)

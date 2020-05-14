@@ -21,6 +21,7 @@ from v1.survey import urls as survey_urls
 from v1.utility import urls as utility_urls
 from v1.consumer import urls as consumer_urls
 from v1.commonapp import urls as common_urls
+from v1.tenant import urls as tenant_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,6 @@ urlpatterns = [
     path('api/v1/campaign/', include(campaign_urls)),
     path('api/v1/survey/', include(survey_urls)),
     path('api/v1/utilities/', include(utility_urls)),
-    path('api/v1/tenant/', include(tenant_urls)),
+    # path('api/v1/tenant/', include(tenant_urls)),
     path('api/v1/consumer/', include(consumer_urls)),
 ]

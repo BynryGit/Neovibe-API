@@ -44,7 +44,7 @@ class Campaign(models.Model):
     area_id = models.BigIntegerField(default=1,null=True, blank=True)
     sub_area_id = models.BigIntegerField(default=1,null=True, blank=True)
     status_id = models.BigIntegerField(default=1,null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())

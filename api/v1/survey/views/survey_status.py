@@ -13,7 +13,7 @@ class SurveyStatusList(generics.ListAPIView):
     serializer_class = SurveyStatusListSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = SurveyStatus.objects.filter(tenant=4, utility=1)
+    queryset = SurveyStatus.objects.filter(tenant=1, utility=1)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'tenant__id_string',)
     ordering_fields = ('name', 'tenant',)
