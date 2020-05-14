@@ -86,7 +86,8 @@ class UserList(generics.ListAPIView):
 # Usage: View, Add, Edit User
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
-# Created on: 12/05/2020
+# Created on: 13/05/2020
+# Updated on: 14/05/2020
 
 class Users(GenericAPIView):
 

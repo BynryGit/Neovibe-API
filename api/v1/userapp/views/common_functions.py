@@ -11,6 +11,7 @@ from v1.userapp.models.role import Role
 
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import Department, get_department_by_id_string
+from v1.commonapp.models.document import Document, get_document_by_id_string
 from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
@@ -363,3 +364,57 @@ def save_edited_bank_details(request, user):
         print("Exception occurred ",str(traceback.print_exc(e)))
         error = str(traceback.print_exc(e))
         return user_detail, False, error
+
+
+# Check only mandatory fields for document api
+def is_document_data_verified(request):
+    if request.data['module'] and request.data['sub_module'] and request.data['document_type'] and \
+            request.data['document_sub_type'] and request.data['name'] and request.data['link']:
+        return True
+    else:
+        return False
+
+
+def add_user_document(request, user):
+    try:
+        document = Document()
+        document.module_id = request.data["module"]
+        document.sub_module_id = request.data["sub_module"]
+        document.document_type_id = request.data["document_type"]
+        document.document_sub_type_id = request.data["document_sub_type"]
+        document.identification_id = user.id
+        document.name = request.data["name"]
+        document.link = request.data["link"]
+        document.save()
+
+        document.tenant = user.tenant
+        document.created_by = user.id
+        document.created_date = datetime.now()
+        document.save()
+
+        return user, True, ''
+    except Exception as e:
+        user = ''
+        print("Exception occurred ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user, False, error
+
+
+def save_edited_document(request, user):
+    try:
+        document = get_document_by_id_string(request.data["document"])
+
+        document.name = request.data["name"]
+        document.link = request.data["link"]
+        document.save()
+
+        document.updated_by = user.id
+        document.updated_date = datetime.now()
+        document.save()
+
+        return document, True, ''
+    except Exception as e:
+        document = ''
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return document, False, error
