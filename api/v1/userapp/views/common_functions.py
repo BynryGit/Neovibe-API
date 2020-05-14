@@ -19,6 +19,7 @@ from v1.userapp.models.role_privilege import RolePrivilege, get_role_privilege_b
     get_role_privilege_by_role_id
 from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
+from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
 from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string
 from v1.userapp.models.user_role import get_role_by_id, UserRole, get_role_by_id_string
@@ -314,6 +315,48 @@ def save_edited_basic_user_details(request, user):
         user_detail.updated_by = user.id
         user_detail.updated_date = datetime.now()
         user_detail.save()
+
+        return user_detail, True, ''
+    except Exception as e:
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user_detail, False, error
+
+# Check only mandatory fields for bank api
+
+
+def is_bank_data_verified(request):
+    if request.data['bank']:
+        return True
+    else:
+        return False
+
+
+def save_bank_details(request, user):
+    try:
+        if request.data['bank'] == '':
+            return True
+        else:
+            bank = get_bank_by_id_string(request.data['bank'])
+            user.bank_detail_id = bank.id
+            user.save()
+
+            return user, True, ''
+    except Exception as e:
+        print("Exception occurred ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user, False, error
+
+
+def save_edited_bank_details(request, user):
+    user_detail = ''
+    try:
+        if request.data['bank'] == '':
+            return True
+        else:
+            bank = get_bank_by_id_string(request.data['bank'])
+            user.bank_detail_id = bank.id
+            user.save()
 
         return user_detail, True, ''
     except Exception as e:
