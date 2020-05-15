@@ -31,17 +31,17 @@ class Jobcard(models.Model):
     bill_cycle = models.BigIntegerField(null=True, blank=True)
     route = models.BigIntegerField(null=True, blank=True)
     route_assigned = models.BigIntegerField(null=True, blank=True)
-    assign_date = models.DateField(null=True, blank=True, default=datetime.now())
+    assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     status = models.BigIntegerField(null=True, blank=True)
-    completion_date = models.DateField(null=True, blank=True, default=datetime.now())
+    completion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_deleted_for_mr = models.BooleanField(default=False)
     is_reading_completed = models.BooleanField(default=False)
     is_revisit = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
 
 # Create Jobcard Table End.

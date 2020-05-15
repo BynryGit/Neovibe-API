@@ -7,6 +7,7 @@ from v1.campaign.models.advertisement_type import AdvertisementType,get_advert_t
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.views.logger import logger
 
 # 'advert-type/list'
 class AdvertisementTypeList(generics.ListAPIView):
@@ -22,7 +23,7 @@ class AdvertisementTypeList(generics.ListAPIView):
 
 
 
-class AdvertisementTypeView(GenericAPIView):
+class AdvertisementTypeDetail(GenericAPIView):
     def get(self,request,id_string):
         try:
             advet_type = get_advert_type_by_id_string(id_string)
@@ -39,6 +40,7 @@ class AdvertisementTypeView(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',

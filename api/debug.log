@@ -1,95 +1,69 @@
-/home/admin1/yy/Smart360-app/api/v1/commonapp/models/sub_module.py changed, reloading.
+/home/admin1/yy/Smart360-app/api/v1/registration/serializers/registration.py changed, reloading.
 Watching for file changes with StatReloader
-/home/admin1/yy/Smart360-app/api/v1/userapp/models/user_token.py changed, reloading.
+Internal Server Error: /api/v1/registration/ba40504e-1220-4c23-80f7-95da2e9d4f85
+Traceback (most recent call last):
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/parsers.py", line 65, in parse
+    return json.load(decoded_stream, parse_constant=parse_constant)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/utils/json.py", line 31, in load
+    return json.load(*args, **kwargs)
+  File "/usr/lib/python3.6/json/__init__.py", line 299, in load
+    parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/usr/lib/python3.6/json/__init__.py", line 367, in loads
+    return cls(**kw).decode(s)
+  File "/usr/lib/python3.6/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python3.6/json/decoder.py", line 355, in raw_decode
+    obj, end = self.scan_once(s, idx)
+json.decoder.JSONDecodeError: Expecting ',' delimiter: line 4 column 19 (char 74)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admin1/yy/Smart360-app/api/v1/registration/views/registrations.py", line 134, in put
+    if is_token_valid(request.data['token']):
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/request.py", line 209, in data
+    self._load_data_and_files()
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/request.py", line 272, in _load_data_and_files
+    self._data, self._files = self._parse()
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/request.py", line 347, in _parse
+    parsed = parser.parse(stream, media_type, self.parser_context)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/parsers.py", line 67, in parse
+    raise ParseError('JSON parse error - %s' % str(exc))
+rest_framework.exceptions.ParseError: JSON parse error - Expecting ',' delimiter: line 4 column 19 (char 74)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/django/views/generic/base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/home/admin1/Desktop/Environments/Bynry-360/lib/python3.6/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/admin1/yy/Smart360-app/api/v1/registration/views/registrations.py", line 183, in put
+    ERROR: str(traceback.print_exc(e))
+  File "/usr/lib/python3.6/traceback.py", line 163, in print_exc
+    print_exception(*sys.exc_info(), limit=limit, file=file, chain=chain)
+  File "/usr/lib/python3.6/traceback.py", line 104, in print_exception
+    type(value), value, tb, limit=limit).format(chain=chain):
+  File "/usr/lib/python3.6/traceback.py", line 498, in __init__
+    _seen=_seen)
+  File "/usr/lib/python3.6/traceback.py", line 509, in __init__
+    capture_locals=capture_locals)
+  File "/usr/lib/python3.6/traceback.py", line 338, in extract
+    if limit >= 0:
+TypeError: '>=' not supported between instances of 'ParseError' and 'int'
+"PUT /api/v1/registration/ba40504e-1220-4c23-80f7-95da2e9d4f85 HTTP/1.1" 500 21017
 Watching for file changes with StatReloader
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/campaign/adassignstatus/ HTTP/1.1" 200 3243
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/commonapp/area/ HTTP/1.1" 200 4998
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/consumer/complaintstatus/ HTTP/1.1" 200 3245
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/consumer/consumerstatus/ HTTP/1.1" 200 3238
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/survey/surveystatus/ HTTP/1.1" 200 3216
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/userapp/roletype/ HTTP/1.1" 200 4586
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/tenant/tenantmaster/ HTTP/1.1" 200 5071
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/registration/registration/ HTTP/1.1" 200 4881
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/registration/registration/3/change/ HTTP/1.1" 200 23414
-"GET /static/admin/css/forms.css HTTP/1.1" 200 8518
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/js/calendar.js HTTP/1.1" 200 7777
-"GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 20232
-"GET /static/admin/js/change_form.js HTTP/1.1" 304 0
-"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
-"GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
-"GET /static/admin/css/widgets.css HTTP/1.1" 200 10322
-"GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
-"GET /admin/registration/registration/ HTTP/1.1" 200 4881
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/userapp/userdetail/ HTTP/1.1" 200 3171
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/userapp/userdetail/add/ HTTP/1.1" 200 54457
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/commonapp/city/ HTTP/1.1" 200 4765
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/userapp/usertype/ HTTP/1.1" 200 4586
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/utility/utilityservicenumberformat/ HTTP/1.1" 200 3328
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 38628
-"GET /admin/commonapp/formfactor/ HTTP/1.1" 200 4616
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"POST /admin/userapp/userdetail/add/ HTTP/1.1" 302 0
-"GET /admin/userapp/userdetail/ HTTP/1.1" 200 4518
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
-"GET /admin/ HTTP/1.1" 200 38947
-"GET /admin/auth/user/ HTTP/1.1" 200 7028
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/img/search.svg HTTP/1.1" 304 0
-"GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
-"GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
-"GET /admin/auth/user/2/change/ HTTP/1.1" 200 42231
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /static/admin/js/SelectBox.js HTTP/1.1" 200 5753
-"GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 12318
-"GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
-"GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
-"GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 200 655
-"GET /admin/auth/user/2/password/ HTTP/1.1" 200 3245
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"POST /admin/auth/user/2/password/ HTTP/1.1" 302 0
-"GET /admin/auth/user/2/change/ HTTP/1.1" 200 42467
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/auth/user/2/password/ HTTP/1.1" 200 3245
-"GET /admin/auth/user/2/change/ HTTP/1.1" 200 42345
-"GET /admin/auth/user/ HTTP/1.1" 200 7028
-"GET /admin/ HTTP/1.1" 200 39227
-"GET /admin/commonapp/module/ HTTP/1.1" 200 5025
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 39227
-"GET /admin/campaign/advertisementtype/ HTTP/1.1" 200 3259
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 39227
-"GET /admin/commonapp/area/ HTTP/1.1" 200 4998
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 39227
-"GET /admin/commonapp/subarea/ HTTP/1.1" 200 5302
-"GET /admin/jsi18n/ HTTP/1.1" 200 3223
-"GET /admin/ HTTP/1.1" 200 39227

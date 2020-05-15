@@ -41,9 +41,9 @@ class AsssetMaster(models.Model):
     address = models.CharField(max_length=200, blank=True, null=True)
     lat = models.CharField(max_length=200, blank=True, null=True)
     long = models.CharField(max_length=200, blank=True, null=True)
-    manufacturing_date = models.DateField(null=True, blank=True, default=datetime.now())
-    installation_date = models.DateField(null=True, blank=True, default=datetime.now())
-    expiry_date = models.DateField(null=True, blank=True, default=datetime.now())
+    manufacturing_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    installation_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    expiry_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     asset_life = models.CharField(max_length=200, blank=True, null=True)
     asset_value = models.BigIntegerField(null=True, blank=True)
     deprecation_method = models.BigIntegerField(null=True, blank=True)
@@ -53,8 +53,8 @@ class AsssetMaster(models.Model):
     flag = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

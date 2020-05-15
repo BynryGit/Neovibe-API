@@ -30,16 +30,16 @@ class ServiceDetails(models.Model):
     service_type = models.BigIntegerField(null=True, blank=True)
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)
     admin_remark = models.CharField(max_length=500, null=True, blank=True)
-    request_date = models.DateField(null=True, blank=True, default=datetime.now())
-    request_due_date = models.DateField(null=True, blank=True, default=datetime.now())
+    request_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    request_due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     request_channel = models.BigIntegerField(null=True, blank=True)
     is_field_appointment = models.BooleanField(default=False)
     status = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.service_request_no

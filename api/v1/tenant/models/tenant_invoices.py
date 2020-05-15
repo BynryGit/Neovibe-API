@@ -28,11 +28,11 @@ class TenantInvoices(models.Model):
     subscription_id = models.BigIntegerField(null=True, blank=True)
     tenantbankdetails_id = models.BigIntegerField(null=True, blank=True)
     invoice_number = models.CharField(max_length=200, blank=False, null=False)
-    invoice_date = models.DateField(null=True, blank=True, default=datetime.now())
+    invoice_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     invoice_amt = models.FloatField(null=True, blank=True)
     invoice_tax = models.FloatField(null=True, blank=True)
     invoice_url = models.CharField(max_length=200, blank=False, null=False)
-    due_date = models.DateField(null=True, blank=True, default=datetime.now())
+    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     contact_name = models.CharField(max_length=500, blank=False, null=False)
     contact_no = models.BigIntegerField(null=True, blank=True)
     email_id = models.CharField(max_length=200, blank=False, null=False)
@@ -42,8 +42,8 @@ class TenantInvoices(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.invoice_number
