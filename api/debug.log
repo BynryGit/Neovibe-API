@@ -66,3 +66,4 @@ Traceback (most recent call last):
     if limit >= 0:
 TypeError: '>=' not supported between instances of 'ParseError' and 'int'
 "PUT /api/v1/registration/ba40504e-1220-4c23-80f7-95da2e9d4f85 HTTP/1.1" 500 21017
+Watching for file changes with StatReloader
