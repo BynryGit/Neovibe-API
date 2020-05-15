@@ -6,7 +6,7 @@ from v1.userapp.views.document import Document
 from v1.userapp.views.notes import Note
 from v1.userapp.views.role import RoleList, PrivilegeDetail, Roles, GetRoleList
 from v1.userapp.views.skills import SkillList
-from v1.userapp.views.user import Users, UserList
+from v1.userapp.views.user import Users, UserList, UserRole
 
 urlpatterns = [
     path('<uuid:id_string>', Roles.as_view()),
@@ -21,5 +21,5 @@ urlpatterns = [
     path('documents/<uuid:id_string>', Document.as_view()),
     path('notes/<uuid:id_string>', Note.as_view()),
     path('skills/<uuid:id_string>', SkillList.as_view()),
-    path('areas/<uuid:id_string>', AreaList.as_view()),
+    path('privilege/<uuid:id_string>', UserRole.as_view()),
 ]

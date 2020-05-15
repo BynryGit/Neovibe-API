@@ -4,11 +4,17 @@
 # $GIT_DIR/info/exclude or the core.excludesFile configuration variable as
 # described in https://git-scm.com/docs/gitignore
 
+
 *.pyc
 *.egg-info
 *.pot
 *.py[co]
 .tox/
+*.log
+*.xml
+*.py-tpl
+*.swp
+.idea
 *workspace.xml
 __pycache__
 *__pycache__
@@ -16,6 +22,7 @@ __pycache__
 MANIFEST
 
 
+migrations/
 0001_initial.py
 migrations/000*
 */migrations/000*

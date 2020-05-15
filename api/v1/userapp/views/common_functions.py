@@ -23,8 +23,8 @@ from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id
 from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
-from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string
-from v1.userapp.models.user_role import get_role_by_id, UserRole, get_role_by_id_string
+from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string, get_user_privilege_by_user_id
+from v1.userapp.models.role import get_role_by_id, UserRole, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id
@@ -478,6 +478,71 @@ def save_edited_note(request, user):
         note.updated_by = user.id
         note.updated_date = datetime.now()
         note.save()
+
+        return user, True, ''
+    except Exception as e:
+        user = ''
+        print("Exception occurred ",str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user, False, error
+
+
+# Check only mandatory fields for user role and privilege api
+def is_privilege_data_verified(request):
+    if request.data['user'] and request.data['module'] and request.data['sub_module'] and request.data['role'] and \
+            request.data['privilege']:
+        return True
+    else:
+        return False
+
+
+def add_user_privilege(request, user):
+    try:
+
+        for role in request.data['role']:
+            role_obj = get_role_by_id_string(role)
+            for module in role['module']:
+                module_obj = get_module_by_id_string(module)
+                for sub_module in module['sub_module']:
+                    sub_module_obj = get_sub_module_by_id_string(sub_module)
+                    privilege_obj = get_privilege_by_id_string(sub_module['privilege'])
+
+                    user_privilege = UserPrivilege()
+
+                    user_privilege.user_id = request.data["user"]
+                    user_privilege.module_id = module_obj.id
+                    user_privilege.sub_module_id = sub_module_obj.id
+                    user_privilege.role_id = role_obj.id
+                    user_privilege.privilege_id = privilege_obj.id
+                    user_privilege.save()
+
+                    user_privilege.tenant = user.tenant
+                    user_privilege.created_by = user.id
+                    user_privilege.created_date = datetime.now()
+                    user_privilege.save()
+
+        return user, True, ''
+    except Exception as e:
+        user = ''
+        print("Exception occurred ", str(traceback.print_exc(e)))
+        error = str(traceback.print_exc(e))
+        return user, False, error
+
+
+def save_edited_privilege(request, user):
+    try:
+        user_detail = get_user_by_id_string(request.data['user'])
+
+        for role in request.data['role']:
+            role_obj = get_role_by_id_string(role)
+            user_privileges = get_user_privilege_by_user_id(user_detail.id)
+            for user_privilege in user_privileges:
+                user_privilege.role_id = role_obj.id
+                user_privilege.save()
+
+                user_privilege.updated_by = user.id
+                user_privilege.updated_date = datetime.now()
+                user_privilege.save()
 
         return user, True, ''
     except Exception as e:

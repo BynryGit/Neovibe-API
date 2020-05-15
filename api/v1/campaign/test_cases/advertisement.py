@@ -23,6 +23,6 @@ class AdvertisementTestCase(APITestCase):
     def get_single_advertisement(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         advertisements = Advertisements.objects.create(tenant=tenant_obj, name="Smart360-Awareness-Power")
-        response = self.client.get(reverse('advertisement_data', args=[advertisements.id_string]))
+        response = self.client.get(reverse('advertisement_detail', args=[advertisements.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

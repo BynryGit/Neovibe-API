@@ -9,7 +9,7 @@ from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.models.notes import get_notes_by_user_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.userapp.models.user_bank_detail import get_bank_by_id
-from v1.userapp.models.user_role import get_role_by_id
+from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id

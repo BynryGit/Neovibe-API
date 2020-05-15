@@ -21,6 +21,6 @@ class AdvertStatusTestCase(APITestCase):
     def get_single_advertisement_status(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         advert_type = AdvertStatus.objects.create(tenant=tenant_obj, name="Assigned")
-        response = self.client.get(reverse('advert_status', args=[advert_type.id_string]))
+        response = self.client.get(reverse('advert_status_detail', args=[advert_type.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
+from v1.commonapp.views.logger import logger
 
 from v1.campaign.models.campaign import get_campaign_by_id_string
 from v1.campaign.models.advertisement import Advertisements,get_advertisements_by_id_string
@@ -22,13 +23,11 @@ from v1.campaign.serializers.advertisment import AdvertismentViewSerializer,Adve
 # Auther: Priyanka
 # Created on: 12/05/2020
 
-logger = logging.getLogger(__name__)
 
 # API for  view advertisment list
 class AdvertismentList(GenericAPIView):
 
     def get(self, request, id_string):
-        logger.info('In api/v1/campaign/:id_string/adverts')
         try:
             campaign = get_campaign_by_id_string(id_string)
             if campaign:
@@ -50,6 +49,7 @@ class AdvertismentList(GenericAPIView):
                     DATA: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -72,10 +72,9 @@ class AdvertismentList(GenericAPIView):
 # Created on: 12/05/2020
 
 # API for add, edit, view advertisment details
-class Advertisment(GenericAPIView):
+class AdvertismentDetail(GenericAPIView):
 
     def get(self, request, id_string):
-        logger.info('In api/v1/campaign/adverts/:id_string/')
         try:
             advert = get_advertisements_by_id_string(id_string=id_string)
             if advert:
@@ -90,6 +89,7 @@ class Advertisment(GenericAPIView):
                     DATA: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
