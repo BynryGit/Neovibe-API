@@ -4056,6 +4056,891 @@
 			"is_active": "True"
 
 			}
+	},
+
+	{
+		"pk": "1",
+		"model": "meter_reading.TempConsumerMaster",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer_no": 40025,
+			"first_name": "Ali",
+			"middle_name": ,
+			"last_name": "Khan",
+			"email_id": "ali@gmail.com",
+			"phone_mobile": 8268974789,
+			"address_line_1": "203 ORCHID Road",
+			"street": "Orchid",
+			"zipcode": 402586,
+			"country": 3,
+			"state": 1,
+			"city": 1,
+			"area": 1,
+			"subarea": 1,
+			"bill_cycle": 1,
+			"bill_month": "July",
+			"route": 1,
+			"meter_no": 1021,
+			"meter_status": 3,
+			"current_reading": 50,
+			"reading_date": "20/06/2020",
+			"reading_status": 1,
+			"reader_status":,
+			"reading_img":,
+			"scheme": 1,
+			"outstanding":,
+			"meter_reading": 50,
+			"jobcard": 3,
+			"month": "July",
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"reading_taken_by":,
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.TempConsumerMaster",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer_no": 40026,
+			"first_name": "Rahul",
+			"middle_name": "Kumar",
+			"last_name": "Singh",
+			"email_id": "Rahul12@gmail.com",
+			"phone_mobile": 7896547852,
+			"address_line_1": "krishna kunj garden",
+			"street": "Krishna",
+			"zipcode": 402586,
+			"country": 3,
+			"state": 1,
+			"city": 1,
+			"area": 2,
+			"subarea": 3,
+			"bill_cycle": 2,
+			"bill_month": "July",
+			"route": 2,
+			"meter_no": 1022,
+			"meter_status": 3,
+			"current_reading": 10,
+			"reading_date": "20/06/2020",
+			"reading_status": 3,
+			"reader_status":,
+			"reading_img":,
+			"scheme": 2,
+			"outstanding":,
+			"meter_reading": 10,
+			"jobcard": ,
+			"month": "July",
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"reading_taken_by":,
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.TempConsumerMaster",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer_no": 40027,
+			"first_name": "Reena",
+			"middle_name": "",
+			"last_name": "Kapoor",
+			"email_id": "kapoorreena@gmail.com",
+			"phone_mobile": 6932579135,
+			"address_line_1": "Qutubullapur road pune",
+			"street": "Qutubullapur",
+			"zipcode": 402026,
+			"country": 3,
+			"state": 2,
+			"city": 3,
+			"area": 3,
+			"subarea": 4,
+			"bill_cycle": 3,
+			"bill_month": "July",
+			"route": 3,
+			"meter_no": 2205,
+			"meter_status": 6,
+			"current_reading": 0,
+			"reading_date": "01/07/2020",
+			"reading_status": 4,
+			"reader_status":,
+			"reading_img":,
+			"scheme": 3,
+			"outstanding":,
+			"meter_reading": 0,
+			"jobcard": 6,
+			"month": "July",
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"reading_taken_by":,
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.TempConsumerMaster",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer_no": 40028,
+			"first_name": "Arti",
+			"middle_name": "",
+			"last_name": "tyagi",
+			"email_id": "Arti@outlook.com",
+			"phone_mobile": 8895677412,
+			"address_line_1": "Rose garden pune",
+			"street": "Rose garden",
+			"zipcode": 402026,
+			"country": 3,
+			"state": 2,
+			"city": 3,
+			"area": 4,
+			"subarea": 5,
+			"bill_cycle": 4,
+			"bill_month": "July",
+			"route": 3,
+			"meter_no": 2206,
+			"meter_status": 6,
+			"current_reading": 25,
+			"reading_date": "01/07/2020",
+			"reading_status": 6,
+			"reader_status":,
+			"reading_img":,
+			"scheme": 4,
+			"outstanding":,
+			"meter_reading": 25,
+			"jobcard": ,
+			"month": "July",
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"reading_taken_by":,
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer_no": 1004383,
+			"meter_reader":,
+			"month": "July",
+			"bill_cycle": 1,
+			"route": 1,
+			"route_assigned":,
+			"assign_date":,
+			"status":,
+			"completion_date": ,
+			"is_deleted_for_mr": "False",
+			"is_reading_completed": "False",
+			"is_revisit": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer_no": 1053110,
+			"meter_reader":,
+			"month": "July",
+			"bill_cycle": 2,
+			"route": 2,
+			"route_assigned":,
+			"assign_date":,
+			"status":,
+			"completion_date": ,
+			"is_deleted_for_mr": "False",
+			"is_reading_completed": "False",
+			"is_revisit": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer_no": 40025,
+			"meter_reader":,
+			"month": "July",
+			"bill_cycle": 1,
+			"route": 1,
+			"route_assigned":,
+			"assign_date":,
+			"status":,
+			"completion_date": ,
+			"is_deleted_for_mr": "False",
+			"is_reading_completed": "False",
+			"is_revisit": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer_no": 1007000,
+			"meter_reader":,
+			"month": "July",
+			"bill_cycle": 3,
+			"route": 3,
+			"route_assigned":,
+			"assign_date":,
+			"status":,
+			"completion_date": ,
+			"is_deleted_for_mr": "False",
+			"is_reading_completed": "False",
+			"is_revisit": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer_no": 1018832,
+			"meter_reader":,
+			"month": "July",
+			"bill_cycle": 4,
+			"route": 3,
+			"route_assigned":,
+			"assign_date":,
+			"status":,
+			"completion_date": ,
+			"is_deleted_for_mr": "False",
+			"is_reading_completed": "False",
+			"is_revisit": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer_no": 40027,
+			"meter_reader":,
+			"month": "July",
+			"bill_cycle": 3,
+			"route": 3,
+			"route_assigned":,
+			"assign_date":,
+			"status":,
+			"completion_date": ,
+			"is_deleted_for_mr": "False",
+			"is_reading_completed": "False",
+			"is_revisit": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Allocated",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Deassigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Complete",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Duplicated",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Revisit",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "7",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Allocated",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "8",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "9",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Deassigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "10",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Complete",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "11",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Duplicated",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "12",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Revisit",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.MeterReading",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"reading_type": ,
+			"reading_type_status":,
+			"month": "July",
+			"bill_cycle": 1,
+			"route": 1,
+			"consumer_no": 1004383,
+			"meter_no": 10245,
+			"jobcard": 1,
+			"current_reading": 0,
+			"reading_date": "10/07/2020",
+			"reading_status": 1,
+			"meter_status": 1,
+			"reader_status": 1,
+			"reading_img":,
+			"reading_taken_by": 1,
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.MeterReading",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"reading_type": ,
+			"reading_type_status":,
+			"month": "July",
+			"bill_cycle": 2,
+			"route": 2,
+			"consumer_no": 1053110,
+			"meter_no": 10255,
+			"jobcard": 2,
+			"current_reading": 0,
+			"reading_date": "10/07/2020",
+			"reading_status": 3,
+			"meter_status": 2,
+			"reader_status": 2,
+			"reading_img":,
+			"reading_taken_by": 2,
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.MeterReading",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"reading_type": ,
+			"reading_type_status":,
+			"month": "July",
+			"bill_cycle": 3,
+			"route": 3,
+			"consumer_no": 1007000,
+			"meter_no": 10265,
+			"jobcard": 4,
+			"current_reading": 0,
+			"reading_date": "15/07/2020",
+			"reading_status": 5,
+			"meter_status": 5,
+			"reader_status": 5,
+			"reading_img":,
+			"reading_taken_by": 3,
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.MeterReading",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"reading_type": ,
+			"reading_type_status":,
+			"month": "July",
+			"bill_cycle": 4,
+			"route": 3,
+			"consumer_no": 1018832,
+			"meter_no": 10275,
+			"jobcard": 5,
+			"current_reading": 0,
+			"reading_date": "15/07/2020",
+			"reading_status": 6,
+			"meter_status": 6,
+			"reader_status": 6,
+			"reading_img":,
+			"reading_taken_by": 4,
+			"suspicious_activity": "False",
+			"is_qr_tempered": "False",
+			"is_solar_meter": "False",
+			"is_duplicate": "False",
+			"is_new": "False",
+			"is_account_verified": "False",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Validation one",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "2",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Validation two",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Validation one",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "5",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Validation two",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "RCNT",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "2",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Faulty",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Normal",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "4",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "RCNT",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "5",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Faulty",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Normal",
+			"is_active": "True"
+			}
+	},
+
+	{
+		"pk": "1",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Door lock",
+			"meter_status": 1,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Address not found",
+			"meter_status": 2,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Door lock",
+			"meter_status": 3,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Address not found",
+			"meter_status": 4,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Door lock",
+			"meter_status": 5,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Address not found",
+			"meter_status": 6,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.MeterImageType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Image-1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.MeterImageType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Image-2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.MeterImageType",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Image-3",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.MeterImageType",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Image-4",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ReadingTakenBy",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Meter reader-1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ReadingTakenBy",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Meter reader-2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.ReadingTakenBy",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Meter reader-3",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.ReadingTakenBy",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Meter reader-4",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.SmartMeterData",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer": 1,
+			"meter": 1,
+			"meter_reading": 0,
+			"meter_status": 1,
+			"route": 1,
+			"data_vendor_no":,
+			"reading_date":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.SmartMeterData",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"consumer": 3,
+			"meter": 2,
+			"meter_reading": 0,
+			"meter_status": 3,
+			"route": 2,
+			"data_vendor_no":,
+			"reading_date":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.SmartMeterData",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer": 6,
+			"meter": 3,
+			"meter_reading": 0,
+			"meter_status": 5,
+			"route": 3,
+			"data_vendor_no":,
+			"reading_date":,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.SmartMeterData",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"consumer": 8,
+			"meter": 4,
+			"meter_reading": 0,
+			"meter_status": 6,
+			"route": 3,
+			"data_vendor_no":,
+			"reading_date":,
+			"is_active": "True"
+			}
 	}
 ]
 

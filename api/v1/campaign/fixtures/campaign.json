@@ -164,11 +164,13 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 1,
-			"status" : "cancel",
+			"statu" : "cancel",
 			"is_active" : "True"
 
 		}
 	},
+
+
 	{
 		"pk": "6",
 		"model": "campaign.CampaignStatus",
@@ -427,7 +429,31 @@
 			"sub_area_id": 1,
 			"status_id": 2,
 			"is_active": "True"
-
+		}
+	},
+	{
+		"pk": "4",
+		"model": "campaign.Advertisements",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"campaign_id": 2,
+			"group_id": 1,
+			"name": "Smart360-Awareness-water",
+			"objective_id":1,
+			"description": "This is Smart360 Awareness of water advertisement",
+			"frequency_id": 1,
+			"type_id": 2,
+			"potential_consumers": 200,
+			"actual_consumers": 100,
+			"budget_amount": 6000,
+			"actual_amount": 5500,
+			"start_date": "2020-02-15",
+			"end_date": "2020-03-16",
+			"area_id": 1,
+			"sub_area_id": 1,
+			"status_id": 2,
+			"is_active": "True"
 		}
 	},
 	{
