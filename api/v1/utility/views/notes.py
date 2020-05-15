@@ -20,7 +20,7 @@ from v1.utility.serializers.notes import NoteSerializer
 # Interaction: for get and add utility notes
 # Usage: API will fetch and add all notes under utility.
 # Tables used: 2.5.12 Notes
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 
@@ -131,7 +131,7 @@ class Notes(GenericAPIView):
 # Interaction: for get and edit utility note
 # Usage: API will fetch and edit note under utility.
 # Tables used: 2.5.12 Notes
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 

@@ -19,7 +19,7 @@ from v1.utility.serializers.summary import UtilityUsageSummaryViewSerializer
 # Interaction: Utility summary
 # Usage: API will fetch all summary against utility
 # Tables used: 2.3  Utility Usage Summary
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 12/05/2020
 
 

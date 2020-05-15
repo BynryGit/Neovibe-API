@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 
 # API Header
-# API end Point: api/v1/tenant
+# API end Point: api/v1/tenant/list
 # API verb: GET
 # Package: Basic
 # Modules:

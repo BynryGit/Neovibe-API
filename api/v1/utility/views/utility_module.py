@@ -19,7 +19,7 @@ from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, U
 # Interaction: Get utility module list
 # Usage: API will fetch required data for utility module list against single utility
 # Tables used: 2.3 Utility Module
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 12/05/2020
 
 
@@ -76,7 +76,7 @@ class UtilityModules(GenericAPIView):
 # Interaction: For edit and get single utility module
 # Usage: API will edit and get utility module
 # Tables used: 2.3 Utility Module
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 class UtilityModuleDetail(GenericAPIView):
