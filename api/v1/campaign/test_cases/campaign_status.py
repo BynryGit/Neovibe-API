@@ -22,6 +22,6 @@ class CampaignStatusTestCase(APITestCase):
     def get_single_campaign_status(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         status_obj = CampaignStatus.objects.create(tenant=tenant_obj, name="Created")
-        response = self.client.get(reverse('campaign_status', args=[status_obj.id_string]))
+        response = self.client.get(reverse('campaign_status_detail', args=[status_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

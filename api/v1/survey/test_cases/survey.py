@@ -22,6 +22,6 @@ class SurveyTestCase(APITestCase):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
         survey = Survey.objects.create(tenant=tenant_obj, utility=utility_obj, name="Domestic consumer survey")
-        response = self.client.get(reverse('survey_data', args=[survey.id_string]))
+        response = self.client.get(reverse('survey_detail', args=[survey.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

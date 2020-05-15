@@ -85,7 +85,7 @@ class CampaignTestCase(APITestCase):
         ConsumerCategory.objects.create(tenant=tenant_obj, name="Domestic")
         ConsumerSubCategory.objects.create(tenant=tenant_obj, name="Builder",category=1)
         Frequency.objects.create(tenant=tenant_obj, name="Frequency")
-        response = self.client.get(reverse('campaign_data', args=[campaign_obj.id_string]))
+        response = self.client.get(reverse('campaign_detail', args=[campaign_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

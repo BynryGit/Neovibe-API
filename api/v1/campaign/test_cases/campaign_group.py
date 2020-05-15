@@ -14,7 +14,7 @@ class CampaignGroupTestCase(APITestCase):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
         CampaignGroup.objects.create(tenant=tenant_obj,utility=utility_obj,name="campaign_group_1")
-        response = self.client.get(reverse('campaign_gropu_list'))
+        response = self.client.get(reverse('campaign_group_list'))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -22,6 +22,6 @@ class CampaignGroupTestCase(APITestCase):
     def get_single_campaign_group(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         group_obj = CampaignGroup.objects.create(tenant=tenant_obj, name="campaign_group_2")
-        response = self.client.get(reverse('campaign_group', args=[group_obj.id_string]))
+        response = self.client.get(reverse('campaign_group_detail', args=[group_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

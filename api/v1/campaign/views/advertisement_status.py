@@ -8,8 +8,8 @@ from v1.campaign.serializers.advertisement_status import AdvertisementStatusList
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.views.logger import logger
 
-logger = logging.getLogger(__name__)
 
 class AdvertisementStatusList(generics.ListAPIView):
     serializer_class = AdvertisementStatusListSerializer
@@ -24,9 +24,8 @@ class AdvertisementStatusList(generics.ListAPIView):
 
 
 
-class AdvertisementStatusView(GenericAPIView):
+class AdvertisementStatusDetail(GenericAPIView):
     def get(self,request,id_string):
-        logger.info('In api/v1/survey/advert/id_string')
         try:
             advert_status = get_advert_status_by_id_string(id_string)
             if advert_status:
@@ -42,6 +41,7 @@ class AdvertisementStatusView(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',

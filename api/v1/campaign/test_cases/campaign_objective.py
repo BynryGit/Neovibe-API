@@ -22,6 +22,6 @@ class CampaignObjectiveTestCase(APITestCase):
     def get_single_campaign_objective(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         objective_obj = CampaignObjective.objects.create(tenant=tenant_obj, name="brand awareness")
-        response = self.client.get(reverse('campaign_objective', args=[objective_obj.id_string]))
+        response = self.client.get(reverse('campaign_objective_detail', args=[objective_obj.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
