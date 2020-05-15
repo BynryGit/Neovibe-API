@@ -19,7 +19,7 @@ from django.db import models  # importing package for database
 
 # Create Sub Module table start
 from v1.commonapp.models.module import get_module_by_id
-from v1.userapp.models.role_privilege import get_privilege_by_sub_module_id
+# from v1.userapp.models.role_privilege import get_privilege_by_sub_module_id
 
 
 class SubModule(models.Model):
@@ -43,9 +43,9 @@ class SubModule(models.Model):
     def get_module(self):
         return get_module_by_id(self.module_id)
 
-    @property
-    def get_privilege(self):
-        return get_privilege_by_sub_module_id(self.id,self.module_id)
+    # @property
+    # def get_privilege(self):
+    #     return get_privilege_by_sub_module_id(self.id,self.module_id)
 
 
 # Create Sub Module table end

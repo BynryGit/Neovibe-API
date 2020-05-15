@@ -67,3 +67,27 @@ Traceback (most recent call last):
 TypeError: '>=' not supported between instances of 'ParseError' and 'int'
 "PUT /api/v1/registration/ba40504e-1220-4c23-80f7-95da2e9d4f85 HTTP/1.1" 500 21017
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/home/arpita/Desktop/Projects/Smart360-app/api/api/settings.py changed, reloading.
+Watching for file changes with StatReloader
