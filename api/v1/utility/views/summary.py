@@ -24,7 +24,7 @@ from v1.utility.serializers.summary import UtilityUsageSummaryViewSerializer
 # Created on: 12/05/2020
 
 
-class UtilityUsageSummaryDetail(GenericAPIView):
+class UtilitySummaryDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:

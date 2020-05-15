@@ -24,7 +24,7 @@ from v1.utility.serializers.numformat import NumformatSerializer
 # Created on: 14/05/2020
 
 
-class Numformat(GenericAPIView):
+class UtilityNumformatDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:

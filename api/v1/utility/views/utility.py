@@ -26,7 +26,7 @@ from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityM
 # Author: Akshay
 # Created on: 08/05/2020
 
-class UtilityListDetail(generics.ListAPIView):
+class UtilityList(generics.ListAPIView):
     serializer_class = UtilityMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 

@@ -25,7 +25,7 @@ from v1.utility.serializers.notes import NoteSerializer
 # Created on: 13/05/2020
 
 
-class Notes(GenericAPIView):
+class UtilityNoteList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -130,7 +130,7 @@ class Notes(GenericAPIView):
 # Created on: 13/05/2020
 
 
-class NoteDetails(GenericAPIView):
+class UtilityNoteDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:

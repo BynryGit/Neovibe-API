@@ -25,7 +25,7 @@ from v1.utility.serializers.document import DocumentSerializer
 # Created on: 13/05/2020
 
 
-class Documents(GenericAPIView):
+class UtilityDocumentList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -130,7 +130,7 @@ class Documents(GenericAPIView):
 # Created on: 13/05/2020
 
 
-class DocumentDetails(GenericAPIView):
+class UtilityDocumentDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
