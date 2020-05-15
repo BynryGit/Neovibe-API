@@ -1,3 +1,4 @@
+import logging
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -8,12 +9,13 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 
+logger = logging.getLogger(__name__)
 
 class AdvertisementStatusList(generics.ListAPIView):
     serializer_class = AdvertisementStatusListSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = AdvertStatus.objects.filter(tenant=4, utility=1)
+    queryset = AdvertStatus.objects.filter(tenant=1, utility=1)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'tenant__id_string',)
     ordering_fields = ('name', 'tenant',)
@@ -24,6 +26,7 @@ class AdvertisementStatusList(generics.ListAPIView):
 
 class AdvertisementStatusView(GenericAPIView):
     def get(self,request,id_string):
+        logger.info('In api/v1/survey/advert/id_string')
         try:
             advert_status = get_advert_status_by_id_string(id_string)
             if advert_status:

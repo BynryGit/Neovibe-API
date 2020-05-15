@@ -19,13 +19,14 @@ from django.db import models  # importing package for database
 
 # Create Sub Module table start
 from v1.commonapp.models.module import get_module_by_id
+from v1.userapp.models.role_privilege import get_privilege_by_sub_module_id
 
 
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    # sub_module = models.BigIntegerField(null=False, blank=False)
-    module_id = models.BigIntegerField(null=False, blank=False)
-    name = models.CharField(max_length=200, null=False, blank=False)
+    sub_module = models.BigIntegerField(null=True, blank=True)
+    module_id = models.BigIntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateField(null=True, blank=True, default=datetime.now())
@@ -41,6 +42,10 @@ class SubModule(models.Model):
     @property
     def get_module(self):
         return get_module_by_id(self.module_id)
+
+    @property
+    def get_privilege(self):
+        return get_privilege_by_sub_module_id(self.id,self.module_id)
 
 
 # Create Sub Module table end

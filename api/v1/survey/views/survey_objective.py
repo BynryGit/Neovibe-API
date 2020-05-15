@@ -14,7 +14,7 @@ class SurveyObjectiveList(generics.ListAPIView):
     serializer_class = SurveyObjectiveListSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = SurveyObjective.objects.filter(tenant=4, utility=1)
+    queryset = SurveyObjective.objects.filter(tenant=1, utility=1)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('objective', 'tenant__id_string',)
     ordering_fields = ('objective', 'tenant',)

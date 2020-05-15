@@ -14,7 +14,7 @@ class CampaignObjectiveList(generics.ListAPIView):
     serializer_class = ObjectiveListSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = CampaignObjective.objects.filter(tenant=4, utility=1)
+    queryset = CampaignObjective.objects.filter(tenant=1, utility=1)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'tenant__id_string',)
     ordering_fields = ('name', 'tenant',)

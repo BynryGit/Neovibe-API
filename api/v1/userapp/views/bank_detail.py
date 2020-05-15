@@ -7,8 +7,9 @@ from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string, get_bank_by_utility_id_string
-from v1.userapp.models.user_master import get_bank_by_user_id_string
+from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string, get_bank_by_utility_id_string, \
+    get_bank_by_id
+from v1.userapp.models.user_master import get_bank_by_user_id_string, get_user_by_id_string
 from v1.userapp.serializers.bank_detail import BankListSerializer, BankViewSerializer
 
 
@@ -23,6 +24,7 @@ from v1.userapp.serializers.bank_detail import BankListSerializer, BankViewSeria
 # Tables used: User - User Bank Details
 # Author: Arpita
 # Created on: 13/05/2020
+from v1.userapp.views.common_functions import is_bank_data_verified, save_bank_details
 
 
 class BankList(generics.ListAPIView):
@@ -92,6 +94,73 @@ class Bank(GenericAPIView):
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request, format=None):
+        try:
+
+            # Request data verification start
+            if is_bank_data_verified(request):
+                # Request data verification end
+
+                # Save bank details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = save_bank_details(request, user)
+                if result:
+                    data = {
+                        "user_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Save bank details start
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, format=None):
+        try:
+            # Request data verification start
+            if is_bank_data_verified(request):
+                # Request data verification end
+
+                # Save privilege details start
+                user = get_user_by_id_string(request.data['user'])
+                user_detail, result, error = save_edited_bank_details(request, user)
+                if result:
+                    data = {
+                        "user_id_string": user_detail.id_string
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: EXCEPTION,
+                        ERROR: error
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                # Save privilege details start
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

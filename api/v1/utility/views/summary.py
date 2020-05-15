@@ -11,15 +11,15 @@ from v1.utility.serializers.summary import UtilityUsageSummaryViewSerializer
 
 
 # API Header
-# API end Point: api/v1/utilities/id_string/summary
+# API end Point: api/v1/utility/id_string/summary
 # API verb: GET
 # Package: Basic
-# Modules: Utility
-# Sub Module: sammary
+# Modules: All
+# Sub Module: All
 # Interaction: Utility summary
 # Usage: API will fetch all summary against utility
 # Tables used: 2.3  Utility Usage Summary
-# Author: aki
+# Author: Akshay
 # Created on: 12/05/2020
 
 

@@ -1,21 +1,27 @@
+__author__ = 'priyanka'
+
 import json
-from django.contrib.auth.models import User
 from django.urls import reverse
-from rest_framework.authtoken.models import Token
-from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.test import APITestCase
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from v1.survey.models.survey import Survey
 
-class SurveyTestCases(APITestCase):
-    def get_all_survey(self):
-        response = self.client.get(reverse('survey_list'))
-        print(json.loads(response))
 
+class SurveyTestCase(APITestCase):
+    def get_all_survey(self):
+        tenant_obj = TenantMaster.objects.create(name="tenant_test")
+        utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
+        Survey.objects.create(tenant=tenant_obj,utility=utility_obj,name="Domestic consumer survey")
+        response = self.client.get(reverse('survey_list'))
+        print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # def test_survey(self):
-    #     data = {"survey_name":"priyanka Testing","start_date":"2022-11-12","end_date":"2022-12-12",
-    #             "description":"This Survey for use POST method",
-	#             "completion_date":"2023-12-12","no_of_consumers":5000}
-    #     response = self.client.post("/api/v1/survey/", data)
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def get_single_survey(self):
+        tenant_obj = TenantMaster.objects.create(name="tenant_test")
+        utility_obj = UtilityMaster.objects.create(tenant=tenant_obj, name="utility_test")
+        survey = Survey.objects.create(tenant=tenant_obj, utility=utility_obj, name="Domestic consumer survey")
+        response = self.client.get(reverse('survey_data', args=[survey.id_string]))
+        print("response",response.content)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

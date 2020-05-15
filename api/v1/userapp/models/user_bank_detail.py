@@ -56,7 +56,7 @@ def get_bank_by_utility_id_string(id_string):
     return UserBankDetails.objects.filter(utility__id_string=id_string,is_active=True)
 
 
-def get_bank_id_string(id_string):
+def get_bank_by_id_string(id_string):
     return UserBankDetails.objects.filter(id_string=id_string).last()
 
 
