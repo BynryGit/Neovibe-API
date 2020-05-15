@@ -30,7 +30,7 @@ class ConsumerPayments(models.Model):
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.FloatField(blank=False, null=False)
     transaction_charges = models.FloatField(blank=False, null=False)
-    transaction_date = models.DateField(null=True, blank=True, default=datetime.now())
+    transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     payment_mode = models.BigIntegerField(null=True, blank=True)
     payment_channel = models.BigIntegerField(null=True, blank=True)
     payment_provider = models.BigIntegerField(null=True, blank=True)
@@ -38,16 +38,23 @@ class ConsumerPayments(models.Model):
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
     cheque_dd_no = models.CharField(max_length=200, null=True, blank=True)
-    cheque_dd_date = models.DateField(null=True, blank=True, default=datetime.now())
+    cheque_dd_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     ifsc_code = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
     def __unicode__(self):
         return str(self.consumer_no) + '-' + str(self.payment_type) + '-' + str(self.payment_mode) + '-' + str(
             self.transaction_id)
+
+
+def get_payment_by_id_string(id_string):
+    try:
+        return ConsumerPayments.objects.get(id_string = id_string)
+    except:
+        return False
 
 # Create Consumer Payment table end.

@@ -29,15 +29,15 @@ class TenantInvoiceTransaction(models.Model):
     payment_method = models.CharField(max_length=200, blank=False, null=False)
     payment_channel = models.CharField(max_length=200, blank=False, null=False)
     transaction_no = models.CharField(max_length=200, blank=False, null=False)
-    transaction_date = models.DateField(null=True, blank=True, default=datetime.now())
+    transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     tax_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     currency = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.invoice_number

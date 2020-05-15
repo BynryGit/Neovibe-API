@@ -29,7 +29,7 @@ class Warning(models.Model):
     module = models.BigIntegerField(null=True, blank=True)
     sub_module = models.BigIntegerField(null=True, blank=True)
     event = models.BigIntegerField(null=True, blank=True)
-    time = models.DateField(null=True, blank=True, default=datetime.now())
+    time = models.DateTimeField(null=True, blank=True, default=datetime.now())
     message = models.CharField(max_length=500, blank=True, null=True)
     code = models.BigIntegerField(null=True, blank=True)
     source = models.CharField(max_length=200, blank=True, null=True)
@@ -37,8 +37,8 @@ class Warning(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.id

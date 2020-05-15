@@ -40,16 +40,16 @@ class Advertisements(models.Model):
     actual_consumers = models.BigIntegerField(default=0, null=True, blank=True)
     budget_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     actual_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     area_id = models.BigIntegerField(null=True, blank=True)
     sub_area_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name

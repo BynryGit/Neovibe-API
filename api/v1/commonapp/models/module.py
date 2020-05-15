@@ -25,8 +25,8 @@ class Module(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(blank=True, null=True)
     updated_by = models.BigIntegerField(blank=True, null=True)
-    created_date = models.DateField(default=datetime.now)
-    updated_date = models.DateField(blank=True, null=True)
+    created_date = models.DateTimeField(default=datetime.now)
+    updated_date = models.DateTimeField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
