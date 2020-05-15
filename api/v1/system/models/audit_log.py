@@ -26,7 +26,7 @@ class AuditLog(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=False, null=False)
     utility = models.ForeignKey(UtilityMaster, blank=False, null=False)
-    action_time = models.DateField(null=True, blank=True, default=datetime.now())
+    action_time = models.DateTimeField(null=True, blank=True, default=datetime.now())
     module = models.BigIntegerField(null=True, blank=True)
     sub_module = models.BigIntegerField(null=True, blank=True)
     event = models.BigIntegerField(null=True, blank=True)
@@ -35,8 +35,8 @@ class AuditLog(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.id

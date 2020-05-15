@@ -30,8 +30,8 @@ class DeprecationMethod(models.Model):
     method = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(blank=False, null=False)
     updated_by = models.BigIntegerField(blank=False, null=False)
-    created_date = models.DateField(default=datetime.now)
-    updated_date = models.DateField(blank=True, null=True)
+    created_date = models.DateTimeField(default=datetime.now)
+    updated_date = models.DateTimeField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):

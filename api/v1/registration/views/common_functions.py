@@ -1,277 +1,60 @@
-import traceback
-from datetime import datetime
-from django.db import transaction
-from django.db.models import Q
-from django.core.paginator import Paginator
-from api.settings import INPUT_DATE_FORMAT
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
-from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
-from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
-from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
-from v1.payment.models.payment_type import get_payment_type_by_id_string
+from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
-from v1.registration.models.registrations import Registration, get_registration_by_id_string
-from v1.supplier.models.supplier_payment import Payment
-from v1.utility.models.utility_master import get_utility_by_id_string
 
 
-def get_filtered_registrations(user, request):
-    total_pages = ''
-    page_no = ''
-    registrations = ''
-    error = ''
-    try:
-        registrations = Registration.objects.filter(tenant=user.tenant)
-        if "utillity" in request.data:
-            registrations = registrations.objects.filter(utility_id=
-                                                         request.data['utillity'])
-        if "category" in request.data:
-            registrations = registrations.objects.filter(consumer_category_id=
-                                                         request.data['category'])
-        if "sub_category" in request.data:
-            registrations = registrations.objects.filter(sub_category_id=
-                                                         request.data['sub_category'])
-        if "city" in request.data:
-            registrations = registrations.objects.filter(city_id=
-                                                         request.data['city'])
-        if "area" in request.data:
-            registrations = registrations.objects.filter(area_id=
-                                                         request.data['area'])
-        if "subarea" in request.data:
-            registrations = registrations.objects.filter(subarea_id=request.data['subarea'])
-
-        if "status" in request.data:
-            registrations = registrations.objects.filter(status_id=request.data['status'])
-
-        if "search_text" in request.data:
-            if request.data['search_text'] == '':
-                pass
-            else:
-                registrations = registrations.filter(
-                    Q(registration_no__icontains=request.data['search_text']) |
-                    Q(first_name__icontains=request.data['search_text']))
-
-        if "page_number" in request.data:
-            if request.data['page_number'] == '':
-                paginator = Paginator(registrations,int(request.data['page_size']))
-                total_pages = str(paginator.num_pages)
-                page_no = '1'
-                registrations = paginator.page(1)
-            else:
-                paginator = Paginator(registrations, int(request.data['page_size']))
-                total_pages = str(paginator.num_pages)
-                page_no = request.data['page_number']
-                registrations = paginator.page(int(page_no))
-        return registrations, total_pages, page_no, True, error
-    except Exception as e:
-        print("Exception occured ",str(traceback.print_exc(e)))
-        error = str(traceback.print_exc(e))
-        return registrations, total_pages, page_no, False, error
-
-
-# only check only mandatory fields
-def is_data_verified(request): #todo - Black, Null, empty string - ready to use method by Django
+def is_data_verified(request):
     return True
-    if request.data['first_name'] == '' and request.data['middle_name'] == '' and \
-        request.data['last_name'] == '' and request.data['utility'] == '' and \
-        request.data['mobile_number'] == '' and request.data['email'] == '' and \
-        request.data['consumer_category'] == '' and request.data['consumer_sub_category'] == '' and \
-        request.data['ownership'] == '' and request.data['is_vip'] == '' and request.data['address'] \
-        and request.data['street'] == '' and request.data['zipcode'] == '' and \
-        request.data['connectivity'] == '':
-        return False
-    else:
-        return True
 
 
-@transaction.atomic
-def add_basic_registration_details(request, user, sid):
-    registration = ""
-    try:
-        registration = Registration()
-        if "first_name" in request.data:
-            registration.first_name = request.data["first_name"]
-        if "middle_name" in request.data:
-            registration.middle_name = request.data["middle_name"]
-        if "last_name" in request.data:
-            registration.last_name = request.data["last_name"]
-        if "email_id" in request.data:
-            registration.email_id = request.data["email_id"]
-        if "phone_mobile" in request.data:
-            registration.phone_mobile = request.data["phone_mobile"]
-        if "phone_landline" in request.data:
-            registration.phone_landline = request.data["phone_landline"]
-        if "address_line_1" in request.data:
-            registration.address_line_1 = request.data["address_line_1"]
-        if "street" in request.data:
-            registration.street = request.data["street"]
-        if "zipcode" in request.data:
-            registration.zipcode = request.data["zipcode"]
-        if "is_vip" in request.data:
-            registration.is_vip = True if request.data["is_vip"] == '1' else False
-        if "connectivity" in request.data:
-            registration.connectivity = True if request.data["connectivity"] == '1' else False
-        if "registration_date" in request.data:
-            registration.registration_date = datetime.strptime(request.data["registration_date"],INPUT_DATE_FORMAT)
-        if "utility_id_string" in request.data:
-            utility = get_utility_by_id_string(request.data["utility_id_string"])
-            registration.utility = utility
-        if "registration_type_id_string" in request.data:
-            registration_type = get_registration_type_by_id_string(request.data["registration_type_id_string"])
-            registration.registration_type_id = registration_type.id
-        if "status_id_string" in request.data:
-            registration_status = get_registration_status_by_id_string(request.data["status_id_string"])
-            registration.status_id = registration_status.id
-        if "country_id_string" in request.data:
-            country = get_country_by_id_string(request.data["country_id_string"])
-            registration.country_id = country.id
-        if "state_id_string" in request.data:
-            state = get_state_by_id_string(request.data["state_id_string"])
-            registration.state_id = state.id
-        if "city_id_string" in request.data:
-            city = get_city_by_id_string(request.data["city_id_string"])
-            registration.city_id = city.id
-        if "area_id_string" in request.data:
-            area = get_area_by_id_string(request.data["area_id_string"])
-            registration.area_id = area.id
-        if "sub_area_id_string" in request.data:
-            sub_area = get_sub_area_by_id_string(request.data["sub_area_id_string"])
-            registration.sub_area_id = sub_area.id
-        if "scheme_id_string" in request.data:
-            scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
-            registration.scheme_id = scheme.id
-        if "ownership_id_string" in request.data:
-            ownership = get_consumer_ownership_by_id_string(request.data["ownership_id_string"])
-            registration.ownership_id = ownership.id
-        if "consumer_category_id_string" in request.data:
-            consumer_category = get_consumer_category_by_id_string(request.data["consumer_category_id_string"])
-            registration.consumer_category_id = consumer_category.id
-        if "sub_category_id_string" in request.data:
-            sub_category = get_consumer_sub_category_by_id_string(request.data["sub_category_id_string"])
-            registration.sub_category_id = sub_category.id
-        if "source_id_string" in request.data:
-            source = get_source_type_by_id_string(request.data['source_id_string'])
-            registration.source_id = source.id
-        registration.tenant = user.tenant
-        registration.status_id = 1
-        registration.created_by = user.id
-        registration.created_date = datetime.now()
-        registration.save()
-        return registration, True
-    except Exception as e:
-        print("Exception occured ",str(traceback.print_exc(e)))
-        transaction.rollback(sid)
-        return registration, False
-
-
-def save_edited_basic_registration_details(request, user):
-    registration = ''
-    try:
-        if "registration_id_string" in request.data:
-            registration = get_registration_by_id_string(request.data["registration_id_string"])
-        if "first_name" in request.data:
-            registration.first_name = request.data["first_name"]
-        if "middle_name" in request.data:
-            registration.middle_name = request.data["middle_name"]
-        if "last_name" in request.data:
-            registration.last_name = request.data["last_name"]
-        if "email_id" in request.data:
-            registration.email_id = request.data["email_id"]
-        if "phone_mobile" in request.data:
-            registration.phone_mobile = request.data["phone_mobile"]
-        if "phone_landline" in request.data:
-            registration.phone_landline = request.data["phone_landline"]
-        if "address_line_1" in request.data:
-            registration.address_line_1 = request.data["address_line_1"]
-        if "street" in request.data:
-            registration.street = request.data["street"]
-        if "zipcode" in request.data:
-            registration.zipcode = request.data["zipcode"]
-        if "is_vip" in request.data:
-            registration.is_vip = True if request.data["is_vip"] == '1' else False
-        if "connectivity" in request.data:
-            registration.connectivity = True if request.data["connectivity"] == '1' else False
-        if "registration_date" in request.data:
-            registration.registration_date = datetime.strptime(request.data["registration_date"], INPUT_DATE_FORMAT)
-        if "utility_id_string" in request.data:
-            utility = get_utility_by_id_string(request.data["utility_id_string"])
-            registration.utility = utility
-        if "registration_type_id_string" in request.data:
-            registration_type = get_registration_type_by_id_string(request.data["registration_type_id_string"])
-            registration.registration_type_id = registration_type.id
-        if "status_id_string" in request.data:
-            registration_status = get_registration_status_by_id_string(request.data["status_id_string"])
-            registration.status_id = registration_status.id
-        if "country_id_string" in request.data:
-            country = get_country_by_id_string(request.data["country_id_string"])
-            registration.country_id = country.id
-        if "state_id_string" in request.data:
-            state = get_state_by_id_string(request.data["state_id_string"])
-            registration.state_id = state.id
-        if "city_id_string" in request.data:
-            city = get_city_by_id_string(request.data["city_id_string"])
-            registration.city_id = city.id
-        if "area_id_string" in request.data:
-            area = get_area_by_id_string(request.data["area_id_string"])
-            registration.area_id = area.id
-        if "sub_area_id_string" in request.data:
-            sub_area = get_sub_area_by_id_string(request.data["sub_area_id_string"])
-            registration.sub_area_id = sub_area.id
-        if "scheme_id_string" in request.data:
-            scheme = get_scheme_by_id_string(request.data["scheme_id_id_string"])
-            registration.scheme_id = scheme.id
-        if "ownership_id_string" in request.data:
-            ownership = get_consumer_ownership_by_id_string(request.data["ownership_id_string"])
-            registration.ownership_id = ownership.id
-        if "consumer_category_id_string" in request.data:
-            consumer_category = get_consumer_category_by_id_string(request.data["consumer_category_id_string"])
-            registration.consumer_category_id = consumer_category.id
-        if "sub_category_id_string" in request.data:
-            sub_category = get_consumer_sub_category_by_id_string(request.data["sub_category_id_string"])
-            registration.sub_category_id = sub_category.id
-        if "source_id_string" in request.data:
-            source = get_source_type_by_id_string(request.data['source_id_string'])
-            registration.source_id = source.id
-        registration.updated_by = user.id
-        registration.updated_date = datetime.now()
-        registration.save()
-        return registration, True
-    except Exception as e:
-        print("Exception occured ",str(traceback.print_exc(e)))
-        return registration,False
-
-def save_payment_details(request, user, registration, sid):
-    try:
-        if request.data['payment_details'] == '':
-            return True
-        else:
-            for payment_detail in request.data['payment_details']:
-                service_type = get_service_type_by_id_string(payment_detail['service_type_id_string'])
-                payment_type = get_payment_type_by_id_string(payment_detail['payment_type_id_string'])
-                payment = Payment( # TODO: Payment table is missing
-                    tenant = registration.tenant,
-                    utility = registration.utility,
-                    identification_id = registration.id,
-                    service_type_id = service_type.id,
-                    payment_type_id = payment_type.id,
-                    paid_amount = payment_detail['amount'],
-                    payment_date = datetime.strptime(payment_detail['payment_date'],INPUT_DATE_FORMAT),
-                    created_by = user.id,
-                    created_date = datetime.now()
-                ).save
-            return True
-    except Exception as e:
-        transaction.rollback(sid)
-        return False
-
-
-
-
+def set_validated_data(validated_data):
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        validated_data["area_id"] = area.id
+    if "status_id" in validated_data:
+        registration_status = get_registration_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = registration_status.id
+    if "registration_type_id" in validated_data:
+        registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
+        validated_data["registration_type_id"] = registration_type.id
+    if "country_id" in validated_data:
+        country = get_country_by_id_string(validated_data["country_id"])
+        validated_data["country_id"] = country.id
+    if "state_id" in validated_data:
+        state = get_state_by_id_string(validated_data["state_id"])
+        validated_data["state_id"] = state.id
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        validated_data["city_id"] = city.id
+    if "scheme_id" in validated_data:
+        scheme = get_scheme_by_id_string(validated_data["scheme_id"])
+        validated_data["scheme_id"] = scheme.id
+    if "sub_area_id" in validated_data:
+        sub_area = get_sub_area_by_id_string(validated_data["sub_area_id"])
+        validated_data["area_id"] = sub_area.id
+    if "payment_id" in validated_data:
+        payment = get_payment_by_id_string(validated_data["payment_id"])
+        validated_data["payment_id"] = payment.id
+    if "ownership_id" in validated_data:
+        ownership = get_consumer_ownership_by_id_string(validated_data["ownership_id"])
+        validated_data["ownership_id"] = ownership.id
+    if "consumer_category_id" in validated_data:
+        consumer_category = get_consumer_category_by_id_string(validated_data["consumer_category_id"])
+        validated_data["consumer_category_id"] = consumer_category.id
+    if "sub_category_id" in validated_data:
+        sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
+        validated_data["sub_category_id"] = sub_category.id
+    if "source_id" in validated_data:
+        source = get_source_type_by_id_string(validated_data["source_id"])
+        validated_data["source_id"] = source.id
+    return validated_data
