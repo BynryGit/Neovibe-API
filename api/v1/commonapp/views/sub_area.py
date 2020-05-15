@@ -17,7 +17,7 @@ class SubAreaList(generics.ListAPIView):
         return queryset
 
 
-class SubAreaView(GenericAPIView):
+class SubAreaDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             sub_area = get_sub_area_by_id_string(id_string)

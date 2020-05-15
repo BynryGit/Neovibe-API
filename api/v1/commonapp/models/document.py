@@ -43,8 +43,8 @@ class Document(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
@@ -81,13 +81,6 @@ class Document(models.Model):
         return get_user_by_id(self.identification_id)
 
 # Create Document table end
-
-
-def get_document_by_id_string(id_string):
-    try:
-        return Document.objects.get(id_string=id_string)
-    except:
-        return False
 
 
 def get_documents_by_utility_id_string(id_string):

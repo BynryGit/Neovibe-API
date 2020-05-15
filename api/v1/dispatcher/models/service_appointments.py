@@ -37,9 +37,9 @@ class ServiceRequest(models.Model):
     city = models.BigIntegerField(null=True, blank=True)
     area = models.BigIntegerField(null=True, blank=True)
     subarea = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
-    due_date = models.DateField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     effort_duration = models.CharField(max_length=200, blank=True, null=True)
     flag = models.BooleanField(default=False)
     priority = models.BigIntegerField(null=True, blank=True)
@@ -48,8 +48,8 @@ class ServiceRequest(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return str(self.service_no) + '-' + str(self.service_name)

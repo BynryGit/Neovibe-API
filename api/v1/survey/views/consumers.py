@@ -9,6 +9,7 @@ from rest_framework import generics, status
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import SurveyConsumer,get_survey_consumer_by_id_string
 from v1.survey.serializers.consumers import ConsumerListSerializer,ConsumerViewSerializer
+from v1.commonapp.views.logger import logger
 
 # API Header
 # API end Point: api/v1/survey/:id-string/consumers
@@ -21,12 +22,10 @@ from v1.survey.serializers.consumers import ConsumerListSerializer,ConsumerViewS
 # Tables used: 2.3.4 Survey Consumer
 # Auther: Priyanka
 # Created on: 29/04/2020
-logger = logging.getLogger(__name__)
 
 class ConsumerList(GenericAPIView):
 
     def get(self,request,id_string):
-        logger.info('In api/v1/survey/consumer/list')
         try:
             survey_obj = get_survey_by_id_string(id_string)
             if survey_obj:
@@ -49,6 +48,7 @@ class ConsumerList(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -68,10 +68,9 @@ class ConsumerList(GenericAPIView):
 # Auther: Priyanka
 # Created on: 29/04/2020
 
-class ConsumerView(GenericAPIView):
+class ConsumerDetail(GenericAPIView):
 
     def get(self, request, id_string):
-        logger.info('In api/v1/survey/consumer/id_string')
         try:
             consumer_survey = get_survey_consumer_by_id_string(id_string)
             if consumer_survey:
@@ -86,6 +85,7 @@ class ConsumerView(GenericAPIView):
                     DATA: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',

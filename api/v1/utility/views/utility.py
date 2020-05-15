@@ -1,16 +1,17 @@
 __author__ = "aki"
 
 import traceback
-from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
 from rest_framework import generics, status
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.generics import GenericAPIView
+from django_filters.rest_framework import DjangoFilterBackend
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
-from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter, SearchFilter
 
 
 # API Header
@@ -25,7 +26,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 # Author: Gauri Deshmukh
 # Created on: 08/05/2020
 
-class UtilityListDetail(generics.ListAPIView):
+class UtilityList(generics.ListAPIView):
     serializer_class = UtilityMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 
@@ -63,9 +64,7 @@ class Utility(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
+
                     serializer = UtilityMasterSerializer(data=request.data)
                     if serializer.is_valid():
                         utility_obj = serializer.create(serializer.validated_data, request.user)
@@ -87,7 +86,7 @@ class Utility(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -120,16 +119,10 @@ class UtilityDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_obj = get_utility_by_id_string(id_string)
-
                     if utility_obj:
-
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
-
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: serializer.data,
@@ -147,7 +140,7 @@ class UtilityDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utility/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -164,13 +157,10 @@ class UtilityDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_obj = get_utility_by_id_string(id_string)
                     if utility_obj:
-                        serializer = UtilityMasterSerializer(data=id_string)
+                        serializer = UtilityMasterSerializer(data=request.data)
                         if serializer.is_valid():
                             serializer.update(utility_obj, serializer.validated_data, request.user)
                             return Response({
@@ -195,7 +185,7 @@ class UtilityDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

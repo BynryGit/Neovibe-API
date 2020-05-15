@@ -7,6 +7,7 @@ from v1.campaign.serializers.campaign_status import CampaignStatusListSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.views.logger import logger
 
 # campaign-status/list/
 class CampaignstatusList(generics.ListAPIView):
@@ -22,7 +23,7 @@ class CampaignstatusList(generics.ListAPIView):
 
 
 
-class CampaignStatusView(GenericAPIView):
+class CampaignStatusDetail(GenericAPIView):
     def get(self,request,id_string):
         try:
             campaign_status = get_cam_status_by_id_string(id_string)
@@ -39,6 +40,7 @@ class CampaignStatusView(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',

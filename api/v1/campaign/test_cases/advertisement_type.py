@@ -21,6 +21,6 @@ class AdvertisementTypeTestCase(APITestCase):
     def get_single_advertisement_type(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
         advert_type = AdvertisementType.objects.create(tenant=tenant_obj, name="tv_ads")
-        response = self.client.get(reverse('advert_type', args=[advert_type.id_string]))
+        response = self.client.get(reverse('advert_type_detail', args=[advert_type.id_string]))
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.notes import get_notes_by_utility_id_string, get_note_by_id_string
+from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.serializers.notes import NoteSerializer
 
@@ -24,7 +25,7 @@ from v1.utility.serializers.notes import NoteSerializer
 # Created on: 13/05/2020
 
 
-class Notes(GenericAPIView):
+class UtilityNoteList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -37,9 +38,6 @@ class Notes(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_notes_obj = get_notes_by_utility_id_string(id_string)
                     if utility_notes_obj:
@@ -67,7 +65,7 @@ class Notes(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -84,9 +82,6 @@ class Notes(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_obj = get_utility_by_id_string(id_string)
                     if utility_obj:
@@ -115,7 +110,7 @@ class Notes(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -135,7 +130,7 @@ class Notes(GenericAPIView):
 # Created on: 13/05/2020
 
 
-class NoteDetails(GenericAPIView):
+class UtilityNoteDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -148,9 +143,6 @@ class NoteDetails(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_notes_obj = get_note_by_id_string(id_string)
                     if utility_notes_obj:
@@ -178,7 +170,7 @@ class NoteDetails(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -195,9 +187,6 @@ class NoteDetails(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_note_obj = get_note_by_id_string(id_string)
                     if utility_note_obj:
@@ -225,7 +214,7 @@ class NoteDetails(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

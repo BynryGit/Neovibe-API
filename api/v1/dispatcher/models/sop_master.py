@@ -29,12 +29,12 @@ class SopMaster(models.Model):
     city = models.BigIntegerField(null=True, blank=True)
     service_type = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
-    effective_start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    effective_end_date = models.DateField(null=True, blank=True, default=datetime.now())
+    effective_start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    effective_end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

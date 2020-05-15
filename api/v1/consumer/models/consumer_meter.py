@@ -25,13 +25,13 @@ class ConsumerMeter(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer = models.BigIntegerField(null=True, blank=True)
     meter = models.BigIntegerField(null=True, blank=True)
-    assign_date = models.DateField(null=True, blank=True, default=datetime.now())
+    assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     initial_reading = models.BigIntegerField(null=True, blank=True)
     status = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
     def __unicode__(self):

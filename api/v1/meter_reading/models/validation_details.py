@@ -35,13 +35,13 @@ class ValidationDetails(models.Model):
     validator_reading = models.CharField(max_length=200, null=True, blank=True)
     validator_comment = models.CharField(max_length=500, null=True, blank=True)
     validator_image_remark = models.CharField(max_length=500, null=True, blank=True)
-    validated_on = models.DateField(null=True, blank=True, default=datetime.now())
+    validated_on = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_meter_matching = models.BooleanField(default=False)
     is_reading_matching = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

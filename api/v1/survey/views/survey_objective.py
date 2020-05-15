@@ -8,6 +8,7 @@ from v1.survey.serializers.survey_objective import SurveyObjectiveListSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.views.logger import logger
 
 
 class SurveyObjectiveList(generics.ListAPIView):
@@ -23,7 +24,7 @@ class SurveyObjectiveList(generics.ListAPIView):
 
 
 
-class SurveyObjectiveView(GenericAPIView):
+class SurveyObjectiveDetail(GenericAPIView):
     def get(self,request,id_string):
         try:
             survey_objective = get_survey_objective_by_id_string(id_string)
@@ -40,6 +41,7 @@ class SurveyObjectiveView(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',

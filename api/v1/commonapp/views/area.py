@@ -17,7 +17,7 @@ class AreaList(generics.ListAPIView):
         return queryset
 
 
-class AreaView(GenericAPIView):
+class AreaDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             area = get_area_by_id_string(id_string)

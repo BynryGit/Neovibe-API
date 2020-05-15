@@ -8,6 +8,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.campaign.models.campaign_objective import CampaignObjective,get_cam_objective_by_id_string
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.views.logger import logger
 
 # objective/list
 class CampaignObjectiveList(generics.ListAPIView):
@@ -23,7 +24,7 @@ class CampaignObjectiveList(generics.ListAPIView):
 
 
 
-class CampaignObjectiveView(GenericAPIView):
+class CampaignObjectiveDetail(GenericAPIView):
 
     def get(self,request,id_string):
         try:
@@ -41,6 +42,7 @@ class CampaignObjectiveView(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',

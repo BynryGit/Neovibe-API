@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.survey.models.survey_type import SurveyType,get_survey_type_by_id_string
 from v1.survey.serializers.survey_type import SurveyTypeListSerializer,SurveyTypeViewSerializer
+from v1.commonapp.views.logger import logger
 
 # type/list/
 class SurveyTypeList(generics.ListAPIView):
@@ -21,7 +22,7 @@ class SurveyTypeList(generics.ListAPIView):
     search_fields = ('name', 'tenant__name',)
 
 # survey/type/:id_string
-class SurveyTypeView(GenericAPIView):
+class SurveyTypeDetail(GenericAPIView):
     def get(self,request,id_string):
         try:
             survey_type = get_survey_type_by_id_string(id_string)
@@ -38,6 +39,7 @@ class SurveyTypeView(GenericAPIView):
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
