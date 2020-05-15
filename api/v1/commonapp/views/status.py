@@ -1,32 +1,31 @@
 __author__ = "aki"
 
 import traceback
-from rest_framework.generics import GenericAPIView
-from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import generics, status
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.serializers.status import StatusSerializer
 from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_usage_summary import get_utility_usage_summary_by_utility_id_string
-from v1.utility.serializers.summary import UtilityUsageSummaryViewSerializer
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.utility.models.utility_status import UtilityStatus
 
 
 # API Header
-# API end Point: api/v1/utility/id_string/summary
+# API end Point: api/v1/status
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: Utility summary
-# Usage: API will fetch all summary against utility
-# Tables used: 2.3  Utility Usage Summary
+# Interaction: city list
+# Usage: API will fetch all city list
+# Tables used: UtilityStatus
 # Author: Akshay
-# Created on: 12/05/2020
+# Created on: 15/05/2020
 
 
-class UtilityUsageSummaryDetail(GenericAPIView):
+class StatusList(generics.ListAPIView):
 
-    def get(self, request, id_string):
+    def get(self, request):
         try:
             # Checking authentication start
             if is_token_valid(request.headers['token']):
@@ -38,9 +37,9 @@ class UtilityUsageSummaryDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    utility_summary_obj = get_utility_usage_summary_by_utility_id_string(id_string)
-                    if utility_summary_obj:
-                        serializer = UtilityUsageSummaryViewSerializer(instance=utility_summary_obj, context={'request': request})
+                    status_obj = UtilityStatus.objects.filter(is_active=True)
+                    if status_obj:
+                        serializer = StatusSerializer(status_obj, many=True)
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: serializer.data,

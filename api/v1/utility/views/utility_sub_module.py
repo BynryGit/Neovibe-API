@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, \
     get_utility_submodules_by_utility_id_string
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer, UtilitySubModuleSerializer
@@ -37,9 +38,6 @@ class UtilitySubModules(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_submodule_obj = get_utility_submodules_by_utility_id_string(id_string)
                     if utility_submodule_obj:
@@ -61,7 +59,7 @@ class UtilitySubModules(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -94,9 +92,6 @@ class UtilitySubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_submodule_obj = get_utility_submodule_by_id_string(id_string)
                     if utility_submodule_obj:
@@ -118,7 +113,7 @@ class UtilitySubModuleDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -135,9 +130,6 @@ class UtilitySubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     utility_submodule_obj = get_utility_submodule_by_id_string(id_string)
                     if utility_submodule_obj:
@@ -166,7 +158,7 @@ class UtilitySubModuleDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
