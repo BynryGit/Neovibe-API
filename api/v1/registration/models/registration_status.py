@@ -13,8 +13,8 @@ class RegistrationStatus(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
@@ -23,7 +23,10 @@ class RegistrationStatus(models.Model):
         return self.name
 
 def get_registration_status_by_id_string(id_string):
-    return RegistrationStatus.objects.get(id_string = id_string)
+    try:
+        return RegistrationStatus.objects.get(id_string = id_string)
+    except:
+        return False
 
 
 def get_registration_status_by_id(id):

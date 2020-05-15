@@ -27,8 +27,8 @@ class ServiceType(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(null=False, blank=False)
     updated_by = models.BigIntegerField(null=False, blank=False)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
@@ -39,6 +39,11 @@ class ServiceType(models.Model):
 
 # Create Service Type table end
 
+
 def get_service_type_by_id_string(id_string):
-    return ServiceType.objects.get(id_string = id_string)
+    return ServiceType.objects.get(id_string=id_string)
+
+
+def get_service_type_by_id(id):
+    return ServiceType.objects.get(id=id)
 # End the Code

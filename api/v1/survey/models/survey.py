@@ -18,6 +18,10 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
+from v1.survey.models.survey_objective import get_survey_objective_by_id
+from v1.survey.models.survey_type import get_survey_type_by_id
+from v1.survey.models.survey_status import get_survey_status_by_id
+
 
 # Create Survey table start
 
@@ -32,17 +36,17 @@ class Survey(models.Model):
     category_id = models.BigIntegerField(null=True, blank=True)
     sub_category_id = models.BigIntegerField(null=True, blank=True)
     no_of_consumers = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     area_id = models.BigIntegerField(null=True, blank=True)
     sub_area_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    completion_date = models.DateField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
+    completion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
@@ -50,10 +54,34 @@ class Survey(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def get_objective(self):
+        objective = get_survey_objective_by_id(self.objective_id)
+        return objective
+
+    @property
+    def get_type(self):
+        type = get_survey_type_by_id(self.type_id)
+        return type
+
+    @property
+    def get_status(self):
+        status = get_survey_status_by_id(self.status_id)
+        return status
+
 def get_survey_by_tenant_id_string(id_string):
     return Survey.objects.filter(tenant__id_string = id_string)
 
 def get_survey_by_id_string(id_string):
-    return Survey.objects.get(id_string = id_string)
+    try:
+        return Survey.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_survey_by_id(id):
+    try:
+        return Survey.objects.get(id = id)
+    except:
+        return False
 
 # Create Survey table end

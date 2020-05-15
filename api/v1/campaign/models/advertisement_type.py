@@ -29,8 +29,8 @@ class AdvertisementType(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.status
@@ -38,4 +38,12 @@ class AdvertisementType(models.Model):
     def __unicode__(self):
         return self.status
 
+def get_advert_type_by_id(id):
+    return AdvertisementType.objects.get(id = id)
+
+def get_advert_type_by_id_string(id_string):
+    try:
+        return AdvertisementType.objects.get(id_string = id_string)
+    except:
+        return False
 # Create advertisement type table end.

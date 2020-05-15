@@ -1,7 +1,7 @@
 __author__ = 'aki'
 
 # *********** KEY CONSTANTS **************
-RESULT='result'
+RESULTS='results'
 MESSAGE='message'
 RESPONSE_DATA='response_data'
 Token = 'token'
@@ -12,6 +12,8 @@ ERROR = 'error'
 
 
 # *********** VALUE CONSTANTS **************
+UNAUTHORIZED_USER="User is not authorised"
+INVALID_TOKEN="User token is not valid"
 SUCCESSFULLY_DATA_SAVE='Data has been saved successfully.'
 SUCCESSFULLY_DATA_DELETED='Data has been deleted successfully.'
 SUCCESSFULLY_DATA_RETRIEVE='Data has been retrieved successfully.'

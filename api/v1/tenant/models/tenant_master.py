@@ -17,7 +17,6 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
 
-
 # Create Tenant Master table start.
 
 class TenantMaster(models.Model):
@@ -33,13 +32,27 @@ class TenantMaster(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
 
     def __unicode__(self):
         return self.name
+
+
+def get_tenant_by_id(id):
+    try:
+        return TenantMaster.objects.get(id = id)
+    except:
+        return False
+
+
+def get_tenant_by_id_string(id_string):
+    try:
+        return TenantMaster.objects.get(id_string = id_string)
+    except:
+        return False
 
 # Create Tenant Master table end.

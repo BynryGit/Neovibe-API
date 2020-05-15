@@ -27,15 +27,15 @@ class UserToken(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     token = models.CharField(max_length=200, null=True, blank=True)
-    form_factor = models.BigIntegerField(null=False, blank=False)
-    user = models.BigIntegerField(null=False, blank=False)
-    ip_address = models.CharField(max_length=200,null=False, blank=False)
-    status = models.BigIntegerField(null=False, blank=False)
+    form_factor = models.BigIntegerField(null=True, blank=True)
+    user = models.BigIntegerField(null=True, blank=True)
+    ip_address = models.CharField(max_length=200,null=True, blank=True)
+    status = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.token

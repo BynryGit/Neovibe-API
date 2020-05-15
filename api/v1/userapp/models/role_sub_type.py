@@ -30,14 +30,22 @@ class RoleSubType(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
 
     @property
     def get_role_type(self):

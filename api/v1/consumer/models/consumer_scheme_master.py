@@ -27,8 +27,8 @@ class ConsumerSchemeMaster(models.Model):
     scheme_type = models.BigIntegerField(null=True, blank=True)  # TODO Conform for lookup Table
     scheme_name = models.CharField(max_length=500, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
-    effective_date = models.DateField(null=True, blank=True, default=datetime.now())
-    expiry_date = models.DateField(null=True, blank=True, default=datetime.now())
+    effective_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    expiry_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     total_deposit_amt = models.FloatField(null=True, blank=True)
     scheme_tax_percentage = models.FloatField(null=True, blank=True)
     monthly_emi = models.FloatField(null=True, blank=True)
@@ -36,8 +36,8 @@ class ConsumerSchemeMaster(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.scheme_name

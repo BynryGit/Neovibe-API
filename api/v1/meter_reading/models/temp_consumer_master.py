@@ -45,7 +45,7 @@ class TempConsumerMaster(models.Model):
     meter_no = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.BigIntegerField(null=True, blank=True)
     current_reading = models.CharField(max_length=200, null=True, blank=True)
-    reading_date = models.DateField(null=True, blank=True, default=datetime.now())
+    reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     reading_status = models.BigIntegerField(null=True, blank=True)
     reader_status = models.BigIntegerField(null=True, blank=True)
     reading_img = models.BigIntegerField(null=True, blank=True)
@@ -64,8 +64,8 @@ class TempConsumerMaster(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.consumer_no

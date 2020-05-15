@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 # table header
 # module: Utility | sub-module - All
 # table type : Master
@@ -29,11 +31,11 @@ class UtilityModule(models.Model):
     subscription_id = models.BigIntegerField(null=True, blank=True)
     module_name = models.CharField(max_length=500, blank=False, null=False)
     module_desc = models.CharField(max_length=500, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.module_name
@@ -42,3 +44,26 @@ class UtilityModule(models.Model):
         return self.module_name
 
 # Create Utility Module table end.
+
+
+def get_utility_module_by_id(id):
+    try:
+        return UtilityModule.objects.get(id = id)
+    except:
+        return False
+
+
+def get_utility_module_by_id_string(id_string):
+    try:
+        return UtilityModule.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_utility_modules_by_tenant_id_string(id_string):
+    return UtilityModule.objects.filter(tenant__id_string = id_string)
+
+
+def get_utility_modules_by_utility_id_string(id_string):
+    return UtilityModule.objects.filter(utility__id_string = id_string)
+

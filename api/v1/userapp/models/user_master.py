@@ -4,9 +4,12 @@ from datetime import datetime # importing package for datetime
 
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.department import get_department_by_id
+from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
+from v1.commonapp.models.notes import get_notes_by_user_id
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.userapp.models.user_role import get_role_by_id
+from v1.userapp.models.user_bank_detail import get_bank_by_id
+from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
@@ -39,7 +42,7 @@ class UserDetail(User):
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
-    user_ID = models.CharField(null=True, blank=True)  # Web, Mobile
+    user_ID = models.CharField(max_length=200,null=True, blank=True)  # Web, Mobile
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     user_image = models.URLField(null=True, blank=True)
     salt = models.CharField(max_length=200, null=True, blank=True)
@@ -47,17 +50,25 @@ class UserDetail(User):
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    roles = jsonfield.JSONField()
-    privileges = jsonfield.JSONField()
+    utilities = jsonfield.JSONField()
     skills = jsonfield.JSONField()
     areas = jsonfield.JSONField()
+    bank_detail_id = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __unicode__(self):
         return self.id
+
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
 
     @property
     def get_user_status(self):
@@ -105,3 +116,19 @@ def get_user_by_username(username):
 
 def get_users_by_tenant_id_string(id_string):
     return UserDetail.objects.filter(tenant__id_string=id_string)
+
+
+def get_bank_by_user_id_string(id_string):
+    user = UserDetail.objects.filter(id_string=id_string).last()
+    return get_bank_by_id(user.bank_detail_id)
+
+
+def get_documents_by_user_id_string(id_string):
+    user = UserDetail.objects.filter(id_string=id_string, is_active=True).last()
+    return get_documents_by_user_id(user.id)
+
+
+def get_notes_by_user_id_string(id_string):
+    user = UserDetail.objects.filter(id_string=id_string, is_active=True).last()
+    return get_notes_by_user_id(user.id)
+

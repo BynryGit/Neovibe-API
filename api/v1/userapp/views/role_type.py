@@ -2,13 +2,11 @@ import traceback
 
 from rest_framework import status, generics
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-
 from api.messages import *
-from v1.commonapp.serializers.role_type import RoleTypeListSerializer, RoleTypeViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role_type import get_role_type_by_tenant_id_string, get_role_type_by_id_string
+from v1.userapp.serializers.role_type import RoleTypeListSerializer, RoleTypeViewSerializer
 
 
 # API Header
@@ -25,7 +23,7 @@ from v1.userapp.models.role_type import get_role_type_by_tenant_id_string, get_r
 # Updated on: 12/05/2020
 
 
-class RoleTypeList(generics.APIView):
+class RoleTypeList(generics.ListAPIView):
     serializer_class = RoleTypeListSerializer
     pagination_class = StandardResultsSetPagination
 

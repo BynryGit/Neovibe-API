@@ -30,9 +30,9 @@ class Schedule(models.Model):
     activity_type = models.BigIntegerField(null=True, blank=True) #Manual, Photo, SpotBill, SmartMeter
     bill_cycle = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateField(null=True, blank=True, default=datetime.now())
-    due_date = models.DateField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     schedule_status = models.BigIntegerField(null=True, blank=True)
     is_valid_next_cycle = models.BooleanField(default=False)
     is_imported = models.BooleanField(default=False)
@@ -40,8 +40,8 @@ class Schedule(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.bill_cycle

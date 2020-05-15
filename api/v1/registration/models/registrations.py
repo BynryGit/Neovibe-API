@@ -14,6 +14,7 @@
 
 from datetime import datetime # importing package for datetime
 
+from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.registration.models.registration_status import get_registration_status_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -37,7 +38,7 @@ class Registration(models.Model):
     phone_landline = models.BigIntegerField(null=True, blank=True)
     address_line_1 = models.CharField(max_length=200, blank=True, null=True)
     street = models.CharField(max_length=200, blank=True, null=True)
-    zipcode = models.BigIntegerField(null=True, blank=True)
+    zipcode = models.CharField(max_length=200,null=True, blank=True)
     country_id = models.BigIntegerField(null=True, blank=True)
     state_id = models.BigIntegerField(null=True, blank=True)
     city_id = models.BigIntegerField(null=True, blank=True)
@@ -51,13 +52,13 @@ class Registration(models.Model):
     is_vip = models.BooleanField(default=False)
     connectivity = models.BooleanField(default=False)
     registration_channel_id = models.BigIntegerField(null=True, blank=True)
-    source_id = models.BigIntegerField(null=False, blank=False)
-    registration_date = models.DateField(null=True, blank=True, default=datetime.now())
+    source_id = models.BigIntegerField(null=True, blank=True)
+    registration_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.first_name
@@ -69,6 +70,11 @@ class Registration(models.Model):
     def get_status(self):
         status = get_registration_status_by_id(self.status_id)
         return status
+
+    @property
+    def get_area(self):
+        area = get_area_by_id(self.area_id)
+        return area
 
 
 

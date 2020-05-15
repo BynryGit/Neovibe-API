@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 # table header
 # module: Utility | sub-module - All
 # table type : Master
@@ -36,8 +38,8 @@ class UtilityMaster(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
@@ -45,7 +47,18 @@ class UtilityMaster(models.Model):
     def __unicode__(self):
         return self.name
 
-def get_utility_by_id_string(id_string):
-    return UtilityMaster.objects.get(id_string = id_string)
-
 # Create Utility Master table end.
+
+
+def get_utility_by_id(id):
+    try:
+        return UtilityMaster.objects.get(id = id)
+    except:
+        return False
+
+
+def get_utility_by_id_string(id_string):
+    try:
+        return UtilityMaster.objects.get(id_string = id_string)
+    except:
+        return False

@@ -32,7 +32,7 @@ class ConsumerMaster(models.Model):
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     address_line_1 = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
-    zipcode = models.BigIntegerField(null=True, blank=True)
+    zipcode = models.CharField(max_length=200, null=True, blank=True)
     country = models.BigIntegerField(null=True, blank=True)
     state = models.BigIntegerField(null=True, blank=True)
     city = models.BigIntegerField(null=True, blank=True)
@@ -59,8 +59,8 @@ class ConsumerMaster(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.consumer_no

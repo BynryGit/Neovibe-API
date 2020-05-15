@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -48,13 +50,11 @@ INSTALLED_APPS = [
     'v1.contract',
     'v1.dispatcher',
     'v1.employee',
-    'v1.lookup',
     'v1.meter_reading',
     'v1.payment',
     'v1.payroll',
     'v1.registration',
     'v1.request',
-    'v1.sourcing',
     'v1.store',
     'v1.supplier',
     'v1.survey',
@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart360',
+        'NAME': 'smart3602',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
@@ -147,3 +147,23 @@ INPUT_DATE_FORMAT = "%d-%b-%Y"
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR + '/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}

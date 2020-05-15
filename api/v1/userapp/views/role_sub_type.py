@@ -3,9 +3,8 @@ import traceback
 from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-
+from v1.userapp.serializers.role_sub_type import RoleSubTypeListSerializer, RoleSubTypeViewSerializer
 from api.messages import *
-from v1.commonapp.serializers.role_sub_type import RoleSubTypeListSerializer, RoleSubTypeViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_tenant_id_string, get_role_sub_type_by_id_string
 
@@ -24,7 +23,8 @@ from v1.userapp.models.role_sub_type import get_role_sub_type_by_tenant_id_strin
 # Updated on: 12/05/2020
 
 
-class RoleSubTypeList(generics.APIView):
+
+class RoleSubTypeList(generics.ListAPIView):
     serializer_class = RoleSubTypeListSerializer
     pagination_class = StandardResultsSetPagination
 

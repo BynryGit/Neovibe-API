@@ -3,7 +3,7 @@
 		"pk" : "1",
 		"model" : "campaign.CampaignGroup",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "campaign_group_1",
 			"is_active" : "True"
@@ -13,7 +13,7 @@
 		"pk" : "2",
 		"model" : "campaign.CampaignGroup",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "campaign_group_2",
 			"is_active" : "True"
@@ -23,7 +23,7 @@
 		"pk" : "3",
 		"model" : "campaign.CampaignGroup",
 		"fields" : {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "campaign_group_3",
 			"is_active" : "True"
@@ -33,7 +33,7 @@
 		"pk": "1",
 		"model": "campaign.CampaignObjective",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "brand awareness",
 			"description" : "This is brand awareness",
@@ -44,7 +44,7 @@
 		"pk": "2",
 		"model": "campaign.CampaignObjective",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name" : "increasing consumer capacity",
 			"description" : "This is increasing consumer capacity",
@@ -56,9 +56,9 @@
 		"pk": "1",
 		"model": "campaign.AdvertStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "created",
+			"name" : "created",
 			"is_active" : "True"
 		}
 	},
@@ -66,9 +66,9 @@
 		"pk": "2",
 		"model": "campaign.AdvertStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "assigned",
+			"name" : "assigned",
 			"is_active" : "True"
 		}
 
@@ -77,9 +77,9 @@
 		"pk": "3",
 		"model": "campaign.AdvertStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "started",
+			"name" : "started",
 			"is_active" : "True"
 		}
 	},
@@ -87,9 +87,9 @@
 		"pk": "4",
 		"model": "campaign.AdvertStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "completed",
+			"name" : "completed",
 			"is_active" : "True"
 
 		}
@@ -98,9 +98,9 @@
 		"pk": "5",
 		"model": "campaign.AdvertStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "cancel",
+			"name" : "cancel",
 			"is_active" : "True"
 
 		}
@@ -109,9 +109,9 @@
 		"pk": "6",
 		"model": "campaign.AdvertStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "hold",
+			"name" : "hold",
 			"is_active" : "True"
 		}
 	},
@@ -120,9 +120,9 @@
 		"pk": "1",
 		"model": "campaign.CampaignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "created",
+			"name" : "created",
 			"is_active" : "True"
 		}
 	},
@@ -130,9 +130,9 @@
 		"pk": "2",
 		"model": "campaign.CampaignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "assigned",
+			"name" : "assigned",
 			"is_active" : "True"
 		}
 
@@ -141,9 +141,9 @@
 		"pk": "3",
 		"model": "campaign.CampaignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "started",
+			"name" : "started",
 			"is_active" : "True"
 		}
 	},
@@ -151,9 +151,9 @@
 		"pk": "4",
 		"model": "campaign.CampaignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "completed",
+			"name" : "completed",
 			"is_active" : "True"
 
 		}
@@ -162,9 +162,9 @@
 		"pk": "5",
 		"model": "campaign.CampaignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"statu" : "cancel",
+			"name" : "cancel",
 			"is_active" : "True"
 
 		}
@@ -175,9 +175,9 @@
 		"pk": "6",
 		"model": "campaign.CampaignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
-			"status" : "hold",
+			"name" : "hold",
 			"is_active" : "True"
 		}
 	},
@@ -185,8 +185,8 @@
 		"pk": "1",
 		"model": "campaign.Campaign",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"group_id": 1,
 			"name": "Smart360",
 			"objective_id":1,
@@ -210,8 +210,8 @@
 		"pk": "2",
 		"model": "campaign.Campaign",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"group_id": 1,
 			"name": "Awareness",
 			"objective_id":1,
@@ -235,8 +235,8 @@
 		"pk": "3",
 		"model": "campaign.Campaign",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"group_id": 1,
 			"name": "Degital Marketing",
 			"objective_id":1,
@@ -261,8 +261,8 @@
 		"pk": "4",
 		"model": "campaign.Campaign",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"group_id": 1,
 			"name": "Smart360 Awareness",
 			"objective_id":1,
@@ -288,8 +288,8 @@
 		"pk": "1",
 		"model": "campaign.AdvertisementType",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"name": "tv_ads",
 			"is_active": "True"
 
@@ -299,8 +299,8 @@
 		"pk": "2",
 		"model": "campaign.AdvertisementType",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"name": "canopy",
 			"is_active": "True"
 
@@ -310,8 +310,8 @@
 		"pk": "3",
 		"model": "campaign.AdvertisementType",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"name": "fm_radio",
 			"is_active": "True"
 
@@ -321,8 +321,8 @@
 		"pk": "4",
 		"model": "campaign.AdvertisementType",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"name": "linkedin",
 			"is_active": "True"
 
@@ -332,8 +332,8 @@
 		"pk": "1",
 		"model": "campaign.Advertisements",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"campaign_id": 1,
 			"group_id": 1,
 			"name": "Smart360-Awareness-Gas",
@@ -358,8 +358,8 @@
 		"pk": "2",
 		"model": "campaign.Advertisements",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"campaign_id": 1,
 			"group_id": 1,
 			"name": "Smart360-Awareness-Power",
@@ -384,8 +384,8 @@
 		"pk": "3",
 		"model": "campaign.Advertisements",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"campaign_id": 2,
 			"group_id": 1,
 			"name": "Smart360",
@@ -410,8 +410,8 @@
 		"pk": "4",
 		"model": "campaign.Advertisements",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
+			"tenant": 1,
+			"utility": 1,
 			"campaign_id": 2,
 			"group_id": 1,
 			"name": "Smart360-Awareness-water",
@@ -460,7 +460,7 @@
 		"pk": "1",
 		"model": "campaign.AdAssignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "created",
 			"is_active" : "True"
@@ -470,7 +470,7 @@
 		"pk": "2",
 		"model": "campaign.AdAssignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "assigned",
 			"is_active" : "True"
@@ -481,7 +481,7 @@
 		"pk": "3",
 		"model": "campaign.AdAssignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "started",
 			"is_active" : "True"
@@ -491,7 +491,7 @@
 		"pk": "4",
 		"model": "campaign.AdAssignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "completed",
 			"is_active" : "True"
@@ -502,7 +502,7 @@
 		"pk": "5",
 		"model": "campaign.AdAssignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "cancel",
 			"is_active" : "True"
@@ -513,7 +513,7 @@
 		"pk": "6",
 		"model": "campaign.AdAssignStatus",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"status" : "hold",
 			"is_active" : "True"
@@ -523,7 +523,7 @@
 		"pk": "1",
 		"model": "campaign.AdvertisementAssignment",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"campaign_id": 1,
 			"group_id": 1,
@@ -538,7 +538,7 @@
 		"pk": "2",
 		"model": "campaign.AdvertisementAssignment",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"campaign_id": 1,
 			"group_id": 1,
@@ -553,7 +553,7 @@
 		"pk": "3",
 		"model": "campaign.AdvertisementAssignment",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"campaign_id": 2,
 			"group_id": 2,
@@ -568,7 +568,7 @@
 		"pk": "4",
 		"model": "campaign.AdvertisementAssignment",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"campaign_id": 3,
 			"group_id": 3,
@@ -583,7 +583,7 @@
 		"pk": "1",
 		"model": "consumer.ConsumerCategory",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name": "CNG",
 			"is_active": "True"
@@ -594,7 +594,7 @@
 		"pk": "2",
 		"model": "consumer.ConsumerCategory",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name": "PNG",
 			"is_active": "True"
@@ -605,8 +605,8 @@
 		"pk": "3",
 		"model": "consumer.ConsumerCategory",
 		"fields": {
-			"tenant": 4,
-			"utility": 3,
+			"tenant": 1,
+			"utility": 1,
 			"name": "CNG",
 			"is_active": "True"
 		}
@@ -617,7 +617,7 @@
 		"model": "consumer.ConsumerCategory",
 		"fields": {
 			"tenant": 1,
-			"utility": 3,
+			"utility": 1,
 			"name": "PNG",
 			"is_active": "True"
 		}
@@ -626,7 +626,7 @@
 		"pk": "1",
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name": "CNG1",
 			"category": 1,
@@ -637,7 +637,7 @@
 		"pk": "2",
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name": "CNG2",
 			"category": 1,
@@ -648,7 +648,7 @@
 		"pk": "3",
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name": "Commercial",
 			"category": 2,
@@ -659,7 +659,7 @@
 		"pk": "4",
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
-			"tenant": 4,
+			"tenant": 1,
 			"utility": 1,
 			"name": "Domestic",
 			"category": 2,
@@ -684,7 +684,7 @@
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
-			"utility": 3,
+			"utility": 1,
 			"name": "CNG1",
 			"category": 3,
 			"is_active": "True"
@@ -694,8 +694,8 @@
 		"pk": "7",
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
-			"tenant": 4,
-			"utility": 3,
+			"tenant": 1,
+			"utility": 1,
 			"name": "CNG2",
 			"category": 3,
 			"is_active": "True"
@@ -705,8 +705,8 @@
 		"pk": "8",
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
-			"tenant": 3,
-			"utility": 3,
+			"tenant": 1,
+			"utility": 1,
 			"name": "Commercial",
 			"category": 4,
 			"is_active": "True"
@@ -717,7 +717,7 @@
 		"model": "consumer.ConsumerSubCategory",
 		"fields": {
 			"tenant": 1,
-			"utility": 3,
+			"utility": 1,
 			"name": "Domestic",
 			"category": 4,
 			"is_active": "True"

@@ -24,7 +24,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 # Created on: 06/05/2020
 # Updated on: 12/05/2020
 
-class FormFactorList(generics.APIView):
+class FormFactorList(generics.ListAPIView):
     serializer_class = FormFactorListSerializer
     pagination_class = StandardResultsSetPagination
 

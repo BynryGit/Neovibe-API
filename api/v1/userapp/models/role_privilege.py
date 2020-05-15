@@ -15,7 +15,10 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.commonapp.models.sub_module import get_submodule_by_module_id
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.privilege import get_privilege_by_id
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
@@ -33,14 +36,18 @@ class RolePrivilege(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.roleprivilege.id
 
     def __unicode__(self):
         return self.self.roleprivilege.id
+
+    @property
+    def get_all_submodules(self):
+        return get_submodule_by_module_id(self.module_id)
 
 # Create Role Privilege table end
 
@@ -51,3 +58,8 @@ def get_role_privilege_by_role_id(id):
 
 def get_role_privilege_by_id_string(id_string):
     return RolePrivilege.objects.filter(id=id_string, is_active=True).last()
+
+
+def get_privilege_by_sub_module_id(sub_module_id,module_id):
+    privilege = RolePrivilege.objects.filter(module_id=module_id,sub_module_id=sub_module_id).last()
+    return get_privilege_by_id(privilege.privilege_id)
