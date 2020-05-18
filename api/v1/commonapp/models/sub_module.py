@@ -1,3 +1,11 @@
+from datetime import datetime # importing package for datetime
+import uuid  # importing package for GUID
+from django.db import models  # importing package for database
+from v1.commonapp.models.module import get_module_by_id
+# from v1.userapp.models.role_privilege import get_privilege_by_sub_module_id
+
+
+
 # Table Header
 # Module : All
 # Table Type : Lookup (Local)
@@ -8,20 +16,8 @@
 # Reference Table : 2.6.1 Service Request
 # Author :
 # Creation Date :
-
 # change history
 # <ddmmyyyy>-<changes>-<Author>
-
-from datetime import datetime # importing package for datetime
-import uuid  # importing package for GUID
-from django.db import models  # importing package for database
-
-
-# Create Sub Module table start
-from v1.commonapp.models.module import get_module_by_id
-from v1.userapp.models.role_privilege import get_privilege_by_sub_module_id
-
-
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     sub_module = models.BigIntegerField(null=True, blank=True)

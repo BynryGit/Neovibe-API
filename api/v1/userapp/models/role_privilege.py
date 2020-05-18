@@ -40,10 +40,10 @@ class RolePrivilege(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.roleprivilege.id
+        return self.tenant.name
 
     def __unicode__(self):
-        return self.self.roleprivilege.id
+        return self.tenant.name
 
     @property
     def get_all_submodules(self):

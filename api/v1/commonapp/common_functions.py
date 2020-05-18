@@ -1,6 +1,6 @@
 import jwt # jwt token library
 from api.settings import SECRET_KEY
-from v1.userapp.models.user_token import UserToken
+# from v1.userapp.models.user_token import UserToken
 
 
 def is_token_valid(token):

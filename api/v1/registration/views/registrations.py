@@ -82,13 +82,9 @@ class Registration(GenericAPIView):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
                     # Checking authorization end
 
@@ -152,7 +148,7 @@ class Registration(GenericAPIView):
                         if registration_obj:
                             serializer = RegistrationSerializer(data=request.data)
                             if serializer.is_valid(request.data):
-                                registration_obj = serializer.update(registration_obj,serializer.validated_data, user)
+                                registration_obj = serializer.update(registration_obj, serializer.validated_data, user)
                                 view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
@@ -180,7 +176,7 @@ class Registration(GenericAPIView):
             # logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
+                ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
