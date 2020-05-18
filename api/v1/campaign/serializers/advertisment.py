@@ -1,7 +1,9 @@
 __author__ = "Priyanka"
 
 from rest_framework import serializers
-from v1.campaign.serializers.campaign import CampaignSerializer,CampaignGroupSerializer,CampaignObjectiveSerializer
+
+from v1.campaign.serializers.campaign import CampaignGroupSerializer,CampaignObjectiveSerializer
+from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.advertisement_type import AdvertisementType
 from v1.campaign.models.advert_status import AdvertStatus
@@ -17,6 +19,11 @@ class AdvertStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdvertStatus
         fields = ('name','id_string')
+
+class CampaignSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CampaignTbl
+        fields = ('name', 'id_string')
 
 class AdvertismentViewSerializer(serializers.ModelSerializer):
     campaign = CampaignSerializer(many=False, required=True, source='get_campaign')
@@ -34,7 +41,7 @@ class AdvertismentViewSerializer(serializers.ModelSerializer):
                   'is_active')
 
 class AdvertismentListSerializer(serializers.ModelSerializer):
-    campaign = serializers.ReadOnlyField(source='get_campaign')
+    campaign = CampaignSerializer(source='get_campaign')
     group = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
     advert_type = AdvertisementTypeSerializer(many=False, required=True, source='get_advert_type')
