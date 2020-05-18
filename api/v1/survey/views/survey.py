@@ -16,14 +16,14 @@ from v1.commonapp.common_functions import is_token_valid, get_payload, get_user,
 from v1.survey.views.common_functions import is_data_verified
 
 # API Header
-# API end Point: api/v1/survey
+# API end Point: api/v1/survey/list
 # API verb: GET
 # Package: Basic
 # Modules: S&M
 # Sub Module: Survey
 # Interaction: Survey list
 # Usage: API will fetch required data for Location and consumer Survey list
-# Tables used: 2.3.1 Survey Master,2.3.4 Survey Consumer
+# Tables used: 2.3.1 Survey Master
 # Author: Priyanka
 # Created on: 28/04/2020
 

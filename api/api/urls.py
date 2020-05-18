@@ -17,8 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from v1.registration import urls as registration_urls
 from v1.campaign import urls as campaign_urls
+<<<<<<< HEAD
 # from v1.survey import urls as survey_urls
 # from v1.utility import urls as utility_urls
+=======
+from v1.survey import urls as survey_urls
+from v1.utility import urls as utility_urls
+>>>>>>> 8b02d41f0dd7a0004ee4b42075dacc7f96b9ad5e
 from v1.consumer import urls as consumer_urls
 # from v1.commonapp import urls as common_urls
 from v1.tenant import urls as tenant_urls

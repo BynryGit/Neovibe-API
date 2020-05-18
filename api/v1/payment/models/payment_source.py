@@ -35,3 +35,16 @@ class PaymentSource(models.Model):
     def __unicode__(self):
         return self.name
 # Create Payment Source table end
+
+
+def get_payment_source_by_id_string(id_string):
+    try:
+        return PaymentSource.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_payment_source_by_id(id):
+    try:
+        return PaymentSource.objects.get(id = id)
+    except:
+        return False
