@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.payment.serializer.payment import PaymentSerializer
+from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer
@@ -104,7 +104,17 @@ class Registration(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
+# API Header
+# API end Point: api/v1/registration/:id_string
+# API verb: GET, PUT
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add, Update registration
+# Usage: Add
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 23/04/2020
 class RegistrationDetail(GenericAPIView):
 
     def get(self, request, id_string):
@@ -185,7 +195,17 @@ class RegistrationDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
+# API Header
+# API end Point: api/v1/registration/:id_string/payment
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add registration payment
+# Usage: Add
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 23/04/2020
 class RegistrationPayment(GenericAPIView):
 
      def post(self, request, id_string):
@@ -198,7 +218,7 @@ class RegistrationPayment(GenericAPIView):
                          serializer = PaymentSerializer(data=request.data)
                          if serializer.is_valid():
                              registration_obj = serializer.create(serializer.validated_data, user, registration_obj)
-                             view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                             view_serializer = PaymentViewSerializer(instance=registration_obj, context={'request': request})
                              return Response({
                                  STATE: SUCCESS,
                                  RESULTS: view_serializer.data,

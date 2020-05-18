@@ -36,3 +36,10 @@ class PaymentMode(models.Model):
     def __unicode__(self):
         return self.name
 # Create Payment Mode table end
+
+
+def get_payment_mode_by_id_string(id_string):
+    try:
+        return PaymentMode.objects.get(id_string = id_string)
+    except:
+        return False

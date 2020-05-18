@@ -11,7 +11,7 @@ from v1.campaign.views.advertisement_status import AdvertisementStatusList,Adver
 urlpatterns = [
     path('', Campaign.as_view(), name="campaign"),
     path('list', CampaignList.as_view(), name="campaign_list"),
-    path('<uuid:id_string>/', CampaignDetail.as_view(),name="campaign_detail"),
+    path('<uuid:id_string>', CampaignDetail.as_view(),name="campaign_detail"),
     path('advert/<uuid:id_string>/', AdvertismentDetail.as_view(),name="advertisement_detail"),
     path('<uuid:id_string>/adverts/', AdvertismentList.as_view(),name="advertisement_list"),
     path('group/list', CampaignGroupList.as_view(),name="campaign_group_list"),

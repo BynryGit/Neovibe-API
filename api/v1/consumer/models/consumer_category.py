@@ -47,7 +47,7 @@ def get_consumer_category_by_tenant_id_string(id_string):
     return ConsumerCategory.objects.filter(tenant__id_string = id_string)
 
 def get_consumer_category_by_id_string(id_string):
-    return ConsumerCategory.objects.get(id_string = id_string)
+    return ConsumerCategory.objects.get(id_string=id_string)
 
 
 def get_consumer_category_by_id(id):

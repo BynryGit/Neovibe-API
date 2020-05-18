@@ -12,6 +12,9 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
+from v1.payment.models.payment_type import get_payment_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -33,7 +36,7 @@ class ConsumerPayment(models.Model):
     transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     payment_mode_id = models.BigIntegerField(null=True, blank=True)
     payment_channel_id = models.BigIntegerField(null=True, blank=True)
-    payment_provider_id = models.BigIntegerField(null=True, blank=True)
+    payment_source_id = models.BigIntegerField(null=True, blank=True)
     receipt_no = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
@@ -49,6 +52,16 @@ class ConsumerPayment(models.Model):
     def __unicode__(self):
         return str(self.consumer_no) + '-' + str(self.payment_type) + '-' + str(self.payment_mode) + '-' + str(
             self.transaction_id)
+
+    @property
+    def get_payment_type(self):
+        payment_type = get_payment_type_by_id(self.payment_type_id)
+        return payment_type
+
+    @property
+    def get_payment_sub_type(self):
+        payment_sub_type = get_payment_sub_type_by_id(self.payment_subtype_id)
+        return payment_sub_type
 
 
 def get_payment_by_id_string(id_string):
