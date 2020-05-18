@@ -2,25 +2,10 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 from v1.commonapp.serializers.area import AreaListSerializer
-from v1.registration.models.registration_status import RegistrationStatus
 from v1.registration.models.registrations import Registration
+from v1.registration.serializers.registration_status import RegistrationStatusViewSerializer
 from v1.registration.views.common_functions import set_validated_data
 
-
-class RegistrationStatusViewSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = RegistrationStatus
-        fields = ('name','id_string')
-
-
-class RegistrationListSerializer(serializers.ModelSerializer):
-    status = RegistrationStatusViewSerializer(many=False,required=True,source='get_status')
-
-    class Meta:
-        model = Registration
-        fields = ('id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
-                  'street', 'zipcode', 'status')
 
 
 class RegistrationViewSerializer(serializers.ModelSerializer):
@@ -34,7 +19,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
-                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'status', 'area')
+                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'created_date', 'status', 'area')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -60,35 +45,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data =  set_validated_data(validated_data)
         with transaction.atomic():
-            payments = []
-            if 'payments' in validated_data:
-                payments = validated_data.pop('payments')
-
             registration_obj = super(RegistrationSerializer, self).create(validated_data)
             registration_obj.created_by = user.id
             registration_obj.created_date = datetime.utcnow()
             registration_obj.tenant = user.tenant
             registration_obj.utility = user.utility
             registration_obj.save()
-            if payments:
-                for payment in payments:
-                    payment['identification'] = registration_obj.id
-                    payment_obj = PaymentSerializer(**payment)
             return registration_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
-            payments = []
-            if 'payments' in validated_data:
-                payments = validated_data.pop('payments')
-
             registration_obj = super(RegistrationSerializer, self).update(instance, validated_data)
             registration_obj.updated_by = user.id
             registration_obj.updated_date = datetime.utcnow()
             registration_obj.save()
-            if payments:
-                for payment in payments:
-                    payment['identification'] = registration_obj.id
-                    payment_obj = PaymentSerializer(**payment)
             return registration_obj
