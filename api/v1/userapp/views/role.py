@@ -83,7 +83,7 @@ class GetRoleList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/role
+# API end Point: api/v1/user/role
 # API verb: GET, POST, PUT
 # Package: Basic
 # Modules: Roles & Privileges
@@ -95,7 +95,7 @@ class GetRoleList(generics.ListAPIView):
 # Created on: 05/05/2020
 # Updated on: 12/05/2020
 
-class Roles(GenericAPIView):
+class Role(GenericAPIView):
 
     def get(self, request, id_string):
         try:

@@ -3,12 +3,12 @@ from django.urls import path
 from v1.userapp.views.bank_detail import Bank, BankList, GetBankList
 from v1.userapp.views.document import Document
 from v1.userapp.views.notes import Note
-from v1.userapp.views.role import RoleList, PrivilegeDetail, Roles, GetRoleList
+from v1.userapp.views.role import RoleList, PrivilegeDetail, Role, GetRoleList
 from v1.userapp.views.skills import SkillList
 from v1.userapp.views.user import Users, UserList, UserRole
 
 urlpatterns = [
-    path('role/', Roles.as_view()),
+    path('role/', Role.as_view()),
     # path('role/<uuid:id_string>', Roles.as_view()),
     path('role-list/', GetRoleList.as_view()),
     path('list/', RoleList.as_view()),

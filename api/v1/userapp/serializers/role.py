@@ -76,5 +76,6 @@ class RoleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserRole
+        depth = 1
         fields = ('id_string', 'tenant', 'utility', 'department', 'form_factor', 'role_type', 'role_sub_type',
                   'role_ID', 'role', 'created_date', 'is_active')
