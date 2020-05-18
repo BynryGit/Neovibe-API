@@ -1,7 +1,7 @@
 from django.urls import path
 from v1.survey.views.survey import SurveyList,SurveyDetail
 from v1.survey.views.consumers import ConsumerDetail,ConsumerList
-from v1.survey.views.survey_type import SurveyTypeList,SurveyTypeView
+from v1.survey.views.survey_type import SurveyTypeList,SurveyTypeDetail
 from v1.survey.views.survey_status import SurveyStatusList,SurveyStatusDetail
 from v1.survey.views.survey_objective import SurveyObjectiveList,SurveyObjectiveDetail
 

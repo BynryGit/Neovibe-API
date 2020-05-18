@@ -22,13 +22,13 @@ class TenantStatus(models.Model):
     def __unicode__(self):
         return self.name
 
-def get_registration_status_by_id_string(id_string):
+def get_tenant_status_by_id_string(id_string):
     return TenantStatus.objects.get(id_string = id_string)
 
 
-def get_registration_status_by_id(id):
+def get_tenant_status_by_id(id):
     return TenantStatus.objects.get(id = id)
 
 
-def get_registration_statuses_by_tenant_id_string(id_string):
+def get_tenant_statuses_by_tenant_id_string(id_string):
     return TenantStatus.objects.filter(tenant__id_string = id_string, is_active = True)

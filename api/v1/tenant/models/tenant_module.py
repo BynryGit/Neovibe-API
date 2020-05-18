@@ -38,3 +38,24 @@ class TenantModule(models.Model):
         return self.module
 
 # Create Tenant  Module table end.
+
+def get_tenant_module_by_id(id):
+    try:
+        return TenantModule.objects.get(id = id)
+    except:
+        return False
+
+
+def get_tenant_module_by_id_string(id_string):
+    try:
+        return TenantModule.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_tenant_modules_by_tenant_id_string(id_string):
+    return TenantModule.objects.filter(tenant__id_string = id_string)
+
+
+def get_tenant_modules_by_utility_id_string(id_string):
+    return TenantModule.objects.filter(utility__id_string = id_string)

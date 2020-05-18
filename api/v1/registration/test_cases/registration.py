@@ -9,7 +9,7 @@ __author__ = 'aki'
 # 3. View registration: Get valid data, payment, documents, Notes, Address, status, valid and invalid data
 # 4. Edit registration: Get valid data, update valid and invalid data, duplicate records
 # # reference tables : registration master, payments, documents, notes
-# author : Akshay Nirbad
+# author : Gauri Deshmukh Nirbad
 # created on : 29/04/2020
 
 # change history

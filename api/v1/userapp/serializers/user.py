@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
-from v1.commonapp.serializers.sub_module import SubModuleSerializer
+# from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.user_master import UserDetail
@@ -53,7 +53,7 @@ class UserViewSerializer(serializers.ModelSerializer):
 
 
 class PrivilegeSerializer(serializers.ModelSerializer):
-    sub_module = SubModuleSerializer(many=True, required=True, source='get_all_submodules')
+    # sub_module = SubModuleSerializer(many=True, required=True, source='get_all_submodules')
 
     class Meta:
         model = RolePrivilege
@@ -61,7 +61,7 @@ class PrivilegeSerializer(serializers.ModelSerializer):
 
 
 class RolePrivilegeSerializer(serializers.ModelSerializer):
-    sub_module = SubModuleSerializer(many=True, required=True, source='get_all_submodules')
+    # sub_module = SubModuleSerializer(many=True, required=True, source='get_all_submodules')
 
     class Meta:
         model = RolePrivilege
