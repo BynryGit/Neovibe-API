@@ -13,12 +13,13 @@ from v1.commonapp.models.department import get_department_by_id, get_department_
 from v1.commonapp.models.form_factor import get_form_factor_by_id, get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import get_role_type_by_id, get_role_type_by_id_string
-from v1.userapp.models.user_master import get_user_by_id_string
+from v1.userapp.models.user_master import get_user_by_id_string, get_user_by_id
 from v1.userapp.models.role import get_role_by_id_string, get_role_by_tenant_id_string, \
     get_role_by_utility_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
@@ -136,7 +137,8 @@ class Roles(GenericAPIView):
                         # Request data verification end
 
                         # Save basic role details start
-                        user = get_user_by_id_string(request.data['user_id_string'])
+                        # user = get_user_by_id_string(request.data['user_id_string'])
+                        user = get_user_by_id(3)
                         serializer = RoleSerializer(data=request.data)
                         if serializer.is_valid():
                             role_obj = serializer.create(serializer.validated_data, user)
@@ -164,6 +166,7 @@ class Roles(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))

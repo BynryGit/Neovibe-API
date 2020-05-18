@@ -1,5 +1,5 @@
 __author__ = "Arpita"
-import transaction
+from django.db import transaction
 from rest_framework import serializers
 from datetime import datetime
 from v1.commonapp.serializers.department import DepartmentSerializer
@@ -69,8 +69,6 @@ class RoleListSerializer(serializers.ModelSerializer):
 
 
 class RoleViewSerializer(serializers.ModelSerializer):
-    tenant = TenantSerializer(many=False, required=True, source='get_tenant')
-    utility = UtilitySerializer(many=False, required=True, source='get_utility')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
@@ -79,4 +77,4 @@ class RoleViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserRole
         fields = ('id_string', 'tenant', 'utility', 'department', 'form_factor', 'role_type', 'role_sub_type',
-                  'role_ID', 'role', 'created_on', 'privilege_list', 'is_active')
+                  'role_ID', 'role', 'created_date', 'is_active')

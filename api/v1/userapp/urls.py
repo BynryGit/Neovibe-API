@@ -8,8 +8,9 @@ from v1.userapp.views.skills import SkillList
 from v1.userapp.views.user import Users, UserList, UserRole
 
 urlpatterns = [
-    path('<uuid:id_string>', Roles.as_view()),
-    path('role/', GetRoleList.as_view()),
+    path('role/', Roles.as_view()),
+    # path('role/<uuid:id_string>', Roles.as_view()),
+    path('role-list/', GetRoleList.as_view()),
     path('list/', RoleList.as_view()),
     path('privileges/', PrivilegeDetail.as_view()),
     path('<uuid:id_string>', Users.as_view()),
