@@ -314,9 +314,9 @@ def set_validated_data(validated_data):
     if "frequency_id" in validated_data:
         frequency = get_frequency_by_id_string(validated_data['frequency_id'])
         validated_data["frequency_id"] = frequency.id
-    if "consumer_category_id" in validated_data:
-        consumer_category = get_consumer_category_by_id_string(validated_data["consumer_category_id"])
-        validated_data["consumer_category_id"] = consumer_category.id
+    if "category_id" in validated_data:
+        consumer_category = get_consumer_category_by_id_string(validated_data["category_id"])
+        validated_data["category_id"] = consumer_category.id
     if "sub_category_id" in validated_data:
         sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
         validated_data["sub_category_id"] = sub_category.id

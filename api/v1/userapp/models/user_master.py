@@ -101,6 +101,10 @@ class UserDetail(User):
 # Create User Details table end
 
 
+def get_all_users():
+    return UserDetail.objects.filter(is_active=1)
+
+
 def get_user_by_id_string(id_string):
     return UserDetail.objects.filter(id_string = id_string, is_active=True).last()
 

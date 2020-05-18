@@ -82,6 +82,10 @@ class UserRole(models.Model):
 # Create User Role table end
 
 
+def get_all_role():
+    return UserRole.objects.filter(is_active=True)
+
+
 def get_role_by_id(id):
     return UserRole.objects.filter(id=id, is_active=True).last()
 

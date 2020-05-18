@@ -1,9 +1,10 @@
 import traceback
-
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.messages import *
 from api.settings import DISPLAY_DATE_FORMAT
@@ -19,7 +20,7 @@ from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, get_role_su
 from v1.userapp.models.role_type import get_role_type_by_id, get_role_type_by_id_string
 from v1.userapp.models.user_master import get_user_by_id_string
 from v1.userapp.models.role import get_role_by_id_string, get_role_by_tenant_id_string, \
-    get_role_by_utility_id_string
+    get_role_by_utility_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer
 from v1.userapp.views.common_functions import add_basic_role_details, save_privilege_details, \
     save_edited_basic_role_details, save_edited_privilege_details, is_role_data_verified
@@ -43,29 +44,16 @@ class RoleList(generics.ListAPIView):
     serializer_class = RoleListSerializer
     pagination_class = StandardResultsSetPagination
 
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_fields = ('tenant__id_string', 'utility__id_string')
+    # filter_fields = ('tenant__id_string', 'utility__id_string', 'type_id_string', 'sub_type_id_string', 'form_factor_id_string', 'department_id_string')
+    ordering_fields = ('name',)
+    ordering = ('created_date',)  # always give by default alphabetical order
+    search_fields = ('name',)
+
     def get_queryset(self):
 
-        queryset = get_role_by_tenant_id_string(1)
-        utility_id_string = self.request.query_params.get('utility', None)
-        type_id_string = self.request.query_params.get('type', None)
-        sub_type_id_string = self.request.query_params.get('sub_type', None)
-        form_factor_id_string = self.request.query_params.get('form_factor', None)
-        department_id_string = self.request.query_params.get('department', None)
-
-        if utility_id_string is not None:
-            queryset = queryset.filter(utility__id_string=utility_id_string)
-        if type_id_string is not None:
-            role_type = get_role_type_by_id_string(type_id_string)
-            queryset = queryset.filter(type_id=role_type.id)
-        if sub_type_id_string is not None:
-            role_sub_type = get_role_sub_type_by_id_string(sub_type_id_string)
-            queryset = queryset.filter(sub_type_id=role_sub_type.id)
-        if form_factor_id_string is not None:
-            form_factor = get_form_factor_by_id_string(form_factor_id_string)
-            queryset = queryset.filter(form_factor_id=form_factor.id)
-        if department_id_string is not None:
-            department = get_department_by_id_string(department_id_string)
-            queryset = queryset.filter(department_id=department.id)
+        queryset = get_all_role()
         return queryset
 
 

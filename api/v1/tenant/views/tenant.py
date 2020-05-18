@@ -8,8 +8,8 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import TenantMaster as tenantTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.registration.serializers.registration import RegistrationListSerializer, RegistrationViewSerializer, \
-    RegistrationStatusViewSerializer, RegistrationSerializer
+from v1.tenant.serializers.tenant import TenantListSerializer, TenantViewSerializer, \
+    TenantStatusViewSerializer, TenantSerializer
 from v1.tenant.serializers.tenant import TenantSerializer,TenantMaster
 from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_status import get_tenant_status_by_id
@@ -31,12 +31,12 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 # Created on: 18/05/2020
 
 class UtilityList(generics.ListAPIView):
-    serializer_class = RegistrationListSerializer
+    serializer_class = TenantListSerializer
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'tenant__id_string',)
-    ordering_fields = ('first_name', 'tenant_id')
+    filter_fields = ('first_name', 'id_string',)
+    ordering_fields = ('first_name', 'id_string')
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('first_name', 'email_id',)
 
@@ -57,13 +57,13 @@ class UtilityList(generics.ListAPIView):
 # Tables used: 1.1. Tenant master
 # Auther: Gauri Deshmukh
 # Created on: 18/5/2020
-class Registration(GenericAPIView):
+class Tenant(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            registration = get_registration_by_id_string(id_string)
-            if registration:
-                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+            tenant = get_tenant_by_id_string(id_string)
+            if tenant:
+                serializer = TenantViewSerializer(instance=tenant, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     DATA: serializer.data,
@@ -98,10 +98,10 @@ class Registration(GenericAPIView):
                     user = UserDetail.objects.get(id = 2)
                     if is_data_verified(request):
                     # Request data verification end
-                        serializer = RegistrationSerializer(data=request.data)
+                        serializer = TenantSerializer(data=request.data)
                         if serializer.is_valid():
-                            registration_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                            tenant_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = TenantViewSerializer(instance=tenant_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: view_serializer.data,
@@ -150,12 +150,12 @@ class Registration(GenericAPIView):
 
                         # Save basic details start
                         user = UserDetail.objects.get(id=2)
-                        registration_obj = get_registration_by_id_string(id_string)
-                        if registration_obj:
-                            serializer = RegistrationSerializer(data=request.data)
+                        tenant_obj = get_tenant_by_id_string(id_string)
+                        if tenant_obj:
+                            serializer = TenantSerializer(data=request.data)
                             if serializer.is_valid(request.data):
-                                registration_obj = serializer.update(registration_obj,serializer.validated_data, user)
-                                view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                                tenant_obj = serializer.update(tenant_obj,serializer.validated_data, user)
+                                view_serializer = TenantViewSerializer(instance=tenant_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULTS: view_serializer.data,
@@ -186,13 +186,13 @@ class Registration(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class RegistrationStatus(GenericAPIView):
+class TenantStatus(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            registration_status = get_registration_status_by_id_string(id_string)
-            if registration_status:
-                serializer = RegistrationStatusViewSerializer(instance=registration_status, context={'request': request})
+            tenant_status = get_tenant_status_by_id_string(id_string)
+            if tenant_status:
+                serializer = TenantStatusViewSerializer(instance=tenant_status, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     DATA: serializer.data,
