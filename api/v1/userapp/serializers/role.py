@@ -55,18 +55,16 @@ class RoleStatusSerializer(serializers.ModelSerializer):
 
 
 class RoleListSerializer(serializers.ModelSerializer):
-    tenant = TenantSerializer(many=False, required=True, source='get_tenant')
-    utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    status = RoleStatusSerializer(many=False, required=True, source='get_role_status')
-    role_type = serializers.ReadOnlyField(source='get_role_type')
-    role_sub_type = serializers.ReadOnlyField(source='get_role_sub_type')
-    form_factor = serializers.ReadOnlyField(source='get_form_factor')
-    department = serializers.ReadOnlyField(source='get_department')
+    form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
+    department = DepartmentSerializer(many=False, required=True, source='get_department')
+    role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
+    role_sub_type = RoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
 
     class Meta:
         model = UserRole
-        fields = ('id_string', 'tenant', 'utility', 'name', 'role_type', 'role_sub_type', 'status', 'form_factor',
-                  'department', 'created_on')
+        depth = 1
+        fields = ('id_string', 'tenant', 'utility', 'role', 'role_ID', 'role_type', 'role_sub_type', 'form_factor',
+                  'department', 'created_date')
 
 
 class RoleViewSerializer(serializers.ModelSerializer):

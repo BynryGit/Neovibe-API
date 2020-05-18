@@ -78,7 +78,7 @@ class GetRoleList(generics.ListAPIView):
 
     def get_queryset(self):
 
-        queryset = get_role_by_utility_id_string(1)
+        queryset = get_all_role()
         return queryset
 
 
@@ -100,7 +100,6 @@ class Role(GenericAPIView):
     def get(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
-            print('=================',id_string)
             if role:
                 serializer = RoleViewSerializer(instance=role, context={'request': request})
                 return Response({
