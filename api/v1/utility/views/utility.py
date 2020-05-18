@@ -47,7 +47,7 @@ class UtilityList(generics.ListAPIView):
 # Interaction: Create Utility object
 # Usage: API will create utility object based on valid data
 # Tables used: 2.1. Utility Master
-# Author: Gauri Deshmukh
+# Author: Aki
 # Created on: 13/05/2020
 
 class Utility(GenericAPIView):
@@ -102,7 +102,7 @@ class Utility(GenericAPIView):
 # Interaction: View Utility object
 # Usage: API will fetch and edit required data for utility using id_string
 # Tables used: 2.1. Utility Master
-# Author: Gauri Deshmukh
+# Author: Aki
 # Created on: 08/05/2020
 
 class UtilityDetail(GenericAPIView):
