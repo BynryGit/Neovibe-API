@@ -19,26 +19,26 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 
 
 # API Header
-# API end Point: api/v1/tenants
+# API end Point: api/v1/tenant/list
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: Utilities list
-# Usage: API will fetch required data for Utilities list
-# Tables used: 1.1 Utility Master
+# Interaction: Tenant list
+# Usage: API will fetch required data for Tenant list
+# Tables used: 1.1 Tenant Master
 # Author: Gauri Deshmukh
 # Created on: 18/05/2020
 
-class UtilityList(generics.ListAPIView):
+class TenantList(generics.ListAPIView):
     serializer_class = TenantListSerializer
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'id_string',)
-    ordering_fields = ('first_name', 'id_string')
+    filter_fields = ('name', 'id_string',)
+    ordering_fields = ('name', 'id_string')
     ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id',)
+    search_fields = ('name', 'email_id',)
 
     def get_queryset(self):
         queryset = tenantTbl.objects.filter(is_active=True)
@@ -48,37 +48,17 @@ class UtilityList(generics.ListAPIView):
 
 # API Header
 # API end Point: api/v1/tenant
-# API verb: GET, POST, PUT
+# API verb: POST
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: View Tenant, Add Tenant, Edit Tenant
-# Usage: View, Add, Edit Tenant
+# Interaction: Add Tenant
+# Usage: Add
 # Tables used: 1.1. Tenant master
 # Auther: Gauri Deshmukh
 # Created on: 18/5/2020
-class Tenant(GenericAPIView):
 
-    def get(self, request, id_string):
-        try:
-            tenant = get_tenant_by_id_string(id_string)
-            if tenant:
-                serializer = TenantViewSerializer(instance=tenant, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class Tenant(GenericAPIView):
 
     def post(self, request):
         try:
