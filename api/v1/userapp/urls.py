@@ -1,6 +1,5 @@
 from django.urls import path
 
-from v1.userapp.views.area import AreaList
 from v1.userapp.views.bank_detail import Bank, BankList, GetBankList
 from v1.userapp.views.document import Document
 from v1.userapp.views.notes import Note
