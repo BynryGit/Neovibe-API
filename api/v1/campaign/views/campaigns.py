@@ -5,7 +5,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
-
+from v1.userapp.models.user_master import UserDetail
 from v1.campaign.models.campaign_objective import get_cam_objective_by_id_string,get_cam_objective_by_id
 from v1.campaign.models.campaign_status import get_cam_status_by_tenant_id_string,get_cam_status_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string,get_consumer_category_by_id,get_consumer_category_by_tenant_id_string
@@ -17,7 +17,8 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.serializers.campaign import CampaignViewSerializer,CampaignListSerializer,CampaignSerializer
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
-from v1.campaign.views.common_functions import is_data_verified
+from v1.campaign.views.common_functions import is_data_verified,set_validated_data
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 
 # API Header
 # API end Point: api/v1/campaign
@@ -97,12 +98,11 @@ class CampaignList(generics.ListAPIView):
 # Created on: 15/05/2020
 
 class Campaign(GenericAPIView):
-    serializer_class = CampaignSerializer
 
     def post(self, request):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid(1):
                 # payload = get_payload(request.data['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
@@ -120,8 +120,7 @@ class Campaign(GenericAPIView):
                         serializer = CampaignSerializer(data=request.data)
                         if serializer.is_valid():
                             campaign_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = CampaignViewSerializer(instance=campaign_obj,
-                                                                         context={'request': request})
+                            view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: view_serializer.data,

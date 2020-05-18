@@ -1,21 +1,21 @@
 [
 	{
 		"pk" : "1",
-		"model" : "campaign.CampaignGroup",
+		"model" : "userapp.UserDetail",
 		"fields" : {
 			"tenant": 1,
 			"utility": 1,
-			"name" : "campaign_group_1",
+			"phone_mobile" : "7620983355",
 			"is_active" : "True"
 		}
 	},
 	{
 		"pk" : "2",
-		"model" : "campaign.CampaignGroup",
+		"model" : "userapp.UserDetail",
 		"fields" : {
 			"tenant": 1,
 			"utility": 1,
-			"name" : "campaign_group_2",
+			"phone_mobile" : "7620983355",
 			"is_active" : "True"
 		}
 	},
@@ -694,6 +694,71 @@
 			"utility": 1,
 			"name": "Domestic",
 			"category": 4,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk" : "1",
+		"model" : "commonapp.Frequency",
+		"fields" : {
+			"tenant": 1,
+			"utility": 1,
+			"name" : "month_1",
+			"is_active" : "True"
+		}
+	},
+	{
+		"pk" : "2",
+		"model" : "commonapp.Frequency",
+		"fields" : {
+			"tenant": 1,
+			"utility": 1,
+			"name" : "month_2",
+			"is_active" : "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "commonapp.Area",
+		"fields": {
+			"tenant": 1,
+			"utility": 2,
+			"name": "Kothrud",
+			"city_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "commonapp.Area",
+		"fields": {
+			"tenant": 1,
+			"utility": 2,
+			"name": "Shivaji Nagar",
+			"city_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "commonapp.SubArea",
+		"fields": {
+			"tenant": 1,
+			"utility": 2,
+			"area": 1,
+			"name": "Bhusari colony",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "commonapp.SubArea",
+		"fields": {
+			"tenant": 1,
+			"utility": 2,
+			"area": 1,
+			"name": "right bhusari colony",
 			"is_active": "True"
 		}
 	}
