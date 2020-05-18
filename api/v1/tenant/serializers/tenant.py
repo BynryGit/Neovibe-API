@@ -46,16 +46,6 @@ class TenantViewSerializer(serializers.ModelSerializer):
 
 
 class TenantSerializer(serializers.ModelSerializer):
-    id_string = serializers.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    short_name = serializers.BigIntegerField(null=True, blank=True)
-    name = serializers.CharField(max_length=200, blank=False, null=False)
-    email_id = serializers.CharField(max_length=200, null=True, blank=True)
-    mobile_no = serializers.CharField(max_length=200, blank=True, null=True)
-    region_id = serializers.BigIntegerField(null=True, blank=True)
-    country_id = serializers.BigIntegerField(null=True, blank=True)
-    state_id = serializers.BigIntegerField(null=True, blank=True)
-    status_id = serializers.BigIntegerField(null=True, blank=True)
-    is_active = serializers.BooleanField(default=False)
 
     class Meta:
         model = TenantMaster

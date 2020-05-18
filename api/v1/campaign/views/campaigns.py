@@ -112,12 +112,12 @@ class Campaign(GenericAPIView):
 
 # API Header
 # API end Point: api/v1/campaign/:id_string
-# API verb: GET
+# API verb: GET,PUT
 # Package: Basic
 # Modules: S&M
 # Sub Module: Campaign
-# Interaction: View Campaign
-# Usage: View
+# Interaction: View  and Update Campaign
+# Usage: View,Update
 # Tables used:  2.3.6 Campaign Master
 # Auther: Priyanka
 # Created on: 23/04/2020
