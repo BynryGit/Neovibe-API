@@ -39,5 +39,8 @@ def get_payment_type_by_id_string(id_string):
 
 
 def get_payment_type_by_id(id):
-    return PaymentType.objects.get(id = id)
+    try:
+        return PaymentType.objects.get(id = id)
+    except:
+        return False
 # Create Payment Type table end

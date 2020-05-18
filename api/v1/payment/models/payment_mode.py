@@ -43,3 +43,9 @@ def get_payment_mode_by_id_string(id_string):
         return PaymentMode.objects.get(id_string = id_string)
     except:
         return False
+
+def get_payment_mode_by_id(id):
+    try:
+        return PaymentMode.objects.get(id = id)
+    except:
+        return False

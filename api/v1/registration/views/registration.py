@@ -39,8 +39,10 @@ class RegistrationList(generics.ListAPIView):
     search_fields = ('first_name', 'email_id',)
 
     def get_queryset(self):
-        queryset = RegTbl.objects.filter(is_active=True)
-        return queryset
+        if is_token_valid(self.request.data['token']):
+            if is_authorized():
+                queryset = RegTbl.objects.filter(is_active=True)
+                return queryset
 
 
 
@@ -119,18 +121,28 @@ class RegistrationDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            registration = get_registration_by_id_string(id_string)
-            if registration:
-                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.data['token']):
+                if is_authorized():
+                    registration = get_registration_by_id_string(id_string)
+                    if registration:
+                        serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -142,13 +154,9 @@ class RegistrationDetail(GenericAPIView):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
                     # Checking authorization end
 
@@ -217,8 +225,8 @@ class RegistrationPayment(GenericAPIView):
                          registration_obj = get_registration_by_id_string(id_string)
                          serializer = PaymentSerializer(data=request.data)
                          if serializer.is_valid():
-                             registration_obj = serializer.create(serializer.validated_data, user, registration_obj)
-                             view_serializer = PaymentViewSerializer(instance=registration_obj, context={'request': request})
+                             payment = serializer.create(serializer.validated_data, user, registration_obj)
+                             view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                              return Response({
                                  STATE: SUCCESS,
                                  RESULTS: view_serializer.data,
@@ -241,7 +249,7 @@ class RegistrationPayment(GenericAPIView):
                      STATE: ERROR,
                  }, status=status.HTTP_401_UNAUTHORIZED)
          except Exception as e:
-             # logger().log(e, 'ERROR', user='test', name='test')
+             logger().log(e, 'ERROR', user='test', name='test')
              return Response({
                  STATE: EXCEPTION,
                  ERROR: ERROR

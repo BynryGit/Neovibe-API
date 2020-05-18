@@ -29,3 +29,9 @@ def get_payment_channel_by_id_string(id_string):
         return PaymentChannel.objects.get(id_string = id_string)
     except:
         return False
+
+def get_payment_channel_by_id(id):
+    try:
+        return PaymentChannel.objects.get(id = id)
+    except:
+        return False

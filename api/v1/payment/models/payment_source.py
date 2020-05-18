@@ -42,3 +42,9 @@ def get_payment_source_by_id_string(id_string):
         return PaymentSource.objects.get(id_string = id_string)
     except:
         return False
+
+def get_payment_source_by_id(id):
+    try:
+        return PaymentSource.objects.get(id = id)
+    except:
+        return False
