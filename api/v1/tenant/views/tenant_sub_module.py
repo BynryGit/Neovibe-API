@@ -24,7 +24,7 @@ from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerial
 # Created on: 12/05/2020
 
 
-class UtilitySubModules(GenericAPIView):
+class TenantSubModules(GenericAPIView):
 
     def get(self, request, id_string):
         try:
