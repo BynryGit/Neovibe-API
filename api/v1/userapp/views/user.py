@@ -1,8 +1,8 @@
 import traceback
-
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
@@ -37,6 +37,12 @@ from v1.userapp.views.common_functions import is_user_data_verified, add_basic_u
 class UserList(generics.ListAPIView):
     serializer_class = UserListSerializer
     pagination_class = StandardResultsSetPagination
+
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_fields = ('first_name', 'tenant__id_string',)
+    ordering_fields = ('first_name', 'registration_no',)
+    ordering = ('created_date',)  # always give by default alphabetical order
+    search_fields = ('first_name', 'email_id',)
 
     def get_queryset(self):
 
