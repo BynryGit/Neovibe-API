@@ -4,10 +4,14 @@ from django.db import transaction
 from django.db.models import Q
 from django.core.paginator import Paginator
 from api.settings import INPUT_DATE_FORMAT
+from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.state import get_state_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.supplier.models.supplier_payment import Payment
-
+from v1.tenant.models.tenant_status import get_tenant_status_by_id_string
 
 
 def get_tenant(request, user):
@@ -1302,5 +1306,21 @@ def is_data_verified(request):  # todo - Black, Null, empty string - ready to us
             return True
 
 
+def set_validated_data(validated_data):
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        validated_data["area_id"] = area.id
+    if "status_id" in validated_data:
+        tenant_status = get_tenant_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = tenant_status.id
+    if "country_id" in validated_data:
+        country = get_country_by_id_string(validated_data["country_id"])
+        validated_data["country_id"] = country.id
+    if "state_id" in validated_data:
+        state = get_state_by_id_string(validated_data["state_id"])
+        validated_data["state_id"] = state.id
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        validated_data["city_id"] = city.id
 
-
+    return validated_data

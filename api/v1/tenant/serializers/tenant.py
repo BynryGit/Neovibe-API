@@ -17,6 +17,7 @@ from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.models.tenant_status import TenantStatus
+from v1.tenant.views.common_functions import set_validated_data
 
 
 class TenantStatusViewSerializer(serializers.ModelSerializer):
@@ -31,7 +32,7 @@ class TenantListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantMaster
-        fields = ('id_string','short_name','name','email_id','mobile_no','region_id','country_id','state_id','status_id','is_active','created_by','created_date')
+        fields = ('id_string','short_name','name','email_id','mobile_no','city_id','country_id','state_id','status_id','is_active','created_by','created_date')
 
 class TenantViewSerializer(serializers.ModelSerializer):
     status = TenantStatusViewSerializer(many=False, source='get_status')
@@ -41,48 +42,44 @@ class TenantViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = TenantMaster
         fields = (
-        'id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'region_id', 'country_id', 'state_id', 'status_id',
+        'id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'city_id', 'country_id', 'state_id', 'status_id',
         'is_active', 'created_by', 'created_date')
 
 
 class TenantSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
+    id_string = serializers.CharField(required=False, max_length=200)
+    short_name = serializers.CharField(required=False, max_length=200)
+    name = serializers.CharField(required=False, max_length=200)
+    email_id = serializers.CharField(required=False, max_length=200)
+    mobile_no = serializers.CharField(required=False, max_length=200)
+    city_id = serializers.CharField(required=False, max_length=200)
+    country_id = serializers.CharField(required=False, max_length=200)
+    state_id = serializers.CharField(required=False, max_length=200)
+    status_id = serializers.CharField(required=False, max_length=200)
+=======
+>>>>>>> 744ccb46d556ada0fbebe79500f0c263fcd7f330
 
     class Meta:
         model = TenantMaster
         fields = ('__all__')
 
     def create(self, validated_data, user):
-        validated_data =  set_validated_data(validated_data)
+        validated_data = set_validated_data(validated_data)
         with transaction.atomic():
-            payments = []
-            if 'payments' in validated_data:
-                payments = validated_data.pop('payments')
-
-            registration_obj = super(TenantSerializer, self).create(validated_data)
-            registration_obj.created_by = user.id
-            registration_obj.created_date = datetime.now()
-            registration_obj.tenant = user.tenant
-            registration_obj.utility = user.utility
-            registration_obj.save()
-            if payments:
-                for payment in payments:
-                    payment['identification'] = registration_obj.id
-                    payment_obj = PaymentSerializer(**payment)
-            return registration_obj
+            tenant_obj = super(TenantSerializer, self).create(validated_data)
+            tenant_obj.created_by = user.id
+            tenant_obj.created_date = datetime.utcnow()
+            tenant_obj.tenant = user.tenant
+            tenant_obj.utility = user.utility
+            tenant_obj.save()
+            return tenant_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
-            payments = []
-            if 'payments' in validated_data:
-                payments = validated_data.pop('payments')
-
-            registration_obj = super(TenantSerializer, self).update(instance, validated_data)
-            registration_obj.updated_by = user
-            registration_obj.updated_date = datetime.now()
-            registration_obj.save()
-            if payments:
-                for payment in payments:
-                    payment['identification'] = registration_obj.id
-                    payment_obj = PaymentSerializer(**payment)
-            return registration_obj
+            tenant_obj = super(TenantSerializer, self).update(instance, validated_data)
+            tenant_obj.updated_by = user.id
+            tenant_obj.updated_date = datetime.utcnow()
+            tenant_obj.save()
+            return tenant_obj
