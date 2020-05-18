@@ -46,6 +46,22 @@ def login(user):
         return False
 
 
+def set_validated_data(validated_data):
+    if "type_id" in validated_data:
+        type = get_user_type_by_id_string(validated_data["type_id"])
+        validated_data["type_id"] = type.id
+    if "sub_type_id" in validated_data:
+        sub_type = get_user_sub_type_by_id_string(validated_data["sub_type_id"])
+        validated_data["sub_type_id"] = sub_type.id
+    if "form_factor_id" in validated_data:
+        form_factor = get_form_factor_by_id_string(validated_data["form_factor_id"])
+        validated_data["form_factor_id"] = form_factor.id
+    if "department_id" in validated_data:
+        department = get_department_by_id_string(validated_data["department_id"])
+        validated_data["department_id"] = department.id
+    return validated_data
+
+
 # Check only mandatory fields for role api
 def is_role_data_verified(request):
     if request.data['role'] and request.data['type'] and request.data['sub_type'] and request.data['form_factor'] and \

@@ -21,7 +21,7 @@ from v1.userapp.models.role_type import get_role_type_by_id, get_role_type_by_id
 from v1.userapp.models.user_master import get_user_by_id_string
 from v1.userapp.models.role import get_role_by_id_string, get_role_by_tenant_id_string, \
     get_role_by_utility_id_string, get_all_role
-from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer
+from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
 from v1.userapp.views.common_functions import add_basic_role_details, save_privilege_details, \
     save_edited_basic_role_details, save_edited_privilege_details, is_role_data_verified
 
@@ -136,21 +136,20 @@ class Roles(GenericAPIView):
                         # Request data verification end
 
                         # Save basic role details start
-                        user = get_user_by_id_string(request.data['user'])
-                        role, result, error = add_basic_role_details(request, user)
-                        if result:
-                            data = {
-                                "role_id_string": role.id_string
-                            }
+                        user = get_user_by_id_string(request.data['user_id_string'])
+                        serializer = RoleSerializer(data=request.data)
+                        if serializer.is_valid():
+                            role_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                DATA: data,
-                            }, status=status.HTTP_200_OK)
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
-                                STATE: EXCEPTION,
-                                ERROR: error
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                         # Save basic role details start
                     else:
                         return Response({
