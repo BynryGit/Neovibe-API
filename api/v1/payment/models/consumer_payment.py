@@ -19,21 +19,21 @@ from django.db import models  # importing package for database
 
 # Create Consumer Payments Table Start.
 
-class ConsumerPayments(models.Model):
+class ConsumerPayment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    payment_type = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
-    payment_subtype = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
-    identification = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
+    payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
+    payment_subtype_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
+    identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.FloatField(blank=False, null=False)
     transaction_charges = models.FloatField(blank=False, null=False)
     transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    payment_mode = models.BigIntegerField(null=True, blank=True)
-    payment_channel = models.BigIntegerField(null=True, blank=True)
-    payment_provider = models.BigIntegerField(null=True, blank=True)
+    payment_mode_id = models.BigIntegerField(null=True, blank=True)
+    payment_channel_id = models.BigIntegerField(null=True, blank=True)
+    payment_provider_id = models.BigIntegerField(null=True, blank=True)
     receipt_no = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
@@ -53,7 +53,7 @@ class ConsumerPayments(models.Model):
 
 def get_payment_by_id_string(id_string):
     try:
-        return ConsumerPayments.objects.get(id_string = id_string)
+        return ConsumerPayment.objects.get(id_string = id_string)
     except:
         return False
 

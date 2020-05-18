@@ -1,4 +1,3 @@
-import traceback
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import status, generics
@@ -6,10 +5,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.payment.serializer.payment import PaymentSerializer
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.registration.serializers.registration import RegistrationListSerializer, RegistrationViewSerializer, \
-    RegistrationStatusViewSerializer, RegistrationSerializer
+from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer
+from v1.registration.serializers.registration_status import RegistrationListSerializer
 from v1.userapp.models.user_master import UserDetail
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registrations import get_registration_by_id_string
@@ -18,7 +18,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 
 
 # API Header
-# API end Point: api/v1/registrations
+# API end Point: api/v1/registration/list
 # API verb: GET
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
@@ -46,37 +46,16 @@ class RegistrationList(generics.ListAPIView):
 
 # API Header
 # API end Point: api/v1/registration
-# API verb: GET, POST, PUT
+# API verb: POST
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Registration
-# Interaction: View registration, Add registration, Edit registration
-# Usage: View, Add, Edit registration
+# Interaction: Add registration
+# Usage: Add
 # Tables used: 2.4.2. Consumer - Registration
 # Auther: Rohan
 # Created on: 23/04/2020
 class Registration(GenericAPIView):
-
-    def get(self, request, id_string):
-        try:
-            registration = get_registration_by_id_string(id_string)
-            if registration:
-                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
         try:
@@ -118,10 +97,35 @@ class Registration(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            traceback.print_exc(e)
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class RegistrationDetail(GenericAPIView):
+
+    def get(self, request, id_string):
+        try:
+            registration = get_registration_by_id_string(id_string)
+            if registration:
+                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    DATA: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: '',
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, id_string):
@@ -149,7 +153,8 @@ class Registration(GenericAPIView):
                             serializer = RegistrationSerializer(data=request.data)
                             if serializer.is_valid(request.data):
                                 registration_obj = serializer.update(registration_obj, serializer.validated_data, user)
-                                view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                                view_serializer = RegistrationViewSerializer(instance=registration_obj,
+                                                                             context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULTS: view_serializer.data,
@@ -180,37 +185,44 @@ class Registration(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class RegistrationStatus(GenericAPIView):
 
-    def get(self, request, id_string):
-        try:
-            registration_status = get_registration_status_by_id_string(id_string)
-            if registration_status:
-                serializer = RegistrationStatusViewSerializer(instance=registration_status, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class RegistrationPayment(GenericAPIView):
 
-    def post(self, request):
-        try:
-            pass
-        except Exception as e:
-            pass
-
-    def put(self, request):
-        try:
-            pass
-        except Exception as e:
-            pass
+     def post(self, request, id_string):
+         try:
+             if is_token_valid(request.data['token']):
+                 if is_authorized():
+                     if is_data_verified(request):
+                         user = UserDetail.objects.get(id=2)
+                         registration_obj = get_registration_by_id_string(id_string)
+                         serializer = PaymentSerializer(data=request.data)
+                         if serializer.is_valid():
+                             registration_obj = serializer.create(serializer.validated_data, user, registration_obj)
+                             view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                             return Response({
+                                 STATE: SUCCESS,
+                                 RESULTS: view_serializer.data,
+                             }, status=status.HTTP_201_CREATED)
+                         else:
+                             return Response({
+                                 STATE: ERROR,
+                                 RESULTS: serializer.errors,
+                             }, status=status.HTTP_400_BAD_REQUEST)
+                     else:
+                         return Response({
+                             STATE: ERROR,
+                         }, status=status.HTTP_400_BAD_REQUEST)
+                 else:
+                     return Response({
+                         STATE: ERROR,
+                     }, status=status.HTTP_403_FORBIDDEN)
+             else:
+                 return Response({
+                     STATE: ERROR,
+                 }, status=status.HTTP_401_UNAUTHORIZED)
+         except Exception as e:
+             # logger().log(e, 'ERROR', user='test', name='test')
+             return Response({
+                 STATE: EXCEPTION,
+                 ERROR: ERROR
+             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
