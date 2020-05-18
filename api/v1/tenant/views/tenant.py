@@ -105,22 +105,23 @@ class Tenant(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             traceback.print_exc(e)
+            logger().log(e, 'ERROR', user='Tenant Exception', name='Testing')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # API Header
-    # API end Point: api/v1/tenant/:id_string
-    # API verb: Put,Get
-    # Package: Basic
-    # Modules: All
-    # Sub Module: All
-    # Interaction: Get Tenant, Update Tenant
-    # Usage: Add and Update Tenant in the system
-    # Tables used: 1.1. Tenant master
-    # Auther: Gauri Deshmukh
-    # Created on: 18/5/2020
+# API Header
+# API end Point: api/v1/tenant/:id_string
+# API verb: Put,Get
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: Get Tenant, Update Tenant
+# Usage: Add and Update Tenant in the system
+# Tables used: 1.1. Tenant master
+# Auther: Gauri Deshmukh
+# Created on: 18/5/2020
 
 class TenantDetail(GenericAPIView):
 
@@ -149,7 +150,7 @@ class TenantDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='Get Tenant Exception ', name='Tenant issue')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -201,7 +202,7 @@ class TenantDetail(GenericAPIView):
 
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            # logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='Tenant update exception', name='Tenant')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
@@ -225,7 +226,7 @@ class TenantStatus(GenericAPIView):
                     DATA: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='status test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
