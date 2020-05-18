@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 from v1.payment.models.consumer_payment import ConsumerPayment
+from v1.payment.serializer.payment_channel import PaymentChannelListSerializer
 from v1.payment.serializer.payment_mode import PaymentModeListSerializer
 from v1.payment.serializer.payment_sub_type import PaymentSubTypeListSerializer
 from v1.payment.serializer.payment_type import PaymentTypeListSerializer
@@ -13,11 +14,11 @@ class PaymentViewSerializer(serializers.ModelSerializer):
     payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
     payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
     get_payment_mode = PaymentModeListSerializer(many=False, source='get_payment_mode')
-    get_payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_sub_type')
+    get_payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_channel_type')
 
     class Meta:
         model = ConsumerPayment
-        fields = ('id_string', 'payment_type', 'payment_sub_type')
+        fields = ('id_string', 'payment_type', 'payment_sub_type', 'get_payment_mode', 'get_payment_channel')
 
 
 class PaymentSerializer(serializers.ModelSerializer):
