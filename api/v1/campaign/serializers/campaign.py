@@ -80,26 +80,25 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignTbl
-        fields = ('__all__')
-
+        fields =  ('id_string', 'name', 'group_id','objective_id', 'description',
+                  'frequency_id','potential_consumers','actual_consumers','budget_amount','actual_amount','category_id',
+                  'sub_category_id','start_date','end_date','area_id','sub_area_id','status_id')
 
     def create(self, validated_data, user):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
-
             campaign_obj = super(CampaignSerializer, self).create(validated_data)
             campaign_obj.created_by = user.id
             campaign_obj.created_date = datetime.now()
             campaign_obj.tenant = user.tenant
             campaign_obj.utility = user.utility
             campaign_obj.save()
-
             return campaign_obj
 
     def update(self, instance, validated_data, user):
-        with transaction.atomic():
+            validated_data = set_validated_data(validated_data)
             campaign_obj = super(CampaignSerializer, self).update(instance, validated_data)
-            campaign_obj.updated_by = user
+            campaign_obj.updated_by = user.id
             campaign_obj.updated_date = datetime.now()
             campaign_obj.save()
             return campaign_obj

@@ -16,7 +16,7 @@ from v1.campaign.views.common_functions import is_data_verified,set_validated_da
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 
 # API Header
-# API end Point: api/v1/campaign
+# API end Point: api/v1/campaign/list
 # API verb: GET
 # Package: Basic
 # Modules: S&M
@@ -151,7 +151,7 @@ class CampaignDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(request.headers['token']):
+            if is_token_valid(1):
                 # payload = get_payload(request.headers['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
@@ -159,15 +159,16 @@ class CampaignDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
-
+                    user = UserDetail.objects.get(id=2)
                     campaign_obj = get_campaign_by_id_string(id_string)
                     if campaign_obj:
-                        serializer = CampaignSerializer(data=id_string)
+                        serializer = CampaignSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.update(campaign_obj, serializer.validated_data, request.user)
+                            campaign_obj = serializer.update(campaign_obj, serializer.validated_data, user)
+                            view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: serializer.data,
+                                RESULTS: view_serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
@@ -190,7 +191,7 @@ class CampaignDetail(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
