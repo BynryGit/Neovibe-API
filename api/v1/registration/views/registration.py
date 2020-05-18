@@ -104,7 +104,17 @@ class Registration(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
+# API Header
+# API end Point: api/v1/registration/:id_string
+# API verb: GET, PUT
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add, Update registration
+# Usage: Add
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 23/04/2020
 class RegistrationDetail(GenericAPIView):
 
     def get(self, request, id_string):
@@ -185,7 +195,17 @@ class RegistrationDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
+# API Header
+# API end Point: api/v1/registration/:id_string/payment
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add registration payment
+# Usage: Add
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 23/04/2020
 class RegistrationPayment(GenericAPIView):
 
      def post(self, request, id_string):
