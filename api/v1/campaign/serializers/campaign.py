@@ -80,11 +80,7 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignTbl
-        fields = ('id_string', 'tenant_name', 'name', 'description',
-                  'frequency_id', 'potential_consumers', 'actual_consumers', 'budget_amount', 'actual_amount',
-                  'category_id',
-                  'sub_category_id', 'start_date', 'end_date', 'area_id', 'sub_area_id', 'objective', 'group', 'status',
-                  'is_active')
+        fields = ('__all__')
 
 
     def create(self, validated_data, user):
