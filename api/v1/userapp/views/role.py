@@ -173,7 +173,7 @@ class Role(GenericAPIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def put(self, request, format=None):
+    def put(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
@@ -192,22 +192,27 @@ class Role(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = get_user_by_id_string(request.data['user'])
-                        role, result, error = save_edited_basic_role_details(request, user)
-                        if result:
-                            data = {
-                                "role_id_string": role.id_string
-                            }
-                            return Response({
-                                STATE: SUCCESS,
-                                DATA: data,
-                            }, status=status.HTTP_200_OK)
+                        # user = get_user_by_id_string(request.data['user'])
+                        user = get_user_by_id(3)
+                        role_obj = get_role_by_id_string(id_string)
+                        if role_obj:
+                            serializer = RoleSerializer(data=request.data)
+                            if serializer.is_valid():
+                                role_obj = serializer.update(role_obj, serializer.validated_data, user)
+                                view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_200_OK)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
                         else:
                             return Response({
-                                STATE: EXCEPTION,
-                                ERROR: error
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        # Save basic details start
+                                STATE: ERROR,
+                            }, status=status.HTTP_404_NOT_FOUND)
                     else:
                         return Response({
                             STATE: ERROR,

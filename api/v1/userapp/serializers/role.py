@@ -40,11 +40,11 @@ class RoleSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
-            registration_obj = super(RoleSerializer, self).update(instance, validated_data)
-            registration_obj.updated_by = user.id
-            registration_obj.updated_date = datetime.utcnow()
-            registration_obj.save()
-            return registration_obj
+            role_obj = super(RoleSerializer, self).update(instance, validated_data)
+            role_obj.updated_by = user.id
+            role_obj.updated_date = datetime.utcnow()
+            role_obj.save()
+            return role_obj
 
 
 class RoleStatusSerializer(serializers.ModelSerializer):
