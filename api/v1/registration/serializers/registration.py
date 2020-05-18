@@ -1,21 +1,8 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
-
-from v1.commonapp.models.area import get_area_by_id_string
-from v1.commonapp.models.city import get_city_by_id_string
-from v1.commonapp.models.country import get_country_by_id_string
-from v1.commonapp.models.state import get_state_by_id_string
-from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.commonapp.serializers.area import AreaListSerializer
-from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
-from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
-from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
-from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from v1.consumer.models.source_type import get_source_type_by_id_string
-from v1.payment.models.consumer_payment import get_payment_by_id_string
-from v1.registration.models.registration_status import RegistrationStatus, get_registration_status_by_id_string
-from v1.registration.models.registration_type import get_registration_type_by_id_string
+from v1.registration.models.registration_status import RegistrationStatus
 from v1.registration.models.registrations import Registration
 from v1.registration.views.common_functions import set_validated_data
 
@@ -79,7 +66,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
             registration_obj = super(RegistrationSerializer, self).create(validated_data)
             registration_obj.created_by = user.id
-            registration_obj.created_date = datetime.now()
+            registration_obj.created_date = datetime.utcnow()
             registration_obj.tenant = user.tenant
             registration_obj.utility = user.utility
             registration_obj.save()
@@ -97,8 +84,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 payments = validated_data.pop('payments')
 
             registration_obj = super(RegistrationSerializer, self).update(instance, validated_data)
-            registration_obj.updated_by = user
-            registration_obj.updated_date = datetime.now()
+            registration_obj.updated_by = user.id
+            registration_obj.updated_date = datetime.utcnow()
             registration_obj.save()
             if payments:
                 for payment in payments:
