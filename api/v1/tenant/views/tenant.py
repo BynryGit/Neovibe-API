@@ -8,8 +8,8 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import TenantMaster as tenantTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.registration.serializers.registration import RegistrationListSerializer, RegistrationViewSerializer, \
-    RegistrationStatusViewSerializer, RegistrationSerializer
+from v1.tenant.serializers.tenant import TenantListSerializer, TenantViewSerializer, \
+    TenantStatusViewSerializer, TenantSerializer
 from v1.tenant.serializers.tenant import TenantSerializer,TenantMaster
 from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_status import get_tenant_status_by_id
@@ -31,7 +31,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 # Created on: 18/05/2020
 
 class UtilityList(generics.ListAPIView):
-    serializer_class = RegistrationListSerializer
+    serializer_class = TenantListSerializer
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -101,7 +101,7 @@ class Tenant(GenericAPIView):
                         serializer = TenantSerializer(data=request.data)
                         if serializer.is_valid():
                             tenant_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = RegistrationViewSerializer(instance=tenant_obj, context={'request': request})
+                            view_serializer = TenantViewSerializer(instance=tenant_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: view_serializer.data,
