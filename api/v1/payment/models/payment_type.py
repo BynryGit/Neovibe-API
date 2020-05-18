@@ -36,4 +36,8 @@ class PaymentType(models.Model):
 
 def get_payment_type_by_id_string(id_string):
     return PaymentType.objects.get(id_string = id_string)
+
+
+def get_payment_type_by_id(id):
+    return PaymentType.objects.get(id = id)
 # Create Payment Type table end
