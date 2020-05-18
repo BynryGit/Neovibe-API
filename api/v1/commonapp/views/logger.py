@@ -4,8 +4,10 @@ from sentry_sdk import configure_scope, capture_exception
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 __author__ = 'Rohan'
+
+
 class logger():
-    def log(self,error,severity,**kwargs):
+    def log(self, error, severity, **kwargs):
         sentry_logging = LoggingIntegration(
             level=logging.ERROR,  # Capture info and above as breadcrumbs
             event_level=logging.ERROR  # Send errors as events
