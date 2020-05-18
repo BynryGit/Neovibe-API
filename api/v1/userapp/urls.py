@@ -9,8 +9,8 @@ from v1.userapp.views.user import Users, UserList, UserRole
 
 urlpatterns = [
     path('role/', Role.as_view()),
-    # path('role/<uuid:id_string>', Roles.as_view()),
-    path('role-list/', GetRoleList.as_view()),
+    path('role/<uuid:id_string>', Role.as_view()),
+    path('roles/', GetRoleList.as_view()),
     path('list/', RoleList.as_view()),
     path('privileges/', PrivilegeDetail.as_view()),
     path('<uuid:id_string>', Users.as_view()),

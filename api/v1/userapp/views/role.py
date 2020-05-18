@@ -100,6 +100,7 @@ class Role(GenericAPIView):
     def get(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
+            print('=================',id_string)
             if role:
                 serializer = RoleViewSerializer(instance=role, context={'request': request})
                 return Response({
@@ -112,6 +113,7 @@ class Role(GenericAPIView):
                     DATA: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
