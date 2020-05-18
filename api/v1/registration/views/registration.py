@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.payment.serializer.payment import PaymentSerializer
+from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer
@@ -39,8 +39,10 @@ class RegistrationList(generics.ListAPIView):
     search_fields = ('first_name', 'email_id',)
 
     def get_queryset(self):
-        queryset = RegTbl.objects.filter(is_active=True)
-        return queryset
+        if is_token_valid(self.request.data['token']):
+            if is_authorized():
+                queryset = RegTbl.objects.filter(is_active=True)
+                return queryset
 
 
 
@@ -104,23 +106,43 @@ class Registration(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
+# API Header
+# API end Point: api/v1/registration/:id_string
+# API verb: GET, PUT
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add, Update registration
+# Usage: Add
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 23/04/2020
 class RegistrationDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            registration = get_registration_by_id_string(id_string)
-            if registration:
-                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.data['token']):
+                if is_authorized():
+                    registration = get_registration_by_id_string(id_string)
+                    if registration:
+                        serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -132,13 +154,9 @@ class RegistrationDetail(GenericAPIView):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
                     # Checking authorization end
 
@@ -185,7 +203,17 @@ class RegistrationDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
+# API Header
+# API end Point: api/v1/registration/:id_string/payment
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add registration payment
+# Usage: Add
+# Tables used: 2.4.2. Consumer - Registration
+# Auther: Rohan
+# Created on: 23/04/2020
 class RegistrationPayment(GenericAPIView):
 
      def post(self, request, id_string):
@@ -197,8 +225,8 @@ class RegistrationPayment(GenericAPIView):
                          registration_obj = get_registration_by_id_string(id_string)
                          serializer = PaymentSerializer(data=request.data)
                          if serializer.is_valid():
-                             registration_obj = serializer.create(serializer.validated_data, user, registration_obj)
-                             view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                             payment = serializer.create(serializer.validated_data, user, registration_obj)
+                             view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                              return Response({
                                  STATE: SUCCESS,
                                  RESULTS: view_serializer.data,
@@ -221,7 +249,7 @@ class RegistrationPayment(GenericAPIView):
                      STATE: ERROR,
                  }, status=status.HTTP_401_UNAUTHORIZED)
          except Exception as e:
-             # logger().log(e, 'ERROR', user='test', name='test')
+             logger().log(e, 'ERROR', user='test', name='test')
              return Response({
                  STATE: EXCEPTION,
                  ERROR: ERROR

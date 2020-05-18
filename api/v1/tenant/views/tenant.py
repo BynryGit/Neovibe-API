@@ -19,26 +19,26 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 
 
 # API Header
-# API end Point: api/v1/tenants
+# API end Point: api/v1/tenant/list
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: Utilities list
-# Usage: API will fetch required data for Utilities list
-# Tables used: 1.1 Utility Master
+# Interaction: Tenant list
+# Usage: API will fetch required data for Tenant list
+# Tables used: 1.1 Tenant Master
 # Author: Gauri Deshmukh
 # Created on: 18/05/2020
 
-class UtilityList(generics.ListAPIView):
+class TenantList(generics.ListAPIView):
     serializer_class = TenantListSerializer
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'id_string',)
-    ordering_fields = ('first_name', 'id_string')
+    filter_fields = ('name', 'id_string',)
+    ordering_fields = ('name', 'id_string')
     ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id',)
+    search_fields = ('name', 'email_id',)
 
     def get_queryset(self):
         queryset = tenantTbl.objects.filter(is_active=True)
@@ -48,37 +48,17 @@ class UtilityList(generics.ListAPIView):
 
 # API Header
 # API end Point: api/v1/tenant
-# API verb: GET, POST, PUT
+# API verb: POST
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: View Tenant, Add Tenant, Edit Tenant
-# Usage: View, Add, Edit Tenant
+# Interaction: Add Tenant
+# Usage: Add Tenant in the system
 # Tables used: 1.1. Tenant master
 # Auther: Gauri Deshmukh
 # Created on: 18/5/2020
-class Tenant(GenericAPIView):
 
-    def get(self, request, id_string):
-        try:
-            tenant = get_tenant_by_id_string(id_string)
-            if tenant:
-                serializer = TenantViewSerializer(instance=tenant, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class Tenant(GenericAPIView):
 
     def post(self, request):
         try:
@@ -130,17 +110,58 @@ class Tenant(GenericAPIView):
                 ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    # API Header
+    # API end Point: api/v1/tenant/:id_string
+    # API verb: Put,Get
+    # Package: Basic
+    # Modules: All
+    # Sub Module: All
+    # Interaction: Get Tenant, Update Tenant
+    # Usage: Add and Update Tenant in the system
+    # Tables used: 1.1. Tenant master
+    # Auther: Gauri Deshmukh
+    # Created on: 18/5/2020
+
+class TenantDetail(GenericAPIView):
+
+    def get(self, request, id_string):
+        try:
+            if is_token_valid(self.request.data['token']):
+                if is_authorized():
+                    tenant = get_tenant_by_id_string(id_string)
+                    if tenant:
+                        serializer = TenantViewSerializer(instance=tenant, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     def put(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
                     # Checking authorization end
 
@@ -154,8 +175,9 @@ class Tenant(GenericAPIView):
                         if tenant_obj:
                             serializer = TenantSerializer(data=request.data)
                             if serializer.is_valid(request.data):
-                                tenant_obj = serializer.update(tenant_obj,serializer.validated_data, user)
-                                view_serializer = TenantViewSerializer(instance=tenant_obj, context={'request': request})
+                                tenant_obj = serializer.update(tenant_obj, serializer.validated_data, user)
+                                view_serializer = TenantViewSerializer(instance=tenant_obj,
+                                                                             context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULTS: view_serializer.data,
@@ -182,7 +204,7 @@ class Tenant(GenericAPIView):
             # logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
+                ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -190,7 +212,7 @@ class TenantStatus(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            tenant_status = get_tenant_status_by_id_string(id_string)
+            tenant_status = get_tenant_status_by_id(id_string)
             if tenant_status:
                 serializer = TenantStatusViewSerializer(instance=tenant_status, context={'request': request})
                 return Response({

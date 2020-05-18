@@ -1,26 +1,14 @@
-# Table Header
-# module: Consumer Care & Ops | sub-module - Consumer, Registration, Metering, Billing, Payments, Services, Complaints
-# Table Type : Lookup (Global)
-# Table Name : 2.12.20 Payment Type
-# Description : It is a global lookup table that stores types of payments
-# Frequency of data changes : Low
-# Sample Table Data : "BillPayment" , "Service" , "Outstanding Recovery" , "Registration"
-# Reference Table : 2.5.10 Payment Table.
-# Author : Jayshree Kumbhare
-# Creation Date : 21-04-2020
-
-# change history
-# <ddmmyyyy><changes><author>
-
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
-# Create Payment Type table start
-class PaymentType(models.Model):
+# Create Payment Mode table start
+class PaymentChannel(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -33,14 +21,17 @@ class PaymentType(models.Model):
 
     def __unicode__(self):
         return self.name
-
-def get_payment_type_by_id_string(id_string):
-    return PaymentType.objects.get(id_string = id_string)
+# Create Payment Mode table end
 
 
-def get_payment_type_by_id(id):
+def get_payment_channel_by_id_string(id_string):
     try:
-        return PaymentType.objects.get(id = id)
+        return PaymentChannel.objects.get(id_string = id_string)
     except:
         return False
-# Create Payment Type table end
+
+def get_payment_channel_by_id(id):
+    try:
+        return PaymentChannel.objects.get(id = id)
+    except:
+        return False

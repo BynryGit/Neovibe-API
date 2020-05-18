@@ -12,6 +12,12 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.payment.models.payment_channel import get_payment_channel_by_id
+from v1.payment.models.payment_mode import get_payment_mode_by_id
+from v1.payment.models.payment_source import get_payment_source_by_id
+from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
+from v1.payment.models.payment_type import get_payment_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -25,7 +31,7 @@ class ConsumerPayment(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
-    payment_subtype_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
+    payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.FloatField(blank=False, null=False)
@@ -33,7 +39,7 @@ class ConsumerPayment(models.Model):
     transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     payment_mode_id = models.BigIntegerField(null=True, blank=True)
     payment_channel_id = models.BigIntegerField(null=True, blank=True)
-    payment_provider_id = models.BigIntegerField(null=True, blank=True)
+    payment_source_id = models.BigIntegerField(null=True, blank=True)
     receipt_no = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
@@ -49,6 +55,31 @@ class ConsumerPayment(models.Model):
     def __unicode__(self):
         return str(self.consumer_no) + '-' + str(self.payment_type) + '-' + str(self.payment_mode) + '-' + str(
             self.transaction_id)
+
+    @property
+    def get_payment_type(self):
+        payment_type = get_payment_type_by_id(self.payment_type_id)
+        return payment_type
+
+    @property
+    def get_payment_sub_type(self):
+        payment_sub_type = get_payment_sub_type_by_id(self.payment_subtype_id)
+        return payment_sub_type
+
+    @property
+    def get_payment_mode(self):
+        payment_mode = get_payment_mode_by_id(self.payment_mode_id)
+        return payment_mode
+
+    @property
+    def get_payment_source(self):
+        payment_source = get_payment_source_by_id(self.payment_source_id)
+        return payment_source
+
+    @property
+    def get_payment_channel(self):
+        payment_channel = get_payment_channel_by_id(self.payment_channel_id)
+        return payment_channel
 
 
 def get_payment_by_id_string(id_string):

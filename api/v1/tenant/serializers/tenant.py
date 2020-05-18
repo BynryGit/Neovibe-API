@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
@@ -14,10 +15,6 @@ from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.consumer_payment import get_payment_by_id_string
-from v1.registration.models.registration_status import RegistrationStatus, get_registration_status_by_id_string
-from v1.registration.models.registration_type import get_registration_type_by_id_string
-from v1.registration.models.registrations import Registration
-from v1.registration.views.common_functions import set_validated_data
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.models.tenant_status import TenantStatus
 
