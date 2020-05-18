@@ -23,10 +23,10 @@ from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityM
 # Interaction: Utility list
 # Usage: API will fetch required data for utility list against filter and search
 # Tables used: 2.1. Utility Master
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 08/05/2020
 
-class UtilityListDetail(generics.ListAPIView):
+class UtilityList(generics.ListAPIView):
     serializer_class = UtilityMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 
@@ -47,7 +47,7 @@ class UtilityListDetail(generics.ListAPIView):
 # Interaction: Create Utility object
 # Usage: API will create utility object based on valid data
 # Tables used: 2.1. Utility Master
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 class Utility(GenericAPIView):
@@ -102,7 +102,7 @@ class Utility(GenericAPIView):
 # Interaction: View Utility object
 # Usage: API will fetch and edit required data for utility using id_string
 # Tables used: 2.1. Utility Master
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 08/05/2020
 
 class UtilityDetail(GenericAPIView):

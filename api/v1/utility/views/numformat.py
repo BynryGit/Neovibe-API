@@ -20,11 +20,11 @@ from v1.utility.serializers.numformat import NumformatSerializer
 # Interaction: for edit numformat
 # Usage: API will edit numformat and return updated current number
 # Tables used: 2.5.12 Notes
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 14/05/2020
 
 
-class Numformat(GenericAPIView):
+class UtilityNumformatDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:

@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "Gauri"
 
 import traceback
 from rest_framework.generics import GenericAPIView
@@ -13,7 +13,7 @@ from v1.utility.serializers.document import DocumentSerializer
 
 
 # API Header
-# API end Point: api/v1/utility/id_string/documents
+# API end Point: api/v1/tenant/id_string/documents
 # API verb: GET, POST
 # Package: Basic
 # Modules: Utility
@@ -21,11 +21,11 @@ from v1.utility.serializers.document import DocumentSerializer
 # Interaction: for get and add utility document
 # Usage: API will fetch and add all documents under utility.
 # Tables used: 2.12.13 Document
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 
-class Documents(GenericAPIView):
+class UtilityDocumentList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -126,11 +126,11 @@ class Documents(GenericAPIView):
 # Interaction: for get and edit utility document
 # Usage: API will fetch and edit documents under utility.
 # Tables used: 2.12.13 Document
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 
-class DocumentDetails(GenericAPIView):
+class UtilityDocumentDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:

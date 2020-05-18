@@ -21,11 +21,11 @@ from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerial
 # Interaction: Utility Submodule list
 # Usage: API will fetch utility submodule list against single utility
 # Tables used: 2.4 Utility SubModule
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 12/05/2020
 
 
-class UtilitySubModules(GenericAPIView):
+class UtilitySubModuleList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -75,7 +75,7 @@ class UtilitySubModules(GenericAPIView):
 # Interaction: For get and edit utility submodule
 # Usage: API will fetch and edit utility submodule details
 # Tables used: 2.4 Utility SubModule
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 12/05/2020
 
 class UtilitySubModuleDetail(GenericAPIView):
