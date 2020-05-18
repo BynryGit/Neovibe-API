@@ -10,7 +10,7 @@ __author__ = 'aki'
 # 3. View utility: Get valid data against single utility
 # 4. Edit utility: Get valid data, update valid and invalid data, duplicate records
 # # reference tables : registration master, payments, documents, notes
-# author : Akshay Nibrad
+# author : Gauri Deshmukh Nibrad
 # created on : 29/04/2020
 
 # change history

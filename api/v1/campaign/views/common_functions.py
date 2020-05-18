@@ -70,17 +70,6 @@ def get_filtered_campaign(user,request):
         return campaigns, total_pages, page_no, False, error
 
 
-# verify the campaign data
-def is_data_verified(request):
-    return True
-    if request.data['campaign_name'] == '' and request.data['area'] == ''and \
-        request.data['sub_area'] == '' and request.data['start_date'] == '' and request.data['end_date'] == '' and \
-        request.data['description'] == ''and \
-        request.data['category_id_string'] == '' and request.data['sub_cat_id_string'] == '':
-        return False
-    else:
-        return True
-
 # verify the advertisement data
 def is_advertisement_verified(request):
     return True
@@ -301,7 +290,44 @@ def save_edited_basic_advertisement_details(request, user):
 
 
 
+from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.country import get_country_by_id_string
+from v1.commonapp.models.state import get_state_by_id_string
+from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
+from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
+from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
+from v1.consumer.models.source_type import get_source_type_by_id_string
+from v1.payment.models.consumer_payment import get_payment_by_id_string
+from v1.registration.models.registration_status import get_registration_status_by_id_string
+from v1.registration.models.registration_type import get_registration_type_by_id_string
 
+
+def is_data_verified(request):
+    return True
+
+
+def set_validated_data(validated_data):
+
+    if "frequency_id" in validated_data:
+        frequency = get_frequency_by_id_string(validated_data['frequency_id'])
+        validated_data["frequency_id"] = frequency.id
+    if "consumer_category_id" in validated_data:
+        consumer_category = get_consumer_category_by_id_string(validated_data["consumer_category_id"])
+        validated_data["consumer_category_id"] = consumer_category.id
+    if "sub_category_id" in validated_data:
+        sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
+        validated_data["sub_category_id"] = sub_category.id
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        validated_data["area_id"] = area.id
+    if "sub_area_id" in validated_data:
+        sub_area = get_sub_area_by_id_string(validated_data["sub_area_id"])
+        validated_data["sub_area_id"] = sub_area.id
+
+    return validated_data
 
 
 

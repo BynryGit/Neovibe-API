@@ -1,4 +1,4 @@
-__author__ = "Gauri"
+__author__ = "priyanka"
 
 import traceback
 from rest_framework.generics import GenericAPIView
@@ -7,25 +7,24 @@ from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.document import get_documents_by_utility_id_string, get_document_by_id_string
-from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.serializers.document import DocumentSerializer
+from v1.survey.serializers.document import DocumentSerializer
 
 
 # API Header
-# API end Point: api/v1/tenant/id_string/documents
+# API end Point: api/v1/survey/id_string/documents
 # API verb: GET, POST
 # Package: Basic
-# Modules: Utility
+# Modules: Camapign
 # Sub Module: Document
-# Interaction: for get and add utility document
-# Usage: API will fetch and add all documents under utility.
+# Interaction: for get and add Camapign document
+# Usage: API will fetch and add all documents under Camapign.
 # Tables used: 2.12.13 Document
-# Author: Gauri Deshmukh
-# Created on: 13/05/2020
+# Author: Priyanka
+# Created on: 15/05/2020
 
 
-class UtilityDocumentList(GenericAPIView):
+class Documents(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -38,6 +37,7 @@ class UtilityDocumentList(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
+
 
                     utility_document_obj = get_documents_by_utility_id_string(id_string)
                     if utility_document_obj:
@@ -64,8 +64,8 @@ class UtilityDocumentList(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -82,6 +82,7 @@ class UtilityDocumentList(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
+
 
                     utility_obj = get_utility_by_id_string(id_string)
                     if utility_obj:
@@ -109,8 +110,8 @@ class UtilityDocumentList(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -118,19 +119,19 @@ class UtilityDocumentList(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/utility/document/id_string
+# API end Point: api/v1/survey/document/id_string
 # API verb: GET, PUT
 # Package: Basic
-# Modules: Utility
+# Modules: survey
 # Sub Module: Document
-# Interaction: for get and edit utility document
-# Usage: API will fetch and edit documents under utility.
+# Interaction: for get and edit survey document
+# Usage: API will fetch and edit documents under survey.
 # Tables used: 2.12.13 Document
-# Author: Gauri Deshmukh
+# Author: Priyanka
 # Created on: 13/05/2020
 
 
-class UtilityDocumentDetail(GenericAPIView):
+class DocumentDetails(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -169,8 +170,8 @@ class UtilityDocumentDetail(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
@@ -187,6 +188,7 @@ class UtilityDocumentDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
+
 
                     utility_document_obj = get_document_by_id_string(id_string)
                     if utility_document_obj:
@@ -213,8 +215,8 @@ class UtilityDocumentDetail(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

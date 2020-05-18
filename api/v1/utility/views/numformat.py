@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.utility.serializers.numformat import NumformatSerializer
 
@@ -19,11 +20,11 @@ from v1.utility.serializers.numformat import NumformatSerializer
 # Interaction: for edit numformat
 # Usage: API will edit numformat and return updated current number
 # Tables used: 2.5.12 Notes
-# Author: Akshay
+# Author: Gauri Deshmukh
 # Created on: 14/05/2020
 
 
-class Numformat(GenericAPIView):
+class UtilityNumformatDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
@@ -36,9 +37,6 @@ class Numformat(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # never pass token in logger
-                    # choices = {'key1': 'val1', 'key2': 'val2'}
-                    # logger.log("info", "Getting utility details", None, choices)
 
                     numformat_obj = UtilityServiceNumberFormat.objects.filter(utility__id_string=id_string,
                                                                                  item=request.data['item'], is_active=True)
@@ -67,7 +65,7 @@ class Numformat(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            # logger.log("Error", "Exception at GET api/v1/utilities/", ex )
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

@@ -16,7 +16,7 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 
-from v1.commonapp.models.sub_module import get_submodule_by_module_id
+# from v1.commonapp.models.sub_module import get_submodule_by_module_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.utility.models.utility_master import UtilityMaster
@@ -47,7 +47,8 @@ class RolePrivilege(models.Model):
 
     @property
     def get_all_submodules(self):
-        return get_submodule_by_module_id(self.module_id)
+        return  True
+        # return get_submodule_by_module_id(self.module_id)
 
 # Create Role Privilege table end
 
