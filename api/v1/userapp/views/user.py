@@ -43,7 +43,7 @@ class UserList(generics.ListAPIView):
     # filter_fields = ('tenant__id_string', 'utility__id_string', 'city_id_string', 'user_type_id_string', 'user_sub_type_id_string', 'form_factor_id_string', 'department_id_string', 'role_id_string', 'status_id_string')
     ordering_fields = ('first_name', 'last_name',)
     ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id',)
+    search_fields = ('first_name', 'email_id')
 
     def get_queryset(self):
 
