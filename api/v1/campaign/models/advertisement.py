@@ -59,7 +59,7 @@ class Advertisements(models.Model):
 
     @property
     def get_campaign(self):
-        campaign = get_campaign_by_id(self.group_id)
+        campaign = get_campaign_by_id(self.campaign_id)
         return campaign
 
     @property
@@ -84,7 +84,7 @@ class Advertisements(models.Model):
 
     @property
     def get_advert_type(self):
-        type = get_advert_type_by_id(self.status_id)
+        type = get_advert_type_by_id(self.type_id)
         return type
 
 
