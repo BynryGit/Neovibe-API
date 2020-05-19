@@ -37,5 +37,18 @@ class ConsumerStatus(models.Model):
 
     def __unicode__(self):
         return self.status
-
  # Create ConsumerStatus table end
+
+
+def get_consumer_status_by_id_string(id_string):
+    try:
+        return  ConsumerStatus.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_consumer_status_by_id(id):
+    try:
+        return  ConsumerStatus.objects.get(id=id)
+    except:
+        return False

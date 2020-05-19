@@ -1,5 +1,6 @@
 __author__ = "Arpita"
-import transaction
+
+from django.db import transaction
 from rest_framework import serializers
 from datetime import datetime
 from v1.commonapp.serializers.department import DepartmentSerializer
