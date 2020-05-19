@@ -47,7 +47,7 @@ class TenantViewSerializer(serializers.ModelSerializer):
 
 
 class TenantSerializer(serializers.ModelSerializer):
-<<<<<<< HEAD
+
     id_string = serializers.CharField(required=False, max_length=200)
     short_name = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=False, max_length=200)
@@ -57,8 +57,6 @@ class TenantSerializer(serializers.ModelSerializer):
     country_id = serializers.CharField(required=False, max_length=200)
     state_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
-=======
->>>>>>> 744ccb46d556ada0fbebe79500f0c263fcd7f330
 
     class Meta:
         model = TenantMaster
