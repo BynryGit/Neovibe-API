@@ -29,13 +29,16 @@ class PaymentSubType(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.name + " " + str(self.id_string)
 
     def __unicode__(self):
         return self.name
 
 def get_payment_sub_type_by_id_string(id_string):
-    return PaymentSubType.objects.get(id_string = id_string)
+    try:
+        return PaymentSubType.objects.get(id_string=id_string)
+    except:
+        return False
 
 def get_payment_sub_type_by_id(id):
     try:

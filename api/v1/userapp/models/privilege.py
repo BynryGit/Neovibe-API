@@ -42,6 +42,10 @@ class Privilege(models.Model):
 # Create Privilege table end
 
 
+def get_all_privilege():
+    return Privilege.objects.filter(is_active=True)
+
+
 def get_privilege_by_id(id):
     return Privilege.objects.filter(id=id, is_active=True).last()
 

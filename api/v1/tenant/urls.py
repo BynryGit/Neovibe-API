@@ -1,11 +1,15 @@
 __author__ = "Gauri"
 
 from django.urls import path
-
+from v1.tenant.views.tenant import TenantList,TenantDetail,Tenant
 
 
 urlpatterns = [
-    # path('', TenantListDetail.as_view(), name='tenant_list'),
+    path('list', TenantList.as_view()),
+    path('', Tenant.as_view()),
+    path('<uuid:id_string>', TenantDetail.as_view()),
+
+
     # path('<uuid:id_string>/', TenantDetail.as_view(),name='tenant_detail'),
 
     # path('<uuid:id_string>/summary', UtilityUsageSummaryDetail.as_view(), name='utility_summary'),

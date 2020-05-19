@@ -272,7 +272,7 @@ class RegistrationPaymentDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.data['token']):
+            if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     payment = get_payment_by_id_string(id_string)
                     if payment:

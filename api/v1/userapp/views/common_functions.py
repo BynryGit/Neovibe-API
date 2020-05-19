@@ -1,14 +1,8 @@
 import traceback
 from datetime import datetime
-
 import jwt
 from django.contrib.auth import authenticate
-# from django.db.models import transaction
-from django.db.models import Q
-from django.core.paginator import Paginator
 from api.settings import SECRET_KEY
-# from v1.userapp.models.role import UserRole
-
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import Department, get_department_by_id_string
 from v1.commonapp.models.document import Document, get_document_by_id_string
@@ -46,7 +40,7 @@ def login(user):
         return False
 
 
-def set_validated_data(validated_data):
+def set_role_validated_data(validated_data):
     if "type_id" in validated_data:
         type = get_role_type_by_id_string(validated_data["type_id"])
         validated_data["type_id"] = type.id
@@ -507,6 +501,7 @@ def save_edited_note(request, user):
 
 # Check only mandatory fields for user role and privilege api
 def is_privilege_data_verified(request):
+    return True
     if request.data['user'] and request.data['module'] and request.data['sub_module'] and request.data['role'] and \
             request.data['privilege']:
         return True

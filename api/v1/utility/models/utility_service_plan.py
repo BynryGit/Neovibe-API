@@ -53,7 +53,10 @@ def __unicode__(self):
 
 
 def get_utility_service_plan_by_id_string(id_string):
-    return UtilityServicePlan.objects.get(id_string = id_string)
+    try:
+        return UtilityServicePlan.objects.get(id_string = id_string)
+    except:
+        return False
 
 
 def get_utility_service_plan_by_id(id):

@@ -8,7 +8,7 @@ from django.db import transaction
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.consumer.models.consumer_category import get_consumer_category_by_id,get_consumer_category_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-
+from v1.supplier.models.supplier_master import get_supplier_by_id_string
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import get_survey_consumer_by_id_string
 from v1.survey.models.survey_status import get_survey_status_by_id_string,get_survey_status_by_id
@@ -456,5 +456,42 @@ def save_vendor_assignment_details(request,user):
         return survey_assignment
         pass
 
+def set_survey_validate_data(validated_data):
+    if "objective_id" in validated_data:
+        objective_id = get_survey_objective_by_id_string(validated_data['objective_id'])
+        validated_data["objective_id"] = objective_id.id
 
+    if "type_id" in validated_data:
+        type_id = get_survey_type_by_id_string(validated_data["type_id"])
+        validated_data["type_id"] = type_id.id
+
+    if "status_id" in validated_data:
+        status_id = get_survey_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = status_id.id
+
+    if "category_id" in validated_data:
+        consumer_category = get_consumer_category_by_id_string(validated_data["category_id"])
+        validated_data["category_id"] = consumer_category.id
+
+    if "sub_category_id" in validated_data:
+        sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
+        validated_data["sub_category_id"] = sub_category.id
+
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        validated_data["area_id"] = area.id
+
+    if "sub_area_id" in validated_data:
+        sub_area = get_sub_area_by_id_string(validated_data["sub_area_id"])
+        validated_data["sub_area_id"] = sub_area.id
+
+    if "vendor_id" in validated_data:
+        vendor_id = get_supplier_by_id_string(validated_data["vendor_id"])
+        validated_data["vendor_id"] = vendor_id.id
+
+    if "survey_id" in validated_data:
+        survey_id = get_survey_by_id_string(validated_data["survey_id"])
+        validated_data["survey_id"] = survey_id.id
+
+    return validated_data
 

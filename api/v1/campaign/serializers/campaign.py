@@ -97,8 +97,9 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
             validated_data = set_validated_data(validated_data)
-            campaign_obj = super(CampaignSerializer, self).update(instance, validated_data)
-            campaign_obj.updated_by = user.id
-            campaign_obj.updated_date = datetime.now()
-            campaign_obj.save()
-            return campaign_obj
+            with transaction.atomic():
+                campaign_obj = super(CampaignSerializer, self).update(instance, validated_data)
+                campaign_obj.updated_by = user.id
+                campaign_obj.updated_date = datetime.now()
+                campaign_obj.save()
+                return campaign_obj
