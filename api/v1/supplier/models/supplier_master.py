@@ -52,4 +52,11 @@ class SupplierMaster(models.Model):
 
 def get_supplier_by_tenant_id_string(id_string):
     return SupplierMaster.objects.filter(tenant__id_string = id_string)
+
+def get_supplier_by_id_string(id_string):
+    return SupplierMaster.objects.get(id_string = id_string)
+
+def get_supplier_by_id(id):
+    return SupplierMaster.objects.get(id = id)
+
 # Create Supplier Master table end.

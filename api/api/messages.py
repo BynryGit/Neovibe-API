@@ -8,6 +8,7 @@ Token = 'token'
 STATE = 'state'
 DATA = 'data'
 ERROR = 'error'
+DUPLICATE = 'duplicate'
 
 
 

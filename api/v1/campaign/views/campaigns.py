@@ -63,7 +63,6 @@ class Campaign(GenericAPIView):
 
     def post(self, request):
         try:
-            # Checking authentication start
             if is_token_valid(1):
                 if is_authorized():
                     user = UserDetail.objects.get(id=2)

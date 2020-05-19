@@ -7,8 +7,11 @@ from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
-from v1.utility.serializers.numformat import NumformatSerializer
+from v1.userapp.models.user_master import UserDetail
+from v1.utility.models.utility_services_number_format import \
+    UtilityServiceNumberFormat as UtilityServiceNumberFormatTbl, \
+    get_utility_service_number_format_by_utility_id_string_and_item
+from v1.utility.serializers.numformat import UtilityServiceNumberFormatSerializer
 
 
 # API Header
@@ -20,11 +23,12 @@ from v1.utility.serializers.numformat import NumformatSerializer
 # Interaction: for edit numformat
 # Usage: API will edit numformat and return updated current number
 # Tables used: 2.5.12 Notes
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 14/05/2020
 
 
 class UtilityNumformatDetail(GenericAPIView):
+    serializer_class = UtilityServiceNumberFormatTbl
 
     def put(self, request, id_string):
         try:
@@ -37,16 +41,26 @@ class UtilityNumformatDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
+                    # Todo fetch user from request start
+                    user = UserDetail.objects.get(id=2)
+                    # Todo fetch user from request end
 
-                    numformat_obj = UtilityServiceNumberFormat.objects.filter(utility__id_string=id_string,
-                                                                                 item=request.data['item'], is_active=True)
+                    numformat_obj = get_utility_service_number_format_by_utility_id_string_and_item(id_string, request.data['item'])
+
                     if numformat_obj:
-                        serializer = NumformatSerializer(data=request.data)
+                        serializer = UtilityServiceNumberFormatSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.update(numformat_obj, serializer.validated_data, request.user)
-                            return Response({
-                                STATE: SUCCESS,
-                            }, status=status.HTTP_200_OK)
+                            numformat_obj = serializer.update(numformat_obj, serializer.validated_data, user)
+                            if numformat_obj.prefix:
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: {'numformat_obj': str(numformat_obj.prefix) + str(numformat_obj.currentno)},
+                                }, status=status.HTTP_200_OK)
+                            else:
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: {'numformat_obj': numformat_obj.currentno},
+                                }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: SUCCESS,

@@ -1,6 +1,9 @@
 import traceback
 from datetime import datetime
-from v1.campaign.models.campaign import Campaign
+from v1.campaign.models.campaign import Campaign,get_campaign_by_id_string
+from v1.campaign.models.campaign_group import get_camp_group_by_id_string
+from v1.campaign.models.campaign_objective import get_cam_objective_by_id_string
+from v1.campaign.models.advertisement_type import get_advert_type_by_id_string
 from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.advert_status import get_advert_status_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id,get_consumer_category_by_id_string
@@ -320,12 +323,34 @@ def set_validated_data(validated_data):
     if "sub_category_id" in validated_data:
         sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
         validated_data["sub_category_id"] = sub_category.id
+
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         validated_data["area_id"] = area.id
+
     if "sub_area_id" in validated_data:
         sub_area = get_sub_area_by_id_string(validated_data["sub_area_id"])
         validated_data["sub_area_id"] = sub_area.id
+
+    if "group_id" in validated_data:
+        group_id = get_camp_group_by_id_string(validated_data["group_id"])
+        validated_data["group_id"] = group_id.id
+
+    if "objective_id" in validated_data:
+        objective_id = get_cam_objective_by_id_string(validated_data["objective_id"])
+        validated_data["objective_id"] = objective_id.id
+
+    if "type_id" in validated_data:
+        type_id = get_advert_type_by_id_string(validated_data["type_id"])
+        validated_data["type_id"] = type_id.id
+
+    if "campaign_id" in validated_data:
+        campaign_id = get_campaign_by_id_string(validated_data["campaign_id"])
+        validated_data["campaign_id"] = campaign_id.id
+
+    if "status_id" in validated_data:
+        status_id = get_advert_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = status_id.id
 
     return validated_data
 
