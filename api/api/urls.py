@@ -35,5 +35,5 @@ urlpatterns = [
     path('api/v1/consumer/', include(consumer_urls)),
     path('api/v1/user/', include(user_urls)),
     path('api/v1/role/', include(role_urls)),
-    # path('api/v1/privilege/', include(privilege_urls)),
+    path('api/v1/privilege/', include(privilege_urls)),
 ]
