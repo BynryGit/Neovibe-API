@@ -47,13 +47,6 @@ class RoleSerializer(serializers.ModelSerializer):
             return role_obj
 
 
-class RoleStatusSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = RoleStatus
-        fields = ('status', 'id_string')
-
-
 class RoleListSerializer(serializers.ModelSerializer):
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     department = DepartmentSerializer(many=False, required=True, source='get_department')

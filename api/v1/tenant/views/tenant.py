@@ -37,7 +37,7 @@ class TenantList(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'id_string',)
     ordering_fields = ('name', 'id_string')
-    ordering = ('created_date',)  # always give by default alphabetical order
+    ordering = ('created_date')  # always give by default alphabetical order
     search_fields = ('name', 'email_id',)
 
     def get_queryset(self):
@@ -63,7 +63,7 @@ class Tenant(GenericAPIView):
     def post(self, request):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid(1):
                 # payload = get_payload(request.data['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
@@ -75,12 +75,13 @@ class Tenant(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id = 2)
+                    #user = UserDetail.objects.get(id = 2)
                     if is_data_verified(request):
                     # Request data verification end
                         serializer = TenantSerializer(data=request.data)
                         if serializer.is_valid():
-                            tenant_obj = serializer.create(serializer.validated_data, user)
+#                            tenant_obj = serializer.create(serializer.validated_data, user)
+                            tenant_obj = serializer.create(serializer.validated_data)
                             view_serializer = TenantViewSerializer(instance=tenant_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
@@ -127,7 +128,7 @@ class TenantDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.data['token']):
+            if is_token_valid(1):
                 if is_authorized():
                     tenant = get_tenant_by_id_string(id_string)
                     if tenant:
@@ -150,7 +151,7 @@ class TenantDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='Get Tenant Exception ', name='Tenant issue')
+            # logger().log(e, 'ERROR', user='Get Tenant Exception ', name='Tenant issue')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -159,7 +160,7 @@ class TenantDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid(1):
                 # Checking authentication end
 
                 # Checking authorization start
@@ -171,12 +172,12 @@ class TenantDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=2)
+                        # user = UserDetail.objects.get(id=2)
                         tenant_obj = get_tenant_by_id_string(id_string)
                         if tenant_obj:
                             serializer = TenantSerializer(data=request.data)
                             if serializer.is_valid(request.data):
-                                tenant_obj = serializer.update(tenant_obj, serializer.validated_data, user)
+                                tenant_obj = serializer.update(tenant_obj, serializer.validated_data)
                                 view_serializer = TenantViewSerializer(instance=tenant_obj,
                                                                              context={'request': request})
                                 return Response({
@@ -189,6 +190,7 @@ class TenantDetail(GenericAPIView):
                             }, status=status.HTTP_404_NOT_FOUND)
                         # Save basic details start
                     else:
+
                         return Response({
                             STATE: ERROR,
                         }, status=status.HTTP_400_BAD_REQUEST)
@@ -202,44 +204,10 @@ class TenantDetail(GenericAPIView):
 
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='Tenant update exception', name='Tenant')
+            # logger().log(e, 'ERROR', user='Tenant update exception', name='Tenant')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class TenantStatus(GenericAPIView):
-
-    def get(self, request, id_string):
-        try:
-            tenant_status = get_tenant_status_by_id(id_string)
-            if tenant_status:
-                serializer = TenantStatusViewSerializer(instance=tenant_status, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            logger().log(e, 'ERROR', user='status test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def post(self, request):
-        try:
-            pass
-        except Exception as e:
-            pass
-
-    def put(self, request):
-        try:
-            pass
-        except Exception as e:
-            pass
