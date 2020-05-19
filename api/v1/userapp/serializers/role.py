@@ -9,7 +9,7 @@ from v1.userapp.models.role_status import RoleStatus
 from v1.userapp.models.role import UserRole
 from v1.userapp.serializers.role_sub_type import RoleSubTypeSerializer
 from v1.userapp.serializers.role_type import RoleTypeSerializer
-from v1.userapp.views.common_functions import set_validated_data
+from v1.userapp.views.common_functions import set_role_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
 
@@ -26,7 +26,7 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data, user):
-        validated_data =  set_validated_data(validated_data)
+        validated_data =  set_role_validated_data(validated_data)
         with transaction.atomic():
             role_obj = super(RoleSerializer, self).create(validated_data)
             role_obj.created_by = user.id
@@ -38,7 +38,7 @@ class RoleSerializer(serializers.ModelSerializer):
             return role_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_validated_data(validated_data)
+        validated_data = set_role_validated_data(validated_data)
         with transaction.atomic():
             role_obj = super(RoleSerializer, self).update(instance, validated_data)
             role_obj.updated_by = user.id

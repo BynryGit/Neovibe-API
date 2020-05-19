@@ -12,8 +12,10 @@ urlpatterns = [
     path('role/', Role.as_view()),
     path('role/<uuid:id_string>', Role.as_view()),
     path('role/list/', RoleList.as_view()),
-    path('privilege/list/', PrivilegeList.as_view()),
+
+    path('privilege/', Privilege.as_view()),
     path('privilege/<uuid:id_string>', Privilege.as_view()),
+    path('privilege/list/', PrivilegeList.as_view()),
 
     path('roles/', GetRoleList.as_view()),
     path('privileges/', PrivilegeDetail.as_view()),
