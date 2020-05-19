@@ -11,7 +11,7 @@ class FormFactorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FormFactor
-        fields = ('status', 'id_string')
+        fields = ('name', 'id_string')
 
 
 class FormFactorListSerializer(serializers.ModelSerializer):

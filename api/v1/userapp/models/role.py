@@ -45,18 +45,10 @@ class UserRole(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id
+        return self.role
 
     def __unicode__(self):
-        return self.id
-
-    @property
-    def get_tenant(self):
-        return self.tenant
-
-    @property
-    def get_utility(self):
-        return self.utility
+        return self.role
 
     @property
     def get_role_type(self):

@@ -47,7 +47,10 @@ class TenantViewSerializer(serializers.ModelSerializer):
 
 
 class TenantSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
 
+=======
+>>>>>>> 58bd88bd9e1e118c77f08bb864676c83bfa4a785
     id_string = serializers.CharField(required=False, max_length=200)
     short_name = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=False, max_length=200)
