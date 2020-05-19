@@ -86,14 +86,17 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_validated_data(validated_data)
-        with transaction.atomic():
-            campaign_obj = super(CampaignSerializer, self).create(validated_data)
-            campaign_obj.created_by = user.id
-            campaign_obj.created_date = datetime.now()
-            campaign_obj.tenant = user.tenant
-            campaign_obj.utility = user.utility
-            campaign_obj.save()
-            return campaign_obj
+        if CampaignTbl.objects.filter(**validated_data).exists():
+            return False
+        else:
+            with transaction.atomic():
+                campaign_obj = super(CampaignSerializer, self).create(validated_data)
+                campaign_obj.created_by = user.id
+                campaign_obj.created_date = datetime.now()
+                campaign_obj.tenant = user.tenant
+                campaign_obj.utility = user.utility
+                campaign_obj.save()
+                return campaign_obj
 
     def update(self, instance, validated_data, user):
             validated_data = set_validated_data(validated_data)
