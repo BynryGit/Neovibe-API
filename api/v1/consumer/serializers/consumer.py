@@ -1,7 +1,7 @@
+from django.db import transaction
 from rest_framework import serializers
-
-from v1.billing.models.invoice_bill import InvoiceBill
 from v1.consumer.models.consumer_master import ConsumerMaster
+from v1.consumer.views.common_functions import set_validated_data
 
 
 class ConsumerViewSerializer(serializers.ModelSerializer):
@@ -19,8 +19,32 @@ class ConsumerViewSerializer(serializers.ModelSerializer):
                   )
 
 
-class ConsumerBillListSerializer(serializers.ModelSerializer):
+class ConsumerSerializer(serializers.ModelSerializer):
+    country_id = serializers.CharField(required=False, max_length=200)
+    state_id = serializers.CharField(required=False, max_length=200)
+    city_id = serializers.CharField(required=False, max_length=200)
+    cycle_id = serializers.CharField(required=False, max_length=200)
+    route_id = serializers.CharField(required=False, max_length=200)
+    scheme_id = serializers.CharField(required=False, max_length=200)
+    area_id = serializers.CharField(required=False, max_length=200)
+    sub_area_id = serializers.CharField(required=False, max_length=200)
+    utility_service_plan_id = serializers.CharField(required=False, max_length=200)
+    category_id = serializers.CharField(required=False, max_length=200)
+    sub_category_id = serializers.CharField(required=False, max_length=200)
+    consumer_status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
-        model = InvoiceBill
-        fields = ('id_string', 'bill_month', 'before_due_date_amount', 'due_date', 'bill_status')
+        model = ConsumerMaster
+        fields = ('__all__')
+
+    def create(self, validated_data, user):
+        validated_data =  set_validated_data(validated_data)
+        with transaction.atomic():
+            consumer_obj = super(ConsumerSerializer, self).create(validated_data)
+            return consumer_obj
+
+    def update(self, instance, validated_data, user):
+        validated_data = set_validated_data(validated_data)
+        with transaction.atomic():
+            consumer_obj = super(ConsumerSerializer, self).update(instance, validated_data)
+            return consumer_obj
