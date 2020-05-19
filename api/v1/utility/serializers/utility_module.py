@@ -14,27 +14,25 @@ class UtilityModuleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('id_string', 'module_name', 'module_desc', 'tenant', 'utility',)
+        fields = ('id_string', 'module_name', 'module_desc', 'subscription_id', 'tenant', 'utility',)
 
 
 class UtilityModuleSerializer(serializers.ModelSerializer):
-    utility_id_string = serializers.UUIDField(required=True, source='utility.id_string')
+    tenant = serializers.UUIDField(required=False, source='tenant.id_string')
+    utility = serializers.UUIDField(required=False, source='utility.id_string')
+    subscription_id = serializers.IntegerField(required=False)
+    module_name = serializers.CharField(required=False, max_length=500)
+    module_desc = serializers.CharField(required=False, max_length=500)
+    is_active = serializers.BooleanField(required=True)
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('utility_id_string', 'subscription_id', 'module_name', 'module_desc')
-
-    def create(self, validated_data, user):
-        with transaction.atomic():
-            utility_module = super(UtilityModuleSerializer, self).create(validated_data)
-            utility_module.created_by = user
-            utility_module.save()
-            return utility_module
+        fields = ('tenant', 'utility', 'subscription_id', 'module_name', 'module_desc', 'is_active')
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():
-            utility_module = super(UtilityModuleSerializer, self).update(instance, validated_data)
-            utility_module.updated_by = user
-            utility_module.updated_date = timezone.now()
-            utility_module.save()
-            return utility_module
+            utility_module_obj = super(UtilityModuleSerializer, self).update(instance, validated_data)
+            utility_module_obj.updated_by = user.id
+            utility_module_obj.updated_date = timezone.now()
+            utility_module_obj.save()
+            return utility_module_obj
