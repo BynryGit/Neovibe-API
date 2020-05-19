@@ -18,7 +18,7 @@ from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
 from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string, get_user_privilege_by_user_id
-from v1.userapp.models.role import get_role_by_id, UserRole, get_role_by_id_string
+from v1.userapp.models.role import Role, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id

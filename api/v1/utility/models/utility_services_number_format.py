@@ -27,7 +27,7 @@ class UtilityServiceNumberFormat(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     item = models.CharField(max_length=200, blank=False, null=False) #Survey, Campaign, Registration, Consumer, Receipt, Contract
     is_prefix = models.BooleanField(default=False)
-    prefix = models.CharField(max_length=5, blank=False, null=False) #Emp, TEC
+    prefix = models.CharField(max_length=5, blank=True, null=True) #Emp, TEC
     startingno = models.BigIntegerField(null=True, blank=True) #Range as in =0,00001,100001
     currentno = models.BigIntegerField(null=True, blank=True) #Range as in =0,00001,100001
     is_active = models.BooleanField(default=True)
@@ -36,12 +36,17 @@ class UtilityServiceNumberFormat(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
+    def __str__(self):
+        return self.item
 
-def __str__(self):
-    return self.id_string
-
-
-def __unicode__(self):
-    return self.id_string
+    def __unicode__(self):
+        return self.item
 
 # Create Utility Service Number Format table end.
+
+
+def get_utility_service_number_format_by_utility_id_string_and_item(id_string, item):
+    try:
+        return UtilityServiceNumberFormat.objects.get(utility__id_string=id_string, item=item, is_active=True)
+    except:
+        return False

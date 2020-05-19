@@ -70,7 +70,6 @@ class TenantSerializer(serializers.ModelSerializer):
             # tenant_obj.created_by = user.id
             # tenant_obj.created_date = datetime.utcnow()
             # tenant_obj.tenant = user.tenant
-            # tenant_obj.utility = user.utility
             tenant_obj.save()
             return tenant_obj
 

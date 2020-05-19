@@ -7,14 +7,14 @@ from v1.userapp.models.user_areas import UserArea
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_mobile import UserDetails
 from v1.userapp.models.user_privilege import UserPrivilege
-from v1.userapp.models.role import UserRole
+from v1.userapp.models.role import Role
 from v1.userapp.models.user_skills import UserSkills
 from v1.userapp.models.user_token import UserToken
 from v1.userapp.models.user_type import UserType
 
 admin.site.register(UserToken)
 admin.site.register(Privilege)
-admin.site.register(UserRole)
+admin.site.register(Role)
 admin.site.register(RolePrivilege)
 admin.site.register(UserSkills)
 admin.site.register(UserArea)
