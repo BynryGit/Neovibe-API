@@ -25,7 +25,7 @@ from django.db import models  # importing package for database
 
 # Create Consumer Payments Table Start.
 
-class ConsumerPayment(models.Model):
+class Payment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -63,7 +63,7 @@ class ConsumerPayment(models.Model):
 
     @property
     def get_payment_sub_type(self):
-        payment_sub_type = get_payment_sub_type_by_id(self.payment_subtype_id)
+        payment_sub_type = get_payment_sub_type_by_id(self.payment_sub_type_id)
         return payment_sub_type
 
     @property
@@ -84,7 +84,7 @@ class ConsumerPayment(models.Model):
 
 def get_payment_by_id_string(id_string):
     try:
-        return ConsumerPayment.objects.get(id_string = id_string)
+        return Payment.objects.get(id_string = id_string)
     except:
         return False
 
