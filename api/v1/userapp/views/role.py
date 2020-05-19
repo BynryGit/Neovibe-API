@@ -64,7 +64,7 @@ class RoleList(generics.ListAPIView): # Add authentication and authorization
 # Created on: 05/05/2020
 # Updated on: 12/05/2020
 
-class Role(GenericAPIView): 
+class Role(GenericAPIView):
 
     def get(self, request, id_string):
         try:

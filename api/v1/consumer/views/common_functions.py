@@ -7,12 +7,16 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id_str
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_status import get_consumer_status_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
+from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id_string
 
 
 def set_validated_data(validated_data):
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         validated_data["area_id"] = area.id
+    if "utility_service_plan_id" in validated_data:
+        utility_service_plan = get_utility_service_plan_by_id_string(validated_data["utility_service_plan_id"])
+        validated_data["utility_service_plan_id"] = utility_service_plan.id
     if "consumer_status_id" in validated_data:
         consumer_status = get_consumer_status_by_id_string(validated_data["consumer_status_id"])
         validated_data["consumer_status_id"] = consumer_status.id
