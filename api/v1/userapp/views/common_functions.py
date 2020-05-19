@@ -1,11 +1,7 @@
 import traceback
 from datetime import datetime
-
 import jwt
 from django.contrib.auth import authenticate
-from django.db import transaction
-from django.db.models import Q
-from django.core.paginator import Paginator
 from api.settings import SECRET_KEY
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import Department, get_department_by_id_string
@@ -46,10 +42,10 @@ def login(user):
 
 def set_validated_data(validated_data):
     if "type_id" in validated_data:
-        type = get_user_type_by_id_string(validated_data["type_id"])
+        type = get_role_type_by_id_string(validated_data["type_id"])
         validated_data["type_id"] = type.id
     if "sub_type_id" in validated_data:
-        sub_type = get_user_sub_type_by_id_string(validated_data["sub_type_id"])
+        sub_type = get_role_sub_type_by_id_string(validated_data["sub_type_id"])
         validated_data["sub_type_id"] = sub_type.id
     if "form_factor_id" in validated_data:
         form_factor = get_form_factor_by_id_string(validated_data["form_factor_id"])
@@ -62,6 +58,7 @@ def set_validated_data(validated_data):
 
 # Check only mandatory fields for role api
 def is_role_data_verified(request):
+    return True
     if request.data['role'] and request.data['type'] and request.data['sub_type'] and request.data['form_factor'] and \
             request.data['department']:
         return True
@@ -69,11 +66,12 @@ def is_role_data_verified(request):
         return False
 
 
-@transaction.atomic
+# @transaction.atomic
 def add_basic_role_details(request, user):
     role = ""
     try:
-        role = Role()
+        # role =  UserRole()
+        role = user
         type = get_role_type_by_id_string(request.data["type"])
         sub_type = get_role_sub_type_by_id_string(request.data["type"])
         form_factor = get_form_factor_by_id_string(request.data["form_factor"])
@@ -220,19 +218,19 @@ def is_authorized(token):
         return False
 
 
-def check_privilege(user, privilege, activity):
-    if Role.objects.filter(id=user.role, is_active=True).exists():
-        role = get_role_by_id(user.role)
-
-        received_privilege = get_privilege_by_id_string(privilege)
-        privileges = UserPrivilege.objects.filter(role=role.id, is_active=True)
-
-        if received_privilege in privileges:
-            return True
-        else:
-            return False
-    else:
-        return False
+# def check_privilege(user, privilege, activity):
+#     if UserRole.objects.filter(id=user.role, is_active=True).exists():
+#         role = get_role_by_id(user.role)
+#
+#         received_privilege = get_privilege_by_id_string(privilege)
+#         privileges = UserPrivilege.objects.filter(role=role.id, is_active=True)
+#
+#         if received_privilege in privileges:
+#             return True
+#         else:
+#             return False
+#     else:
+#         return False
 
 
 # Check only mandatory fields for user api
@@ -247,7 +245,7 @@ def is_user_data_verified(request):
         return False
 
 
-@transaction.atomic
+# @transaction.atomic
 def add_basic_user_details(request, user):
     user_detail = ""
     try:

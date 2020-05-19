@@ -40,8 +40,10 @@ class CampaignList(generics.ListAPIView):
     search_fields = ('name',)
 
     def get_queryset(self):
-        queryset = CampaignTbl.objects.filter(is_active=True)
-        return queryset
+        if is_token_valid(1):
+            if is_authorized():
+                queryset = CampaignTbl.objects.filter(is_active=True)
+                return queryset
 
 
 
@@ -63,20 +65,9 @@ class Campaign(GenericAPIView):
         try:
             # Checking authentication start
             if is_token_valid(1):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
                     user = UserDetail.objects.get(id=2)
                     if is_data_verified(request):
-                        # Request data verification end
                         serializer = CampaignSerializer(data=request.data)
                         if serializer.is_valid():
                             campaign_obj = serializer.create(serializer.validated_data, user)
@@ -127,38 +118,40 @@ class CampaignDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            campaign = get_campaign_by_id_string(id_string)
-            if campaign:
-                serializer = CampaignViewSerializer(instance=campaign, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
+            if is_token_valid(1):
+                if is_authorized():
+                    campaign = get_campaign_by_id_string(id_string)
+                    if campaign:
+                        serializer = CampaignViewSerializer(instance=campaign, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
-                ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
     def put(self, request, id_string):
         try:
-            # Checking authentication start
             if is_token_valid(1):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
                 if is_authorized():
-                # Checking authorization end
                     user = UserDetail.objects.get(id=2)
                     campaign_obj = get_campaign_by_id_string(id_string)
                     if campaign_obj:
