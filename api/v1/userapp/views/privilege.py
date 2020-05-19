@@ -13,9 +13,11 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_all_privilege, get_privilege_by_id_string
 from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.serializers.privilege import PrivilegeListSerializer, PrivilegeViewSerializer, PrivilegeSerializer
+from v1.userapp.views.common_functions import is_privilege_data_verified
+
 
 # API Header
-# API end Point: api/v1/user/privilege/list
+# API end Point: api/v1/privilege/list
 # API verb: GET
 # Package: Basic
 # Modules: Roles & Privileges
@@ -26,7 +28,6 @@ from v1.userapp.serializers.privilege import PrivilegeListSerializer, PrivilegeV
 # Tables used: 2.5.1. Users & Privileges - Privilege
 # Author: Arpita
 # Created on: 19/05/2020
-from v1.userapp.views.common_functions import is_privilege_data_verified
 
 
 class PrivilegeList(generics.ListAPIView):
@@ -40,8 +41,8 @@ class PrivilegeList(generics.ListAPIView):
     search_fields = ('name',)
 
     def get_queryset(self):
-        queryset = get_all_privilege()
-        return queryset
+            queryset = get_all_privilege()
+            return queryset
 
 
 # API Header
