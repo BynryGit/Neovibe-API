@@ -28,7 +28,7 @@ from django.db import models  # importing package for database
 
 # Create User Role table start
 
-class UserRole(models.Model): # change name to role
+class Role(models.Model): # change name to role
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -75,20 +75,20 @@ class UserRole(models.Model): # change name to role
 
 
 def get_all_role():
-    return UserRole.objects.filter(is_active=True)
+    return Role.objects.filter(is_active=True)
 
 
 def get_role_by_id(id):
-    return UserRole.objects.filter(id=id, is_active=True).last()
+    return Role.objects.filter(id=id, is_active=True).last()
 
 
 def get_role_by_id_string(id_string):
-    return UserRole.objects.filter(id_string=id_string, is_active=True).last()
+    return Role.objects.filter(id_string=id_string, is_active=True).last()
 
 
 def get_role_by_tenant_id_string(id_string):
-    return UserRole.objects.filter(tenant__id_string=id_string, is_active=True)
+    return Role.objects.filter(tenant__id_string=id_string, is_active=True)
 
 
 def get_role_by_utility_id_string(id_string):
-    return UserRole.objects.filter(utility__id_string=id_string, is_active=True)
+    return Role.objects.filter(utility__id_string=id_string, is_active=True)

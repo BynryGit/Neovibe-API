@@ -3,8 +3,8 @@ from django.urls import path
 from v1.userapp.views.bank_detail import Bank, BankList, GetBankList
 from v1.userapp.views.document import Document
 from v1.userapp.views.notes import Note
-from v1.userapp.views.privilege import PrivilegeList, Privilege
-from v1.userapp.views.role import RoleList, PrivilegeDetail, Role
+from v1.userapp.views.privilege import PrivilegeList, Privilege, PrivilegeDetail
+from v1.userapp.views.role import RoleList, Role
 from v1.userapp.views.skills import SkillList
 from v1.userapp.views.user import Users, UserList, UserRole
 
