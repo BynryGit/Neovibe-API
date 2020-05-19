@@ -3,6 +3,7 @@ from django.urls import path
 from v1.userapp.views.bank_detail import Bank, BankList, GetBankList
 from v1.userapp.views.document import Document
 from v1.userapp.views.notes import Note
+from v1.userapp.views.privilege import PrivilegeList
 from v1.userapp.views.role import RoleList, PrivilegeDetail, Role, GetRoleList
 from v1.userapp.views.skills import SkillList
 from v1.userapp.views.user import Users, UserList, UserRole
@@ -10,8 +11,10 @@ from v1.userapp.views.user import Users, UserList, UserRole
 urlpatterns = [
     path('role/', Role.as_view()),
     path('role/<uuid:id_string>', Role.as_view()),
+    path('role/list/', RoleList.as_view()),
+    path('privilege/list/', PrivilegeList.as_view()),
+
     path('roles/', GetRoleList.as_view()),
-    path('list/', RoleList.as_view()),
     path('privileges/', PrivilegeDetail.as_view()),
     path('<uuid:id_string>', Users.as_view()),
     path('list/', UserList.as_view()),
