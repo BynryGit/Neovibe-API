@@ -28,29 +28,26 @@ class TenantStatusViewSerializer(serializers.ModelSerializer):
 
 
 class TenantListSerializer(serializers.ModelSerializer):
-    status = TenantStatusViewSerializer(many=False, required=True, source='get_status')
+    # status = TenantStatusViewSerializer(many=False, required=True, source='get_status')
 
     class Meta:
         model = TenantMaster
-        fields = ('id_string','short_name','name','email_id','mobile_no','city_id','country_id','state_id','status_id','is_active','created_by','created_date')
+        fields = ('id_string','short_name','name','email_id','mobile_no','city_id','country_id','state_id','status_id',
+                  'is_active','created_by','created_date')
 
 class TenantViewSerializer(serializers.ModelSerializer):
-    status = TenantStatusViewSerializer(many=False, source='get_status')
-    area = AreaListSerializer(many=False, source='get_area')
-    tenant = serializers.ReadOnlyField(source='tenant.name')
+    #status = TenantStatusViewSerializer(many=False, source='get_status')
+    # area = AreaListSerializer(many=False, source='get_area')
+    # tenant = serializers.ReadOnlyField(source='tenant.name')
 
     class Meta:
         model = TenantMaster
         fields = (
-        'id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'city_id', 'country_id', 'state_id', 'status_id',
-        'is_active', 'created_by', 'created_date')
+        'id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'city_id', 'country_id', 'state_id', 'status_id')
 
 
 class TenantSerializer(serializers.ModelSerializer):
-<<<<<<< HEAD
 
-=======
->>>>>>> 58bd88bd9e1e118c77f08bb864676c83bfa4a785
     id_string = serializers.CharField(required=False, max_length=200)
     short_name = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=False, max_length=200)
@@ -60,27 +57,28 @@ class TenantSerializer(serializers.ModelSerializer):
     country_id = serializers.CharField(required=False, max_length=200)
     state_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
+    is_active = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = TenantMaster
         fields = ('__all__')
 
-    def create(self, validated_data, user):
+    def create(self, validated_data):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
             tenant_obj = super(TenantSerializer, self).create(validated_data)
-            tenant_obj.created_by = user.id
-            tenant_obj.created_date = datetime.utcnow()
-            tenant_obj.tenant = user.tenant
-            tenant_obj.utility = user.utility
+            # tenant_obj.created_by = user.id
+            # tenant_obj.created_date = datetime.utcnow()
+            # tenant_obj.tenant = user.tenant
+            # tenant_obj.utility = user.utility
             tenant_obj.save()
             return tenant_obj
 
-    def update(self, instance, validated_data, user):
+    def update(self, instance, validated_data):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
             tenant_obj = super(TenantSerializer, self).update(instance, validated_data)
-            tenant_obj.updated_by = user.id
-            tenant_obj.updated_date = datetime.utcnow()
+            # tenant_obj.updated_by = user.id
+            # tenant_obj.updated_date = datetime.utcnow()
             tenant_obj.save()
             return tenant_obj
