@@ -28,7 +28,7 @@ from django.db import models  # importing package for database
 
 # Create User Role table start
 
-class UserRole(models.Model):
+class UserRole(models.Model): # change name to role
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -45,18 +45,10 @@ class UserRole(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id
+        return self.role
 
     def __unicode__(self):
-        return self.id
-
-    @property
-    def get_tenant(self):
-        return self.tenant
-
-    @property
-    def get_utility(self):
-        return self.utility
+        return self.role
 
     @property
     def get_role_type(self):

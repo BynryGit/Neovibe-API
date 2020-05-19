@@ -11,7 +11,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Department
-        fields = ('status', 'id_string')
+        fields = ('name', 'id_string')
 
 
 class DepartmentListSerializer(serializers.ModelSerializer):

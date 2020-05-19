@@ -12,23 +12,23 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-
 from v1.payment.models.payment_channel import get_payment_channel_by_id
 from v1.payment.models.payment_mode import get_payment_mode_by_id
 from v1.payment.models.payment_source import get_payment_source_by_id
 from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
 from v1.payment.models.payment_type import get_payment_type_by_id
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
 # Create Consumer Payments Table Start.
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 
-class ConsumerPayment(models.Model):
+
+class Payment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='tenant')
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
@@ -63,7 +63,7 @@ class ConsumerPayment(models.Model):
 
     @property
     def get_payment_sub_type(self):
-        payment_sub_type = get_payment_sub_type_by_id(self.payment_subtype_id)
+        payment_sub_type = get_payment_sub_type_by_id(self.payment_sub_type_id)
         return payment_sub_type
 
     @property
@@ -84,7 +84,7 @@ class ConsumerPayment(models.Model):
 
 def get_payment_by_id_string(id_string):
     try:
-        return ConsumerPayment.objects.get(id_string = id_string)
+        return Payment.objects.get(id_string = id_string)
     except:
         return False
 
