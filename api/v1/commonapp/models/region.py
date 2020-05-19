@@ -37,4 +37,17 @@ class Region(models.Model):
     def __unicode__(self):
         return self.name
 
+def get_region_by_id(id):
+    try:
+        return Region.objects.get(id = id)
+    except:
+        return False
+
+
+def get_region_by_id_string(id_string):
+    try:
+        return Region.objects.get(id_string = id_string)
+    except:
+        return False
+
 # Create Region table end.

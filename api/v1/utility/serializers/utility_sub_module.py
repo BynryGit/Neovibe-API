@@ -19,22 +19,16 @@ class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
 
 
 class UtilitySubModuleSerializer(serializers.ModelSerializer):
+    is_active = serializers.BooleanField(required=True)
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('submodule_name', 'submodule_desc')
-
-    def create(self, validated_data, user):
-        with transaction.atomic():
-            utility_module = super(UtilitySubModuleSerializer, self).create(validated_data)
-            utility_module.created_by = user
-            utility_module.save()
-            return utility_module
+        fields = ('is_active',)
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():
-            utility_module = super(UtilitySubModuleSerializer, self).update(instance, validated_data)
-            utility_module.updated_by = user
-            utility_module.updated_date = timezone.now()
-            utility_module.save()
-            return utility_module
+            utility_submodule = super(UtilitySubModuleSerializer, self).update(instance, validated_data)
+            utility_submodule.updated_by = user.id
+            utility_submodule.updated_date = timezone.now()
+            utility_submodule.save()
+            return utility_submodule

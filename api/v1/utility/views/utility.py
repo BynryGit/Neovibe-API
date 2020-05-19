@@ -6,10 +6,11 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.userapp.models.user_master import UserDetail
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
 
@@ -23,19 +24,32 @@ from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityM
 # Interaction: Utility list
 # Usage: API will fetch required data for utility list against filter and search
 # Tables used: 2.1. Utility Master
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 08/05/2020
 
 class UtilityList(generics.ListAPIView):
     serializer_class = UtilityMasterViewSerializer
     pagination_class = StandardResultsSetPagination
 
-    queryset = UtilityMasterTbl.objects.filter(is_active=True)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('name', 'tenant__id_string',)
     ordering_fields = ('name', 'tenant',)
     ordering = ('name',) # always give by default alphabetical order
     search_fields = ('name', 'tenant__name',)
+
+    def get_queryset(self):
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = UtilityMasterTbl.objects.filter(is_active=True)
+                return queryset
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response({
+                STATE: ERROR,
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # API Header
@@ -47,7 +61,7 @@ class UtilityList(generics.ListAPIView):
 # Interaction: Create Utility object
 # Usage: API will create utility object based on valid data
 # Tables used: 2.1. Utility Master
-# Author: Aki
+# Author: Akshay
 # Created on: 13/05/2020
 
 class Utility(GenericAPIView):
@@ -64,19 +78,28 @@ class Utility(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
+                    # Todo fetch user from request start
+                    user = UserDetail.objects.get(id=2)
+                    # Todo fetch user from request end
 
-                    serializer = UtilityMasterSerializer(data=request.data)
-                    if serializer.is_valid():
-                        utility_obj = serializer.create(serializer.validated_data, request.user)
+                    duplicate_utility_obj = UtilityMasterTbl.objects.filter(tenant__id_string=request.data['tenant'], name=request.data['name'])
+                    if duplicate_utility_obj:
                         return Response({
-                            STATE: SUCCESS,
-                            RESULTS: {'utility_id_string': utility_obj.id_string},
-                        }, status=status.HTTP_201_CREATED)
+                            STATE: DUPLICATE,
+                        }, status=status.HTTP_404_NOT_FOUND)
                     else:
-                        return Response({
-                            STATE: ERROR,
-                            RESULTS:serializer.errors,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        serializer = UtilityMasterSerializer(data=request.data)
+                        if serializer.is_valid():
+                            utility_obj = serializer.create(serializer.validated_data, user)
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: {'utility_id_string': utility_obj.id_string},
+                            }, status=status.HTTP_201_CREATED)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -102,7 +125,7 @@ class Utility(GenericAPIView):
 # Interaction: View Utility object
 # Usage: API will fetch and edit required data for utility using id_string
 # Tables used: 2.1. Utility Master
-# Author: Aki
+# Author: Akshay
 # Created on: 08/05/2020
 
 class UtilityDetail(GenericAPIView):
@@ -157,15 +180,18 @@ class UtilityDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                 # Checking authorization end
+                    # Todo fetch user from request start
+                    user = UserDetail.objects.get(id=2)
+                    # Todo fetch user from request end
 
                     utility_obj = get_utility_by_id_string(id_string)
                     if utility_obj:
                         serializer = UtilityMasterSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.update(utility_obj, serializer.validated_data, request.user)
+                            serializer.update(utility_obj, serializer.validated_data, user)
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: serializer.data,
+                                RESULTS: {'utility_id_string': utility_obj.id_string},
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({

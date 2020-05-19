@@ -2,18 +2,21 @@ __author__ = "aki"
 
 import traceback
 from rest_framework.generics import GenericAPIView
-from rest_framework import status
+from rest_framework import generics, status
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, \
-    get_utility_submodules_by_utility_id_string
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.userapp.models.user_master import UserDetail
+from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, UtilitySubModule as UtilitySubModuleTbl
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer, UtilitySubModuleSerializer
 
 
 # API Header
-# API end Point: api/v1/utility/id_string/submodules
+# API end Point: api/v1/utility/id_string/submodule/list
 # API verb: GET
 # Package: Basic
 # Modules: Utility
@@ -21,49 +24,33 @@ from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerial
 # Interaction: Utility Submodule list
 # Usage: API will fetch utility submodule list against single utility
 # Tables used: 2.4 Utility SubModule
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 12/05/2020
 
 
-class UtilitySubModuleList(GenericAPIView):
+class UtilitySubModuleList(generics.ListAPIView):
+    serializer_class = UtilitySubModuleViewSerializer
+    pagination_class = StandardResultsSetPagination
 
-    def get(self, request, id_string):
-        try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    filter_fields = ('tenant__id_string', 'utility__id_string')
+    ordering_fields = ('submodule_name', 'tenant__name', 'utility__name')
+    ordering = ('submodule_name',)  # always give by default alphabetical order
+    search_fields = ('submodule_name', 'tenant__name', 'utility__name',)
 
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-
-                    utility_submodule_obj = get_utility_submodules_by_utility_id_string(id_string)
-                    if utility_submodule_obj:
-                        serializer = UtilitySubModuleViewSerializer(utility_submodule_obj, many=True, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+    def get_queryset(self):
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = UtilitySubModuleTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                return queryset
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
             return Response({
-                STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                STATE: ERROR,
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # API Header
@@ -75,7 +62,7 @@ class UtilitySubModuleList(GenericAPIView):
 # Interaction: For get and edit utility submodule
 # Usage: API will fetch and edit utility submodule details
 # Tables used: 2.4 Utility SubModule
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 12/05/2020
 
 class UtilitySubModuleDetail(GenericAPIView):
@@ -130,15 +117,18 @@ class UtilitySubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
+                    # Todo fetch user from request start
+                    user = UserDetail.objects.get(id=2)
+                    # Todo fetch user from request end
 
                     utility_submodule_obj = get_utility_submodule_by_id_string(id_string)
                     if utility_submodule_obj:
                         serializer = UtilitySubModuleSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.update(utility_submodule_obj, serializer.validated_data, request.user)
+                            utility_submodule_obj = serializer.update(utility_submodule_obj, serializer.validated_data, user)
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: serializer.data,
+                                RESULTS: {'utility_submodule_obj': utility_submodule_obj.id_string},
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({

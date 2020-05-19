@@ -40,8 +40,10 @@ class SurveyList(generics.ListAPIView):
     search_fields = ('name',)
 
     def get_queryset(self):
-        queryset = Surveytbl.objects.filter(is_active=True)
-        return queryset
+        if is_token_valid(1):
+            if is_authorized():
+                queryset = Surveytbl.objects.filter(is_active=True)
+                return queryset
 
 
 # API Header
@@ -61,22 +63,10 @@ class Survey(GenericAPIView):
 
     def post(self, request):
         try:
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
+            if is_token_valid(1):
                 if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
                     user = UserDetail.objects.get(id=2)
                     if is_data_verified(request):
-                        # Request data verification end
                         serializer = SurveySerializer(data=request.data)
                         if serializer.is_valid():
                             survey_obj = serializer.create(serializer.validated_data, user)
@@ -149,24 +139,17 @@ class SurveyDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
+            if is_token_valid(1):
                 if is_authorized():
-                # Checking authorization end
-
                     survey_obj = get_survey_by_id_string(id_string)
                     if survey_obj:
-                        serializer = SurveySerializer(data=id_string)
+                        serializer = SurveySerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.update(survey_obj, serializer.validated_data, request.user)
+                            survey_obj = serializer.update(survey_obj, serializer.validated_data, request.user)
+                            serializer = SurveyViewSerializer(instance=survey_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: serializer.data,
+                                DATA: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
@@ -189,5 +172,5 @@ class SurveyDetail(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

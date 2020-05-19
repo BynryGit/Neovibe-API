@@ -39,3 +39,17 @@ class UtilityStatus(models.Model):
         return self.status
 
  # Create Utility Status table end
+
+
+def get_utility_status_by_id(id):
+    try:
+        return UtilityStatus.objects.get(id = id)
+    except:
+        return False
+
+
+def get_utility_status_by_id_string(id_string):
+    try:
+        return UtilityStatus.objects.get(id_string = id_string)
+    except:
+        return False
