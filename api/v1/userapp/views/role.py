@@ -30,20 +30,22 @@ from v1.userapp.views.common_functions import is_role_data_verified
 # Created on: 04/05/2020
 # Updated on: 09/05/2020
 
-class RoleList(generics.ListAPIView): # Add authentication and authorization
-    serializer_class = RoleListSerializer
-    pagination_class = StandardResultsSetPagination
+class RoleList(generics.ListAPIView):  # Add authentication and authorization
+    # Checking authorization start
+    if is_authorized():
+        # Checking authorization end
+        serializer_class = RoleListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('tenant__id_string', 'utility__id_string')
-    ordering_fields = ('name',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('name',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('name',)
 
-    def get_queryset(self):
-
-        queryset = get_all_role()
-        return queryset # Add http code
+        def get_queryset(self):
+            queryset = get_all_role()
+            return queryset  # Add http code
 
 
 # API Header
