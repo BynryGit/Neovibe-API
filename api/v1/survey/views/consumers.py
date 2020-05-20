@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from api.messages import SUCCESS,STATE,ERROR,EXCEPTION,DATA,RESULTS
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
+from rest_framework.exceptions import APIException
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.userapp.models.user_master import UserDetail
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import SurveyConsumer,get_survey_consumer_by_id_string
@@ -29,23 +31,33 @@ from v1.survey.views.common_functions import is_data_verified
 # Created on: 29/04/2020
 
 class ConsumerList(generics.ListAPIView):
-    serializer_class = ConsumerViewSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = ConsumerViewSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'consumer_no',)
-    ordering_fields = ('first_name',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('first_name', 'consumer_no',)
+        ordering_fields = ('first_name',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('first_name',)
 
-    def get_queryset(self):
-        if is_token_valid(1):
-            if is_authorized():
-                queryset = ''
-                survey = get_survey_by_id_string(self.kwargs['id_string'])
-                if survey:
-                    queryset = SurveyConsumer.objects.filter(survey_id=survey.id, is_active=True)
-                return queryset
+        def get_queryset(self):
+            if is_token_valid(1):
+                if is_authorized():
+                    queryset = ''
+                    survey = get_survey_by_id_string(self.kwargs['id_string'])
+                    if survey:
+                        queryset = SurveyConsumer.objects.filter(survey_id=survey.id, is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
+
 
 # API Header
 # API end Point: api/v1/survey/:id_string/consumers

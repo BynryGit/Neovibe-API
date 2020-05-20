@@ -1,5 +1,7 @@
 import traceback
 import logging
+from rest_framework.exceptions import APIException
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
@@ -30,29 +32,29 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICA
 # Api for getting campaign  filter
 
 class CampaignList(generics.ListAPIView):
-    serializer_class = CampaignListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = CampaignListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string','start_date',)
-    ordering_fields = ('name',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('name',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('name', 'tenant__id_string','start_date',)
+        ordering_fields = ('name',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('name',)
 
-    def get_queryset(self):
-        if is_token_valid(1):
-            if is_authorized():
-                queryset = CampaignTbl.objects.filter(is_active=True)
-                return queryset
+        def get_queryset(self):
+            if is_token_valid(0):
+                if is_authorized():
+                    queryset = CampaignTbl.objects.filter(is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
             else:
-                return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_403_FORBIDDEN)
-        else:
-            return Response({
-                STATE: ERROR,
-            }, status=status.HTTP_401_UNAUTHORIZED)
+                raise InvalidTokenException
 
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
 
 
 # API Header
