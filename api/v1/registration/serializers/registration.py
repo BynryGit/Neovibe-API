@@ -1,6 +1,8 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.registration.models.registrations import Registration
 from v1.registration.serializers.registration_status import RegistrationStatusViewSerializer
@@ -40,7 +42,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
+        validators = [UniqueTogetherValidator(queryset=Registration.objects.all(), fields=('phone_mobile',), message='Registration already exists!')]
         fields = ('__all__')
+
 
     def create(self, validated_data, user):
         validated_data =  set_validated_data(validated_data)
