@@ -44,4 +44,26 @@ class TenantSummaryOnMonthlyBasis(models.Model):
     def __unicode__(self):
         return self.id_string
 
+
 # Create Tenant Summary on Monthly Basis table end.
+
+
+def get_tenant_usage_summary_by_id(id):
+    try:
+        return TenantSummaryOnMonthlyBasis.objects.get(id = id)
+    except:
+        return False
+
+
+def get_tenant_usage_summary_by_id_string(id_string):
+    try:
+        return TenantSummaryOnMonthlyBasis.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_tenant_usage_summary_by_tenant_id_string(id_string):
+    try:
+        return TenantSummaryOnMonthlyBasis.objects.get(tenant__id_string = id_string)
+    except:
+        return False

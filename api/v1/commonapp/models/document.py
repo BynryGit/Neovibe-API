@@ -22,6 +22,7 @@ from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 # from v1.userapp.models.user_master import get_user_by_id
+from v1.userapp.models.user_master import get_user_by_id
 from v1.utility.models.utility_master import UtilityMaster
 
 from django.db import models  # importing package for database
@@ -86,6 +87,8 @@ class Document(models.Model):
 def get_documents_by_utility_id_string(id_string):
     return Document.objects.filter(utility__id_string=id_string)
 
+def get_documents_by_tenant_id_string(id_string):
+    return Document.objects.filter(tenant__id_string=id_string)
 
 def get_documents_by_user_id(id):
     return Document.objects.filter(identification=id)

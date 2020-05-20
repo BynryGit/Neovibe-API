@@ -32,8 +32,7 @@ class TenantListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantMaster
-        fields = ('id_string','short_name','name','email_id','mobile_no','city_id','country_id','state_id','status_id',
-                  'is_active','created_by','created_date')
+        fields = ( 'id_string','subscription_id','module_id','sub_module_id','sub_module_name','is_active')
 
 class TenantViewSerializer(serializers.ModelSerializer):
     #status = TenantStatusViewSerializer(many=False, source='get_status')

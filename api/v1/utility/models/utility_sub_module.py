@@ -8,7 +8,7 @@ __author__ = "aki"
 # frequency of data changes : Medium
 # sample tale data : "Plan - A"
 # reference tables : 2.1 Utility Master, 2.3. Utility Module
-# author : Gauri Deshmukh
+# author : Akshay
 # created on : 24/04/2020
 
 # change history

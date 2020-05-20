@@ -30,7 +30,7 @@ class AssetServiceHistory(models.Model):
     asset_id = models.BigIntegerField(null=True, blank=True)
     service_request = models.BigIntegerField(null=True, blank=True)
     service_type = models.BigIntegerField(null=True, blank=True)
-    status = models.BigIntegerField(null=True, blank=True)
+    status_id = models.BigIntegerField(null=True, blank=True)
     maintenance_cost = models.FloatField(max_length=200, blank=False, null=False, default=Decimal(0.00))
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

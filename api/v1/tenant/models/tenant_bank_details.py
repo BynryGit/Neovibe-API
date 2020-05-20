@@ -48,3 +48,13 @@ class TenantBankDetails(models.Model):
         return self.bank_id
 
 # Create Tenant Bank Details table end.
+
+def get_bank_by_tenant_id_string(id_string):
+    return TenantBankDetails.objects.filter(tenant_id_string=id_string,is_active=True)
+
+def get_bank_by_id_string(id_string):
+    return TenantBankDetails.objects.filter(id_string=id_string).last()
+
+
+def get_bank_by_id(id):
+    return TenantBankDetails.objects.filter(id=id).last()

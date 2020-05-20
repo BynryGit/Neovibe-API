@@ -38,5 +38,16 @@ class ComplaintStatus(models.Model):
 
     def __unicode__(self):
         return self.status
-
  # Create ComplaintStatus table end
+
+def get_complaint_status_by_id(id):
+    try:
+        return ComplaintStatus.objects.get(id = id)
+    except:
+        return False
+
+def get_complaint_status_by_id_string(id_string):
+    try:
+        return ComplaintStatus.objects.get(id_string = id_string)
+    except:
+        return False
