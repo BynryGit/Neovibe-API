@@ -1,9 +1,8 @@
 from django.urls import path
 from v1.commonapp.views.city import CityList
 from v1.commonapp.views.country import CountryList
-from v1.commonapp.views.region import RegionsList
+from v1.commonapp.views.region import RegionList
 from v1.commonapp.views.state import StateList
-from v1.commonapp.views.status import StatusList
 from v1.commonapp.views.area import AreaList, AreaDetail
 from v1.commonapp.views.department import Department, DepartmentList
 from v1.commonapp.views.form_factor import FormFactor, FormFactorList
@@ -28,10 +27,9 @@ urlpatterns = [
     path('submodule/<uuid:id_string>', SubModule.as_view()),
     path('submodule/list/', SubModuleList.as_view()),
     # This api used for utility dropdown start
-    path('regions', RegionsList.as_view(), name='regions_list'),
+    path('regions', RegionList.as_view(), name='regions_list'),
     path('countries', CountryList.as_view(), name='country_list'),
     path('states', StateList.as_view(), name='state_list'),
     path('cities', CityList.as_view(), name='city_list'),
-    path('status', StatusList.as_view(), name='city_list'),
     # This api used for utility dropdown end
 ]
