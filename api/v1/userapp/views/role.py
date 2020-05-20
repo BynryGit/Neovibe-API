@@ -128,18 +128,28 @@ class RoleDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            role = get_role_by_id_string(id_string)
-            if role:
-                serializer = RoleViewSerializer(instance=role, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    role = get_role_by_id_string(id_string)
+                    if role:
+                        serializer = RoleViewSerializer(instance=role, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({

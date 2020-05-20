@@ -36,11 +36,12 @@ class PrivilegeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():
-            role_obj = super(PrivilegeSerializer, self).update(instance, validated_data)
-            role_obj.updated_by = user.id
-            role_obj.updated_date = datetime.utcnow()
-            role_obj.save()
-            return role_obj
+            privilege_obj = super(PrivilegeSerializer, self).update(instance, validated_data)
+            privilege_obj.updated_by = user.id
+            privilege_obj.updated_date = datetime.utcnow()
+            privilege_obj.is_active = True
+            privilege_obj.save()
+            return privilege_obj
 
 
 class PrivilegeViewSerializer(serializers.ModelSerializer):
@@ -49,3 +50,10 @@ class PrivilegeViewSerializer(serializers.ModelSerializer):
         model = Privilege
         depth = 1
         fields = ('id_string', 'tenant', 'utility', 'name', 'created_date', 'is_active')
+
+
+class GetPrivilegeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Privilege
+        fields = ('id_string', 'name')

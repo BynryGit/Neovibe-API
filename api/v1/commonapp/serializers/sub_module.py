@@ -8,11 +8,11 @@ from v1.commonapp.serializers.module import ModuleSerializer
 
 
 class SubModuleSerializer(serializers.ModelSerializer):
-    # privilege = PrivilegeSerializer(many=False, required=True, source='get_privilege')
+    module = ModuleSerializer(many=False, required=True, source='get_module')
 
     class Meta:
         model = SubModule
-        fields = ('name', 'id_string', 'privilege')
+        fields = ('name', 'id_string', 'module')
 
 
 class SubModuleListSerializer(serializers.ModelSerializer):

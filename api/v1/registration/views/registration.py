@@ -352,3 +352,5 @@ class RegistrationPaymentDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
