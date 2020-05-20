@@ -63,7 +63,7 @@ class Role(GenericAPIView):
     def post(self, request, format=None):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid(self.request.headers['token']):
                 # Checking authentication end
 
                 # Checking authorization start
@@ -161,7 +161,7 @@ class RoleDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(request.data['token']):
+            if is_token_valid(self.request.headers['token']):
                 # Checking authentication end
 
                 # Checking authorization start

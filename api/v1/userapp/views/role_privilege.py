@@ -35,7 +35,7 @@ class RolePrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            if is_token_valid(request.data['token']):
+            if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     data = []
                     if is_role_privilege_data_verified(request):
