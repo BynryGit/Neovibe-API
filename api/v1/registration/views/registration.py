@@ -9,8 +9,8 @@ from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer
-from v1.registration.serializers.registration_status import RegistrationListSerializer
+from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer, \
+    RegistrationListSerializer
 from v1.userapp.models.user_master import UserDetail
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.views.common_functions import is_data_verified

@@ -37,5 +37,17 @@ class ConsumerMeter(models.Model):
     def __unicode__(self):
         return str(self.meter_id) + '-' + str(self.consumer_id) + '-' + str(self.assign_date) + '-' + str(
             self.initial_reading) + '-' + str(self.status)
-
 # Create Consumer meter table end.
+
+def get_consumer_meter_by_id(id):
+    try:
+        return ConsumerMeter.objects.get(id=id)
+    except:
+        return False
+
+
+def get_consumer_meter_by_id_string(id_string):
+    try:
+        return ConsumerMeter.objects.get(id_string=id_string)
+    except:
+        return False

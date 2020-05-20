@@ -23,11 +23,13 @@ from v1.utility import urls as utility_urls
 from v1.consumer import urls as consumer_urls
 from v1.commonapp import urls as common_urls
 from v1.tenant import urls as tenant_urls
+from v1.billing import urls as billing_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(common_urls)),
     path('api/v1/registration/', include(registration_urls)),
+    path('api/v1/bill/', include(billing_urls)),
     path('api/v1/campaign/', include(campaign_urls)),
     path('api/v1/survey/', include(survey_urls)),
     path('api/v1/utility/', include(utility_urls)),

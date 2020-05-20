@@ -27,8 +27,8 @@ class ConsumerSubCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=200, blank=False, null=False)
-    category = models.BigIntegerField(blank=False, null=False)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    category = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -44,14 +44,20 @@ class ConsumerSubCategory(models.Model):
 # Create Consumer Sub Category table end
 
 def get_consumer_sub_category_by_id_string(id_string):
-    return ConsumerSubCategory.objects.get(id_string = id_string)
+    try:
+        return ConsumerSubCategory.objects.get(id_string = id_string)
+    except:
+        return False
 
 def get_consumer_sub_category_by_tenant_id_string(id_string):
     return ConsumerSubCategory.objects.filter(tenant__id_string = id_string)
 
 
 def get_consumer_sub_category_by_id(id):
-    return ConsumerSubCategory.objects.get(id = id)
+    try:
+        return ConsumerSubCategory.objects.get(id = id)
+    except:
+        return False
 
 # End the Code
 

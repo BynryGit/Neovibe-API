@@ -28,7 +28,7 @@ class ConsumerCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=200, blank=False, null=False)
+    name = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -47,11 +47,17 @@ def get_consumer_category_by_tenant_id_string(id_string):
     return ConsumerCategory.objects.filter(tenant__id_string = id_string)
 
 def get_consumer_category_by_id_string(id_string):
-    return ConsumerCategory.objects.get(id_string=id_string)
+    try:
+        return ConsumerCategory.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_consumer_category_by_id(id):
-    return ConsumerCategory.objects.get(id = id)
+    try:
+        return ConsumerCategory.objects.get(id = id)
+    except:
+        return False
 
 # End The Code
 
