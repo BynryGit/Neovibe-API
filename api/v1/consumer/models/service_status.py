@@ -37,5 +37,17 @@ class ServiceStatus(models.Model):
 
     def __unicode__(self):
         return self.name
-
  # Create ServiceStatus table end
+
+def get_service_status_by_id(id):
+    try:
+        return ServiceStatus.objects.get(id=id)
+    except:
+        return False
+
+
+def get_service_status_by_id_string(id_string):
+    try:
+        return ServiceStatus.objects.get(id_string=id_string)
+    except:
+        return False

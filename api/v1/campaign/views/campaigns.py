@@ -7,13 +7,13 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_master import UserDetail
-from v1.campaign.models.campaign import get_campaign_by_id_string
+from v1.campaign.models.campaign import get_campaign_by_id_string,Campaign as Campaigntbl
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.serializers.campaign import CampaignViewSerializer,CampaignListSerializer,CampaignSerializer
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.campaign.views.common_functions import is_data_verified,set_validated_data
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 
 # API Header
 # API end Point: api/v1/campaign/list
@@ -44,6 +44,14 @@ class CampaignList(generics.ListAPIView):
             if is_authorized():
                 queryset = CampaignTbl.objects.filter(is_active=True)
                 return queryset
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response({
+                STATE: ERROR,
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -70,11 +78,17 @@ class Campaign(GenericAPIView):
                         serializer = CampaignSerializer(data=request.data)
                         if serializer.is_valid():
                             campaign_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
+                            if campaign_obj:
+                                view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: DUPLICATE,
+                                    RESULTS: DATA_ALREADY_EXISTS,
+                                }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,

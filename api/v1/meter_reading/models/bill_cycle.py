@@ -39,10 +39,16 @@ class BillCycle(models.Model):
         return self.code
 
 def get_bill_cycle_by_id_string(id_string):
-    return BillCycle.objects.get(id_string = id_string)
+    try:
+        return BillCycle.objects.get(id_string = id_string)
+    except:
+        return False
 
 
 def get_bill_cycle_by_id(id):
-    return BillCycle.objects.get(id = id)
+    try:
+        return BillCycle.objects.get(id = id)
+    except:
+        return False
 
 # Create Bill Cycle table end

@@ -4,21 +4,21 @@ import jwt
 from django.contrib.auth import authenticate
 from api.settings import SECRET_KEY
 from v1.commonapp.models.city import get_city_by_id_string
-from v1.commonapp.models.department import Department, get_department_by_id_string
+from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.document import Document, get_document_by_id_string
-from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_id_string
+from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
-from v1.userapp.models.privilege import filter_privilege_by_id_string
+from v1.userapp.models.privilege import filter_privilege_by_id_string, get_privilege_by_id_string
 from v1.userapp.models.role_privilege import RolePrivilege, get_role_privilege_by_id_string, \
     get_role_privilege_by_role_id
-from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id_string
-from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
+from v1.userapp.models.role_type import get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
-from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string, get_user_privilege_by_user_id
-from v1.userapp.models.role import get_role_by_id, UserRole, get_role_by_id_string
+from v1.userapp.models.user_privilege import UserPrivilege, get_user_privilege_by_user_id
+from v1.userapp.models.role import Role, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id
@@ -56,48 +56,29 @@ def set_role_validated_data(validated_data):
     return validated_data
 
 
+def set_role_privilege_validated_data(validated_data):
+    if "role_id" in validated_data:
+        role = get_role_by_id_string(validated_data["role_id"])
+        validated_data["role_id"] = role.id
+    if "module_id" in validated_data:
+        module = get_module_by_id_string(validated_data["module_id"])
+        validated_data["module_id"] = module.id
+    if "sub_module_id" in validated_data:
+        sub_module = get_sub_module_by_id_string(validated_data["sub_module_id"])
+        validated_data["sub_module_id"] = sub_module.id
+    if "privilege_id" in validated_data:
+        privilege = get_privilege_by_id_string(validated_data["privilege_id"])
+        validated_data["privilege_id"] = privilege.id
+    return validated_data
+
+
 # Check only mandatory fields for role api
 def is_role_data_verified(request):
     return True
-    if request.data['role'] and request.data['type'] and request.data['sub_type'] and request.data['form_factor'] and \
-            request.data['department']:
-        return True
-    else:
-        return False
 
 
-# @transaction.atomic
-def add_basic_role_details(request, user):
-    role = ""
-    try:
-        # role =  UserRole()
-        role = user
-        type = get_role_type_by_id_string(request.data["type"])
-        sub_type = get_role_sub_type_by_id_string(request.data["type"])
-        form_factor = get_form_factor_by_id_string(request.data["form_factor"])
-        department = get_department_by_id_string(request.data["department"])
-
-        if "role" in request.data:
-            role.role = request.data["role"]
-        if "type" in request.data:
-            role.type_id = type.id
-        if "sub_type" in request.data:
-            role.sub_type_id = sub_type.id
-        if "form_factor" in request.data:
-            role.form_factor_id = form_factor.id
-        if "department" in request.data:
-            role.department_id = department.id
-        role.tenant = user.tenant
-        role.created_by = user.id
-        role.created_date = datetime.now()
-        role.save()
-        role.role_ID = role.id
-        role.save()
-        return role, True, ''
-    except Exception as e:
-        print("Exception occurred ",str(traceback.print_exc(e)))
-        error = str(traceback.print_exc(e))
-        return role, False, error
+def is_role_privilege_data_verified(request):
+    return True
 
 
 def save_privilege_details(request, user, role):
@@ -123,32 +104,6 @@ def save_privilege_details(request, user, role):
             return role, True, ''
     except Exception as e:
         print("Exception occurred ", str(traceback.print_exc(e)))
-        error = str(traceback.print_exc(e))
-        return role, False, error
-
-
-def save_edited_basic_role_details(request, user):
-    role = ''
-    try:
-        if "role_id_string" in request.data:
-            role = get_role_by_id_string(request.data["role_id_string"])
-        if "role" in request.data:
-            role.role = request.data["role"]
-        if "type" in request.data:
-            role.type_id = request.data["type"]
-        if "sub_type" in request.data:
-            role.sub_type_id = request.data["sub_type"]
-        if "form_factor" in request.data:
-            role.form_factor_id = request.data["form_factor"]
-        if "department" in request.data:
-            role.department_id = request.data["department"]
-        role.updated_by = user.id
-        role.updated_date = datetime.now()
-        role.save()
-
-        return role, True, ''
-    except Exception as e:
-        print("Exception occurred ",str(traceback.print_exc(e)))
         error = str(traceback.print_exc(e))
         return role, False, error
 

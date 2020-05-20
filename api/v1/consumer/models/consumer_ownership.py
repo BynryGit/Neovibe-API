@@ -25,9 +25,15 @@ class ConsumerOwnership(models.Model):
         return self.ownership
 
 def get_consumer_ownership_by_id_string(id_string):
-    return ConsumerOwnership.objects.get(id_string = id_string)
+    try:
+        return ConsumerOwnership.objects.get(id_string = id_string)
+    except:
+        return False
 
 
 def get_consumer_ownership_by_id(id):
-    return ConsumerOwnership.objects.get(id = id)
+    try:
+        return ConsumerOwnership.objects.get(id = id)
+    except:
+        return False
  # Create ComplaintStatus table end

@@ -6,7 +6,7 @@ from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.userapp.models.role_status import RoleStatus
-from v1.userapp.models.role import UserRole
+from v1.userapp.models.role import Role
 from v1.userapp.serializers.role_sub_type import RoleSubTypeSerializer
 from v1.userapp.serializers.role_type import RoleTypeSerializer
 from v1.userapp.views.common_functions import set_role_validated_data
@@ -22,7 +22,7 @@ class RoleSerializer(serializers.ModelSerializer):
     role = serializers.CharField(required=False, max_length=200)
 
     class Meta:
-        model = UserRole
+        model = Role
         fields = '__all__'
 
     def create(self, validated_data, user):
@@ -43,6 +43,7 @@ class RoleSerializer(serializers.ModelSerializer):
             role_obj = super(RoleSerializer, self).update(instance, validated_data)
             role_obj.updated_by = user.id
             role_obj.updated_date = datetime.utcnow()
+            role_obj.is_active = True
             role_obj.save()
             return role_obj
 
@@ -54,7 +55,7 @@ class RoleListSerializer(serializers.ModelSerializer):
     role_sub_type = RoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
 
     class Meta:
-        model = UserRole
+        model = Role
         depth = 1
         fields = ('id_string', 'tenant', 'utility', 'role', 'role_ID', 'role_type', 'role_sub_type', 'form_factor',
                   'department', 'created_date')
@@ -67,7 +68,14 @@ class RoleViewSerializer(serializers.ModelSerializer):
     role_sub_type = RoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
 
     class Meta:
-        model = UserRole
+        model = Role
         depth = 1
         fields = ('id_string', 'tenant', 'utility', 'department', 'form_factor', 'role_type', 'role_sub_type',
                   'role_ID', 'role', 'created_date', 'is_active')
+
+
+class GetRoleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Role
+        fields = ('id_string', 'role_ID', 'role')

@@ -5,6 +5,7 @@ from django.urls import path
 from v1.utility.views.document import UtilityDocumentList, UtilityDocumentDetail
 from v1.utility.views.notes import UtilityNoteList, UtilityNoteDetail
 from v1.utility.views.numformat import UtilityNumformatDetail
+from v1.utility.views.status import UtilityStatusList
 from v1.utility.views.utility import UtilityList, UtilityDetail, Utility
 from v1.utility.views.summary import UtilitySummaryDetail
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
@@ -24,4 +25,5 @@ urlpatterns = [
     path('<uuid:id_string>/notes', UtilityNoteList.as_view(), name='utility_notes_list'),
     path('note/<uuid:id_string>', UtilityNoteDetail.as_view(), name='utility_note_details'),
     path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(),name='numformat'),
+    path('<uuid:id_string>/status/list', UtilityStatusList.as_view(),name='utility_status_list'),
 ]
