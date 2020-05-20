@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 
 # Create Asset Master table start
 
-class AsssetMaster(models.Model):
+class Assset(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -33,11 +33,11 @@ class AsssetMaster(models.Model):
     manufacturer = models.BigIntegerField(null=True, blank=True)
     make = models.BigIntegerField(null=True, blank=True)
     model = models.BigIntegerField(null=True, blank=True)
-    category = models.BigIntegerField(null=True, blank=True)
-    sub_category = models.BigIntegerField(null=True, blank=True)
-    city = models.BigIntegerField(null=True, blank=True)
-    area = models.BigIntegerField(null=True, blank=True)
-    subarea = models.BigIntegerField(null=True, blank=True)
+    category_id = models.BigIntegerField(null=True, blank=True)
+    sub_category_id = models.BigIntegerField(null=True, blank=True)
+    city_id = models.BigIntegerField(null=True, blank=True)
+    area_id = models.BigIntegerField(null=True, blank=True)
+    subarea_id = models.BigIntegerField(null=True, blank=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     lat = models.CharField(max_length=200, blank=True, null=True)
     long = models.CharField(max_length=200, blank=True, null=True)
@@ -49,7 +49,7 @@ class AsssetMaster(models.Model):
     deprecation_method = models.BigIntegerField(null=True, blank=True)
     deprecation_rate = models.BigIntegerField(null=True, blank=True)
     image = models.UrlField(null=False, blank=False)
-    status = models.BigIntegerField(null=True, blank=True)
+    status_id = models.BigIntegerField(null=True, blank=True)
     flag = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -62,5 +62,24 @@ class AsssetMaster(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_status(self):
+        status = get_cam_status_by_id(self.status_id)
+        return status
+
+
+def get_campaign_by_id_string(id_string):
+    try:
+        return Campaign.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_campaign_by_id(id):
+    try:
+        return Campaign.objects.get(id=id)
+    except:
+        return False
 
 # Create Asset Master table end.
