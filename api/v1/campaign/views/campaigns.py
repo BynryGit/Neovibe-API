@@ -44,6 +44,14 @@ class CampaignList(generics.ListAPIView):
             if is_authorized():
                 queryset = CampaignTbl.objects.filter(is_active=True)
                 return queryset
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response({
+                STATE: ERROR,
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
