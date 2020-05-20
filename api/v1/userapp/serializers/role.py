@@ -43,6 +43,7 @@ class RoleSerializer(serializers.ModelSerializer):
             role_obj = super(RoleSerializer, self).update(instance, validated_data)
             role_obj.updated_by = user.id
             role_obj.updated_date = datetime.utcnow()
+            role_obj.is_active = True
             role_obj.save()
             return role_obj
 
@@ -71,3 +72,10 @@ class RoleViewSerializer(serializers.ModelSerializer):
         depth = 1
         fields = ('id_string', 'tenant', 'utility', 'department', 'form_factor', 'role_type', 'role_sub_type',
                   'role_ID', 'role', 'created_date', 'is_active')
+
+
+class GetRoleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Role
+        fields = ('id_string', 'role_ID', 'role')

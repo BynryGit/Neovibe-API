@@ -23,7 +23,7 @@ from v1.commonapp.views.logger import logger
 # Created on: 15/05/2020
 
 
-class RegionsList(generics.ListAPIView):
+class RegionList(generics.ListAPIView):
 
     def get(self, request):
         try:
