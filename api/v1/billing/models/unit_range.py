@@ -25,7 +25,7 @@ class UnitRange(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    range = models.CharField(maxlength=200, blank=False, null=False)
+    range = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -33,9 +33,9 @@ class UnitRange(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.range
 
     def __unicode__(self):
-        return self.name
+        return self.range
 # Create Unit Range table start.
 

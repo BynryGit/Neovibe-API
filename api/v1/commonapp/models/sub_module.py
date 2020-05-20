@@ -65,4 +65,4 @@ def get_submodule_by_module_id(id):
 
 
 def get_sub_module_by_id_string(id_string):
-    return SubModule.objects.filter(id_string=id_string,is_active=True)
+    return SubModule.objects.get(id_string=id_string,is_active=True)

@@ -4,11 +4,10 @@
 # table name : 1.1 Tenant Master
 # table description : It is Tenant Master table. It will contain details for Tenant
 # frequency of data changes : Medium
-# sample table data : MNGL,VGL,SGL
+# sample table data : MNGL, VGL, SGL
 # reference tables :-
 # author : Gauri Deshmukh
 # created on : 24/04/2020
-
 # change history
 # <ddmmyyyy><changes><author>
 
@@ -35,8 +34,8 @@ class TenantMaster(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
     def __unicode__(self):
         return self.name

@@ -20,6 +20,8 @@ from django.db import models  # importing package for database
 
 
 # Create Tenant Sub-Module table start.
+from v1.tenant.models.tenant_module import get_tenant_module_by_id
+
 
 class TenantSubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -33,9 +35,36 @@ class TenantSubModule(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.module
+        return self.submodule_name
 
     def __unicode__(self):
-        return self.module
+        return self.submodule_name
 
-# Create Tenant Sub-Module table end.
+    @property
+    def get_tenant_module(self):
+        module = get_tenant_module_by_id(self.module_id)
+        return module.module_name
+
+
+# Create Utility Sub Module table end.
+
+
+def get_tenant_submodule_by_id(id):
+    try:
+        return TenantSubModule.objects.get(id=id)
+    except:
+        return False
+
+
+def get_tenant_submodule_by_id_string(id_string):
+    try:
+        return TenantSubModule.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_tenant_submodules_by_tenant_id_string(id_string):
+    return TenantSubModule.objects.filter(tenant_id_string=id_string)
+
+
+def get_tenant_submodules_by_module_id(id):
+    return TenantSubModule.objects.filter(module_id=id)

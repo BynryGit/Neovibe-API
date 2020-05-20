@@ -21,7 +21,7 @@ from v1.utility.serializers.notes import NoteSerializer
 # Interaction: for get and add utility notes
 # Usage: API will fetch and add all notes under utility.
 # Tables used: 2.5.12 Notes
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 13/05/2020
 
 

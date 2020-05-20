@@ -1,40 +1,38 @@
-__author__ = "aki"
+__author__ = "Gauri"
 
 from rest_framework import serializers
 from django.db import transaction
 from django.utils import timezone
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
-from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
-from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl
+from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl
 
 
-class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
+class TenantSubModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
-    utility = UtilityMasterViewSerializer(read_only=True)
-    utility_module = serializers.ReadOnlyField(source='get_utility_module')
+    tenant_module = serializers.ReadOnlyField(source='get_tenant_module')
 
     class Meta:
-        model = UtilitySubModuleTbl
-        fields = ('id_string', 'submodule_name', 'submodule_desc', 'utility_module', 'tenant', 'utility',)
+        model = TenantSubModuleTbl
+        fields = ('sub_module_id', 'sub_module_name', 'submodule_desc', 'subscription_id', 'module_id')
 
 
-class UtilitySubModuleSerializer(serializers.ModelSerializer):
+class TenantSubModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = UtilitySubModuleTbl
-        fields = ('submodule_name', 'submodule_desc')
+        model = TenantSubModuleTbl
+        fields = ('sub_module_id', 'sub_module_name', 'submodule_desc', 'subscription_id', 'module_id')
 
     def create(self, validated_data, user):
         with transaction.atomic():
-            utility_module = super(UtilitySubModuleSerializer, self).create(validated_data)
-            utility_module.created_by = user
-            utility_module.save()
-            return utility_module
+            tenant_module = super(TenantSubModuleSerializer, self).create(validated_data)
+            tenant_module.created_by = user
+            tenant_module.save()
+            return tenant_module
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():
-            utility_module = super(UtilitySubModuleSerializer, self).update(instance, validated_data)
-            utility_module.updated_by = user
-            utility_module.updated_date = timezone.now()
-            utility_module.save()
-            return utility_module
+            tenant_module = super(TenantSubModuleSerializer, self).update(instance, validated_data)
+            tenant_module.updated_by = user
+            tenant_module.updated_date = timezone.now()
+            tenant_module.save()
+            return tenant_module

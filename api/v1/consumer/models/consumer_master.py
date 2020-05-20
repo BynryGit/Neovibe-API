@@ -74,4 +74,9 @@ def get_consumer_by_id_string(id_string):
     except Exception as e:
         return False
 
-# Create Consumer Master table end.
+
+def get_consumer_by_id(id):
+    try:
+        return ConsumerMaster.objects.get(id = id)
+    except:
+        return False

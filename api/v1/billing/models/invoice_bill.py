@@ -12,6 +12,9 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -26,15 +29,15 @@ class InvoiceBill(models.Model):
     invoice_no = models.CharField(max_length=200, null=True, blank=True)
     invoice_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    category = models.BigIntegerField(null=True, blank=True)
-    subcategory = models.BigIntegerField(null=True, blank=True)
+    category_id = models.BigIntegerField(null=True, blank=True)
+    sub_category_id = models.BigIntegerField(null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
     contact = models.CharField(max_length=200, null=True, blank=True)
     conversion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     consumer_status = models.CharField(max_length=200, null=True, blank=True)
-    cycle = models.BigIntegerField(null=True, blank=True)
-    route = models.BigIntegerField(null=True, blank=True)
-    utility_service_plan = models.BigIntegerField(null=True, blank=True)
+    cycle_id = models.BigIntegerField(null=True, blank=True)
+    route_id = models.BigIntegerField(null=True, blank=True)
+    utility_service_plan_id = models.BigIntegerField(null=True, blank=True)
     bill_count = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -63,12 +66,12 @@ class InvoiceBill(models.Model):
     after_due_date_amount = models.FloatField(null=True, blank=True)
     current_emi_amt = models.FloatField(null=True, blank=True)
     closing_month = models.CharField(max_length=200, null=True, blank=True)
-    bill_status = models.BigIntegerField(null=True, blank=True)
+    bill_status_id = models.BigIntegerField(null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     is_adjusted = models.BooleanField(default=False)
     is_spot_bill = models.BooleanField(default=False)
     is_sms_send = models.BooleanField(default=False)
-    instruction = models.BigIntegerField(null=True, blank=True)
+    instruction_id = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -78,13 +81,43 @@ class InvoiceBill(models.Model):
 
 
     def __str__(self):
-        return self.invoice_no
+        return self.consumer_no
 
     def __unicode__(self):
-        return self.invoice_no
+        return self.consumer_no
+
+    @property
+    def get_category(self):
+        try:
+            category = get_consumer_category_by_id(self.category_id)
+            return  category
+        except:
+            return False
+
+    @property
+    def get_sub_category(self):
+        try:
+            sub_category = get_consumer_sub_category_by_id(self.sub_category_id)
+            return sub_category
+        except:
+            return False
 
 
 def get_invoice_bills_by_consumer_no(consumer_no):
     return InvoiceBill.objects.filter(consumer_no = consumer_no)
+
+
+def get_invoice_bill_by_id_string(id_string):
+    try:
+        return InvoiceBill.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_invoice_bill_by_id(id):
+    try:
+        return InvoiceBill.objects.get(id=id)
+    except:
+        return False
 
 # Create Invoice Bill table end.

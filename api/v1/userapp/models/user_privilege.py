@@ -36,10 +36,10 @@ class UserPrivilege(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id
+        return self.tenant.name
 
     def __unicode__(self):
-        return self.id
+        return self.tenant.name
 
     @property
     def get_role_privilege(self):
@@ -49,7 +49,7 @@ class UserPrivilege(models.Model):
 
 
 def get_privilege_by_id_string(id_string):
-    return UserPrivilege.objects.filter(id_string=id_string, is_active=True).last()
+    return UserPrivilege.objects.get(id_string=id_string, is_active=True)
 
 
 def get_user_privilege_by_user_id(id):
