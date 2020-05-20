@@ -37,22 +37,34 @@ class RolePrivilege(GenericAPIView):
         try:
             if is_token_valid(request.data['token']):
                 if is_authorized():
+                    data = []
                     if is_role_privilege_data_verified(request):
                         user = get_user_by_id(3)
-                        serializer = RolePrivilegeSerializer(data=request.data)
-                        if serializer.is_valid():
-                            privilege_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
-                                                                      context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                        module_list = request.data['module_id']
+                        for module in module_list:
+                            validate_data = {}
+                            sub_module_list = module['sub_module_id']
+                            for sub_module in sub_module_list:
+                                validate_data['role_id'] = request.data['role_id']
+                                validate_data['module_id'] = module['module_id']
+                                validate_data['sub_module_id'] = sub_module['sub_module_id']
+                                validate_data['privilege_id'] = sub_module['privilege_id']
+                                serializer = RolePrivilegeSerializer(data=validate_data)
+                                if serializer.is_valid():
+                                    privilege_obj = serializer.create(serializer.validated_data, user)
+                                    view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
+                                                                              context={'request': request})
+                                    data.append(view_serializer.data)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        RESULTS: serializer.errors,
+                                    }, status=status.HTTP_400_BAD_REQUEST)
+
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: data,
+                        }, status=status.HTTP_201_CREATED)
                         # Save privilege details start
                     else:
                         return Response({
@@ -138,47 +150,47 @@ class RolePrivilegeDetail(GenericAPIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def put(self, request, format=None):
-        try:
-            # Checking authentication start
-            if is_token_valid(request.data['token']):
-                if is_authorized():
-                    if is_role_privilege_data_verified(request):
-                        user = get_user_by_id(3)
-                        role = get_role_by_id_string(request.data['role'])
-                        # role_privilege, result, error = save_edited_privilege_details(request, user, role)
-                        result = ''
-                        if result:
-                            data = {
-                                "role_id_string": role.id_string
-                            }
-                            return Response({
-                                STATE: SUCCESS,
-                                DATA: data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: EXCEPTION,
-                                ERROR: error
-                            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                        # Save privilege details start
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
-            else:
-                return Response({
-                    STATE: ERROR,
-
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    # def put(self, request, format=None):
+    #     try:
+    #         # Checking authentication start
+    #         if is_token_valid(request.data['token']):
+    #             if is_authorized():
+    #                 if is_role_privilege_data_verified(request):
+    #                     user = get_user_by_id(3)
+    #                     role = get_role_by_id_string(request.data['role'])
+    #                     # role_privilege, result, error = save_edited_privilege_details(request, user, role)
+    #                     result = ''
+    #                     if result:
+    #                         data = {
+    #                             "role_id_string": role.id_string
+    #                         }
+    #                         return Response({
+    #                             STATE: SUCCESS,
+    #                             DATA: data,
+    #                         }, status=status.HTTP_200_OK)
+    #                     else:
+    #                         return Response({
+    #                             STATE: EXCEPTION,
+    #                             ERROR: error
+    #                         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    #                     # Save privilege details start
+    #                 else:
+    #                     return Response({
+    #                         STATE: ERROR,
+    #                     }, status=status.HTTP_400_BAD_REQUEST)
+    #             else:
+    #                 return Response({
+    #                     STATE: ERROR,
+    #                 }, status=status.HTTP_403_FORBIDDEN)
+    #         else:
+    #             return Response({
+    #                 STATE: ERROR,
+    #
+    #             }, status=status.HTTP_401_UNAUTHORIZED)
+    #     except Exception as e:
+    #         logger().log(e, 'ERROR', user='test', name='test')
+    #         return Response({
+    #             STATE: EXCEPTION,
+    #             ERROR: str(traceback.print_exc(e))
+    #         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
