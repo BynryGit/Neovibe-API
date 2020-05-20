@@ -71,8 +71,8 @@ class RolePrivilege(models.Model):
     # Create Role Privilege table end
 
 
-def get_role_privilege_by_role_id(id):
-    return RolePrivilege.objects.filter(role_id=id, is_active=True)
+def get_role_privilege_by_role_id(role_id):
+    return RolePrivilege.objects.filter(role_id=role_id, is_active=True)
 
 
 def get_role_privilege_by_id_string(id_string):
