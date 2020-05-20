@@ -69,6 +69,8 @@ def set_role_privilege_validated_data(validated_data):
     if "privilege_id" in validated_data:
         privilege = get_privilege_by_id_string(validated_data["privilege_id"])
         validated_data["privilege_id"] = privilege.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 

@@ -17,11 +17,11 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 
 # from v1.commonapp.models.sub_module import get_submodule_by_module_id
-from v1.commonapp.models.module import get_module_by_id
-from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.commonapp.models.module import get_module_by_id, get_module_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_id, get_sub_module_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.userapp.models.privilege import get_privilege_by_id
-from v1.userapp.models.role import get_role_by_id
+from v1.userapp.models.privilege import get_privilege_by_id, get_privilege_by_id_string
+from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
@@ -82,3 +82,10 @@ def get_role_privilege_by_id_string(id_string):
 def get_privilege_by_sub_module_id(sub_module_id,module_id):
     privilege = RolePrivilege.objects.filter(module_id=module_id,sub_module_id=sub_module_id).last()
     return get_privilege_by_id(privilege.privilege_id)
+
+
+def get_record_by_values(role_id,module_id_string,sub_module_id_string,privilege_id_string):
+    module = get_module_by_id_string(module_id_string)
+    sub_module = get_sub_module_by_id_string(sub_module_id_string)
+    privilege = get_privilege_by_id_string(privilege_id_string)
+    return RolePrivilege.objects.filter(role_id=role_id,module_id=module.id,sub_module_id=sub_module.id,privilege_id=privilege.id).last()
