@@ -7,7 +7,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_master import UserDetail
-from v1.campaign.models.campaign import get_campaign_by_id_string
+from v1.campaign.models.campaign import get_campaign_by_id_string,Campaign as Campaigntbl
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.serializers.campaign import CampaignViewSerializer,CampaignListSerializer,CampaignSerializer
@@ -63,7 +63,6 @@ class Campaign(GenericAPIView):
 
     def post(self, request):
         try:
-            # Checking authentication start
             if is_token_valid(1):
                 if is_authorized():
                     user = UserDetail.objects.get(id=2)
@@ -71,11 +70,17 @@ class Campaign(GenericAPIView):
                         serializer = CampaignSerializer(data=request.data)
                         if serializer.is_valid():
                             campaign_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
+                            if campaign_obj:
+                                view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS:"Alreday Exist",
+                                }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,

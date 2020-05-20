@@ -71,11 +71,11 @@ def get_area_by_id(id):
     try:
         return Area.objects.get(id = id)
     except:
-        False
+        return False
 
 
 def get_area_by_id_string(id_string):
     try:
         return Area.objects.get(id_string=id_string)
     except:
-        False
+        return  False

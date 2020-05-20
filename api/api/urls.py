@@ -17,18 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from v1.registration import urls as registration_urls
 from v1.campaign import urls as campaign_urls
-# from v1.survey import urls as survey_urls
-# from v1.utility import urls as utility_urls
-
 from v1.survey import urls as survey_urls
-from v1.utility import urls as utility_urls
-
-from v1.survey import urls as survey_urls
+from v1.userapp.urls import user_urls, role_urls, privilege_urls
 from v1.utility import urls as utility_urls
 from v1.consumer import urls as consumer_urls
 from v1.commonapp import urls as common_urls
 from v1.tenant import urls as tenant_urls
-from v1.userapp import urls as user_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,4 +34,6 @@ urlpatterns = [
     path('api/v1/tenant/', include(tenant_urls)),
     path('api/v1/consumer/', include(consumer_urls)),
     path('api/v1/user/', include(user_urls)),
+    path('api/v1/role/', include(role_urls)),
+    path('api/v1/privilege/', include(privilege_urls)),
 ]

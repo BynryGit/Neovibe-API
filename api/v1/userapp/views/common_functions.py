@@ -18,7 +18,7 @@ from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
 from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string, get_user_privilege_by_user_id
-from v1.userapp.models.role import get_role_by_id, UserRole, get_role_by_id_string
+from v1.userapp.models.role import Role, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id
@@ -40,7 +40,7 @@ def login(user):
         return False
 
 
-def set_validated_data(validated_data):
+def set_role_validated_data(validated_data):
     if "type_id" in validated_data:
         type = get_role_type_by_id_string(validated_data["type_id"])
         validated_data["type_id"] = type.id
@@ -501,6 +501,7 @@ def save_edited_note(request, user):
 
 # Check only mandatory fields for user role and privilege api
 def is_privilege_data_verified(request):
+    return True
     if request.data['user'] and request.data['module'] and request.data['sub_module'] and request.data['role'] and \
             request.data['privilege']:
         return True

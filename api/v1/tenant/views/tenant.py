@@ -174,10 +174,14 @@ class TenantDetail(GenericAPIView):
                         # Save basic details start
                         # user = UserDetail.objects.get(id=2)
                         tenant_obj = get_tenant_by_id_string(id_string)
+
                         if tenant_obj:
                             serializer = TenantSerializer(data=request.data)
+                            print("Here");
                             if serializer.is_valid(request.data):
+
                                 tenant_obj = serializer.update(tenant_obj, serializer.validated_data)
+
                                 view_serializer = TenantViewSerializer(instance=tenant_obj,
                                                                              context={'request': request})
                                 return Response({
@@ -205,6 +209,7 @@ class TenantDetail(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             # logger().log(e, 'ERROR', user='Tenant update exception', name='Tenant')
+            print("#######################",e)
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
