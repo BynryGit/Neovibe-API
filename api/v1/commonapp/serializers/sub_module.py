@@ -12,7 +12,7 @@ class SubModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubModule
-        fields = ('name', 'id_string', 'privilege')
+        fields = ('name', 'id_string')
 
 
 class SubModuleListSerializer(serializers.ModelSerializer):

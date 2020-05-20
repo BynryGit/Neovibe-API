@@ -1,7 +1,7 @@
 from django.urls import path
 
-from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.views.role import RoleList, Role, RoleDetail
+from v1.userapp.views.role_privilege import RolePrivilege
 
 urlpatterns = [
 

@@ -3,7 +3,12 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers
+
+from v1.commonapp.serializers.module import ModuleSerializer
+from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
+from v1.userapp.serializers.privilege import GetPrivilegeSerializer
+from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.views.common_functions import set_role_privilege_validated_data
 
 
@@ -31,13 +36,13 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
 
 
 class RolePrivilegeViewSerializer(serializers.ModelSerializer):
-    department = DepartmentSerializer(many=False, required=True, source='get_department')
-    form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
-    role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
-    role_sub_type = RoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+    role = GetRoleSerializer(many=False, required=True, source='get_role')
+    module = ModuleSerializer(many=False, required=True, source='get_module')
+    sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
+    privilege = GetPrivilegeSerializer(many=False, required=True, source='get_privilege')
 
     class Meta:
-        model = Role
+        model = RolePrivilege
         depth = 1
-        fields = ('id_string', 'tenant', 'utility', 'department', 'form_factor', 'role_type', 'role_sub_type',
-                  'role_ID', 'role', 'created_date', 'is_active')
+        fields = ('id_string', 'tenant', 'utility', 'role', 'module', 'sub_module', 'privilege',
+                  'created_date', 'is_active')

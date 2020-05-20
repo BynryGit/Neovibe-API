@@ -49,7 +49,7 @@ class UserPrivilege(models.Model):
 
 
 def get_privilege_by_id_string(id_string):
-    return UserPrivilege.objects.filter(id_string=id_string, is_active=True).last()
+    return UserPrivilege.objects.get(id_string=id_string, is_active=True)
 
 
 def get_user_privilege_by_user_id(id):

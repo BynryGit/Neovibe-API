@@ -10,14 +10,14 @@ from v1.commonapp.models.form_factor import FormFactor, get_form_factor_by_id_st
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
-from v1.userapp.models.privilege import filter_privilege_by_id_string
+from v1.userapp.models.privilege import filter_privilege_by_id_string, get_privilege_by_id_string
 from v1.userapp.models.role_privilege import RolePrivilege, get_role_privilege_by_id_string, \
     get_role_privilege_by_role_id
 from v1.userapp.models.role_sub_type import RoleSubType, get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import RoleType, get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
-from v1.userapp.models.user_privilege import UserPrivilege, get_privilege_by_id_string, get_user_privilege_by_user_id
+from v1.userapp.models.user_privilege import UserPrivilege, get_user_privilege_by_user_id
 from v1.userapp.models.role import Role, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
@@ -68,6 +68,7 @@ def set_role_privilege_validated_data(validated_data):
         validated_data["sub_module_id"] = sub_module.id
     if "privilege_id" in validated_data:
         privilege = get_privilege_by_id_string(validated_data["privilege_id"])
+        print('============',validated_data["privilege_id"],privilege)
         validated_data["privilege_id"] = privilege.id
     return validated_data
 
