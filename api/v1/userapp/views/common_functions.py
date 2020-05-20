@@ -56,6 +56,22 @@ def set_role_validated_data(validated_data):
     return validated_data
 
 
+def set_role_privilege_validated_data(validated_data):
+    if "role_id" in validated_data:
+        role = get_role_by_id_string(validated_data["role_id"])
+        validated_data["role_id"] = role.id
+    if "module_id" in validated_data:
+        module = get_module_by_id_string(validated_data["module_id"])
+        validated_data["module_id"] = module.id
+    if "sub_module_id" in validated_data:
+        sub_module = get_sub_module_by_id_string(validated_data["sub_module_id"])
+        validated_data["sub_module_id"] = sub_module.id
+    if "privilege_id" in validated_data:
+        privilege = get_privilege_by_id_string(validated_data["privilege_id"])
+        validated_data["privilege_id"] = privilege.id
+    return validated_data
+
+
 # Check only mandatory fields for role api
 def is_role_data_verified(request):
     return True
@@ -66,38 +82,13 @@ def is_role_data_verified(request):
         return False
 
 
-# @transaction.atomic
-def add_basic_role_details(request, user):
-    role = ""
-    try:
-        # role =  UserRole()
-        role = user
-        type = get_role_type_by_id_string(request.data["type"])
-        sub_type = get_role_sub_type_by_id_string(request.data["type"])
-        form_factor = get_form_factor_by_id_string(request.data["form_factor"])
-        department = get_department_by_id_string(request.data["department"])
-
-        if "role" in request.data:
-            role.role = request.data["role"]
-        if "type" in request.data:
-            role.type_id = type.id
-        if "sub_type" in request.data:
-            role.sub_type_id = sub_type.id
-        if "form_factor" in request.data:
-            role.form_factor_id = form_factor.id
-        if "department" in request.data:
-            role.department_id = department.id
-        role.tenant = user.tenant
-        role.created_by = user.id
-        role.created_date = datetime.now()
-        role.save()
-        role.role_ID = role.id
-        role.save()
-        return role, True, ''
-    except Exception as e:
-        print("Exception occurred ",str(traceback.print_exc(e)))
-        error = str(traceback.print_exc(e))
-        return role, False, error
+def is_role_privilege_data_verified(request):
+    return True
+    if request.data['role'] and request.data['type'] and request.data['sub_type'] and request.data['form_factor'] and \
+            request.data['department']:
+        return True
+    else:
+        return False
 
 
 def save_privilege_details(request, user, role):
@@ -123,32 +114,6 @@ def save_privilege_details(request, user, role):
             return role, True, ''
     except Exception as e:
         print("Exception occurred ", str(traceback.print_exc(e)))
-        error = str(traceback.print_exc(e))
-        return role, False, error
-
-
-def save_edited_basic_role_details(request, user):
-    role = ''
-    try:
-        if "role_id_string" in request.data:
-            role = get_role_by_id_string(request.data["role_id_string"])
-        if "role" in request.data:
-            role.role = request.data["role"]
-        if "type" in request.data:
-            role.type_id = request.data["type"]
-        if "sub_type" in request.data:
-            role.sub_type_id = request.data["sub_type"]
-        if "form_factor" in request.data:
-            role.form_factor_id = request.data["form_factor"]
-        if "department" in request.data:
-            role.department_id = request.data["department"]
-        role.updated_by = user.id
-        role.updated_date = datetime.now()
-        role.save()
-
-        return role, True, ''
-    except Exception as e:
-        print("Exception occurred ",str(traceback.print_exc(e)))
         error = str(traceback.print_exc(e))
         return role, False, error
 
