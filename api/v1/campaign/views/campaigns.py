@@ -13,7 +13,7 @@ from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.serializers.campaign import CampaignViewSerializer,CampaignListSerializer,CampaignSerializer
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.campaign.views.common_functions import is_data_verified,set_validated_data
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 
 # API Header
 # API end Point: api/v1/campaign/list
@@ -86,8 +86,8 @@ class Campaign(GenericAPIView):
                                 }, status=status.HTTP_201_CREATED)
                             else:
                                 return Response({
-                                    STATE: ERROR,
-                                    RESULTS:"Alreday Exist",
+                                    STATE: DUPLICATE,
+                                    RESULTS: DATA_ALREADY_EXISTS,
                                 }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
