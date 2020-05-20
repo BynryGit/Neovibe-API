@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "Gauri"
 
 import traceback
 from rest_framework.generics import GenericAPIView
@@ -6,26 +6,26 @@ from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.document import get_documents_by_utility_id_string, get_document_by_id_string
+from v1.commonapp.models.notes import get_notes_by_tenant_id_string, get_note_by_id_string
 from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.serializers.document import DocumentSerializer
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.tenant.serializers.notes import NoteSerializer
 
 
 # API Header
-# API end Point: api/v1/utility/id_string/documents
+# API end Point: api/v1/tenant/id_string/notes
 # API verb: GET, POST
 # Package: Basic
-# Modules: Utility
-# Sub Module: Document
-# Interaction: for get and add utility document
-# Usage: API will fetch and add all documents under utility.
-# Tables used: 2.12.13 Document
-# Author: Akshay
-# Created on: 13/05/2020
+# Modules: Tenant
+# Sub Module: Notes
+# Interaction: for get and add tenant notes
+# Usage: API will fetch and add all notes under tenant.
+# Tables used: Notes
+# Author: Gauri Deshmukh
+# Created on: 20/05/2020
 
 
-class UtilityDocumentList(GenericAPIView):
+class TenantNoteList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -37,11 +37,11 @@ class UtilityDocumentList(GenericAPIView):
 
                 # Checking authorization start
                 if is_authorized():
-                # Checking authorization end
+                    # Checking authorization end
 
-                    utility_document_obj = get_documents_by_utility_id_string(id_string)
-                    if utility_document_obj:
-                        serializer = DocumentSerializer(utility_document_obj, many=True, context={'request': request})
+                    tenant_notes_obj = get_notes_by_tenant_id_string(id_string)
+                    if tenant_notes_obj:
+                        serializer = NoteSerializer(tenant_notes_obj, many=True, context={'request': request})
                         if serializer.is_valid():
                             return Response({
                                 STATE: SUCCESS,
@@ -71,7 +71,7 @@ class UtilityDocumentList(GenericAPIView):
                 ERROR: str(traceback.print_exc(ex))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def post(self, request,id_string):
+    def post(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(request.headers['token']):
@@ -83,11 +83,11 @@ class UtilityDocumentList(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
-                        serializer = DocumentSerializer(data=request.data)
+                    tenant_obj = get_tenant_by_id_string(id_string)
+                    if tenant_obj:
+                        serializer = NoteSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.validated_data['utility']=utility_obj.id
+                            serializer.validated_data['tenant'] = tenant_obj.id
                             serializer.create(serializer.validated_data, request.user)
                             return Response({
                                 STATE: SUCCESS,
@@ -118,19 +118,19 @@ class UtilityDocumentList(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/utility/document/id_string
+# API end Point: api/v1/tenant/note/id_string
 # API verb: GET, PUT
 # Package: Basic
-# Modules: Utility
-# Sub Module: Document
-# Interaction: for get and edit utility document
-# Usage: API will fetch and edit documents under utility.
-# Tables used: 2.12.13 Document
+# Modules: Tenant
+# Sub Module: Notes
+# Interaction: for get and edit tenant note
+# Usage: API will fetch and edit note under tenant.
+# Tables used:  Notes
 # Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 
-class UtilityDocumentDetail(GenericAPIView):
+class TenantNoteDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -142,11 +142,11 @@ class UtilityDocumentDetail(GenericAPIView):
 
                 # Checking authorization start
                 if is_authorized():
-                # Checking authorization end
+                    # Checking authorization end
 
-                    utility_document_obj = get_document_by_id_string(id_string)
-                    if utility_document_obj:
-                        serializer = DocumentSerializer(utility_document_obj,context={'request':request})
+                    tenant_notes_obj = get_note_by_id_string(id_string)
+                    if tenant_notes_obj:
+                        serializer = NoteSerializer(tenant_notes_obj, context={'request': request})
                         if serializer.is_valid():
                             return Response({
                                 STATE: SUCCESS,
@@ -176,7 +176,7 @@ class UtilityDocumentDetail(GenericAPIView):
                 ERROR: str(traceback.print_exc(ex))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def put(self, request,id_string):
+    def put(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(request.headers['token']):
@@ -188,9 +188,9 @@ class UtilityDocumentDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    utility_document_obj = get_document_by_id_string(id_string)
-                    if utility_document_obj:
-                        serializer = DocumentSerializer(data=request.data)
+                    tenant_note_obj = get_note_by_id_string(id_string)
+                    if tenant_note_obj:
+                        serializer = NoteSerializer(data=request.data)
                         if serializer.is_valid():
                             serializer.create(serializer.validated_data, request.user)
                             return Response({

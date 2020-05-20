@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "Gauri"
 
 import traceback
 from rest_framework.generics import GenericAPIView
@@ -6,26 +6,26 @@ from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.document import get_documents_by_utility_id_string, get_document_by_id_string
+from v1.commonapp.models.document import get_documents_by_tenant_id_string, get_document_by_id_string
 from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.serializers.document import DocumentSerializer
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.tenant.serializers.document import DocumentSerializer
 
 
 # API Header
-# API end Point: api/v1/utility/id_string/documents
+# API end Point: api/v1/tenant/id_string/documents
 # API verb: GET, POST
 # Package: Basic
-# Modules: Utility
+# Modules: Tenant
 # Sub Module: Document
-# Interaction: for get and add utility document
-# Usage: API will fetch and add all documents under utility.
-# Tables used: 2.12.13 Document
-# Author: Akshay
+# Interaction: for get and add Tenant document
+# Usage: API will fetch and add all documents under Tenant.
+# Tables used:  Document
+# Author: Gauri Deshmukh
 # Created on: 13/05/2020
 
 
-class UtilityDocumentList(GenericAPIView):
+class TenantDocumentList(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -39,9 +39,9 @@ class UtilityDocumentList(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    utility_document_obj = get_documents_by_utility_id_string(id_string)
-                    if utility_document_obj:
-                        serializer = DocumentSerializer(utility_document_obj, many=True, context={'request': request})
+                    tenant_document_obj = get_documents_by_tenant_id_string(id_string)
+                    if tenant_document_obj:
+                        serializer = DocumentSerializer(tenant_document_obj, many=True, context={'request': request})
                         if serializer.is_valid():
                             return Response({
                                 STATE: SUCCESS,
@@ -83,11 +83,11 @@ class UtilityDocumentList(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
+                    tenant_obj = get_tenant_by_id_string(id_string)
+                    if tenant_obj:
                         serializer = DocumentSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.validated_data['utility']=utility_obj.id
+                            serializer.validated_data['utility']=tenant_obj.id
                             serializer.create(serializer.validated_data, request.user)
                             return Response({
                                 STATE: SUCCESS,
@@ -130,7 +130,7 @@ class UtilityDocumentList(GenericAPIView):
 # Created on: 13/05/2020
 
 
-class UtilityDocumentDetail(GenericAPIView):
+class TenantDocumentDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -144,9 +144,9 @@ class UtilityDocumentDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    utility_document_obj = get_document_by_id_string(id_string)
-                    if utility_document_obj:
-                        serializer = DocumentSerializer(utility_document_obj,context={'request':request})
+                    tenant_document_obj = get_document_by_id_string(id_string)
+                    if tenant_document_obj:
+                        serializer = DocumentSerializer(tenant_document_obj,context={'request':request})
                         if serializer.is_valid():
                             return Response({
                                 STATE: SUCCESS,
@@ -188,8 +188,8 @@ class UtilityDocumentDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    utility_document_obj = get_document_by_id_string(id_string)
-                    if utility_document_obj:
+                    tenant_document_obj = get_document_by_id_string(id_string)
+                    if tenant_document_obj:
                         serializer = DocumentSerializer(data=request.data)
                         if serializer.is_valid():
                             serializer.create(serializer.validated_data, request.user)
