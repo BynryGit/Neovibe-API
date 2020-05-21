@@ -207,11 +207,9 @@ class RolePrivilegeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            print(e)
-            # logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))

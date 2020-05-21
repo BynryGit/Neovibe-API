@@ -99,12 +99,28 @@ def set_user_validated_data(validated_data):
     return validated_data
 
 
+def set_user_role_validated_data(validated_data):
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
+    if "role_id" in validated_data:
+        role = get_role_by_id_string(validated_data["role_id"])
+        validated_data["role_id"] = role.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
+    return validated_data
+
+
 # Check only mandatory fields for role api
 def is_role_data_verified(request):
     return True
 
 
 def is_role_privilege_data_verified(request):
+    return True
+
+
+def is_user_role_data_verified(request):
     return True
 
 

@@ -9,17 +9,17 @@ from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.role import get_role_by_id
+from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, \
     get_user_by_id
-from v1.userapp.models.user_role import get_user_role_by_user_id
+from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer, \
-    UserSerializer
+    UserSerializer, UserRoleSerializer, UserRoleViewSerializer
 from v1.userapp.views.common_functions import is_user_data_verified, is_privilege_data_verified, add_user_privilege, \
-    save_edited_privilege
+    save_edited_privilege, is_user_role_data_verified
 
 
 # API Header
@@ -429,69 +429,92 @@ class UserRole(GenericAPIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def post(self, request, format=None):
+    def post(self, request, id_string):
         try:
-
-            # Request data verification start
-            if is_privilege_data_verified(request):
-                # Request data verification end
-
-                # Save basic user details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = add_user_privilege(request, user)
-                if result:
-                    data = {
-                        "user_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    data = []
+                    if is_user_role_data_verified(request):
+                        user = get_user_by_id(3)
+                        for role in request.data['roles']:
+                            validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
+                            serializer = UserRoleSerializer(data=validate_data)
+                            if serializer.is_valid():
+                                user_role_obj = serializer.create(serializer.validated_data, user)
+                                view_serializer = UserRoleViewSerializer(instance=user_role_obj,
+                                                                              context={'request': request})
+                                data.append(view_serializer.data)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: data,
+                        }, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Save basic role details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def put(self, request, format=None):
+    def put(self, request, id_string):
         try:
-
-            # Request data verification start
-            if is_privilege_data_verified(request):
-                # Request data verification end
-
-                # Edit basic details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = save_edited_privilege(request, user)
-                if result:
-                    data = {
-                        "user_detail_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    data = []
+                    if is_user_role_data_verified(request):
+                        user = get_user_by_id(3)
+                        for role in request.data['roles']:
+                            validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
+                                             "is_active": role['is_active']}
+                            serializer = UserRoleSerializer(data=validate_data)
+                            if serializer.is_valid():
+                                user_role = get_record_by_values(str(id_string), validate_data['role_id'])
+                                if user_role:
+                                    user_role_obj = serializer.update(user_role, serializer.validated_data, user)
+                                else:
+                                    user_role_obj = serializer.create(serializer.validated_data, user)
+                                view_serializer = UserRoleViewSerializer(instance=user_role_obj,
+                                                                              context={'request': request})
+                                data.append(view_serializer.data)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Edit basic details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))

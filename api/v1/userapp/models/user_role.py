@@ -15,9 +15,11 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-from v1.tenant.models.tenant_master import TenantMaster
+from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
+from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
-from v1.utility.models.utility_master import UtilityMaster
+from v1.userapp.models.user_master import get_user_by_id, get_user_by_id_string
+from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 from django.db import models  # importing package for database
 
 
@@ -42,6 +44,22 @@ class UserRole(models.Model):
         return self.tenant.name
 
     @property
+    def get_tenant(self):
+        return get_tenant_by_id(self.tenant.id)
+
+    @property
+    def get_utility(self):
+        return get_utility_by_id(self.utility.id)
+
+    @property
+    def get_user(self):
+        return get_user_by_id(self.user_id)
+
+    @property
+    def get_role(self):
+        return get_role_by_id(self.role_id)
+
+    @property
     def get_role_privilege(self):
         return get_role_privilege_by_role_id(self.role_id)
 
@@ -58,5 +76,12 @@ def get_user_role_by_user_id(id):
 
 def get_user_role_by_role_id(id):
     return UserRole.objects.filter(role_id=id, is_active=True)
+
+
+def get_record_by_values(user_id_string,role_id_string):
+    user = get_user_by_id_string(user_id_string)
+    role = get_role_by_id_string(role_id_string)
+    return UserRole.objects.filter(user_id=user.id,role_id=role.id).last()
+
 
 
