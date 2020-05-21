@@ -26,16 +26,16 @@ class UserSerializer(serializers.ModelSerializer):
     department_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
     user_ID = serializers.CharField(required=False, max_length=200)
-    username = serializers.CharField(required=False, max_length=200)
+    username = serializers.CharField(required=True, max_length=200)
+    password = serializers.CharField(required=True, max_length=200)
     first_name = serializers.CharField(required=False, max_length=200)
     middle_name = serializers.CharField(required=False, max_length=200)
     last_name = serializers.CharField(required=False, max_length=200)
     phone_mobile = serializers.CharField(required=False, max_length=200)
     phone_landline = serializers.CharField(required=False, max_length=200)
-    # utilities = serializers.CharField(required=False, max_length=200)
-    # skills = serializers.CharField(required=False, max_length=200)
-    # areas = serializers.CharField(required=False, max_length=200)
-    password = serializers.CharField(required=True, max_length=200)
+    utilities = serializers.JSONField(required=False)
+    skills = serializers.JSONField(required=False)
+    areas = serializers.JSONField(required=False)
 
     class Meta:
         model = UserDetail
@@ -58,7 +58,8 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data = set_user_validated_data(validated_data)
         with transaction.atomic():
             user_obj = super(UserSerializer, self).update(instance, validated_data)
-            user_obj.set_password(validated_data['password'])
+            if 'password' in validated_data:
+                user_obj.set_password(validated_data['password'])
             user_obj.updated_by = user.id
             user_obj.updated_date = datetime.utcnow()
             user_obj.is_active = True

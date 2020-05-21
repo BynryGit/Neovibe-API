@@ -102,6 +102,7 @@ class User(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
@@ -158,32 +159,41 @@ class UserDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-
-            # Request data verification start
-            if is_user_data_verified(request):
-                # Request data verification end
-
-                # Edit basic details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = save_edited_basic_user_details(request, user)
-                if result:
-                    data = {
-                        "user_detail_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_user_data_verified(request):
+                        user = get_user_by_id(3)
+                        user_obj = get_user_by_id_string(id_string)
+                        if user_obj:
+                            serializer = UserSerializer(data=request.data)
+                            if serializer.is_valid():
+                                user_obj = serializer.update(user_obj, serializer.validated_data, user)
+                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_200_OK)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                            }, status=status.HTTP_404_NOT_FOUND)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Edit basic details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
