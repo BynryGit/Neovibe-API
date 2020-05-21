@@ -17,6 +17,7 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
     module_id = serializers.CharField(required=False, max_length=200)
     sub_module_id = serializers.CharField(required=False, max_length=200)
     privilege_id = serializers.CharField(required=False, max_length=200)
+    is_active = serializers.BooleanField(required=False)
 
     class Meta:
         model = RolePrivilege
@@ -33,6 +34,15 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
             role_privilege_obj.is_active = True
             role_privilege_obj.save()
             return role_privilege_obj
+
+    def update(self, instance, validated_data, user):
+        validated_data = set_role_privilege_validated_data(validated_data)
+        with transaction.atomic():
+            role_obj = super(RolePrivilegeSerializer, self).update(instance, validated_data)
+            role_obj.updated_by = user.id
+            role_obj.updated_date = datetime.utcnow()
+            role_obj.save()
+            return role_obj
 
 
 class RolePrivilegeViewSerializer(serializers.ModelSerializer):
