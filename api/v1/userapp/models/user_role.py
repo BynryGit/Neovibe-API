@@ -23,7 +23,7 @@ from django.db import models  # importing package for database
 
 # Create User Privilege table start
 
-class UserPrivilege(models.Model):
+class UserRole(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -49,12 +49,14 @@ class UserPrivilege(models.Model):
 
 
 def get_privilege_by_id_string(id_string):
-    return UserPrivilege.objects.get(id_string=id_string, is_active=True)
+    return UserRole.objects.get(id_string=id_string, is_active=True)
 
 
-def get_user_privilege_by_user_id(id):
-    return UserPrivilege.objects.filter(user_id=id, is_active=True)
+def get_user_role_by_user_id(id):
+    return UserRole.objects.filter(user_id=id, is_active=True)
 
 
-def get_user_privilege_by_role_id(id):
-    return UserPrivilege.objects.filter(role_id=id, is_active=True)
+def get_user_role_by_role_id(id):
+    return UserRole.objects.filter(role_id=id, is_active=True)
+
+

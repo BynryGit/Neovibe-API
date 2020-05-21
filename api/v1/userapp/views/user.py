@@ -9,11 +9,13 @@ from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, \
     get_user_by_id
-from v1.userapp.models.user_privilege import get_user_privilege_by_user_id
+from v1.userapp.models.user_role import get_user_role_by_user_id
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
+from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer, \
     UserSerializer
 from v1.userapp.views.common_functions import is_user_data_verified, is_privilege_data_verified, add_user_privilege, \
@@ -352,7 +354,7 @@ class UserPrivilege(GenericAPIView):
     def get(self, request, id_string):
         try:
             user = get_user_by_id_string(id_string)
-            privileges = get_user_privilege_by_user_id(user.id)
+            privileges = get_user_role_by_user_id(user.id)
             for privilege in privileges:
                 serializer = UserPrivilegeViewSerializer(instance=privilege, context={'request': request})
 
@@ -386,8 +388,46 @@ class UserPrivilege(GenericAPIView):
 # Tables used: 2.5.2. Users & Privileges - Role Privileges
 # Author: Arpita
 # Created on: 14/05/2020
+# Updated on: 21/05/2020
 
 class UserRole(GenericAPIView):
+
+    def get(self, request, id_string):
+        try:
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    role_list = []
+                    user = get_user_by_id_string(id_string)
+                    user_roles = get_user_role_by_user_id(user.id)
+                    if user_roles:
+                        for user_role in user_roles:
+                            role_obj = get_role_by_id(user_role.role_id)
+                            role = RoleViewSerializer(instance=role_obj, context={'request': request})
+                            role_list.append(role.data)
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: role_list,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            DATA: 'No records found.',
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request, format=None):
         try:

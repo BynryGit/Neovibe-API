@@ -17,7 +17,7 @@ from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
-from v1.userapp.models.user_privilege import UserPrivilege, get_user_privilege_by_user_id
+from v1.userapp.models.user_role import UserRole, get_user_role_by_user_id
 from v1.userapp.models.role import Role, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
@@ -205,7 +205,7 @@ def is_authorized(token):
 #         role = get_role_by_id(user.role)
 #
 #         received_privilege = get_privilege_by_id_string(privilege)
-#         privileges = UserPrivilege.objects.filter(role=role.id, is_active=True)
+#         privileges = UserRole.objects.filter(role=role.id, is_active=True)
 #
 #         if received_privilege in privileges:
 #             return True
@@ -474,11 +474,6 @@ def save_edited_note(request, user):
 # Check only mandatory fields for user role and privilege api
 def is_privilege_data_verified(request):
     return True
-    if request.data['user'] and request.data['module'] and request.data['sub_module'] and request.data['role'] and \
-            request.data['privilege']:
-        return True
-    else:
-        return False
 
 
 def add_user_privilege(request, user):
@@ -492,7 +487,7 @@ def add_user_privilege(request, user):
                     sub_module_obj = get_sub_module_by_id_string(sub_module)
                     privilege_obj = get_privilege_by_id_string(sub_module['privilege'])
 
-                    user_privilege = UserPrivilege()
+                    user_privilege = UserRole()
 
                     user_privilege.user_id = request.data["user"]
                     user_privilege.module_id = module_obj.id
@@ -520,7 +515,7 @@ def save_edited_privilege(request, user):
 
         for role in request.data['role']:
             role_obj = get_role_by_id_string(role)
-            user_privileges = get_user_privilege_by_user_id(user_detail.id)
+            user_privileges = get_user_role_by_user_id(user_detail.id)
             for user_privilege in user_privileges:
                 user_privilege.role_id = role_obj.id
                 user_privilege.save()

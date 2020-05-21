@@ -13,6 +13,8 @@ urlpatterns = [
 
     path('<uuid:id_string>/bank/', UserBankDetail.as_view()),
 
+    path('<uuid:id_string>/role/', UserRole.as_view()),
+
     path('bank/list', BankList.as_view()),
     path('bank-detail/', GetBankList.as_view()),
     path('bank/<uuid:id_string>', Bank.as_view()),

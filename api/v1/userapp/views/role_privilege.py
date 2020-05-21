@@ -130,8 +130,8 @@ class RolePrivilegeDetail(GenericAPIView):
                     else:
                         return Response({
                             STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            DATA: 'No records found.',
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,
