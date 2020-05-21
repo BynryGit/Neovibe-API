@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from v1.survey.models.survey_consumer import SurveyConsumer
 from v1.survey.models.survey import Survey
-from v1.supplier.models.supplier_master import SupplierMaster
+from v1.supplier.models.supplier import SupplierMaster
 from v1.survey.views.common_functions import set_survey_validate_data
 
 class SurveSerializers(serializers.ModelSerializer):

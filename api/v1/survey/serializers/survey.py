@@ -7,6 +7,10 @@ from v1.survey.models.survey_status import SurveyStatus
 from v1.survey.models.survey_type import SurveyType
 from v1.survey.models.survey_objective import SurveyObjective
 from v1.survey.views.common_functions import set_survey_validate_data
+from v1.commonapp.serializers.area import AreaListSerializer
+from v1.commonapp.serializers.sub_area import SubAreaListSerializer
+from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer
+from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer
 
 class SurveyObjectiveSerializer(serializers.ModelSerializer):
 
@@ -28,27 +32,35 @@ class SurveyStatusSerializer(serializers.ModelSerializer):
 
 class SurveyListSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    objective = SurveyObjectiveSerializer(many=False,required=True,source='get_objective')
-    type = SurveyTypeSerializer(many=False,required=True,source='get_type')
-    status = SurveyStatusSerializer(many=False,required=True,source='get_status')
+    objective_id = SurveyObjectiveSerializer(many=False,required=True,source='get_objective')
+    type_id = SurveyTypeSerializer(many=False,required=True,source='get_type')
+    status_id = SurveyStatusSerializer(many=False,required=True,source='get_status')
+    category_id = ConsumerCategoryListSerializer(many=False, required=True, source='get_category')
+    sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
+    area_id = AreaListSerializer(many=False, required=True, source='get_area')
+    sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
 
     class Meta:
         model = SurveyTbl
         fields = ('id_string', 'tenant_name', 'name', 'description','start_date','end_date','no_of_consumers',
-                  'category_id','sub_category_id','area_id','sub_area_id',
-                  'completion_date','objective','type','status')
+                  'completion_date','category_id','sub_category_id','area_id','sub_area_id',
+                  'objective_id','type_id','status_id')
 
 class SurveyViewSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
     objective_id = SurveyObjectiveSerializer(many=False, required=True, source='get_objective')
     type_id = SurveyTypeSerializer(many=False, required=True, source='get_type')
     status_id = SurveyStatusSerializer(many=False, required=True, source='get_status')
+    category_id = ConsumerCategoryListSerializer(many=False, required=True, source='get_category')
+    sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
+    area_id = AreaListSerializer(many=False, required=True, source='get_area')
+    sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
 
     class Meta:
         model = SurveyTbl
         fields = ('id_string', 'tenant_name', 'name', 'description', 'start_date', 'end_date', 'no_of_consumers',
-                  'category_id', 'sub_category_id', 'area_id', 'sub_area_id',
-                  'completion_date', 'objective_id', 'type_id', 'status_id')
+                  'completion_date', 'category_id', 'sub_category_id', 'area_id', 'sub_area_id',
+                  'objective_id', 'type_id', 'status_id')
 
 class SurveySerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')

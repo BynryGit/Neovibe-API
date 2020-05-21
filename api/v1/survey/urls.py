@@ -8,7 +8,7 @@ from v1.survey.views.survey_objective import SurveyObjectiveList,SurveyObjective
 urlpatterns = [
     path('list', SurveyList.as_view(),name="survey_list"),
     path('', Survey.as_view(), name="Survey"),
-    path('<uuid:id_string>/', SurveyDetail.as_view(),name="survey_detail"),
+    path('<uuid:id_string>', SurveyDetail.as_view(),name="survey_detail"),
 
     path('<uuid:id_string>/consumer-list', ConsumerList.as_view(), name="survey_consumer_list"),
     path('<uuid:id_string>/consumers', Consumers.as_view(), name="Consumers"),

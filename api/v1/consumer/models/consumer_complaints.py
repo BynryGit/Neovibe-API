@@ -50,5 +50,10 @@ class ConsumerComplaints(models.Model):
 
     def __unicode__(self):
         return self.complaint_no
-
 # Create Consumer Complaints table end.
+
+def get_consumer_complaints_by_consumer_no(consumer_no):
+    try:
+        return ConsumerComplaints.objects.filter(consumer_no = consumer_no)
+    except:
+        return False

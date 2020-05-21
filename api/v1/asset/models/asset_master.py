@@ -19,7 +19,11 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.asset.models.asset_status import get_asset_status_by_id
-
+from v1.asset.models.asset_category import get_asset_category_by_id
+from v1.asset.models.asset_sub_category import get_asset_sub_category_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 # Create Asset Master table start
 
 class Asset(models.Model):
@@ -67,6 +71,31 @@ class Asset(models.Model):
     def get_status(self):
         status = get_asset_status_by_id(self.status_id)
         return status
+
+    @property
+    def get_city(self):
+        city = get_city_by_id(self.city_id)
+        return city
+
+    @property
+    def get_area(self):
+        area = get_area_by_id(self.area_id)
+        return area
+
+    @property
+    def get_sub_area(self):
+        sub_area = get_sub_area_by_id(self.sub_area_id)
+        return sub_area
+
+    @property
+    def get_category(self):
+        category = get_asset_category_by_id(self.category_id)
+        return category
+
+    @property
+    def get_sub_category(self):
+        sub_category = get_asset_sub_category_by_id(self.sub_category_id)
+        return sub_category
 
 
 def get_asset_by_id_string(id_string):
