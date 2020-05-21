@@ -93,6 +93,9 @@ def set_user_validated_data(validated_data):
     if "status_id" in validated_data:
         status = get_user_status_by_id_string(validated_data["status_id"])
         validated_data["status_id"] = status.id
+    if "bank_id" in validated_data:
+        bank = get_bank_by_id_string(validated_data["bank_id"])
+        validated_data["bank_id"] = bank.id
     return validated_data
 
 
@@ -312,10 +315,7 @@ def save_edited_basic_user_details(request, user):
 
 
 def is_bank_data_verified(request):
-    if request.data['bank']:
-        return True
-    else:
-        return False
+    return True
 
 
 def save_bank_details(request, user):

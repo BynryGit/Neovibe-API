@@ -4,12 +4,14 @@ from v1.userapp.views.bank_detail import Bank, BankList, GetBankList
 from v1.userapp.views.document import Document
 from v1.userapp.views.notes import Note
 from v1.userapp.views.skills import SkillList
-from v1.userapp.views.user import User, UserList, UserRole, UserDetail
+from v1.userapp.views.user import User, UserList, UserRole, UserDetail, UserBankDetail
 
 urlpatterns = [
     path('', User.as_view()),
     path('<uuid:id_string>', UserDetail.as_view()),
     path('list/', UserList.as_view()),
+
+    path('<uuid:id_string>/bank/', UserBankDetail.as_view()),
 
     path('bank/list', BankList.as_view()),
     path('bank-detail/', GetBankList.as_view()),
