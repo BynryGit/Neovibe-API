@@ -26,7 +26,7 @@ class TenantSubscription(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     subscription_plan_id = models.BigIntegerField(null=True, blank=True)
-    subscription_frequency_id = models.BigIntegerField(null=True, blank=True) #Payment fr
+    subscription_frequency_id = models.BigIntegerField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     validity_id = models.BigIntegerField(null=True, blank=True)
@@ -43,3 +43,17 @@ class TenantSubscription(models.Model):
         return self.subscription_id
 
 # Create Tenant Subscription table end.
+def get_subscription_by_id(id):
+    try:
+        return TenantSubscription.objects.get(id = id)
+    except:
+        return False
+
+
+def get_subscription_by_id_string(id_string):
+    try:
+        return TenantSubscription.objects.get(id_string = id_string)
+    except:
+        return False
+def get_subscription_by_tenant_id_string(id_string):
+    return TenantSubscription.objects.filter(tenant_id_string=id_string)

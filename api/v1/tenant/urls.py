@@ -3,12 +3,16 @@ __author__ = "Gauri"
 from django.urls import path
 
 from v1.commonapp.models.notes import Notes
+from v1.tenant.views.invoice import TenantInvoiceList, TenantInvoice, TenantInvoiceDetail
+from v1.tenant.views.payment import TenantInvoicePaymentList, TenantInvoicePayment
+from v1.tenant.views.subscription import SubscriptionList, Subscription, SubscriptionDetail
+from v1.tenant.views.subscription_plan import SubscriptionPlanList, SubscriptionPlan, SubscriptionPlanDetail
 from v1.tenant.views.tenant import TenantList,TenantDetail,Tenant
 from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModuleDetail
 from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
 from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
-from v1.tenant.views.bank_detail import BankList,BankDetails
+from v1.tenant.views.bank_detail import BankList,TenantBankDetail,TenantBank
 
 
 urlpatterns = [
@@ -28,8 +32,29 @@ urlpatterns = [
     path('<uuid:id_string>/summary', TenantSummaryDetail.as_view(), name='tenant_summary'),
 
     path('bank/list', BankList.as_view()),
-    path('bank-detail/', GetBankList.as_view()),
-    path('bank/<uuid:id_string>', Bank.as_view()),
+    path('bank/', TenantBank.as_view()),
+    path('bank/<uuid:id_string>', TenantBankDetail.as_view()),
+
+    path('subscription/list', SubscriptionList.as_view()),
+    path('subscription/', Subscription.as_view()),
+    path('subscription/<uuid:id_string>', SubscriptionDetail.as_view()),
+
+    path('subscription-plan/list', SubscriptionPlanList.as_view()),
+    path('subscription-plan/', SubscriptionPlan.as_view()),
+    path('subscription-plan/<uuid:id_string>', SubscriptionPlanDetail.as_view()),
+
+    path('subscription-rate/list', SubscriptionList.as_view()),
+    path('subscription-rate/', Subscription.as_view()),
+    path('subscription-rate/<uuid:id_string>', SubscriptionDetail.as_view()),
+
+    path('invoice/list', TenantInvoiceList.as_view()),
+    path('invoice/', TenantInvoice.as_view()),
+    path('invoice/<uuid:id_string>', TenantInvoiceDetail.as_view()),
+
+    path('payment/list', TenantInvoicePaymentList.as_view()),
+    path('payment/', TenantInvoicePayment.as_view()),
+    path('payment/<uuid:id_string>', PaymentDetail.as_view()),
+
 
 
 

@@ -45,3 +45,18 @@ class TenantSubscriptionPlan(models.Model):
         return self.id_string
 
 # Create Tenant Subscription Plan table end.
+
+def get_subscription_plan_by_id(id):
+    try:
+        return TenantSubscriptionPlan.objects.get(id = id)
+    except:
+        return False
+
+
+def get_subscription_plan_by_id_string(id_string):
+    try:
+        return TenantSubscriptionPlan.objects.get(id_string = id_string)
+    except:
+        return False
+def get_subscription_plan_by_tenant_id_string(id_string):
+    return TenantSubscriptionPlan.objects.filter(tenant_id_string=id_string)

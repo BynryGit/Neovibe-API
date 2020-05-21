@@ -52,3 +52,19 @@ class TenantInvoices(models.Model):
         return self.invoice_number
 
 # Create Tenant Invoices table end.
+
+def get_tenant_invoic_by_id(id):
+    try:
+        return TenantInvoices.objects.get(id = id)
+    except:
+        return False
+
+
+def get_tenant_invoice_by_id_string(id_string):
+    try:
+        return TenantInvoices.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_tenant_invoice_by_tenant_id_string(id_string):
+    return TenantInvoices.objects.filter(tenant_id_string=id_string)

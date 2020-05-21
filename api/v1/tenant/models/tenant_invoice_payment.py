@@ -22,7 +22,7 @@ from django.db import models  # importing package for database
 
 # Create Tenant Invoice Transaction table start.
 
-class TenantInvoiceTransaction(models.Model):
+class TenantInvoicePayment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     invoice_number = models.BigIntegerField(null=True, blank=True)
@@ -46,3 +46,20 @@ class TenantInvoiceTransaction(models.Model):
         return self.invoice_number
 
 # Create Tenant Invoice Transaction table end.
+
+
+def get_tenant_payment_by_id(id):
+    try:
+        return TenantInvoicePayment.objects.get(id = id)
+    except:
+        return False
+
+
+def get_tenant_payment_by_id_string(id_string):
+    try:
+        return TenantInvoicePayment.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_tenant_payment_by_tenant_id_string(id_string):
+    return TenantInvoicePayment.objects.filter(tenant_id_string=id_string)
