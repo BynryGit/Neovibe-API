@@ -44,7 +44,7 @@ class ConsumerMaster(models.Model):
     deposit_amt = models.FloatField(null=True, blank=True)
     collected_amt = models.FloatField(null=True, blank=True)
     utility_service_plan_id = models.BigIntegerField(null=True, blank=True)  # TODO: Conform Foreignkey
-    registration = models.CharField(max_length=200, null=True, blank=True)
+    registration_id = models.BigIntegerField(null=True, blank=True)
     category_id = models.BigIntegerField(null=True, blank=True)
     sub_category_id = models.BigIntegerField(null=True, blank=True)
     is_vip = models.BooleanField(default=False)
@@ -78,5 +78,12 @@ def get_consumer_by_id_string(id_string):
 def get_consumer_by_id(id):
     try:
         return ConsumerMaster.objects.get(id = id)
+    except:
+        return False
+
+
+def get_consumer_by_registration_id(id):
+    try:
+        return ConsumerMaster.objects.get(registration_id = id)
     except:
         return False
