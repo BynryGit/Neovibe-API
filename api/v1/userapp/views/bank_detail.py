@@ -8,12 +8,10 @@ from rest_framework.generics import GenericAPIView
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
-from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string, get_bank_by_utility_id_string, \
-    get_bank_by_id
+from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string, get_bank_by_utility_id_string
 from v1.userapp.models.user_master import get_bank_by_user_id_string, get_user_by_id_string, get_user_by_id
 from v1.userapp.serializers.bank_detail import BankListSerializer, UserBankViewSerializer, UserBankSerializer
-from v1.userapp.views.common_functions import is_bank_data_verified, save_edited_bank_details
+from v1.userapp.views.common_functions import is_bank_data_verified
 
 
 # API Header
