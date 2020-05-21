@@ -25,7 +25,7 @@ class AssetSubCategory(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    sub_category = models.CharField(max_length=200, blank=False, null=False)
+    category_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -35,5 +35,19 @@ class AssetSubCategory(models.Model):
 
     def __unicode__(self):
         return self.sub_category
+
+
+def get_asset_sub_category_by_id_string(id_string):
+    try:
+        return AssetSubCategory.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_asset_sub_category_by_id(id):
+    try:
+        return AssetSubCategory.objects.get(id=id)
+    except:
+        return False
 
 # Create Asset Sub Category table end.

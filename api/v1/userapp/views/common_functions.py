@@ -17,7 +17,7 @@ from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
-from v1.userapp.models.user_privilege import UserPrivilege, get_user_privilege_by_user_id
+from v1.userapp.models.user_role import UserRole, get_user_role_by_user_id
 from v1.userapp.models.role import Role, get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
@@ -69,6 +69,45 @@ def set_role_privilege_validated_data(validated_data):
     if "privilege_id" in validated_data:
         privilege = get_privilege_by_id_string(validated_data["privilege_id"])
         validated_data["privilege_id"] = privilege.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
+    return validated_data
+
+
+def set_user_validated_data(validated_data):
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        validated_data["city_id"] = city.id
+    if "user_type_id" in validated_data:
+        user_type = get_user_type_by_id_string(validated_data["user_type_id"])
+        validated_data["user_type_id"] = user_type.id
+    if "user_subtype_id" in validated_data:
+        user_subtype = get_user_sub_type_by_id_string(validated_data["user_subtype_id"])
+        validated_data["user_subtype_id"] = user_subtype.id
+    if "form_factor_id" in validated_data:
+        form_factor = get_form_factor_by_id_string(validated_data["form_factor_id"])
+        validated_data["form_factor_id"] = form_factor.id
+    if "department_id" in validated_data:
+        department = get_department_by_id_string(validated_data["department_id"])
+        validated_data["department_id"] = department.id
+    if "status_id" in validated_data:
+        status = get_user_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = status.id
+    if "bank_id" in validated_data:
+        bank = get_bank_by_id_string(validated_data["bank_id"])
+        validated_data["bank_id"] = bank.id
+    return validated_data
+
+
+def set_user_role_validated_data(validated_data):
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
+    if "role_id" in validated_data:
+        role = get_role_by_id_string(validated_data["role_id"])
+        validated_data["role_id"] = role.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
@@ -78,6 +117,10 @@ def is_role_data_verified(request):
 
 
 def is_role_privilege_data_verified(request):
+    return True
+
+
+def is_user_role_data_verified(request):
     return True
 
 
@@ -178,7 +221,7 @@ def is_authorized(token):
 #         role = get_role_by_id(user.role)
 #
 #         received_privilege = get_privilege_by_id_string(privilege)
-#         privileges = UserPrivilege.objects.filter(role=role.id, is_active=True)
+#         privileges = UserRole.objects.filter(role=role.id, is_active=True)
 #
 #         if received_privilege in privileges:
 #             return True
@@ -190,14 +233,7 @@ def is_authorized(token):
 
 # Check only mandatory fields for user api
 def is_user_data_verified(request):
-    if request.data['city'] and request.data['user_type'] and request.data['user_subtype'] \
-            and request.data['form_factor'] and request.data['department'] and request.data['user_ID'] and \
-            request.data['username'] and request.data['first_name'] and request.data['last_name'] and \
-            request.data['email'] and request.data['department'] and request.data['utilities'] and \
-            request.data['skills'] and request.data['areas']:
-        return True
-    else:
-        return False
+    return True
 
 
 # @transaction.atomic
@@ -295,10 +331,7 @@ def save_edited_basic_user_details(request, user):
 
 
 def is_bank_data_verified(request):
-    if request.data['bank']:
-        return True
-    else:
-        return False
+    return True
 
 
 def save_bank_details(request, user):
@@ -457,11 +490,6 @@ def save_edited_note(request, user):
 # Check only mandatory fields for user role and privilege api
 def is_privilege_data_verified(request):
     return True
-    if request.data['user'] and request.data['module'] and request.data['sub_module'] and request.data['role'] and \
-            request.data['privilege']:
-        return True
-    else:
-        return False
 
 
 def add_user_privilege(request, user):
@@ -475,7 +503,7 @@ def add_user_privilege(request, user):
                     sub_module_obj = get_sub_module_by_id_string(sub_module)
                     privilege_obj = get_privilege_by_id_string(sub_module['privilege'])
 
-                    user_privilege = UserPrivilege()
+                    user_privilege = UserRole()
 
                     user_privilege.user_id = request.data["user"]
                     user_privilege.module_id = module_obj.id
@@ -503,7 +531,7 @@ def save_edited_privilege(request, user):
 
         for role in request.data['role']:
             role_obj = get_role_by_id_string(role)
-            user_privileges = get_user_privilege_by_user_id(user_detail.id)
+            user_privileges = get_user_role_by_user_id(user_detail.id)
             for user_privilege in user_privileges:
                 user_privilege.role_id = role_obj.id
                 user_privilege.save()

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from v1.consumer.models.complaint_status import ComplaintStatus
-from v1.consumer.models.con_service_details import ServiceDetails
+from v1.consumer.models.consumer_services import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_complaints import ConsumerComplaints
 from v1.consumer.models.consumer_master import ConsumerMaster

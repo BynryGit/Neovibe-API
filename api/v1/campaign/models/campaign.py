@@ -16,11 +16,14 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
 from django.db import models
-
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.campaign.models.campaign_status import get_cam_status_by_id
 from v1.campaign.models.campaign_group import get_camp_group_by_id
 from v1.campaign.models.campaign_objective import get_cam_objective_by_id
 from v1.commonapp.models.frequency import get_frequency_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 
 # Create Campaign Master table start
 
@@ -57,6 +60,16 @@ class Campaign(models.Model):
         return self.name
 
     @property
+    def get_area(self):
+        area = get_area_by_id(self.area_id)
+        return area
+
+    @property
+    def get_sub_area(self):
+        sub_area = get_sub_area_by_id(self.sub_area_id)
+        return sub_area
+
+    @property
     def get_group(self):
         group = get_camp_group_by_id(self.group_id)
         return group
@@ -76,6 +89,15 @@ class Campaign(models.Model):
         status = get_cam_status_by_id(self.status_id)
         return status
 
+    @property
+    def get_category(self):
+        category = get_consumer_category_by_id(self.category_id)
+        return category
+
+    @property
+    def get_sub_category(self):
+        sub_category = get_consumer_sub_category_by_id(self.sub_category_id)
+        return sub_category
 
 
 def get_campaign_by_id_string(id_string):

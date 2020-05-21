@@ -18,7 +18,7 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from v1.supplier.models.supplier_master import get_supplier_by_id
+from v1.supplier.models.supplier import get_supplier_by_id
 from v1.survey.models.survey import get_survey_by_id
 
 

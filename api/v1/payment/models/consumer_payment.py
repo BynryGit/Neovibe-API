@@ -88,4 +88,11 @@ def get_payment_by_id_string(id_string):
     except:
         return False
 
+
+def get_payments_by_consumer_no(consumer_no):
+    try:
+        return Payment.objects.filter(consumer_no = consumer_no)
+    except:
+        return False
+
 # Create Consumer Payment table end.

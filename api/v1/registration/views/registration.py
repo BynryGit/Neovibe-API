@@ -1,10 +1,15 @@
+from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.consumer.models.consumer_master import get_consumer_by_registration_id
+from v1.consumer.serializers.consumer import ConsumerSerializer
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
@@ -29,20 +34,28 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
 # Author: Rohan
 # Created on: 21/04/2020
 class RegistrationList(generics.ListAPIView):
-    serializer_class = RegistrationListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = RegistrationListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'tenant__id_string',)
-    ordering_fields = ('first_name', 'registration_no',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('first_name', 'tenant__id_string',)
+        ordering_fields = ('first_name', 'registration_no',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('first_name', 'email_id',)
 
-    def get_queryset(self):
-        if is_token_valid(self.request.headers['token']):
-            if is_authorized():
-                queryset = RegTbl.objects.filter(is_active=True)
-                return queryset
+        def get_queryset(self):
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    queryset = RegTbl.objects.filter(is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
 
 
 
@@ -75,9 +88,15 @@ class Registration(GenericAPIView):
                     if is_data_verified(request):
                     # Request data verification end
                         serializer = RegistrationSerializer(data=request.data)
-                        if serializer.is_valid():
-                            registration_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                        consumer_serializer = ConsumerSerializer(data=request.data)
+                        if serializer.is_valid() and consumer_serializer.is_valid():
+                            with transaction.atomic():
+                                registration_obj = serializer.create(serializer.validated_data, user)
+                                consumer_obj = consumer_serializer.create(consumer_serializer.validated_data, user)
+                                consumer_obj.is_active = False
+                                consumer_obj.registration_id = registration_obj.id
+                                consumer_obj.save()
+                                view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: view_serializer.data,
@@ -100,7 +119,8 @@ class Registration(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            print("@@@@@@@@@@2",e)
+            # logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
@@ -224,9 +244,10 @@ class RegistrationPayment(GenericAPIView):
                      if is_data_verified(request):
                          user = UserDetail.objects.get(id=2)
                          registration_obj = get_registration_by_id_string(id_string)
+                         consumer = get_consumer_by_registration_id(registration_obj.id)
                          serializer = PaymentSerializer(data=request.data)
                          if serializer.is_valid():
-                             payment = serializer.create(serializer.validated_data, user, registration_obj)
+                             payment = serializer.create(serializer.validated_data, user, consumer)
                              view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                              return Response({
                                  STATE: SUCCESS,

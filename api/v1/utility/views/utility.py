@@ -190,7 +190,7 @@ class UtilityDetail(GenericAPIView):
                     if utility_obj:
                         serializer = UtilityMasterSerializer(data=request.data)
                         if serializer.is_valid():
-                            serializer.update(utility_obj, serializer.validated_data, user)
+                            utility_obj = serializer.update(utility_obj, serializer.validated_data, user)
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: {'utility_id_string': utility_obj.id_string},

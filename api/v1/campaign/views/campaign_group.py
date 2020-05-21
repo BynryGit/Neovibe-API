@@ -1,6 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from api.messages import SUCCESS, STATE, DATA, EXCEPTION
 from v1.campaign.models.campaign_group import get_camp_group_by_id_string,CampaignGroup
 from v1.campaign.serializers.campaign_group import CampaignGroupListSerializer,CampaignGroupViewSerializer
@@ -8,18 +10,34 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.commonapp.views.logger import logger
+from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+
 
 # group/list/
 class CampaignGroupList(generics.ListAPIView):
-    serializer_class = CampaignGroupListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = CampaignGroupListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    queryset = CampaignGroup.objects.filter(tenant=1, utility=1)
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string',)
-    ordering_fields = ('name', 'tenant',)
-    ordering = ('name',)  # always give by default alphabetical order
-    search_fields = ('name', 'tenant__name',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('name', 'tenant__id_string',)
+        ordering_fields = ('name', 'tenant',)
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name',)
+
+        def get_queryset(self):
+            if is_token_valid(0):
+                if is_authorized():
+                    queryset = CampaignGroup.objects.filter(tenant=1, utility=1)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
 
 
 

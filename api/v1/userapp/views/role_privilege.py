@@ -9,7 +9,7 @@ from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role import get_role_by_id_string
-from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
+from v1.userapp.models.role_privilege import get_role_privilege_by_role_id, get_record_by_values
 from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
@@ -49,6 +49,7 @@ class RolePrivilege(GenericAPIView):
                                 validate_data['module_id'] = module['module_id']
                                 validate_data['sub_module_id'] = sub_module['sub_module_id']
                                 validate_data['privilege_id'] = sub_module['privilege_id']
+                                validate_data['is_active'] = sub_module['is_active']
                                 serializer = RolePrivilegeSerializer(data=validate_data)
                                 if serializer.is_valid():
                                     privilege_obj = serializer.create(serializer.validated_data, user)
@@ -60,7 +61,6 @@ class RolePrivilege(GenericAPIView):
                                         STATE: ERROR,
                                         RESULTS: serializer.errors,
                                     }, status=status.HTTP_400_BAD_REQUEST)
-
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: data,
@@ -130,8 +130,8 @@ class RolePrivilegeDetail(GenericAPIView):
                     else:
                         return Response({
                             STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            DATA: 'No records found.',
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -150,47 +150,68 @@ class RolePrivilegeDetail(GenericAPIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # def put(self, request, format=None):
-    #     try:
-    #         # Checking authentication start
-    #         if is_token_valid(request.data['token']):
-    #             if is_authorized():
-    #                 if is_role_privilege_data_verified(request):
-    #                     user = get_user_by_id(3)
-    #                     role = get_role_by_id_string(request.data['role'])
-    #                     # role_privilege, result, error = save_edited_privilege_details(request, user, role)
-    #                     result = ''
-    #                     if result:
-    #                         data = {
-    #                             "role_id_string": role.id_string
-    #                         }
-    #                         return Response({
-    #                             STATE: SUCCESS,
-    #                             DATA: data,
-    #                         }, status=status.HTTP_200_OK)
-    #                     else:
-    #                         return Response({
-    #                             STATE: EXCEPTION,
-    #                             ERROR: error
-    #                         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    #                     # Save privilege details start
-    #                 else:
-    #                     return Response({
-    #                         STATE: ERROR,
-    #                     }, status=status.HTTP_400_BAD_REQUEST)
-    #             else:
-    #                 return Response({
-    #                     STATE: ERROR,
-    #                 }, status=status.HTTP_403_FORBIDDEN)
-    #         else:
-    #             return Response({
-    #                 STATE: ERROR,
-    #
-    #             }, status=status.HTTP_401_UNAUTHORIZED)
-    #     except Exception as e:
-    #         logger().log(e, 'ERROR', user='test', name='test')
-    #         return Response({
-    #             STATE: EXCEPTION,
-    #             ERROR: str(traceback.print_exc(e))
-    #         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def put(self, request, id_string):
+        try:
+            # Checking authentication start
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    data = []
+                    if is_role_privilege_data_verified(request):
+                        user = get_user_by_id(3)
+                        role = get_role_by_id_string(id_string)
+                        if role:
+                            module_list = request.data['module_id']
+                            for module in module_list:
+                                validate_data = {}
+                                sub_module_list = module['sub_module_id']
+                                for sub_module in sub_module_list:
+                                    validate_data['role_id'] = str(id_string)
+                                    validate_data['module_id'] = module['module_id']
+                                    validate_data['sub_module_id'] = sub_module['sub_module_id']
+                                    validate_data['privilege_id'] = sub_module['privilege_id']
+                                    validate_data['is_active'] = sub_module['is_active']
+                                    serializer = RolePrivilegeSerializer(data=validate_data)
+                                    if serializer.is_valid():
+                                        role_privilege = get_record_by_values(role.id, validate_data['module_id'],
+                                                                              validate_data['sub_module_id'],
+                                                                              validate_data['privilege_id'])
+
+                                        if role_privilege:
+                                            role_privilege_obj = serializer.update(role_privilege, serializer.validated_data, user)
+                                        else:
+                                            role_privilege_obj = serializer.create(serializer.validated_data, user)
+                                        view_serializer = RolePrivilegeViewSerializer(instance=role_privilege_obj,
+                                                                                      context={'request': request})
+                                        data.append(view_serializer.data)
+                                    else:
+                                        return Response({
+                                            STATE: ERROR,
+                                            RESULTS: serializer.errors,
+                                        }, status=status.HTTP_400_BAD_REQUEST)
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: data,
+                                }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

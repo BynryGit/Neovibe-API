@@ -19,7 +19,7 @@ from django.db import models  # importing package for database
 
 # Create Tenant Bank Details table start.
 
-class UserBankDetails(models.Model):
+class UserBankDetail(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -40,25 +40,25 @@ class UserBankDetails(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.bank_id
+        return self.bank_name
 
     def __unicode__(self):
-        return self.bank_id
+        return self.bank_name
 
 # Create Tenant Bank Details table end.
 
 
 def get_bank_by_tenant_id_string(id_string):
-    return UserBankDetails.objects.filter(tenant__id_string=id_string,is_active=True)
+    return UserBankDetail.objects.filter(tenant__id_string=id_string,is_active=True)
 
 
 def get_bank_by_utility_id_string(id_string):
-    return UserBankDetails.objects.filter(utility__id_string=id_string,is_active=True)
+    return UserBankDetail.objects.filter(utility__id_string=id_string,is_active=True)
 
 
 def get_bank_by_id_string(id_string):
-    return UserBankDetails.objects.filter(id_string=id_string).last()
+    return UserBankDetail.objects.filter(id_string=id_string).last()
 
 
 def get_bank_by_id(id):
-    return UserBankDetails.objects.filter(id=id).last()
+    return UserBankDetail.objects.filter(id=id).last()

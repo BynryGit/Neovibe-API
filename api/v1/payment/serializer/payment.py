@@ -9,6 +9,16 @@ from v1.payment.serializer.payment_type import PaymentTypeListSerializer
 from v1.payment.views.common_functions import set_validated_data
 
 
+class PaymentListSerializer(serializers.ModelSerializer):
+    payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
+    payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
+    payment_mode = PaymentModeListSerializer(many=False, source='get_payment_mode')
+    payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_channel')
+
+    class Meta:
+        model = Payment
+        fields = ('id_string', 'transaction_amount', 'transaction_charges', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel')
+
 
 class PaymentViewSerializer(serializers.ModelSerializer):
     payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
@@ -41,6 +51,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment.tenant = user.tenant
             payment.utility = user.utility
             payment.identification_id = obj.id
+            payment.consumer_no = obj.consumer_no
             payment.save()
         return payment
 
