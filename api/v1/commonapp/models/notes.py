@@ -21,6 +21,9 @@ from v1.commonapp.models.service_type import get_service_type_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 # from v1.userapp.models.user_master import get_user_by_id
+
+# from v1.userapp.models.user_master import get_user_by_id
+
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 # Create Notes Table start

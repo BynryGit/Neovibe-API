@@ -9,7 +9,9 @@ from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
 from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
 from v1.tenant.views.bank_detail import BankList
+
 # from v1.tenant.views.bank_detail import BankList,BankDetails
+
 
 
 urlpatterns = [
