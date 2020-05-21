@@ -8,7 +8,7 @@ from django.db import transaction
 from api.settings import DISPLAY_DATE_FORMAT
 from v1.consumer.models.consumer_category import get_consumer_category_by_id,get_consumer_category_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from v1.supplier.models.supplier_master import get_supplier_by_id_string
+from v1.supplier.models.supplier import get_supplier_by_id_string
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import get_survey_consumer_by_id_string
 from v1.survey.models.survey_status import get_survey_status_by_id_string,get_survey_status_by_id

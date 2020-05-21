@@ -20,6 +20,7 @@ from v1.campaign import urls as campaign_urls
 from v1.survey import urls as survey_urls
 from v1.userapp.urls import user_urls, role_urls, privilege_urls
 from v1.utility import urls as utility_urls
+from v1.supplier import urls as supplier_urls
 from v1.consumer import urls as consumer_urls
 from v1.commonapp import urls as common_urls
 from v1.tenant import urls as tenant_urls
@@ -33,6 +34,7 @@ urlpatterns = [
     path('api/v1/campaign/', include(campaign_urls)),
     path('api/v1/survey/', include(survey_urls)),
     path('api/v1/utility/', include(utility_urls)),
+    path('api/v1/supplier/', include(supplier_urls)),
     path('api/v1/tenant/', include(tenant_urls)),
     path('api/v1/consumer/', include(consumer_urls)),
     path('api/v1/user/', include(user_urls)),
