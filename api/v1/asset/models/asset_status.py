@@ -20,7 +20,7 @@ from django.db import models  # importing package for database
 
 # Create Asset Service History Status table start.
 
-class AssetServiceHistoryStatus(models.Model):
+class AssetStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -32,10 +32,22 @@ class AssetServiceHistoryStatus(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
-# Create Asset Service History Status table end.
+def get_asset_status_by_id_string(id_string):
+    try:
+        return AssetStatus.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_asset_status_by_id(id):
+    try:
+        return AssetStatus.objects.get(id=id)
+    except:
+        return False
+
+        # Create Asset Service History Status table end.
 

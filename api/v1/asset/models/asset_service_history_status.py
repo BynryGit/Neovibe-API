@@ -32,10 +32,10 @@ class AssetServiceHistoryStatus(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
 # Create Asset Service History Status table end.
 
