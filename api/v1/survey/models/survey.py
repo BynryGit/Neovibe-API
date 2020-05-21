@@ -17,11 +17,13 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.survey.models.survey_objective import get_survey_objective_by_id
 from v1.survey.models.survey_type import get_survey_type_by_id
 from v1.survey.models.survey_status import get_survey_status_by_id
-
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 
 # Create Survey table start
 
@@ -68,6 +70,26 @@ class Survey(models.Model):
     def get_status(self):
         status = get_survey_status_by_id(self.status_id)
         return status
+
+    @property
+    def get_area(self):
+        area = get_area_by_id(self.area_id)
+        return area
+
+    @property
+    def get_sub_area(self):
+        sub_area = get_sub_area_by_id(self.sub_area_id)
+        return sub_area
+
+    @property
+    def get_category(self):
+        category = get_consumer_category_by_id(self.category_id)
+        return category
+
+    @property
+    def get_sub_category(self):
+        sub_category = get_consumer_sub_category_by_id(self.sub_category_id)
+        return sub_category
 
 def get_survey_by_tenant_id_string(id_string):
     return Survey.objects.filter(tenant__id_string = id_string)

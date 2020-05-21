@@ -8,29 +8,45 @@ from v1.asset.models.asset_status import AssetStatus as AssetStatusTbl
 from v1.asset.views.common_function import set_asset_validated_data
 from datetime import datetime
 from django.db import transaction
-
-class AssetStatusSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AssetStatusTbl
-        fields = ('id_string','name')
+from v1.asset.serializer.asset_status import AssetStatusListSerializer
+from v1.asset.serializer.category import AssetCategoryListSerializer
+from v1.asset.serializer.sub_category import AssetSubCategoryListSerializer
+from v1.commonapp.serializers.city import CitySerializer
+from v1.commonapp.serializers.area import AreaListSerializer
+from v1.commonapp.serializers.sub_area import SubAreaListSerializer
 
 class AssetListSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    status_id = AssetStatusSerializer(many=False, required=True, source='get_status')
+    category_id = AssetCategoryListSerializer(many=False, required=True, source='get_category')
+    sub_category_id = AssetSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
+    status_id = AssetStatusListSerializer(many=False, required=True, source='get_status')
+    city_id = CitySerializer(many=False, required=True, source='get_city')
+    area_id = AreaListSerializer(many=False, required=True, source='get_area')
+    sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
+
     class Meta:
         model = AssetTbl
-        fields = ('__all__')
+        fields = ('id_string', 'tenant_name', 'name', 'asset_no', 'description', 'address', 'serial_no', 'manufacturer', 'make',
+            'model', 'lat', 'long', 'manufacturing_date',
+            'installation_date', 'expiry_date', 'asset_life', 'asset_value', 'deprecation_method', 'deprecation_rate',
+            'flag',
+             'city_id', 'area_id', 'sub_area_id', 'category_id', 'sub_category_id','status_id')
+
 
 class AssetViewSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    status_id = AssetStatusSerializer(many=False, required=True, source='get_status')
+    category_id = AssetCategoryListSerializer(many=False, required=True, source='get_category')
+    sub_category_id = AssetSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
+    status_id = AssetStatusListSerializer(many=False, required=True, source='get_status')
+    city_id = CitySerializer(many=False, required=True, source='get_city')
+    area_id = AreaListSerializer(many=False, required=True, source='get_area')
+    sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
+
     class Meta:
         model = AssetTbl
-        fields = ('id_string','tenant_name','name' ,'asset_no', 'description','serial_no','manufacturer','make','model','city_id',
-                   'area_id', 'sub_area_id','address','category_id','sub_category_id','lat','long','manufacturing_date',
-                   'installation_date','expiry_date','asset_life','asset_value','deprecation_method','deprecation_rate',
-                   'status_id','flag')
+        fields = ('id_string','tenant_name','name' ,'asset_no', 'description','address','serial_no','manufacturer','make','model','lat','long','manufacturing_date',
+                   'installation_date','expiry_date','asset_life','asset_value','deprecation_method','deprecation_rate','flag',
+                   'city_id','area_id', 'sub_area_id','category_id','sub_category_id','status_id')
 
 
 class AssetSerializer(serializers.ModelSerializer):

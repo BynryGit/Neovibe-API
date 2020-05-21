@@ -36,4 +36,18 @@ class AssetSubCategory(models.Model):
     def __unicode__(self):
         return self.sub_category
 
+
+def get_asset_sub_category_by_id_string(id_string):
+    try:
+        return AssetSubCategory.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_asset_sub_category_by_id(id):
+    try:
+        return AssetSubCategory.objects.get(id=id)
+    except:
+        return False
+
 # Create Asset Sub Category table end.
