@@ -1,6 +1,9 @@
 __author__ = "Priyanka"
 
-
+import traceback
+import logging
+from datetime import datetime
+from django.db import transaction
 from rest_framework.exceptions import APIException
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,6 +18,9 @@ from v1.asset.serializer.asset import AssetListSerializer,AssetViewSerializer,As
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.asset.models.asset_master import Asset as AssetTbl,get_asset_by_id_string
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
+from v1.userapp.models.user_master import UserDetail
+
+
 
 # API Header
 # API end Point: api/v1/asset/list
@@ -167,12 +173,12 @@ class AssetDetail(GenericAPIView):
             if is_token_valid(1):
                 if is_authorized():
                     user = UserDetail.objects.get(id=2)
-                    campaign_obj = get_campaign_by_id_string(id_string)
-                    if campaign_obj:
-                        serializer = CampaignSerializer(data=request.data)
+                    asset = get_asset_by_id_string(id_string)
+                    if asset:
+                        serializer = AssetSerializer(data=request.data)
                         if serializer.is_valid():
-                            campaign_obj = serializer.update(campaign_obj, serializer.validated_data, user)
-                            view_serializer = CampaignViewSerializer(instance=campaign_obj,context={'request': request})
+                            asset_obj = serializer.update(asset, serializer.validated_data, user)
+                            view_serializer = AssetViewSerializer(instance=asset_obj,context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: view_serializer.data,

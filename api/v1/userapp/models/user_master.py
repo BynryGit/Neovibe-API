@@ -59,6 +59,8 @@ class UserDetail(User):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
+
+
     def __unicode__(self):
         return self.id
 

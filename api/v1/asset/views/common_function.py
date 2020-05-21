@@ -22,6 +22,10 @@ def set_asset_validated_data(validated_data):
         sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
         validated_data["sub_category_id"] = sub_category.id
 
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        validated_data["city_id"] = city.id
+
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         validated_data["area_id"] = area.id

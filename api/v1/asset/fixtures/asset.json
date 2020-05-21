@@ -1,5 +1,4 @@
-[
-	{
+[{
 		"pk": "1",
 		"model": "asset.AssetStatus",
 		"fields": {
@@ -74,7 +73,7 @@
 		"model": "asset.AssetCategory",
 		"fields": {
 			"tenant": 1,
-			"utility": 3,
+			"utility": 1,
 			"name": "Computer",
 			"is_active": "True"
 		}
@@ -91,8 +90,8 @@
 			"name": "Fan insurance",
 			"provider": "Power ltd.",
 			"cost": 50000,
-			"effective_start_date": "1/06/2020",
-			"effective_end_date": "31/12/2020",
+			"effective_start_date": "2020-12-01",
+			"effective_end_date": "2020-12-31",
 			"is_active": "True"
 		}
 	},
@@ -107,8 +106,8 @@
 			"name": "Computer insurance",
 			"provider": "TDE ltd",
 			"cost": 25000,
-			"effective_start_date": "1/06/2020",
-			"effective_end_date": "31/12/2020",
+			"effective_start_date": "2020-06-01",
+			"effective_end_date": "2020-12-31",
 			"is_active": "True"
 		}
 	},
@@ -123,8 +122,8 @@
 			"name": "Fan insurance",
 			"provider": "Power ltd.",
 			"cost": 50000,
-			"effective_start_date": "15/07/2020",
-			"effective_end_date": "15/01/2021",
+			"effective_start_date": "2020-07-15",
+			"effective_end_date": "2021-01-15",
 			"is_active": "True"
 		}
 	},
@@ -139,8 +138,8 @@
 			"name": "Computer insurance",
 			"provider": "TDE ltd",
 			"cost": 25000,
-			"effective_start_date": "15/07/2020",
-			"effective_end_date": "15/01/2021",
+			"effective_start_date": "2020-07-15",
+			"effective_end_date": "2021-07-30",
 			"is_active": "True"
 		}
 	},
@@ -193,7 +192,7 @@
 
 	{
 		"pk": "1",
-		"model": "asset.Assset",
+		"model": "asset.Asset",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -201,20 +200,20 @@
 			"asset_no": 101,
 			"description": "Fan",
 			"serial_no": 10025,
-			"manufacturer": "Bajaj",
+			"manufacturer": 1,
 			"make": 1,
-			"model": "LF1",
+			"model": 1,
 			"category_id": 1,
 			"sub_category_id": 1,
 			"city_id": 1,
 			"area_id": 1,
-			"subarea_id": 1,
+			"sub_area_id": 1,
 			"address": "EDM colony kothrud",
 			"lat": 18,
 			"long": 79,
-			"manufacturing_date": "15/01/2020",
-			"installation_date": "30/04/2020",
-			"expiry_date": "15/01/2030",
+			"manufacturing_date": "2020-01-15",
+			"installation_date": "2020-04-05",
+			"expiry_date": "2030-01-15",
 			"asset_life": 10,
 			"asset_value": 1,
 			"deprecation_method": 1,
@@ -227,7 +226,7 @@
 	},
 	{
 		"pk": "2",
-		"model": "asset.Assset",
+		"model": "asset.Asset",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -235,34 +234,32 @@
 			"asset_no": 205,
 			"description": "Hard disk",
 			"serial_no": 45623,
-			"manufacturer": "Dell",
+			"manufacturer": 2,
 			"make": 1,
-			"model": "D20",
+			"model": 2,
 			"category_id": 2,
 			"sub_category_id": 2,
 			"city_id": 1,
 			"area_id": 1,
-			"subarea_id": 1,
+			"sub_area_id": 1,
 			"address": "Shree colony kothrud",
 			"lat": 18,
 			"long": 79,
-			"manufacturing_date": "13/03/2020",
-			"installation_date": "15/05/2020",
-			"expiry_date": "13/03/2030",
+			"manufacturing_date": "2020-03-13",
+			"installation_date": "2020-05-25",
+			"expiry_date": "2030-12-03",
 			"asset_life": 10,
 			"asset_value": 1,
 			"deprecation_method": 1,
 			"deprecation_rate": 2,
-
-			"status_id":1 ,
+			"status_id": 1,
 			"flag": "False",
 			"is_active": "True"
-		},
-
-
+		}
+	},
 		{
 		"pk": "3",
-		"model": "asset.Assset",
+		"model": "asset.Asset",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -270,20 +267,20 @@
 			"asset_no": 503,
 			"description": "Fan",
 			"serial_no": 10256,
-			"manufacturer": "Bajaj",
+			"manufacturer": 3,
 			"make": 1,
-			"model": "CD1",
+			"model": 3,
 			"category_id": 3,
 			"sub_category_id": 3,
 			"city_id": 3,
 			"area_id": 3,
-			"subarea_id": 3,
+			"sub_area_id": 3,
 			"address": "Ring road",
 			"lat": 18,
 			"long": 79,
-			"manufacturing_date": "10/01/2020",
-			"installation_date": "15/04/2020",
-			"expiry_date": "10/01/2030",
+			"manufacturing_date": "2020-01-15",
+			"installation_date": "2020-04-15",
+			"expiry_date": "2030-01-10",
 			"asset_life": 10,
 			"asset_value": 1,
 			"deprecation_method": 1,
@@ -296,7 +293,7 @@
 	},
 	{
 		"pk": "4",
-		"model": "asset.Assset",
+		"model": "asset.Asset",
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
@@ -304,20 +301,20 @@
 			"asset_no": 630,
 			"description": "Hard disk",
 			"serial_no": 78965,
-			"manufacturer": "Dell",
+			"manufacturer": 4,
 			"make":1 ,
-			"model": "MK8",
+			"model": 1,
 			"category_id": 4,
 			"sub_category_id": 4,
 			"city_id": 3,
 			"area_id": 3,
-			"subarea_id": 3,
+			"sub_area_id": 3,
 			"address": "Ring road",
 			"lat": 18,
 			"long": 79,
-			"manufacturing_date": "10/03/2020",
-			"installation_date": "30/05/2020",
-			"expiry_date": "10/03/2030",
+			"manufacturing_date": "2020-03-05",
+			"installation_date": "2020-05-15",
+			"expiry_date": "2030-10-03",
 			"asset_life": 10,
 			"asset_value": 1,
 			"deprecation_method":1 ,
@@ -335,7 +332,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "created",
+			"name": "created",
 			"is_active": "True"
 			}
 	},
@@ -345,7 +342,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "assigned",
+			"name": "assigned",
 			"is_active": "True"
 			}
 	},
@@ -355,7 +352,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "started",
+			"name": "started",
 			"is_active": "True"
 			}
 	},
@@ -365,7 +362,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "completed",
+			"name": "completed",
 			"is_active": "True"
 			}
 	},
@@ -375,7 +372,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "hold",
+			"name": "hold",
 			"is_active": "True"
 			}
 	},
@@ -385,7 +382,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "cancel",
+			"name": "cancel",
 			"is_active": "True"
 			}
 	},
@@ -395,7 +392,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "created",
+			"name": "created",
 			"is_active": "True"
 			}
 	},
@@ -405,7 +402,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "assigned",
+			"name": "assigned",
 			"is_active": "True"
 			}
 	},
@@ -415,7 +412,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "started",
+			"name": "started",
 			"is_active": "True"
 			}
 	},
@@ -425,7 +422,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "completed",
+			"name": "completed",
 			"is_active": "True"
 			}
 	},
@@ -435,7 +432,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"status": "hold",
+			"name": "hold",
 			"is_active": "True"
 			}
 	},

@@ -8,7 +8,7 @@ from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModu
 from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
 from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
-from v1.tenant.views.bank_detail import BankList,BankDetails
+from v1.tenant.views.bank_detail import BankList
 
 
 urlpatterns = [
@@ -28,8 +28,8 @@ urlpatterns = [
     path('<uuid:id_string>/summary', TenantSummaryDetail.as_view(), name='tenant_summary'),
 
     path('bank/list', BankList.as_view()),
-    path('bank-detail/', GetBankList.as_view()),
-    path('bank/<uuid:id_string>', Bank.as_view()),
+    # path('bank-detail/', GetBankList.as_view()),
+    # path('bank/<uuid:id_string>', Bank.as_view()),
 
 
 

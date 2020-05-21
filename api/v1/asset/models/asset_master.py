@@ -37,7 +37,7 @@ class Asset(models.Model):
     sub_category_id = models.BigIntegerField(null=True, blank=True)
     city_id = models.BigIntegerField(null=True, blank=True)
     area_id = models.BigIntegerField(null=True, blank=True)
-    subarea_id = models.BigIntegerField(null=True, blank=True)
+    sub_area_id = models.BigIntegerField(null=True, blank=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     lat = models.CharField(max_length=200, blank=True, null=True)
     long = models.CharField(max_length=200, blank=True, null=True)
