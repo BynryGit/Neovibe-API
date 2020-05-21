@@ -1,5 +1,5 @@
 __author__ = "Arpita"
-
+from django.db import transaction
 from rest_framework import serializers
 
 from v1.commonapp.models.document import Document
@@ -9,6 +9,7 @@ from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.userapp.serializers.user import UserSerializer
+from v1.userapp.views.common_functions import set_document_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
 
@@ -24,6 +25,31 @@ class DocumentViewSerializer(serializers.ModelSerializer):
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
                   'name', 'link', 'is_active', 'created_by')
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    module_id = serializers.CharField( required=False, max_length=200)
+    sub_module_id = serializers.CharField(required=False, max_length=200)
+    document_type_id = serializers.CharField(required=False, max_length=200)
+    document_sub_type_id = serializers.CharField(required=False, max_length=200)
+    identification_id = serializers.CharField(required=False, max_length=200)
+    name = serializers.CharField(required=False, max_length=200)
+    link = serializers.CharField(required=False, max_length=200)
+
+    class Meta:
+        model = Document
+        fields = '__all__'
+
+    def create(self, validated_data, user):
+        validated_data =  set_document_validated_data(validated_data)
+        with transaction.atomic():
+            document = super(DocumentSerializer, self).create(validated_data)
+            document.created_by = user.id
+            document.tenant = user.tenant
+            document.utility = user.utility
+            document.is_active = True
+            document.save()
+            return document
 
 
 class DocumentListSerializer(serializers.ModelSerializer):

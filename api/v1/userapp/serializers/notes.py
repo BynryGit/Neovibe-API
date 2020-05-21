@@ -43,7 +43,6 @@ class NoteSerializer(serializers.ModelSerializer):
         validated_data =  set_note_validated_data(validated_data)
         with transaction.atomic():
             note = super(NoteSerializer, self).create(validated_data)
-            note.identification_id = user.id
             note.created_by = user.id
             note.tenant = user.tenant
             note.utility = user.utility

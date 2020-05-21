@@ -9,8 +9,8 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.document import get_document_by_user_id
 from v1.commonapp.models.document_type import get_document_type_by_name
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_documents_by_user_id_string, get_user_by_id_string
-from v1.userapp.serializers.document import DocumentListSerializer, DocumentViewSerializer
+from v1.userapp.models.user_master import get_documents_by_user_id_string, get_user_by_id_string, get_user_by_id
+from v1.userapp.serializers.document import DocumentListSerializer, DocumentViewSerializer, DocumentSerializer
 from v1.userapp.serializers.notes import NoteViewSerializer
 
 
@@ -92,29 +92,20 @@ class UserDocument(GenericAPIView):
         try:
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    data = []
-                    if is_user_role_data_verified(request):
-                        user = get_user_by_id(3)
-                        for role in request.data['roles']:
-                            validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
-                            serializer = UserRoleSerializer(data=validate_data)
-                            if serializer.is_valid():
-                                user_role_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = UserRoleViewSerializer(instance=user_role_obj,
-                                                                              context={'request': request})
-                                data.append(view_serializer.data)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
+                    user = get_user_by_id(3)
+                    request.data['identification_id'] = str(id_string)
+                    serializer = DocumentSerializer(data=request.data)
+                    if serializer.is_valid():
+                        document_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: data,
+                            RESULTS: view_serializer.data,
                         }, status=status.HTTP_201_CREATED)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({

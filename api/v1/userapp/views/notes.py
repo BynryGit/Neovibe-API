@@ -77,8 +77,8 @@ class UserNote(GenericAPIView):
                     request.data['identification_id'] = str(id_string)
                     serializer = NoteSerializer(data=request.data)
                     if serializer.is_valid():
-                        role_obj = serializer.create(serializer.validated_data, user)
-                        view_serializer = NoteViewSerializer(instance=role_obj, context={'request': request})
+                        note_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: view_serializer.data,

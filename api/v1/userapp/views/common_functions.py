@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate
 from api.settings import SECRET_KEY
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import get_department_by_id_string
+from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id_string
+from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
@@ -140,6 +142,25 @@ def set_note_validated_data(validated_data):
     if "service_type_id" in validated_data:
         user = get_service_type_by_id_string(validated_data["service_type_id"])
         validated_data["service_type_id"] = user.id
+    if "identification_id" in validated_data:
+        user = get_user_by_id_string(validated_data["identification_id"])
+        validated_data["identification_id"] = user.id
+    return validated_data
+
+
+def set_document_validated_data(validated_data):
+    if "module_id" in validated_data:
+        user = get_module_by_id_string(validated_data["module_id"])
+        validated_data["module_id"] = user.id
+    if "sub_module_id" in validated_data:
+        role = get_sub_module_by_id_string(validated_data["sub_module_id"])
+        validated_data["sub_module_id"] = role.id
+    if "document_type_id" in validated_data:
+        document_type = get_document_type_by_id_string(validated_data["document_type_id"])
+        validated_data["document_type_id"] = document_type.id
+    if "document_sub_type_id" in validated_data:
+        document_sub_type = get_document_sub_type_by_id_string(validated_data["document_sub_type_id"])
+        validated_data["document_sub_type_id"] = document_sub_type.id
     if "identification_id" in validated_data:
         user = get_user_by_id_string(validated_data["identification_id"])
         validated_data["identification_id"] = user.id
