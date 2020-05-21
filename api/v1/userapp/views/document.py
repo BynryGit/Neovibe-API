@@ -9,31 +9,8 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.document import get_document_by_user_id
 from v1.commonapp.models.document_type import get_document_type_by_name
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_documents_by_user_id_string, get_user_by_id_string, get_user_by_id
-from v1.userapp.serializers.document import DocumentListSerializer, DocumentViewSerializer, DocumentSerializer
-from v1.userapp.serializers.notes import NoteViewSerializer
-
-
-# API Header
-# API end Point: api/v1/user/documents
-# API verb: GET, POST, PUT
-# Package: Basic
-# Modules: User
-# Sub Module: User
-# Interaction: View, Add, Edit documents details of users
-# Usage: This will display all documents of user.
-# Tables used: 2.12.13. Lookup - Document
-# Author: Arpita
-# Created on: 13/05/2020
-
-
-class Document(generics.ListAPIView):
-    serializer_class = DocumentListSerializer
-
-    def get_queryset(self):
-
-        queryset = get_documents_by_user_id_string(1)
-        return queryset
+from v1.userapp.models.user_master import get_user_by_id_string, get_user_by_id
+from v1.userapp.serializers.document import DocumentViewSerializer, DocumentSerializer
 
 # API Header
 # API end Point: api/v1/user/:/note

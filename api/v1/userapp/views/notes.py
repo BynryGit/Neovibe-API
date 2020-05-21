@@ -13,8 +13,6 @@ from v1.userapp.models.user_master import get_user_by_id_string, get_user_by_id
 from v1.userapp.serializers.notes import NoteSerializer, NoteViewSerializer
 
 
-
-
 # API Header
 # API end Point: api/v1/user/:/note
 # API verb: GET, POST, PUT
