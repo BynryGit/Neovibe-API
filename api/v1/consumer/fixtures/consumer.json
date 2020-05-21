@@ -4940,6 +4940,421 @@
 			"reading_date":,
 			"is_active": "True"
 			}
-	}
+	},
+
+
+
+	{
+		"pk": "1",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Electrical",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Computer",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Electrical",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Computer",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"insurance_no": 1025,
+			"name": "Fan insurance",
+			"provider": "Power ltd.",
+			"cost": 50000,
+			"effective_start_date": "1/06/2020",
+			"effective_end_date": "31/12/2020",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"insurance_no": 1326,
+			"name": "Computer insurance",
+			"provider": "TDE ltd",
+			"cost": 25000,
+			"effective_start_date": "1/06/2020",
+			"effective_end_date": "31/12/2020",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 1,
+			"insurance_no": 1205,
+			"name": "Fan insurance",
+			"provider": "Power ltd.",
+			"cost": 50000,
+			"effective_start_date": "15/07/2020",
+			"effective_end_date": "15/01/2021",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"insurance_no": 1579,
+			"name": "Computer insurance",
+			"provider": "TDE ltd",
+			"cost": 25000,
+			"effective_start_date": "15/07/2020",
+			"effective_end_date": "15/01/2021",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"category_id": 1,
+			"name": "Fan",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"category_id": 2,
+			"name": "Hard disk",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"category_id": 3,
+			"name": "Fan",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"category_id": 4,
+			"name": "Hard disk",
+			"is_active": "True"
+		}
+	},
+
+
+
+	{
+		"pk": "1",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Fan",
+			"asset_no": 101,
+			"description": "Fan",
+			"serial_no": 10025,
+			"manufacturer": "Bajaj",
+			"make": ,
+			"model": "LF1",
+			"category_id": 1,
+			"sub_category_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"address": "EDM colony kothrud",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "15/01/2020",
+			"installation_date": "30/04/2020",
+			"expiry_date": "15/01/2030",
+			"asset_life": 10,
+			"asset_value": ,
+			"deprecation_method": ,
+			"deprecation_rate": 5,
+			"image": ,
+			"status_id": ,
+			"flag": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Hard disk",
+			"asset_no": 205,
+			"description": "Hard disk",
+			"serial_no": 45623,
+			"manufacturer": "Dell",
+			"make": ,
+			"model": "D20",
+			"category_id": 2,
+			"sub_category_id": 2,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"address": "Shree colony kothrud",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "13/03/2020",
+			"installation_date": "15/05/2020",
+			"expiry_date": "13/03/2030",
+			"asset_life": 10,
+			"asset_value": ,
+			"deprecation_method": ,
+			"deprecation_rate": 2,
+			"image": ,
+			"status_id": ,
+			"flag": ,
+			"is_active": "True"
+		},
+
+
+		{
+		"pk": "3",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Fan",
+			"asset_no": 503,
+			"description": "Fan",
+			"serial_no": 10256,
+			"manufacturer": "Bajaj",
+			"make": ,
+			"model": "CD1",
+			"category_id": 3,
+			"sub_category_id": 3,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"address": "Ring road",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "10/01/2020",
+			"installation_date": "15/04/2020",
+			"expiry_date": "10/01/2030",
+			"asset_life": 10,
+			"asset_value": ,
+			"deprecation_method": ,
+			"deprecation_rate": 5,
+			"image": ,
+			"status_id": ,
+			"flag": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Hard disk",
+			"asset_no": 630,
+			"description": "Hard disk",
+			"serial_no": 78965,
+			"manufacturer": "Dell",
+			"make": ,
+			"model": "MK8",
+			"category_id": 4,
+			"sub_category_id": 4,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"address": "Ring road",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "10/03/2020",
+			"installation_date": "30/05/2020",
+			"expiry_date": "10/03/2030",
+			"asset_life": 10,
+			"asset_value": ,
+			"deprecation_method": ,
+			"deprecation_rate": 2,
+			"image": ,
+			"status_id": ,
+			"flag": ,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "11",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "12",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+
+
 ]
 

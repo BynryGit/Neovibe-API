@@ -18,11 +18,11 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from v1.asset.models.asset_status import get_asset_status_by_id
 
 # Create Asset Master table start
 
-class Assset(models.Model):
+class Asset(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -48,7 +48,7 @@ class Assset(models.Model):
     asset_value = models.BigIntegerField(null=True, blank=True)
     deprecation_method = models.BigIntegerField(null=True, blank=True)
     deprecation_rate = models.BigIntegerField(null=True, blank=True)
-    image = models.UrlField(null=False, blank=False)
+    # image = models.UrlField(null=False, blank=False)
     status_id = models.BigIntegerField(null=True, blank=True)
     flag = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -65,20 +65,20 @@ class Assset(models.Model):
 
     @property
     def get_status(self):
-        status = get_cam_status_by_id(self.status_id)
+        status = get_asset_status_by_id(self.status_id)
         return status
 
 
-def get_campaign_by_id_string(id_string):
+def get_asset_by_id_string(id_string):
     try:
-        return Campaign.objects.get(id_string=id_string)
+        return Asset.objects.get(id_string=id_string)
     except:
         return False
 
 
-def get_campaign_by_id(id):
+def get_asset_by_id(id):
     try:
-        return Campaign.objects.get(id=id)
+        return Asset.objects.get(id=id)
     except:
         return False
 
