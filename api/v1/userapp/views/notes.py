@@ -6,7 +6,7 @@ from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.models.notes import get_notes_by_user_id
+from v1.commonapp.models.notes import get_notes_by_user_id, get_note_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_name
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_master import get_user_by_id_string, get_user_by_id
@@ -25,7 +25,7 @@ from v1.userapp.serializers.notes import NoteSerializer, NoteViewSerializer
 # Author: Arpita
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
-from v1.userapp.views.common_functions import is_user_note_data_verified
+from v1.userapp.views.common_functions import is_user_note_data_verified, is_note_data_verified
 
 
 class UserNote(GenericAPIView):
@@ -34,22 +34,27 @@ class UserNote(GenericAPIView):
         try:
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    data = []
-                    user = get_user_by_id_string(id_string)
-                    service_type = get_service_type_by_name('User')
-                    user_notes_obj = get_notes_by_user_id(user.id,service_type.id)
-                    if user_notes_obj:
-                        for user_note in user_notes_obj:
-                            serializer = NoteViewSerializer(instance=user_note, context={'request': request})
-                            data.append(serializer.data)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_200_OK)
+                    if is_note_data_verified(request):
+                        data = []
+                        user = get_user_by_id_string(id_string)
+                        service_type = get_service_type_by_name('User')
+                        user_notes_obj = get_notes_by_user_id(user.id,service_type.id)
+                        if user_notes_obj:
+                            for user_note in user_notes_obj:
+                                serializer = NoteViewSerializer(instance=user_note, context={'request': request})
+                                data.append(serializer.data)
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: data,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                DATA: 'No records found.',
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                            DATA: 'No records found.',
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -71,20 +76,25 @@ class UserNote(GenericAPIView):
         try:
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    user = get_user_by_id(3)
-                    request.data['identification_id'] = str(id_string)
-                    serializer = NoteSerializer(data=request.data)
-                    if serializer.is_valid():
-                        note_obj = serializer.create(serializer.validated_data, user)
-                        view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: view_serializer.data,
-                        }, status=status.HTTP_201_CREATED)
+                    if is_note_data_verified(request):
+                        user = get_user_by_id(3)
+                        request.data['identification_id'] = str(id_string)
+                        serializer = NoteSerializer(data=request.data)
+                        if serializer.is_valid():
+                            note_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_201_CREATED)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -105,31 +115,28 @@ class UserNote(GenericAPIView):
         try:
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    data = []
-                    if is_user_role_data_verified(request):
+                    if is_note_data_verified(request):
                         user = get_user_by_id(3)
-                        for role in request.data['roles']:
-                            validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
-                                             "is_active": role['is_active']}
-                            serializer = UserRoleSerializer(data=validate_data)
+                        request.data['identification_id'] = str(id_string)
+                        note = get_note_by_id_string(request.data['note_id'])
+                        if note:
+                            serializer = NoteSerializer(data=request.data)
                             if serializer.is_valid():
-                                user_role = get_record_by_values(str(id_string), validate_data['role_id'])
-                                if user_role:
-                                    user_role_obj = serializer.update(user_role, serializer.validated_data, user)
-                                else:
-                                    user_role_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = UserRoleViewSerializer(instance=user_role_obj,
-                                                                              context={'request': request})
-                                data.append(view_serializer.data)
+                                note_obj = serializer.update(note, serializer.validated_data, user)
+                                view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_200_OK)
                             else:
                                 return Response({
                                     STATE: ERROR,
                                     RESULTS: serializer.errors,
                                 }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                            }, status=status.HTTP_404_NOT_FOUND)
                     else:
                         return Response({
                             STATE: ERROR,

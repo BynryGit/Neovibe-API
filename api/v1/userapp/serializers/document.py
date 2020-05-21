@@ -1,4 +1,7 @@
 __author__ = "Arpita"
+
+from datetime import datetime
+
 from django.db import transaction
 from rest_framework import serializers
 
@@ -43,13 +46,23 @@ class DocumentSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data =  set_document_validated_data(validated_data)
         with transaction.atomic():
-            document = super(DocumentSerializer, self).create(validated_data)
-            document.created_by = user.id
-            document.tenant = user.tenant
-            document.utility = user.utility
-            document.is_active = True
-            document.save()
-            return document
+            document_obj = super(DocumentSerializer, self).create(validated_data)
+            document_obj.created_by = user.id
+            document_obj.tenant = user.tenant
+            document_obj.utility = user.utility
+            document_obj.is_active = True
+            document_obj.save()
+            return document_obj
+
+    def update(self, instance, validated_data, user):
+        validated_data = set_document_validated_data(validated_data)
+        with transaction.atomic():
+            document_obj = super(DocumentSerializer, self).update(instance, validated_data)
+            document_obj.updated_by = user.id
+            document_obj.updated_date = datetime.utcnow()
+            document_obj.is_active = True
+            document_obj.save()
+            return document_obj
 
 
 class DocumentListSerializer(serializers.ModelSerializer):

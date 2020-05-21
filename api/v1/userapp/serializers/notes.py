@@ -1,4 +1,7 @@
 __author__ = "Arpita"
+
+from datetime import datetime
+
 from django.db import transaction
 from rest_framework import serializers
 
@@ -42,13 +45,23 @@ class NoteSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data =  set_note_validated_data(validated_data)
         with transaction.atomic():
-            note = super(NoteSerializer, self).create(validated_data)
-            note.created_by = user.id
-            note.tenant = user.tenant
-            note.utility = user.utility
-            note.is_active = True
-            note.save()
-            return note
+            note_obj = super(NoteSerializer, self).create(validated_data)
+            note_obj.created_by = user.id
+            note_obj.tenant = user.tenant
+            note_obj.utility = user.utility
+            note_obj.is_active = True
+            note_obj.save()
+            return note_obj
+
+    def update(self, instance, validated_data, user):
+        validated_data = set_note_validated_data(validated_data)
+        with transaction.atomic():
+            note_obj = super(NoteSerializer, self).update(instance, validated_data)
+            note_obj.updated_by = user.id
+            note_obj.updated_date = datetime.utcnow()
+            note_obj.is_active = True
+            note_obj.save()
+            return note_obj
 
 
 class NoteListSerializer(serializers.ModelSerializer):
