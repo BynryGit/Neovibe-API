@@ -74,6 +74,28 @@ def set_role_privilege_validated_data(validated_data):
     return validated_data
 
 
+def set_user_validated_data(validated_data):
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        validated_data["city_id"] = city.id
+    if "user_type_id" in validated_data:
+        user_type = get_user_type_by_id_string(validated_data["user_type_id"])
+        validated_data["user_type_id"] = user_type.id
+    if "user_subtype_id" in validated_data:
+        user_subtype = get_user_sub_type_by_id_string(validated_data["user_subtype_id"])
+        validated_data["user_subtype_id"] = user_subtype.id
+    if "form_factor_id" in validated_data:
+        form_factor = get_form_factor_by_id_string(validated_data["form_factor_id"])
+        validated_data["form_factor_id"] = form_factor.id
+    if "department_id" in validated_data:
+        department = get_department_by_id_string(validated_data["department_id"])
+        validated_data["department_id"] = department.id
+    if "status_id" in validated_data:
+        status = get_user_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = status.id
+    return validated_data
+
+
 # Check only mandatory fields for role api
 def is_role_data_verified(request):
     return True
@@ -192,14 +214,7 @@ def is_authorized(token):
 
 # Check only mandatory fields for user api
 def is_user_data_verified(request):
-    if request.data['city'] and request.data['user_type'] and request.data['user_subtype'] \
-            and request.data['form_factor'] and request.data['department'] and request.data['user_ID'] and \
-            request.data['username'] and request.data['first_name'] and request.data['last_name'] and \
-            request.data['email'] and request.data['department'] and request.data['utilities'] and \
-            request.data['skills'] and request.data['areas']:
-        return True
-    else:
-        return False
+    return True
 
 
 # @transaction.atomic

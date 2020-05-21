@@ -12,13 +12,15 @@ from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_master import get_users_by_tenant_id_string, get_user_by_id_string, get_all_users
+from v1.userapp.models.user_master import get_users_by_tenant_id_string, get_user_by_id_string, get_all_users, \
+    get_user_by_id
 from v1.userapp.models.role import get_role_by_id_string
 from v1.userapp.models.user_privilege import get_user_privilege_by_user_id
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_type import get_user_type_by_id_string
-from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer
+from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer, \
+    UserSerializer
 from v1.userapp.views.common_functions import is_user_data_verified, add_basic_user_details, \
     save_edited_basic_user_details, is_privilege_data_verified, add_user_privilege, save_edited_privilege
 
@@ -70,32 +72,35 @@ class User(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-
-            # Request data verification start
-            if is_user_data_verified(request):
-                # Request data verification end
-
-                # Save basic user details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = add_basic_user_details(request, user)
-                if result:
-                    data = {
-                        "user_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_user_data_verified(request):
+                        user = get_user_by_id(3)
+                        serializer = UserSerializer(data=request.data)
+                        if serializer.is_valid():
+                            user_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_201_CREATED)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Save basic role details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({
                 STATE: EXCEPTION,
@@ -109,8 +114,8 @@ class User(GenericAPIView):
 # Package: Basic
 # Modules: User
 # Sub Module: User
-# Interaction: View users, Add users, Edit users
-# Usage: View, Add, Edit User
+# Interaction: View users, Edit users
+# Usage: View, Edit User
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
 # Created on: 13/05/2020
