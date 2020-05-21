@@ -81,11 +81,11 @@ class UserDetail(User):
         return get_city_by_id(self.city_id)
 
     @property
-    def get_type(self):
+    def get_user_type(self):
         return get_user_type_by_id(self.user_type_id)
 
     @property
-    def get_sub_type(self):
+    def get_user_sub_type(self):
         return get_user_sub_type_by_id(self.user_subtype_id)
 
     @property

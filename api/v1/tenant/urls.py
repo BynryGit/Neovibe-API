@@ -10,6 +10,9 @@ from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
 from v1.tenant.views.bank_detail import BankList
 
+# from v1.tenant.views.bank_detail import BankList,BankDetails
+
+
 
 urlpatterns = [
     path('list', TenantList.as_view()),
