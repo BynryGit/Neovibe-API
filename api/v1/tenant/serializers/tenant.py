@@ -20,6 +20,13 @@ from v1.tenant.models.tenant_status import TenantStatus
 from v1.tenant.views.common_functions import set_validated_data
 
 
+class GetTenantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TenantStatus
+        fields = ('name','id_string')
+
+
 class TenantStatusViewSerializer(serializers.ModelSerializer):
 
     class Meta:

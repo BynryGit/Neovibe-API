@@ -160,20 +160,9 @@ class RoleDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            # Checking authentication start
             if is_token_valid(self.request.headers['token']):
-                # Checking authentication end
-
-                # Checking authorization start
                 if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
                     if is_role_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic details start
-                        # user = get_user_by_id_string(request.data['user'])
                         user = get_user_by_id(3)
                         role_obj = get_role_by_id_string(id_string)
                         if role_obj:
@@ -205,7 +194,6 @@ class RoleDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
