@@ -45,3 +45,19 @@ class TenantSubscriptionPlanRate(models.Model):
         return self.base_rate
 
 # Create Tenant Subscription Plan Rate table end.
+
+def get_subscription_plan_rate_by_id(id):
+    try:
+        return TenantSubscriptionPlanRate.objects.get(id = id)
+    except:
+        return False
+
+
+def get_subscription_plan_rate_by_id_string(id_string):
+    try:
+        return TenantSubscriptionPlanRate.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_subscription_plan_rate_by_tenant_id_string(id_string):
+    return TenantSubscriptionPlanRate.objects.filter(tenant_id_string=id_string)
