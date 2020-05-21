@@ -9,17 +9,15 @@ from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
+from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
-from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, \
-    get_user_by_id
+from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, get_user_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer
-from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer, \
-    UserSerializer, UserRoleSerializer, UserRoleViewSerializer
-from v1.userapp.views.common_functions import is_user_data_verified, is_privilege_data_verified, add_user_privilege, \
-    save_edited_privilege, is_user_role_data_verified
+from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserRoleSerializer, \
+    UserRoleViewSerializer
+from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified
 
 
 # API Header
@@ -337,54 +335,13 @@ class UserBankDetail(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/user/role
-# API verb: GET
+# API end Point: api/v1/user/:id_string/role
+# API verb: GET, POST, PUT
 # Package: Basic
 # Modules: User
 # Sub Module: User
-# Interaction: Get user role list
-# Usage: get User role and privileges
-# Tables used: 2.5.2. Users & Privileges - Role Privileges
-# Author: Arpita
-# Created on: 14/05/2020
-
-
-class UserPrivilege(GenericAPIView):
-
-    def get(self, request, id_string):
-        try:
-            user = get_user_by_id_string(id_string)
-            privileges = get_user_role_by_user_id(user.id)
-            for privilege in privileges:
-                serializer = UserPrivilegeViewSerializer(instance=privilege, context={'request': request})
-
-            if user:
-                serializer = UserPrivilegeViewSerializer(instance=user, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        except Exception as e:
-            return Response({
-                STATE: EXCEPTION,
-                DATA: '',
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-# API Header
-# API end Point: api/v1/user/role
-# API verb: POST, PUT
-# Package: Basic
-# Modules: User
-# Sub Module: User
-# Interaction: Add user notes, Edit user role and privilege
-# Usage: Add, Edit User role and privileges
+# Interaction: Get, Add, Edit user role and privilege
+# Usage: Get, Add, Edit User role and privileges
 # Tables used: 2.5.2. Users & Privileges - Role Privileges
 # Author: Arpita
 # Created on: 14/05/2020

@@ -46,4 +46,8 @@ def get_service_type_by_id_string(id_string):
 
 def get_service_type_by_id(id):
     return ServiceType.objects.get(id=id)
+
+
+def get_service_type_by_name(name):
+    return ServiceType.objects.get(name=name)
 # End the Code

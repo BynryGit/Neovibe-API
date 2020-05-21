@@ -48,3 +48,7 @@ def get_document_type_by_id_string(id_string):
 
 def get_document_type_by_id(id):
     return DocumentType.objects.filter(id=id).last()
+
+
+def get_document_type_by_name(name):
+    return DocumentType.objects.get(name=name)

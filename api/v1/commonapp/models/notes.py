@@ -74,7 +74,7 @@ class Notes(models.Model):
         return get_service_type_by_id(self.service_type_id)
 
     # @property
-    # def get_user_identification(self):
+    # def get_identification(self):
     #     return get_user_by_id(self.identification_id)
 
 # Create Notes table end.
@@ -94,8 +94,9 @@ def get_notes_by_utility_id_string(id_string):
 def get_notes_by_tenant_id_string(id_string):
     return Notes.objects.filter(tenant__id_string=id_string)
 
-def get_notes_by_user_id(id):
-    return Notes.objects.filter(identification=id)
+
+def get_notes_by_user_id(user_id,service_type_id):
+    return Notes.objects.filter(identification_id=user_id, service_type_id=service_type_id)
 
 
 def get_note_by_id_string(id_string):
