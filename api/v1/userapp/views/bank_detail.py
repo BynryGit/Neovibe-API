@@ -6,11 +6,14 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.user_bank_detail import get_bank_by_tenant_id_string, get_bank_by_utility_id_string, \
     get_bank_by_id
-from v1.userapp.models.user_master import get_bank_by_user_id_string, get_user_by_id_string
-from v1.userapp.serializers.bank_detail import BankListSerializer, BankViewSerializer
+from v1.userapp.models.user_master import get_bank_by_user_id_string, get_user_by_id_string, get_user_by_id
+from v1.userapp.serializers.bank_detail import BankListSerializer, UserBankViewSerializer, UserBankSerializer
+from v1.userapp.views.common_functions import is_bank_data_verified, save_edited_bank_details
 
 
 # API Header
@@ -24,7 +27,6 @@ from v1.userapp.serializers.bank_detail import BankListSerializer, BankViewSeria
 # Tables used: User - User Bank Details
 # Author: Arpita
 # Created on: 13/05/2020
-from v1.userapp.views.common_functions import is_bank_data_verified, save_bank_details
 
 
 class BankList(generics.ListAPIView):
@@ -80,7 +82,7 @@ class Bank(GenericAPIView):
         try:
             bank = get_bank_by_user_id_string(id_string)
             if bank:
-                serializer = BankViewSerializer(instance=bank, context={'request': request})
+                serializer = UserBankViewSerializer(instance=bank, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     DATA: serializer.data,
@@ -99,33 +101,37 @@ class Bank(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-
-            # Request data verification start
-            if is_bank_data_verified(request):
-                # Request data verification end
-
-                # Save bank details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = save_bank_details(request, user)
-                if result:
-                    data = {
-                        "user_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_bank_data_verified(request):
+                        user = get_user_by_id(3)
+                        serializer = UserBankSerializer(data=request.data)
+                        if serializer.is_valid():
+                            bank_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserBankViewSerializer(instance=bank_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_201_CREATED)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Save bank details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))

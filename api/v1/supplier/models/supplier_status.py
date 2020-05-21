@@ -41,3 +41,16 @@ class SupplierStatus(models.Model):
 
 # Create Supplier Status table end.
 
+
+def get_supplier_status_by_id_string(id_string):
+    try:
+        return SupplierStatus.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_supplier_status_by_id(id):
+    try:
+        return SupplierStatus.objects.get(id = id)
+    except:
+        return False
+

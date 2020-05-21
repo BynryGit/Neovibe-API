@@ -1,5 +1,7 @@
 __author__ = "Priyanka"
 
+from rest_framework.exceptions import APIException
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 import traceback
 from rest_framework.response import Response
 from api.messages import SUCCESS,STATE,ERROR,EXCEPTION,DATA,RESULTS
@@ -30,20 +32,29 @@ from v1.survey.views.common_functions import is_data_verified
 
 # API for getting list data of Location Survey
 class SurveyList(generics.ListAPIView):
-    serializer_class = SurveyListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = SurveyListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string',)
-    ordering_fields = ('name', 'no_of_consumers',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('name',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('name', 'tenant__id_string',)
+        ordering_fields = ('name', 'no_of_consumers',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('name',)
 
-    def get_queryset(self):
-        if is_token_valid(1):
-            if is_authorized():
-                queryset = Surveytbl.objects.filter(is_active=True)
-                return queryset
+        def get_queryset(self):
+            if is_token_valid(1):
+                if is_authorized():
+                    queryset = Surveytbl.objects.filter(is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
 
 
 # API Header

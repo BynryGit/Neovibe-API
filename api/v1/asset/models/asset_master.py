@@ -18,11 +18,11 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from v1.asset.models.asset_status import get_asset_status_by_id
 
 # Create Asset Master table start
 
-class AsssetMaster(models.Model):
+class Asset(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -33,11 +33,11 @@ class AsssetMaster(models.Model):
     manufacturer = models.BigIntegerField(null=True, blank=True)
     make = models.BigIntegerField(null=True, blank=True)
     model = models.BigIntegerField(null=True, blank=True)
-    category = models.BigIntegerField(null=True, blank=True)
-    sub_category = models.BigIntegerField(null=True, blank=True)
-    city = models.BigIntegerField(null=True, blank=True)
-    area = models.BigIntegerField(null=True, blank=True)
-    subarea = models.BigIntegerField(null=True, blank=True)
+    category_id = models.BigIntegerField(null=True, blank=True)
+    sub_category_id = models.BigIntegerField(null=True, blank=True)
+    city_id = models.BigIntegerField(null=True, blank=True)
+    area_id = models.BigIntegerField(null=True, blank=True)
+    sub_area_id = models.BigIntegerField(null=True, blank=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     lat = models.CharField(max_length=200, blank=True, null=True)
     long = models.CharField(max_length=200, blank=True, null=True)
@@ -48,8 +48,8 @@ class AsssetMaster(models.Model):
     asset_value = models.BigIntegerField(null=True, blank=True)
     deprecation_method = models.BigIntegerField(null=True, blank=True)
     deprecation_rate = models.BigIntegerField(null=True, blank=True)
-    image = models.UrlField(null=False, blank=False)
-    status = models.BigIntegerField(null=True, blank=True)
+    # image = models.UrlField(null=False, blank=False)
+    status_id = models.BigIntegerField(null=True, blank=True)
     flag = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -62,5 +62,24 @@ class AsssetMaster(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_status(self):
+        status = get_asset_status_by_id(self.status_id)
+        return status
+
+
+def get_asset_by_id_string(id_string):
+    try:
+        return Asset.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_asset_by_id(id):
+    try:
+        return Asset.objects.get(id=id)
+    except:
+        return False
 
 # Create Asset Master table end.

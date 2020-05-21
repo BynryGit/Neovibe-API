@@ -15,7 +15,7 @@ from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_status import get_tenant_status_by_id
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.tenant.views.common_functions import is_data_verified
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE
 
 
 # API Header
@@ -78,7 +78,14 @@ class Tenant(GenericAPIView):
                     #user = UserDetail.objects.get(id = 2)
                     if is_data_verified(request):
                     # Request data verification end
-                        serializer = TenantSerializer(data=request.data)
+                        duplicate_tenant_obj = tenantTbl.objects.filter(id_string=request.data["id_string"],
+                                                                            name=request.data['name'])
+                        if duplicate_tenant_obj:
+                            return Response({
+                                STATE: DUPLICATE,
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        else:
+                            serializer = TenantSerializer(data=request.data)
                         if serializer.is_valid():
 #                            tenant_obj = serializer.create(serializer.validated_data, user)
                             tenant_obj = serializer.create(serializer.validated_data)

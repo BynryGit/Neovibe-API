@@ -50,14 +50,16 @@ class UserDetail(User):
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
+    bank_detail_id = models.BigIntegerField(null=True, blank=True)
     utilities = jsonfield.JSONField()
     skills = jsonfield.JSONField()
     areas = jsonfield.JSONField()
-    bank_detail_id = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+
+
 
     def __unicode__(self):
         return self.id
@@ -79,11 +81,11 @@ class UserDetail(User):
         return get_city_by_id(self.city_id)
 
     @property
-    def get_type(self):
+    def get_user_type(self):
         return get_user_type_by_id(self.user_type_id)
 
     @property
-    def get_sub_type(self):
+    def get_user_sub_type(self):
         return get_user_sub_type_by_id(self.user_subtype_id)
 
     @property
@@ -97,6 +99,10 @@ class UserDetail(User):
     @property
     def get_user_role(self):
         return get_role_by_id(self.role_id)
+
+    @property
+    def get_user_bank(self):
+        return get_bank_by_id(self.bank_detail_id)
 
 # Create User Details table end
 

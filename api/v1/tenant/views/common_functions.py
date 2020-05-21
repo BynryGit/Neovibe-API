@@ -1306,6 +1306,13 @@ def is_data_verified(request):  # todo - Black, Null, empty string - ready to us
             return True
 
 
+def is_bank_data_verified(request):
+    if request.data['bank']:
+        return True
+    else:
+        return False
+
+
 def set_validated_data(validated_data):
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])

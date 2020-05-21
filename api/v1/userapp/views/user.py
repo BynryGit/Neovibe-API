@@ -6,17 +6,19 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
-from v1.commonapp.models.city import get_city_by_id_string
-from v1.commonapp.models.department import get_department_by_id_string
-from v1.commonapp.models.form_factor import get_form_factor_by_id_string
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_master import get_users_by_tenant_id_string, get_user_by_id_string, get_all_users
-from v1.userapp.models.role import get_role_by_id_string
+from v1.userapp.models.user_bank_detail import get_bank_by_id
+from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, \
+    get_user_by_id
 from v1.userapp.models.user_privilege import get_user_privilege_by_user_id
-from v1.userapp.models.user_status import get_user_status_by_id_string
-from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
-from v1.userapp.models.user_type import get_user_type_by_id_string
-from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer
+from v1.userapp.serializers.bank_detail import UserBankViewSerializer
+from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserPrivilegeViewSerializer, \
+    UserSerializer
+from v1.userapp.views.common_functions import is_user_data_verified, is_privilege_data_verified, add_user_privilege, \
+    save_edited_privilege
+
 
 # API Header
 # API end Point: api/v1/user/list
@@ -30,8 +32,7 @@ from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, 
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
 # Created on: 11/05/2020
-from v1.userapp.views.common_functions import is_user_data_verified, add_basic_user_details, \
-    save_edited_basic_user_details, is_privilege_data_verified, add_user_privilege, save_edited_privilege
+# Updated on: 21/05/2020
 
 
 class UserList(generics.ListAPIView):
@@ -40,116 +41,293 @@ class UserList(generics.ListAPIView):
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filter_fields = ('tenant__id_string', 'utility__id_string')
-    # filter_fields = ('tenant__id_string', 'utility__id_string', 'city_id_string', 'user_type_id_string', 'user_sub_type_id_string', 'form_factor_id_string', 'department_id_string', 'role_id_string', 'status_id_string')
     ordering_fields = ('first_name', 'last_name',)
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('first_name', 'email_id')
 
     def get_queryset(self):
-
         queryset = get_all_users()
         return queryset
 
 
 # API Header
 # API end Point: api/v1/user
-# API verb: GET, POST, PUT
+# API verb: POST
 # Package: Basic
 # Modules: User
 # Sub Module: User
-# Interaction: View users, Add users, Edit users
-# Usage: View, Add, Edit User
+# Interaction: Add users
+# Usage: Add User
 # Tables used: 2.5.3. Users & Privileges - User Details
 # Author: Arpita
 # Created on: 13/05/2020
 # Updated on: 14/05/2020
 
-class Users(GenericAPIView):
+class User(GenericAPIView):
+
+    def post(self, request, format=None):
+        try:
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_user_data_verified(request):
+                        user = get_user_by_id(3)
+                        serializer = UserSerializer(data=request.data)
+                        if serializer.is_valid():
+                            user_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_201_CREATED)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/user/:id_string
+# API verb: GET, PUT
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: View users, Edit users
+# Usage: View, Edit User
+# Tables used: 2.5.3. Users & Privileges - User Details
+# Author: Arpita
+# Created on: 13/05/2020
+# Updated on: 21/05/2020
+
+
+class UserDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            user = get_user_by_id_string(id_string)
-            if user:
-                serializer = UserViewSerializer(instance=user, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    user = get_user_by_id_string(id_string)
+                    if user:
+                        serializer = UserViewSerializer(instance=user, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    DATA: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def post(self, request, format=None):
+    def put(self, request, id_string):
         try:
-
-            # Request data verification start
-            if is_user_data_verified(request):
-                # Request data verification end
-
-                # Save basic user details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = add_basic_user_details(request, user)
-                if result:
-                    data = {
-                        "user_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_user_data_verified(request):
+                        user = get_user_by_id(3)
+                        user_obj = get_user_by_id_string(id_string)
+                        if user_obj:
+                            serializer = UserSerializer(data=request.data)
+                            if serializer.is_valid():
+                                user_obj = serializer.update(user_obj, serializer.validated_data, user)
+                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_200_OK)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                            }, status=status.HTTP_404_NOT_FOUND)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Save basic role details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def put(self, request, format=None):
+
+# API Header
+# API end Point: api/v1/user/:id_string/bank
+# API verb: GET, POST, PUT
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: View, Add, Edit user bank detail
+# Usage: View, Add, Edit User bank detail
+# Tables used: 2.5 Users & Privileges - User Bank Details
+# Author: Arpita
+# Created on: 21/05/2020
+
+
+class UserBankDetail(GenericAPIView):
+
+    def get(self, request, id_string):
         try:
-
-            # Request data verification start
-            if is_user_data_verified(request):
-                # Request data verification end
-
-                # Edit basic details start
-                user = get_user_by_id_string(request.data['user'])
-                user_detail, result, error = save_edited_basic_user_details(request, user)
-                if result:
-                    data = {
-                        "user_detail_id_string": user_detail.id_string
-                    }
-                    return Response({
-                        STATE: SUCCESS,
-                        DATA: data,
-                    }, status=status.HTTP_200_OK)
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    user = get_user_by_id_string(id_string)
+                    bank = get_bank_by_id(user.bank_detail_id)
+                    if user:
+                        serializer = UserBankViewSerializer(instance=bank, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            DATA: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: EXCEPTION,
+                            DATA: '',
+                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 else:
                     return Response({
-                        STATE: EXCEPTION,
-                        ERROR: error
-                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # Edit basic details start
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, request, id_string):
+        try:
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_user_data_verified(request):
+                        user = get_user_by_id(3)
+                        user_obj = get_user_by_id_string(id_string)
+                        if user_obj:
+                            serializer = UserSerializer(data=request.data)
+                            if serializer.is_valid():
+                                user_obj = serializer.update(user_obj, serializer.validated_data, user)
+                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_200_OK)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                            }, status=status.HTTP_404_NOT_FOUND)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, id_string):
+        try:
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    if is_user_data_verified(request):
+                        user = get_user_by_id(3)
+                        user_obj = get_user_by_id_string(id_string)
+                        if user_obj:
+                            serializer = UserSerializer(data=request.data)
+                            if serializer.is_valid():
+                                user_obj = serializer.update(user_obj, serializer.validated_data, user)
+                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_200_OK)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                            }, status=status.HTTP_404_NOT_FOUND)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(e))

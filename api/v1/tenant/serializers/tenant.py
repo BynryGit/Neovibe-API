@@ -20,6 +20,13 @@ from v1.tenant.models.tenant_status import TenantStatus
 from v1.tenant.views.common_functions import set_validated_data
 
 
+class GetTenantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TenantStatus
+        fields = ('name','id_string')
+
+
 class TenantStatusViewSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -32,8 +39,7 @@ class TenantListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantMaster
-        fields = ('id_string','short_name','name','email_id','mobile_no','city_id','country_id','state_id','status_id',
-                  'is_active','created_by','created_date')
+        fields = ( 'id_string','subscription_id','module_id','sub_module_id','sub_module_name','is_active')
 
 class TenantViewSerializer(serializers.ModelSerializer):
     #status = TenantStatusViewSerializer(many=False, source='get_status')

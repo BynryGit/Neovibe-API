@@ -5,7 +5,6 @@ from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.region import get_region_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
-from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_status import get_utility_status_by_id_string
 
 

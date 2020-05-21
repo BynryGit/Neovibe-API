@@ -1,4 +1,4 @@
-__author__ = "Gauri"
+__author__ = "aki"
 
 import traceback
 from rest_framework.generics import GenericAPIView
@@ -13,7 +13,7 @@ from v1.utility.serializers.document import DocumentSerializer
 
 
 # API Header
-# API end Point: api/v1/tenant/id_string/documents
+# API end Point: api/v1/utility/id_string/documents
 # API verb: GET, POST
 # Package: Basic
 # Modules: Utility
@@ -21,7 +21,7 @@ from v1.utility.serializers.document import DocumentSerializer
 # Interaction: for get and add utility document
 # Usage: API will fetch and add all documents under utility.
 # Tables used: 2.12.13 Document
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 13/05/2020
 
 
