@@ -97,3 +97,7 @@ def get_record_by_values(role_id,module_id_string,sub_module_id_string,privilege
     sub_module = get_sub_module_by_id_string(sub_module_id_string)
     privilege = get_privilege_by_id_string(privilege_id_string)
     return RolePrivilege.objects.filter(role_id=role_id,module_id=module.id,sub_module_id=sub_module.id,privilege_id=privilege.id).last()
+
+
+def get_record_values_by_id(role_id,module_id,sub_module_id,privilege_id):
+    return RolePrivilege.objects.filter(role_id=role_id,module_id=module_id,sub_module_id=sub_module_id,privilege_id=privilege_id).last()
