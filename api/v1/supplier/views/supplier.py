@@ -88,7 +88,7 @@ class Supplier(GenericAPIView):
                     if duplicate_supplier_obj:
                         return Response({
                             STATE: DUPLICATE,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        }, status=status.HTTP_409_CONFLICT)
                     else:
                         serializer = SupplierSerializer(data=request.data)
                         if serializer.is_valid():

@@ -14,7 +14,7 @@ from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.serializers.role_privilege import RolePrivilegeSerializer, RolePrivilegeViewSerializer
-from v1.userapp.views.common_functions import is_role_privilege_data_verified
+from v1.userapp.views.common_functions import is_role_privilege_data_verified, set_role_privilege_validated_data
 
 
 # API Header
@@ -50,7 +50,8 @@ class RolePrivilege(GenericAPIView):
                                 validate_data['sub_module_id'] = sub_module['sub_module_id']
                                 validate_data['privilege_id'] = sub_module['privilege_id']
                                 validate_data['is_active'] = sub_module['is_active']
-                                serializer = RolePrivilegeSerializer(data=validate_data)
+                                validated_data = set_role_privilege_validated_data(validate_data)
+                                serializer = RolePrivilegeSerializer(data=validated_data)
                                 if serializer.is_valid():
                                     privilege_obj = serializer.create(serializer.validated_data, user)
                                     view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
@@ -125,28 +126,28 @@ class RolePrivilegeDetail(GenericAPIView):
                         data[0]['sub_module'] = sub_modules
                         return Response({
                             STATE: SUCCESS,
-                            DATA: data,
+                            RESULTS: data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: EXCEPTION,
-                            DATA: 'No records found.',
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                            RESULTS: '',
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
-                        DATA: '',
+                        RESULTS: '',
                     }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
-                    DATA: '',
+                    RESULTS: '',
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
+                RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -170,7 +171,8 @@ class RolePrivilegeDetail(GenericAPIView):
                                     validate_data['sub_module_id'] = sub_module['sub_module_id']
                                     validate_data['privilege_id'] = sub_module['privilege_id']
                                     validate_data['is_active'] = sub_module['is_active']
-                                    serializer = RolePrivilegeSerializer(data=validate_data)
+                                    validated_data = set_role_privilege_validated_data(validate_data)
+                                    serializer = RolePrivilegeSerializer(data=validated_data)
                                     if serializer.is_valid():
                                         role_privilege = get_record_by_values(role.id, validate_data['module_id'],
                                                                               validate_data['sub_module_id'],

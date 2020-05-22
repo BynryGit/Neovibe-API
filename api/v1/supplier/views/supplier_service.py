@@ -2,49 +2,55 @@ __author__ = "aki"
 
 import traceback
 from rest_framework.exceptions import APIException
-from rest_framework.response import Response
-from rest_framework import generics, status
-from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
+from rest_framework import generics, status
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
-from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, \
+    ObjectNotFoundException
+from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.supplier.serializers.supplier_service import SupplierServiceViewSerializer, SupplierServiceSerializer
 from v1.userapp.models.user_master import UserDetail
-from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
-from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
+from v1.supplier.models.supplier_service import SupplierService as SupplierServiceTbl, get_supplier_service_by_id_string
 
 
 # API Header
-# API end Point: api/v1/utility/list
+# API end Point: api/v1/supplier/id_string/service/list
 # API verb: GET
 # Package: Basic
-# Modules: All
-# Sub Module: All
-# Interaction: Utility list
-# Usage: API will fetch required data for utility list against filter and search
-# Tables used: 2.1. Utility Master
+# Modules: Supplier
+# Sub Module: Service
+# Interaction: Get supplier service list
+# Usage: API will fetch required data for supplier service list.
+# Tables used: SupplierService
 # Author: Akshay
-# Created on: 08/05/2020
+# Created on: 22/05/2020
 
-class UtilityList(generics.ListAPIView):
+
+class SupplierServiceList(generics.ListAPIView):
     try:
-        serializer_class = UtilityMasterViewSerializer
+        serializer_class = SupplierServiceViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('name', 'tenant__id_string',)
-        ordering_fields = ('name', 'tenant',)
-        ordering = ('name',) # always give by default alphabetical order
-        search_fields = ('name', 'tenant__name',)
+        filter_fields = ('name', 'tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name',)
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    queryset = UtilityMasterTbl.objects.filter(is_active=True)
-                    return queryset
+                    supplier_service_obj = get_supplier_service_by_id_string(self.kwargs['id_string'])
+                    if supplier_service_obj:
+                        queryset = SupplierServiceTbl.objects.filter(supplier=supplier_service_obj.id, is_active=True)
+                        return queryset
+                    else:
+                        raise ObjectNotFoundException
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -55,19 +61,19 @@ class UtilityList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/utility
+# API end Point: api/v1/supplier/id_string/service
 # API verb: POST
 # Package: Basic
-# Modules: All
-# Sub Module: All
-# Interaction: Create Utility object
-# Usage: API will create utility object based on valid data
-# Tables used: 2.1. Utility Master
+# Modules: Supplier
+# Sub Module: Service
+# Interaction: Create supplier service
+# Usage: API will create supplier service object based on valid data
+# Tables used: SupplierService
 # Author: Akshay
-# Created on: 13/05/2020
+# Created on: 22/05/2020
 
-class Utility(GenericAPIView):
-    serializer_class = UtilityMasterSerializer
+class SupplierService(GenericAPIView):
+    serializer_class = SupplierServiceSerializer
 
     def post(self, request):
         try:
@@ -84,18 +90,18 @@ class Utility(GenericAPIView):
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    duplicate_utility_obj = UtilityMasterTbl.objects.filter(tenant__id_string=request.data['tenant'], name=request.data['name'])
-                    if duplicate_utility_obj:
+                    duplicate_supplier_supplier_obj = SupplierServiceTbl.objects.filter(utility__id_string=request.data['utility'], name=request.data['name'])
+                    if duplicate_supplier_supplier_obj:
                         return Response({
                             STATE: DUPLICATE,
                         }, status=status.HTTP_409_CONFLICT)
                     else:
-                        serializer = UtilityMasterSerializer(data=request.data)
+                        serializer = SupplierServiceSerializer(data=request.data)
                         if serializer.is_valid():
-                            utility_obj = serializer.create(serializer.validated_data, user)
+                            supplier_service_obj = serializer.create(serializer.validated_data, user)
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'utility_id_string': utility_obj.id_string},
+                                RESULTS: {'supplier_service_id_string': supplier_service_obj.id_string},
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
@@ -119,19 +125,19 @@ class Utility(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/utility/id_string
-# API verb: GET,PUT
+# API end Point: api/v1/supplier/service/id_string
+# API verb: GET, PUT
 # Package: Basic
-# Modules: All
-# Sub Module: All
-# Interaction: View Utility object
-# Usage: API will fetch and edit required data for utility using id_string
-# Tables used: 2.1. Utility Master
+# Modules: Supplier
+# Sub Module: Service
+# Interaction: For edit and get single supplier service
+# Usage: API will edit and get supplier service
+# Tables used: SupplierService
 # Author: Akshay
-# Created on: 08/05/2020
+# Created on: 22/05/2020
 
-class UtilityDetail(GenericAPIView):
-    serializer_class = UtilityMasterSerializer
+class SupplierServiceDetail(GenericAPIView):
+    serializer_class = SupplierServiceSerializer
 
     def get(self, request, id_string):
         try:
@@ -145,9 +151,9 @@ class UtilityDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
-                        serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                    supplier_service_obj = get_supplier_service_by_id_string(id_string)
+                    if supplier_service_obj:
+                        serializer = SupplierServiceViewSerializer(supplier_service_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: serializer.data,
@@ -186,14 +192,14 @@ class UtilityDetail(GenericAPIView):
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
-                        serializer = UtilityMasterSerializer(data=request.data)
+                    supplier_service_obj = get_supplier_service_by_id_string(id_string)
+                    if supplier_service_obj:
+                        serializer = SupplierServiceSerializer(data=request.data)
                         if serializer.is_valid():
-                            utility_obj = serializer.update(utility_obj, serializer.validated_data, user)
+                            supplier_service_obj = serializer.update(supplier_service_obj, serializer.validated_data, user)
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'utility_id_string': utility_obj.id_string},
+                                RESULTS: {'supplier_service_id_string': supplier_service_obj.id_string},
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({

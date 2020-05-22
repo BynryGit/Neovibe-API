@@ -2,11 +2,12 @@ import uuid  # importing package for guid
 import jsonfield # importing json field
 from datetime import datetime # importing package for datetime
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
-from v1.commonapp.models.notes import get_notes_by_user_id
+from v1.commonapp.models.notes import get_notes_by_user_id, get_notes_by_userid
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.role import get_role_by_id
@@ -58,8 +59,6 @@ class UserDetail(User):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-
-
 
     def __unicode__(self):
         return self.id
@@ -140,5 +139,14 @@ def get_documents_by_user_id_string(id_string):
 
 def get_notes_by_user_id_string(id_string):
     user = UserDetail.objects.filter(id_string=id_string, is_active=True).last()
-    return get_notes_by_user_id(user.id)
+    return get_notes_by_userid(user.id)
+
+
+def is_username_exists(username):
+    user = UserDetail.objects.filter(username=username, is_active=True).last()
+    print('===========',user)
+    if user:
+        return False
+    else:
+        return True
 

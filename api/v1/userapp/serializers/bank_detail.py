@@ -4,13 +4,13 @@ from datetime import datetime
 
 from rest_framework import serializers
 
-from v1.tenant.serializers.tenant import TenantSerializer
+from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.user_bank_detail import UserBankDetail
 from v1.utility.serializers.utility import UtilitySerializer
 
 
 class BankListSerializer(serializers.ModelSerializer):
-    tenant = TenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:

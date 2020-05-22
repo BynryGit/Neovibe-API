@@ -28,7 +28,7 @@ class ContractsDemand(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     contract = models.BigIntegerField(null=True, blank=True)
-    product = models.BigIntegerField(null=True, blank=True)
+    supplier_product = models.BigIntegerField(null=True, blank=True)
     requested_quantity = models.BigIntegerField(null=True, blank=True)
     unit = models.BigIntegerField(null=True, blank=True)
     actual_quantity = models.BigIntegerField(null=True, blank=True)

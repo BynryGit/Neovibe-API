@@ -94,7 +94,7 @@ class SupplierInvoice(GenericAPIView):
                     if duplicate_supplier_invoice_obj:
                         return Response({
                             STATE: DUPLICATE,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        }, status=status.HTTP_409_CONFLICT)
                     else:
                         serializer = SupplierInvoiceSerializer(data=request.data)
                         if serializer.is_valid():
