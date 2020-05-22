@@ -138,6 +138,8 @@ USE_TZ = True
 
 DISPLAY_DATE_FORMAT = "%d-%b-%Y"
 
+DISPLAY_DATE_TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
+
 INPUT_DATE_FORMAT = "%d-%b-%Y"
 
 

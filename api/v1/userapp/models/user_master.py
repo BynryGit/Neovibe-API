@@ -2,6 +2,7 @@ import uuid  # importing package for guid
 import jsonfield # importing json field
 from datetime import datetime # importing package for datetime
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.document import get_documents_by_user_id
@@ -58,8 +59,6 @@ class UserDetail(User):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-
-
 
     def __unicode__(self):
         return self.id

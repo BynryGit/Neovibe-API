@@ -4,8 +4,8 @@ from rest_framework import status, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-
 from api.messages import *
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -17,7 +17,7 @@ from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserRoleSerializer, \
-    UserRoleViewSerializer
+    UserRoleViewSerializer, UserSerializer
 from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified
 
 
@@ -41,10 +41,10 @@ class UserList(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('tenant__id_string', 'utility__id_string')
+    filter_fields = ('first_name', 'last_name', 'tenant__id_string', 'utility__id_string')
     ordering_fields = ('first_name', 'last_name',)
     ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id')
+    search_fields = ('first_name', 'email',)
 
     def get_queryset(self):
         if is_token_valid(self.request.headers['token']):
@@ -136,13 +136,13 @@ class UserDetail(GenericAPIView):
                         serializer = UserViewSerializer(instance=user, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            DATA: serializer.data,
+                            RESULTS: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            RESULTS: '',
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -155,7 +155,7 @@ class UserDetail(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
+                RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
