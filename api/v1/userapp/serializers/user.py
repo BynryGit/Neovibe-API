@@ -1,9 +1,9 @@
 __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
-
 from rest_framework import serializers
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
@@ -111,6 +111,10 @@ class GetUserSerializer(serializers.ModelSerializer):
 
 
 class UserViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
@@ -120,12 +124,13 @@ class UserViewSerializer(serializers.ModelSerializer):
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     bank = UserBankViewSerializer(many=False, required=True, source='get_user_bank')
+    date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = UserDetail
         fields = ('id_string', 'tenant', 'utility', 'user_type', 'user_sub_type', 'form_factor', 'city', 'department',
                   'bank', 'status', 'user_ID','first_name', 'middle_name','last_name', 'email', 'user_image', 'phone_mobile',
-                  'phone_landline', 'utilities', 'skills', 'areas', 'created_by', 'created_date')
+                  'phone_landline', 'utilities', 'skills', 'areas', 'created_by', 'date')
 
 
 class UserRoleSerializer(serializers.ModelSerializer):

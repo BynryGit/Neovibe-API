@@ -5,6 +5,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -43,7 +44,7 @@ class UserList(generics.ListAPIView):
     filter_fields = ('first_name', 'last_name', 'tenant__id_string', 'utility__id_string')
     ordering_fields = ('first_name', 'last_name',)
     ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id')
+    search_fields = ('first_name', 'email',)
 
     def get_queryset(self):
         if is_token_valid(self.request.headers['token']):
