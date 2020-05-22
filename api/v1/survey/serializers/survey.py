@@ -11,6 +11,7 @@ from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.serializers.sub_area import SubAreaListSerializer
 from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 
 class SurveyObjectiveSerializer(serializers.ModelSerializer):
 
@@ -31,6 +32,15 @@ class SurveyStatusSerializer(serializers.ModelSerializer):
         fields = ('name','id_string')
 
 class SurveyListSerializer(serializers.ModelSerializer):
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_start_date(self, obj):
+        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_end_date(self, obj):
+        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
     objective_id = SurveyObjectiveSerializer(many=False,required=True,source='get_objective')
     type_id = SurveyTypeSerializer(many=False,required=True,source='get_type')
@@ -39,14 +49,26 @@ class SurveyListSerializer(serializers.ModelSerializer):
     sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    start_date = serializers.SerializerMethodField('get_start_date')
+    end_date = serializers.SerializerMethodField('get_end_date')
 
     class Meta:
         model = SurveyTbl
         fields = ('id_string', 'tenant_name', 'name', 'description','start_date','end_date','no_of_consumers',
                   'completion_date','category_id','sub_category_id','area_id','sub_area_id',
-                  'objective_id','type_id','status_id')
+                  'objective_id','type_id','status_id','created_date')
 
 class SurveyViewSerializer(serializers.ModelSerializer):
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_start_date(self, obj):
+        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_end_date(self, obj):
+        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
     objective_id = SurveyObjectiveSerializer(many=False, required=True, source='get_objective')
     type_id = SurveyTypeSerializer(many=False, required=True, source='get_type')
@@ -55,12 +77,15 @@ class SurveyViewSerializer(serializers.ModelSerializer):
     sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    start_date = serializers.SerializerMethodField('get_start_date')
+    end_date = serializers.SerializerMethodField('get_end_date')
 
     class Meta:
         model = SurveyTbl
         fields = ('id_string', 'tenant_name', 'name', 'description', 'start_date', 'end_date', 'no_of_consumers',
                   'completion_date', 'category_id', 'sub_category_id', 'area_id', 'sub_area_id',
-                  'objective_id', 'type_id', 'status_id')
+                  'objective_id', 'type_id', 'status_id','created_date')
 
 class SurveySerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
