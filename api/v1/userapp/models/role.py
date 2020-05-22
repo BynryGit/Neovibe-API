@@ -18,11 +18,11 @@ from datetime import datetime # importing package for datetime
 
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
-from v1.tenant.models.tenant_master import TenantMaster
+from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 from v1.userapp.models.role_status import get_role_status_by_id
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
 from v1.userapp.models.role_type import get_role_type_by_id
-from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 from django.db import models  # importing package for database
 
 
@@ -49,6 +49,14 @@ class Role(models.Model): # change name to role
 
     def __unicode__(self):
         return self.role
+
+    @property
+    def get_tenant(self):
+        return get_tenant_by_id(self.tenant_id)
+
+    @property
+    def get_utility(self):
+        return get_utility_by_id(self.utility_id)
 
     @property
     def get_role_type(self):
