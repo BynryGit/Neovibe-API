@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
@@ -74,7 +74,8 @@ class Consumer(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            print("########",e)
+            # logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
@@ -188,31 +189,31 @@ class ConsumerDetail(GenericAPIView):
 # Tables used: InvoiceBill, ConsumerMaster
 # Author: Rohan
 # Created on: 20/05/2020
-class ConsumerBillList(GenericAPIView):
-    serializer_class = InvoiceBillListSerializer
-    pagination_class = StandardResultsSetPagination
+class ConsumerBillList(generics.ListAPIView):
+    try:
+        serializer_class = InvoiceBillListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('bill_month', 'tenant__id_string',)
-    ordering_fields = ('invoice_date', 'bill_month',)
-    ordering = ('invoice_date',)  # always give by default alphabetical order
-    search_fields = ('bill_month',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('bill_month', 'tenant__id_string',)
+        ordering_fields = ('bill_month',)
+        ordering = ('bill_month',)  # always give by default alphabetical order
+        search_fields = ('bill_month',)
 
-    def get_queryset(self):
-        try:
+        def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     if consumer:
                         queryset = get_invoice_bills_by_consumer_no(consumer.consumer_no)
                         return queryset
-                    else:
-                        raise InvalidAuthorizationException
                 else:
-                    raise InvalidTokenException
-        except Exception as ex:
-            logger().log(ex, 'ERROR')
-            raise APIException
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException
 
 
 # API Header
@@ -226,31 +227,31 @@ class ConsumerBillList(GenericAPIView):
 # Tables used: Payment, ConsumerMaster
 # Author: Rohan
 # Created on: 21/05/2020
-class ConsumerPaymentList(GenericAPIView):
-    serializer_class = PaymentListSerializer
-    pagination_class = StandardResultsSetPagination
+class ConsumerPaymentList(generics.ListAPIView):
+    try:
+        serializer_class = PaymentListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('transaction_date',)
-    ordering_fields = ('transaction_date',)
-    ordering = ('transaction_date',)  # always give by default alphabetical order
-    search_fields = ('transaction_amount',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('transaction_date',)
+        ordering_fields = ('transaction_date',)
+        ordering = ('transaction_date',)  # always give by default alphabetical order
+        search_fields = ('transaction_amount',)
 
-    def get_queryset(self):
-        try:
+        def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     if consumer:
                         queryset = get_payments_by_consumer_no(consumer.consumer_no)
                         return queryset
-                    else:
-                        raise InvalidAuthorizationException
                 else:
-                    raise InvalidTokenException
-        except Exception as ex:
-            logger().log(ex, 'ERROR')
-            raise APIException
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException
 
 
 # API Header
@@ -264,18 +265,18 @@ class ConsumerPaymentList(GenericAPIView):
 # Tables used: ConsumerComplaint, ConsumerMaster
 # Author: Rohan
 # Created on: 21/05/2020
-class ConsumerComplaintList(GenericAPIView):
-    serializer_class = ConsumerComplaintListSerializer
-    pagination_class = StandardResultsSetPagination
+class ConsumerComplaintList(generics.ListAPIView):
+    try:
+        serializer_class = ConsumerComplaintListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('transaction_date',)
-    ordering_fields = ('transaction_date',)
-    ordering = ('transaction_date',)  # always give by default alphabetical order
-    search_fields = ('transaction_amount',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('complaint_date',)
+        ordering_fields = ('complaint_date',)
+        ordering = ('complaint_date',)  # always give by default alphabetical order
+        search_fields = ('complaint_date',)
 
-    def get_queryset(self):
-        try:
+        def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
@@ -286,9 +287,9 @@ class ConsumerComplaintList(GenericAPIView):
                         raise InvalidAuthorizationException
                 else:
                     raise InvalidTokenException
-        except Exception as ex:
-            logger().log(ex, 'ERROR')
-            raise APIException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException
 
 
 
