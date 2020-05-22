@@ -2,6 +2,7 @@ from django.urls import path
 
 from v1.userapp.views.bank_detail import Bank, BankList, GetBankList
 from v1.userapp.views.document import UserDocument
+from v1.userapp.views.login import LoginApiView
 from v1.userapp.views.notes import UserNote
 from v1.userapp.views.skills import SkillList
 from v1.userapp.views.user import User, UserList, UserRole, UserDetail, UserBankDetail
@@ -14,6 +15,7 @@ urlpatterns = [
     path('<uuid:id_string>/role/', UserRole.as_view()),
     path('<uuid:id_string>/note/', UserNote.as_view()),
     path('<uuid:id_string>/document/', UserDocument.as_view()),
+    path('login/', LoginApiView.as_view()),
 
     path('bank/list', BankList.as_view()),
     path('bank-detail/', GetBankList.as_view()),
