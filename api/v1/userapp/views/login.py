@@ -9,8 +9,13 @@ from rest_framework import status
 from api.messages import *
 from api.settings import SECRET_KEY
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_user_by_username
+from v1.userapp.models.user_master import get_user_by_username, get_user_by_id_string
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id
+
+
+
+
+
 
 
 # API Header
@@ -24,32 +29,24 @@ from v1.userapp.models.user_token import UserToken, get_token_by_user_id
 # Author: Arpita
 # Created on: 29/04/2020
 
-
-# def is_authenticate(validated_data):
-#     user = authenticate(username=validated_data['username'], password=validated_data['password'])
-#     if user is not None:
-#         return user
-#     else:
-#         return False
-#
-#
-# def is_authorized(token):
-#     try:
-#         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-#         if UserDetail.objects.filter(id_string=str(decoded_token)).exists():
-#             user_obj = UserDetail.objects.get(id_string=str(decoded_token))
-#             if UserToken.objects.filter(user=user_obj.id).exists():
-#                 token_obj = UserToken.objects.get(user=user_obj.id)
-#                 if token_obj.token == token:
-#                     return True
-#                 else:
-#                     return False
-#             else:
-#                 return False
-#         else:
-#             return False
-#     except:
-#         return False
+def is_authorized(token):
+    try:
+        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        user_obj = get_user_by_id_string(str(decoded_token))
+        if user_obj:
+            token_obj = get_token_by_user_id(user_obj.id)
+            if token_obj:
+                if token_obj.token == token:
+                    return True, user_obj.id
+                else:
+                    return False, ''
+            else:
+                return False, ''
+        else:
+            return False, ''
+    except Exception as e:
+        logger().log(e, 'ERROR', user='test', name='test')
+        return False
 #
 #
 # # def check_privilege(user, privilege, activity):
@@ -114,6 +111,7 @@ class LoginApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
+            logger().log(ex, 'ERROR', user='test', name='test')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),

@@ -7,9 +7,22 @@ from api.settings import SECRET_KEY
 def is_token_valid(token):
     return True
     try:
-        return UserToken.objects.filter(token=token).exists()
-    except:
-        return False
+        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        user_obj = get_user_by_id_string(str(decoded_token))
+        if user_obj:
+            token_obj = get_token_by_user_id(user_obj.id)
+            if token_obj:
+                if token_obj.token == token:
+                    return True, user_obj.id
+                else:
+                    return False, ''
+            else:
+                return False, ''
+        else:
+            return False, ''
+    except Exception as e:
+        logger().log(e, 'ERROR', user='test', name='test')
+        raise InvalidAuthorizationException
 
 
 def get_payload(token):
