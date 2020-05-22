@@ -7,6 +7,7 @@ from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id
@@ -46,8 +47,14 @@ class UserList(generics.ListAPIView):
     search_fields = ('first_name', 'email_id')
 
     def get_queryset(self):
-        queryset = get_all_users()
-        return queryset
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = get_all_users()
+                return queryset
+            else:
+                raise InvalidAuthorizationException
+        else:
+            raise InvalidTokenException
 
 
 # API Header

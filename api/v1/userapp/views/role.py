@@ -8,9 +8,10 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_master import get_user_by_id_string, get_user_by_id
+from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
 from v1.userapp.views.common_functions import is_role_data_verified
@@ -30,7 +31,7 @@ from v1.userapp.views.common_functions import is_role_data_verified
 # Created on: 04/05/2020
 # Updated on: 09/05/2020
 
-class RoleList(generics.ListAPIView):  # Add authentication and authorization
+class RoleList(generics.ListAPIView):
     serializer_class = RoleListSerializer
     pagination_class = StandardResultsSetPagination
 
@@ -41,8 +42,14 @@ class RoleList(generics.ListAPIView):  # Add authentication and authorization
     search_fields = ('name',)
 
     def get_queryset(self):
-        queryset = get_all_role()
-        return queryset  # Add http code
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = get_all_role()
+                return queryset
+            else:
+                raise InvalidAuthorizationException
+        else:
+            raise InvalidTokenException
 
 
 # API Header
