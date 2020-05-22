@@ -13,8 +13,8 @@
 # <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
+from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
+from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
@@ -38,6 +38,14 @@ class Privilege(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_tenant(self):
+        return get_tenant_by_id(self.tenant_id)
+
+    @property
+    def get_utility(self):
+        return get_utility_by_id(self.utility_id)
 
 # Create Privilege table end
 

@@ -5,14 +5,17 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
+from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.privilege import Privilege
+from v1.utility.serializers.utility import UtilitySerializer
 
 
 class PrivilegeListSerializer(serializers.ModelSerializer):
+    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
         model = Privilege
-        depth = 1
         fields = ('id_string', 'tenant', 'utility', 'name', 'created_date')
 
 
@@ -45,10 +48,11 @@ class PrivilegeSerializer(serializers.ModelSerializer):
 
 
 class PrivilegeViewSerializer(serializers.ModelSerializer):
+    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
         model = Privilege
-        depth = 1
         fields = ('id_string', 'tenant', 'utility', 'name', 'created_date', 'is_active')
 
 

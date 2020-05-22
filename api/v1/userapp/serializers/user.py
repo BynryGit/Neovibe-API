@@ -7,7 +7,7 @@ from rest_framework import serializers
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
-from v1.tenant.serializers.tenant import TenantSerializer, GetTenantSerializer
+from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_role import UserRole

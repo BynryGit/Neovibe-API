@@ -6,10 +6,12 @@ from rest_framework import serializers
 
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
+from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.views.common_functions import set_role_privilege_validated_data
+from v1.utility.serializers.utility import UtilitySerializer
 
 
 class RolePrivilegeSerializer(serializers.ModelSerializer):
@@ -46,6 +48,8 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
 
 
 class RolePrivilegeViewSerializer(serializers.ModelSerializer):
+    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
     role = GetRoleSerializer(many=False, required=True, source='get_role')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
@@ -53,6 +57,5 @@ class RolePrivilegeViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RolePrivilege
-        depth = 1
         fields = ('id_string', 'tenant', 'utility', 'role', 'module', 'sub_module', 'privilege',
                   'created_date', 'is_active')
