@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from v1.campaign.models.advertisement_type import AdvertisementType
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 
 class AdvertisementListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,11 +9,15 @@ class AdvertisementListSerializer(serializers.ModelSerializer):
 
 
 class AdvertisementViewSerializer(serializers.ModelSerializer):
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = AdvertisementType
-        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string')
+        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string','created_date')

@@ -96,7 +96,11 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+<<<<<<< HEAD
         'NAME': 'postgres',
+=======
+        'NAME': 'smart360',
+>>>>>>> 0788cad7edeebb82c04c722ab98bfddaf8eedcc3
         'USER': 'postgres',
         'PASSWORD': 'root',
         'HOST': 'localhost',
@@ -137,6 +141,8 @@ USE_L10N = True
 USE_TZ = True
 
 DISPLAY_DATE_FORMAT = "%d-%b-%Y"
+
+DISPLAY_DATE_TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
 
 INPUT_DATE_FORMAT = "%d-%b-%Y"
 

@@ -4,20 +4,22 @@ from rest_framework import status, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-
 from api.messages import *
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
-from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, get_user_by_id
+from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, get_user_by_id, is_username_exists
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserRoleSerializer, \
-    UserRoleViewSerializer
-from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified
+    UserRoleViewSerializer, UserSerializer
+from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified, \
+    set_user_role_validated_data
 
 
 # API Header
@@ -40,14 +42,20 @@ class UserList(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('tenant__id_string', 'utility__id_string')
+    filter_fields = ('first_name', 'last_name', 'tenant__id_string', 'utility__id_string')
     ordering_fields = ('first_name', 'last_name',)
     ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email_id')
+    search_fields = ('first_name', 'email',)
 
     def get_queryset(self):
-        queryset = get_all_users()
-        return queryset
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = get_all_users()
+                return queryset
+            else:
+                raise InvalidAuthorizationException
+        else:
+            raise InvalidTokenException
 
 
 # API Header
@@ -73,12 +81,18 @@ class User(GenericAPIView):
                         user = get_user_by_id(3)
                         serializer = UserSerializer(data=request.data)
                         if serializer.is_valid():
-                            user_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
+                            if is_username_exists(request.data['username']):
+                                user_obj = serializer.create(serializer.validated_data, user)
+                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: '',
+                                }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,
@@ -129,13 +143,13 @@ class UserDetail(GenericAPIView):
                         serializer = UserViewSerializer(instance=user, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            DATA: serializer.data,
+                            RESULTS: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            RESULTS: '',
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -148,7 +162,7 @@ class UserDetail(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
+                RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -395,7 +409,8 @@ class UserRole(GenericAPIView):
                         user = get_user_by_id(3)
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
-                            serializer = UserRoleSerializer(data=validate_data)
+                            validated_data = set_user_role_validated_data(validate_data)
+                            serializer = UserRoleSerializer(data=validated_data)
                             if serializer.is_valid():
                                 user_role_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserRoleViewSerializer(instance=user_role_obj,
@@ -439,7 +454,8 @@ class UserRole(GenericAPIView):
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
                                              "is_active": role['is_active']}
-                            serializer = UserRoleSerializer(data=validate_data)
+                            validated_data = set_user_role_validated_data(validate_data)
+                            serializer = UserRoleSerializer(data=validated_data)
                             if serializer.is_valid():
                                 user_role = get_record_by_values(str(id_string), validate_data['role_id'])
                                 if user_role:

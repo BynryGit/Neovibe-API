@@ -88,7 +88,7 @@ class Utility(GenericAPIView):
                     if duplicate_utility_obj:
                         return Response({
                             STATE: DUPLICATE,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        }, status=status.HTTP_409_CONFLICT)
                     else:
                         serializer = UtilityMasterSerializer(data=request.data)
                         if serializer.is_valid():

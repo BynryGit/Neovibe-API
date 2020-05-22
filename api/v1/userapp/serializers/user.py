@@ -1,13 +1,14 @@
 __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
-
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
-from v1.tenant.serializers.tenant import TenantSerializer, GetTenantSerializer
+from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_role import UserRole
@@ -92,15 +93,20 @@ class UserSubTypeSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = UserDetail
         fields = ('id_string', 'tenant', 'utility', 'department', 'first_name', 'last_name', 'user_ID', 'phone_mobile',
-                  'status', 'email')
+                  'status', 'email', 'created_date')
 
 
 class GetUserSerializer(serializers.ModelSerializer):
@@ -111,6 +117,10 @@ class GetUserSerializer(serializers.ModelSerializer):
 
 
 class UserViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
@@ -120,6 +130,7 @@ class UserViewSerializer(serializers.ModelSerializer):
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     bank = UserBankViewSerializer(many=False, required=True, source='get_user_bank')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = UserDetail
@@ -135,10 +146,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserRole
+        # validators = [UniqueTogetherValidator(queryset=UserRole.objects.all(), fields=('role_id', 'user_id',), message='User-role already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):
-        validated_data = set_user_role_validated_data(validated_data)
         with transaction.atomic():
             user_role_obj = super(UserRoleSerializer, self).create(validated_data)
             user_role_obj.created_by = user.id
@@ -160,10 +171,15 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
 
 class UserRoleViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     role = GetRoleSerializer(many=False, required=True, source='get_role')
     user = GetUserSerializer(many=False, required=True, source='get_user')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = RolePrivilege

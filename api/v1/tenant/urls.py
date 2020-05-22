@@ -13,7 +13,6 @@ from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModu
 from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
 from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
-
 from v1.tenant.views.bank_detail import BankList,TenantBankDetail,TenantBank
 from v1.tenant.views.bank_detail import BankList
 
@@ -58,7 +57,16 @@ urlpatterns = [
 
     path('payment/list', TenantInvoicePaymentList.as_view()),
     path('payment/', TenantInvoicePayment.as_view()),
+<<<<<<< HEAD
     path('payment/<uuid:id_string>', TenantInvoicePaymentDetail.as_view()),
+=======
+    # path('payment/<uuid:id_string>', PaymentDetail.as_view()),
+
+    # path('bank-detail/', GetBankList.as_view()),
+    # path('bank/<uuid:id_string>', Bank.as_view()),
+
+
+>>>>>>> 0788cad7edeebb82c04c722ab98bfddaf8eedcc3
 
     # path('<uuid:id_string>/summary', UtilityUsageSummaryDetail.as_view(), name='utility_summary'),
     # path('<uuid:id_string>/modules', UtilityModules.as_view(), name='utility_module_list'),

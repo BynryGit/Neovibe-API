@@ -1,5 +1,6 @@
 __author__ = "Priyanka"
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from rest_framework import serializers
 from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.models.campaign_status import CampaignStatus
@@ -34,6 +35,17 @@ class CampaignStatusSerializer(serializers.ModelSerializer):
 
 
 class CampaignListSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_start_date(self, obj):
+        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_end_date(self, obj):
+        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective_id = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
     status_id = CampaignStatusSerializer(many=False, required=True, source='get_status')
@@ -43,21 +55,29 @@ class CampaignListSerializer(serializers.ModelSerializer):
     sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    start_date = serializers.SerializerMethodField('get_start_date')
+    end_date = serializers.SerializerMethodField('get_end_date')
 
     class Meta:
         model = CampaignTbl
         fields = ('id_string', 'tenant_name', 'name', 'description', 'start_date', 'end_date',
                   'potential_consumers', 'actual_consumers', 'budget_amount', 'actual_amount', 'frequency_id',
                   'category_id',
-                  'sub_category_id', 'area_id', 'sub_area_id', 'objective_id', 'group_id', 'status_id',
+                  'sub_category_id', 'area_id', 'sub_area_id', 'objective_id', 'group_id', 'status_id','created_date',
                   'is_active')
 
-# class CampaignSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = CampaignTbl
-#         fields = ('name', 'id_string')
 
 class CampaignViewSerializer(serializers.ModelSerializer):
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_start_date(self, obj):
+        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_end_date(self, obj):
+        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective_id = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
     status_id = CampaignStatusSerializer(many=False, required=True, source='get_status')
@@ -67,13 +87,16 @@ class CampaignViewSerializer(serializers.ModelSerializer):
     sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    start_date = serializers.SerializerMethodField('get_start_date')
+    end_date = serializers.SerializerMethodField('get_end_date')
 
     class Meta:
         model = CampaignTbl
         fields = ('id_string', 'tenant_name', 'name',  'description','start_date','end_date',
                   'potential_consumers','actual_consumers','budget_amount','actual_amount','frequency_id','category_id',
                   'sub_category_id','area_id','sub_area_id','objective_id','group_id','status_id',
-                  'is_active')
+                  'is_active','created_date')
 
 
 class CampaignSerializer(serializers.ModelSerializer):

@@ -7,6 +7,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_all_privilege, get_privilege_by_id_string
@@ -34,14 +35,20 @@ class PrivilegeList(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('tenant__id_string', 'utility__id_string')
+    filter_fields = ('name', 'tenant__id_string', 'utility__id_string')
     ordering_fields = ('name',)
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('name',)
 
     def get_queryset(self):
-            queryset = get_all_privilege()
-            return queryset
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = get_all_privilege()
+                return queryset
+            else:
+                raise InvalidAuthorizationException
+        else:
+            raise InvalidTokenException
 
 
 # API Header
@@ -60,19 +67,9 @@ class Privilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            # Checking authentication start
             if is_token_valid(self.request.headers['token']):
-                # Checking authentication end
-
-                # Checking authorization start
                 if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
                     if is_privilege_data_verified(request):
-                        # Request data verification end
-
-                        # user = get_user_by_id_string(request.data['user_id_string'])
                         user = get_user_by_id(3)
                         serializer = PrivilegeSerializer(data=request.data)
                         if serializer.is_valid():
@@ -88,7 +85,6 @@ class Privilege(GenericAPIView):
                                 STATE: ERROR,
                                 RESULTS: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
-                        # Save basic role details start
                     else:
                         return Response({
                             STATE: ERROR,
@@ -132,13 +128,13 @@ class PrivilegeDetail(GenericAPIView):
                         serializer = PrivilegeViewSerializer(instance=privilege, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            DATA: serializer.data,
+                            RESULTS: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            RESULTS: '',
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -151,26 +147,15 @@ class PrivilegeDetail(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
+                RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, id_string):
         try:
-            # Checking authentication start
             if is_token_valid(self.request.headers['token']):
-                # Checking authentication end
-
-                # Checking authorization start
                 if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
                     if is_privilege_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic details start
-                        # user = get_user_by_id_string(request.data['user'])
                         user = get_user_by_id(3)
                         role_obj = get_privilege_by_id_string(id_string)
                         if role_obj:

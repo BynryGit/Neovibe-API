@@ -42,7 +42,7 @@ class RegistrationList(generics.ListAPIView):
         filter_fields = ('first_name', 'tenant__id_string',)
         ordering_fields = ('first_name', 'registration_no',)
         ordering = ('created_date',)  # always give by default alphabetical order
-        search_fields = ('first_name', 'email_id',)
+        search_fields = ('first_name', 'last_name',)
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
@@ -53,8 +53,8 @@ class RegistrationList(generics.ListAPIView):
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
-    except Exception as ex:
-        logger().log(ex, 'ERROR')
+    except Exception as e:
+        logger().log(e, 'ERROR')
         raise APIException
 
 
@@ -119,8 +119,7 @@ class Registration(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            print("@@@@@@@@@@2",e)
-            # logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
