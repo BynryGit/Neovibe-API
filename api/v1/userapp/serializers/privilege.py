@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.serializers.tenant import GetTenantSerializer
@@ -30,6 +31,7 @@ class PrivilegeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Privilege
+        validators = [UniqueTogetherValidator(queryset=Privilege.objects.all(), fields=('name',), message='Privilege already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):

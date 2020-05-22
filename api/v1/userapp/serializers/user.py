@@ -2,6 +2,7 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.city import CitySerializer
@@ -145,10 +146,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserRole
+        validators = [UniqueTogetherValidator(queryset=UserRole.objects.all(), fields=('role_id', 'user_id',), message='User-role already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):
-        validated_data = set_user_role_validated_data(validated_data)
         with transaction.atomic():
             user_role_obj = super(UserRoleSerializer, self).create(validated_data)
             user_role_obj.created_by = user.id

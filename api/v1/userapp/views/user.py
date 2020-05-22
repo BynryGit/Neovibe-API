@@ -12,13 +12,14 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
-from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, get_user_by_id
+from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, get_user_by_id, is_username_exists
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserRoleSerializer, \
     UserRoleViewSerializer, UserSerializer
-from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified
+from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified, \
+    set_user_role_validated_data
 
 
 # API Header
@@ -80,12 +81,18 @@ class User(GenericAPIView):
                         user = get_user_by_id(3)
                         serializer = UserSerializer(data=request.data)
                         if serializer.is_valid():
-                            user_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
+                            if is_username_exists(request.data['username']):
+                                user_obj = serializer.create(serializer.validated_data, user)
+                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULTS: view_serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: '',
+                                }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,
@@ -402,7 +409,8 @@ class UserRole(GenericAPIView):
                         user = get_user_by_id(3)
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
-                            serializer = UserRoleSerializer(data=validate_data)
+                            validated_data = set_user_role_validated_data(validate_data)
+                            serializer = UserRoleSerializer(data=validated_data)
                             if serializer.is_valid():
                                 user_role_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserRoleViewSerializer(instance=user_role_obj,
@@ -446,7 +454,8 @@ class UserRole(GenericAPIView):
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
                                              "is_active": role['is_active']}
-                            serializer = UserRoleSerializer(data=validate_data)
+                            validated_data = set_user_role_validated_data(validate_data)
+                            serializer = UserRoleSerializer(data=validated_data)
                             if serializer.is_valid():
                                 user_role = get_record_by_values(str(id_string), validate_data['role_id'])
                                 if user_role:
