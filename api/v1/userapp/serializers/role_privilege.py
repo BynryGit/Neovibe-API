@@ -3,6 +3,7 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
@@ -11,7 +12,6 @@ from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
-from v1.userapp.views.common_functions import set_role_privilege_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
 
@@ -24,10 +24,10 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RolePrivilege
+        # validators = [UniqueTogetherValidator(queryset=RolePrivilege.objects.all(), fields=('role_id', 'module_id', 'sub_module_id', 'privilege_id',), message='Role-privilege already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):
-        validated_data = set_role_privilege_validated_data(validated_data)
         with transaction.atomic():
             role_privilege_obj = super(RolePrivilegeSerializer, self).create(validated_data)
             role_privilege_obj.created_by = user.id
@@ -39,7 +39,6 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
             return role_privilege_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_role_privilege_validated_data(validated_data)
         with transaction.atomic():
             role_obj = super(RolePrivilegeSerializer, self).update(instance, validated_data)
             role_obj.updated_by = user.id

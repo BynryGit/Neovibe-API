@@ -87,6 +87,10 @@ def get_notes_by_tenant_id_string(id_string):
     return Notes.objects.filter(tenant__id_string=id_string)
 
 
+def get_notes_by_userid(user_id):
+    return Notes.objects.filter(identification_id=user_id)
+
+
 def get_notes_by_user_id(user_id,service_type_id):
     return Notes.objects.filter(identification_id=user_id, service_type_id=service_type_id)
 
