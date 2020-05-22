@@ -49,12 +49,12 @@ class UserDocument(GenericAPIView):
                         else:
                             return Response({
                                 STATE: ERROR,
-                                DATA: 'No records found.',
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                                RESULTS: '',
+                            }, status=status.HTTP_204_NO_CONTENT)
                     else:
                         return Response({
                             STATE: ERROR,
-                            DATA: 'No records found.',
+                            RESULTS: '',
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -68,7 +68,7 @@ class UserDocument(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
+                RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

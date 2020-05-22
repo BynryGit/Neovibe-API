@@ -10,7 +10,7 @@ from v1.tenant.models.tenant_invoice_payment import TenantInvoicePayment as tena
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.payment import TenantInvoicePaymentListSerializer, TenantInvoicePaymentViewSerializer, \
      TenantInvoicePaymentSerializer
-from v1.tenant.models.tenant_invoice_payment import get_tenant_invoice_payment_by_id_string
+from v1.tenant.models.tenant_invoice_payment import get_tenant_payment_by_id_string
 from v1.tenant.views.common_functions import is_data_verified
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE
 
