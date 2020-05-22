@@ -6,7 +6,7 @@ class ConsumerComplaintListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerComplaints
-        fields = ('name', 'id_string')
+        fields = ('complaint_name', 'id_string')
 
 
 class ConsumerComplaintViewSerializer(serializers.ModelSerializer):
