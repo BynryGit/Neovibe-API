@@ -7,6 +7,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_all_privilege, get_privilege_by_id_string
@@ -40,8 +41,14 @@ class PrivilegeList(generics.ListAPIView):
     search_fields = ('name',)
 
     def get_queryset(self):
-            queryset = get_all_privilege()
-            return queryset
+        if is_token_valid(self.request.headers['token']):
+            if is_authorized():
+                queryset = get_all_privilege()
+                return queryset
+            else:
+                raise InvalidAuthorizationException
+        else:
+            raise InvalidTokenException
 
 
 # API Header
