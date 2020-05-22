@@ -26,7 +26,7 @@ class SupplierInvoiceSerializer(serializers.ModelSerializer):
     supplier_financial = serializers.IntegerField(required=False)
     demand = serializers.IntegerField(required=False)
     invoice_no = serializers.CharField(required=True, max_length=500)
-    invoice_amount = serializers.FloatField(required=True, max_length=500)
+    invoice_amount = serializers.FloatField(required=True)
     invoice_date = serializers.DateTimeField(required=True)
 
     class Meta:

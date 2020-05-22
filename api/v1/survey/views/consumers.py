@@ -10,7 +10,8 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.userapp.models.user_master import UserDetail
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import SurveyConsumer,get_survey_consumer_by_id_string
-from v1.survey.serializers.consumers import ConsumerViewSerializer,ConsumerViewSerializer,ConsumerSerializer
+from v1.survey.serializers.consumers import ConsumerSerializer
+# from v1.survey.serializers.consumers import ConsumerViewSerializer,ConsumerViewSerializer,ConsumerSerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -32,7 +33,7 @@ from v1.survey.views.common_functions import is_data_verified
 
 class ConsumerList(generics.ListAPIView):
     try:
-        serializer_class = ConsumerViewSerializer
+        # serializer_class = ConsumerViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)

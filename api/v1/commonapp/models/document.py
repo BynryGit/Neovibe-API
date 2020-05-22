@@ -103,3 +103,7 @@ def get_document_by_id_string(id_string):
 def get_document_by_id(id):
     return Document.objects.filter(id=id).last()
 
+
+def get_document_by_user_id(user_id,document_type_id):
+    return Document.objects.filter(identification_id=user_id, document_type_id=document_type_id)
+
