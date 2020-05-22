@@ -1,7 +1,7 @@
 # table header
 # module: Sourcing
 # table type : Master
-# table name : Product Table
+# table name : SupplierService
 # table description : The Product table saves the basic Product/Services details of any Supplier
 # frequency of data changes : High
 # sample table data :
@@ -23,7 +23,7 @@ from decimal import Decimal  # importing package for float number
 
 # Create Product Service Table start
 
-class SupplierServices(models.Model):
+class SupplierService(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -51,3 +51,17 @@ class SupplierServices(models.Model):
         return self.name
 
 # Create Product Service table end.
+
+
+def get_supplier_service_by_id_string(id_string):
+    try:
+        return SupplierService.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_supplier_service_by_id(id):
+    try:
+        return SupplierService.objects.get(id = id)
+    except:
+        return False

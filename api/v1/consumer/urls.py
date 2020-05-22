@@ -10,4 +10,6 @@ urlpatterns = [
     path('payment/<uuid:id_string>',ConsumerPaymentDetail.as_view()),
     path('<uuid:id_string>/payment/list',ConsumerPaymentList.as_view()),
     path('<uuid:id_string>/complaint/list',ConsumerComplaintList.as_view()),
+    path('<uuid:id_string>/complaint',ConsumerComplaint.as_view()),
+    path('complaint/<uuid:id_string>',ConsumerComplaintDetail.as_view()),
 ]

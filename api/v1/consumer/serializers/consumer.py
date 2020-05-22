@@ -2,7 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from v1.consumer.models.consumer_master import ConsumerMaster
-from v1.consumer.views.common_functions import set_validated_data
+from v1.consumer.views.common_functions import *
 
 
 class ConsumerViewSerializer(serializers.ModelSerializer):
@@ -37,7 +37,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
     def create(self, validated_data, user):
-        validated_data =  set_validated_data(validated_data)
+        validated_data =  set_consumer_validated_data(validated_data)
         with transaction.atomic():
             consumer_obj = super(ConsumerSerializer, self).create(validated_data)
             consumer_obj.tenant = user.tenant
@@ -47,7 +47,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
             return consumer_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_validated_data(validated_data)
+        validated_data = set_consumer_validated_data(validated_data)
         with transaction.atomic():
             consumer_obj = super(ConsumerSerializer, self).update(instance, validated_data)
             return consumer_obj
