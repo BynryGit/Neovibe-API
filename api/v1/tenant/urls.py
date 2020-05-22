@@ -13,6 +13,9 @@ from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
 from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
 from v1.tenant.views.bank_detail import BankList,TenantBankDetail,TenantBank
+from v1.tenant.views.bank_detail import BankList
+
+# from v1.tenant.views.bank_detail import BankList,BankDetails
 
 urlpatterns = [
     path('list', TenantList.as_view()),
@@ -62,6 +65,5 @@ urlpatterns = [
     # path('<uuid:id_string>/summary', UtilityUsageSummaryDetail.as_view(), name='utility_summary'),
     # path('<uuid:id_string>/modules', UtilityModules.as_view(), name='utility_module_list'),
     # path('module/<uuid:id_string>', UtilityModuleDetail.as_view(), name='utility_module_details'),
-
 
 ]
