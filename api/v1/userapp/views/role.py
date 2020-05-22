@@ -14,7 +14,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
-from v1.userapp.views.common_functions import is_role_data_verified
+from v1.userapp.views.common_functions import is_role_data_verified, set_role_validated_data
 
 
 # API Header
@@ -73,7 +73,8 @@ class Role(GenericAPIView):
                 if is_authorized():
                     if is_role_data_verified(request):
                         user = get_user_by_id(3)
-                        serializer = RoleSerializer(data=request.data)
+                        validated_data = set_role_validated_data(request.data)
+                        serializer = RoleSerializer(data=validated_data)
                         if serializer.is_valid():
                             role_obj = serializer.create(serializer.validated_data, user)
                             view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
@@ -161,7 +162,8 @@ class RoleDetail(GenericAPIView):
                         user = get_user_by_id(3)
                         role_obj = get_role_by_id_string(id_string)
                         if role_obj:
-                            serializer = RoleSerializer(data=request.data)
+                            validated_data = set_role_validated_data(request.data)
+                            serializer = RoleSerializer(data=validated_data)
                             if serializer.is_valid():
                                 role_obj = serializer.update(role_obj, serializer.validated_data, user)
                                 view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})

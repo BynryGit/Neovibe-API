@@ -1,8 +1,8 @@
 # table header
-# module: Sourcing, Purchase
+# module: Sourcing
 # table type : Master
-# table name : Contracts Master
-# table description : The Contracts Master table saves the basic details of any Contracts created
+# table name : SupplierProduct
+# table description : The Product table saves the basic Product/Services details of any Supplier
 # frequency of data changes : High
 # sample table data :
 # reference tables : None
@@ -18,26 +18,25 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from decimal import Decimal  # importing package for decimal
 
 
-# Create Contracts Master Table start
+# Create Product Service Table start
 
-class ContractsMaster(models.Model):
+class SupplierProduct(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
-    contract_type = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    contract_period = models.BigIntegerField(null=True, blank=True)
-    contract_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     supplier = models.BigIntegerField(null=True, blank=True)
-    product_id = models.BigIntegerField(null=True, blank=True)
-    cost_center = models.BigIntegerField(null=True, blank=True)
+    type = models.BigIntegerField(null=True, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    image = models.URLField(null=False, blank=False)
+    product_category = models.BigIntegerField(null=True, blank=True)
+    product_subcategory = models.BigIntegerField(null=True, blank=True)
+    rate = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
+    quantity = models.BigIntegerField(null=True, blank=True)
+    unit = models.BigIntegerField(null=True, blank=True)
     status = models.BigIntegerField(null=True, blank=True)
+    source_type = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -50,4 +49,18 @@ class ContractsMaster(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Contracts Master table end.
+# Create Product Service table end.
+
+
+def get_supplier_product_by_id_string(id_string):
+    try:
+        return SupplierProduct.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_supplier_product_by_id(id):
+    try:
+        return SupplierProduct.objects.get(id = id)
+    except:
+        return False

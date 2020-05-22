@@ -28,7 +28,7 @@ class UserToken(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     token = models.CharField(max_length=200, null=True, blank=True)
     form_factor = models.BigIntegerField(null=True, blank=True)
-    user = models.BigIntegerField(null=True, blank=True)
+    user_id = models.BigIntegerField(null=True, blank=True)
     ip_address = models.CharField(max_length=200,null=True, blank=True)
     status = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
@@ -47,4 +47,4 @@ class UserToken(models.Model):
 
 
 def get_token_by_user_id(id):
-    return UserToken.objects.get(user_id=id)
+    return UserToken.objects.filter(user_id=id).last()

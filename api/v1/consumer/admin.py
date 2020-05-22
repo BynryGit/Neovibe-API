@@ -1,5 +1,7 @@
 from django.contrib import admin
 from v1.consumer.models.complaint_status import ComplaintStatus
+from v1.consumer.models.complaint_sub_type import ComplaintSubType
+from v1.consumer.models.complaint_type import ComplaintType
 from v1.consumer.models.consumer_services import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_complaints import ConsumerComplaints
@@ -32,3 +34,5 @@ admin.site.register(ServiceRequestPriority)
 admin.site.register(ServiceRequestStatus)
 admin.site.register(ConsumerCategory)
 admin.site.register(ConsumerSubCategory)
+admin.site.register(ComplaintType)
+admin.site.register(ComplaintSubType)
