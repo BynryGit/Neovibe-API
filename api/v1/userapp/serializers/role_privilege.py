@@ -4,6 +4,7 @@ from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.tenant.serializers.tenant import GetTenantSerializer
@@ -48,12 +49,17 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
 
 
 class RolePrivilegeViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     role = GetRoleSerializer(many=False, required=True, source='get_role')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     privilege = GetPrivilegeSerializer(many=False, required=True, source='get_privilege')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = RolePrivilege

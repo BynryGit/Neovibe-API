@@ -2,6 +2,8 @@ __author__ = "Arpita"
 from django.db import transaction
 from rest_framework import serializers
 from datetime import datetime
+
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.tenant.serializers.tenant import GetTenantSerializer
@@ -48,12 +50,17 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class RoleListSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = RoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = Role
@@ -61,13 +68,18 @@ class RoleListSerializer(serializers.ModelSerializer):
                   'role_ID',  'created_date')
 
 
-class RoleViewSerializer(serializers.ModelSerializer): #TODO datetime format
+class RoleViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = RoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = Role

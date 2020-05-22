@@ -5,6 +5,7 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.document import Document
 from v1.commonapp.serializers.document_sub_type import DocumentSubTypeSerializer
 from v1.commonapp.serializers.document_type import DocumentTypeSerializer
@@ -17,17 +18,22 @@ from v1.utility.serializers.utility import UtilitySerializer
 
 
 class DocumentViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     document_type = DocumentTypeSerializer(many=False, required=True, source='get_type')
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
-                  'name', 'link', 'is_active', 'created_by')
+                  'name', 'link', 'is_active', 'created_date')
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -66,6 +72,10 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 
 class DocumentListSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
@@ -73,8 +83,9 @@ class DocumentListSerializer(serializers.ModelSerializer):
     document_type = DocumentTypeSerializer(many=False, required=True, source='get_type')
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
+    created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
-                  'identification', 'name', 'link', 'is_active', 'created_by')
+                  'identification', 'name', 'link', 'is_active', 'created_date')
