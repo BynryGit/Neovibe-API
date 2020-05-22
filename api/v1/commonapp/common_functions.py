@@ -4,10 +4,14 @@ from api.settings import SECRET_KEY
 # from v1.userapp.models.user_token import UserToken
 
 
+def get_payload(token):
+    return jwt.decode(token, SECRET_KEY, algorithms='HS256')
+
+
 def is_token_valid(token):
     return True
     try:
-        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        decoded_token = get_payload(token)
         user_obj = get_user_by_id_string(str(decoded_token))
         if user_obj:
             token_obj = get_token_by_user_id(user_obj.id)
@@ -23,10 +27,6 @@ def is_token_valid(token):
     except Exception as e:
         logger().log(e, 'ERROR', user='test', name='test')
         raise InvalidAuthorizationException
-
-
-def get_payload(token):
-    return jwt.decode(token, SECRET_KEY, algorithms='RS256')
 
 
 def get_user(id_string):
