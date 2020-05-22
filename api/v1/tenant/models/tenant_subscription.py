@@ -37,10 +37,10 @@ class TenantSubscription(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.subscription_id
+        return self.subscription_plan_id
 
     def __unicode__(self):
-        return self.subscription_id
+        return self.subscription_plan_id
 
 # Create Tenant Subscription table end.
 def get_subscription_by_id(id):

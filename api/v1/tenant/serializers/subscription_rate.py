@@ -28,7 +28,7 @@ class SubscriptionPlanViewSerializer(serializers.ModelSerializer):
 class SubscriptionPlanRateSerializer(serializers.ModelSerializer):
 
     id_string = serializers.CharField(required=False, max_length=200)
-    tenantsubscriptionplan_id = serializers.CharField(required=False, max_length=200)
+    subscription_plan_id = serializers.CharField(required=False, max_length=200)
     base_rate = serializers.CharField(required=False, max_length=200)
     currency = serializers.CharField(required=False, max_length=200)
     region = serializers.CharField(required=False, max_length=200)

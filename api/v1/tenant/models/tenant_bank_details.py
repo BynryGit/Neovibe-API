@@ -25,13 +25,13 @@ from django.db import models  # importing package for database
 class TenantBankDetails(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    bank_name = models.CharField(max_length=200, blank=False, null=False)
-    branch_name  = models.CharField(max_length=200, blank=False, null=False)
+    bank_name = models.CharField(max_length=200, blank=True, null=True)
+    branch_name  = models.CharField(max_length=200, blank=True, null=True)
     branch_city  = models.CharField(max_length=200, blank=False, null=False)
     account_number = models.CharField(max_length=200, blank=False, null=False)
     account_type = models.CharField(max_length=200, blank=False, null=False)
     account_name = models.CharField(max_length=200, blank=False, null=False)
-    ifsc_no = models.CharField(max_length=200, blank=False, null=False)
+    ifsc_no = models.CharField(max_length=200, blank=False , null=False)
     pan_no = models.CharField(max_length=200, blank=False, null=False)
     gst_no  = models.CharField(max_length=200, blank=False, null=False)
     tax_id_no = models.CharField(max_length=200, blank=False, null=False)
@@ -42,15 +42,21 @@ class TenantBankDetails(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.bank_id
+        return self.bank_name
 
     def __unicode__(self):
-        return self.bank_id
+        return self.bank_name
 
 # Create Tenant Bank Details table end.
 
+# def get_bank_by_tenant_id_string(id_string):
+#     return TenantBankDetails.objects.filter(tenant_id_string=id_string,is_active=True)
+
 def get_bank_by_tenant_id_string(id_string):
-    return TenantBankDetails.objects.filter(tenant_id_string=id_string,is_active=True)
+    try:
+        return TenantBankDetails.objects.get(id_string = id_string)
+    except:
+        return False
 
 def get_bank_by_id_string(id_string):
     return TenantBankDetails.objects.filter(id_string=id_string).last()

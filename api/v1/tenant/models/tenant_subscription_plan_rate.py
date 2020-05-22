@@ -25,6 +25,9 @@ from django.db import models  # importing package for database
 class TenantSubscriptionPlanRate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenantsubscriptionplan_id = models.BigIntegerField(null=True, blank=True)
+    subscription_plan_id = models.BigIntegerField(null=True, blank=True)
+    subscription_name = models.CharField(max_length=200, blank=False, null=False)
+    subscription_type = models.CharField(max_length=200, blank=False, null=False)
     base_rate = models.FloatField(null=True, blank=True)
     currency = models.CharField(max_length=200, blank=False, null=False)
     region = models.CharField(max_length=200, blank=False, null=False)
@@ -39,10 +42,10 @@ class TenantSubscriptionPlanRate(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.base_rate
+        return self.subscription_name
 
     def __unicode__(self):
-        return self.base_rate
+        return self.subscription_name
 
 # Create Tenant Subscription Plan Rate table end.
 

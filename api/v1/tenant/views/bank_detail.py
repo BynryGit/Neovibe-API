@@ -9,7 +9,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import status, generics
 from v1.commonapp.views.logger import logger
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.tenant.models.tenant_bank_details import TenantMaster as tenantBankTbl, get_bank_by_id_string
+from v1.tenant.models.tenant_bank_details import TenantBankDetails as tenantBankTbl, get_bank_by_id_string
 
 from api.messages import *
 from v1.commonapp.common_functions import is_token_valid, is_authorized
@@ -79,15 +79,15 @@ class TenantBank (GenericAPIView):
                         # user = UserDetail.objects.get(id = 2)
                      #   if is_data_verified(request):
                             # Request data verification end
-                            duplicate_tenant_bank_obj = tenantBankTbl.objects.filter(id_string=request.data["id_string"],
-                                                                            name=request.data['name'])
-                            if duplicate_tenant_bank_obj:
-                                return Response({
-                                    STATE: DUPLICATE,
-                                }, status=status.HTTP_404_NOT_FOUND)
-                            else:
+                            # duplicate_tenant_bank_obj = tenantBankTbl.objects.filter(id__string=request.data["id_string"],
+                            #                                                 bank_name=request.data['bank_name'])
+                            # if duplicate_tenant_bank_obj:
+                            #     return Response({
+                            #         STATE: DUPLICATE,
+                            #     }, status=status.HTTP_404_NOT_FOUND)
+                            # else:
 
-                                serializer = BankListSerializer(data=request.data)
+                            serializer = BankListSerializer(data=request.data)
                             if serializer.is_valid():
                                 #                            tenant_obj = serializer.create(serializer.validated_data, user)
                                 tenant_bank_obj = serializer.create(serializer.validated_data)
@@ -116,7 +116,7 @@ class TenantBank (GenericAPIView):
                     }, status=status.HTTP_401_UNAUTHORIZED)
             except Exception as e:
                 traceback.print_exc(e)
-                logger().log(e, 'ERROR', user='Tenant Exception', name='Testing')
+                # logger().log(e, 'ERROR', user='Tenant Exception', name='Testing')
                 return Response({
                     STATE: EXCEPTION,
                     ERROR: ERROR
@@ -141,7 +141,7 @@ class TenantBankDetail(GenericAPIView):
                 if is_authorized():
                     tenant_bank = get_bank_by_tenant_id_string(id_string)
                     if tenant_bank:
-                        serializer = Serializer(instance=tenant_bank, context={'request': request})
+                        serializer = BankViewSerializer(instance=tenant_bank, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             DATA: serializer.data,
@@ -182,10 +182,11 @@ class TenantBankDetail(GenericAPIView):
                         tenant_bank_obj = get_bank_by_id_string(id_string)
                         if tenant_bank_obj:
                             serializer = TenantBankSerializer(data=request.data)
-                            print("Here");
+                            print("Here",request.data);
                             if serializer.is_valid(request.data):
-                                tenant_obj = serializer.update(tenant_bank_obj, serializer.validated_data)
-                                view_serializer = BankViewSerializer(instance=tenant_obj,
+                                print("Here I am ");
+                                tenant_bank_obj = serializer.update(tenant_bank_obj, serializer.validated_data)
+                                view_serializer = BankViewSerializer(instance=tenant_bank_obj,
                                                                              context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,

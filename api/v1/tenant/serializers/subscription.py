@@ -11,8 +11,8 @@ class SubscriptionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantSubscription
-        fields = ( 'id_string','tenant','subscription_plan_id','subscription_frequency_id',
-                   'start_date''end_date','validity_id','is_active')
+        fields = ('id_string','tenant','subscription_plan_id','subscription_frequency_id',
+                   'start_date','end_date','validity_id','is_active')
 
 class SubscriptionViewSerializer(serializers.ModelSerializer):
     #status = TenantStatusViewSerializer(many=False, source='get_status')
@@ -22,7 +22,7 @@ class SubscriptionViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = TenantSubscription
         fields = ('id_string', 'tenant', 'subscription_plan_id', 'subscription_frequency_id',
-                  'start_date''end_date', 'validity_id', 'is_active')
+                  'start_date','end_date', 'validity_id', 'is_active')
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
