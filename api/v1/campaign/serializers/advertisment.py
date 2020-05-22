@@ -9,6 +9,7 @@ from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.advertisement_type import AdvertisementType
 from v1.campaign.models.advert_status import AdvertStatus
 from v1.campaign.views.common_functions import set_validated_data
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 
 class AdvertisementTypeSerializer(serializers.ModelSerializer):
 
@@ -28,34 +29,60 @@ class CampaignSerializer(serializers.ModelSerializer):
         fields = ('name', 'id_string')
 
 class AdvertismentViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_start_date(self, obj):
+        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_end_date(self, obj):
+        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     campaign_id = CampaignSerializer(many=False, required=True, source='get_campaign')
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective_id = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
     type_id = AdvertisementTypeSerializer(many=False, required=True, source='get_advert_type')
     status_id = AdvertStatusSerializer(many=False, required=True, source='get_advert_status')
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    start_date = serializers.SerializerMethodField('get_start_date')
+    end_date = serializers.SerializerMethodField('get_end_date')
 
     class Meta:
         model = Advertisements
         fields = ('id_string', 'tenant_name', 'name', 'description',
                   'potential_consumers', 'actual_consumers', 'budget_amount', 'actual_amount',
                   'start_date', 'end_date', 'campaign_id', 'type_id','objective_id', 'group_id',
-                  'status_id','is_active')
+                  'status_id','is_active','created_date')
 
 class AdvertismentListSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_start_date(self, obj):
+        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_end_date(self, obj):
+        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
     campaign = CampaignSerializer(many=False, required=True,source='get_campaign')
     group = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
     advert_type = AdvertisementTypeSerializer(many=False, required=True, source='get_advert_type')
     status = AdvertStatusSerializer(many=False, required=True, source='get_advert_status')
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    start_date = serializers.SerializerMethodField('get_start_date')
+    end_date = serializers.SerializerMethodField('get_end_date')
 
     class Meta:
         model = Advertisements
         fields = ('id_string', 'tenant_name', 'name', 'description',
                   'potential_consumers', 'actual_consumers', 'budget_amount', 'actual_amount',
                   'start_date', 'end_date', 'campaign', 'advert_type', 'objective', 'group', 'status',
-                  'is_active')
+                  'is_active','created_date')
 
 class AdvertisementSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
@@ -77,10 +104,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
     status_id = serializers.CharField(required=False, max_length=200)
     class Meta:
         model = Advertisements
-        fields = ('id_string', 'tenant_name', 'name', 'description',
-                  'potential_consumers', 'actual_consumers', 'budget_amount', 'actual_amount',
-                  'start_date', 'end_date', 'campaign_id', 'type_id', 'frequency_id','objective_id', 'group_id',
-                  'status_id','area_id','sub_area_id','is_active')
+        fields = ('__all__')
 
     def create(self,validated_data,user,campaign_obj):
         validated_data = set_validated_data(validated_data)

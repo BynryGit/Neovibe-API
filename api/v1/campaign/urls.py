@@ -24,9 +24,9 @@ urlpatterns = [
     path('objective/<uuid:id_string>', CampaignObjectiveDetail.as_view(),name="campaign_objective_detail"),
 
     path('campaign-status/list', CampaignstatusList.as_view(), name="campaign_status_list"),
-    path('status/<uuid:id_string>', CampaignStatusDetail.as_view(), name="campaign_status_detail"),
+    path('campaign-status/<uuid:id_string>', CampaignStatusDetail.as_view(), name="campaign_status_detail"),
 
-    path('advert-type/list/', AdvertisementTypeList.as_view(), name="advert_type_list"),
+    path('advert-type/list', AdvertisementTypeList.as_view(), name="advert_type_list"),
     path('advert-type/<uuid:id_string>', AdvertisementTypeDetail.as_view(), name="advert_type_detail"),
 
     path('advert-status/list', AdvertisementStatusList.as_view(), name="advert_status_list"),
