@@ -24,7 +24,7 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RolePrivilege
-        validators = [UniqueTogetherValidator(queryset=RolePrivilege.objects.all(), fields=('role_id', 'module_id', 'sub_module_id', 'privilege_id',), message='Role-privilege already exists!')]
+        # validators = [UniqueTogetherValidator(queryset=RolePrivilege.objects.all(), fields=('role_id', 'module_id', 'sub_module_id', 'privilege_id',), message='Role-privilege already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):

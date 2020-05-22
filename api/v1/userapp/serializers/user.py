@@ -146,7 +146,7 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserRole
-        validators = [UniqueTogetherValidator(queryset=UserRole.objects.all(), fields=('role_id', 'user_id',), message='User-role already exists!')]
+        # validators = [UniqueTogetherValidator(queryset=UserRole.objects.all(), fields=('role_id', 'user_id',), message='User-role already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):
