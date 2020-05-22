@@ -29,14 +29,14 @@ class ConsumerComplaints(models.Model):
     complaint_name = models.CharField(max_length=500, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    complaint_type = models.BigIntegerField(null=True, blank=True)
-    complaint_subtype = models.BigIntegerField(null=True, blank=True)
+    complaint_type_id = models.BigIntegerField(null=True, blank=True)
+    complaint_sub_type_id = models.BigIntegerField(null=True, blank=True)
     complaint_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     channel = models.BigIntegerField(null=True, blank=True)
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)
     admin_remark = models.CharField(max_length=500, null=True, blank=True)
     complaint_raised_by = models.BigIntegerField(null=True, blank=True)
-    complaint_status = models.BigIntegerField(null=True, blank=True)
+    complaint_status_id = models.BigIntegerField(null=True, blank=True)
     close_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     closure_remark = models.CharField(max_length=500, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -55,5 +55,19 @@ class ConsumerComplaints(models.Model):
 def get_consumer_complaints_by_consumer_no(consumer_no):
     try:
         return ConsumerComplaints.objects.filter(consumer_no = consumer_no)
+    except:
+        return False
+
+
+def get_consumer_complaint_by_id_string(id_string):
+    try:
+        return ConsumerComplaints.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_consumer_complaint_by_id(id):
+    try:
+        return ConsumerComplaints.objects.get(id = id)
     except:
         return False

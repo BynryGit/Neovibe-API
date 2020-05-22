@@ -3,6 +3,9 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.consumer.models.complaint_status import get_complaint_status_by_id_string
+from v1.consumer.models.complaint_sub_type import get_complaint_sub_type_by_id_string
+from v1.consumer.models.complaint_type import get_complaint_type_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_status import get_consumer_status_by_id_string
@@ -10,7 +13,7 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
 from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id_string
 
 
-def set_validated_data(validated_data):
+def set_consumer_validated_data(validated_data):
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         validated_data["area_id"] = area.id
@@ -41,4 +44,17 @@ def set_validated_data(validated_data):
     if "sub_category_id" in validated_data:
         sub_category = get_consumer_sub_category_by_id_string(validated_data["sub_category_id"])
         validated_data["sub_category_id"] = sub_category.id
+    return validated_data
+
+
+def set_complaint_validated_data(validated_data):
+    if "complaint_type_id" in validated_data:
+        complaint_type = get_complaint_type_by_id_string(validated_data["complaint_type_id"])
+        validated_data["complaint_type_id"] = complaint_type.id
+    if "complaint_sub_type_id" in validated_data:
+        complaint_sub_type = get_complaint_sub_type_by_id_string(validated_data["complaint_sub_type_id"])
+        validated_data["complaint_sub_type_id"] = complaint_sub_type.id
+    if "complaint_status_id" in validated_data:
+        complaint_status = get_complaint_status_by_id_string(validated_data["complaint_status_id"])
+        validated_data["complaint_status_id"] = complaint_status.id
     return validated_data
