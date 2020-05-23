@@ -151,7 +151,7 @@ class AssetDetail(GenericAPIView):
                         return Response({
                             STATE: EXCEPTION,
                             DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,

@@ -55,7 +55,7 @@ class Documents(GenericAPIView):
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
