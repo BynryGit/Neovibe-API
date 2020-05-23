@@ -43,7 +43,7 @@ class RoleList(generics.ListAPIView):
 
     def get_queryset(self):
         if is_token_valid(self.request.headers['token']):
-            if is_authorized(1, 1, 1, self.request.headers['token']):
+            if is_authorized():
                 queryset = get_all_role()
                 return queryset
             else:
