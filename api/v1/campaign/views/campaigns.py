@@ -146,7 +146,7 @@ class CampaignDetail(GenericAPIView):
                         return Response({
                             STATE: EXCEPTION,
                             DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -186,7 +186,7 @@ class CampaignDetail(GenericAPIView):
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
