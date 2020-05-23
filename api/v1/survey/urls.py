@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('status/list', SurveyStatusList.as_view(),name="survey_status_list"),
     path('status/<uuid:id_string>/', SurveyStatusDetail.as_view(),name="survey_status_detail"),
-    
+
     path('objective/list', SurveyObjectiveList.as_view(),name="survey_objective_list"),
     path('objective/<uuid:id_string>/', SurveyObjectiveDetail.as_view(),name="survey_objective_detail"),
 ]
