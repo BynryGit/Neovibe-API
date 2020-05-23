@@ -18,6 +18,7 @@ from django.db import models  # importing package for database
 
 # Create Tenant Master table start.
 
+
 class TenantMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     short_name = models.BigIntegerField(null=True, blank=True)
@@ -28,7 +29,7 @@ class TenantMaster(models.Model):
     country_id = models.BigIntegerField(null=True, blank=True)
     state_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
