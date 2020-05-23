@@ -78,14 +78,14 @@ class Tenant(GenericAPIView):
                     #user = UserDetail.objects.get(id = 2)
                     if is_data_verified(request):
                     # Request data verification end
-                        duplicate_tenant_obj = tenantTbl.objects.filter(id_string=request.data["id_string"],
-                                                                            name=request.data['name'])
-                        if duplicate_tenant_obj:
-                            return Response({
-                                STATE: DUPLICATE,
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        else:
-                            serializer = TenantSerializer(data=request.data)
+                    #     duplicate_tenant_obj = tenantTbl.objects.filter(id__string=request.data["id_string"],
+                    #                                                         name=request.data['name'])
+                    #     if duplicate_tenant_obj:
+                    #         return Response({
+                    #             STATE: DUPLICATE,
+                    #         }, status=status.HTTP_404_NOT_FOUND)
+                    #     else:
+                        serializer = TenantSerializer(data=request.data)
                         if serializer.is_valid():
 #                            tenant_obj = serializer.create(serializer.validated_data, user)
                             tenant_obj = serializer.create(serializer.validated_data)
