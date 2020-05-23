@@ -13,9 +13,11 @@ from v1.consumer.models.consumer_status import ConsumerStatus
 from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
 from v1.consumer.models.consumer_token import ConsumerToken
 from v1.consumer.models.financial_details import FinancialDetails
+from v1.consumer.models.scheme_type import SchemeType
 from v1.consumer.models.service_request_priority import ServiceRequestPriority
 from v1.consumer.models.service_request_status import ServiceRequestStatus
 from v1.consumer.models.service_status import ServiceStatus
+from v1.consumer.models.service_sub_type import ServiceSubType
 from v1.consumer.models.source_type import SourceType
 
 admin.site.register(SourceType)
@@ -36,3 +38,5 @@ admin.site.register(ConsumerCategory)
 admin.site.register(ConsumerSubCategory)
 admin.site.register(ComplaintType)
 admin.site.register(ComplaintSubType)
+admin.site.register(ServiceSubType)
+admin.site.register(SchemeType)

@@ -62,4 +62,4 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment.updated_by = user.id
             payment.updated_date = datetime.utcnow()
             payment.save()
-            return payment
+        return payment

@@ -18,16 +18,16 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
-
+from v1.dispatcher.models.service_type import get_service_type_by_id
+from v1.commonapp.models.city import get_city_by_id
 # Create SOP Master table start
 
 class SopMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    city = models.BigIntegerField(null=True, blank=True)
-    service_type = models.BigIntegerField(null=True, blank=True)
+    city_id = models.BigIntegerField(null=True, blank=True)
+    service_type_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     effective_start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     effective_end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -42,5 +42,27 @@ class SopMaster(models.Model):
 
     def __unicode__(self):
         return str(self.service_type_id) + '-' + str(self.name)
+
+    @property
+    def get_service_type(self):
+        service_type = get_service_type_by_id(self.service_type_id)
+        return service_type
+
+    @property
+    def get_city(self):
+        city_id = get_city_by_id(self.city_id)
+        return city_id
+
+def get_sop_by_id_string(id_string):
+    try:
+        return SopMaster.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_sop_by_id(id):
+    try:
+        return SopMaster.objects.get(id=id)
+    except:
+        return False
 
 # Create SOP Master table end.

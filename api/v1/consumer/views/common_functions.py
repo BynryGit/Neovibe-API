@@ -10,6 +10,7 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id_str
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_status import get_consumer_status_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
+from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
 from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id_string
 
 
@@ -57,4 +58,11 @@ def set_complaint_validated_data(validated_data):
     if "complaint_status_id" in validated_data:
         complaint_status = get_complaint_status_by_id_string(validated_data["complaint_status_id"])
         validated_data["complaint_status_id"] = complaint_status.id
+    return validated_data
+
+
+def set_scheme_validated_data(validated_data):
+    if "scheme_type_id" in validated_data:
+        scheme_type = get_scheme_type_by_id_string(validated_data["scheme_type_id"])
+        validated_data["scheme_type_id"] = scheme_type.id
     return validated_data

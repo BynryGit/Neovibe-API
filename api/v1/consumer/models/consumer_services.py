@@ -26,15 +26,16 @@ class ServiceDetails(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     service_request_no = models.CharField(max_length=200, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    service_request = models.BigIntegerField(null=True, blank=True)
-    service_type = models.BigIntegerField(null=True, blank=True)
+    service_request_id = models.BigIntegerField(null=True, blank=True)
+    service_type_id = models.BigIntegerField(null=True, blank=True)
+    service_sub_type_id = models.BigIntegerField(null=True, blank=True)
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)
     admin_remark = models.CharField(max_length=500, null=True, blank=True)
     request_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     request_due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    request_channel = models.BigIntegerField(null=True, blank=True)
+    request_channel_id = models.BigIntegerField(null=True, blank=True)
     is_field_appointment = models.BooleanField(default=False)
-    status = models.BigIntegerField(null=True, blank=True)
+    service_status_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -42,9 +43,30 @@ class ServiceDetails(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.service_request_no
+        return self.consumer_no
 
     def __unicode__(self):
-        return self.service_request_no
+        return self.consumer_no
 
 # Create Service Details table end.
+
+
+def get_consumer_services_by_consumer_no(consumer_no):
+    try:
+        return ServiceDetails.objects.filter(consumer_no = consumer_no)
+    except:
+        return False
+
+
+def get_consumer_service_by_id_string(id_string):
+    try:
+        return ServiceDetails.objects.get(id_string = id_string)
+    except:
+        return False
+
+
+def get_consumer_service_by_id(id):
+    try:
+        return ServiceDetails.objects.get(id = id)
+    except:
+        return False
