@@ -58,11 +58,9 @@ urlpatterns = [
     path('payment/list', TenantInvoicePaymentList.as_view()),
     path('payment/', TenantInvoicePayment.as_view()),
     path('payment/<uuid:id_string>', TenantInvoicePaymentDetail.as_view()),
-
     # path('payment/<uuid:id_string>', PaymentDetail.as_view()),
 
     # path('bank-detail/', GetBankList.as_view()),
-    # path('bank/<uuid:id_string>', Bank.as_view()),
 
 
 
