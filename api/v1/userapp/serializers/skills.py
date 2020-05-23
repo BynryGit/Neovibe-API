@@ -1,9 +1,8 @@
 __author__ = "Arpita"
 
 from rest_framework import serializers
-
 from v1.commonapp.models.skills import Skills
-from v1.commonapp.serializers.service_type import ServiceTypeSerializer
+from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -11,7 +10,7 @@ from v1.utility.serializers.utility import UtilitySerializer
 class SkillListSerializer(serializers.ModelSerializer):
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    service_type = ServiceTypeSerializer(many=False, required=True, source='get_service_type')
+    service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
 
     class Meta:
         model = Skills

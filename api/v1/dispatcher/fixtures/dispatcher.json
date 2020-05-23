@@ -27,205 +27,6 @@
 			"is_active": "True"
 			}
 	},
-   {
-		"pk": "1",
-		"model": "dispatcher.ServiceRequest",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "service_no": 5446,
-			"service_name": "service_1",
-            "description": "Demo service_1",
-            "consumer_id": 1,
-            "consumer_address": "pune",
-            "asset_id": 1,
-            "duration": "1 month",
-            "city_id": 1,
-            "area_id": 1,
-            "sub_area_id": 1,
-            "start_date": "2020-12-01",
-            "end_date": "2021-12-01",
-            "due_date": "2021-12-01",
-            "status_id": 1,
-			"is_active": "True"
-			}
-	},
-   {
-		"pk": "2",
-		"model": "dispatcher.ServiceRequest",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "service_no": 5446,
-			"service_name": "service_2",
-            "description": "Demo service_2",
-            "consumer_id": 1,
-            "consumer_address": "pune",
-            "asset_id": 1,
-            "duration": "1 month",
-            "city_id": 1,
-            "area_id": 1,
-            "sub_area_id": 1,
-            "start_date": "2020-11-01",
-            "end_date": "2021-11-01",
-            "due_date": "2021-11-01",
-            "status_id": 1,
-			"is_active": "True"
-			}
-	},
-  {
-		"pk": "3",
-		"model": "dispatcher.ServiceRequest",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "service_no": 12005,
-			"service_name": "service_3",
-            "description": "Demo service_3",
-            "consumer_id": 1,
-            "consumer_address": "Mumbai",
-            "asset_id": 1,
-            "duration": "3 month",
-            "city_id": 1,
-            "area_id": 1,
-            "sub_area_id": 1,
-            "start_date": "2020-06-09",
-            "end_date": "2021-09-08",
-            "due_date": "2021-10-12",
-            "status_id": 1,
-			"is_active": "True"
-			}
-	},
-	{
-		"pk": "1",
-		"model": "dispatcher.ServiceAssignment",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "vendor_id": 1,
-            "is_complete_on_time": "True",
-            "defined_duration": "3 month",
-            "actual_duration": "2 month",
-            "city_id": 1,
-            "area_id": 1,
-            "assigned_date": "2020-06-12",
-            "start_date": "2021-09-12",
-            "completion_date": "2021-10-12",
-            "status_id": 1,
-			"is_active": "True"
-			}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.ServiceAssignment",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "vendor_id": 1,
-            "is_complete_on_time": "True",
-            "defined_duration": "3 month",
-            "actual_duration": "2 month",
-            "city_id": 1,
-            "area_id": 1,
-            "assigned_date": "2020-06-09",
-            "start_date": "2021-09-09",
-            "completion_date": "2021-10-09",
-            "status_id": 1,
-			"is_active": "True"
-			}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.ServiceAssignment",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "vendor_id": 1,
-            "is_complete_on_time": "True",
-            "defined_duration": "5 month",
-            "actual_duration": "10 month",
-            "city_id": 1,
-            "area_id": 1,
-            "assigned_date": "2020-06-11",
-            "start_date": "2021-09-11",
-            "completion_date": "2021-10-11",
-            "status_id": 1,
-			"is_active": "True"
-			}
-	},
-  {
-		"pk": "1",
-		"model": "dispatcher.ClosureReport",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "service_request_id": 1,
-            "vendor_id": 1,
-            "city_id": 1,
-            "area_id": 1,
-            "remark": "THis is clouser report",
-			"is_active": "True"
-			}
-	},
-  {
-		"pk": "2",
-		"model": "dispatcher.ClosureReport",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "service_request_id": 1,
-            "vendor_id": 1,
-            "city_id": 1,
-            "area_id": 1,
-            "remark": "THis is clouser report2",
-			"is_active": "True"
-			}
-	},
-  {
-		"pk": "1",
-		"model": "dispatcher.ClosureReportTransaction",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "sop_status_id": 1,
-			"sop_master_id": 1,
-			"is_active": "True"
-			}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.ClosureReportTransaction",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "sop_status_id": 1,
-            "sop_master_id": 1,
-			"is_active": "True"
-			}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.ClosureReportTransaction",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-            "service_type_id": 1,
-            "sop_status_id": 1,
-            "sop_master_id": 1,
-			"is_active": "True"
-			}
-	},
-
 
 	{
 		"pk": "1",
@@ -475,6 +276,323 @@
 			"name": "Material",
 			"is_active": "True"
 		}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request_id": 1,
+			"service_type_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"remark":"one" ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request_id": 2,
+			"service_type_id": 2,
+			"city_id": 1,
+			"area_id": 1,
+			"remark":"Done" ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request_id": 1,
+			"service_type_id": 2,
+			"city_id": 3,
+			"area_id": 3,
+			"remark":"Done" ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request_id": 2,
+			"service_type_id": 1,
+			"city_id": 3,
+			"area_id": 3,
+			"remark": "Done",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type_id": 1,
+			"closure_report_id": 1,
+			"sop_master_id": 1,
+			"sop_master_detail_id": 1,
+			"field_type": 1,
+			"field_name": "Field-1",
+			"field_value": 1,
+			"flag": "False",
+			"sop_status_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type_id": 1,
+			"closure_report_id": 1,
+			"sop_master_id": 1,
+			"sop_master_detail_id": 1,
+			"field_type": 3,
+			"field_name": "Field-3",
+			"field_value": 2,
+			"flag": "False",
+			"sop_status_id": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type_id": 1,
+			"closure_report_id": 1,
+			"sop_master_id": 1,
+			"sop_master_detail_id": 1,
+			"field_type": 4,
+			"field_name": "Field-4",
+			"field_value": 3,
+			"flag": "False",
+			"sop_status_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type_id": 1,
+			"closure_report_id": 1,
+			"sop_master_id": 1,
+			"sop_master_detail_id": 6,
+			"field_type": 6,
+			"field_name": "Field-6",
+			"field_value": 4,
+			"flag": "False",
+			"sop_status_id": 4,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type_id": 1,
+			"service_no": 1001,
+			"service_name": "Service-1",
+			"description": "Service-1",
+			"consumer_id": 1,
+			"consumer_address": "P. NO.19 , LOTUS ENCLAVE",
+			"asset_id": 1,
+			"duration": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"sub_area_id": 1,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": "one month",
+			"flag": "False",
+			"status_id":1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 2,
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type_id": 2,
+			"service_no": 1002,
+			"service_name": "Service-2",
+			"description": "Service-2",
+			"consumer_id": 1,
+			"consumer_address": "41 , ROYAL MEADOWS , Cine planet road",
+			"asset_id": 2,
+			"duration": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"sub_area_id": 1,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": "two month",
+			"flag": "False",
+			"status_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 3,
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type_id": 1,
+			"service_no": 1003,
+			"service_name": "Service-3",
+			"description": "Service-3",
+			"consumer_id": 1,
+			"consumer_address": "FLAT NO:410,KRISHNA KUNJ GARDENS",
+			"asset_id": 3,
+			"duration": 1,
+			"city_id": 3,
+			"area_id": 3,
+			"sub_area_id": 3,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration":"two month" ,
+			"flag": "False",
+			"status_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 4,
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type_id": 4,
+			"service_no": 1004,
+			"service_name": "Service-4",
+			"description": "Service-4",
+			"consumer_id": 1,
+			"consumer_address": "P. NO.120 , LOTUS",
+			"asset_id": 4,
+			"duration": 1,
+			"city_id": 3,
+			"area_id": 3,
+			"sub_area_id": 3,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": "one month",
+			"flag": "False",
+			"status_id":1 ,
+			"is_active": "True"
+		}
+	},
+
+
+
+	{
+		"pk": 1,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request_id": 1,
+			"service_type_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"status_id":1,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 2,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request_id": 2,
+			"service_type_id": 2,
+			"city_id": 1,
+			"area_id": 1,
+			"status_id": 1,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 3,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request_id": 1,
+			"service_type_id": 1,
+			"city_id": 3,
+			"area_id": 3,
+			"status_id":1,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 4,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request_id": 1,
+			"service_type_id": 1,
+			"city_id": 3,
+			"area_id": 3,
+			"status_id": 1,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
 	}
+
 
 ]
