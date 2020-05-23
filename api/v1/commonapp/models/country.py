@@ -18,12 +18,10 @@ from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
 
 # Create Country table start
-from v1.tenant.models.tenant_master import TenantMaster
 
 
 class Country(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     region = models.BigIntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
