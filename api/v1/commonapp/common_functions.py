@@ -45,7 +45,7 @@ def is_authorized():
     return True
 
 
-<<<<<<< HEAD
+
 # def is_authorized(module_id, sub_module_id, privilege_id, token):
 #     try:
 #         data = False
@@ -66,7 +66,7 @@ def is_authorized():
 #     except Exception as e:
 #         logger().log(e, 'ERROR', user='test', name='test')
 #         raise InvalidAuthorizationException
-=======
+
 def is_authorized():
     return True
     try:
@@ -88,4 +88,4 @@ def is_authorized():
     except Exception as e:
         logger().log(e, 'ERROR', user='test', name='test')
         raise InvalidAuthorizationException
->>>>>>> 9ea6b7266fdc24343795260c7c44297641ae11e4
+
