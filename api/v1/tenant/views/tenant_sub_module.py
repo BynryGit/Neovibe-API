@@ -6,10 +6,11 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.tenant.views.common_functions import is_data_verified, is_submodule_data_verified
 from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_sub_module import get_tenant_submodule_by_id_string, TenantSubModule as TenantSubModuleTbl
 from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
@@ -152,4 +153,82 @@ class TenantSubModuleDetail(GenericAPIView):
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# API Header
+# API end Point: api/v1/tenant/submodule
+# API verb: POST
+# Package: Basic
+# Modules: All
+# Sub Module: submodule
+# Interaction: Add Tenant Submodule
+# Usage: Add Tenant submodule in the system
+# Tables used:  Tenant Submodule
+# Auther: Gauri Deshmukh
+# Created on: 21/5/2020
+
+class Submodule(GenericAPIView):
+
+    def post(self, request):
+        try:
+            # Checking authentication start
+            if is_token_valid(1):
+                # payload = get_payload(request.data['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                # privilege = get_privilege_by_id(1)
+                # sub_module = get_sub_module_by_id(1)
+                if is_authorized():
+                    # Checking authorization end
+
+                    # Request data verification start
+                    #user = UserDetail.objects.get(id = 2)
+                    if is_submodule_data_verified(request):
+                    # Request data verification end
+                    #     duplicate_tenant_submodule_obj = TenantSubModuleTbl.objects.filter(id_string=request.data["id_string"],
+                    #                                                         sub_module_name=request.data['sub_module_name'])
+                    #     if duplicate_tenant_submodule_obj:
+                    #         return Response({
+                    #             STATE: DUPLICATE,
+                    #         }, status=status.HTTP_404_NOT_FOUND)
+                    #     else:
+
+                        serializer = TenantSubModuleSerializer(data=request.data)
+                        print("here##")
+                        if serializer.is_valid():
+#                            tenant_obj = serializer.create(serializer.validated_data, user)
+                            print("##here##")
+                            tenant_submodule_obj = serializer.create(serializer.validated_data)
+                            print("##here##123")
+                            view_serializer = TenantSubModuleViewSerializer(instance=tenant_submodule_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_201_CREATED)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+           # traceback.print_exc(e)
+            print("error submodule",e)
+            # logger().log(e, 'ERROR', user='Tenant Submodule Exception', name='Testing')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

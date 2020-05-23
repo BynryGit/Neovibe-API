@@ -11,12 +11,12 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.subscription import SubscriptionListSerializer, SubscriptionViewSerializer, \
      SubscriptionSerializer
 from v1.tenant.models.tenant_subscription import get_subscription_by_id_string
-from v1.tenant.views.common_functions import is_data_verified
+from v1.tenant.views.common_functions import is_data_verified, is_subscription_data_verified
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE
 
 
 # API Header
-# API end Point: api/v1/tenant/list
+# API end Point: api/v1/tenant/subscription/list
 # API verb: GET
 # Package: Basic
 # Modules: All
@@ -73,16 +73,16 @@ class Subscription(GenericAPIView):
 
                     # Request data verification start
                     #user = UserDetail.objects.get(id = 2)
-                    if is_data_verified(request):
+                    if is_subscription_data_verified(request):
                     # Request data verification end
-                        duplicate_subscription_obj = subscriptionTbl.objects.filter(id_string=request.data["id_string"],
-                                                                              subscription_plan=request.data['subscription_plan_id'])
-                        if duplicate_subscription_obj:
-                            return Response({
-                                STATE: DUPLICATE,
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        else:
-                            serializer = SubscriptionSerializer(data=request.data)
+                    #     duplicate_subscription_obj = subscriptionTbl.objects.filter(id_string=request.data["id_string"],
+                    #                                                           subscription_plan_id=request.data['subscription_plan_id'])
+                    #     if duplicate_subscription_obj:
+                    #         return Response({
+                    #             STATE: DUPLICATE,
+                    #         }, status=status.HTTP_404_NOT_FOUND)
+                    #     else:
+                        serializer = SubscriptionSerializer(data=request.data)
                         if serializer.is_valid():
 #                            tenant_obj = serializer.create(serializer.validated_data, user)
                             subscription_obj = serializer.create(serializer.validated_data)
@@ -110,7 +110,7 @@ class Subscription(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             traceback.print_exc(e)
-            logger().log(e, 'ERROR', user='Exception', name='Testing')
+            # logger().log(e, 'ERROR', user='Exception', name='Testing')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
@@ -172,7 +172,7 @@ class SubscriptionDetail(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_subscription_data_verified(request):
                         # Request data verification end
 
                         # Save basic details start

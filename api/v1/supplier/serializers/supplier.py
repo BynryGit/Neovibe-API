@@ -3,15 +3,30 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
+
+from api.settings import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.serializers.city import CitySerializer
+from v1.commonapp.serializers.country import CountrySerializer
+from v1.commonapp.serializers.state import StateSerializer
+from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
+from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.supplier.models.supplier import Supplier as SupplierTbl
 from v1.supplier.views.common_functions import set_supplier_validated_data
 
 
 class SupplierViewSerializer(serializers.ModelSerializer):
+    tenant = TenantMasterViewSerializer()
+    utility = UtilityMasterViewSerializer()
+    country = CountrySerializer()
+    state = StateSerializer()
+    city = CitySerializer()
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = SupplierTbl
-        fields = ('__all__')
+        fields = ('id_string', 'name', 'description', 'phone_no', 'email_id', 'address_line_1', 'created_date',
+                  'updated_date', 'tenant', 'utility', 'country', 'state', 'city')
 
 
 class SupplierSerializer(serializers.ModelSerializer):

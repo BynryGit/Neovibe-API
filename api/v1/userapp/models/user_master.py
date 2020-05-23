@@ -144,7 +144,6 @@ def get_notes_by_user_id_string(id_string):
 
 def is_username_exists(username):
     user = UserDetail.objects.filter(username=username, is_active=True).last()
-    print('===========',user)
     if user:
         return False
     else:
