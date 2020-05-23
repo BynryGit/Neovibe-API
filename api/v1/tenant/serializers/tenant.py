@@ -38,6 +38,7 @@ class TenantMasterViewSerializer(serializers.ModelSerializer):
 
 
 class TenantMasterSerializer(serializers.ModelSerializer):
+
     short_name = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=False, max_length=200)
     email_id = serializers.CharField(required=False, max_length=200)
