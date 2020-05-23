@@ -57,17 +57,11 @@ urlpatterns = [
 
     path('payment/list', TenantInvoicePaymentList.as_view()),
     path('payment/', TenantInvoicePayment.as_view()),
-<<<<<<< HEAD
     path('payment/<uuid:id_string>', TenantInvoicePaymentDetail.as_view()),
-=======
     # path('payment/<uuid:id_string>', PaymentDetail.as_view()),
 
     # path('bank-detail/', GetBankList.as_view()),
     # path('bank/<uuid:id_string>', Bank.as_view()),
-
-
->>>>>>> 0788cad7edeebb82c04c722ab98bfddaf8eedcc3
-
     # path('<uuid:id_string>/summary', UtilityUsageSummaryDetail.as_view(), name='utility_summary'),
     # path('<uuid:id_string>/modules', UtilityModules.as_view(), name='utility_module_list'),
     # path('module/<uuid:id_string>', UtilityModuleDetail.as_view(), name='utility_module_details'),
