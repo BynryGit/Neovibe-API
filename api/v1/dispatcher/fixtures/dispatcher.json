@@ -1,0 +1,272 @@
+[
+  {
+		"pk": "1",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Image",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "2",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Parameter",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "3",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Material",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "1",
+		"model": "dispatcher.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Image",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "2",
+		"model": "dispatcher.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Parameter",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "3",
+		"model": "dispatcher.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Material",
+			"is_active": "True"
+			}
+	},
+   {
+		"pk": "1",
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_no": 5446,
+			"service_name": "service_1",
+            "description": "Demo service_1",
+            "consumer_id": 1,
+            "consumer_address": "pune",
+            "asset_id": 1,
+            "duration": "1 month",
+            "city_id": 1,
+            "area_id": 1,
+            "sub_area_id": 1,
+            "start_date": "2020-12-01",
+            "end_date": "2021-12-01",
+            "due_date": "2021-12-01",
+            "status_id": 1,
+			"is_active": "True"
+			}
+	},
+   {
+		"pk": "2",
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_no": 5446,
+			"service_name": "service_2",
+            "description": "Demo service_2",
+            "consumer_id": 1,
+            "consumer_address": "pune",
+            "asset_id": 1,
+            "duration": "1 month",
+            "city_id": 1,
+            "area_id": 1,
+            "sub_area_id": 1,
+            "start_date": "2020-11-01",
+            "end_date": "2021-11-01",
+            "due_date": "2021-11-01",
+            "status_id": 1,
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "3",
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_no": 12005,
+			"service_name": "service_3",
+            "description": "Demo service_3",
+            "consumer_id": 1,
+            "consumer_address": "Mumbai",
+            "asset_id": 1,
+            "duration": "3 month",
+            "city_id": 1,
+            "area_id": 1,
+            "sub_area_id": 1,
+            "start_date": "2020-06-09",
+            "end_date": "2021-09-08",
+            "due_date": "2021-10-12",
+            "status_id": 1,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "vendor_id": 1,
+            "is_complete_on_time": "True",
+            "defined_duration": "3 month",
+            "actual_duration": "2 month",
+            "city_id": 1,
+            "area_id": 1,
+            "sub_area_id": 1,
+            "assigned_date": "2020-06-12",
+            "start_date": "2021-09-12",
+            "completion_date": "2021-10-12",
+            "status_id": 1,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "vendor_id": 1,
+            "is_complete_on_time": "True",
+            "defined_duration": "3 month",
+            "actual_duration": "2 month",
+            "city_id": 1,
+            "area_id": 1,
+            "sub_area_id": 1,
+            "assigned_date": "2020-06-09",
+            "start_date": "2021-09-09",
+            "completion_date": "2021-10-09",
+            "status_id": 1,
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "vendor_id": 1,
+            "is_complete_on_time": "True",
+            "defined_duration": "5 month",
+            "actual_duration": "10 month",
+            "city_id": 1,
+            "area_id": 1,
+            "sub_area_id": 1,
+            "assigned_date": "2020-06-11",
+            "start_date": "2021-09-11",
+            "completion_date": "2021-10-11",
+            "status_id": 1,
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "1",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_request_id": 1,
+            "vendor_id": 1,
+            "city_id": 1,
+            "area_id": 1,
+            "remark": "THis is clouser report",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "2",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_request_id": 1,
+            "vendor_id": 1,
+            "city_id": 1,
+            "area_id": 1,
+            "remark": "THis is clouser report2",
+			"is_active": "True"
+			}
+	},
+  {
+		"pk": "1",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_request_id": 1,
+            "vendor_id": 1,
+            "city_id": 1,
+            "area_id": 1,
+            "remark": "THis is clouser transtion report1",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_request_id": 1,
+            "vendor_id": 1,
+            "city_id": 1,
+            "area_id": 1,
+            "remark": "THis is clouser transtion report2",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+            "service_type_id": 1,
+            "service_request_id": 1,
+            "vendor_id": 1,
+            "city_id": 1,
+            "area_id": 1,
+            "remark": "THis is clouser  transtion report3",
+			"is_active": "True"
+			}
+	}
+]
