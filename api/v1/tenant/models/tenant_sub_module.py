@@ -25,9 +25,9 @@ from v1.tenant.models.tenant_module import get_tenant_module_by_id
 class TenantSubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    sub_module_name = models.BigIntegerField(null=True, blank=True)
+    sub_module_name = models.CharField(max_length=200, blank=True, null=True)
     module_id = models.BigIntegerField(null=True, blank=True)
-    submodule_desc =  models.CharField(max_length=500, blank=False, null=False)
+    submodule_desc =  models.CharField(max_length=500, blank=True, null=True)
     subscription_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)

@@ -1845,5 +1845,324 @@
 			"form_factor": 2,
 			"is_active": "True"
 		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.ServiceAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request": 1,
+			"sop_master_detail": 1,
+			"parent_record": ,
+			"status": 1,
+			"city": 1,
+			"area": 1,
+			"subarea": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ServiceAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request": 2,
+			"sop_master_detail": 2,
+			"parent_record": ,
+			"status": 2,
+			"city": 1,
+			"area": 1,
+			"subarea": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ServiceAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request": 3,
+			"sop_master_detail": 3,
+			"parent_record": ,
+			"status": 3,
+			"city": 3,
+			"area": 3,
+			"subarea": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.ServiceAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request": 4,
+			"sop_master_detail": 4,
+			"parent_record": ,
+			"status": 4,
+			"city": 3,
+			"area": 3,
+			"subarea": 3,
+			"is_active": "True"
+		}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "dispatcher.SopMaster",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"city": 1,
+			"service_type": ,
+			"name": "SOP-1",
+			"effective_start_date": "2020-06-10",
+			"effective_end_date": "2020-07-10",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.SopMaster",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"city": 1,
+			"service_type": ,
+			"name": "SOP-2",
+			"effective_start_date": "2020-06-15",
+			"effective_end_date": "2020-07-15",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.SopMaster",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"city": 3,
+			"service_type": ,
+			"name": "SOP-3",
+			"effective_start_date": "2020-06-10",
+			"effective_end_date": "2020-07-10",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.SopMaster",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"city": 3,
+			"service_type": ,
+			"name": "SOP-4",
+			"effective_start_date": "2020-06-15",
+			"effective_end_date": "2020-07-15",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.SopMasterDetails",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sop_master": 1,
+			"service_type": ,
+			"sub_sop_name": "Sub SOP-1",
+			"task_type": 1,
+			"field_type": 1,
+			"field_name": "Field-1",
+			"field_unit": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.SopMasterDetails",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sop_master": 1,
+			"service_type": ,
+			"sub_sop_name": "Sub SOP-2",
+			"task_type": 2,
+			"field_type": 2,
+			"field_name": "Field-2",
+			"field_unit": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.SopMasterDetails",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"sop_master": 2,
+			"service_type": ,
+			"sub_sop_name": "Sub SOP-3",
+			"task_type": 3,
+			"field_type": 3,
+			"field_name": "Field-3",
+			"field_unit": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.SopMasterDetails",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sop_master": 3,
+			"service_type": ,
+			"sub_sop_name": "Sub SOP-4",
+			"task_type": 4,
+			"field_type": 4,
+			"field_name": "Field-4",
+			"field_unit": 4,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "dispatcher.SopMasterDetails",
+		"fields": {
+			"tenant": 2,
+			"utility":3,
+			"sop_master": 3,
+			"service_type": ,
+			"sub_sop_name": "Sub SOP-5",
+			"task_type": 5,
+			"field_type": 5,
+			"field_name": "Field-5",
+			"field_unit": 5,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "dispatcher.SopMasterDetails",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"sop_master": 4,
+			"service_type": ,
+			"sub_sop_name": "Sub SOP-6",
+			"task_type": 6,
+			"field_type": 6,
+			"field_name": "Field-6",
+			"field_unit": 6,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Active",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Inactive",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Active",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.SopStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Inactive",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"utility": 1,
+			"name": "Image",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"utility": 1,
+			"name": "Parameter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"utility": 1,
+			"name": "Material",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"utility": 3,
+			"name": "Image",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"utility": 3,
+			"name": "Parameter",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "6",
+		"model": "dispatcher.TaskType",
+		"fields": {
+			"utility": 3,
+			"name": "Material",
+			"is_active": "True"
+		}
 	}
+
+
+
 ]

@@ -1,20 +1,10 @@
-import uuid
-from datetime import datetime
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
-
-from v1.commonapp.models.area import get_area_by_id_string
-from v1.commonapp.models.city import get_city_by_id_string
-from v1.commonapp.models.country import get_country_by_id_string
-from v1.commonapp.models.state import get_state_by_id_string
-from v1.commonapp.models.sub_area import get_sub_area_by_id_string
-from v1.commonapp.serializers.area import AreaListSerializer
-from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
-from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
-from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
-from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from v1.consumer.models.source_type import get_source_type_by_id_string
-from v1.payment.models.consumer_payment import get_payment_by_id_string
+from api.settings import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.serializers.city import CitySerializer
+from v1.commonapp.serializers.country import CountrySerializer
+from v1.commonapp.serializers.state import StateSerializer
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.models.tenant_status import TenantStatus
 from v1.tenant.views.common_functions import set_validated_data
@@ -34,29 +24,21 @@ class TenantStatusViewSerializer(serializers.ModelSerializer):
         fields = ('name','id_string')
 
 
-class TenantListSerializer(serializers.ModelSerializer):
-    # status = TenantStatusViewSerializer(many=False, required=True, source='get_status')
+class TenantMasterViewSerializer(serializers.ModelSerializer):
+    country_id = CountrySerializer(many=False, required=False, source='get_country')
+    state_id = StateSerializer(many=False, required=False, source='get_state')
+    city_id = CitySerializer(many=False, required=False, source='get_city')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = TenantMaster
-        fields = (
-            'id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'city_id', 'country_id', 'state_id',
-            'status_id','created_date')
-
-class TenantViewSerializer(serializers.ModelSerializer):
-    #status = TenantStatusViewSerializer(many=False, source='get_status')
-    # area = AreaListSerializer(many=False, source='get_area')
-    # tenant = serializers.ReadOnlyField(source='tenant.name')
-
-    class Meta:
-        model = TenantMaster
-        fields = (
-        'id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'city_id', 'country_id', 'state_id', 'status_id','created_date')
+        fields = ('id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'created_date', 'updated_date', 'status_id',
+                  'country_id', 'state_id', 'city_id')
 
 
-class TenantSerializer(serializers.ModelSerializer):
+class TenantMasterSerializer(serializers.ModelSerializer):
 
-    id_string = serializers.CharField(required=False, max_length=200)
     short_name = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=False, max_length=200)
     email_id = serializers.CharField(required=False, max_length=200)
@@ -66,26 +48,28 @@ class TenantSerializer(serializers.ModelSerializer):
     state_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
     is_active = serializers.CharField(required=False, max_length=200)
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = TenantMaster
         fields = ('__all__')
 
-    def create(self, validated_data):
+    def create(self, validated_data, user):
         validated_data = set_validated_data(validated_data)
+        if TenantMaster.objects.filter(**validated_data).exists():
+            return False
         with transaction.atomic():
-            tenant_obj = super(TenantSerializer, self).create(validated_data)
-            # tenant_obj.created_by = user.id
-            # tenant_obj.created_date = datetime.utcnow()
-            # tenant_obj.tenant = user.tenant
+            tenant_obj = super(TenantMasterSerializer, self).create(validated_data)
+            tenant_obj.created_by = user.id
             tenant_obj.save()
             return tenant_obj
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
-            tenant_obj = super(TenantSerializer, self).update(instance, validated_data)
-            # tenant_obj.updated_by = user.id
-            # tenant_obj.updated_date = datetime.utcnow()
+            tenant_obj = super(TenantMasterSerializer, self).update(instance, validated_data)
+            tenant_obj.updated_by = user.id
+            tenant_obj.updated_date = timezone.now()
             tenant_obj.save()
             return tenant_obj
