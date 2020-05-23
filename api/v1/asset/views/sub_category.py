@@ -1,22 +1,22 @@
+import traceback
+from v1.commonapp.views.logger import logger
 from rest_framework import generics, status
-from rest_framework.exceptions import APIException
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from api.messages import SUCCESS, STATE, DATA, EXCEPTION
-from v1.campaign.serializers.advertisement_type import AdvertisementListSerializer,AdvertisementViewSerializer
-from v1.campaign.models.advertisement_type import AdvertisementType,get_advert_type_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.commonapp.views.logger import logger
+from v1.asset.models.asset_sub_category import AssetSubCategory,get_asset_sub_category_by_id_string
+from v1.asset.serializer.sub_category import AssetSubCategoryListSerializer,AssetSubCategoryViewSerializer
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 
-
-# 'advert-type/list'
-class AdvertisementTypeList(generics.ListAPIView):
+# sub_category-list
+class AssetSubCategoryList(generics.ListAPIView):
     try:
-        serializer_class = AdvertisementListSerializer
+        serializer_class = AssetSubCategoryListSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -28,7 +28,7 @@ class AdvertisementTypeList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(0):
                 if is_authorized():
-                    queryset = AdvertisementType.objects.filter(tenant=1, utility=1)
+                    queryset = AssetSubCategory.objects.filter(is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -41,12 +41,12 @@ class AdvertisementTypeList(generics.ListAPIView):
 
 
 
-class AdvertisementTypeDetail(GenericAPIView):
+class AssetSubCategoryDetail(GenericAPIView):
     def get(self,request,id_string):
         try:
-            advet_type = get_advert_type_by_id_string(id_string)
-            if advet_type:
-                serializer = AdvertisementViewSerializer(instance=advet_type,context={"request":request})
+            asset_sub_category = get_asset_sub_category_by_id_string(id_string)
+            if asset_sub_category:
+                serializer = AssetSubCategoryViewSerializer(instance=asset_sub_category,context={'request':request})
                 return Response({
                     STATE: SUCCESS,
                     DATA: serializer.data,

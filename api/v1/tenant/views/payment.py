@@ -177,7 +177,7 @@ class TenantInvoicePaymentDetail(GenericAPIView):
 
                         # Save basic details start
                         # user = UserDetail.objects.get(id=2)
-                        tenant_invoice_payment_obj = get_tenant_invoice_payment_by_id_string(id_string)
+                        tenant_invoice_payment_obj = get_tenant_payment_by_id_string(id_string)
 
                         if tenant_invoice_payment_obj:
                             serializer = TenantInvoicePaymentSerializer(data=request.data)

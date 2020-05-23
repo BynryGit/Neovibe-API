@@ -5,30 +5,35 @@ from django.db import transaction
 from rest_framework import serializers
 from v1.survey.models.survey_consumer import SurveyConsumer
 from v1.survey.models.survey import Survey
-# from v1.supplier.models.supplier import SupplierMaster
+from v1.supplier.models.supplier import Supplier
 from v1.survey.views.common_functions import set_survey_validate_data
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 
 class SurveSerializers(serializers.ModelSerializer):
     class Meta:
         model = Survey
         fields = ('id_string','name')
 
-# class vendorSerializers(serializers.ModelSerializer):
-#     class Meta:
-#         model = SupplierMaster
-#         fields = ('id_string','name')
+class vendorSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Supplier
+        fields = ('id_string','name')
 
 
 
-# class ConsumerViewSerializer(serializers.ModelSerializer):
-#     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-#     survey_id = SurveSerializers(many=False, required=True,source='get_survey')
-#     vendor_id = vendorSerializers(many=False, required=True,source='get_vendor')
-#
-#     class Meta:
-#         model = SurveyConsumer
-#         fields = ('id_string','tenant_name','consumer_no', 'first_name', 'middle_name', 'last_name', 'email_id', 'phone_mobile',
-#                   'address_line_1','survey_id','vendor_id')
+class ConsumerViewSerializer(serializers.ModelSerializer):
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    tenant_name = serializers.ReadOnlyField(source='tenant.name')
+    survey_id = SurveSerializers(many=False, required=True,source='get_survey')
+    vendor_id = vendorSerializers(many=False, required=True,source='get_vendor')
+    created_date = serializers.SerializerMethodField('get_created_date')
+
+    class Meta:
+        model = SurveyConsumer
+        fields = ('id_string','tenant_name','consumer_no', 'first_name', 'middle_name', 'last_name', 'email_id', 'phone_mobile',
+                  'address_line_1','survey_id','vendor_id','created_date')
 
 
 

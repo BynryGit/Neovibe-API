@@ -29,7 +29,7 @@ class SupplierProduct(models.Model):
     supplier = models.BigIntegerField(null=True, blank=True)
     type = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
-    image = models.URLField(null=False, blank=False)
+    image = models.URLField(null=True, blank=True)
     product_category = models.BigIntegerField(null=True, blank=True)
     product_subcategory = models.BigIntegerField(null=True, blank=True)
     rate = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)

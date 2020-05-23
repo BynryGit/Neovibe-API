@@ -10,8 +10,10 @@ from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
-# from v1.supplier.models.supplier_payment import Payment
+from v1.tenant.models.tenant_module import get_tenant_module_by_id_string
 from v1.tenant.models.tenant_status import get_tenant_status_by_id_string
+from v1.tenant.models.tenant_subscription_plan import get_subscription_plan_by_id, get_subscription_plan_by_id_string, \
+    get_subscription_plan_by_tenant_id_string
 
 
 def get_tenant(request, user):
@@ -1305,6 +1307,22 @@ def is_data_verified(request):  # todo - Black, Null, empty string - ready to us
         else:
             return True
 
+def is_subscription_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
+    if request.data['subscription_plan_id'] == '' and request.data['subscription_frequency_id'] == '':
+        return False
+    else:
+        return True
+def is_subscription_plan_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
+    if request.data['subscription_plan_id'] == '':
+        return False
+    else:
+        return True
+
+def is_submodule_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
+    if request.data['sub_module_name'] == '' :
+        return False
+    else:
+        return True
 
 def is_bank_data_verified(request):
     if request.data['bank']:
@@ -1330,4 +1348,17 @@ def set_validated_data(validated_data):
         city = get_city_by_id_string(validated_data["city_id"])
         validated_data["city_id"] = city.id
 
+    return validated_data
+
+def set_validated_data_submodule(validated_data):
+    if "module_id" in validated_data:
+        module = get_tenant_module_by_id_string(validated_data["module_id"])
+        validated_data["module_id"] = module.id
+
+    return validated_data
+
+def set_validated_data_subscription_plan(validated_data):
+    if "subscription_plan_id" in validated_data:
+        subscription_plan = get_subscription_plan_by_id_string(validated_data["subscription_plan_id"])
+        validated_data["subscription_plan_id"] = subscription_plan.id
     return validated_data

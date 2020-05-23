@@ -18,16 +18,17 @@ from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
 
-
-# Create Tenant Sub-Module table start.
 from v1.tenant.models.tenant_module import get_tenant_module_by_id
 
 
+# Create Tenant Sub-Module table start.
 class TenantSubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    sub_module = models.BigIntegerField(null=True, blank=True)
-    module = models.BigIntegerField(null=True, blank=True)
+    sub_module_name = models.CharField(max_length=200, blank=True, null=True)
+    module_id = models.BigIntegerField(null=True, blank=True)
+    submodule_desc =  models.CharField(max_length=500, blank=True, null=True)
+    subscription_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -35,13 +36,13 @@ class TenantSubModule(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.submodule_name
+        return self.sub_module_name
 
     def __unicode__(self):
-        return self.submodule_name
+        return self.sub_module_name
 
     @property
-    def get_tenant_module(self):
+    def get_tenant_sub_module(self):
         module = get_tenant_module_by_id(self.module_id)
         return module.module_name
 
