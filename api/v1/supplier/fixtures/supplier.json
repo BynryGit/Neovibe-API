@@ -1,0 +1,297 @@
+[
+	{
+		"pk": "1",
+		"model": "supplier.ProductCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Product 1",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.ProductCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Product 2",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Product subcategory 1",
+			"category": 1
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.ProductSubCategory",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Product subcategory 2",
+			"category": 2
+		}
+	},
+	{
+		"pk": "1",
+		"model": "supplier.SupplierStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "active",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupplierStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "de-active",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "supplier.Supplier",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"country": 1,
+			"state": 1,
+			"city": 1,
+			"name": "Supplier 1",
+			"description": "Supplier 1 is vendor of Advertisement 1",
+			"phone_no": "9011613929",
+			"email_id": "Supplier1@gmail.com",
+			"address_line_1": "Pune",
+			"street": "pune",
+			"zipcode": 1234546,
+			"status": 1,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.Supplier",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"country": 1,
+			"state": 1,
+			"city": 1,
+			"name": "Supplier 2",
+			"description": "Supplier 2 is vendor of Advertisement 2",
+			"phone_no": "9011613929",
+			"email_id": "Supplier2@gmail.com",
+			"address_line_1": "Pune",
+			"street": "pune",
+			"zipcode": 1234546,
+			"status": 1,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "3",
+		"model": "supplier.Supplier",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"country": 1,
+			"state": 1,
+			"city": 1,
+			"name": "Supplier 3",
+			"description": "Supplier 3 is vendor of Advertisement 3",
+			"phone_no": "9011613929",
+			"email_id": "Supplier3@gmail.com",
+			"address_line_1": "Pune",
+			"street": "pune",
+			"zipcode": 1234546,
+			"status": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "supplier.Supplier",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"country": 1,
+			"state": 1,
+			"city": 1,
+			"name": "Supplier 4",
+			"description": "Supplier 4 is vendor of Advertisement 4",
+			"phone_no": "9011613929",
+			"email_id": "Supplier4@gmail.com",
+			"address_line_1": "Pune",
+			"street": "pune",
+			"zipcode": 1234546,
+			"status": 2,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "supplier.SupplierInvoice",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"contract": 1,
+			"supplier": 1,
+			"supplier_financial": 1,
+			"demand": 1,
+			"invoice_no": 123456,
+			"invoice_amount": 354,
+			"status_id": 1,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupplierInvoice",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"contract": 2,
+			"supplier": 2,
+			"supplier_financial": 2,
+			"demand": 2,
+			"invoice_no": 456461,
+			"invoice_amount": 354,
+			"status_id": 2,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "supplier.SupplierPayment",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"payment_type": 1,
+			"invoice": 1,
+			"contract": 1,
+			"supplier": 1,
+			"supplier_financial": 1,
+			"demand": 1,
+			"invoice_amount": 354,
+			"paid_amount": 654651,
+			"cheque_no": 6546556451,
+			"dd_no": 556451,
+			"bank_name": "BOI",
+			"txn_id": 64654,
+			"account_no": "BOI654654654",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupplierPayment",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"payment_type": 1,
+			"invoice": 2,
+			"contract": 2,
+			"supplier": 2,
+			"supplier_financial": 2,
+			"demand": 2,
+			"invoice_amount": 354,
+			"paid_amount": 354652,
+			"cheque_no": 3546546552,
+			"dd_no": 35552,
+			"bank_name": "SBI",
+			"txn_id": 534654,
+			"account_no": "SBI564654654",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "supplier.SupplierProduct",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"supplier": 1,
+			"name": "Product 1",
+			"product_category": 1,
+			"product_subcategory": 1,
+			"rate": 561,
+			"quantity": 51,
+			"unit": 1236,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupplierProduct",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"supplier": 2,
+			"name": "Product 2",
+			"product_category": 2,
+			"product_subcategory": 2,
+			"rate": 45461,
+			"quantity": 41,
+			"unit": 1236,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "1",
+		"model": "supplier.SupplierService",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"supplier": 1,
+			"name": "service 1",
+			"category": 1,
+			"subcategory": 1,
+			"rate": 561,
+			"quantity": 51,
+			"unit": 1236,
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "supplier.SupplierService",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"supplier": 2,
+			"name": "service 2",
+			"category": 2,
+			"subcategory": 2,
+			"rate": 45461,
+			"quantity": 41,
+			"unit": 1236,
+			"is_active": "True"
+
+		}
+	}
+]
