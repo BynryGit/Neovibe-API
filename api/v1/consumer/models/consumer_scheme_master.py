@@ -24,7 +24,7 @@ class ConsumerSchemeMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    scheme_type = models.BigIntegerField(null=True, blank=True)  # TODO Conform for lookup Table
+    scheme_type_id = models.BigIntegerField(null=True, blank=True)  # TODO Conform for lookup Table
     scheme_name = models.CharField(max_length=500, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     effective_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
