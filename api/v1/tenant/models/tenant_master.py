@@ -15,8 +15,12 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.country import get_country_by_id
+from v1.commonapp.models.state import get_state_by_id
 
 # Create Tenant Master table start.
+
 
 class TenantMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -28,17 +32,32 @@ class TenantMaster(models.Model):
     country_id = models.BigIntegerField(null=True, blank=True)
     state_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_country(self):
+        country = get_country_by_id(self.country_id)
+        return country
+
+    @property
+    def get_state(self):
+        state = get_state_by_id(self.state_id)
+        return state
+
+    @property
+    def get_city(self):
+        city = get_city_by_id(self.city_id)
+        return city
 
 
 def get_tenant_by_id(id):

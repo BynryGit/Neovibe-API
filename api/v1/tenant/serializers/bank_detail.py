@@ -4,9 +4,9 @@ from django.db import transaction
 from rest_framework import serializers
 
 from v1.tenant.models import tenant_bank_details
-from v1.tenant.serializers.tenant import TenantSerializer
+from v1.tenant.serializers.tenant import TenantMasterSerializer
 from v1.tenant.models.tenant_bank_details import TenantBankDetails
-from v1.tenant.serializers.tenant import TenantSerializer
+from v1.tenant.serializers.tenant import TenantMasterSerializer
 from v1.tenant.views.common_functions import set_validated_data
 
 

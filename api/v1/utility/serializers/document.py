@@ -4,12 +4,12 @@ from rest_framework import serializers
 from v1.commonapp.models.document import Document as DocumentTbl
 from v1.commonapp.serializers.document_sub_type import DocumentSubTypeSerializer
 from v1.commonapp.serializers.document_type import DocumentTypeSerializer
-from v1.tenant.serializers.tenant import TenantSerializer
+from v1.tenant.serializers.tenant import TenantMasterSerializer
 from v1.utility.serializers.utility import UtilitySerializer
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    tenant = TenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantMasterSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     document_type = DocumentTypeSerializer(many=False, required=True, source='get_type')
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
