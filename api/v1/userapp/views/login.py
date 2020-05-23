@@ -22,7 +22,7 @@ from v1.userapp.models.user_token import UserToken, get_token_by_user_id
 # Usage: API will fetch required data for user list
 # Tables used: 2.5.3. User Details
 # Author: Arpita
-# Created on: 29/04/2020
+# Created on: 23/05/2020
 
 def login(request, user):
     try:

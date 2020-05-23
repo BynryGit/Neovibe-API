@@ -50,7 +50,7 @@ class UserDocument(GenericAPIView):
                             return Response({
                                 STATE: ERROR,
                                 RESULTS: '',
-                            }, status=status.HTTP_204_NO_CONTENT)
+                            }, status=status.HTTP_404_NOT_FOUND)
                     else:
                         return Response({
                             STATE: ERROR,

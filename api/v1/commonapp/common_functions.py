@@ -6,6 +6,7 @@ from v1.userapp.models.role_privilege import get_record_by_values, get_record_va
 from v1.userapp.models.user_master import get_user_by_id_string
 from v1.userapp.models.user_role import get_user_role_by_user_id
 from v1.userapp.models.user_token import get_token_by_user_id
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 def get_payload(token):
@@ -44,11 +45,18 @@ def is_authorized():
     return True
 
 
-# def is_authorized(module_id, sub_module_id, privilege_id, token):
+# def is_authorized(utility_id, module_id, sub_module_id, privilege_id, token):
 #     try:
 #         data = False
 #         decoded_token = get_payload(token)
 #         user_obj = get_user_by_id_string(str(decoded_token['id_string']))
+#         for i in user_obj.utilities:
+#             utility = get_utility_by_id_string(i['utility_id_string'])
+#             if utility.id == utility_id:
+#                 data = True
+#                 return data
+#             else:
+#                 return False
 #         roles = get_user_role_by_user_id(user_obj.id)
 #         if roles:
 #             for role in roles:
