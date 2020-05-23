@@ -25,9 +25,9 @@ class TenantStatusViewSerializer(serializers.ModelSerializer):
 
 
 class TenantMasterViewSerializer(serializers.ModelSerializer):
-    country_id = CountrySerializer()
-    state_id = StateSerializer()
-    city_id = CitySerializer()
+    country_id = CountrySerializer(many=False, required=False, source='get_country')
+    state_id = StateSerializer(many=False, required=False, source='get_state')
+    city_id = CitySerializer(many=False, required=False, source='get_city')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
