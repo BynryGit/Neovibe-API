@@ -30,7 +30,7 @@ class SupplierService(models.Model):
     supplier = models.BigIntegerField(null=True, blank=True)
     type = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
-
+    image = models.UUIDField(null=False, blank=False)
     category = models.BigIntegerField(null=True, blank=True)
     subcategory = models.BigIntegerField(null=True, blank=True)
     rate = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
