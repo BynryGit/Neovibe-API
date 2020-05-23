@@ -2161,8 +2161,355 @@
 			"name": "Material",
 			"is_active": "True"
 		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request": 1,
+			"parent_record": ,
+			"service_type": 1,
+			"city": 1,
+			"area": 1,
+			"resource": ,
+			"remark": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request": 2,
+			"parent_record": ,
+			"service_type": 2,
+			"city": 1,
+			"area": 1,
+			"resource": ,
+			"remark": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request": 3,
+			"parent_record": ,
+			"service_type": 3,
+			"city": 3,
+			"area": 3,
+			"resource": ,
+			"remark": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.ClosureReport",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request": 4,
+			"parent_record": ,
+			"service_type": 4,
+			"city": 3,
+			"area": 3,
+			"resource": ,
+			"remark": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type": 1,
+			"closure_report": 1,
+			"sop_master": 1,
+			"sop_master_detail": 1,
+			"task": ,
+			"field_type": 1,
+			"field_name": "Field-1",
+			"field_value": 1,
+			"flag": "False",
+			"sop_status": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type": 2,
+			"closure_report": 2,
+			"sop_master": 2,
+			"sop_master_detail": 3,
+			"task": ,
+			"field_type": 3,
+			"field_name": "Field-3",
+			"field_value": 2,
+			"flag": "False",
+			"sop_status": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type": 3,
+			"closure_report": 3,
+			"sop_master": 3,
+			"sop_master_detail": 4,
+			"task": ,
+			"field_type": 4,
+			"field_name": "Field-4",
+			"field_value": 3,
+			"flag": "False",
+			"sop_status": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "dispatcher.ClosureReportTransaction",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type": 4,
+			"closure_report": 4,
+			"sop_master": 4,
+			"sop_master_detail": 6,
+			"task": ,
+			"field_type": 6,
+			"field_name": "Field-6",
+			"field_value": 4,
+			"flag": "False",
+			"sop_status": 4,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type": 1,
+			"service_no": 1001,
+			"service_name": "Service-1",
+			"description": "Service-1",
+			"consumer": 1,
+			"consumer_address": "P. NO.19 , LOTUS ENCLAVE",
+			"asset": 1,
+			"duration": 1,
+			"parent_record": ,
+			"city": 1,
+			"area": 1,
+			"subarea": 1,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": ,
+			"flag": "False",
+			"priority": ,
+			"skill": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 2,
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_type": 2,
+			"service_no": 1002,
+			"service_name": "Service-2",
+			"description": "Service-2",
+			"consumer": 2,
+			"consumer_address": "41 , ROYAL MEADOWS , Cine planet road",
+			"asset": 2,
+			"duration": 1,
+			"parent_record": ,
+			"city": 1,
+			"area": 1,
+			"subarea": 1,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": ,
+			"flag": "False",
+			"priority": ,
+			"skill": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 3,
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type": 3,
+			"service_no": 1003,
+			"service_name": "Service-3",
+			"description": "Service-3",
+			"consumer": 6,
+			"consumer_address": "FLAT NO:410,KRISHNA KUNJ GARDENS",
+			"asset": 3,
+			"duration": 1,
+			"parent_record": ,
+			"city": 3,
+			"area": 3,
+			"subarea": 3
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": ,
+			"flag": "False",
+			"priority": ,
+			"skill": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 4,
+		"model": "dispatcher.ServiceRequest",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_type": 4,
+			"service_no": 1004,
+			"service_name": "Service-4",
+			"description": "Service-4",
+			"consumer": 7,
+			"consumer_address": "P. NO.120 , LOTUS",
+			"asset": 4,
+			"duration": 1,
+			"parent_record": ,
+			"city": 3,
+			"area": 3,
+			"subarea": 3,
+			"start_date": "2020-06-10",
+			"end_date": "2020-07-10",
+			"due_date": "2020-07-20",
+			"effort_duration": ,
+			"flag": "False",
+			"priority": ,
+			"skill": ,
+			"status": ,
+			"is_active": "True"
+		}
+	},
+
+
+
+	{
+		"pk": 1,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request": 1,
+			"service_type": 1,
+			"resource": 1,
+			"city": 1,
+			"area": 1,
+			"parent_record": ,
+			"status": ,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 2,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"service_request": 2,
+			"service_type": 2,
+			"resource": 2,
+			"city": 1,
+			"area": 1,
+			"parent_record": ,
+			"status": ,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 3,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request": 3,
+			"service_type": 3,
+			"resource": 3,
+			"city": 3,
+			"area": 3,
+			"parent_record": ,
+			"status": ,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": 4,
+		"model": "dispatcher.ServiceAssignment",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"service_request": 4,
+			"service_type": 4,
+			"resource": 4,
+			"city": 3,
+			"area": 3,
+			"parent_record": ,
+			"status": ,
+			"assigned_date": "2020-06-05",
+			"start_date": "2020-06-25",
+			"completion_date": "2020-06-30",
+			"defined_duration": "1 day",
+			"actual_duration": "1 day",
+			"is_complete_on_time": "False",
+			"is_active": "True"
+		}
 	}
-
-
 
 ]
