@@ -98,7 +98,7 @@ class Consumers(GenericAPIView):
                         else:
                             return Response({
                                 STATE: ERROR,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                            }, status=status.HTTP_204_NO_CONTENT)
                     else:
                         return Response({
                             STATE: ERROR,

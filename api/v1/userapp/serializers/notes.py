@@ -9,7 +9,7 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.notes import Notes
 from v1.commonapp.serializers.module import ModuleSerializer
-from v1.commonapp.serializers.service_type import ServiceTypeSerializer
+from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.serializers.user import UserSerializer, GetUserSerializer
@@ -26,7 +26,7 @@ class NoteViewSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
-    service_type = ServiceTypeSerializer(many=False, required=True, source='get_service_type')
+    service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
@@ -79,7 +79,7 @@ class NoteListSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
-    service_type = ServiceTypeSerializer(many=False, required=True, source='get_service_type')
+    service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
     created_date = serializers.SerializerMethodField('get_created_date')
 

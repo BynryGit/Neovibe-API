@@ -10,10 +10,8 @@ from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
-from v1.supplier.models.supplier_payment import SupplierPayment
 from v1.tenant.models.tenant_module import get_tenant_module_by_id_string
 from v1.tenant.models.tenant_status import get_tenant_status_by_id_string
-from v1.tenant.models.tenant_sub_module import get_tenant_submodule_by_id
 from v1.tenant.models.tenant_subscription_plan import get_subscription_plan_by_id, get_subscription_plan_by_id_string, \
     get_subscription_plan_by_tenant_id_string
 
@@ -1315,7 +1313,7 @@ def is_subscription_data_verified(request):  # todo - Black, Null, empty string 
     else:
         return True
 def is_subscription_plan_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
-    if request.data['subscription_plan_id'] == '':
+    if request.data['subcription_type'] == '':
         return False
     else:
         return True

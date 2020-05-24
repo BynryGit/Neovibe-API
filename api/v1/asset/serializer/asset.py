@@ -125,6 +125,9 @@ class AssetSerializer(serializers.ModelSerializer):
                 asset_obj.tenant = user.tenant
                 asset_obj.utility = user.utility
                 asset_obj.save()
+                asset_no = str(asset_obj.name) + str(asset_obj.tenant) + str(asset_obj.utility)
+                asset_obj.asset_no = asset_no
+                asset_obj.save()
                 return asset_obj
 
     def update(self, instance, validated_data, user):

@@ -6,7 +6,6 @@ from v1.payment.models.payment_type import get_payment_type_by_id_string
 
 
 def set_validated_data(validated_data):
-    print("@@@@@@@@@@@@@@@@@@", validated_data)
     if "payment_type_id" in validated_data:
         payment_type = get_payment_type_by_id_string(validated_data["payment_type_id"])
         validated_data["payment_type_id"] = payment_type.id

@@ -3,6 +3,7 @@ from v1.asset.views.asset import AssetList,AssetDetail,Asset
 from v1.asset.views.asset_status import AssetstatusList,AssetStatusDetail
 from v1.asset.views.category import AssetCategoryList,AssetCategoryDetail
 from v1.asset.views.sub_category import AssetSubCategoryList,AssetSubCategoryDetail
+from v1.dispatcher.views.sop import SOPList,SOPDetail
 
 urlpatterns = [
     path('list', AssetList.as_view(), name="asset_list"),
@@ -17,5 +18,9 @@ urlpatterns = [
 
     path('sub_category/list', AssetSubCategoryList.as_view(), name="asset_sub_category_list"),
     path('sub_category/<uuid:id_string>', AssetSubCategoryDetail.as_view(), name="asset_sub_category_detail"),
+
+
+    path('sop/list', SOPList.as_view(), name="sop_list"),
+    path('sop/<uuid:id_string>', SOPDetail.as_view(), name="sop_detail"),
 ]
 
