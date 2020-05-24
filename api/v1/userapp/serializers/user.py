@@ -56,6 +56,8 @@ class UserSerializer(serializers.ModelSerializer):
             user_obj.utility = user.utility
             user_obj.is_active = True
             user_obj.save()
+            user_obj.user_ID = str(user_obj.username) + str(user_obj.tenant) + str(user_obj.utility)
+            user_obj.save()
             return user_obj
 
     def update(self, instance, validated_data, user):
