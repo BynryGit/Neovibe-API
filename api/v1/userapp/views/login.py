@@ -28,6 +28,9 @@ def login(request, user):
     try:
         user_obj = get_user_by_username(user.username)
         token_obj = get_token_by_user_id(user_obj.id)
+        if request.data['imei']:
+            if request.data['imei'] != user_obj.imei:
+                return False
         if token_obj:
             token_obj.delete()
         payload = {'id_string': str(user_obj.id_string)}
@@ -61,8 +64,12 @@ class LoginApiView(APIView):
         try:
             username = request.data['username']
             password = request.data['password']
+            imei = request.data['imei']
 
-            auth = authenticate(username=username, password=password)
+            if imei:
+                auth = is_imei_valid()
+            else:
+                auth = authenticate(username=username, password=password)
 
             if auth:
                 token = login(request, auth)  # Call Login function

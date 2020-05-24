@@ -71,3 +71,21 @@ def is_authorized():
 #     except Exception as e:
 #         logger().log(e, 'ERROR', user='test', name='test')
 #         return False
+
+
+# def is_utility(utility_id, token):
+#     try:
+#         data = False
+#         decoded_token = get_payload(token)
+#         user_obj = get_user_by_id_string(str(decoded_token['id_string']))
+#         for i in user_obj.utilities:
+#             utility = get_utility_by_id_string(i['utility_id_string'])
+#             if utility.id == utility_id:
+#                 data = True
+#                 return data
+#             else:
+#                 return False
+#         return data
+#     except Exception as e:
+#         logger().log(e, 'ERROR', user='test', name='test')
+#         return False
