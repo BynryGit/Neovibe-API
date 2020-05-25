@@ -9,7 +9,6 @@ from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_mobile import UserDetails
 from v1.userapp.models.user_role import UserRole
 from v1.userapp.models.role import Role
-from v1.userapp.models.user_skills import Skills
 from v1.userapp.models.user_status import UserStatus
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_token import UserToken
@@ -19,7 +18,6 @@ admin.site.register(UserToken)
 admin.site.register(Privilege)
 admin.site.register(Role)
 admin.site.register(RolePrivilege)
-admin.site.register(Skills)
 admin.site.register(UserArea)
 admin.site.register(UserDetail)
 admin.site.register(UserDetails)
