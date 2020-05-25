@@ -7,7 +7,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE, DATA_ALREADY_EXISTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, DATA_ALREADY_EXISTS, RESULT
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
@@ -87,22 +87,21 @@ class Utility(GenericAPIView):
                     serializer = UtilityMasterSerializer(data=request.data)
                     if serializer.is_valid():
                         utility_obj = serializer.create(serializer.validated_data, user)
-                        print("aaa",utility_obj)
                         if utility_obj:
                             serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: serializer.data,
+                                RESULT: serializer.data,
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
                                 STATE: DUPLICATE,
-                                RESULTS: DATA_ALREADY_EXISTS,
+                                RESULT: DATA_ALREADY_EXISTS,
                             }, status=status.HTTP_409_CONFLICT)
                     else:
                         return Response({
                             STATE: ERROR,
-                            RESULTS: serializer.errors,
+                            RESULT: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -152,7 +151,7 @@ class UtilityDetail(GenericAPIView):
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -193,14 +192,15 @@ class UtilityDetail(GenericAPIView):
                         serializer = UtilityMasterSerializer(data=request.data)
                         if serializer.is_valid():
                             utility_obj = serializer.update(utility_obj, serializer.validated_data, user)
+                            serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'utility_id_string': utility_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({

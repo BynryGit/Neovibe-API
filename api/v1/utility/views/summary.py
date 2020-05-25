@@ -4,7 +4,7 @@ import traceback
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_usage_summary import get_utility_usage_summary_by_utility_id_string
@@ -43,7 +43,7 @@ class UtilitySummaryDetail(GenericAPIView):
                         serializer = UtilityUsageSummaryViewSerializer(instance=utility_summary_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({

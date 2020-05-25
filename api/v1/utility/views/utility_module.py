@@ -8,7 +8,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -89,7 +89,7 @@ class UtilityModuleDetail(GenericAPIView):
                         serializer = UtilityModuleViewSerializer(utility_module_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -130,14 +130,15 @@ class UtilityModuleDetail(GenericAPIView):
                         serializer = UtilityModuleSerializer(data=request.data)
                         if serializer.is_valid():
                             utility_module_obj = serializer.update(utility_module_obj, serializer.validated_data, user)
+                            serializer = UtilityModuleViewSerializer(utility_module_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'utility_module_obj': utility_module_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({

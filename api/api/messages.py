@@ -2,6 +2,7 @@ __author__ = 'aki'
 
 # *********** KEY CONSTANTS **************
 RESULTS='results'
+RESULT='result'
 MESSAGE='message'
 RESPONSE_DATA='response_data'
 Token = 'token'

@@ -7,7 +7,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, DATA_ALREADY_EXISTS, RESULT
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
@@ -35,10 +35,10 @@ class SupplierList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('name', 'tenant__id_string',)
-        ordering_fields = ('name', 'tenant__id_string',)
+        filter_fields = ('name', 'utility__id_string',)
+        ordering_fields = ('name', 'utility__id_string',)
         ordering = ('name',) # always give by default alphabetical order
-        search_fields = ('name', 'tenant__name',)
+        search_fields = ('name', 'utility__name',)
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
@@ -84,24 +84,25 @@ class Supplier(GenericAPIView):
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    duplicate_supplier_obj = SupplierTbl.objects.filter(utility__id_string=request.data['utility'], name=request.data['name'])
-                    if duplicate_supplier_obj:
-                        return Response({
-                            STATE: DUPLICATE,
-                        }, status=status.HTTP_409_CONFLICT)
-                    else:
-                        serializer = SupplierSerializer(data=request.data)
-                        if serializer.is_valid():
-                            supplier_obj = serializer.create(serializer.validated_data, user)
+                    serializer = SupplierSerializer(data=request.data)
+                    if serializer.is_valid():
+                        supplier_obj = serializer.create(serializer.validated_data, user)
+                        if supplier_obj:
+                            serializer = SupplierViewSerializer(instance=supplier_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'supplier_id_string': supplier_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                                STATE: DUPLICATE,
+                                RESULT: DATA_ALREADY_EXISTS,
+                            }, status=status.HTTP_409_CONFLICT)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            RESULT: serializer.errors,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -150,7 +151,7 @@ class SupplierDetail(GenericAPIView):
                         serializer = SupplierViewSerializer(instance=supplier_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -191,14 +192,15 @@ class SupplierDetail(GenericAPIView):
                         serializer = SupplierSerializer(data=request.data)
                         if serializer.is_valid():
                             supplier_obj = serializer.update(supplier_obj, serializer.validated_data, user)
+                            serializer = SupplierViewSerializer(instance=supplier_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'supplier_id_string': supplier_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
