@@ -112,11 +112,11 @@ def get_all_users():
 
 
 def get_user_by_id_string(id_string):
-    return UserDetail.objects.filter(id_string = id_string, is_active=True).last()
+    return UserDetail.objects.filter(id_string=id_string, is_active=True).last()
 
 
 def get_user_by_id(id):
-    user = UserDetail.objects.filter(id = id, is_active=True).last()
+    user = UserDetail.objects.filter(id=id, is_active=True).last()
     return user
 
 
