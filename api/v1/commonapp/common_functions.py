@@ -49,13 +49,6 @@ def is_authorized():
 #         data = False
 #         decoded_token = get_payload(token)
 #         user_obj = get_user_by_id_string(str(decoded_token['id_string']))
-#         for i in user_obj.utilities:
-#             utility = get_utility_by_id_string(i['utility_id_string'])
-#             if utility.id == utility_id:
-#                 data = True
-#                 return data
-#             else:
-#                 return False
 #         roles = get_user_role_by_user_id(user_obj.id)
 #         if roles:
 #             for role in roles:
@@ -67,7 +60,7 @@ def is_authorized():
 #                     data = False
 #             return data
 #         else:
-#             return data
+#             return False
 #     except Exception as e:
 #         logger().log(e, 'ERROR', user='test', name='test')
 #         return False
