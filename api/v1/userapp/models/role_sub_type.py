@@ -51,6 +51,9 @@ class RoleSubType(models.Model):
     def get_role_type(self):
         return get_role_type_by_id(self.role_type_id)
 
+    class Meta:
+        unique_together = ('role_type_id', 'name',)
+
 # Create Role Sub Type table end
 
 

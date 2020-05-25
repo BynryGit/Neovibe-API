@@ -168,7 +168,14 @@ def set_document_validated_data(validated_data):
 
 
 def set_role_sub_type_validated_data(validated_data):
-    if "type_id" in validated_data:
-        type = get_role_type_by_id_string(validated_data["type_id"])
-        validated_data["type_id"] = type.id
+    if "role_type_id" in validated_data:
+        type = get_role_type_by_id_string(validated_data["role_type_id"])
+        validated_data["role_type_id"] = type.id
+    return validated_data
+
+
+def set_user_sub_type_validated_data(validated_data):
+    if "user_type_id" in validated_data:
+        user_type = get_user_type_by_id_string(validated_data["user_type_id"])
+        validated_data["user_type_id"] = user_type.id
     return validated_data

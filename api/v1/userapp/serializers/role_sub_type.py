@@ -6,7 +6,7 @@ from django.db import transaction
 from rest_framework import serializers
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_sub_type import RoleSubType
-from v1.userapp.serializers.role_type import RoleTypeSerializer
+from v1.userapp.serializers.role_type import GetRoleTypeSerializer
 from v1.userapp.views.common_functions import set_role_sub_type_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -21,7 +21,7 @@ class GetRoleSubTypeSerializer(serializers.ModelSerializer):
 class RoleSubTypeListSerializer(serializers.ModelSerializer):
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
+    role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
 
     class Meta:
         model = RoleSubType
@@ -31,7 +31,7 @@ class RoleSubTypeListSerializer(serializers.ModelSerializer):
 class RoleSubTypeViewSerializer(serializers.ModelSerializer):
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    role_type = RoleTypeSerializer(many=False, required=True, source='get_role_type')
+    role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
 
     class Meta:
         model = RoleSubType
@@ -39,7 +39,7 @@ class RoleSubTypeViewSerializer(serializers.ModelSerializer):
 
 
 class RoleSubTypeSerializer(serializers.ModelSerializer):
-    type_id = serializers.CharField(required=False, max_length=200)
+    role_type_id = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=False, max_length=200)
 
     class Meta:
