@@ -15,11 +15,11 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
-from v1.commonapp.models.city import get_city_by_id
-from v1.commonapp.models.country import get_country_by_id
-from v1.commonapp.models.state import get_state_by_id
 
 # Create Tenant Master table start.
+from v1.tenant.models.tenant_city import get_tenant_city_by_id
+from v1.tenant.models.tenant_country import get_tenant_country_by_id
+from v1.tenant.models.tenant_state import get_tenant_state_by_id
 
 
 class TenantMaster(models.Model):
@@ -28,9 +28,9 @@ class TenantMaster(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     email_id = models.CharField(max_length=200, null=True, blank=True)
     mobile_no = models.CharField(max_length=200, blank=True, null=True)
-    city_id = models.BigIntegerField(null=True, blank=True)
-    country_id = models.BigIntegerField(null=True, blank=True)
-    state_id = models.BigIntegerField(null=True, blank=True)
+    tenant_city_id = models.BigIntegerField(null=True, blank=True)
+    tenant_country_id = models.BigIntegerField(null=True, blank=True)
+    tenant_state_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -45,18 +45,18 @@ class TenantMaster(models.Model):
         return self.name
 
     @property
-    def get_country(self):
-        country = get_country_by_id(self.country_id)
+    def get_tenant_country(self):
+        country = get_tenant_country_by_id(self.tenant_country_id)
         return country
 
     @property
-    def get_state(self):
-        state = get_state_by_id(self.state_id)
+    def get_tenant_state(self):
+        state = get_tenant_state_by_id(self.tenant_state_id)
         return state
 
     @property
-    def get_city(self):
-        city = get_city_by_id(self.city_id)
+    def get_tenant_city(self):
+        city = get_tenant_city_by_id(self.tenant_city_id)
         return city
 
 

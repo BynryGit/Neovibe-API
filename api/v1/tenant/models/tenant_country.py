@@ -14,23 +14,20 @@
 
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
-
 from django.db import models  # importing package for database
-
-from v1.tenant.models.tenant_master import TenantMaster
-
 
 # Create Tenant Country table start
 
-class Country(models.Model):
+
+class TenantCountry(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    country = models.BigIntegerField(null=True, blank=True)
-    tenant_region = models.BigIntegerField(null=False, blank=False)
-    is_active = models.BooleanField(default=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    tenant_region_id = models.BigIntegerField(null=False, blank=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -39,3 +36,11 @@ class Country(models.Model):
         return self.name
 
 # Create Tenant Country table end
+
+
+def get_tenant_country_by_id_string(id_string):
+    return TenantCountry.objects.get(id_string = id_string)
+
+
+def get_tenant_country_by_id(id):
+    return TenantCountry.objects.get(id = id)

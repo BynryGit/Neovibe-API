@@ -4,7 +4,7 @@ from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan
 from v1.tenant.models.tenant_subscription_plan_rate import TenantSubscriptionPlanRate
 from v1.tenant.models.tenant_bank_details import TenantBankDetails
 from v1.tenant.models.tenant_city import TenantCity
-from v1.tenant.models.tenant_country import Country
+from v1.tenant.models.tenant_country import TenantCountry
 from v1.tenant.models.tenant_currency import TenantCurrency
 from v1.tenant.models.tenant_invoice_details import TenantInvoiceDetails
 from v1.tenant.models.tenant_invoice_payment import TenantInvoicePayment
@@ -21,7 +21,7 @@ admin.site.register(TenantSubscriptionPlan)
 admin.site.register(TenantSubscriptionPlanRate)
 admin.site.register(TenantBankDetails)
 admin.site.register(TenantCity)
-admin.site.register(Country)
+admin.site.register(TenantCountry)
 admin.site.register(TenantInvoiceDetails)
 admin.site.register(TenantInvoicePayment)
 admin.site.register(TenantInvoices)

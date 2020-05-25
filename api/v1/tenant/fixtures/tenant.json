@@ -1,0 +1,145 @@
+[
+  {
+		"pk": "1",
+		"model": "tenant.TenantRegion",
+		"fields": {
+			"name": "America",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "tenant.TenantRegion",
+		"fields": {
+			"name": "Europe",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "tenant.TenantRegion",
+		"fields": {
+			"name": "Asia",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "tenant.TenantRegion",
+		"fields": {
+			"name": "Africa",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "tenant.TenantCountry",
+		"fields": {
+			"name": "United States",
+			"tenant_region_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "tenant.TenantCountry",
+		"fields": {
+			"name": "Russia",
+			"tenant_region_id": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "tenant.TenantCountry",
+		"fields": {
+			"name": "India",
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "4",
+		"model": "tenant.TenantCountry",
+		"fields": {
+			"name": "India",
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "tenant.TenantState",
+		"fields": {
+			"name": "Maharashtra",
+			"tenant_country_id": 3,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "tenant.TenantState",
+		"fields": {
+			"name": "West Bengal",
+			"tenant_country_id": 4,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "tenant.TenantState",
+		"fields": {
+			"name": "Telangana",
+			"tenant_country_id": 3,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "tenant.TenantState",
+		"fields": {
+			"name": "Andhra Pradesh",
+			"tenant_country_id": 3,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "tenant.TenantCity",
+		"fields": {
+			"name": "Pune",
+			"tenant_state_id": 1,
+			"tenant_country_id": 3,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "tenant.TenantCity",
+		"fields": {
+			"name": "Nashik",
+			"tenant_state_id": 1,
+			"tenant_country_id": 3,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "tenant.TenantCity",
+		"fields": {
+			"name": "Kolkata",
+			"tenant_state_id": 2,
+			"tenant_country_id": 3,
+			"tenant_region_id": 3,
+			"is_active": "True"
+		}
+	}
+]

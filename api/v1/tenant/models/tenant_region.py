@@ -22,12 +22,12 @@ from django.db import models  # importing package for database
 
 class TenantRegion(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    region = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -36,3 +36,11 @@ class TenantRegion(models.Model):
         return self.name
 
 # Create Tenant Region table end.
+
+
+def get_tenant_region_by_id_string(id_string):
+    return TenantRegion.objects.get(id_string = id_string)
+
+
+def get_tenant_region_by_id(id):
+    return TenantRegion.objects.get(id = id)
