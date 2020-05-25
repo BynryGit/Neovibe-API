@@ -15,7 +15,7 @@ class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('id_string', 'submodule_name', 'submodule_desc', 'utility_module', 'tenant', 'utility',)
+        fields = ('id_string', 'submodule_name', 'submodule_desc', 'utility_module', 'is_active', 'tenant', 'utility')
 
 
 class UtilitySubModuleSerializer(serializers.ModelSerializer):
