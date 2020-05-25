@@ -45,20 +45,20 @@ class RoleTypeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         with transaction.atomic():
-            sub_type_obj = super(RoleTypeSerializer, self).create(validated_data)
-            sub_type_obj.created_by = user.id
-            sub_type_obj.created_date = datetime.utcnow()
-            sub_type_obj.tenant = user.tenant
-            sub_type_obj.utility = user.utility
-            sub_type_obj.is_active = True
-            sub_type_obj.save()
-            return sub_type_obj
+            type_obj = super(RoleTypeSerializer, self).create(validated_data)
+            type_obj.created_by = user.id
+            type_obj.created_date = datetime.utcnow()
+            type_obj.tenant = user.tenant
+            type_obj.utility = user.utility
+            type_obj.is_active = True
+            type_obj.save()
+            return type_obj
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():
-            sub_type_obj = super(RoleTypeSerializer, self).update(instance, validated_data)
-            sub_type_obj.updated_by = user.id
-            sub_type_obj.updated_date = datetime.utcnow()
-            sub_type_obj.is_active = True
-            sub_type_obj.save()
-            return sub_type_obj
+            type_obj = super(RoleTypeSerializer, self).update(instance, validated_data)
+            type_obj.updated_by = user.id
+            type_obj.updated_date = datetime.utcnow()
+            type_obj.is_active = True
+            type_obj.save()
+            return type_obj
