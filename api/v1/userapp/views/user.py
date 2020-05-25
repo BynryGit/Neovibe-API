@@ -78,7 +78,7 @@ class User(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_user_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         serializer = UserSerializer(data=request.data)
                         if serializer.is_valid():
                             if is_username_exists(request.data['username']):
@@ -171,7 +171,7 @@ class UserDetail(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_user_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
                         if user_obj:
                             serializer = UserSerializer(data=request.data)
@@ -264,7 +264,7 @@ class UserBankDetail(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_user_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
                         if user_obj:
                             serializer = UserSerializer(data=request.data)
@@ -308,7 +308,7 @@ class UserBankDetail(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_user_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
                         if user_obj:
                             serializer = UserSerializer(data=request.data)
@@ -406,7 +406,7 @@ class UserRole(GenericAPIView):
                 if is_authorized():
                     data = []
                     if is_user_role_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
                             validated_data = set_user_role_validated_data(validate_data)
@@ -450,7 +450,7 @@ class UserRole(GenericAPIView):
                 if is_authorized():
                     data = []
                     if is_user_role_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
                                              "is_active": role['is_active']}

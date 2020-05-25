@@ -70,7 +70,7 @@ class Privilege(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_privilege_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         serializer = PrivilegeSerializer(data=request.data)
                         if serializer.is_valid():
                             privilege_obj = serializer.create(serializer.validated_data, user)
@@ -156,7 +156,7 @@ class PrivilegeDetail(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_privilege_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         role_obj = get_privilege_by_id_string(id_string)
                         if role_obj:
                             serializer = PrivilegeSerializer(data=request.data)
