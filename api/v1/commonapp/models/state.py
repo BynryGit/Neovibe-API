@@ -12,10 +12,16 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
+
 # Create State table start
+
 
 class State(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     country = models.BigIntegerField(blank=False, null=False)
     region = models.BigIntegerField(blank=False, null=False)

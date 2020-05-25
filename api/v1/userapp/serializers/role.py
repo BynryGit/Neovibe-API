@@ -37,6 +37,8 @@ class RoleSerializer(serializers.ModelSerializer):
             role_obj.utility = user.utility
             role_obj.is_active = True
             role_obj.save()
+            role_obj.role_ID = str(role_obj.role) + str(role_obj.tenant) + str(role_obj.utility)
+            role_obj.save()
             return role_obj
 
     def update(self, instance, validated_data, user):

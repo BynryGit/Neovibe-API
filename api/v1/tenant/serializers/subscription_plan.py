@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
-from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan
+from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan as TenantSubscriptionPlanTbl
 from v1.tenant.views.common_functions import set_validated_data, set_validated_data_subscription_plan
 
 
@@ -11,7 +11,7 @@ class SubscriptionPlanListSerializer(serializers.ModelSerializer):
     # status = TenantStatusViewSerializer(many=False, required=True, source='get_status')
 
     class Meta:
-        model = TenantSubscriptionPlan
+        model = TenantSubscriptionPlanTbl
         fields = ( 'id_string','subscription_id','short_name','subcription_type','subscription_name',
                    'description','max_utility','max_user','max_consumer','max_storage','is_active')
 
@@ -21,7 +21,7 @@ class SubscriptionPlanViewSerializer(serializers.ModelSerializer):
     # tenant = serializers.ReadOnlyField(source='tenant.name')
 
     class Meta:
-        model = TenantSubscriptionPlan
+        model = TenantSubscriptionPlanTbl
         fields = ('id_string', 'subscription_id', 'short_name', 'subcription_type','subscription_name',
                   'description', 'max_utility', 'max_user', 'max_consumer', 'max_storage', 'is_active')
 
@@ -40,16 +40,16 @@ class SubscriptionPlanSerializer(serializers.ModelSerializer):
     max_storage = serializers.CharField(required=False, max_length=200)
 
     class Meta:
-        model = TenantSubscriptionPlan
+        model = TenantSubscriptionPlanTbl
         fields = ('__all__')
 
-    def create(self, validated_data):
+    def create(self, validated_data,user):
         validated_data = set_validated_data_subscription_plan(validated_data)
         with transaction.atomic():
             subscription_plan_obj = super(SubscriptionPlanSerializer, self).create(validated_data)
-            # tenant_obj.created_by = user.id
-            # tenant_obj.created_date = datetime.utcnow()
-            # tenant_obj.tenant = user.tenant
+            subscription_plan_obj.created_by = user.id
+            subscription_plan_obj.created_date = datetime.utcnow()
+            subscription_plan_obj.tenant = user.tenant
             subscription_plan_obj.save()
             return subscription_plan_obj
 

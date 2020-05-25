@@ -448,5 +448,430 @@
 			"name": "cancel",
 			"is_active": "True"
 			}
+	},
+
+
+
+	{
+		"pk": "1",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "11",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "12",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"user_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"user_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"user_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"user_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+
+
+
+{
+		"pk": "1",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"service_request": 1,
+			"service_type": ,
+			"status_id": 1,
+			"maintenance_cost": 2000,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"service_request": 2,
+			"service_type": ,
+			"status_id": 3,
+			"maintenance_cost": 3000,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"service_request": 3,
+			"service_type": ,
+			"status_id": 8,
+			"maintenance_cost": 2000,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"service_request": 4,
+			"service_type": ,
+			"status_id": 11,
+			"maintenance_cost": 3000,
+			"is_active": "True"
+			}
+	},
+
+
+{
+		"pk": "1",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"sop_master_detail": 1,
+			"frequency_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"sop_master_detail": 2,
+			"frequency_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"sop_master_detail": 3,
+			"frequency_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"sop_master_detail": 4,
+			"frequency_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+
+{
+		"pk": "1",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Cash",
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Payment Gateway",
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Cash",
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Payment Gateway",
+			"is_active": "True"
+			}
+	},
+
+
+{
+		"pk": "1",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"contract_no": 23,
+			"contract_name": "Electrical maintenance",
+			"contract_provider": "Electrical supply ltd",
+			"cost": 5000,
+			"no_of_services": 5,
+			"frequency":,
+			"sop": 1,
+			"effective_start_date":"1/07/2020",
+			"effective_end_date":"1/07/2021",
+			"is_active": "True"
+			}
+	},
+
+{
+		"pk": "2",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"contract_no": 20,
+			"contract_name": "IT maintenance",
+			"contract_provider": "Soft solutions",
+			"cost": 3000,
+			"no_of_services": 3,
+			"frequency":,
+			"sop": 2,
+			"effective_start_date":"1/08/2020",
+			"effective_end_date":"1/08/2021",
+			"is_active": "True"
+			}
+	},
+
+
+{
+		"pk": "3",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"contract_no": 56,
+			"contract_name": "Electrical maintenance",
+			"contract_provider": "VGS powers",
+			"cost": 5000,
+			"no_of_services": 6,
+			"frequency":,
+			"sop": 3,
+			"effective_start_date":"1/07/2020",
+			"effective_end_date":"1/07/2021",
+			"is_active": "True"
+			}
+	},
+
+{
+		"pk": "4",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"contract_no": 85,
+			"contract_name": "IT maintenance",
+			"contract_provider": "Soft solutions",
+			"cost": 3000,
+			"no_of_services": 4,
+			"frequency":,
+			"sop": 4,
+			"effective_start_date":"1/08/2020",
+			"effective_end_date":"1/08/2021",
+			"is_active": "True"
+			}
 	}
 ]

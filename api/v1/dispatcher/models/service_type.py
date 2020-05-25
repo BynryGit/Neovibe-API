@@ -1,16 +1,3 @@
-# Table Header
-# Module : O&M
-# Table Type : Lookup (Local)
-# Table Name : 2.12.79 SOP Status
-# Description : It  SOP Status and ID of various SOP Status to be used by Operator or Utility
-# Frequency of data changes : Low
-# Sample Table Data :
-# Reference Table : 2.6.7 Closure Report Transaction
-# Author : Jayshree Kumbhare
-# Creation Date : 22/04/2020
-
-# change history
-# <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
@@ -19,11 +6,10 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-# Create Sop Status table start
+# Create Service Type table start
 
-class SopStatus(models.Model):
+class ServiceTypes(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -38,4 +24,16 @@ class SopStatus(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Sop Status table end
+def get_service_type_by_id_string(id_string):
+    try:
+        return ServiceTypes.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_service_type_by_id(id):
+    try:
+        return ServiceTypes.objects.get(id=id)
+    except:
+        return False
+
+# Create Task Type table end

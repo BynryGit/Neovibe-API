@@ -31,7 +31,7 @@ class Asset(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    asset_no = models.CharField(max_length=200, blank=True, null=True)
+    asset_no = models.CharField(max_length=500, blank=True, null=True,unique=True)
     description = models.CharField(max_length=200, blank=True, null=True)
     serial_no = models.BigIntegerField(null=True, blank=True)
     manufacturer = models.CharField(max_length=200, blank=True, null=True)
