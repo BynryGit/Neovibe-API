@@ -2,11 +2,11 @@ from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
 from api.settings import DISPLAY_DATE_TIME_FORMAT
-from v1.commonapp.serializers.city import CitySerializer
-from v1.commonapp.serializers.country import CountrySerializer
-from v1.commonapp.serializers.state import StateSerializer
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.models.tenant_status import TenantStatus
+from v1.tenant.serializers.tenant_city import TenantCitySerializer
+from v1.tenant.serializers.tenant_country import TenantCountrySerializer
+from v1.tenant.serializers.tenant_state import TenantStateSerializer
 from v1.tenant.views.common_functions import set_validated_data
 
 
@@ -25,9 +25,9 @@ class TenantStatusViewSerializer(serializers.ModelSerializer):
 
 
 class TenantMasterViewSerializer(serializers.ModelSerializer):
-    country_id = CountrySerializer(many=False, required=False, source='get_country')
-    state_id = StateSerializer(many=False, required=False, source='get_state')
-    city_id = CitySerializer(many=False, required=False, source='get_city')
+    country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
+    state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
+    city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
