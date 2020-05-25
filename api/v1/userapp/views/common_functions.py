@@ -165,3 +165,10 @@ def set_document_validated_data(validated_data):
         user = get_user_by_id_string(validated_data["identification_id"])
         validated_data["identification_id"] = user.id
     return validated_data
+
+
+def set_role_sub_type_validated_data(validated_data):
+    if "type_id" in validated_data:
+        type = get_role_type_by_id_string(validated_data["type_id"])
+        validated_data["type_id"] = type.id
+    return validated_data

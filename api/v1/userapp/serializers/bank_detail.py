@@ -28,6 +28,8 @@ class BankSerializer(serializers.ModelSerializer):
 
 
 class UserBankViewSerializer(serializers.ModelSerializer):
+    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
         model = UserBankDetail
