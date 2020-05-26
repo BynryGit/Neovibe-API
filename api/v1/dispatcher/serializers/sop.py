@@ -5,7 +5,7 @@ from rest_framework import serializers
 from datetime import datetime
 from django.db import transaction
 from v1.dispatcher.models.sop_master import SopMaster
-from v1.dispatcher.serializers.service_type import ServiceTypeListSerializer
+from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
 from v1.commonapp.serializers.city import CitySerializer
 
 

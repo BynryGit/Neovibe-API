@@ -2161,6 +2161,54 @@
 			"name": "Material",
 			"is_active": "True"
 		}
+	},
+	{
+		"pk": "1",
+		"model": "commonapp.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Installation",
+			"is_active": "True",
+			"created_by": 2,
+			"updated_by": 2
+			}
+	},
+  {
+		"pk": "2",
+		"model": "commonapp.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Conversion",
+			"is_active": "True",
+			"created_by": 2,
+			"updated_by": 2
+			}
+	},
+  {
+		"pk": "3",
+		"model": "commonapp.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Maintenance",
+			"is_active": "True",
+			"created_by": 2,
+			"updated_by": 2
+			}
+	},
+	  {
+		"pk": "4",
+		"model": "commonapp.ServiceType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Emergency",
+			"is_active": "True",
+			"created_by": 2,
+			"updated_by": 2
+			}
 	}
 
 ]

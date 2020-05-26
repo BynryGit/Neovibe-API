@@ -18,7 +18,13 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
+from v1.consumer.models.consumer_master import get_consumer_by_id
+from v1.asset.models.asset_master import get_asset_by_id
+from v1.commonapp.models.service_type import get_service_type_by_id
+from v1.dispatcher.models.sop_status import get_sop_status_by_id
 # Create Service Request table start
 
 class ServiceRequest(models.Model):
@@ -26,7 +32,7 @@ class ServiceRequest(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     service_type_id = models.BigIntegerField(null=True, blank=True)
-    service_no = models.BigIntegerField(null=True, blank=True)
+    service_no = models.CharField(max_length=500, blank=True, null=True)
     service_name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     consumer_id = models.BigIntegerField(null=True, blank=True)
@@ -56,6 +62,53 @@ class ServiceRequest(models.Model):
 
     def __unicode__(self):
         return str(self.service_no) + '-' + str(self.service_name)
+
+    @property
+    def get_service_type(self):
+        service_type_id = get_service_type_by_id(self.service_type_id)
+        return service_type_id
+
+    @property
+    def get_city(self):
+        city_id = get_city_by_id(self.city_id)
+        return city_id
+
+    @property
+    def get_area(self):
+        area_id = get_area_by_id(self.area_id)
+        return area_id
+
+    @property
+    def get_sub_area(self):
+        sub_area_id = get_sub_area_by_id(self.sub_area_id)
+        return sub_area_id
+
+    @property
+    def get_consumer(self):
+        consumer_id = get_consumer_by_id(self.consumer_id)
+        return consumer_id
+
+    @property
+    def get_asset(self):
+        asset_id = get_asset_by_id(self.asset_id)
+        return asset_id
+
+    @property
+    def get_sop_status(self):
+        status_id = get_sop_status_by_id(self.status_id)
+        return status_id
+
+def get_service_request_by_id_string(id_string):
+    try:
+        return ServiceRequest.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_service_request_by_id(id):
+    try:
+        return ServiceRequest.objects.get(id=id)
+    except:
+        return False
 
 # Create Service Request table end.
 
