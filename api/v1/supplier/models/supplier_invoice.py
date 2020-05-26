@@ -43,10 +43,10 @@ class SupplierInvoice(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.invoice_no
+        return str(self.invoice_no)
 
     def __unicode__(self):
-        return self.invoice_no
+        return str(self.invoice_no)
 
 # Create Invoice table end.
 

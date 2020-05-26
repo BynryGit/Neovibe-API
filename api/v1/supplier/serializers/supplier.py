@@ -30,13 +30,11 @@ class SupplierViewSerializer(serializers.ModelSerializer):
 
 
 class SupplierSerializer(serializers.ModelSerializer):
-    tenant = serializers.UUIDField(required=True, source='tenant.id_string')
-    utility = serializers.UUIDField(required=True, source='utility.id_string')
-    country_id = serializers.IntegerField(required=False)
-    state_id = serializers.IntegerField(required=False)
-    city_id = serializers.IntegerField(required=False)
-    source = serializers.IntegerField(required=False)
-    status_id = serializers.IntegerField(required=False)
+    country_id = serializers.UUIDField(required=False)
+    state_id = serializers.UUIDField(required=False)
+    city_id = serializers.UUIDField(required=False)
+    source = serializers.UUIDField(required=False)
+    status_id = serializers.UUIDField(required=False)
     name = serializers.CharField(required=True, max_length=500)
     description = serializers.CharField(required=True, max_length=500)
     email_id = serializers.CharField(required=False, max_length=500)
@@ -48,16 +46,12 @@ class SupplierSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_supplier_validated_data(validated_data)
-        if SupplierTbl.objects.filter(tenant=validated_data["tenant"], utility=validated_data["utility"], name=validated_data["name"]).exists():
+        if SupplierTbl.objects.filter(tenant=user.tenant, utility=user.utility, name=validated_data["name"]).exists():
             return False
         with transaction.atomic():
-            if 'tenant' in validated_data:
-                tenant = validated_data.pop('tenant')
-            if 'utility' in validated_data:
-                utility = validated_data.pop('utility')
             utility_obj = super(SupplierSerializer, self).create(validated_data)
-            utility_obj.tenant_id = tenant
-            utility_obj.utility_id = utility
+            utility_obj.tenant = user.tenant
+            utility_obj.utility = user.utility
             utility_obj.created_by = user.id
             utility_obj.save()
             return utility_obj
@@ -65,13 +59,9 @@ class SupplierSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_supplier_validated_data(validated_data)
         with transaction.atomic():
-            if 'tenant' in validated_data:
-                tenant = validated_data.pop('tenant')
-            if 'utility' in validated_data:
-                utility = validated_data.pop('utility')
             utility_obj = super(SupplierSerializer, self).update(instance, validated_data)
-            utility_obj.tenant_id = tenant
-            utility_obj.utility_id = utility
+            utility_obj.tenant = user.tenant
+            utility_obj.utility = user.utility
             utility_obj.updated_by = user.id
             utility_obj.updated_date = timezone.now()
             utility_obj.save()
