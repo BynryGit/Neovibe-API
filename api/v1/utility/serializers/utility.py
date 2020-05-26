@@ -16,10 +16,11 @@ class UtilitySerializer(serializers.ModelSerializer):
 
 class UtilityMasterViewSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
 
     class Meta:
         model = UtilityMasterTbl
-        fields = ('id_string', 'tenant_name', 'short_name', 'name', 'phone_no', 'email_id')
+        fields = ('id_string', 'tenant_id_string', 'tenant_name', 'short_name', 'name', 'phone_no', 'email_id')
 
 
 class UtilityMasterSerializer(serializers.ModelSerializer):
@@ -41,6 +42,8 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_utility_validated_data(validated_data)
+        if UtilityMasterTbl.objects.filter(tenant=validated_data["tenant"], name=validated_data["name"]).exists():
+            return False
         with transaction.atomic():
             if 'tenant' in validated_data:
                 tenant = validated_data.pop('tenant')

@@ -53,10 +53,10 @@ class SupplierPayment(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.invoice
+        return str(self.txn_id)
 
     def __unicode__(self):
-        return self.invoice
+        return str(self.txn_id)
 
 # Create Payment table end.
 

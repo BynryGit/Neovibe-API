@@ -6,8 +6,8 @@
 			"name" : "MNGL",
 			"email_id" : "info@mngl.in",
 			"mobile_no" : 18002662696,
-			"country_id" : 3,
-			"state_id" : 1,
+			"tenant_country_id" : 3,
+			"tenant_state_id" : 1,
 			"is_active" : "True"
 		}
 	},
@@ -18,8 +18,8 @@
 			"name": "BGCL",
 			"email_id": "info@bgcl.in",
 			"mobile_no": 23248070,
-			"country_id": 3,
-			"state_id": 2,
+			"tenant_country_id": 3,
+			"tenant_state_id": 2,
 			"is_active": "True"
 		}
 	},
@@ -30,8 +30,8 @@
 			"name": "INFRA MARK",
 			"email_id": "infra@gmail.com",
 			"mobile_no": 9550209071,
-			"country_id": 1,
-			"state_id": 5,
+			"tenant_country_id": 1,
+			"tenant_state_id": 5,
 			"is_active": "True"
 		}
 	},
@@ -42,8 +42,8 @@
 			"name": "GAIL",
 			"email_id": "gail@gmail.com",
 			"mobile_no": 7020929071,
-			"country_id": 3,
-			"state_id": 1,
+			"tenant_country_id": 3,
+			"tenant_state_id": 1,
 			"is_active": "True"
 		}
 	},

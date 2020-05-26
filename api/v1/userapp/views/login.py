@@ -9,7 +9,7 @@ from rest_framework import status
 from api.messages import *
 from api.settings import SECRET_KEY
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_user_by_username, get_user_by_id_string
+from v1.userapp.models.user_master import get_user_by_username
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id
 
 
@@ -22,17 +22,34 @@ from v1.userapp.models.user_token import UserToken, get_token_by_user_id
 # Usage: API will fetch required data for user list
 # Tables used: 2.5.3. User Details
 # Author: Arpita
-# Created on: 29/04/2020
+# Created on: 23/05/2020
 
-def login(user):
+def login(request, user):
     try:
         user_obj = get_user_by_username(user.username)
         token_obj = get_token_by_user_id(user_obj.id)
+        if 'imei' in request.data:
+            if request.data['imei'] != user_obj.imei:
+                return False
         if token_obj:
             token_obj.delete()
         payload = {'id_string': str(user_obj.id_string)}
         encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
-        token_obj = UserToken(user_id=user_obj.id, token=encoded_jwt)
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        token_obj = UserToken(
+            tenant=user_obj.tenant,
+            utility=user_obj.utility,
+            form_factor=user_obj.form_factor_id,
+            user_id=user_obj.id,
+            token=encoded_jwt,
+            ip_address = ip,
+            created_by=user.id,
+            is_active = True
+        )
         token_obj.save()
         return token_obj.token
     except Exception as e:
@@ -51,7 +68,7 @@ class LoginApiView(APIView):
             auth = authenticate(username=username, password=password)
 
             if auth:
-                token = login(auth)  # Call Login function
+                token = login(request, auth)  # Call Login function
 
                 if not token:
                     return Response({

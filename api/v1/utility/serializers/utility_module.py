@@ -14,20 +14,15 @@ class UtilityModuleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('id_string', 'module_name', 'module_desc', 'subscription_id', 'tenant', 'utility',)
+        fields = ('id_string', 'module_name', 'module_desc', 'subscription_id', 'is_active', 'tenant', 'utility',)
 
 
 class UtilityModuleSerializer(serializers.ModelSerializer):
-    tenant = serializers.UUIDField(required=False, source='tenant.id_string')
-    utility = serializers.UUIDField(required=False, source='utility.id_string')
-    subscription_id = serializers.IntegerField(required=False)
-    module_name = serializers.CharField(required=False, max_length=500)
-    module_desc = serializers.CharField(required=False, max_length=500)
     is_active = serializers.BooleanField(required=True)
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('tenant', 'utility', 'subscription_id', 'module_name', 'module_desc', 'is_active')
+        fields = ('is_active',)
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():

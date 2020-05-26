@@ -39,7 +39,7 @@ class RolePrivilege(GenericAPIView):
                 if is_authorized():
                     data = []
                     if is_role_privilege_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         module_list = request.data['module_id']
                         for module in module_list:
                             validate_data = {}
@@ -132,7 +132,7 @@ class RolePrivilegeDetail(GenericAPIView):
                         return Response({
                             STATE: EXCEPTION,
                             RESULTS: '',
-                        }, status=status.HTTP_204_NO_CONTENT)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -158,7 +158,7 @@ class RolePrivilegeDetail(GenericAPIView):
                 if is_authorized():
                     data = []
                     if is_role_privilege_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         role = get_role_by_id_string(id_string)
                         if role:
                             module_list = request.data['module_id']

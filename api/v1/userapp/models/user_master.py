@@ -43,6 +43,7 @@ class UserDetail(User):
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
+    imei = models.CharField(max_length=50, null=True, blank=True)  # Web, Mobile
     user_ID = models.CharField(max_length=200,null=True, blank=True)  # Web, Mobile
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     user_image = models.URLField(null=True, blank=True)
@@ -111,11 +112,11 @@ def get_all_users():
 
 
 def get_user_by_id_string(id_string):
-    return UserDetail.objects.filter(id_string = id_string, is_active=True).last()
+    return UserDetail.objects.filter(id_string=id_string, is_active=True).last()
 
 
 def get_user_by_id(id):
-    user = UserDetail.objects.filter(id = id, is_active=True).last()
+    user = UserDetail.objects.filter(id=id, is_active=True).last()
     return user
 
 

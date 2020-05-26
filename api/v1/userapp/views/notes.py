@@ -51,7 +51,7 @@ class UserNote(GenericAPIView):
                             return Response({
                                 STATE: ERROR,
                                 RESULTS: '',
-                            }, status=status.HTTP_204_NO_CONTENT)
+                            }, status=status.HTTP_404_NOT_FOUND)
                     else:
                         return Response({
                             STATE: ERROR,
@@ -77,7 +77,7 @@ class UserNote(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_note_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         request.data['identification_id'] = str(id_string)
                         serializer = NoteSerializer(data=request.data)
                         if serializer.is_valid():
@@ -116,7 +116,7 @@ class UserNote(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_note_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         request.data['identification_id'] = str(id_string)
                         note = get_note_by_id_string(request.data['note_id'])
                         if note:

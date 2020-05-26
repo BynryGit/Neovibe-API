@@ -31,7 +31,7 @@ class SupplierProductSerializer(serializers.ModelSerializer):
         model = SupplierProductTbl
         fields = ('__all__')
 
-    def create(self, validated_data, user):
+    def create(self, validated_data, supplier_obj, user):
         validated_data = set_supplier_product_validated_data(validated_data)
         with transaction.atomic():
             utility_obj = super(SupplierProductSerializer, self).create(validated_data)

@@ -3,7 +3,7 @@ __author__ = "aki"
 import traceback
 from rest_framework import generics
 from v1.commonapp.serializers.country import CountrySerializer
-from v1.tenant.models.tenant_country import Country as CountryTbl
+from v1.tenant.models.tenant_country import TenantCountry as TenantCountryTbl
 from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
@@ -37,7 +37,7 @@ class CountryList(generics.ListAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    country_obj = CountryTbl.objects.filter(is_active=True)
+                    country_obj = TenantCountryTbl.objects.filter(is_active=True)
                     if country_obj:
                         serializer = CountrySerializer(country_obj, many=True)
                         return Response({
