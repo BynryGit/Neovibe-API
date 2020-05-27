@@ -206,9 +206,11 @@ class SupplierProductDetail(GenericAPIView):
                         serializer = SupplierProductSerializer(data=request.data)
                         if serializer.is_valid():
                             supplier_product_obj = serializer.update(supplier_product_obj, serializer.validated_data, user)
+                            serializer = SupplierProductViewSerializer(supplier_product_obj,
+                                                                       context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULT: {'supplier_product_id_string': supplier_product_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
