@@ -29,23 +29,18 @@ class VendorSerializer(serializers.ModelSerializer):
         fields = ('id_string','name')
 
 class ServiceAssignmentViewSerializer(serializers.ModelSerializer):
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
     service_request_id = ServiceRequestSerializer(many=False, required=True, source='get_service_request')
     service_type_id = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     city_id = CitySerializer(many=False, required=True, source='get_city')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT,read_only=True)
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     status_id = SOPStatusSerializer(many=False, required=True, source='get_sop_status')
     vendor_id = VendorSerializer(many=False, required=True, source='get_vendor')
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
+    completion_date =serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    assigned_date =serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    start_date =serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
 
 
     class Meta:
@@ -57,9 +52,9 @@ class ServiceAssignmentViewSerializer(serializers.ModelSerializer):
 
 
 class ServiceAssignmentSerializer(serializers.ModelSerializer):
-    assigned_date = serializers.CharField(required=False, max_length=200)
-    start_date = serializers.CharField(required=False, max_length=200)
-    completion_date = serializers.CharField(required=False, max_length=200)
+    assigned_date = serializers.DateTimeField(required=False,format="%d-%m-%Y")
+    start_date = serializers.DateTimeField(required=False,format="%d-%m-%Y")
+    completion_date = serializers.DateTimeField(required=False,format="%d-%m-%Y")
     defined_duration = serializers.CharField(required=False, max_length=200)
     actual_duration = serializers.CharField(required=False, max_length=200)
     service_request_id = serializers.CharField(required=False, max_length=200)

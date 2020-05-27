@@ -7,7 +7,6 @@ from django.db import transaction
 from v1.asset.models.asset_master import Asset as AssetTbl
 from v1.asset.models.asset_status import AssetStatus as AssetStatusTbl
 from v1.asset.views.common_function import set_asset_validated_data
-from datetime import datetime
 from django.db import transaction
 from v1.asset.serializer.asset_status import AssetStatusListSerializer
 from v1.asset.serializer.category import AssetCategoryListSerializer
@@ -42,12 +41,10 @@ class AssetListSerializer(serializers.ModelSerializer):
 class AssetViewSerializer(serializers.ModelSerializer):
 
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    manuf_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, required=False, read_only=True,source='manufacturing_date')
-    install_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, required=False, read_only=True,source='installation_date')
-    exp_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, required=False, read_only=True,source='expiry_date')
-    # manufacturing_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    # installation_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    # expiry_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    manufacturing_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    installation_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    expiry_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT,read_only=True)
     category_id = AssetCategoryListSerializer(many=False, required=True, source='get_category')
     sub_category_id = AssetSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     status_id = AssetStatusListSerializer(many=False, required=True, source='get_status')
@@ -60,7 +57,7 @@ class AssetViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssetTbl
         fields = ('id_string', 'tenant_name', 'name', 'asset_no', 'description', 'address', 'serial_no', 'manufacturer', 'make',
-            'model', 'lat', 'long', 'manuf_date','install_date', 'exp_date', 'asset_life', 'asset_value', 'deprecation_method', 'deprecation_rate',
+            'model', 'lat', 'long', 'manufacturing_date','installation_date', 'expiry_date', 'asset_life', 'asset_value', 'deprecation_method', 'deprecation_rate',
             'flag','city_id', 'area_id', 'sub_area_id', 'category_id', 'sub_category_id','status_id','created_date')
 
 
@@ -80,9 +77,9 @@ class AssetSerializer(serializers.ModelSerializer):
     sub_category_id = serializers.CharField(required=False, max_length=200)
     lat = serializers.CharField(required=False, max_length=200)
     long = serializers.CharField(required=False, max_length=200)
-    manufacturing_date = serializers.CharField(required=False, max_length=200)
-    installation_date = serializers.CharField(required=False, max_length=200)
-    expiry_date = serializers.CharField(required=False, max_length=200)
+    manufacturing_date = serializers.DateTimeField(format="%Y-%m-%d")
+    installation_date = serializers.DateTimeField(format="%Y-%m-%d")
+    expiry_date = serializers.DateTimeField(format="%Y-%m-%d")
     asset_life = serializers.CharField(required=False, max_length=200)
     asset_value = serializers.CharField(required=False, max_length=200)
     deprecation_method = serializers.CharField(required=False, max_length=200)

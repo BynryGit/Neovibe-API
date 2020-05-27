@@ -31,7 +31,7 @@ class ServiceAssignment(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=2)
+                    user = UserDetail.objects.get(id=5)
                     if is_data_verified(request):
                         asset_obj = get_asset_by_id_string(id_string)
                         serializer = ServiceAssignmentSerializer(data=request.data)

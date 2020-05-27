@@ -1,6 +1,6 @@
 __author__ = "Priyanka"
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings import DISPLAY_DATE_TIME_FORMAT,INPUT_DATE_FORMAT
 from rest_framework import serializers
 from datetime import datetime
 from django.db import transaction
@@ -37,22 +37,14 @@ class AssetSerializer(serializers.ModelSerializer):
 
 class ServiceRequestViewSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
     service_type_id = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     city_id = CitySerializer(many=False, required=True, source='get_city')
     consumer_id = ConsumerSerializer(many=False, required=True, source='get_consumer')
     asset_id = AssetSerializer(many=False, required=True, source='get_asset')
-    created_date = serializers.SerializerMethodField('get_created_date')
-    start_date = serializers.SerializerMethodField('get_start_date')
-    end_date = serializers.SerializerMethodField('get_end_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT,read_only=True)
+    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
     # status_id = SOPStatusSerializer(many=False, required=True, source='get_sop_status')
@@ -74,8 +66,8 @@ class ServiceRequestSerializer(serializers.ModelSerializer):
     city_id = serializers.CharField(required=False, max_length=200)
     area_id = serializers.CharField(required=False, max_length=200)
     sub_area_id = serializers.CharField(required=False, max_length=200)
-    start_date = serializers.CharField(required=False, max_length=200)
-    end_date = serializers.CharField(required=False, max_length=200)
+    start_date = serializers.DateTimeField(required=False,format="%d-%m-%Y")
+    end_date = serializers.DateTimeField(required=False,format="%d-%m-%Y")
     status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:

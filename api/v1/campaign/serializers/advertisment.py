@@ -58,24 +58,15 @@ class AdvertismentViewSerializer(serializers.ModelSerializer):
 
 class AdvertismentListSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     campaign = CampaignSerializer(many=False, required=True,source='get_campaign')
     group = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
     advert_type = AdvertisementTypeSerializer(many=False, required=True, source='get_advert_type')
     status = AdvertStatusSerializer(many=False, required=True, source='get_advert_status')
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    created_date = serializers.SerializerMethodField('get_created_date')
-    start_date = serializers.SerializerMethodField('get_start_date')
-    end_date = serializers.SerializerMethodField('get_end_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
 
     class Meta:
         model = Advertisements
@@ -91,8 +82,8 @@ class AdvertisementSerializer(serializers.ModelSerializer):
     actual_consumers = serializers.CharField(required=False, max_length=200)
     budget_amount = serializers.CharField(required=False, max_length=200)
     actual_amount = serializers.CharField(required=False, max_length=200)
-    start_date = serializers.CharField(required=False, max_length=200)
-    end_date = serializers.CharField(required=False, max_length=200)
+    start_date = serializers.DateTimeField(format="%Y-%m-%d")
+    end_date = serializers.DateTimeField(format="%Y-%m-%d")
     campaign_id = serializers.CharField(required=False, max_length=200)
     group_id = serializers.CharField(required=False, max_length=200)
     objective_id = serializers.CharField(required=False, max_length=200)
