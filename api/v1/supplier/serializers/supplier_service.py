@@ -43,21 +43,21 @@ class SupplierServiceSerializer(serializers.ModelSerializer):
                                              supplier=supplier_obj.id, name=validated_data["name"]).exists():
             return False
         with transaction.atomic():
-            utility_obj = super(SupplierServiceSerializer, self).create(validated_data)
-            utility_obj.tenant = user.tenant
-            utility_obj.utility = user.utility
-            utility_obj.supplier = supplier_obj.id
-            utility_obj.created_by = user.id
-            utility_obj.save()
-            return utility_obj
+            supplier_service_obj = super(SupplierServiceSerializer, self).create(validated_data)
+            supplier_service_obj.tenant = user.tenant
+            supplier_service_obj.utility = user.utility
+            supplier_service_obj.supplier = supplier_obj.id
+            supplier_service_obj.created_by = user.id
+            supplier_service_obj.save()
+            return supplier_service_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_supplier_service_validated_data(validated_data)
         with transaction.atomic():
-            utility_obj = super(SupplierServiceSerializer, self).update(instance, validated_data)
-            utility_obj.tenant = user.tenant
-            utility_obj.utility = user.utility
-            utility_obj.updated_by = user.id
-            utility_obj.updated_date = timezone.now()
-            utility_obj.save()
-            return utility_obj
+            supplier_service_obj = super(SupplierServiceSerializer, self).update(instance, validated_data)
+            supplier_service_obj.tenant = user.tenant
+            supplier_service_obj.utility = user.utility
+            supplier_service_obj.updated_by = user.id
+            supplier_service_obj.updated_date = timezone.now()
+            supplier_service_obj.save()
+            return supplier_service_obj

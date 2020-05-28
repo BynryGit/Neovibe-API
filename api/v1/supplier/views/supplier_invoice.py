@@ -94,9 +94,9 @@ class SupplierInvoice(GenericAPIView):
                     if supplier_obj:
                         serializer = SupplierInvoiceSerializer(data=request.data)
                         if serializer.is_valid():
-                            supplier_invoice = serializer.create(serializer.validated_data, supplier_obj, user)
-                            if supplier_invoice:
-                                serializer = SupplierInvoiceViewSerializer(supplier_invoice, context={'request': request})
+                            supplier_invoice_obj = serializer.create(serializer.validated_data, supplier_obj, user)
+                            if supplier_invoice_obj:
+                                serializer = SupplierInvoiceViewSerializer(supplier_invoice_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULT: serializer.data,

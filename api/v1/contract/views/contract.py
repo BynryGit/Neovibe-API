@@ -7,51 +7,45 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, RESULT, DATA_ALREADY_EXISTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, \
-    ObjectNotFoundException
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.supplier.models.supplier import get_supplier_by_id_string
-from v1.supplier.serializers.supplier_payment import SupplierPaymentViewSerializer, SupplierPaymentSerializer
+from v1.contract.serializers.contract import ContractViewSerializer, ContractSerializer
 from v1.userapp.models.user_master import UserDetail
-from v1.supplier.models.supplier_payment import SupplierPayment as SupplierPaymentTbl, get_supplier_payment_by_id_string
+from v1.contract.models.contracts import Contract as ContractTbl, get_contract_by_id_string
 
 
 # API Header
-# API end Point: api/v1/supplier/id_string/payment/list
+# API end Point: api/v1/contract/list
 # API verb: GET
 # Package: Basic
-# Modules: Supplier
-# Sub Module: Payment
-# Interaction: Get supplier payment list
-# Usage: API will fetch required data for supplier payment list.
-# Tables used: 2.5.10 SupplierPayment
+# Modules: Contract
+# Sub Module: Contract
+# Interaction: Get contract list
+# Usage: API will fetch required data for contract list.
+# Tables used: Contract
 # Author: Akshay
-# Created on: 22/05/2020
+# Created on: 28/05/2020
 
 
-class SupplierPaymentList(generics.ListAPIView):
+class ContractList(generics.ListAPIView):
     try:
-        serializer_class = SupplierPaymentViewSerializer
+        serializer_class = ContractViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('tenant__id_string', 'utility__id_string')
-        ordering_fields = ('tenant__name', 'utility__name')
-        ordering = ('tenant__name',)  # always give by default alphabetical order
-        search_fields = ('tenant__name', 'utility__name',)
+        filter_fields = ('name', 'tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name',)
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    supplier_obj = get_supplier_by_id_string(self.kwargs['id_string'])
-                    if supplier_obj:
-                        queryset = SupplierPaymentTbl.objects.filter(supplier=supplier_obj.id, is_active=True)
-                        return queryset
-                    else:
-                        raise ObjectNotFoundException
+                    queryset = ContractTbl.objects.filter(is_active=True)
+                    return queryset
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -62,19 +56,19 @@ class SupplierPaymentList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/supplier/id_string/payment
+# API end Point: api/v1/contract/
 # API verb: POST
 # Package: Basic
-# Modules: Supplier
-# Sub Module: Payment
-# Interaction: Create supplier payment
-# Usage: API will create supplier payment object based on valid data
-# Tables used: 2.5.10 SupplierPayment
+# Modules: Contract
+# Sub Module: Contract
+# Interaction: Create contract
+# Usage: API will create contract object based on valid data
+# Tables used: Contract
 # Author: Akshay
-# Created on: 22/05/2020
+# Created on: 28/05/2020
 
-class SupplierPayment(GenericAPIView):
-    serializer_class = SupplierPaymentSerializer
+class Contract(GenericAPIView):
+    serializer_class = ContractSerializer
 
     def post(self, request, id_string):
         try:
@@ -90,32 +84,26 @@ class SupplierPayment(GenericAPIView):
                     # Todo fetch user from request start
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
-                    supplier_obj = get_supplier_by_id_string(id_string)
-                    if supplier_obj:
-                        serializer = SupplierPaymentSerializer(data=request.data)
-                        if serializer.is_valid():
-                            supplier_payment_obj = serializer.create(serializer.validated_data, supplier_obj, user)
-                            if supplier_payment_obj:
-                                serializer = SupplierPaymentViewSerializer(supplier_payment_obj,
-                                                                           context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULT: serializer.data,
-                                }, status=status.HTTP_201_CREATED)
-                            else:
-                                return Response({
-                                    STATE: DUPLICATE,
-                                    RESULT: DATA_ALREADY_EXISTS,
-                                }, status=status.HTTP_409_CONFLICT)
+
+                    serializer = ContractSerializer(data=request.data)
+                    if serializer.is_valid():
+                        contract_obj = serializer.create(serializer.validated_data, user)
+                        if contract_obj:
+                            serializer = ContractViewSerializer(contract_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULT: serializer.data,
+                            }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
-                                STATE: ERROR,
-                                RESULT: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                                STATE: DUPLICATE,
+                                RESULT: DATA_ALREADY_EXISTS,
+                            }, status=status.HTTP_409_CONFLICT)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                            RESULT: serializer.errors,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -133,19 +121,19 @@ class SupplierPayment(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/supplier/payment/id_string
+# API end Point: api/v1/contract/id_string
 # API verb: GET, PUT
 # Package: Basic
-# Modules: Supplier
-# Sub Module: Payment
-# Interaction: For edit and get single supplier payment
-# Usage: API will edit and get supplier payment
-# Tables used: 2.5.10 SupplierPayment
+# Modules: Contract
+# Sub Module: Contract
+# Interaction: For edit and get single contract
+# Usage: API will edit and get contract
+# Tables used: Contract
 # Author: Akshay
-# Created on: 22/05/2020
+# Created on: 28/05/2020
 
-class SupplierPaymentDetail(GenericAPIView):
-    serializer_class = SupplierPaymentSerializer
+class ContractDetail(GenericAPIView):
+    serializer_class = ContractSerializer
 
     def get(self, request, id_string):
         try:
@@ -159,9 +147,9 @@ class SupplierPaymentDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    supplier_payment_obj = get_supplier_payment_by_id_string(id_string)
-                    if supplier_payment_obj:
-                        serializer = SupplierPaymentViewSerializer(supplier_payment_obj, context={'request': request})
+                    contract_obj = get_contract_by_id_string(id_string)
+                    if contract_obj:
+                        serializer = ContractViewSerializer(contract_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULT: serializer.data,
@@ -200,13 +188,12 @@ class SupplierPaymentDetail(GenericAPIView):
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    supplier_payment_obj = get_supplier_payment_by_id_string(id_string)
-                    if supplier_payment_obj:
-                        serializer = SupplierPaymentSerializer(data=request.data)
+                    contract_obj = get_contract_by_id_string(id_string)
+                    if contract_obj:
+                        serializer = ContractSerializer(data=request.data)
                         if serializer.is_valid():
-                            supplier_payment_obj = serializer.update(supplier_payment_obj, serializer.validated_data, user)
-                            serializer = SupplierPaymentViewSerializer(supplier_payment_obj,
-                                                                       context={'request': request})
+                            contract_obj = serializer.update(contract_obj, serializer.validated_data, user)
+                            serializer = ContractViewSerializer(contract_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULT: serializer.data,

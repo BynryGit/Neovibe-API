@@ -61,6 +61,13 @@ class SupplierPayment(models.Model):
 # Create Payment table end.
 
 
+def get_supplier_payment_by_id(id):
+    try:
+        return SupplierPayment.objects.get(id = id)
+    except:
+        return False
+
+
 def get_supplier_payment_by_id_string(id_string):
     try:
         return SupplierPayment.objects.get(id_string = id_string)
@@ -68,8 +75,15 @@ def get_supplier_payment_by_id_string(id_string):
         return False
 
 
-def get_supplier_payment_by_id(id):
+def get_contract_payment_by_id(id):
     try:
-        return SupplierPayment.objects.get(id = id)
+        return SupplierPayment.objects.get(id=id)
+    except:
+        return False
+
+
+def get_contract_payment_by_id_string(id_string):
+    try:
+        return SupplierPayment.objects.get(id_string=id_string)
     except:
         return False

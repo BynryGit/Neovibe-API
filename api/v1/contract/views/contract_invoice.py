@@ -13,28 +13,28 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
     ObjectNotFoundException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.supplier.models.supplier import get_supplier_by_id_string
-from v1.supplier.serializers.supplier_payment import SupplierPaymentViewSerializer, SupplierPaymentSerializer
+from v1.contract.models.contracts import get_contract_by_id_string
+from v1.contract.serializers.contract_invoice import SupplierInvoiceViewSerializer, SupplierInvoiceSerializer
 from v1.userapp.models.user_master import UserDetail
-from v1.supplier.models.supplier_payment import SupplierPayment as SupplierPaymentTbl, get_supplier_payment_by_id_string
+from v1.supplier.models.supplier_invoice import SupplierInvoice as SupplierInvoiceTbl, get_contract_invoice_by_id_string
 
 
 # API Header
-# API end Point: api/v1/supplier/id_string/payment/list
+# API end Point: api/v1/contract/id_string/invoice/list
 # API verb: GET
 # Package: Basic
-# Modules: Supplier
-# Sub Module: Payment
-# Interaction: Get supplier payment list
-# Usage: API will fetch required data for supplier payment list.
-# Tables used: 2.5.10 SupplierPayment
+# Modules: Contract
+# Sub Module: Invoice
+# Interaction: Get contract invoice list
+# Usage: API will fetch required data for contract invoice list.
+# Tables used: 2.5.9 Supplier Invoice
 # Author: Akshay
-# Created on: 22/05/2020
+# Created on: 28/05/2020
 
 
-class SupplierPaymentList(generics.ListAPIView):
+class ContractInvoiceList(generics.ListAPIView):
     try:
-        serializer_class = SupplierPaymentViewSerializer
+        serializer_class = SupplierInvoiceViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -46,9 +46,9 @@ class SupplierPaymentList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    supplier_obj = get_supplier_by_id_string(self.kwargs['id_string'])
-                    if supplier_obj:
-                        queryset = SupplierPaymentTbl.objects.filter(supplier=supplier_obj.id, is_active=True)
+                    contract_obj = get_contract_by_id_string(self.kwargs['id_string'])
+                    if contract_obj:
+                        queryset = SupplierInvoiceTbl.objects.filter(contract=contract_obj.id, is_active=True)
                         return queryset
                     else:
                         raise ObjectNotFoundException
@@ -62,19 +62,19 @@ class SupplierPaymentList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/supplier/id_string/payment
+# API end Point: api/v1/contract/id_string/invoice
 # API verb: POST
 # Package: Basic
-# Modules: Supplier
-# Sub Module: Payment
-# Interaction: Create supplier payment
-# Usage: API will create supplier payment object based on valid data
-# Tables used: 2.5.10 SupplierPayment
+# Modules: Contract
+# Sub Module: Invoice
+# Interaction: Create contract invoice
+# Usage: API will create contract invoice object based on valid data
+# Tables used: 2.5.9 Supplier Invoice
 # Author: Akshay
-# Created on: 22/05/2020
+# Created on: 28/05/2020
 
-class SupplierPayment(GenericAPIView):
-    serializer_class = SupplierPaymentSerializer
+class ContractInvoice(GenericAPIView):
+    serializer_class = SupplierInvoiceSerializer
 
     def post(self, request, id_string):
         try:
@@ -90,14 +90,13 @@ class SupplierPayment(GenericAPIView):
                     # Todo fetch user from request start
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
-                    supplier_obj = get_supplier_by_id_string(id_string)
-                    if supplier_obj:
-                        serializer = SupplierPaymentSerializer(data=request.data)
+                    contract_obj = get_contract_by_id_string(id_string)
+                    if contract_obj:
+                        serializer = SupplierInvoiceSerializer(data=request.data)
                         if serializer.is_valid():
-                            supplier_payment_obj = serializer.create(serializer.validated_data, supplier_obj, user)
-                            if supplier_payment_obj:
-                                serializer = SupplierPaymentViewSerializer(supplier_payment_obj,
-                                                                           context={'request': request})
+                            contract_invoice_obj = serializer.create(serializer.validated_data, contract_obj, user)
+                            if contract_invoice_obj:
+                                serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULT: serializer.data,
@@ -133,19 +132,19 @@ class SupplierPayment(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/supplier/payment/id_string
+# API end Point: api/v1/contract/invoice/id_string
 # API verb: GET, PUT
 # Package: Basic
-# Modules: Supplier
-# Sub Module: Payment
-# Interaction: For edit and get single supplier payment
-# Usage: API will edit and get supplier payment
-# Tables used: 2.5.10 SupplierPayment
+# Modules: Contract
+# Sub Module: Invoice
+# Interaction: For edit and get single contract invoice
+# Usage: API will edit and get contract invoice
+# Tables used: 2.5.9 Supplier Invoice
 # Author: Akshay
-# Created on: 22/05/2020
+# Created on: 28/05/2020
 
-class SupplierPaymentDetail(GenericAPIView):
-    serializer_class = SupplierPaymentSerializer
+class ContractInvoiceDetail(GenericAPIView):
+    serializer_class = SupplierInvoiceSerializer
 
     def get(self, request, id_string):
         try:
@@ -159,9 +158,9 @@ class SupplierPaymentDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    supplier_payment_obj = get_supplier_payment_by_id_string(id_string)
-                    if supplier_payment_obj:
-                        serializer = SupplierPaymentViewSerializer(supplier_payment_obj, context={'request': request})
+                    contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
+                    if contract_invoice_obj:
+                        serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULT: serializer.data,
@@ -200,13 +199,12 @@ class SupplierPaymentDetail(GenericAPIView):
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    supplier_payment_obj = get_supplier_payment_by_id_string(id_string)
-                    if supplier_payment_obj:
-                        serializer = SupplierPaymentSerializer(data=request.data)
+                    contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
+                    if contract_invoice_obj:
+                        serializer = SupplierInvoiceSerializer(data=request.data)
                         if serializer.is_valid():
-                            supplier_payment_obj = serializer.update(supplier_payment_obj, serializer.validated_data, user)
-                            serializer = SupplierPaymentViewSerializer(supplier_payment_obj,
-                                                                       context={'request': request})
+                            contract_invoice_obj = serializer.update(contract_invoice_obj, serializer.validated_data, user)
+                            serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULT: serializer.data,

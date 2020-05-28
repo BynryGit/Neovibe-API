@@ -7,7 +7,7 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.contracts import Contract as ContractTbl
-from v1.supplier.views.common_functions import set_supplier_contract_validated_data
+from v1.contract.views.common_functions import set_contract_validated_data
 
 
 class ContractViewSerializer(serializers.ModelSerializer):
@@ -21,8 +21,7 @@ class ContractViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractTbl
         fields = ('id_string', 'name', 'description', 'contract_amount', 'start_date', 'end_date', 'created_date',
-                  'updated_date', 'tenant', 'utility', 'contract_type', 'contract_period', 'supplier',
-                  'supplier_product_id', 'cost_center', 'status')
+                  'updated_date', 'tenant', 'utility', 'contract_type', 'contract_period', 'cost_center', 'status')
 
 
 class ContractSerializer(serializers.ModelSerializer):
@@ -30,7 +29,6 @@ class ContractSerializer(serializers.ModelSerializer):
     contract_period = serializers.UUIDField(required=False)
     status = serializers.UUIDField(required=False)
     cost_center = serializers.UUIDField(required=False)
-    supplier_product_id = serializers.UUIDField(required=False)
     name = serializers.CharField(required=True, max_length=200)
     description = serializers.CharField(required=True, max_length=500)
 
@@ -38,27 +36,25 @@ class ContractSerializer(serializers.ModelSerializer):
         model = ContractTbl
         fields = ('__all__')
 
-    def create(self, validated_data, supplier_obj, user):
-        validated_data = set_supplier_contract_validated_data(validated_data)
-        if ContractTbl.objects.filter(tenant=user.tenant, utility=user.utility,
-                                             supplier=supplier_obj.id, name=validated_data["name"]).exists():
+    def create(self, validated_data, user):
+        validated_data = set_contract_validated_data(validated_data)
+        if ContractTbl.objects.filter(tenant=user.tenant, utility=user.utility, name=validated_data["name"]).exists():
             return False
         with transaction.atomic():
-            supplier_contract_obj = super(ContractSerializer, self).create(validated_data)
-            supplier_contract_obj.tenant = user.tenant
-            supplier_contract_obj.utility = user.utility
-            supplier_contract_obj.supplier = supplier_obj.id
-            supplier_contract_obj.created_by = user.id
-            supplier_contract_obj.save()
-            return supplier_contract_obj
+            contract_obj = super(ContractSerializer, self).create(validated_data)
+            contract_obj.tenant = user.tenant
+            contract_obj.utility = user.utility
+            contract_obj.created_by = user.id
+            contract_obj.save()
+            return contract_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_supplier_contract_validated_data(validated_data)
+        validated_data = set_contract_validated_data(validated_data)
         with transaction.atomic():
-            supplier_contract_obj = super(ContractSerializer, self).update(instance, validated_data)
-            supplier_contract_obj.tenant = user.tenant
-            supplier_contract_obj.utility = user.utility
-            supplier_contract_obj.updated_by = user.id
-            supplier_contract_obj.updated_date = timezone.now()
-            supplier_contract_obj.save()
-            return supplier_contract_obj
+            contract_obj = super(ContractSerializer, self).update(instance, validated_data)
+            contract_obj.tenant = user.tenant
+            contract_obj.utility = user.utility
+            contract_obj.updated_by = user.id
+            contract_obj.updated_date = timezone.now()
+            contract_obj.save()
+            return contract_obj
