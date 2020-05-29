@@ -1313,6 +1313,7 @@ def is_subscription_data_verified(request):  # todo - Black, Null, empty string 
     else:
         return True
 def is_subscription_plan_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
+
     if request.data['subcription_type'] == '':
         return False
     else:

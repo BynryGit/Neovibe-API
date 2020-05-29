@@ -60,7 +60,9 @@ def get_subscription_plan_by_id(id):
 def get_subscription_plan_by_id_string(id_string):
     try:
         return TenantSubscriptionPlan.objects.get(id_string = id_string)
+
     except:
         return False
+
 def get_subscription_plan_by_tenant_id_string(id_string):
     return TenantSubscriptionPlan.objects.filter(tenant_id_string=id_string)
