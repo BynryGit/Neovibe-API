@@ -6,7 +6,7 @@ from django.utils import timezone
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
-from v1.contract.models.contracts import Contract as ContractTbl
+from v1.contract.models.contract import Contract as ContractTbl
 from v1.supplier.views.common_functions import set_supplier_contract_validated_data
 
 

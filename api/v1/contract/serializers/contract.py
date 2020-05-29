@@ -6,13 +6,17 @@ from django.utils import timezone
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
-from v1.contract.models.contracts import Contract as ContractTbl
+from v1.contract.models.contract import Contract as ContractTbl
+from v1.contract.serializers.contract_period import ContractPeriodShortViewSerializer
+from v1.contract.serializers.contract_type import ContractTypeShortViewSerializer
 from v1.contract.views.common_functions import set_contract_validated_data
 
 
 class ContractViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
+    contract_type = ContractTypeShortViewSerializer(many=False, required=False, source='get_contract_type')
+    contract_period = ContractPeriodShortViewSerializer(many=False, required=False, source='get_contract_period')
     start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
@@ -25,8 +29,8 @@ class ContractViewSerializer(serializers.ModelSerializer):
 
 
 class ContractSerializer(serializers.ModelSerializer):
-    contract_type = serializers.UUIDField(required=False)
-    contract_period = serializers.UUIDField(required=False)
+    contract_type = serializers.UUIDField(required=True)
+    contract_period = serializers.UUIDField(required=True)
     status = serializers.UUIDField(required=False)
     cost_center = serializers.UUIDField(required=False)
     name = serializers.CharField(required=True, max_length=200)

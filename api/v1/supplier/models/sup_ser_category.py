@@ -41,3 +41,16 @@ class SupServiceCategory(models.Model):
 
 # Create Product Service Category table start.
 
+
+def get_supplier_service_category_by_id(id):
+    try:
+        return SupServiceCategory.objects.get(id = id)
+    except:
+        return False
+
+
+def get_supplier_service_category_by_id_string(id_string):
+    try:
+        return SupServiceCategory.objects.get(id_string = id_string)
+    except:
+        return False

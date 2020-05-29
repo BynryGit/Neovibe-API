@@ -14,7 +14,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.contract.serializers.contract import ContractViewSerializer, ContractSerializer
 from v1.userapp.models.user_master import UserDetail
-from v1.contract.models.contracts import Contract as ContractTbl, get_contract_by_id_string
+from v1.contract.models.contract import Contract as ContractTbl, get_contract_by_id_string
 
 
 # API Header
@@ -70,7 +70,7 @@ class ContractList(generics.ListAPIView):
 class Contract(GenericAPIView):
     serializer_class = ContractSerializer
 
-    def post(self, request, id_string):
+    def post(self, request):
         try:
             # Checking authentication start
             if is_token_valid(request.headers['token']):

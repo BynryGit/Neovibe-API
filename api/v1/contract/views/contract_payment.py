@@ -13,7 +13,7 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
     ObjectNotFoundException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.contract.models.contracts import get_contract_by_id_string
+from v1.contract.models.contract import get_contract_by_id_string
 from v1.contract.serializers.contract_payment import SupplierPaymentViewSerializer, SupplierPaymentSerializer
 from v1.userapp.models.user_master import UserDetail
 from v1.supplier.models.supplier_payment import SupplierPayment as SupplierPaymentTbl, get_contract_payment_by_id_string
