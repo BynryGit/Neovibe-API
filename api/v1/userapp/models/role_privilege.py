@@ -76,6 +76,9 @@ class RolePrivilege(models.Model):
     def get_privilege(self):
         return get_privilege_by_id(self.privilege_id)
 
+    class Meta:
+        unique_together = ('role_id', 'module_id', 'sub_module_id', 'privilege_id',)
+
     # Create Role Privilege table end
 
 

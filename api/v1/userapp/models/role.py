@@ -78,6 +78,9 @@ class Role(models.Model): # change name to role
     def get_department(self):
         return get_department_by_id(self.department_id)
 
+    class Meta:
+        unique_together = ('type_id', 'sub_type_id', 'form_factor_id', 'department_id', 'role',)
+
 
 # Create User Role table end
 

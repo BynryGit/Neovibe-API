@@ -53,12 +53,19 @@ class SupplierPayment(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.invoice
+        return str(self.txn_id)
 
     def __unicode__(self):
-        return self.invoice
+        return str(self.txn_id)
 
 # Create Payment table end.
+
+
+def get_supplier_payment_by_id(id):
+    try:
+        return SupplierPayment.objects.get(id = id)
+    except:
+        return False
 
 
 def get_supplier_payment_by_id_string(id_string):
@@ -68,8 +75,15 @@ def get_supplier_payment_by_id_string(id_string):
         return False
 
 
-def get_supplier_payment_by_id(id):
+def get_contract_payment_by_id(id):
     try:
-        return SupplierPayment.objects.get(id = id)
+        return SupplierPayment.objects.get(id=id)
+    except:
+        return False
+
+
+def get_contract_payment_by_id_string(id_string):
+    try:
+        return SupplierPayment.objects.get(id_string=id_string)
     except:
         return False

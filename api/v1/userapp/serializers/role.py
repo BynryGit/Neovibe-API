@@ -25,7 +25,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        validators = [UniqueTogetherValidator(queryset=Role.objects.all(), fields=('type_id', 'sub_type_id', 'form_factor_id', 'department_id', 'role'), message='Role already exists!')]
+        # validators = [UniqueTogetherValidator(queryset=Role.objects.all(), fields=('type_id', 'sub_type_id', 'form_factor_id', 'department_id', 'role'), message='Role already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):

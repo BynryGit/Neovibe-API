@@ -45,6 +45,14 @@ class UserBankDetail(models.Model):
     def __unicode__(self):
         return self.bank_name
 
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
 # Create Tenant Bank Details table end.
 
 

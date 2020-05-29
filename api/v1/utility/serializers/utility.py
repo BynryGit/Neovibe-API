@@ -16,10 +16,11 @@ class UtilitySerializer(serializers.ModelSerializer):
 
 class UtilityMasterViewSerializer(serializers.ModelSerializer):
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
 
     class Meta:
         model = UtilityMasterTbl
-        fields = ('id_string', 'tenant_name', 'short_name', 'name', 'phone_no', 'email_id')
+        fields = ('id_string', 'tenant_id_string', 'tenant_name', 'short_name', 'name', 'phone_no', 'email_id')
 
 
 class UtilityMasterSerializer(serializers.ModelSerializer):

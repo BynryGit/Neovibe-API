@@ -24,6 +24,14 @@ class UserStatus(models.Model):
     def __unicode__(self):
         return self.status
 
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
 
 def get_user_status_by_id_string(id_string):
     return UserStatus.objects.filter(id_string=id_string).last()

@@ -1,13 +1,16 @@
 __author__ = "Arpita"
 
+from datetime import datetime
+from django.db import transaction
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_type import RoleType
 from v1.utility.serializers.utility import UtilitySerializer
 
 
-class RoleTypeSerializer(serializers.ModelSerializer):
+class GetRoleTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RoleType
@@ -30,3 +33,32 @@ class RoleTypeViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoleType
         fields = ('id_string', 'tenant', 'utility', 'name', 'is_active')
+
+
+class RoleTypeSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=False, max_length=200)
+
+    class Meta:
+        model = RoleType
+        validators = [UniqueTogetherValidator(queryset=RoleType.objects.all(), fields=('name',), message='Role Type already exists!')]
+        fields = '__all__'
+
+    def create(self, validated_data, user):
+        with transaction.atomic():
+            type_obj = super(RoleTypeSerializer, self).create(validated_data)
+            type_obj.created_by = user.id
+            type_obj.created_date = datetime.utcnow()
+            type_obj.tenant = user.tenant
+            type_obj.utility = user.utility
+            type_obj.is_active = True
+            type_obj.save()
+            return type_obj
+
+    def update(self, instance, validated_data, user):
+        with transaction.atomic():
+            type_obj = super(RoleTypeSerializer, self).update(instance, validated_data)
+            type_obj.updated_by = user.id
+            type_obj.updated_date = datetime.utcnow()
+            type_obj.is_active = True
+            type_obj.save()
+            return type_obj

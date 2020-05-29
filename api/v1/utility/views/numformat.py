@@ -4,7 +4,7 @@ import traceback
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_master import UserDetail
@@ -54,17 +54,17 @@ class UtilityNumformatDetail(GenericAPIView):
                             if numformat_obj.prefix:
                                 return Response({
                                     STATE: SUCCESS,
-                                    RESULTS: {'numformat_obj': str(numformat_obj.prefix) + str(numformat_obj.currentno)},
+                                    RESULT: {'numformat_obj': str(numformat_obj.prefix) + str(numformat_obj.currentno)},
                                 }, status=status.HTTP_200_OK)
                             else:
                                 return Response({
                                     STATE: SUCCESS,
-                                    RESULTS: {'numformat_obj': numformat_obj.currentno},
+                                    RESULT: {'numformat_obj': numformat_obj.currentno},
                                 }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({

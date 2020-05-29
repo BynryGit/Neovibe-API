@@ -72,7 +72,7 @@ class Role(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_role_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         validated_data = set_role_validated_data(request.data)
                         serializer = RoleSerializer(data=validated_data)
                         if serializer.is_valid():
@@ -159,7 +159,7 @@ class RoleDetail(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     if is_role_data_verified(request):
-                        user = get_user_by_id(3)
+                        success, user = is_token_valid(self.request.headers['token'])
                         role_obj = get_role_by_id_string(id_string)
                         if role_obj:
                             validated_data = set_role_validated_data(request.data)
