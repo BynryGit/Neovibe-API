@@ -7,6 +7,7 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl
 from v1.tenant.views.common_functions import set_validated_data, set_validated_data_submodule
 
+
 class TenantSubmoduleListSerializer(serializers.ModelSerializer):
     # status = TenantStatusViewSerializer(many=False, required=True, source='get_status')
 

@@ -1308,13 +1308,20 @@ def is_data_verified(request):  # todo - Black, Null, empty string - ready to us
             return True
 
 def is_subscription_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
-    if request.data['subscription_plan_id'] == '' and request.data['subscription_frequency_id'] == '':
+    if request.data['subscription_plan_id'] == '':
         return False
     else:
         return True
+
 def is_subscription_plan_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
 
-    if request.data['subcription_type'] == '':
+    if request.data['subscription_type'] == '':
+        return False
+    else:
+        return True
+def is_subscription_plan_rate_data_verified(request):  # todo - Black, Null, empty string - ready to use method by Django
+
+    if request.data['subscription_plan_id'] == '':
         return False
     else:
         return True
@@ -1331,6 +1338,17 @@ def is_bank_data_verified(request):
     else:
         return False
 
+def is_invoice_data_verified(request):
+    if request.data['invoice_number']:
+        return True
+    else:
+        return False
+
+def is_payment_data_verified(request):
+    if request.data['invoice_number']:
+        return True
+    else:
+        return False
 
 def set_validated_data(validated_data):
     if "area_id" in validated_data:
