@@ -52,7 +52,7 @@ def is_token_valid(token):
     # except Exception as e:
     #     logger().log(e, 'ERROR', user='test', name='test')
     #     return False
->>>>>>> 7fb2e43b6c7ed5c94ad362332d0d324934e98ccc
+
 
 
 def get_user(id_string):

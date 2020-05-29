@@ -6,6 +6,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.tenant.models.tenant_subscription import get_subscription_by_id_string
 from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan as subscriptionPlanTbl, \
     get_subscription_plan_by_id
 from v1.commonapp.common_functions import is_token_valid, is_authorized
@@ -164,21 +165,20 @@ class SubscriptionPlanDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    print("Here");
+
                     # Request data verification start
                     if is_subscription_plan_data_verified(request):
                         # Request data verification end
 
                         # Save basic details start
-                        # user = UserDetail.objects.get(id=2)
-                        print("Here",request);
-                        subscription_plan_obj = get_subscription_plan_by_id(id_string)
+                        user = UserDetail.objects.get(id=2)
+                        subscription_plan_obj = get_subscription_plan_by_id_string(id_string)
 
                         if subscription_plan_obj:
                             serializer = SubscriptionPlanSerializer(data=request.data)
                             print("Here");
                             if serializer.is_valid(request.data):
-
+                                print("Here2",request.data);
                                 subscription_plan_obj = serializer.update(subscription_plan_obj, serializer.validated_data)
 
                                 view_serializer = SubscriptionPlanViewSerializer(instance=subscription_plan_obj,
@@ -213,5 +213,3 @@ class SubscriptionPlanDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
