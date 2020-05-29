@@ -7,11 +7,12 @@ from v1.supplier.views.supplier_invoice import SupplierInvoiceList, SupplierInvo
 from v1.supplier.views.supplier_payment import SupplierPaymentList, SupplierPayment, SupplierPaymentDetail
 from v1.supplier.views.supplier_product import SupplierProductList, SupplierProduct, SupplierProductDetail
 from v1.supplier.views.supplier_service import SupplierServiceList, SupplierService, SupplierServiceDetail
+from v1.supplier.views.supplier_status import SupplierStatusList
 
 urlpatterns = [
     path('', Supplier.as_view(), name='supplier'),
     path('list', SupplierList.as_view(), name='supplier_list'),
-    path('<uuid:id_string>', SupplierDetail.as_view(),name='utility_detail'),
+    path('<uuid:id_string>', SupplierDetail.as_view(),name='supplier_detail'),
     path('<uuid:id_string>/invoice/list', SupplierInvoiceList.as_view(),name='supplier_invoice_list'),
     path('<uuid:id_string>/invoice', SupplierInvoice.as_view(), name='supplier_invoice'),
     path('invoice/<uuid:id_string>', SupplierInvoiceDetail.as_view(),name='supplier_invoice_detail'),
@@ -27,4 +28,5 @@ urlpatterns = [
     path('<uuid:id_string>/contract/list', SupplierContractList.as_view(),name='supplier_contract_list'),
     path('<uuid:id_string>/contract', SupplierContract.as_view(), name='supplier_contract'),
     path('contract/<uuid:id_string>', SupplierContractDetail.as_view(),name='supplier_contract_detail'),
+    path('status/list', SupplierStatusList.as_view(), name='supplier_status_list'),
 ]

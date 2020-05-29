@@ -1,4 +1,5 @@
 import uuid
+import uuid
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
@@ -11,17 +12,17 @@ class SubscriptionPlanRateListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantSubscriptionPlanRate
-        fields = ('id_string', 'tenantsubscriptionplan_id', 'base_rate', 'currency', 'region',
+        fields = ('id_string', 'subscription_plan_id', 'base_rate', 'currency', 'region',
                   'country', 'is_taxable', 'tax', 'effective_date', 'is_active')
 
-class SubscriptionPlanViewSerializer(serializers.ModelSerializer):
+class SubscriptionPlanRateViewSerializer(serializers.ModelSerializer):
     #status = TenantStatusViewSerializer(many=False, source='get_status')
     # area = AreaListSerializer(many=False, source='get_area')
     # tenant = serializers.ReadOnlyField(source='tenant.name')
 
     class Meta:
         model = TenantSubscriptionPlanRate
-        fields = ('id_string', 'tenantsubscriptionplan_id','base_rate','currency','region',
+        fields = ('id_string', 'subscription_plan_id','base_rate','currency','region',
                   'country','is_taxable', 'tax','effective_date', 'is_active')
 
 
@@ -42,7 +43,7 @@ class SubscriptionPlanRateSerializer(serializers.ModelSerializer):
         model = TenantSubscriptionPlanRate
         fields = ('__all__')
 
-    def create(self, validated_data):
+    def create(self, validated_data,user):
         validated_data = set_validated_data(validated_data)
         with transaction.atomic():
             subscription_plan__rate_obj = super(SubscriptionPlanRateSerializer, self).create(validated_data)

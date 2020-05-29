@@ -9,6 +9,7 @@ from v1.commonapp.views.form_factor import FormFactor, FormFactorList
 from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail
 from v1.commonapp.views.sub_modules import SubModule, SubModuleList
 from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
+from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 # from v1.userapp.views.role_type import RoleType, RoleTypeList
 
@@ -35,4 +36,6 @@ urlpatterns = [
     path('states', StateList.as_view(), name='state_list'),
     path('cities', CityList.as_view(), name='city_list'),
     # This api used for utility dropdown end
+    path('service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
+    path('service_type/<uuid:id_string>', ServiceTypeDetail.as_view(), name="service_type_detail"),
 ]

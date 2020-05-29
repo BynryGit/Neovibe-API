@@ -85,6 +85,8 @@ class TenantSubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
+                    user = UserDetail.objects.get(id=2)
+                    # Todo fetch user from request end
 
                     tenant_submodule_obj = get_tenant_submodule_by_id_string(id_string)
                     if tenant_submodule_obj:
@@ -189,7 +191,7 @@ class Submodule(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    #user = UserDetail.objects.get(id = 2)
+                    user = UserDetail.objects.get(id = 2)
                     if is_submodule_data_verified(request):
                     # Request data verification end
                     #     duplicate_tenant_submodule_obj = TenantSubModuleTbl.objects.filter(id_string=request.data["id_string"],

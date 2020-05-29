@@ -69,14 +69,14 @@ class CampaignListSerializer(serializers.ModelSerializer):
 
 
 class CampaignViewSerializer(serializers.ModelSerializer):
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+    # def get_start_date(self, obj):
+    #     start_date = datetime.strptime(obj.start_date , DISPLAY_DATE_TIME_FORMAT)
+    #     return start_date
+    #
+    # def get_end_date(self, obj):
+    #     end_date = datetime.strptime(obj.end_date, DISPLAY_DATE_TIME_FORMAT)
+    #     return end_date
 
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
     objective_id = CampaignObjectiveSerializer(many=False, required=True, source='get_objective')
@@ -87,9 +87,9 @@ class CampaignViewSerializer(serializers.ModelSerializer):
     sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
-    created_date = serializers.SerializerMethodField('get_created_date')
-    start_date = serializers.SerializerMethodField('get_start_date')
-    end_date = serializers.SerializerMethodField('get_end_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
 
     class Meta:
         model = CampaignTbl
@@ -111,8 +111,8 @@ class CampaignSerializer(serializers.ModelSerializer):
     actual_amount = serializers.CharField(required=False, max_length=200)
     category_id = serializers.CharField(required=False, max_length=200)
     sub_category_id = serializers.CharField(required=False, max_length=200)
-    start_date = serializers.CharField(required=False, max_length=200)
-    end_date = serializers.CharField(required=False, max_length=200)
+    start_date = serializers.DateTimeField(format="%Y-%m-%d")
+    end_date = serializers.DateTimeField(format="%Y-%m-%d")
     area_id = serializers.CharField(required=False, max_length=200)
     sub_area_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
@@ -131,7 +131,7 @@ class CampaignSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 campaign_obj = super(CampaignSerializer, self).create(validated_data)
                 campaign_obj.created_by = user.id
-                campaign_obj.created_date = datetime.now()
+                # campaign_obj.created_date = datetime.now()
                 campaign_obj.tenant = user.tenant
                 campaign_obj.utility = user.utility
                 campaign_obj.save()
@@ -142,6 +142,6 @@ class CampaignSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 campaign_obj = super(CampaignSerializer, self).update(instance, validated_data)
                 campaign_obj.updated_by = user.id
-                campaign_obj.updated_date = datetime.now()
+                # campaign_obj.updated_date = datetime.now()
                 campaign_obj.save()
                 return campaign_obj

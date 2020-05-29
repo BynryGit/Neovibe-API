@@ -11,7 +11,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.payment import TenantInvoicePaymentListSerializer, TenantInvoicePaymentViewSerializer, \
      TenantInvoicePaymentSerializer
 from v1.tenant.models.tenant_invoice_payment import get_tenant_payment_by_id_string
-from v1.tenant.views.common_functions import is_data_verified
+from v1.tenant.views.common_functions import is_data_verified, is_payment_data_verified
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE
 
 
@@ -73,10 +73,9 @@ class TenantInvoicePayment(GenericAPIView):
 
                     # Request data verification start
                     #user = UserDetail.objects.get(id = 2)
-                    if is_data_verified(request):
+                    if is_payment_data_verified(request):
                     # Request data verification end
-                        duplicate_tenant_invoice_payment_obj = tenantInvoicesPaymentTbl.objects.filter(id_string=request.data["id_string"],
-                                                                              invoice_number=request.data['invoice_number'])
+                        duplicate_tenant_invoice_payment_obj = tenantInvoicesPaymentTbl.objects.filter(invoice_number=request.data['invoice_number'])
                         if duplicate_tenant_invoice_payment_obj:
                             return Response({
                                 STATE: DUPLICATE,
@@ -134,7 +133,7 @@ class TenantInvoicePaymentDetail(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    tenant_invoice_payment = get_tenant_invoice_payment_by_id_string(id_string)
+                    tenant_invoice_payment = get_tenant_payment_by_id_string(id_string)
                     if tenant_invoice_payment:
                         serializer = TenantInvoicePaymentViewSerializer(instance=tenant_invoice_payment, context={'request': request})
                         return Response({
@@ -172,7 +171,7 @@ class TenantInvoicePaymentDetail(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_payment_data_verified(request):
                         # Request data verification end
 
                         # Save basic details start

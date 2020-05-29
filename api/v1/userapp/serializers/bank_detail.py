@@ -9,7 +9,7 @@ from v1.userapp.models.user_bank_detail import UserBankDetail
 from v1.utility.serializers.utility import UtilitySerializer
 
 
-class BankListSerializer(serializers.ModelSerializer):
+class UserBankListSerializer(serializers.ModelSerializer):
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
@@ -20,7 +20,7 @@ class BankListSerializer(serializers.ModelSerializer):
                   'created_date')
 
 
-class BankSerializer(serializers.ModelSerializer):
+class GetUserBankSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserBankDetail
@@ -28,6 +28,8 @@ class BankSerializer(serializers.ModelSerializer):
 
 
 class UserBankViewSerializer(serializers.ModelSerializer):
+    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
         model = UserBankDetail

@@ -26,11 +26,11 @@ class TenantSubscriptionPlan(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     subscription_id = models.BigIntegerField(null=True, blank=True)
     subscription_plan_id = models.BigIntegerField(null=True, blank=True)
-    subcription_type = models.CharField(max_length=200, blank=True, null=True)
+    subscription_type = models.CharField(max_length=200, blank=True, null=True)
     subscription_name = models.CharField(max_length=200, blank=True, null=True)
     subscription_frequency_id = models.BigIntegerField(null=True, blank=True)
     short_name = models.BigIntegerField(null=True, blank=True)
-    subscription_type = models.CharField(max_length=200, blank=True, null=True)
+
     description = models.CharField(max_length=500, blank=True, null=True)
     max_utility  = models.BigIntegerField(null=True, blank=True)
     max_user = models.BigIntegerField(null=True, blank=True)
@@ -60,7 +60,9 @@ def get_subscription_plan_by_id(id):
 def get_subscription_plan_by_id_string(id_string):
     try:
         return TenantSubscriptionPlan.objects.get(id_string = id_string)
+
     except:
         return False
+
 def get_subscription_plan_by_tenant_id_string(id_string):
     return TenantSubscriptionPlan.objects.filter(tenant_id_string=id_string)

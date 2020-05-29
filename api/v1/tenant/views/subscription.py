@@ -26,6 +26,8 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLIC
 # Tables used: 1.1 Tenant Master
 # Author: Gauri Deshmukh
 # Created on: 21/05/2020
+from v1.userapp.models.user_master import UserDetail
+
 
 class SubscriptionList(generics.ListAPIView):
     serializer_class = SubscriptionListSerializer
@@ -61,28 +63,23 @@ class Subscription(GenericAPIView):
         try:
             # Checking authentication start
             if is_token_valid(1):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
                     # Checking authorization end
 
                     # Request data verification start
-                    #user = UserDetail.objects.get(id = 2)
+                    user = UserDetail.objects.get(id = 2)
                     if is_subscription_data_verified(request):
-                    # Request data verification end
-                    #     duplicate_subscription_obj = subscriptionTbl.objects.filter(id_string=request.data["id_string"],
-                    #                                                           subscription_plan_id=request.data['subscription_plan_id'])
-                    #     if duplicate_subscription_obj:
-                    #         return Response({
-                    #             STATE: DUPLICATE,
-                    #         }, status=status.HTTP_404_NOT_FOUND)
-                    #     else:
-                        serializer = SubscriptionSerializer(data=request.data)
+                    #Request data verification end
+                        duplicate_subscription_obj = subscriptionTbl.objects.filter(subscription_plan_id=request.data['subscription_plan_id'])
+                        if duplicate_subscription_obj:
+                            return Response({
+                                STATE: DUPLICATE,
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        else:
+                            serializer = SubscriptionSerializer(data=request.data)
                         if serializer.is_valid():
 #                            tenant_obj = serializer.create(serializer.validated_data, user)
                             subscription_obj = serializer.create(serializer.validated_data)

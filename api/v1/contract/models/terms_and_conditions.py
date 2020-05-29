@@ -33,7 +33,7 @@ class TermsAndCondition(models.Model):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.terms_name
@@ -42,3 +42,17 @@ class TermsAndCondition(models.Model):
         return self.terms_name
 
 # Create Terms and Conditions table end.
+
+
+def get_contract_term_and_condition_by_id(id):
+    try:
+        return TermsAndCondition.objects.get(id=id)
+    except:
+        return False
+
+
+def get_contract_term_and_condition_by_id_string(id_string):
+    try:
+        return TermsAndCondition.objects.get(id_string=id_string)
+    except:
+        return False

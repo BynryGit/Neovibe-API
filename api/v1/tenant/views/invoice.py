@@ -11,7 +11,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.invoice import TenantInvoiceListSerializer, TenantInvoiceViewSerializer, \
      TenantInvoiceSerializer
 from v1.tenant.models.tenant_invoices import get_tenant_invoice_by_id_string
-from v1.tenant.views.common_functions import is_data_verified
+from v1.tenant.views.common_functions import is_data_verified, is_invoice_data_verified
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE
 
 
@@ -73,10 +73,9 @@ class TenantInvoice(GenericAPIView):
 
                     # Request data verification start
                     #user = UserDetail.objects.get(id = 2)
-                    if is_data_verified(request):
+                    if is_invoice_data_verified(request):
                     # Request data verification end
-                        duplicate_tenant_invoice_obj = tenantInvoicesTbl.objects.filter(id_string=request.data["id_string"],
-                                                                              invoice_number=request.data['invoice_number'])
+                        duplicate_tenant_invoice_obj = tenantInvoicesTbl.objects.filter(invoice_number=request.data['invoice_number'])
                         if duplicate_tenant_invoice_obj:
                             return Response({
                                 STATE: DUPLICATE,
@@ -172,7 +171,7 @@ class TenantInvoiceDetail(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    if is_data_verified(request):
+                    if is_invoice_data_verified(request):
                         # Request data verification end
 
                         # Save basic details start

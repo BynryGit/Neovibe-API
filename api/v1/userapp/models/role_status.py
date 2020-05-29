@@ -24,6 +24,14 @@ class RoleStatus(models.Model):
     def __unicode__(self):
         return self.status
 
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
 
 def get_role_status_by_id_string(id_string):
     return RoleStatus.objects.filter(id_string=id_string).last()

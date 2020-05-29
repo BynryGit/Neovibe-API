@@ -79,7 +79,7 @@ class Advertisement(GenericAPIView):
             if is_token_valid(1):
                 if is_authorized():
                     if is_data_verified(request):
-                        user = UserDetail.objects.get(id=2)
+                        user = UserDetail.objects.get(id=5)
                         campaign_obj = get_campaign_by_id_string(id_string)
                         serializer = AdvertisementSerializer(data=request.data)
                         if serializer.is_valid():

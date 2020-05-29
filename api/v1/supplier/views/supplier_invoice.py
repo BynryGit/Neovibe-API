@@ -7,12 +7,13 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, RESULT, DATA_ALREADY_EXISTS
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, \
     ObjectNotFoundException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.supplier.models.supplier import get_supplier_by_id_string
 from v1.supplier.serializers.supplier_invoice import SupplierInvoiceViewSerializer, SupplierInvoiceSerializer
 from v1.userapp.models.user_master import UserDetail
 from v1.supplier.models.supplier_invoice import SupplierInvoice as SupplierInvoiceTbl, get_supplier_invoice_by_id_string
@@ -45,9 +46,9 @@ class SupplierInvoiceList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    supplier_invoice_obj = get_supplier_invoice_by_id_string(self.kwargs['id_string'])
-                    if supplier_invoice_obj:
-                        queryset = SupplierInvoiceTbl.objects.filter(supplier=supplier_invoice_obj.id, is_active=True)
+                    supplier_obj = get_supplier_by_id_string(self.kwargs['id_string'])
+                    if supplier_obj:
+                        queryset = SupplierInvoiceTbl.objects.filter(supplier=supplier_obj.id, is_active=True)
                         return queryset
                     else:
                         raise ObjectNotFoundException
@@ -75,7 +76,7 @@ class SupplierInvoiceList(generics.ListAPIView):
 class SupplierInvoice(GenericAPIView):
     serializer_class = SupplierInvoiceSerializer
 
-    def post(self, request):
+    def post(self, request, id_string):
         try:
             # Checking authentication start
             if is_token_valid(request.headers['token']):
@@ -89,25 +90,31 @@ class SupplierInvoice(GenericAPIView):
                     # Todo fetch user from request start
                     user = UserDetail.objects.get(id=2)
                     # Todo fetch user from request end
-
-                    duplicate_supplier_invoice_obj = SupplierInvoiceTbl.objects.filter(utility__id_string=request.data['utility'], name=request.data['invoice_no'])
-                    if duplicate_supplier_invoice_obj:
-                        return Response({
-                            STATE: DUPLICATE,
-                        }, status=status.HTTP_409_CONFLICT)
-                    else:
+                    supplier_obj = get_supplier_by_id_string(id_string)
+                    if supplier_obj:
                         serializer = SupplierInvoiceSerializer(data=request.data)
                         if serializer.is_valid():
-                            supplier_invoice = serializer.create(serializer.validated_data, user)
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: {'supplier_invoice_id_string': supplier_invoice.id_string},
-                            }, status=status.HTTP_201_CREATED)
+                            supplier_invoice_obj = serializer.create(serializer.validated_data, supplier_obj, user)
+                            if supplier_invoice_obj:
+                                serializer = SupplierInvoiceViewSerializer(supplier_invoice_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULT: serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: DUPLICATE,
+                                    RESULT: DATA_ALREADY_EXISTS,
+                                }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -156,7 +163,7 @@ class SupplierInvoiceDetail(GenericAPIView):
                         serializer = SupplierInvoiceViewSerializer(supplier_invoice_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -197,14 +204,15 @@ class SupplierInvoiceDetail(GenericAPIView):
                         serializer = SupplierInvoiceSerializer(data=request.data)
                         if serializer.is_valid():
                             supplier_invoice_obj = serializer.update(supplier_invoice_obj, serializer.validated_data, user)
+                            serializer = SupplierInvoiceViewSerializer(supplier_invoice_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'supplier_invoice_id_string': supplier_invoice_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
