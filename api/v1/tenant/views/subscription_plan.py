@@ -6,7 +6,8 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan as subscriptionPlanTbl
+from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan as subscriptionPlanTbl, \
+    get_subscription_plan_by_id
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.subscription_plan import SubscriptionPlanListSerializer, SubscriptionPlanViewSerializer, \
      SubscriptionPlanSerializer
@@ -171,7 +172,7 @@ class SubscriptionPlanDetail(GenericAPIView):
                         # Save basic details start
                         # user = UserDetail.objects.get(id=2)
                         print("Here",request);
-                        subscription_plan_obj = get_subscription_plan_by_id_string(id_string)
+                        subscription_plan_obj = get_subscription_plan_by_id(id_string)
 
                         if subscription_plan_obj:
                             serializer = SubscriptionPlanSerializer(data=request.data)
