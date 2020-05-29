@@ -1,26 +1,10 @@
-# Table Header
-# Table Type : Lookup (Local)
-# Table Name : 2.12.51 Schedule Type
-# Description : It Schedule type and ID of various Schedule type to be used by Operator or Utility
-# Frequency of data changes : Low
-# Sample Table Data : Reading, Bill Distribution, Notices
-# Reference Table : 2.3.8.1 Schedule
-# Author : Jayshree
-# Creation Date : 22/04/2020
-
-# change history
-# <ddmmyyyy>-<changes>-<Author>
-
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
-
-# Create Schedule Type table start
-
-class ScheduleType(models.Model):
+class ActivityType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -39,15 +23,15 @@ class ScheduleType(models.Model):
 
 # Create Schedule Type table start
 
-def get_schedule_type_by_id(id):
+def get_activity_type_by_id(id):
     try:
-        return ScheduleType.object.get(id = id)
+        return ActivityType.object.get(id=id)
     except:
         return False
 
 
-def get_schedule_type_by_id_string(id_string):
+def get_activity_type_by_id_string(id_string):
     try:
-        return ScheduleType.object.get(id_string = id_string)
+        return ActivityType.object.get(id_string=id_string)
     except:
         return False

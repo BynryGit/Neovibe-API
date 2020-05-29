@@ -87,3 +87,10 @@ def get_consumer_by_registration_id(id):
         return ConsumerMaster.objects.get(registration_id = id)
     except:
         return False
+
+
+def get_consumers_by_cycle_id(id):
+    try:
+        return ConsumerMaster.objects.filter(cycle_id = id)
+    except:
+        return False

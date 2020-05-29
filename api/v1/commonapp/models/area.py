@@ -18,6 +18,7 @@ from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
 
 from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.views.custom_exception import ObjectNotFoundException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -76,6 +77,6 @@ def get_area_by_id(id):
 
 def get_area_by_id_string(id_string):
     try:
-        return Area.objects.get(id_string=id_string)
+        return Area.objects.get(id_string = id_string)
     except:
-        return  False
+        return False

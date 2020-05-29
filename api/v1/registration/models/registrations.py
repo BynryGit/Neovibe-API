@@ -14,6 +14,8 @@
 
 from datetime import datetime # importing package for datetime
 
+from django.contrib.auth.models import AbstractUser
+
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.registration.models.registration_status import get_registration_status_by_id
@@ -59,6 +61,9 @@ class Registration(models.Model):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True)
     updated_date = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('phone_mobile',)
 
     def __str__(self):
         return self.first_name

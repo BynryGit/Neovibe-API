@@ -2,6 +2,8 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.registration.models.registrations import Registration
 from v1.registration.serializers.registration_status import RegistrationStatusViewSerializer
@@ -23,15 +25,16 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    reg_created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, required=False, read_only=True, source='created_date')
 
     class Meta:
         model = Registration
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
-                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'created_date', 'status', 'area')
+                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'reg_created_date', 'status', 'area')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    phone_mobile = serializers.CharField(required=False, max_length=200)
+    phone_mobile = serializers.CharField(required=True, max_length=200)
     area_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
     registration_type_id = serializers.CharField(required=False, max_length=200)
@@ -48,7 +51,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        validators = [UniqueTogetherValidator(queryset=Registration.objects.all(), fields=('phone_mobile',), message='Registration already exists!')]
         fields = ('__all__')
 
 

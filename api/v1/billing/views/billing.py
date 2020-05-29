@@ -1,11 +1,18 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, generics
+from rest_framework.exceptions import APIException
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from api.messages import SUCCESS, RESULTS, STATE, ERROR, EXCEPTION, DATA
 from v1.billing.models.invoice_bill import get_invoice_bill_by_id_string
 from v1.billing.serializers.invoice_bill import InvoiceBillSerializer, InvoiceBillViewSerializer
 from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.meter_reading.models.schedule import get_all_schedules
+from v1.meter_reading.serializers.schedule import ScheduleListSerializer
 from v1.registration.views.common_functions import is_data_verified
 from v1.userapp.models.user_master import UserDetail
 
@@ -160,8 +167,33 @@ class InvoiceBillDetail(GenericAPIView):
 
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            # logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class BillingList(generics.ListAPIView):
+    try:
+        serializer_class = ScheduleListSerializer
+        pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('',)
+        ordering_fields = ('',)
+        ordering = ('',)  # always give by default alphabetical order
+        search_fields = ('',)
+
+        def get_queryset(self):
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    schedules = get_all_schedules()
+                    schedules = schedules.filter(tenant=user.tenant)
+                    return schedules
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException

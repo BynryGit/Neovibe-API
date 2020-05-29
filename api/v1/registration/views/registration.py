@@ -9,7 +9,6 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.consumer.models.consumer_master import get_consumer_by_registration_id
-from v1.consumer.serializers.consumer import ConsumerSerializer
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
@@ -88,14 +87,9 @@ class Registration(GenericAPIView):
                     if is_data_verified(request):
                     # Request data verification end
                         serializer = RegistrationSerializer(data=request.data)
-                        consumer_serializer = ConsumerSerializer(data=request.data)
-                        if serializer.is_valid() and consumer_serializer.is_valid():
+                        if serializer.is_valid():
                             with transaction.atomic():
                                 registration_obj = serializer.create(serializer.validated_data, user)
-                                consumer_obj = consumer_serializer.create(consumer_serializer.validated_data, user)
-                                consumer_obj.is_active = False
-                                consumer_obj.registration_id = registration_obj.id
-                                consumer_obj.save()
                                 view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
@@ -119,11 +113,9 @@ class Registration(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
-            return Response({
-                STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            response = self.handle_exception(e)
+            # logger().log(e, 'ERROR', user='test', name='test')
+            return response
 
 
 # API Header

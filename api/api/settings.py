@@ -148,6 +148,7 @@ INPUT_DATE_FORMAT = "%d-%b-%Y"
 
 STATIC_URL = '/static/'
 
+
 #
 # LOGGING = {
 #     'version': 1,
