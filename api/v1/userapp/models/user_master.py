@@ -122,6 +122,10 @@ def get_user_by_username(username):
     return UserDetail.objects.get(username=username)
 
 
+def get_user_by_username_password(username, password):
+    return UserDetail.objects.get(username=username, password=password)
+
+
 def get_users_by_tenant_id_string(id_string):
     return UserDetail.objects.filter(tenant__id_string=id_string)
 
@@ -141,14 +145,10 @@ def get_notes_by_user_id_string(id_string):
     return get_notes_by_userid(user.id)
 
 
-def is_username_exists(username):
-    user = UserDetail.objects.filter(username=username, is_active=True).last()
-    if user:
-        return False
-    else:
-        return True
-
-
 def check_user_id_string_exists(id_string):
     return UserDetail.objects.filter(id_string=id_string, is_active=True).exists()
+
+
+def authenticate_user(username, password):
+    return UserDetail.objects.filter(username=username, password=password, is_active=True).exists()
 

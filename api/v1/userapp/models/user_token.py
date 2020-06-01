@@ -28,7 +28,6 @@ class UserToken(models.Model):
     form_factor_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
     ip_address = models.CharField(max_length=200,null=True, blank=True)
-    status = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
