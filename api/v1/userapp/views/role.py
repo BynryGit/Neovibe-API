@@ -42,8 +42,9 @@ class RoleList(generics.ListAPIView):
     search_fields = ('role',)
 
     def get_queryset(self):
-        if is_token_valid(self.request.headers['token']):
-            if is_authorized():
+        response, user_obj = is_token_valid(self.request.headers['token'])
+        if response:
+            if is_authorized(user_obj):
                 queryset = get_all_role()
                 return queryset
             else:
