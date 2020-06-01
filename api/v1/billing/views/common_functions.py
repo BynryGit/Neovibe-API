@@ -19,7 +19,14 @@ def set_validated_data(validated_data):
     return validated_data
 
 
-def generate_consumer_bill(consumer, bill_month, due_date, schedule):
+def run_bill(consumer, bill_month, due_date, schedule):
+    try:
+        pass
+    except:
+        pass
+
+
+def generate_consumer_bill(consumer, bill_month):
     try:
         meter_reading = get_consumer_meter_reading_by_bill_month(consumer, bill_month)
         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)

@@ -18,7 +18,7 @@ from v1.registration.serializers.registration import RegistrationViewSerializer,
 from v1.userapp.models.user_master import UserDetail
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.views.common_functions import is_data_verified
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, RESULT, UNAUTHORIZED
 
 
 # API Header
@@ -82,40 +82,37 @@ class Registration(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    # Request data verification start
                     user = UserDetail.objects.get(id = 2)
-                    if is_data_verified(request):
-                    # Request data verification end
-                        serializer = RegistrationSerializer(data=request.data)
-                        if serializer.is_valid():
-                            with transaction.atomic():
-                                registration_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                    serializer = RegistrationSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        registration_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: view_serializer.data,
+                        }, status=status.HTTP_201_CREATED)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULT: list(serializer.errors.values())[0][0],
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,
+                        RESULT: UNAUTHORIZED,
                     }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULT: UNAUTHORIZED,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            response = self.handle_exception(e)
-            # logger().log(e, 'ERROR', user='test', name='test')
-            return response
+            logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -159,7 +156,7 @@ class RegistrationDetail(GenericAPIView):
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
+                RESULTS: '',
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, id_string):
@@ -172,28 +169,22 @@ class RegistrationDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    # Request data verification start
-                    if is_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic details start
-                        user = UserDetail.objects.get(id=2)
-                        registration_obj = get_registration_by_id_string(id_string)
-                        if registration_obj:
-                            serializer = RegistrationSerializer(data=request.data)
-                            if serializer.is_valid(request.data):
-                                registration_obj = serializer.update(registration_obj, serializer.validated_data, user)
-                                view_serializer = RegistrationViewSerializer(instance=registration_obj,
-                                                                             context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                        else:
+                    # Save basic details start
+                    user = UserDetail.objects.get(id=2)
+                    registration_obj = get_registration_by_id_string(id_string)
+                    if "phone_mobile" not in request.data:
+                        request.data['phone_mobile'] = registration_obj.phone_mobile
+                    if registration_obj:
+                        serializer = RegistrationSerializer(data=request.data)
+                        if serializer.is_valid(request.data):
+                            registration_obj = serializer.update(registration_obj, serializer.validated_data, user)
+                            view_serializer = RegistrationViewSerializer(instance=registration_obj,
+                                                                         context={'request': request})
                             return Response({
-                                STATE: ERROR,
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        # Save basic details start
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
+                    # Save basic details end
                     else:
                         return Response({
                             STATE: ERROR,
@@ -205,14 +196,15 @@ class RegistrationDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-
+                    RESULT: UNAUTHORIZED
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            # logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
