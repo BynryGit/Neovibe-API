@@ -7,11 +7,13 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.terms_and_conditions import TermsAndCondition as TermsAndConditionTbl
+from v1.contract.serializers.contract import ContractShortViewSerializer
 
 
 class TermsAndConditionViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
+    contract = ContractShortViewSerializer(many=False, required=False, source='get_contract')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 

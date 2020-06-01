@@ -3,7 +3,6 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
-
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
@@ -12,6 +11,13 @@ from v1.supplier.views.common_functions import set_supplier_validated_data
 from v1.tenant.serializers.tenant_city import TenantCitySerializer
 from v1.tenant.serializers.tenant_country import TenantCountrySerializer
 from v1.tenant.serializers.tenant_state import TenantStateSerializer
+
+
+class SupplierShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SupplierTbl
+        fields = ('id_string', 'name')
 
 
 class SupplierViewSerializer(serializers.ModelSerializer):

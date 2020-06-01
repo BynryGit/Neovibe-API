@@ -18,6 +18,7 @@ from datetime import datetime # importing package for datetime
 
 from v1.supplier.models.product_category import get_supplier_product_category_by_id
 from v1.supplier.models.product_subcategory import get_supplier_product_subcategory_by_id
+from v1.supplier.models.supplier import get_supplier_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -51,6 +52,11 @@ class SupplierProduct(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_supplier(self):
+        supplier = get_supplier_by_id(self.supplier)
+        return supplier
 
     @property
     def get_product_category(self):
