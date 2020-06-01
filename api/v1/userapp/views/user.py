@@ -5,7 +5,6 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
-from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger

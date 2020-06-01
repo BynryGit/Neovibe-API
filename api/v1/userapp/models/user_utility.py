@@ -57,27 +57,10 @@ class UserUtility(models.Model):
 
 # Create User Privilege table end
 
-
-# def get_privilege_by_id_string(id_string):
-#     return UserRole.objects.get(id_string=id_string, is_active=True)
-#
-#
-# def get_user_role_by_user_id(id):
-#     return UserRole.objects.filter(user_id=id, is_active=True)
-#
-#
-# def get_user_role_by_role_id(id):
-#     return UserRole.objects.filter(role_id=id, is_active=True)
-#
-#
-# def get_record_by_values(user_id_string,role_id_string):
-#     user = get_user_by_id_string(user_id_string)
-#     role = get_role_by_id_string(role_id_string)
-#     return UserRole.objects.filter(user_id=user.id,role_id=role.id).last()
-
-
-def check_user_utility_exists(user_id,utility_id):
+def check_user_utility_exists(user_id, utility_id):
     return UserUtility.objects.filter(user_id=user_id, utility_id=utility_id, is_active=True).exists()
 
 
+def get_utility_by_user(user_id):
+    return UserUtility.objects.filter(user_id=user_id, is_active=True)
 

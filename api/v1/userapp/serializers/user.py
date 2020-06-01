@@ -17,6 +17,9 @@ from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
+from v1.userapp.serializers.user_area import UserAreaSerializer
+from v1.userapp.serializers.user_skill import UserSkillSerializer
+from v1.userapp.serializers.user_utility import UserUtilitySerializer
 from v1.userapp.views.common_functions import set_user_validated_data, set_user_role_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -124,7 +127,6 @@ class UserViewSerializer(serializers.ModelSerializer):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
-    utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
     user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_user_sub_type')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
@@ -132,6 +134,9 @@ class UserViewSerializer(serializers.ModelSerializer):
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     bank = UserBankViewSerializer(many=False, required=True, source='get_user_bank')
+    utilities = UserUtilitySerializer(many=True, required=True, source='get_user_utility')
+    areas = UserAreaSerializer(many=True, required=True, source='get_user_area')
+    skills = UserSkillSerializer(many=True, required=True, source='get_user_skill')
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:

@@ -15,7 +15,7 @@ class LoginTrail(models.Model): # change name to role
     logout_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.role
+        return self.username
 
     def __unicode__(self):
-        return self.role
+        return self.username

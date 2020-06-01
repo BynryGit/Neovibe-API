@@ -8,12 +8,13 @@ from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.models.notes import get_notes_by_user_id, get_notes_by_userid
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.user_area import get_area_by_user
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.role import get_role_by_id
+from v1.userapp.models.user_skill import get_skill_by_user
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 # Create User Details table start
@@ -31,7 +32,7 @@ from django.db import models  # importing package for database
 
 # change history
 # <ddmmyyyy><changes><author>
-
+from v1.userapp.models.user_utility import get_utility_by_user
 
 
 class UserDetail(models.Model):
@@ -102,11 +103,23 @@ class UserDetail(models.Model):
     def get_user_bank(self):
         return get_bank_by_id(self.bank_detail_id)
 
+    @property
+    def get_user_utility(self):
+        return get_utility_by_user(self.id)
+
+    @property
+    def get_user_area(self):
+        return get_area_by_user(self.id)
+
+    @property
+    def get_user_skill(self):
+        return get_skill_by_user(self.id)
+
 # Create User Details table end
 
 
 def get_all_users():
-    return UserDetail.objects.filter(is_active=1)
+    return UserDetail.objects.filter(is_active=True)
 
 
 def get_user_by_id_string(id_string):
