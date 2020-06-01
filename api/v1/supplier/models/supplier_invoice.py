@@ -43,23 +43,38 @@ class SupplierInvoice(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.invoice_no
+        return str(self.invoice_no)
 
     def __unicode__(self):
-        return self.invoice_no
+        return str(self.invoice_no)
 
 # Create Invoice table end.
 
 
-def get_supplier_invoice_by_id_string(id_string):
+def get_supplier_invoice_by_id(id):
     try:
-        return SupplierInvoice.objects.get(id_string = id_string)
+        return SupplierInvoice.objects.get(id=id)
     except:
         return False
 
-def get_supplier_invoice_by_id(id):
+
+def get_supplier_invoice_by_id_string(id_string):
     try:
-        return SupplierInvoice.objects.get(id = id)
+        return SupplierInvoice.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_contract_invoice_by_id(id):
+    try:
+        return SupplierInvoice.objects.get(id=id)
+    except:
+        return False
+
+
+def get_contract_invoice_by_id_string(id_string):
+    try:
+        return SupplierInvoice.objects.get(id_string=id_string)
     except:
         return False
 

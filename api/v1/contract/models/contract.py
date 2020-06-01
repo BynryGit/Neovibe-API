@@ -15,6 +15,9 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.contract.models.contract_period import get_contract_period_by_id
+from v1.contract.models.contract_type import get_contract_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -42,13 +45,23 @@ class Contract(models.Model):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_contract_type(self):
+        contract = get_contract_type_by_id(self.contract_type)
+        return contract
+
+    @property
+    def get_contract_period(self):
+        period = get_contract_period_by_id(self.contract_period)
+        return period
 
 # Create Contracts Master table end.
 
@@ -59,9 +72,10 @@ def get_contract_by_id(id):
     except:
         return False
 
+
 def get_contract_by_id_string(id_string):
     try:
-        return Contract.objects.get(id_string = id)
+        return Contract.objects.get(id_string = id_string)
     except:
         return False
 

@@ -60,5 +60,14 @@ def get_utility_service_plan_by_id_string(id_string):
 
 
 def get_utility_service_plan_by_id(id):
-    return UtilityServicePlan.objects.get(id = id)
-# Create  Utility Service Plan  table end.
+    try:
+        return UtilityServicePlan.objects.get(id = id)
+    except:
+        return False
+
+
+def get_utility_service_plans_by_dates(from_date, to_date, schedule):
+    try:
+        return UtilityServicePlan.objects.filter(utility=schedule.utility, start_date__lte=to_date, end_date__gte=from_date, is_active=True)
+    except:
+        return False

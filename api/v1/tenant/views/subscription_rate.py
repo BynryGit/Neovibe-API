@@ -11,9 +11,9 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.subscription_plan import SubscriptionPlanListSerializer, SubscriptionPlanViewSerializer, \
      SubscriptionPlanSerializer
 from v1.tenant.models.tenant_subscription_plan import get_subscription_plan_by_id_string
-from v1.tenant.views.common_functions import is_data_verified
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE
-
+from v1.tenant.serializers.subscription_rate import SubscriptionPlanRateSerializer, SubscriptionPlanRateViewSerializer
+from v1.tenant.views.common_functions import is_data_verified, is_subscription_plan_rate_data_verified
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE, DATA_ALREADY_EXISTS
 
 # API Header
 # API end Point: api/v1/tenant/subscription-plan/list
@@ -26,6 +26,9 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLIC
 # Tables used: 1.1 Tenant Subscription plan
 # Author: Gauri Deshmukh
 # Created on: 21/05/2020
+from v1.userapp.models.user_master import UserDetail
+from v1.userapp.views import user
+
 
 class SubscriptionList(generics.ListAPIView):
     serializer_class = SubscriptionPlanListSerializer
@@ -55,50 +58,42 @@ class SubscriptionList(generics.ListAPIView):
 # Auther: Gauri Deshmukh
 # Created on: 21/5/2020
 
-class SubscriptionPlan(GenericAPIView):
+class SubscriptionPlanRate(GenericAPIView):
 
     def post(self, request):
         try:
             # Checking authentication start
-            if is_token_valid(1):
-                # payload = get_payload(request.data['token'])
+            if is_token_valid(request.headers['token']):
+                # payload = get_payload(request.headers['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
                 if is_authorized():
                     # Checking authorization end
+                    # Todo fetch user from request start
+                    #user = UserDetail.objects.get(id=1)
+                    # Todo fetch user from request end
 
-                    # Request data verification start
-                    #user = UserDetail.objects.get(id = 2)
-                    if is_data_verified(request):
-                    # Request data verification end
-                        duplicate_subscription_plan_obj = subscriptionPlanTbl.objects.filter(id_string=request.data["id_string"],
-                                                                              subscription_plan=request.data['subscription_plan_id'])
-                        if duplicate_subscription_plan_obj:
-                            return Response({
-                                STATE: DUPLICATE,
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        else:
-                            serializer = SubscriptionPlanSerializer(data=request.data)
-                        if serializer.is_valid():
-#                            tenant_obj = serializer.create(serializer.validated_data, user)
-                            subscription_plan_obj = serializer.create(serializer.validated_data)
-                            view_serializer = SubscriptionPlanViewSerializer(instance=subscription_plan_obj, context={'request': request})
+                    serializer = SubscriptionPlanRateSerializer(data=request.data)
+                    if serializer.is_valid():
+                        tenantRate_obj = serializer.create(serializer.validated_data, user)
+                        if tenantRate_obj:
+                            view_serializer = SubscriptionPlanRateViewSerializer(instance=tenantRate_obj,
+                                                                             context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULTS: view_serializer.data,
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                                STATE: DUPLICATE,
+                                RESULTS: DATA_ALREADY_EXISTS,
+                            }, status=status.HTTP_409_CONFLICT)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -108,12 +103,11 @@ class SubscriptionPlan(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as e:
-            traceback.print_exc(e)
-            logger().log(e, 'ERROR', user='Exception', name='Testing')
+        except Exception as ex:
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
+                ERROR: str(traceback.print_exc(ex))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # API Header

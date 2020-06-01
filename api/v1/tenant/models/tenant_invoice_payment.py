@@ -25,7 +25,7 @@ from django.db import models  # importing package for database
 class TenantInvoicePayment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    invoice_number = models.BigIntegerField(null=True, blank=True)
+    invoice_number = models.CharField(max_length=200, blank=False, null=False)
     payment_method = models.CharField(max_length=200, blank=False, null=False)
     payment_channel = models.CharField(max_length=200, blank=False, null=False)
     transaction_no = models.CharField(max_length=200, blank=False, null=False)

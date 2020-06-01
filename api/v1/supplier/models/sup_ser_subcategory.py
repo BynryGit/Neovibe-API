@@ -42,3 +42,17 @@ class SupSerSubCategory(models.Model):
         return self.name
 
 # Create Product Service Sub Category table end.
+
+
+def get_supplier_service_subcategory_by_id(id):
+    try:
+        return SupSerSubCategory.objects.get(id=id)
+    except:
+        return False
+
+
+def get_supplier_service_subcategory_by_id_string(id_string):
+    try:
+        return SupSerSubCategory.objects.get(id_string=id_string)
+    except:
+        return False

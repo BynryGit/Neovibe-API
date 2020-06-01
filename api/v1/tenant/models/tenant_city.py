@@ -21,8 +21,8 @@ from django.db import models  # importing package for database
 
 class TenantCity(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=200, blank=False, null=False)
-    tenant_state_id = models.BigIntegerField(blank=False, null=False)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    tenant_state_id = models.BigIntegerField(blank=True, null=True)
     tenant_country_id = models.BigIntegerField(null=True, blank=True)
     tenant_region_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)

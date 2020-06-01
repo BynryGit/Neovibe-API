@@ -1,32 +1,5 @@
 [
 
-  {
-		"pk": "1",
-		"model": "dispatcher.ServiceTypes",
-		"fields": {
-			"utility": 1,
-			"name": "Image",
-			"is_active": "True"
-			}
-	},
-  {
-		"pk": "2",
-		"model": "dispatcher.ServiceTypes",
-		"fields": {
-			"utility": 1,
-			"name": "Parameter",
-			"is_active": "True"
-			}
-	},
-  {
-		"pk": "3",
-		"model": "dispatcher.ServiceTypes",
-		"fields": {
-			"utility": 1,
-			"name": "Material",
-			"is_active": "True"
-			}
-	},
 
 	{
 		"pk": "1",
@@ -188,7 +161,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"name": "Active",
+			"name": "Assign",
 			"is_active": "True"
 		}
 	},
@@ -198,7 +171,7 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"name": "Inactive",
+			"name": "Deassign",
 			"is_active": "True"
 		}
 	},
@@ -208,21 +181,10 @@
 		"fields": {
 			"tenant": 1,
 			"utility": 1,
-			"name": "Active",
+			"name": "Reassign",
 			"is_active": "True"
 		}
 	},
-	{
-		"pk": "4",
-		"model": "dispatcher.SopStatus",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Inactive",
-			"is_active": "True"
-		}
-	},
-
 	{
 		"pk": "1",
 		"model": "dispatcher.TaskType",

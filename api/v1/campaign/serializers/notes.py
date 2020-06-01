@@ -7,12 +7,10 @@ from v1.utility.serializers.utility import UtilitySerializer
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 
 class NoteSerializer(serializers.ModelSerializer):
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
     tenant = TenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = NotesTbl

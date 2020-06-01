@@ -18,7 +18,12 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.service_type import get_service_type_by_id
+from v1.dispatcher.models.sop_status import get_sop_status_by_id
+from v1.dispatcher.models.service_appointments import get_service_request_by_id
+from v1.supplier.models.supplier import get_supplier_by_id
 # Create Service Assignment table start
 
 class ServiceAssignment(models.Model):
@@ -45,10 +50,55 @@ class ServiceAssignment(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.service_request)
+        return str(self.service_request_id)
 
     def __unicode__(self):
-        return str(self.service_request)
+        return str(self.service_request_id)
+
+    @property
+    def get_service_type(self):
+        service_type_id = get_service_type_by_id(self.service_type_id)
+        return service_type_id
+
+    @property
+    def get_city(self):
+        city_id = get_city_by_id(self.city_id)
+        return city_id
+
+    @property
+    def get_area(self):
+        area_id = get_area_by_id(self.area_id)
+        return area_id
+
+
+
+    @property
+    def get_sop_status(self):
+        status_id = get_sop_status_by_id(self.status_id)
+        return status_id
+
+    @property
+    def get_service_request(self):
+        service_request_id = get_service_request_by_id(self.service_request_id)
+        return service_request_id
+
+    @property
+    def get_vendor(self):
+        vendor_id = get_supplier_by_id(self.vendor_id)
+        return vendor_id
+
+def get_service_assignment_by_id_string(id_string):
+    try:
+        return ServiceAssignment.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_service_assignment_by_id(id):
+    try:
+        return ServiceAssignment.objects.get(id=id)
+    except:
+        return False
+
 
 # Create Service Assignment table end.
 

@@ -33,7 +33,8 @@ class MeterReading(models.Model):
     consumer_no = models.BigIntegerField(null=True, blank=True)
     meter_no = models.BigIntegerField(null=True, blank=True)
     jobcard = models.BigIntegerField(null=True, blank=True)
-    current_reading = models.CharField(max_length=200, null=True, blank=True)
+    current_reading = models.FloatField(null=True, blank=True)
+    consumption = models.FloatField(null=True, blank=True)
     reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     reading_status = models.BigIntegerField(null=True, blank=True)
     meter_status = models.BigIntegerField(null=True, blank=True)
@@ -59,3 +60,9 @@ class MeterReading(models.Model):
         return self.consumer_no
 
 # Create Meter Reading Table end
+
+def get_consumer_meter_reading_by_bill_month(consumer, month):
+    try:
+        return MeterReading.object.get(consumer_no = consumer, month = month)
+    except:
+        return False

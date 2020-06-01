@@ -41,23 +41,21 @@ class InvoiceBill(models.Model):
     bill_count = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    billing_period_from = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    billing_period_to = models.DateTimeField(null=True, blank=True, default=datetime.now())
     meter_no = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.BigIntegerField(null=True, blank=True)
     meter_reading = models.BigIntegerField(null=True, blank=True)
-    previous_reading = models.CharField(max_length=200, null=True, blank=True)
-    current_reading = models.CharField(max_length=200, null=True, blank=True)
+    previous_reading = models.FloatField(null=True, blank=True)
+    current_reading = models.FloatField(null=True, blank=True)
     previous_reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     current_reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    consumption = models.CharField(max_length=200, null=True, blank=True)
+    consumption = models.FloatField(null=True, blank=True)
     basic_price = models.FloatField(null=True, blank=True)
     vat_percent = models.FloatField(null=True, blank=True)
     total_price = models.FloatField(null=True, blank=True)
     consumption_charges = models.FloatField(null=True, blank=True)
     net_amount = models.FloatField(null=True, blank=True)
     outstanding = models.FloatField(null=True, blank=True)
-    payment = models.CharField(max_length=200, null=True, blank=True)
+    payment = models.FloatField(null=True, blank=True)
     current_charges = models.FloatField(null=True, blank=True)
     total_emi_paid = models.FloatField(null=True, blank=True)
     remaining_emi_amt = models.FloatField(null=True, blank=True)
@@ -120,4 +118,16 @@ def get_invoice_bill_by_id(id):
     except:
         return False
 
-# Create Invoice Bill table end.
+
+def get_consumer_invoice_bill_by_month(consumer, month):
+    try:
+        return InvoiceBill.objects.get(consumer_no = consumer, bill_month = month)
+    except:
+        return False
+
+
+def get_previous_consumer_bill(consumer):
+    try:
+        return InvoiceBill.objects.filter(consumer_no = consumer)[InvoiceBill.objects.filter(consumer_no = consumer).count()-2]
+    except:
+        return False

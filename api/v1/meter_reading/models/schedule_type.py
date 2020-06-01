@@ -38,3 +38,16 @@ class ScheduleType(models.Model):
         return self.name
 
 # Create Schedule Type table start
+
+def get_schedule_type_by_id(id):
+    try:
+        return ScheduleType.object.get(id = id)
+    except:
+        return False
+
+
+def get_schedule_type_by_id_string(id_string):
+    try:
+        return ScheduleType.object.get(id_string = id_string)
+    except:
+        return False

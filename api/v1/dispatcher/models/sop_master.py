@@ -18,8 +18,8 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from v1.dispatcher.models.service_type import get_service_type_by_id
 from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.service_type import get_service_type_by_id
 # Create SOP Master table start
 
 class SopMaster(models.Model):
@@ -44,14 +44,15 @@ class SopMaster(models.Model):
         return str(self.service_type_id) + '-' + str(self.name)
 
     @property
-    def get_service_type(self):
-        service_type = get_service_type_by_id(self.service_type_id)
-        return service_type
-
-    @property
     def get_city(self):
         city_id = get_city_by_id(self.city_id)
         return city_id
+
+    @property
+    def get_service_type(self):
+        service_type_id = get_service_type_by_id(self.service_type_id)
+        return service_type_id
+
 
 def get_sop_by_id_string(id_string):
     try:

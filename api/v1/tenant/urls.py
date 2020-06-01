@@ -7,6 +7,7 @@ from v1.tenant.views.invoice import TenantInvoiceList, TenantInvoice, TenantInvo
 from v1.tenant.views.payment import TenantInvoicePaymentList, TenantInvoicePayment, TenantInvoicePaymentDetail
 from v1.tenant.views.subscription import SubscriptionList, Subscription, SubscriptionDetail
 from v1.tenant.views.subscription_plan import SubscriptionPlanList, SubscriptionPlan, SubscriptionPlanDetail
+from v1.tenant.views.subscription_rate import SubscriptionPlanRate
 from v1.tenant.views.tenant import TenantList,TenantDetail,Tenant
 from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModuleDetail, Submodule
 from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
@@ -45,7 +46,7 @@ urlpatterns = [
     path('subscription-plan/<uuid:id_string>', SubscriptionPlanDetail.as_view()),
 
     path('subscription-rate/list', SubscriptionList.as_view()),
-    path('subscription-rate/', Subscription.as_view()),
+    path('subscription-rate/', SubscriptionPlanRate.as_view()),
     path('subscription-rate/<uuid:id_string>', SubscriptionDetail.as_view()),
 
     path('invoice/list', TenantInvoiceList.as_view()),

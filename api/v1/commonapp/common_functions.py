@@ -12,7 +12,6 @@ def get_payload(token):
 
 
 def is_token_valid(token):
-    # return True
     try:
         if check_token_exists(token):
             decoded_token = get_payload(token)
@@ -20,7 +19,7 @@ def is_token_valid(token):
             if user_obj:
                 return True, user_obj
             else:
-                return False
+                return True
         else:
             return False
     except Exception as e:
