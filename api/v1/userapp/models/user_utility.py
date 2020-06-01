@@ -25,12 +25,11 @@ from django.db import models  # importing package for database
 
 # Create User Privilege table start
 
-class UserRole(models.Model):
+class UserUtility(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     user_id = models.BigIntegerField(null=True, blank=True)
-    role_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -55,40 +54,30 @@ class UserRole(models.Model):
     def get_user(self):
         return get_user_by_id(self.user_id)
 
-    @property
-    def get_role(self):
-        return get_role_by_id(self.role_id)
-
-    @property
-    def get_role_privilege(self):
-        return get_role_privilege_by_role_id(self.role_id)
-
-    class Meta:
-        unique_together = ('role_id', 'user_id',)
 
 # Create User Privilege table end
 
 
-def get_privilege_by_id_string(id_string):
-    return UserRole.objects.get(id_string=id_string, is_active=True)
+# def get_privilege_by_id_string(id_string):
+#     return UserRole.objects.get(id_string=id_string, is_active=True)
+#
+#
+# def get_user_role_by_user_id(id):
+#     return UserRole.objects.filter(user_id=id, is_active=True)
+#
+#
+# def get_user_role_by_role_id(id):
+#     return UserRole.objects.filter(role_id=id, is_active=True)
+#
+#
+# def get_record_by_values(user_id_string,role_id_string):
+#     user = get_user_by_id_string(user_id_string)
+#     role = get_role_by_id_string(role_id_string)
+#     return UserRole.objects.filter(user_id=user.id,role_id=role.id).last()
 
 
-def get_user_role_by_user_id(id):
-    return UserRole.objects.filter(user_id=id, is_active=True)
-
-
-def get_user_role_by_role_id(id):
-    return UserRole.objects.filter(role_id=id, is_active=True)
-
-
-def get_record_by_values(user_id_string,role_id_string):
-    user = get_user_by_id_string(user_id_string)
-    role = get_role_by_id_string(role_id_string)
-    return UserRole.objects.filter(user_id=user.id,role_id=role.id).last()
-
-
-def check_role_exists(id):
-    return UserRole.objects.filter(user_id=id, is_active=True)
+def check_user_utility_exists(user_id,utility_id):
+    return UserUtility.objects.filter(user_id=user_id, utility_id=utility_id, is_active=True).exists()
 
 
 

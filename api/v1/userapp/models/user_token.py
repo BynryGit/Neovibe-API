@@ -24,9 +24,8 @@ from django.db import models  # importing package for database
 class UserToken(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     token = models.CharField(max_length=200, null=True, blank=True)
-    form_factor = models.BigIntegerField(null=True, blank=True)
+    form_factor_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
     ip_address = models.CharField(max_length=200,null=True, blank=True)
     status = models.BigIntegerField(null=True, blank=True)
@@ -46,4 +45,8 @@ class UserToken(models.Model):
 
 
 def get_token_by_user_id(id):
-    return UserToken.objects.filter(user_id=id).last()
+    return UserToken.objects.filter(user_id=id, is_active=True).last()
+
+
+def check_token_exists(token):
+    return UserToken.objects.filter(token=token, is_active=True).exists()
