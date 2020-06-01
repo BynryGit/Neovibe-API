@@ -17,7 +17,9 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 
 from v1.contract.models.contract_period import get_contract_period_by_id
+from v1.contract.models.contract_status import get_contract_status_by_id
 from v1.contract.models.contract_type import get_contract_type_by_id
+from v1.supplier.models.supplier import get_supplier_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -54,6 +56,11 @@ class Contract(models.Model):
         return self.name
 
     @property
+    def get_supplier(self):
+        supplier = get_supplier_by_id(self.supplier)
+        return supplier
+
+    @property
     def get_contract_type(self):
         contract = get_contract_type_by_id(self.contract_type)
         return contract
@@ -63,25 +70,30 @@ class Contract(models.Model):
         period = get_contract_period_by_id(self.contract_period)
         return period
 
+    @property
+    def get_contract_status(self):
+        status = get_contract_status_by_id(self.status)
+        return status
+
 # Create Contracts Master table end.
 
 
 def get_contract_by_id(id):
     try:
-        return Contract.objects.get(id = id)
+        return Contract.objects.get(id=id)
     except:
         return False
 
 
 def get_contract_by_id_string(id_string):
     try:
-        return Contract.objects.get(id_string = id_string)
+        return Contract.objects.get(id_string=id_string)
     except:
         return False
 
 
 def get_supplier_contract_by_id(id):
     try:
-        return Contract.objects.get(supplier = id)
+        return Contract.objects.get(supplier=id)
     except:
         return False

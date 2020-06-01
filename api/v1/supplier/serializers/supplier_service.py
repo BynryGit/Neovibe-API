@@ -3,17 +3,18 @@ __author__ = "aki"
 from django.db import transaction
 from rest_framework import serializers
 from django.utils import timezone
-
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.supplier.models.supplier_service import SupplierService as SupplierServiceTbl
+from v1.supplier.serializers.supplier import SupplierShortViewSerializer
 from v1.supplier.views.common_functions import set_supplier_service_validated_data
 
 
 class SupplierServiceViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
+    supplier = SupplierShortViewSerializer(many=False, required=False, source='get_supplier')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 

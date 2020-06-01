@@ -8,8 +8,16 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.contract import Contract as ContractTbl
 from v1.contract.serializers.contract_period import ContractPeriodShortViewSerializer
+from v1.contract.serializers.contract_status import ContractStatusShortViewSerializer
 from v1.contract.serializers.contract_type import ContractTypeShortViewSerializer
 from v1.contract.views.common_functions import set_contract_validated_data
+
+
+class ContractShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ContractTbl
+        fields = ('id_string', 'name')
 
 
 class ContractViewSerializer(serializers.ModelSerializer):
@@ -17,6 +25,7 @@ class ContractViewSerializer(serializers.ModelSerializer):
     utility = UtilityMasterViewSerializer(read_only=True)
     contract_type = ContractTypeShortViewSerializer(many=False, required=False, source='get_contract_type')
     contract_period = ContractPeriodShortViewSerializer(many=False, required=False, source='get_contract_period')
+    # status = ContractStatusShortViewSerializer(many=False, required=False, source='get_contract_status')
     start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
@@ -25,7 +34,7 @@ class ContractViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractTbl
         fields = ('id_string', 'name', 'description', 'contract_amount', 'start_date', 'end_date', 'created_date',
-                  'updated_date', 'tenant', 'utility', 'contract_type', 'contract_period', 'cost_center', 'status')
+                  'updated_date', 'tenant', 'utility', 'contract_type', 'contract_period', 'status', 'cost_center')
 
 
 class ContractSerializer(serializers.ModelSerializer):

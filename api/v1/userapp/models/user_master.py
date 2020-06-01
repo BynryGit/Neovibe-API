@@ -1,5 +1,4 @@
 import uuid  # importing package for guid
-import jsonfield # importing json field
 from datetime import datetime # importing package for datetime
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
@@ -16,7 +15,6 @@ from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from django.contrib.auth.models import User
 
 # Create User Details table start
 
@@ -35,17 +33,19 @@ from django.contrib.auth.models import User
 # <ddmmyyyy><changes><author>
 
 
-class UserDetail(User):
+
+class UserDetail(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     city_id = models.BigIntegerField(blank=True, null=True)
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
-    imei = models.CharField(max_length=50, null=True, blank=True)  # Web, Mobile
     user_ID = models.CharField(max_length=200,null=True, blank=True)  # Web, Mobile
+    first_name = models.CharField(max_length=200, null=True, blank=True)
     middle_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
+    email = models.CharField(max_length=200, null=True, blank=True)
     user_image = models.URLField(null=True, blank=True)
     salt = models.CharField(max_length=200, null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
@@ -53,9 +53,7 @@ class UserDetail(User):
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     bank_detail_id = models.BigIntegerField(null=True, blank=True)
-    utilities = jsonfield.JSONField()
-    skills = jsonfield.JSONField()
-    areas = jsonfield.JSONField()
+    is_active = models.BooleanField(null=True, blank=True, default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -149,4 +147,8 @@ def is_username_exists(username):
         return False
     else:
         return True
+
+
+def check_user_id_string_exists(id_string):
+    return UserDetail.objects.filter(id_string=id_string, is_active=True).exists()
 
