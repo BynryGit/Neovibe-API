@@ -2,7 +2,6 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.city import CitySerializer
@@ -17,6 +16,9 @@ from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
+from v1.userapp.serializers.user_area import UserAreaSerializer
+from v1.userapp.serializers.user_skill import UserSkillSerializer
+from v1.userapp.serializers.user_utility import GetUserUtilitySerializer
 from v1.userapp.views.common_functions import set_user_validated_data, set_user_role_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -37,9 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(required=False, max_length=200)
     phone_mobile = serializers.CharField(required=False, max_length=200)
     phone_landline = serializers.CharField(required=False, max_length=200)
-    utilities = serializers.JSONField(required=False)
-    skills = serializers.JSONField(required=False)
-    areas = serializers.JSONField(required=False)
 
     class Meta:
         model = UserDetail
@@ -71,6 +70,13 @@ class UserSerializer(serializers.ModelSerializer):
             user_obj.is_active = True
             user_obj.save()
             return user_obj
+
+
+class GetUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserDetail
+        fields = ('username', 'id_string')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):
@@ -111,20 +117,12 @@ class UserListSerializer(serializers.ModelSerializer):
                   'status', 'email', 'created_date')
 
 
-class GetUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserDetail
-        fields = ('id_string', 'username', 'first_name', 'last_name')
-
-
 class UserViewSerializer(serializers.ModelSerializer):
 
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
     tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
-    utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
     user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_user_sub_type')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
@@ -132,6 +130,9 @@ class UserViewSerializer(serializers.ModelSerializer):
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     bank = UserBankViewSerializer(many=False, required=True, source='get_user_bank')
+    utilities = GetUserUtilitySerializer(many=True, required=True, source='get_user_utility')
+    areas = UserAreaSerializer(many=True, required=True, source='get_user_area')
+    skills = UserSkillSerializer(many=True, required=True, source='get_user_skill')
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:

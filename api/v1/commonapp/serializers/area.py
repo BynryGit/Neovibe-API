@@ -2,6 +2,13 @@ from rest_framework import serializers
 from v1.commonapp.models.area import Area
 
 
+class GetAreaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Area
+        fields = ('name', 'id_string')
+
+
 class AreaListSerializer(serializers.ModelSerializer):
 
     class Meta:
