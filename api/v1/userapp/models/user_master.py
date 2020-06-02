@@ -9,10 +9,10 @@ from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.models.notes import get_notes_by_user_id, get_notes_by_userid
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.userapp.models.user_area import get_area_by_user
+# from v1.userapp.models.user_area import get_area_by_user_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.role import get_role_by_id
-from v1.userapp.models.user_skill import get_skill_by_user
+# from v1.userapp.models.user_skill import get_skill_by_user_id
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
@@ -35,7 +35,7 @@ from v1.userapp.models.user_utility import get_utility_by_user
 # change history
 # <ddmmyyyy><changes><author>
 
-class UserDetail(User):
+class UserDetail(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     city_id = models.BigIntegerField(blank=True, null=True)
@@ -109,11 +109,11 @@ class UserDetail(User):
 
     @property
     def get_user_area(self):
-        return get_area_by_user(self.id)
+        return get_area_by_user_id(self.id)
 
     @property
     def get_user_skill(self):
-        return get_skill_by_user(self.id)
+        return get_skill_by_user_id(self.id)
 
 
 # Create User Details table end
@@ -136,8 +136,8 @@ def get_user_by_id(id):
     return user
 
 
-def get_user_by_username(username):
-    return UserDetail.objects.get(username=username)
+def get_user_by_email(email):
+    return UserDetail.objects.get(email=email)
 
 
 def get_user_by_username_password(username, password):

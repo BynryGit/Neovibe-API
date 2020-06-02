@@ -12,19 +12,11 @@ from rest_framework import status
 
 from api.messages import *
 from api.settings import SECRET_KEY
+from master.models import get_user_by_email
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.login_trail import LoginTrail
-from v1.userapp.models.user_master import get_user_by_username, authenticate_user, get_user_by_username_password
 from v1.userapp.models.user_token import UserToken, get_token_by_user_id
-
-
-# def authenticate(username, password):
-#     encrypted_password = make_password(password)
-#     if authenticate_user(username, encrypted_password):
-#         return get_user_by_username_password(username, encrypted_password)
-#     else:
-#         return False
 
 
 def validate_login_data(request):
@@ -44,7 +36,7 @@ def set_login_trail(username, password, status):
 
 def login(request, user):
     try:
-        user_obj = get_user_by_username(user.username)
+        user_obj = get_user_by_email(user.email)
         form_factor = get_form_factor_by_id(user_obj.form_factor_id)
         if form_factor.name == 'Mobile':
             if request.data['imei'] != user_obj.imei:
@@ -58,7 +50,7 @@ def login(request, user):
             ip = request.META.get('REMOTE_ADDR')
         token_obj = UserToken(
             tenant=user_obj.tenant,
-            form_factor=user_obj.form_factor_id,
+            form_factor_id=user_obj.form_factor_id,
             user_id=user_obj.id,
             token=encoded_jwt,
             ip_address=ip,
@@ -68,6 +60,7 @@ def login(request, user):
         token_obj.save()
         return token_obj.token
     except Exception as e:
+        print(traceback.print_exc())
         logger().log(e, 'ERROR', user='test', name='test')
         return False
 
@@ -97,6 +90,7 @@ class LoginApiView(APIView):
 
                 if auth:
                     token = login(request, auth)  # Call Login function
+                    print('======token',token)
 
                     if not token:
                         set_login_trail(username, password, 'Fail')

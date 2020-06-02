@@ -12,7 +12,7 @@ from v1.userapp.models.privilege import get_privilege_by_id_string
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import get_role_type_by_id_string
 from v1.userapp.models.user_bank_detail import get_bank_by_id_string
-from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_user_by_id_string
+from v1.userapp.models.user_master import UserDetail, get_user_by_email, get_user_by_id_string
 from v1.userapp.models.role import get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string

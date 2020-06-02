@@ -17,7 +17,7 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 # from v1.userapp.models.user_master import get_user_by_id
-from v1.userapp.models.user_master import get_user_by_id_string
+# from v1.userapp.models.user_master import get_user_by_id_string
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id, get_utility_by_id_string
 from django.db import models  # importing package for database
 
