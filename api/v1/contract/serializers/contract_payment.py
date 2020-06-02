@@ -6,6 +6,7 @@ from django.utils import timezone
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from v1.contract.serializers.contract import ContractShortViewSerializer
 from v1.contract.views.common_functions import set_contract_payment_validated_data
 from v1.supplier.models.supplier_payment import SupplierPayment as SupplierPaymentTbl
 
@@ -13,6 +14,7 @@ from v1.supplier.models.supplier_payment import SupplierPayment as SupplierPayme
 class SupplierPaymentViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
+    contract = ContractShortViewSerializer(many=False, required=False, source='get_contract')
     cheque_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     dd_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     payment_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)

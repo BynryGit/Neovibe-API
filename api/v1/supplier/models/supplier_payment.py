@@ -15,6 +15,9 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from v1.contract.models.contract import get_contract_by_id
+from v1.supplier.models.supplier import get_supplier_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -57,6 +60,16 @@ class SupplierPayment(models.Model):
 
     def __unicode__(self):
         return str(self.txn_id)
+
+    @property
+    def get_supplier(self):
+        supplier = get_supplier_by_id(self.supplier)
+        return supplier
+
+    @property
+    def get_contract(self):
+        contract = get_contract_by_id(self.contract)
+        return contract
 
 # Create Payment table end.
 

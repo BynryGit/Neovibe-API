@@ -1,6 +1,7 @@
 __author__ = "aki"
 
-from rest_framework.exceptions import APIException
+from rest_framework import status
+from rest_framework.exceptions import APIException, ValidationError
 from api.messages import INVALID_TOKEN, UNAUTHORIZED_USER, DATA_NOT_EXISTS
 
 
@@ -17,3 +18,16 @@ class InvalidAuthorizationException(APIException):
 class ObjectNotFoundException(APIException):
     status_code = 404
     default_detail = DATA_NOT_EXISTS
+
+
+class CustomAPIException(ValidationError):
+    """
+    raises API exceptions with custom messages and custom status codes
+    """
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_code = 'error'
+
+    def __init__(self, detail, status_code=None):
+        self.detail = detail
+        if status_code is not None:
+            self.status_code = status_code

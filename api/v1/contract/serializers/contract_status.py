@@ -6,6 +6,13 @@ from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.contract_status import ContractStatus as ContractStatusTbl
 
 
+class ContractStatusShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ContractStatusTbl
+        fields = ('id_string', 'name')
+
+
 class ContractStatusViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()
