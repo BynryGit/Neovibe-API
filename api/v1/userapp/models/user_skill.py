@@ -3,7 +3,9 @@ from datetime import datetime
 
 from django.db import models
 
+from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.userapp.models.user_master import get_user_by_id_string
 
 
 class UserSkill(models.Model):
@@ -24,5 +26,11 @@ class UserSkill(models.Model):
         return self.tenant.name
 
 
-def get_skill_by_user(user_id):
+def get_skill_by_user_id(user_id):
     return UserSkill.objects.filter(user_id=user_id, is_active=True)
+
+
+def get_record_by_values(user_id_string, skill_id_string):
+    user = get_user_by_id_string(user_id_string)
+    skill = get_skill_by_id_string(skill_id_string)
+    return UserSkill.objects.filter(user_id=user.id, skill_id=skill.id).last()
