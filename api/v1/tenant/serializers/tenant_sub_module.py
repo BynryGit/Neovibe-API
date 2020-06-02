@@ -3,24 +3,17 @@ __author__ = "Gauri"
 from rest_framework import serializers
 from django.db import transaction
 from django.utils import timezone
-from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl
 from v1.tenant.views.common_functions import set_validated_data, set_validated_data_submodule
 
 
 class TenantSubmoduleListSerializer(serializers.ModelSerializer):
-    # status = TenantStatusViewSerializer(many=False, required=True, source='get_status')
-
     class Meta:
         model = TenantSubModuleTbl
         fields = ('id_string', 'sub_module_name', 'submodule_desc', 'subscription_id', 'module_id')
 
 
-
 class TenantSubModuleViewSerializer(serializers.ModelSerializer):
-    # tenant = TenantMasterViewSerializer(read_only=True)
-    # tenant_module = serializers.ReadOnlyField(source='get_tenant_module')
-
     class Meta:
         model = TenantSubModuleTbl
         fields = ('id_string', 'sub_module_name', 'submodule_desc', 'subscription_id', 'module_id')

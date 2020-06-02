@@ -1,20 +1,18 @@
 __author__ = "Gauri"
 
 import traceback
-
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.tenant.serializers.subscription import SubscriptionListSerializer
-from v1.tenant.views.common_functions import is_data_verified, is_submodule_data_verified
+from v1.tenant.views.common_functions import is_submodule_data_verified
 from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_sub_module import get_tenant_submodule_by_id_string, TenantSubModule as TenantSubModuleTbl
 from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer, \
@@ -93,7 +91,7 @@ class TenantSubModuleDetail(GenericAPIView):
                         serializer = TenantSubModuleViewSerializer(tenant_submodule_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -136,12 +134,12 @@ class TenantSubModuleDetail(GenericAPIView):
                             tenant_submodule_obj = serializer.update(tenant_submodule_obj, serializer.validated_data, user)
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'tenant_submodule_obj': tenant_submodule_obj.id_string},
+                                RESULT: {'tenant_submodule_obj': tenant_submodule_obj.id_string},
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
@@ -174,7 +172,7 @@ class TenantSubModuleDetail(GenericAPIView):
 # Auther: Gauri Deshmukh
 # Created on: 21/5/2020
 
-class Submodule(GenericAPIView):
+class TenantSubmodule(GenericAPIView):
 
     def post(self, request):
         try:
@@ -212,12 +210,12 @@ class Submodule(GenericAPIView):
                             view_serializer = TenantSubModuleViewSerializer(instance=tenant_submodule_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
+                                RESULT: view_serializer.data,
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({

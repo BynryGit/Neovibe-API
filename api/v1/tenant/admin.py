@@ -1,5 +1,6 @@
 from django.contrib import admin
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.tenant.models.tenant_status import TenantStatus
 from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan
 from v1.tenant.models.tenant_subscription_plan_rate import TenantSubscriptionPlanRate
 from v1.tenant.models.tenant_bank_details import TenantBankDetails
@@ -29,5 +30,7 @@ admin.site.register(TenantModule)
 admin.site.register(TenantSubModule)
 admin.site.register(TenantSubscription)
 admin.site.register(TenantSummaryOnMonthlyBasis)
+admin.site.register(TenantStatus)
+admin.site.register(TenantCurrency)
 
 

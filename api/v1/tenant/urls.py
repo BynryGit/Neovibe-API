@@ -1,15 +1,13 @@
 __author__ = "Gauri"
 
 from django.urls import path
-
-from v1.tenant.models.tenant_sub_module import TenantSubModule
 from v1.tenant.views.invoice import TenantInvoiceList, TenantInvoice, TenantInvoiceDetail
 from v1.tenant.views.payment import TenantInvoicePaymentList, TenantInvoicePayment, TenantInvoicePaymentDetail
 from v1.tenant.views.subscription import SubscriptionList, Subscription, SubscriptionDetail
 from v1.tenant.views.subscription_plan import SubscriptionPlanList, SubscriptionPlan, SubscriptionPlanDetail
 from v1.tenant.views.subscription_rate import SubscriptionPlanRate
 from v1.tenant.views.tenant import TenantList,TenantDetail,Tenant
-from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModuleDetail, Submodule
+from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModuleDetail, TenantSubmodule
 from v1.tenant.views.document import TenantDocumentList, TenantDocumentDetail
 from v1.tenant.views.notes import TenantNoteDetail, TenantNoteList
 from v1.tenant.views.summary import TenantSummaryDetail
@@ -23,7 +21,7 @@ urlpatterns = [
 
     path('submodule/list', TenantSubModuleList.as_view(), name='tenant_submodule_list'),
     path('submodule/<uuid:id_string>', TenantSubModuleDetail.as_view(), name='tenant_submodule_details'),
-    path('submodule', Submodule.as_view(), name='tenant_submodule'),
+    path('submodule', TenantSubmodule.as_view(), name='tenant_submodule'),
 
     path('<uuid:id_string>/documents', TenantDocumentList.as_view(), name='tenant_document_list'),
     path('document/<uuid:id_string>', TenantDocumentDetail.as_view(), name='tenant_document_details'),
