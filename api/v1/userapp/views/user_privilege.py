@@ -8,52 +8,52 @@ from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.privilege import get_privilege_by_id
-from v1.userapp.models.role import get_role_by_id_string
-from v1.userapp.models.role_privilege import get_role_privilege_by_role_id, get_record_by_values
+from v1.userapp.models.role_privilege import get_record_by_values
+from v1.userapp.models.user_master import get_user_by_id_string
+from v1.userapp.models.user_privilege import get_user_privilege_by_user_id
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
-from v1.userapp.serializers.role import GetRoleSerializer
-from v1.userapp.serializers.role_privilege import RolePrivilegeSerializer, RolePrivilegeViewSerializer
-from v1.userapp.views.common_functions import is_role_privilege_data_verified, set_role_privilege_validated_data
+from v1.userapp.serializers.user import GetUserSerializer
+from v1.userapp.serializers.user_privilege import UserPrivilegeSerializer, UserPrivilegeViewSerializer
+from v1.userapp.views.common_functions import is_user_privilege_data_verified, set_user_privilege_validated_data
 
 
 # API Header
-# API end Point: api/v1/role/privileges
+# API end Point: api/v1/user/:id_string/privileges
 # API verb: POST
 # Package: Basic
 # Modules: Roles & Privileges
-# Sub Module: Role
-# Interaction: Add role-privilege details
+# Sub Module: Privilege
+# Interaction: Add user-privilege details
 # Usage: Add privilege details
-# Tables used: 2.5.1. Users & Privileges - Role Privileges
+# Tables used: 2.5.1. Users & Privileges - User Privileges
 # Author: Arpita
-# Created on: 06/05/2020
-# Updated on: 20/05/2020
+# Created on: 02/06/2020
 
 
-class RolePrivilege(GenericAPIView):
+class UserPrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     data = []
-                    if is_role_privilege_data_verified(request):
+                    if is_user_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         module_list = request.data['module_id']
                         for module in module_list:
                             validate_data = {}
                             sub_module_list = module['sub_module_id']
                             for sub_module in sub_module_list:
-                                validate_data['role_id'] = request.data['role_id']
+                                validate_data['user_id'] = request.data['user_id']
                                 validate_data['module_id'] = module['module_id']
                                 validate_data['sub_module_id'] = sub_module['sub_module_id']
                                 validate_data['privilege_id'] = sub_module['privilege_id']
                                 validate_data['is_active'] = sub_module['is_active']
-                                validated_data = set_role_privilege_validated_data(validate_data)
-                                serializer = RolePrivilegeSerializer(data=validated_data)
+                                validated_data = set_user_privilege_validated_data(validate_data)
+                                serializer = UserPrivilegeSerializer(data=validated_data)
                                 if serializer.is_valid():
                                     privilege_obj = serializer.create(serializer.validated_data, user)
-                                    view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
+                                    view_serializer = UserPrivilegeViewSerializer(instance=privilege_obj,
                                                                               context={'request': request})
                                     data.append(view_serializer.data)
                                 else:
@@ -87,20 +87,19 @@ class RolePrivilege(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/role/:id_string/privileges
+# API end Point: api/v1/user/:id_string/privileges
 # API verb: POST
 # Package: Basic
 # Modules: Roles & Privileges
-# Sub Module: Role
+# Sub Module: Privilege
 # Interaction: View privilege details, Edit privilege details
 # Usage: View, Edit privilege details
-# Tables used: 2.5.1. Users & Privileges - Role, Role Privileges
+# Tables used: 2.5.1. Users & Privileges - User Detail, User Privileges
 # Author: Arpita
-# Created on: 06/05/2020
-# Updated on: 20/05/2020
+# Created on: 02/06/2020
 
 
-class RolePrivilegeDetail(GenericAPIView):
+class UserPrivilegeDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
@@ -108,16 +107,16 @@ class RolePrivilegeDetail(GenericAPIView):
                 if is_authorized():
                     sub_modules = []
                     data = []
-                    role = get_role_by_id_string(id_string)
-                    if role:
-                        roles = GetRoleSerializer(instance=role, context={'request': request})
-                        data.append(roles.data)
-                        role_privileges = get_role_privilege_by_role_id(role.id)
-                        for role_privilege in role_privileges:
-                            sub_module_obj = get_sub_module_by_id(role_privilege.sub_module_id)
+                    user = get_user_by_id_string(id_string)
+                    if user:
+                        users = GetUserSerializer(instance=user, context={'request': request})
+                        data.append(users.data)
+                        user_privileges = get_user_privilege_by_user_id(user.id)
+                        for user_privilege in user_privileges:
+                            sub_module_obj = get_sub_module_by_id(user_privilege.sub_module_id)
                             sub_module = SubModuleSerializer(instance=sub_module_obj, context={'request': request})
                             sub_modules.append(sub_module.data)
-                            privilege_obj = get_privilege_by_id(role_privilege.privilege_id)
+                            privilege_obj = get_privilege_by_id(user_privilege.privilege_id)
                             privilege = GetPrivilegeSerializer(instance=privilege_obj, context={'request': request})
                             index = sub_modules.index(sub_module.data)
                             sub_modules[index]['privilege'] = privilege.data
@@ -156,32 +155,32 @@ class RolePrivilegeDetail(GenericAPIView):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
                     data = []
-                    if is_role_privilege_data_verified(request):
+                    if is_user_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
-                        role = get_role_by_id_string(id_string)
-                        if role:
+                        get_user = get_user_by_id_string(id_string)
+                        if user:
                             module_list = request.data['module_id']
                             for module in module_list:
                                 validate_data = {}
                                 sub_module_list = module['sub_module_id']
                                 for sub_module in sub_module_list:
-                                    validate_data['role_id'] = str(id_string)
+                                    validate_data['user_id'] = str(id_string)
                                     validate_data['module_id'] = module['module_id']
                                     validate_data['sub_module_id'] = sub_module['sub_module_id']
                                     validate_data['privilege_id'] = sub_module['privilege_id']
                                     validate_data['is_active'] = sub_module['is_active']
-                                    validated_data = set_role_privilege_validated_data(validate_data)
-                                    serializer = RolePrivilegeSerializer(data=validated_data)
+                                    validated_data = set_user_privilege_validated_data(validate_data)
+                                    serializer = UserPrivilegeSerializer(data=validated_data)
                                     if serializer.is_valid():
-                                        role_privilege = get_record_by_values(role.id, validate_data['module_id'],
+                                        user_privilege = get_record_by_values(get_user.id, validate_data['module_id'],
                                                                               validate_data['sub_module_id'],
                                                                               validate_data['privilege_id'])
 
-                                        if role_privilege:
-                                            role_privilege_obj = serializer.update(role_privilege, serializer.validated_data, user)
+                                        if user_privilege:
+                                            user_privilege_obj = serializer.update(user_privilege, serializer.validated_data, user)
                                         else:
-                                            role_privilege_obj = serializer.create(serializer.validated_data, user)
-                                        view_serializer = RolePrivilegeViewSerializer(instance=role_privilege_obj,
+                                            user_privilege_obj = serializer.create(serializer.validated_data, user)
+                                        view_serializer = UserPrivilegeViewSerializer(instance=user_privilege_obj,
                                                                                       context={'request': request})
                                         data.append(view_serializer.data)
                                     else:

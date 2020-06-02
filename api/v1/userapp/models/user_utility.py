@@ -16,9 +16,7 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
-from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
-from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
-from v1.userapp.models.user_master import get_user_by_id, get_user_by_id_string
+# from v1.userapp.models.user_master import get_user_by_id
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 from django.db import models  # importing package for database
 
@@ -49,10 +47,10 @@ class UserUtility(models.Model):
     @property
     def get_utility(self):
         return get_utility_by_id(self.utility.id)
-
-    @property
-    def get_user(self):
-        return get_user_by_id(self.user_id)
+    #
+    # @property
+    # def get_user(self):
+    #     return get_user_by_id(self.user_id)
 
 
 # Create User Privilege table end

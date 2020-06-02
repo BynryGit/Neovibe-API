@@ -76,6 +76,13 @@ class UserSerializer(serializers.ModelSerializer):
             return user_obj
 
 
+class GetUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserDetail
+        fields = ('username', 'id_string')
+
+
 class UserStatusSerializer(serializers.ModelSerializer):
 
     class Meta:

@@ -77,15 +77,15 @@ class UserPrivilege(models.Model):
         return get_privilege_by_id(self.privilege_id)
 
     class Meta:
-        unique_together = ('role_id', 'module_id', 'sub_module_id', 'privilege_id',)
+        unique_together = ('user_id', 'module_id', 'sub_module_id', 'privilege_id',)
 
     # Create Role Privilege table end
 
 
-# def get_role_privilege_by_role_id(role_id):
-#     return RolePrivilege.objects.filter(role_id=role_id, is_active=True)
-#
-#
+def get_user_privilege_by_user_id(user_id):
+    return UserPrivilege.objects.filter(user_id=user_id, is_active=True)
+
+
 # def get_role_privilege_by_id_string(id_string):
 #     return RolePrivilege.objects.filter(id=id_string, is_active=True).last()
 #

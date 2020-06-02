@@ -1,7 +1,8 @@
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
+from django.db import models  # importing package for database
+from django.contrib.auth.models import User
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.document import get_documents_by_user_id
@@ -15,7 +16,8 @@ from v1.userapp.models.user_skill import get_skill_by_user
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
-from django.db import models  # importing package for database
+from v1.userapp.models.user_utility import get_utility_by_user
+
 
 # Create User Details table start
 
@@ -32,21 +34,19 @@ from django.db import models  # importing package for database
 
 # change history
 # <ddmmyyyy><changes><author>
-from v1.userapp.models.user_utility import get_utility_by_user
 
-
-class UserDetail(models.Model):
+class UserDetail(User):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     city_id = models.BigIntegerField(blank=True, null=True)
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
-    user_ID = models.CharField(max_length=200,null=True, blank=True)  # Web, Mobile
-    first_name = models.CharField(max_length=200, null=True, blank=True)
+    user_ID = models.CharField(max_length=200, null=True, blank=True)  # Web, Mobile
+    # first_name = models.CharField(max_length=200, null=True, blank=True)
     middle_name = models.CharField(max_length=200, null=True, blank=True)
-    last_name = models.CharField(max_length=200, null=True, blank=True)
-    email = models.CharField(max_length=200, null=True, blank=True)
+    # last_name = models.CharField(max_length=200, null=True, blank=True)
+    # email = models.CharField(max_length=200, null=True, blank=True)
     user_image = models.URLField(null=True, blank=True)
     salt = models.CharField(max_length=200, null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
@@ -54,7 +54,7 @@ class UserDetail(models.Model):
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     bank_detail_id = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(null=True, blank=True, default=True)
+    # is_active = models.BooleanField(null=True, blank=True, default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -115,11 +115,16 @@ class UserDetail(models.Model):
     def get_user_skill(self):
         return get_skill_by_user(self.id)
 
+
 # Create User Details table end
 
 
 def get_all_users():
     return UserDetail.objects.filter(is_active=True)
+
+
+def is_username_exists(username):
+    return UserDetail.objects.filter(username=username, is_active=True)
 
 
 def get_user_by_id_string(id_string):
@@ -164,4 +169,3 @@ def check_user_id_string_exists(id_string):
 
 def authenticate_user(username, password):
     return UserDetail.objects.filter(username=username, password=password, is_active=True).exists()
-
