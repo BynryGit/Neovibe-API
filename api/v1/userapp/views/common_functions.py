@@ -1,8 +1,4 @@
-import traceback
-from datetime import datetime
-import jwt
-from django.contrib.auth import authenticate
-from api.settings import SECRET_KEY
+from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id_string
@@ -10,6 +6,7 @@ from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.userapp.models.privilege import get_privilege_by_id_string
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
@@ -19,12 +16,13 @@ from v1.userapp.models.user_master import UserDetail, get_user_by_username, get_
 from v1.userapp.models.role import get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
-from v1.userapp.models.user_token import UserToken, get_token_by_user_id
 from v1.userapp.models.user_type import get_user_type_by_id_string
 
 
-
 # Check only mandatory fields for role api
+from v1.utility.models.utility_master import get_utility_by_id_string
+
+
 def is_role_data_verified(request):
     return True
 
@@ -38,6 +36,18 @@ def is_user_privilege_data_verified(request):
 
 
 def is_user_role_data_verified(request):
+    return True
+
+
+def is_user_utility_data_verified(request):
+    return True
+
+
+def is_user_area_data_verified(request):
+    return True
+
+
+def is_user_skill_data_verified(request):
     return True
 
 
@@ -149,6 +159,42 @@ def set_user_role_validated_data(validated_data):
     if "role_id" in validated_data:
         role = get_role_by_id_string(validated_data["role_id"])
         validated_data["role_id"] = role.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
+    return validated_data
+
+
+def set_user_utility_validated_data(validated_data):
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        validated_data["utility_id"] = utility.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
+    return validated_data
+
+
+def set_user_area_validated_data(validated_data):
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        validated_data["area_id"] = area.id
+    if "is_active" in validated_data:
+        validated_data["is_active"] = bool(validated_data["is_active"])
+    return validated_data
+
+
+def set_user_skill_validated_data(validated_data):
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
+    if "skill_id" in validated_data:
+        skill = get_skill_by_id_string(validated_data["skill_id"])
+        validated_data["skill_id"] = skill.id
     if "is_active" in validated_data:
         validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
