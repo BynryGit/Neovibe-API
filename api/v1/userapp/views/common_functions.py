@@ -104,8 +104,6 @@ def set_role_privilege_validated_data(validated_data):
     if "privilege_id" in validated_data:
         privilege = get_privilege_by_id_string(validated_data["privilege_id"])
         validated_data["privilege_id"] = privilege.id
-    if "is_active" in validated_data:
-        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
@@ -122,8 +120,6 @@ def set_user_privilege_validated_data(validated_data):
     if "privilege_id" in validated_data:
         privilege = get_privilege_by_id_string(validated_data["privilege_id"])
         validated_data["privilege_id"] = privilege.id
-    if "is_active" in validated_data:
-        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
@@ -159,8 +155,6 @@ def set_user_role_validated_data(validated_data):
     if "role_id" in validated_data:
         role = get_role_by_id_string(validated_data["role_id"])
         validated_data["role_id"] = role.id
-    if "is_active" in validated_data:
-        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
@@ -171,8 +165,6 @@ def set_user_utility_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
         validated_data["utility_id"] = utility.id
-    if "is_active" in validated_data:
-        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
@@ -183,8 +175,6 @@ def set_user_area_validated_data(validated_data):
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         validated_data["area_id"] = area.id
-    if "is_active" in validated_data:
-        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
@@ -195,8 +185,6 @@ def set_user_skill_validated_data(validated_data):
     if "skill_id" in validated_data:
         skill = get_skill_by_id_string(validated_data["skill_id"])
         validated_data["skill_id"] = skill.id
-    if "is_active" in validated_data:
-        validated_data["is_active"] = bool(validated_data["is_active"])
     return validated_data
 
 
