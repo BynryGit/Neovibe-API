@@ -86,21 +86,6 @@ def get_user_privilege_by_user_id(user_id):
     return UserPrivilege.objects.filter(user_id=user_id, is_active=True)
 
 
-# def get_role_privilege_by_id_string(id_string):
-#     return RolePrivilege.objects.filter(id=id_string, is_active=True).last()
-#
-#
-# def get_privilege_by_sub_module_id(sub_module_id,module_id):
-#     privilege = RolePrivilege.objects.filter(module_id=module_id,sub_module_id=sub_module_id).last()
-#     return get_privilege_by_id(privilege.privilege_id)
-#
-#
-# def get_record_by_values(role_id,module_id_string,sub_module_id_string,privilege_id_string):
-#     module = get_module_by_id_string(module_id_string)
-#     sub_module = get_sub_module_by_id_string(sub_module_id_string)
-#     privilege = get_privilege_by_id_string(privilege_id_string)
-#     return RolePrivilege.objects.filter(role_id=role_id,module_id=module.id,sub_module_id=sub_module.id,privilege_id=privilege.id).last()
-
 def get_record_values_by_id(user_id,module_id,sub_module_id,privilege_id):
     return UserPrivilege.objects.filter(user_id=user_id, module_id=module_id, sub_module_id=sub_module_id, privilege_id=privilege_id, is_active=True).last()
 

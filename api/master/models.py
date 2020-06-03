@@ -159,7 +159,6 @@ def is_contact_exists(phone_mobile, tenant_id):
 
 
 def get_user_by_id_string(id_string):
-    print('-----------ffffff',User.objects.filter(id_string=id_string, is_active=True).last())
     return User.objects.filter(id_string=id_string, is_active=True).last()
 
 
