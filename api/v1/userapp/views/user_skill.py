@@ -6,7 +6,7 @@ from api.messages import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.skills import get_skill_by_id
-from v1.commonapp.serializers.skill import GetSkillSerializer
+from v1.commonapp.serializers.skill import GetSkillSerializer, SkillViewSerializer
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_skill import get_skill_by_user_id, get_record_by_values
 from v1.userapp.serializers.user_skill import UserSkillSerializer, UserSkillViewSerializer
@@ -30,15 +30,16 @@ class UserSkill(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     skill_list = []
                     user = get_user_by_id_string(id_string)
                     user_skills = get_skill_by_user_id(user.id)
                     if user_skills:
                         for user_skill in user_skills:
                             skill_obj = get_skill_by_id(user_skill.skill_id)
-                            skill = GetSkillSerializer(instance=skill_obj, context={'request': request})
+                            skill = SkillViewSerializer(instance=skill_obj, context={'request': request})
                             skill_list.append(skill.data)
                         return Response({
                             STATE: SUCCESS,
@@ -67,8 +68,9 @@ class UserSkill(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_skill_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
@@ -111,8 +113,9 @@ class UserSkill(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_skill_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])

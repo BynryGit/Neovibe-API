@@ -34,8 +34,9 @@ class UserPrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
@@ -103,8 +104,9 @@ class UserPrivilegeDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     sub_modules = []
                     data = []
                     user = get_user_by_id_string(id_string)
@@ -152,8 +154,9 @@ class UserPrivilegeDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])

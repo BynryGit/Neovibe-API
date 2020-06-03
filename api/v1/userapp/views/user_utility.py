@@ -30,8 +30,9 @@ class UserUtility(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     utility_list = []
                     user = get_user_by_id_string(id_string)
                     user_utilities = get_utility_by_user(user.id)
@@ -67,8 +68,9 @@ class UserUtility(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_utility_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
@@ -111,8 +113,9 @@ class UserUtility(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_utility_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])

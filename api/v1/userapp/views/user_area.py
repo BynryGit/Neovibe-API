@@ -30,8 +30,9 @@ class UserArea(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     area_list = []
                     user = get_user_by_id_string(id_string)
                     user_areas = get_area_by_user_id(user.id)
@@ -67,8 +68,9 @@ class UserArea(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_area_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
@@ -111,8 +113,9 @@ class UserArea(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_area_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])

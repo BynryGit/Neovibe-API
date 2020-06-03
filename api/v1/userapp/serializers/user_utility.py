@@ -51,7 +51,6 @@ class UserUtilitySerializer(serializers.ModelSerializer):
             user_utility_obj.created_by = user.id
             user_utility_obj.created_date = datetime.utcnow()
             user_utility_obj.tenant = user.tenant
-            user_utility_obj.utility = user.utility
             user_utility_obj.is_active = True
             user_utility_obj.save()
             return user_utility_obj
