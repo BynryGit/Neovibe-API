@@ -1,7 +1,7 @@
 [
 	{
 		"pk" : "2",
-		"model" : "userapp.UserDetail",
+		"model" : "userapp.UserUser",
 		"fields" : {
 			"tenant": 1,
 			"utility": 1,
@@ -11,7 +11,7 @@
 	},
 	{
 		"pk" : "3",
-		"model" : "userapp.UserDetail",
+		"model" : "userapp.User",
 		"fields" : {
 			"tenant": 1,
 			"utility": 1,

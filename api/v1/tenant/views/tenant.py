@@ -26,7 +26,6 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLIC
 # Tables used: 1.1 Tenant Master
 # Author: Gauri Deshmukh
 # Created on: 18/05/2020
-from v1.userapp.models.user_master import UserDetail
 
 
 class TenantList(generics.ListAPIView):
@@ -80,7 +79,7 @@ class Tenant(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     serializer = TenantMasterSerializer(data=request.data)
@@ -172,7 +171,7 @@ class TenantDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     # Request data verification start

@@ -5,13 +5,13 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
+from master.models import get_all_users, is_username_exists, get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
-from v1.userapp.models.user_master import get_user_by_id_string, get_all_users, is_username_exists
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer

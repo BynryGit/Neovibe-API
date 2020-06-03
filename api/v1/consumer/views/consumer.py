@@ -21,7 +21,6 @@ from v1.consumer.serializers.consumer_scheme_master import ConsumerSchemeMasterS
 from v1.payment.models.consumer_payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
 from v1.registration.views.common_functions import is_data_verified
-from v1.userapp.models.user_master import UserDetail
 
 # API Header
 # API end Point: api/v1/consumer
@@ -47,7 +46,7 @@ class Consumer(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id = 2)
+                    user = User.objects.get(id = 2)
                     if is_data_verified(request):
                     # Request data verification end
                         serializer = ConsumerSerializer(data=request.data)
@@ -143,7 +142,7 @@ class ConsumerDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=2)
+                        user = User.objects.get(id=2)
                         consumer = get_consumer_by_id_string(id_string)
                         if consumer:
                             serializer = ConsumerSerializer(data=request.data)
@@ -354,7 +353,7 @@ class ConsumerBillDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=2)
+                        user = User.objects.get(id=2)
                         bill = get_invoice_bill_by_id_string(id_string)
                         if bill:
                             serializer = InvoiceBillSerializer(data=request.data)
@@ -409,7 +408,7 @@ class ConsumerPayment(GenericAPIView):
             if is_token_valid(request.headers['token']):
                 if is_authorized():
                     if is_data_verified(request):
-                        user = UserDetail.objects.get(id=2)
+                        user = User.objects.get(id=2)
                         consumer_obj = get_consumer_by_id_string(id_string)
                         serializer = PaymentSerializer(data=request.data)
                         if serializer.is_valid():

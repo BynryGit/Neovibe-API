@@ -15,7 +15,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.serializers.subscription import SubscriptionListSerializer
 from v1.tenant.views.common_functions import is_data_verified, is_submodule_data_verified
-from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_sub_module import get_tenant_submodule_by_id_string, TenantSubModule as TenantSubModuleTbl
 from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer, \
     TenantSubmoduleListSerializer
@@ -85,7 +84,7 @@ class TenantSubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     tenant_submodule_obj = get_tenant_submodule_by_id_string(id_string)
@@ -126,7 +125,7 @@ class TenantSubModuleDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     tenant_submodule_obj = get_tenant_submodule_by_id_string(id_string)
@@ -191,7 +190,7 @@ class Submodule(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id = 2)
+                    user = User.objects.get(id = 2)
                     if is_submodule_data_verified(request):
                     # Request data verification end
                     #     duplicate_tenant_submodule_obj = TenantSubModuleTbl.objects.filter(id_string=request.data["id_string"],

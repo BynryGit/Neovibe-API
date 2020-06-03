@@ -14,7 +14,6 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.meter_reading.models.schedule import get_all_schedules
 from v1.meter_reading.serializers.schedule import ScheduleListSerializer
 from v1.registration.views.common_functions import is_data_verified
-from v1.userapp.models.user_master import UserDetail
 
 # API Header
 # API end Point: api/v1/bill

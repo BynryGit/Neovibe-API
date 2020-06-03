@@ -4,12 +4,12 @@ from datetime import datetime
 from rest_framework import serializers
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
+from master.models import User
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
-from v1.userapp.models.user_master import UserDetail
 from v1.userapp.models.user_role import UserRole
 from v1.userapp.models.user_status import UserStatus
 from v1.userapp.models.user_sub_type import UserSubType
@@ -41,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
     phone_landline = serializers.CharField(required=False, max_length=200)
 
     class Meta:
-        model = UserDetail
+        model = User
         fields = '__all__'
 
     def create(self, validated_data, user):
@@ -75,7 +75,7 @@ class UserSerializer(serializers.ModelSerializer):
 class GetUserSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = UserDetail
+        model = User
         fields = ('username', 'id_string')
 
 
@@ -112,7 +112,7 @@ class UserListSerializer(serializers.ModelSerializer):
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
-        model = UserDetail
+        model = User
         fields = ('id_string', 'tenant', 'utility', 'department', 'first_name', 'last_name', 'user_ID', 'phone_mobile',
                   'status', 'email', 'created_date')
 
@@ -136,7 +136,7 @@ class UserViewSerializer(serializers.ModelSerializer):
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
-        model = UserDetail
+        model = User
         fields = ('id_string', 'tenant', 'utility', 'user_type', 'user_sub_type', 'form_factor', 'city', 'department',
                   'bank', 'status', 'user_ID','first_name', 'middle_name','last_name', 'email', 'user_image', 'phone_mobile',
                   'phone_landline', 'utilities', 'skills', 'areas', 'created_by', 'created_date')

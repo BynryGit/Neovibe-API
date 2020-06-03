@@ -15,7 +15,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.supplier.models.supplier import get_supplier_by_id_string
 from v1.supplier.serializers.supplier_contract import ContractViewSerializer, ContractSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.contract.models.contract import Contract as ContractTbl, get_contract_by_id_string
 
 
@@ -88,7 +87,7 @@ class SupplierContract(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     supplier_obj = get_supplier_by_id_string(id_string)
@@ -197,7 +196,7 @@ class SupplierContractDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     supplier_contract_obj = get_contract_by_id_string(id_string)

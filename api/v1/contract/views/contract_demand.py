@@ -15,7 +15,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.contract.models.contract import get_contract_by_id_string
 from v1.contract.serializers.contract_demand import ContractDemandViewSerializer, ContractDemandSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.contract.models.contract_demand import ContractDemand as ContractDemandTbl, get_contract_demand_by_id_string
 
 

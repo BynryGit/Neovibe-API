@@ -11,7 +11,6 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_all_privilege, get_privilege_by_id_string
-from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.serializers.privilege import PrivilegeListSerializer, PrivilegeViewSerializer, PrivilegeSerializer
 from v1.userapp.views.common_functions import is_privilege_data_verified
 

@@ -15,7 +15,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.supplier.models.supplier import get_supplier_by_id_string
 from v1.supplier.serializers.supplier_product import SupplierProductViewSerializer, SupplierProductSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.supplier.models.supplier_product import SupplierProduct as SupplierProductTbl, get_supplier_product_by_id_string
 
 

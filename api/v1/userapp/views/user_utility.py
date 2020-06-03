@@ -3,9 +3,9 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
+from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_user_by_id_string
 from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values
 from v1.userapp.serializers.user_utility import UserUtilitySerializer, UserUtilityViewSerializer
 from v1.userapp.views.common_functions import is_user_utility_data_verified, set_user_utility_validated_data

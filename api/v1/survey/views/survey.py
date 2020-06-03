@@ -10,7 +10,6 @@ from rest_framework import generics, status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.survey.models.survey import get_survey_by_id_string,Survey as Surveytbl
-from v1.userapp.models.user_master import UserDetail
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.survey.serializers.survey import SurveyViewSerializer,SurveyListSerializer,SurveySerializer
 from v1.commonapp.views.logger import logger
@@ -76,7 +75,7 @@ class Survey(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     if is_data_verified(request):
                         serializer = SurveySerializer(data=request.data)
                         if serializer.is_valid():

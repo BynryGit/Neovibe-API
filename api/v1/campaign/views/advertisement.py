@@ -16,7 +16,6 @@ from v1.campaign.models.advertisement import Advertisements,get_advertisements_b
 from v1.campaign.serializers.advertisment import AdvertismentViewSerializer,AdvertismentListSerializer,AdvertisementSerializer
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.campaign.views.common_functions import is_data_verified
-from v1.userapp.models.user_master import UserDetail
 
 # API Header
 # API end Point: api/v1/campaign/:id_string/adverts-list
@@ -79,7 +78,7 @@ class Advertisement(GenericAPIView):
             if is_token_valid(1):
                 if is_authorized():
                     if is_data_verified(request):
-                        user = UserDetail.objects.get(id=5)
+                        user = User.objects.get(id=5)
                         campaign_obj = get_campaign_by_id_string(id_string)
                         serializer = AdvertisementSerializer(data=request.data)
                         if serializer.is_valid():
@@ -169,7 +168,7 @@ class AdvertismentDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=2)
+                        user = User.objects.get(id=2)
                         advert_obj = get_advertisements_by_id_string(id_string)
                         if advert_obj:
                             serializer = AdvertisementSerializer(data=request.data)

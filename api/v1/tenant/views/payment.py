@@ -72,7 +72,7 @@ class TenantInvoicePayment(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    #user = UserDetail.objects.get(id = 2)
+                    #user = User.objects.get(id = 2)
                     if is_payment_data_verified(request):
                     # Request data verification end
                         duplicate_tenant_invoice_payment_obj = tenantInvoicesPaymentTbl.objects.filter(invoice_number=request.data['invoice_number'])
@@ -175,7 +175,7 @@ class TenantInvoicePaymentDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        # user = UserDetail.objects.get(id=2)
+                        # user = User.objects.get(id=2)
                         tenant_invoice_payment_obj = get_tenant_payment_by_id_string(id_string)
 
                         if tenant_invoice_payment_obj:

@@ -13,7 +13,6 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.contract.serializers.contract import ContractViewSerializer, ContractSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.contract.models.contract import Contract as ContractTbl, get_contract_by_id_string
 
 

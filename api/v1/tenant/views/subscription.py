@@ -26,7 +26,6 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLIC
 # Tables used: 1.1 Tenant Master
 # Author: Gauri Deshmukh
 # Created on: 21/05/2020
-from v1.userapp.models.user_master import UserDetail
 
 
 class SubscriptionList(generics.ListAPIView):
@@ -70,7 +69,7 @@ class Subscription(GenericAPIView):
                     # Checking authorization end
 
                     # Request data verification start
-                    user = UserDetail.objects.get(id = 2)
+                    user = User.objects.get(id = 2)
                     if is_subscription_data_verified(request):
                     #Request data verification end
                         duplicate_subscription_obj = subscriptionTbl.objects.filter(subscription_plan_id=request.data['subscription_plan_id'])
@@ -173,7 +172,7 @@ class SubscriptionDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        # user = UserDetail.objects.get(id=2)
+                        # user = User.objects.get(id=2)
                         subscription_obj = get_subscription_by_id_string(id_string)
 
                         if subscription_obj:

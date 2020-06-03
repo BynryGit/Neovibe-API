@@ -5,6 +5,8 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+
+from master.models import User
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -15,7 +17,6 @@ from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer, \
     RegistrationListSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.views.common_functions import is_data_verified
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, RESULT, UNAUTHORIZED
@@ -82,7 +83,7 @@ class Registration(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
 
-                    user = UserDetail.objects.get(id = 2)
+                    user = User.objects.get(id = 2)
                     serializer = RegistrationSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=False):
                         registration_obj = serializer.create(serializer.validated_data, user)
@@ -170,7 +171,7 @@ class RegistrationDetail(GenericAPIView):
                     # Checking authorization end
 
                     # Save basic details start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     registration_obj = get_registration_by_id_string(id_string)
                     if "phone_mobile" not in request.data:
                         request.data['phone_mobile'] = registration_obj.phone_mobile
@@ -225,7 +226,7 @@ class RegistrationPayment(GenericAPIView):
              if is_token_valid(request.headers['token']):
                  if is_authorized():
                      if is_data_verified(request):
-                         user = UserDetail.objects.get(id=2)
+                         user = User.objects.get(id=2)
                          registration_obj = get_registration_by_id_string(id_string)
                          consumer = get_consumer_by_registration_id(registration_obj.id)
                          serializer = PaymentSerializer(data=request.data)
@@ -320,7 +321,7 @@ class RegistrationPaymentDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=2)
+                        user = User.objects.get(id=2)
                         payment = get_payment_by_id_string(id_string)
                         if payment:
                             serializer = PaymentSerializer(data=request.data)

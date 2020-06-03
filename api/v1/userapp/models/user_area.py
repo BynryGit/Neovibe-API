@@ -3,9 +3,9 @@ from datetime import datetime
 
 from django.db import models
 
+# from master.models import get_user_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.userapp.models.user_master import get_user_by_id_string
 
 
 class UserArea(models.Model):

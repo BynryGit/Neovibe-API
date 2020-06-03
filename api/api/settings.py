@@ -77,6 +77,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'api.urls'
 
+AUTH_USER_MODEL = 'master.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -171,4 +173,3 @@ STATIC_URL = '/static/'
 #         },
 #     },
 # }
-AUTH_USER_MODEL = 'master.User'

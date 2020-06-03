@@ -11,7 +11,6 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
 from v1.userapp.views.common_functions import is_role_data_verified, set_role_validated_data

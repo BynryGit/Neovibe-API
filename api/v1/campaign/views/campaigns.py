@@ -1,6 +1,8 @@
 import traceback
 import logging
 from rest_framework.exceptions import APIException
+
+from master.models import User
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -8,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import UserDetail
 from v1.campaign.models.campaign import get_campaign_by_id_string,Campaign as Campaigntbl
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.campaign.models.campaign import Campaign as CampaignTbl
@@ -75,7 +76,7 @@ class Campaign(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=5)
+                    user = User.objects.get(id=5)
                     if is_data_verified(request):
                         serializer = CampaignSerializer(data=request.data)
                         if serializer.is_valid():
@@ -167,7 +168,7 @@ class CampaignDetail(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     campaign_obj = get_campaign_by_id_string(id_string)
                     if campaign_obj:
                         serializer = CampaignSerializer(data=request.data)

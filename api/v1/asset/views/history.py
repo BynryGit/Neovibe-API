@@ -15,7 +15,6 @@ from rest_framework.response import Response
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
-from v1.userapp.models.user_master import UserDetail
 from v1.dispatcher.serializers.service_request import ServiceRequestViewSerializer
 from v1.dispatcher.models.service_appointments import ServiceRequest
 from v1.asset.models.asset_master import get_asset_by_id_string

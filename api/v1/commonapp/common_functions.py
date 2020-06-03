@@ -1,7 +1,7 @@
 import jwt # jwt token library
 from api.settings import SECRET_KEY
+from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_user_by_id_string, check_user_id_string_exists
 from v1.userapp.models.user_privilege import check_user_privilege_exists
 from v1.userapp.models.user_token import check_token_exists
 from v1.userapp.models.user_utility import check_user_utility_exists

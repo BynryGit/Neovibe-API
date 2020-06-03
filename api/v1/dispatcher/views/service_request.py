@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import UserDetail
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 from v1.commonapp.common_functions import is_token_valid, get_user, is_authorized
 from v1.dispatcher.views.common_functions import is_data_verified
@@ -32,7 +31,7 @@ class ServiceRequest(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=5)
+                    user = User.objects.get(id=5)
                     if is_data_verified(request):
                         asset_obj = get_asset_by_id_string(id_string)
                         serializer = ServiceRequestSerializer(data=request.data)
@@ -125,7 +124,7 @@ class ServiceRequestDetail(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     service_obj = get_service_request_by_id_string(id_string)
                     if service_obj:
                         serializer = ServiceRequestSerializer(data=request.data)

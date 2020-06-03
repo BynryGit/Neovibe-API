@@ -15,7 +15,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.supplier.models.supplier import get_supplier_by_id_string
 from v1.supplier.serializers.supplier_payment import SupplierPaymentViewSerializer, SupplierPaymentSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.supplier.models.supplier_payment import SupplierPayment as SupplierPaymentTbl, get_supplier_payment_by_id_string
 
 

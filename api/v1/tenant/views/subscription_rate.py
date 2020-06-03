@@ -26,7 +26,6 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLIC
 # Tables used: 1.1 Tenant Subscription plan
 # Author: Gauri Deshmukh
 # Created on: 21/05/2020
-from v1.userapp.models.user_master import UserDetail
 from v1.userapp.views import user
 
 
@@ -72,7 +71,7 @@ class SubscriptionPlanRate(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    #user = UserDetail.objects.get(id=1)
+                    #user = User.objects.get(id=1)
                     # Todo fetch user from request end
 
                     serializer = SubscriptionPlanRateSerializer(data=request.data)
@@ -170,7 +169,7 @@ class SubscriptionPlaneDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        # user = UserDetail.objects.get(id=2)
+                        # user = User.objects.get(id=2)
                         subscription_plan_obj = get_subscription_plan_by_id_string(id_string)
 
                         if subscription_plan_obj:

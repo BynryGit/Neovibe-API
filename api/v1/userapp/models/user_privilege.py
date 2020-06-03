@@ -21,7 +21,6 @@ from v1.commonapp.models.module import get_module_by_id, get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id, get_sub_module_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 from v1.userapp.models.privilege import get_privilege_by_id, get_privilege_by_id_string
-from v1.userapp.models.user_master import get_user_by_id
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 from django.db import models  # importing package for database
 
