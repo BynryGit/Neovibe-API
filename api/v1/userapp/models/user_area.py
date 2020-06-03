@@ -25,6 +25,9 @@ class UserArea(models.Model):
     def __unicode__(self):
         return self.tenant.name
 
+    def get_tenant(self):
+        return self.tenant
+
 
 def get_area_by_user_id(user_id):
     return UserArea.objects.filter(user_id=user_id, is_active=True)
