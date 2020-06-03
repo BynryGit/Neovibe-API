@@ -466,7 +466,7 @@ class UserRole(GenericAPIView):
                             validated_data = set_user_role_validated_data(validate_data)
                             serializer = UserRoleSerializer(data=validated_data)
                             if serializer.is_valid():
-                                user_role = get_record_by_values(str(id_string), validate_data['role_id'])
+                                user_role = get_record_by_values(str(id_string), role['role_id_string'])
                                 if user_role:
                                     user_role_obj = serializer.update(user_role, serializer.validated_data, user)
                                 else:

@@ -15,6 +15,8 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+from master.models import get_user_by_id, get_user_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
@@ -83,7 +85,11 @@ def get_user_role_by_role_id(id):
 def get_record_by_values(user_id_string,role_id_string):
     user = get_user_by_id_string(user_id_string)
     role = get_role_by_id_string(role_id_string)
-    return UserRole.objects.filter(user_id=user.id,role_id=role.id).last()
+    return UserRole.objects.filter(user_id=user.id, role_id=role.id).last()
+
+
+def get_record_values_by_id(user_id,role_id):
+    return UserRole.objects.filter(user_id=user_id,role_id=role_id).last()
 
 
 def check_role_exists(id):

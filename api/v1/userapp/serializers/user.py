@@ -158,7 +158,6 @@ class UserRoleSerializer(serializers.ModelSerializer):
             return user_role_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_user_role_validated_data(validated_data)
         with transaction.atomic():
             user_role_obj = super(UserRoleSerializer, self).update(instance, validated_data)
             user_role_obj.updated_by = user.id

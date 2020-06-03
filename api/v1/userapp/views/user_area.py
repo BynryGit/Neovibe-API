@@ -120,7 +120,7 @@ class UserArea(GenericAPIView):
                     if is_user_area_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         for area in request.data['areas']:
-                            validate_data = {'user_id': str(id_string), 'area_id': area['uarea_id_string'],
+                            validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string'],
                                              "is_active": area['is_active']}
                             validated_data = set_user_area_validated_data(validate_data)
                             serializer = UserAreaSerializer(data=validated_data)
