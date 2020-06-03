@@ -32,17 +32,17 @@ class TenantSummaryOnMonthlyBasis(models.Model):
     no_of_documents = models.BigIntegerField(null=True, blank=True)
     total_storage_in_use = models.FloatField(null=True, blank=True)
     month = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.id_string
+        return self.month
 
     def __unicode__(self):
-        return self.id_string
+        return self.month
 
 
 # Create Tenant Summary on Monthly Basis table end.
@@ -50,20 +50,20 @@ class TenantSummaryOnMonthlyBasis(models.Model):
 
 def get_tenant_usage_summary_by_id(id):
     try:
-        return TenantSummaryOnMonthlyBasis.objects.get(id = id)
+        return TenantSummaryOnMonthlyBasis.objects.get(id=id)
     except:
         return False
 
 
 def get_tenant_usage_summary_by_id_string(id_string):
     try:
-        return TenantSummaryOnMonthlyBasis.objects.get(id_string = id_string)
+        return TenantSummaryOnMonthlyBasis.objects.get(id_string=id_string)
     except:
         return False
 
 
 def get_tenant_usage_summary_by_tenant_id_string(id_string):
     try:
-        return TenantSummaryOnMonthlyBasis.objects.get(tenant__id_string = id_string)
+        return TenantSummaryOnMonthlyBasis.objects.get(tenant__id_string=id_string)
     except:
         return False

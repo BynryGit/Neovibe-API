@@ -1,14 +1,14 @@
 __author__ = "Gauri"
 
 import traceback
-
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, DUPLICATE
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
+from master.models import User
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -16,8 +16,10 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.serializers.subscription import SubscriptionListSerializer
 from v1.tenant.views.common_functions import is_data_verified, is_submodule_data_verified
 from v1.tenant.models.tenant_sub_module import get_tenant_submodule_by_id_string, TenantSubModule as TenantSubModuleTbl
-from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer, \
-    TenantSubmoduleListSerializer
+from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl, get_tenant_submodule_by_id_string
+from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
 
 
 # API Header
@@ -35,19 +37,19 @@ from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerialize
 
 class TenantSubModuleList(generics.ListAPIView):
     try:
-        serializer_class = TenantSubmoduleListSerializer
+        serializer_class = TenantSubModuleViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('sub_module_name', 'id_string',)
-        ordering_fields = ('sub_module_name', 'id_string',)
-        ordering = ('sub_module_name',)  # always give by default alphabetical order
-        search_fields = ('sub_module_name', )
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant__id_string',)
+        ordering = ('tenant__name',)  # always give by default alphabetical order
+        search_fields = ('tenant__name',)
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    queryset = TenantSubModuleTbl.objects.filter(is_active=True)
+                    queryset = TenantSubModuleTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -56,6 +58,77 @@ class TenantSubModuleList(generics.ListAPIView):
     except Exception as ex:
         logger().log(ex, 'ERROR')
         raise APIException
+
+
+# API Header
+# API end Point: api/v1/tenant/id_string/submodule
+# API verb: POST
+# Package: Basic
+# Modules: All
+# Sub Module: submodule
+# Interaction: Add Tenant Submodule
+# Usage: Add Tenant submodule in the system
+# Tables used:  Tenant Submodule
+# Auther: Gauri Deshmukh
+# Created on: 21/5/2020
+
+class TenantSubModule(GenericAPIView):
+    serializer_class = TenantSubModuleSerializer
+
+    def post(self, request, id_string):
+        try:
+            # Checking authentication start
+            if is_token_valid(request.headers['token']):
+                # payload = get_payload(request.headers['token'])
+                # user = get_user(payload['id_string'])
+                # Checking authentication end
+
+                # Checking authorization start
+                if is_authorized():
+                    # Checking authorization end
+                    user = User.objects.get(id=2)
+                    # Todo fetch user from request start
+                    # Todo fetch user from request end
+
+                    tenant_obj = get_tenant_by_id_string(id_string)
+                    if tenant_obj:
+                        serializer = TenantSubModuleSerializer(data=request.data)
+                        if serializer.is_valid():
+                            tenant_sub_module_obj = serializer.create(serializer.validated_data, tenant_obj, user)
+                            if tenant_sub_module_obj:
+                                serializer = TenantSubModuleViewSerializer(tenant_sub_module_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULT: serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: DUPLICATE,
+                                    RESULT: DATA_ALREADY_EXISTS,
+                                }, status=status.HTTP_409_CONFLICT)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_403_FORBIDDEN)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as ex:
+            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(ex))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # API Header
@@ -84,15 +157,16 @@ class TenantSubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
+                    # Todo fetch user from request start
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    tenant_submodule_obj = get_tenant_submodule_by_id_string(id_string)
-                    if tenant_submodule_obj:
-                        serializer = TenantSubModuleViewSerializer(tenant_submodule_obj, context={'request': request})
+                    tenant_sub_module_obj = get_tenant_submodule_by_id_string(id_string)
+                    if tenant_sub_module_obj:
+                        serializer = TenantSubModuleViewSerializer(tenant_sub_module_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
@@ -127,20 +201,31 @@ class TenantSubModuleDetail(GenericAPIView):
                     # Todo fetch user from request start
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
+                    if is_submodule_data_verified(request):
+                        pass
+                    # Request data verification end
+                    #     duplicate_tenant_submodule_obj = TenantSubModuleTbl.objects.filter(id_string=request.data["id_string"],
+                    #                                                         sub_module_name=request.data['sub_module_name'])
+                    #     if duplicate_tenant_submodule_obj:
+                    #         return Response({
+                    #             STATE: DUPLICATE,
+                    #         }, status=status.HTTP_404_NOT_FOUND)
+                    #     else:
 
-                    tenant_submodule_obj = get_tenant_submodule_by_id_string(id_string)
-                    if tenant_submodule_obj:
+                    tenant_sub_module_obj = get_tenant_submodule_by_id_string(id_string)
+                    if tenant_sub_module_obj:
                         serializer = TenantSubModuleSerializer(data=request.data)
                         if serializer.is_valid():
-                            tenant_submodule_obj = serializer.update(tenant_submodule_obj, serializer.validated_data, user)
+                            tenant_sub_module_obj = serializer.update(tenant_sub_module_obj, serializer.validated_data, user)
+                            serializer = TenantSubModuleViewSerializer(tenant_sub_module_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: {'tenant_submodule_obj': tenant_submodule_obj.id_string},
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
@@ -159,82 +244,4 @@ class TenantSubModuleDetail(GenericAPIView):
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# API Header
-# API end Point: api/v1/tenant/submodule
-# API verb: POST
-# Package: Basic
-# Modules: All
-# Sub Module: submodule
-# Interaction: Add Tenant Submodule
-# Usage: Add Tenant submodule in the system
-# Tables used:  Tenant Submodule
-# Auther: Gauri Deshmukh
-# Created on: 21/5/2020
-
-class Submodule(GenericAPIView):
-
-    def post(self, request):
-        try:
-            # Checking authentication start
-            if is_token_valid(1):
-                # payload = get_payload(request.data['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                # privilege = get_privilege_by_id(1)
-                # sub_module = get_sub_module_by_id(1)
-                if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
-                    user = User.objects.get(id = 2)
-                    if is_submodule_data_verified(request):
-                    # Request data verification end
-                    #     duplicate_tenant_submodule_obj = TenantSubModuleTbl.objects.filter(id_string=request.data["id_string"],
-                    #                                                         sub_module_name=request.data['sub_module_name'])
-                    #     if duplicate_tenant_submodule_obj:
-                    #         return Response({
-                    #             STATE: DUPLICATE,
-                    #         }, status=status.HTTP_404_NOT_FOUND)
-                    #     else:
-
-                        serializer = TenantSubModuleSerializer(data=request.data)
-                        print("here##")
-                        if serializer.is_valid():
-#                            tenant_obj = serializer.create(serializer.validated_data, user)
-                            print("##here##")
-                            tenant_submodule_obj = serializer.create(serializer.validated_data)
-                            print("##here##123")
-                            view_serializer = TenantSubModuleViewSerializer(instance=tenant_submodule_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
-            else:
-                return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as e:
-           # traceback.print_exc(e)
-            print("error submodule",e)
-            # logger().log(e, 'ERROR', user='Tenant Submodule Exception', name='Testing')
-            return Response({
-                STATE: EXCEPTION,
-                ERROR: ERROR
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

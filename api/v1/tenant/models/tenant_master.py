@@ -15,11 +15,12 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
-
-# Create Tenant Master table start.
 from v1.tenant.models.tenant_city import get_tenant_city_by_id
 from v1.tenant.models.tenant_country import get_tenant_country_by_id
 from v1.tenant.models.tenant_state import get_tenant_state_by_id
+from v1.tenant.models.tenant_status import get_tenant_status_by_id
+
+# Create Tenant Master table start.
 
 
 class TenantMaster(models.Model):
@@ -36,7 +37,7 @@ class TenantMaster(models.Model):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True)
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
@@ -59,18 +60,24 @@ class TenantMaster(models.Model):
         city = get_tenant_city_by_id(self.tenant_city_id)
         return city
 
+    @property
+    def get_tenant_status(self):
+        status = get_tenant_status_by_id(self.status_id)
+        return status
+
+# Create Tenant Master table end.
+
 
 def get_tenant_by_id(id):
     try:
-        return TenantMaster.objects.get(id = id)
+        return TenantMaster.objects.get(id=id)
     except:
         return False
 
 
 def get_tenant_by_id_string(id_string):
     try:
-        return TenantMaster.objects.get(id_string = id_string)
+        return TenantMaster.objects.get(id_string=id_string)
     except:
         return False
 
-# Create Tenant Master table end.

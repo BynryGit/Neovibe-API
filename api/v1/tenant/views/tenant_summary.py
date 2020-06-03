@@ -4,11 +4,11 @@ import traceback
 from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
+from v1.tenant.serializers.tenant_summary import TenantSummaryOnMonthlyBasisViewSerializer
 from v1.tenant.models.tenant_summary_on_monthly_basis import get_tenant_usage_summary_by_tenant_id_string
-from v1.tenant.serializers.summary import TenantUsageSummaryViewSerializer
 
 
 # API Header
@@ -25,6 +25,7 @@ from v1.tenant.serializers.summary import TenantUsageSummaryViewSerializer
 
 
 class TenantSummaryDetail(GenericAPIView):
+    serializer_class = TenantSummaryOnMonthlyBasisViewSerializer
 
     def get(self, request, id_string):
         try:
@@ -36,14 +37,14 @@ class TenantSummaryDetail(GenericAPIView):
 
                 # Checking authorization start
                 if is_authorized():
-                # Checking authorization end
+                    # Checking authorization end
 
                     tenant_summary_obj = get_tenant_usage_summary_by_tenant_id_string(id_string)
                     if tenant_summary_obj:
-                        serializer = TenantUsageSummaryViewSerializer(instance=tenant_summary_obj, context={'request': request})
+                        serializer = TenantSummaryOnMonthlyBasisViewSerializer(tenant_summary_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
