@@ -16,7 +16,7 @@ from master.models import get_user_by_email
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.login_trail import LoginTrail
-from v1.userapp.models.user_token import UserToken, get_token_by_user_id
+from v1.userapp.models.user_token import UserToken, check_token_exists, get_token_by_token
 
 
 def validate_login_data(request):
@@ -27,11 +27,19 @@ def validate_login_data(request):
 
 
 def set_login_trail(username, password, status):
+    password = make_password(password)
     LoginTrail(
         username=username,
         password=password,
         status=status
     ).save()
+
+
+# def check_form_factor(request, user_obj):
+#     if request.data['imei'] != user_obj.imei:
+#         return False
+#     else:
+#         return True
 
 
 def login(request, user):
@@ -90,7 +98,6 @@ class LoginApiView(APIView):
 
                 if auth:
                     token = login(request, auth)  # Call Login function
-                    print('======token',token)
 
                     if not token:
                         set_login_trail(username, password, 'Fail')
@@ -102,7 +109,7 @@ class LoginApiView(APIView):
                         set_login_trail(username, password, 'Success')
                         return Response({
                             STATE: SUCCESS,
-                            RESULTS: SUCCESSFULLY_DATA_RETRIEVE,
+                            RESULTS: SUCCESSFUL_LOGIN,
                             Token: token,
                         }, status=status.HTTP_200_OK)
                 else:
@@ -123,3 +130,58 @@ class LoginApiView(APIView):
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/user/logout
+# API verb: GET
+# Package: Basic
+# Modules: User
+# Interaction: user list
+# Usage: API will fetch required data for user list
+# Tables used: 2.5.3. User Details
+# Author: Arpita
+# Created on: 03/06/2020
+
+
+def validate_logout_data(request):
+    if 'token' in request.headers:
+        return True
+    else:
+        return False
+
+
+class LogoutApiView(APIView):
+    """Login Api View"""
+
+    def post(self, request, format=None):
+        try:
+            if validate_logout_data(request):
+                token = request.headers['token']
+
+                if check_token_exists(token):
+                    token = get_token_by_token(token)  # Call Login function
+                    token.is_active = False
+                    token.save()
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: SUCCESSFUL_LOGOUT,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: FAIL,
+                        RESULTS: INVALID_CREDENTIALS,
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as ex:
+            print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
+            logger().log(ex, 'ERROR', user='test', name='test')
+            return Response({
+                STATE: FAIL,
+                RESULTS: SERVER_ERROR.format(str(ex)),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

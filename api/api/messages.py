@@ -16,6 +16,8 @@ DUPLICATE = 'duplicate'
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER="User is not authorised"
 INVALID_TOKEN="User token is not valid"
+SUCCESSFUL_LOGIN="User logged in successfully"
+SUCCESSFUL_LOGOUT="User logged out successfully"
 SUCCESSFULLY_DATA_SAVE='Data has been saved successfully.'
 SUCCESSFULLY_DATA_DELETED='Data has been deleted successfully.'
 SUCCESSFULLY_DATA_RETRIEVE='Data has been retrieved successfully.'

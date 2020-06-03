@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from v1.userapp.models.login_trail import LoginTrail
 from v1.userapp.models.privilege import Privilege
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.role_sub_type import RoleSubType
@@ -18,6 +20,7 @@ from v1.userapp.models.user_type import UserType
 from v1.userapp.models.user_utility import UserUtility
 
 admin.site.register(UserToken)
+admin.site.register(LoginTrail)
 admin.site.register(Privilege)
 admin.site.register(Role)
 admin.site.register(RolePrivilege)

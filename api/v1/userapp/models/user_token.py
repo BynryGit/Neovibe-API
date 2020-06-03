@@ -47,5 +47,9 @@ def get_token_by_user_id(id):
     return UserToken.objects.filter(user_id=id, is_active=True).last()
 
 
+def get_token_by_token(token):
+    return UserToken.objects.get(token=token, is_active=True)
+
+
 def check_token_exists(token):
     return UserToken.objects.filter(token=token, is_active=True).exists()
