@@ -52,7 +52,7 @@
 		"model": "tenant.TenantSubscriptionPlan",
 		"fields": {
 			"subscription_id": 1,
-			"subcription_type": "Basic",
+			"subscription_type": "Basic",
 			"description": "If you chooses basic plan you will get only 3 module",
 			"max_utility": 1,
 			"max_user": 120,
@@ -66,7 +66,7 @@
 		"model": "tenant.TenantSubscriptionPlan",
 		"fields": {
 			"subscription_id": 2,
-			"subcription_type": "Advance",
+			"subscription_type": "Advance",
 			"description": "If you choose advance plan you will get",
 			"max_utility": 2,
 			"max_user": 500,

@@ -3,7 +3,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.models.tenant_status import TenantStatus
 from v1.tenant.models.tenant_subscription_plan import TenantSubscriptionPlan
 from v1.tenant.models.tenant_subscription_plan_rate import TenantSubscriptionPlanRate
-from v1.tenant.models.tenant_bank_details import TenantBankDetails
+from v1.tenant.models.tenant_bank_details import TenantBankDetail
 from v1.tenant.models.tenant_city import TenantCity
 from v1.tenant.models.tenant_country import TenantCountry
 from v1.tenant.models.tenant_currency import TenantCurrency
@@ -20,7 +20,7 @@ from v1.tenant.models.tenant_summary_on_monthly_basis import TenantSummaryOnMont
 admin.site.register(TenantMaster)
 admin.site.register(TenantSubscriptionPlan)
 admin.site.register(TenantSubscriptionPlanRate)
-admin.site.register(TenantBankDetails)
+admin.site.register(TenantBankDetail)
 admin.site.register(TenantCity)
 admin.site.register(TenantCountry)
 admin.site.register(TenantInvoiceDetails)
