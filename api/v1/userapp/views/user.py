@@ -5,7 +5,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
-from master.models import get_all_users, is_username_exists, get_user_by_id_string
+from master.models import get_all_users, get_user_by_id_string, is_email_exists
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -41,14 +41,15 @@ class UserList(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'last_name', 'tenant__id_string', 'utility__id_string')
+    filter_fields = ('first_name', 'last_name', 'tenant__id_string')
     ordering_fields = ('first_name', 'last_name',)
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('first_name', 'email',)
 
     def get_queryset(self):
-        if is_token_valid(self.request.headers['token']):
-            if is_authorized():
+        response, user_obj = is_token_valid(self.request.headers['token'])
+        if response:
+            if is_authorized(1, 1, 1, user_obj):
                 queryset = get_all_users()
                 return queryset
             else:
@@ -74,13 +75,14 @@ class User(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_user_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         serializer = UserSerializer(data=request.data)
                         if serializer.is_valid():
-                            if is_username_exists(request.data['username']):
+                            if not is_email_exists(request.data['email']):
                                 user_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
                                 return Response({
@@ -135,8 +137,9 @@ class UserDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     user = get_user_by_id_string(id_string)
                     if user:
                         serializer = UserViewSerializer(instance=user, context={'request': request})
@@ -167,8 +170,9 @@ class UserDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_user_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
@@ -227,8 +231,9 @@ class UserBankDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     user = get_user_by_id_string(id_string)
                     bank = get_bank_by_id(user.bank_detail_id)
                     if user:
@@ -260,8 +265,9 @@ class UserBankDetail(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_user_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
@@ -304,8 +310,9 @@ class UserBankDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_user_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
@@ -364,8 +371,9 @@ class UserRole(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     role_list = []
                     user = get_user_by_id_string(id_string)
                     user_roles = get_user_role_by_user_id(user.id)
@@ -401,8 +409,9 @@ class UserRole(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_role_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
@@ -445,8 +454,9 @@ class UserRole(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_user_role_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
