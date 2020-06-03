@@ -34,7 +34,6 @@ class RoleSerializer(serializers.ModelSerializer):
             role_obj.created_by = user.id
             role_obj.created_date = datetime.utcnow()
             role_obj.tenant = user.tenant
-            role_obj.utility = user.utility
             role_obj.is_active = True
             role_obj.save()
             role_obj.role_ID = str(role_obj.role) + str(role_obj.tenant) + str(role_obj.utility)

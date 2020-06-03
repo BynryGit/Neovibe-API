@@ -34,8 +34,9 @@ class RolePrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_role_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
@@ -104,8 +105,9 @@ class RolePrivilegeDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     sub_modules = []
                     data = []
                     role = get_role_by_id_string(id_string)
@@ -153,8 +155,9 @@ class RolePrivilegeDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     data = []
                     if is_role_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
