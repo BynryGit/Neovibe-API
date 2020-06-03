@@ -31,7 +31,6 @@ class UserPrivilegeSerializer(serializers.ModelSerializer):
             user_privilege_obj.created_by = user.id
             user_privilege_obj.created_date = datetime.utcnow()
             user_privilege_obj.tenant = user.tenant
-            user_privilege_obj.utility = user.utility
             user_privilege_obj.is_active = True
             user_privilege_obj.save()
             return user_privilege_obj

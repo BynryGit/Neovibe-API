@@ -10,7 +10,7 @@ from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role_privilege import get_record_by_values
-from v1.userapp.models.user_privilege import get_user_privilege_by_user_id
+from v1.userapp.models.user_privilege import get_user_privilege_by_user_id, get_record_values_by_id
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.user import GetUserSerializer
 from v1.userapp.serializers.user_privilege import UserPrivilegeSerializer, UserPrivilegeViewSerializer
@@ -175,7 +175,7 @@ class UserPrivilegeDetail(GenericAPIView):
                                     validated_data = set_user_privilege_validated_data(validate_data)
                                     serializer = UserPrivilegeSerializer(data=validated_data)
                                     if serializer.is_valid():
-                                        user_privilege = get_record_by_values(get_user.id, validate_data['module_id'],
+                                        user_privilege = get_record_values_by_id(get_user.id, validate_data['module_id'],
                                                                               validate_data['sub_module_id'],
                                                                               validate_data['privilege_id'])
 
