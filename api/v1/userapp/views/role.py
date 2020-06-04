@@ -69,14 +69,13 @@ class Role(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     if is_role_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         validated_data = set_role_validated_data(request.data)
                         serializer = RoleSerializer(data=validated_data)
-                        if serializer.is_valid():
+                        if serializer.is_valid(raise_exception=False):
                             role_obj = serializer.create(serializer.validated_data, user)
                             view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
                             return Response({
@@ -102,10 +101,11 @@ class Role(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -158,16 +158,15 @@ class RoleDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     if is_role_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         role_obj = get_role_by_id_string(id_string)
                         if role_obj:
                             validated_data = set_role_validated_data(request.data)
                             serializer = RoleSerializer(data=validated_data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 role_obj = serializer.update(role_obj, serializer.validated_data, user)
                                 view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
                                 return Response({
@@ -197,7 +196,8 @@ class RoleDetail(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)

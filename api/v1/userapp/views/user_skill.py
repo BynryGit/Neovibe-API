@@ -68,17 +68,16 @@ class UserSkill(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_skill_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         for skill in request.data['skills']:
                             validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string']}
                             validated_data = set_user_skill_validated_data(validate_data)
                             serializer = UserSkillSerializer(data=validated_data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_skill_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserSkillViewSerializer(instance=user_skill_obj,
                                                                          context={'request': request})
@@ -106,25 +105,25 @@ class UserSkill(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     def put(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_skill_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         for skill in request.data['skills']:
                             validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string'],
                                              "is_active": skill['is_active']}
                             validated_data = set_user_skill_validated_data(validate_data)
                             serializer = UserSkillSerializer(data=validated_data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_skill = get_record_by_values(str(id_string), validate_data['skill_id'])
                                 if user_skill:
                                     user_skill_obj = serializer.update(user_skill, serializer.validated_data, user)
@@ -156,7 +155,8 @@ class UserSkill(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)

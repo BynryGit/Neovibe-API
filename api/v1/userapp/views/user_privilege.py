@@ -34,12 +34,11 @@ class UserPrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_privilege_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         module_list = request.data['module_id']
                         for module in module_list:
                             validate_data = {}
@@ -52,7 +51,7 @@ class UserPrivilege(GenericAPIView):
                                 validate_data['is_active'] = sub_module['is_active']
                                 validated_data = set_user_privilege_validated_data(validate_data)
                                 serializer = UserPrivilegeSerializer(data=validated_data)
-                                if serializer.is_valid():
+                                if serializer.is_valid(raise_exception=False):
                                     privilege_obj = serializer.create(serializer.validated_data, user)
                                     view_serializer = UserPrivilegeViewSerializer(instance=privilege_obj,
                                                                               context={'request': request})
@@ -81,10 +80,11 @@ class UserPrivilege(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -154,12 +154,11 @@ class UserPrivilegeDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # Checking authentication start
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_privilege_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         get_user = get_user_by_id_string(id_string)
                         if user:
                             module_list = request.data['module_id']
@@ -174,7 +173,7 @@ class UserPrivilegeDetail(GenericAPIView):
                                     validate_data['is_active'] = sub_module['is_active']
                                     validated_data = set_user_privilege_validated_data(validate_data)
                                     serializer = UserPrivilegeSerializer(data=validated_data)
-                                    if serializer.is_valid():
+                                    if serializer.is_valid(raise_exception=False):
                                         user_privilege = get_record_values_by_id(get_user.id, validate_data['module_id'],
                                                                               validate_data['sub_module_id'],
                                                                               validate_data['privilege_id'])
@@ -213,8 +212,9 @@ class UserPrivilegeDetail(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 

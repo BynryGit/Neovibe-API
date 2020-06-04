@@ -68,17 +68,16 @@ class UserUtility(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_utility_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         for utility in request.data['utilities']:
                             validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
                             validated_data = set_user_utility_validated_data(validate_data)
                             serializer = UserUtilitySerializer(data=validated_data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_utility_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
                                                                          context={'request': request})
@@ -106,25 +105,25 @@ class UserUtility(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     def put(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_utility_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         for utility in request.data['utilities']:
                             validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string'],
                                              "is_active": utility['is_active']}
                             validated_data = set_user_utility_validated_data(validate_data)
                             serializer = UserUtilitySerializer(data=validated_data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_utility = get_record_by_values(str(id_string), validate_data['utility_id'])
                                 if user_utility:
                                     user_utility_obj = serializer.update(user_utility, serializer.validated_data, user)
@@ -156,7 +155,8 @@ class UserUtility(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
