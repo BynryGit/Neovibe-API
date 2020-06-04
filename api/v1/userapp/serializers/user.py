@@ -9,7 +9,7 @@ from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.user_role import UserRole
 from v1.userapp.models.user_status import UserStatus
@@ -107,7 +107,7 @@ class UserListSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     created_date = serializers.SerializerMethodField('get_created_date')
@@ -123,7 +123,7 @@ class UserViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
     user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_user_sub_type')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
@@ -178,7 +178,7 @@ class UserRoleViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     role = GetRoleSerializer(many=False, required=True, source='get_role')
     user = GetUserSerializer(many=False, required=True, source='get_user')
     created_date = serializers.SerializerMethodField('get_created_date')

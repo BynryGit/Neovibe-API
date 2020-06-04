@@ -5,7 +5,7 @@ from rest_framework import serializers, status
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.skill import GetSkillSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_skill import UserSkill
 from v1.userapp.views.common_functions import set_user_skill_validated_data
 
@@ -28,7 +28,7 @@ class UserSkillViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:

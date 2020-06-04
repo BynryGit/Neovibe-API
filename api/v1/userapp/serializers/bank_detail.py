@@ -5,13 +5,13 @@ from datetime import datetime
 from rest_framework import serializers, status
 
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_bank_detail import UserBankDetail
 from v1.utility.serializers.utility import UtilitySerializer
 
 
 class UserBankListSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
@@ -29,7 +29,7 @@ class GetUserBankSerializer(serializers.ModelSerializer):
 
 
 class UserBankViewSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:

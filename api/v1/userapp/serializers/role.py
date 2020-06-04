@@ -9,7 +9,7 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role import Role
 from v1.userapp.serializers.role_sub_type import RoleSubTypeSerializer
 from v1.userapp.serializers.role_type import RoleTypeSerializer
@@ -64,7 +64,7 @@ class RoleListSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
@@ -83,7 +83,7 @@ class RoleViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')

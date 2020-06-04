@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role_type import RoleType
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -18,7 +18,7 @@ class GetRoleTypeSerializer(serializers.ModelSerializer):
 
 
 class RoleTypeListSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
@@ -27,7 +27,7 @@ class RoleTypeListSerializer(serializers.ModelSerializer):
 
 
 class RoleTypeViewSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:

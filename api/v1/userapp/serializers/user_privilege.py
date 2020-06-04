@@ -8,7 +8,7 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_privilege import UserPrivilege
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.user import GetUserSerializer
@@ -59,7 +59,7 @@ class UserPrivilegeViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user = GetUserSerializer(many=False, required=True, source='get_user')
     module = ModuleSerializer(many=False, required=True, source='get_module')

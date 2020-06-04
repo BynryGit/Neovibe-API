@@ -3,13 +3,12 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
-from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
@@ -56,7 +55,7 @@ class RolePrivilegeViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     role = GetRoleSerializer(many=False, required=True, source='get_role')
     module = ModuleSerializer(many=False, required=True, source='get_module')
