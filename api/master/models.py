@@ -192,7 +192,3 @@ def get_notes_by_user_id_string(id_string):
 
 def check_user_id_string_exists(id_string):
     return User.objects.filter(id_string=id_string, is_active=True).exists()
-
-
-def authenticate_user(email, password):
-    return User.objects.filter(email=email, password=password, is_active=True).exists()

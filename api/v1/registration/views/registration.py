@@ -1,11 +1,9 @@
-from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework import status, generics
+from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-
 from master.models import User
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -15,11 +13,9 @@ from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.registration.serializers.registration import RegistrationViewSerializer, RegistrationSerializer, \
-    RegistrationListSerializer
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.views.common_functions import is_data_verified
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, RESULT, UNAUTHORIZED
+from api.messages import *
 
 
 # API Header
@@ -55,7 +51,7 @@ class RegistrationList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'ERROR')
-        raise APIException
+        # raise APIException
 
 
 
@@ -138,26 +134,28 @@ class RegistrationDetail(GenericAPIView):
                         serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
-                            DATA: serializer.data,
+                            RESULT: serializer.data,
                         }, status=status.HTTP_200_OK)
                     else:
                         return Response({
-                            STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            STATE: ERROR,
+                            RESULT: DATA_NOT_EXISTS,
+                        }, status=status.HTTP_204_NO_CONTENT)
                 else:
                     return Response({
                         STATE: ERROR,
+                        RESULT: UNAUTHORIZED,
                     }, status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULT: UNAUTHORIZED,
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
                 STATE: EXCEPTION,
-                RESULTS: '',
+                RESULT: '',
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, id_string):

@@ -1,13 +1,14 @@
 __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
-from rest_framework import serializers
+from rest_framework import serializers, status
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from master.models import User
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.user_role import UserRole
@@ -16,8 +17,6 @@ from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
 from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
-# from v1.userapp.serializers.user_area import UserAreaSerializer
-# from v1.userapp.serializers.user_skill import UserSkillSerializer
 from v1.userapp.views.common_functions import set_user_validated_data, set_user_role_validated_data
 
 
@@ -44,29 +43,35 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_user_validated_data(validated_data)
-        with transaction.atomic():
-            user_obj = super(UserSerializer, self).create(validated_data)
-            user_obj.set_password(validated_data['password'])
-            user_obj.created_by = user.id
-            user_obj.created_date = datetime.utcnow()
-            user_obj.tenant = user.tenant
-            user_obj.is_active = True
-            user_obj.save()
-            user_obj.user_ID = str(user_obj.username) + str(user_obj.tenant)
-            user_obj.save()
-            return user_obj
+        if User.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Mobile number already exists!", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                user_obj = super(UserSerializer, self).create(validated_data)
+                user_obj.set_password(validated_data['password'])
+                user_obj.created_by = user.id
+                user_obj.created_date = datetime.utcnow()
+                user_obj.tenant = user.tenant
+                user_obj.is_active = True
+                user_obj.save()
+                user_obj.user_ID = str(user_obj.username) + str(user_obj.tenant)
+                user_obj.save()
+                return user_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_user_validated_data(validated_data)
-        with transaction.atomic():
-            user_obj = super(UserSerializer, self).update(instance, validated_data)
-            if 'password' in validated_data:
-                user_obj.set_password(validated_data['password'])
-            user_obj.updated_by = user.id
-            user_obj.updated_date = datetime.utcnow()
-            user_obj.is_active = True
-            user_obj.save()
-            return user_obj
+        if User.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Mobile number already exists!", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                user_obj = super(UserSerializer, self).update(instance, validated_data)
+                if 'password' in validated_data:
+                    user_obj.set_password(validated_data['password'])
+                user_obj.updated_by = user.id
+                user_obj.updated_date = datetime.utcnow()
+                user_obj.is_active = True
+                user_obj.save()
+                return user_obj
 
 
 class GetUserSerializer(serializers.ModelSerializer):
@@ -126,8 +131,6 @@ class UserViewSerializer(serializers.ModelSerializer):
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     bank = UserBankViewSerializer(many=False, required=True, source='get_user_bank')
-    # areas = UserAreaSerializer(many=True, required=True, source='get_user_area')
-    # skills = UserSkillSerializer(many=True, required=True, source='get_user_skill')
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
@@ -144,20 +147,24 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserRole
-        # validators = [UniqueTogetherValidator(queryset=UserRole.objects.all(), fields=('role_id', 'user_id',), message='User-role already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):
-        with transaction.atomic():
-            user_role_obj = super(UserRoleSerializer, self).create(validated_data)
-            user_role_obj.created_by = user.id
-            user_role_obj.created_date = datetime.utcnow()
-            user_role_obj.tenant = user.tenant
-            user_role_obj.is_active = True
-            user_role_obj.save()
-            return user_role_obj
+        validated_data = set_user_role_validated_data(validated_data)
+        if UserRole.objects.filter(user_id=validated_data['user_id'], role_id=validated_data['role_id'], tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Role already exists for this user!", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                user_role_obj = super(UserRoleSerializer, self).create(validated_data)
+                user_role_obj.created_by = user.id
+                user_role_obj.created_date = datetime.utcnow()
+                user_role_obj.tenant = user.tenant
+                user_role_obj.is_active = True
+                user_role_obj.save()
+                return user_role_obj
 
     def update(self, instance, validated_data, user):
+        validated_data = set_user_role_validated_data(validated_data)
         with transaction.atomic():
             user_role_obj = super(UserRoleSerializer, self).update(instance, validated_data)
             user_role_obj.updated_by = user.id

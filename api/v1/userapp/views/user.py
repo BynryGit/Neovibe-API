@@ -7,7 +7,7 @@ from rest_framework.generics import GenericAPIView
 from api.messages import *
 from master.models import get_all_users, get_user_by_id_string, is_email_exists
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id
@@ -17,8 +17,7 @@ from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserRoleSerializer, \
     UserRoleViewSerializer, UserSerializer
-from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified, \
-    set_user_role_validated_data
+from v1.userapp.views.common_functions import is_user_data_verified, is_user_role_data_verified
 
 
 # API Header
@@ -47,9 +46,9 @@ class UserList(generics.ListAPIView):
     search_fields = ('first_name', 'email',)
 
     def get_queryset(self):
-        response, user_obj = is_token_valid(self.request.headers['token'])
+        response, user = is_token_valid(self.request.headers['token'])
         if response:
-            if is_authorized(1, 1, 1, user_obj):
+            if is_authorized(1, 1, 1, user):
                 queryset = get_all_users()
                 return queryset
             else:
@@ -75,13 +74,12 @@ class User(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     if is_user_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         serializer = UserSerializer(data=request.data)
-                        if serializer.is_valid():
+                        if serializer.is_valid(raise_exception=False):
                             if not is_email_exists(request.data['email']):
                                 user_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
@@ -90,14 +88,11 @@ class User(GenericAPIView):
                                     RESULTS: view_serializer.data,
                                 }, status=status.HTTP_201_CREATED)
                             else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: '',
-                                }, status=status.HTTP_409_CONFLICT)
+                                raise CustomAPIException("User already exists.", status_code=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULTS: list(serializer.errors.values())[0][0],
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
@@ -113,10 +108,11 @@ class User(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -170,15 +166,14 @@ class UserDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     if is_user_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
                         if user_obj:
                             serializer = UserSerializer(data=request.data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_obj = serializer.update(user_obj, serializer.validated_data, user)
                                 view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
                                 return Response({
@@ -188,7 +183,7 @@ class UserDetail(GenericAPIView):
                             else:
                                 return Response({
                                     STATE: ERROR,
-                                    RESULTS: serializer.errors,
+                                    RESULTS: list(serializer.errors.values())[0][0],
                                 }, status=status.HTTP_400_BAD_REQUEST)
                         else:
                             return Response({
@@ -208,10 +203,11 @@ class UserDetail(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -265,15 +261,14 @@ class UserBankDetail(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     if is_user_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
                         if user_obj:
                             serializer = UserSerializer(data=request.data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_obj = serializer.update(user_obj, serializer.validated_data, user)
                                 view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
                                 return Response({
@@ -283,7 +278,7 @@ class UserBankDetail(GenericAPIView):
                             else:
                                 return Response({
                                     STATE: ERROR,
-                                    RESULTS: serializer.errors,
+                                    RESULTS: list(serializer.errors.values())[0][0],
                                 }, status=status.HTTP_400_BAD_REQUEST)
                         else:
                             return Response({
@@ -303,22 +298,22 @@ class UserBankDetail(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     def put(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     if is_user_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         user_obj = get_user_by_id_string(id_string)
                         if user_obj:
                             serializer = UserSerializer(data=request.data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 user_obj = serializer.update(user_obj, serializer.validated_data, user)
                                 view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
                                 return Response({
@@ -328,7 +323,7 @@ class UserBankDetail(GenericAPIView):
                             else:
                                 return Response({
                                     STATE: ERROR,
-                                    RESULTS: serializer.errors,
+                                    RESULTS: list(serializer.errors.values())[0][0],
                                 }, status=status.HTTP_400_BAD_REQUEST)
                         else:
                             return Response({
@@ -348,10 +343,11 @@ class UserBankDetail(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -409,17 +405,15 @@ class UserRole(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_role_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
-                            validated_data = set_user_role_validated_data(validate_data)
-                            serializer = UserRoleSerializer(data=validated_data)
-                            if serializer.is_valid():
+                            serializer = UserRoleSerializer(data=validate_data)
+                            if serializer.is_valid(raise_exception=False):
                                 user_role_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserRoleViewSerializer(instance=user_role_obj,
                                                                               context={'request': request})
@@ -427,7 +421,7 @@ class UserRole(GenericAPIView):
                             else:
                                 return Response({
                                     STATE: ERROR,
-                                    RESULTS: serializer.errors,
+                                    RESULTS: list(serializer.errors.values())[0][0],
                                 }, status=status.HTTP_400_BAD_REQUEST)
                         return Response({
                             STATE: SUCCESS,
@@ -447,25 +441,24 @@ class UserRole(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     def put(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user_obj):
+                if is_authorized(1, 1, 1, user):
                     data = []
                     if is_user_role_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         for role in request.data['roles']:
                             validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
                                              "is_active": role['is_active']}
-                            validated_data = set_user_role_validated_data(validate_data)
-                            serializer = UserRoleSerializer(data=validated_data)
-                            if serializer.is_valid():
+                            serializer = UserRoleSerializer(data=validate_data)
+                            if serializer.is_valid(raise_exception=False):
                                 user_role = get_record_by_values(str(id_string), role['role_id_string'])
                                 if user_role:
                                     user_role_obj = serializer.update(user_role, serializer.validated_data, user)
@@ -477,7 +470,7 @@ class UserRole(GenericAPIView):
                             else:
                                 return Response({
                                     STATE: ERROR,
-                                    RESULTS: serializer.errors,
+                                    RESULTS: list(serializer.errors.values())[0][0],
                                 }, status=status.HTTP_400_BAD_REQUEST)
                         return Response({
                             STATE: SUCCESS,
@@ -497,7 +490,8 @@ class UserRole(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)

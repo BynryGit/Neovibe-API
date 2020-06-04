@@ -1,13 +1,15 @@
 from django.db import transaction
 from datetime import datetime
 
-from rest_framework import serializers
+from rest_framework import serializers, status
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 
 from v1.commonapp.serializers.area import GetAreaSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.user_area import UserArea
+from v1.userapp.views.common_functions import set_user_area_validated_data
 
 
 class GetUserAreaSerializer(serializers.ModelSerializer):
@@ -44,15 +46,21 @@ class UserAreaSerializer(serializers.ModelSerializer):
         model = UserArea
         fields = '__all__'
 
-    def create(self, validated_data, user):
-        with transaction.atomic():
-            user_area_obj = super(UserAreaSerializer, self).create(validated_data)
-            user_area_obj.created_by = user.id
-            user_area_obj.created_date = datetime.utcnow()
-            user_area_obj.tenant = user.tenant
-            user_area_obj.is_active = True
-            user_area_obj.save()
-            return user_area_obj
+    def create(self, validate_data, user):
+        validated_data = set_user_area_validated_data(validate_data)
+        if UserArea.objects.filter(user_id=validated_data['user_id'], area_id=validated_data['area_id'],
+                                   tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Area already exists for specified user!",
+                                     status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                user_area_obj = super(UserAreaSerializer, self).create(validated_data)
+                user_area_obj.created_by = user.id
+                user_area_obj.created_date = datetime.utcnow()
+                user_area_obj.tenant = user.tenant
+                user_area_obj.is_active = True
+                user_area_obj.save()
+                return user_area_obj
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():

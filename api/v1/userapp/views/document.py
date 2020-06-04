@@ -31,8 +31,9 @@ class UserDocument(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user):
                     if is_document_data_verified(request):
                         data = []
                         user = get_user_by_id_string(id_string)
@@ -74,13 +75,13 @@ class UserDocument(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user):
                     if is_document_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         request.data['identification_id'] = str(id_string)
                         serializer = DocumentSerializer(data=request.data)
-                        if serializer.is_valid():
+                        if serializer.is_valid(raise_exception=False):
                             document_obj = serializer.create(serializer.validated_data, user)
                             view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
                             return Response({
@@ -106,22 +107,23 @@ class UserDocument(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user):
                     if is_document_data_verified(request):
-                        success, user = is_token_valid(self.request.headers['token'])
                         request.data['identification_id'] = str(id_string)
                         document = get_document_by_id_string(request.data['document_id'])
                         if document:
                             serializer = DocumentSerializer(data=request.data)
-                            if serializer.is_valid():
+                            if serializer.is_valid(raise_exception=False):
                                 document_obj = serializer.update(document, serializer.validated_data, user)
                                 view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
                                 return Response({
@@ -151,7 +153,8 @@ class UserDocument(GenericAPIView):
                 }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
