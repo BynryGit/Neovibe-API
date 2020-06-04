@@ -14,7 +14,7 @@ from v1.tenant.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.serializers.tenant import TenantMasterSerializer
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
-from v1.userapp.models.user_master import UserDetail
+from master.models import User
 
 # API Header
 # API end Point: api/v1/tenant/list

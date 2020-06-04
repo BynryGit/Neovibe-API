@@ -46,12 +46,22 @@ class SubModule(models.Model):
 
 
 def get_sub_module_by_id(id):
-    return SubModule.objects.filter(id=id, is_active=True).last()
-
-
-def get_submodule_by_module_id(id):
-    return SubModule.objects.filter(module_id=id, is_active=True)
+    try:
+        return SubModule.objects.get(id=id,is_active=True)
+    except:
+        return False
 
 
 def get_sub_module_by_id_string(id_string):
-    return SubModule.objects.filter(id_string=id_string, is_active=True).last()
+    try:
+        return SubModule.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
+
+
+def get_all_sub_modules():
+    return SubModule.objects.filter(is_active=True)
+
+
+def get_submodule_by_module_id(id):
+    return SubModule.objects.filter(module_id=id,is_active=True)

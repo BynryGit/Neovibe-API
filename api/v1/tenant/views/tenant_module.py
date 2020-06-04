@@ -14,7 +14,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.tenant.serializers.tenant_module import TenantModuleViewSerializer, TenantModuleSerializer
-from v1.userapp.models.user_master import UserDetail
+from master.models import User
 from v1.tenant.models.tenant_module import TenantModule as TenantModuleTbl, get_tenant_module_by_id_string
 
 
@@ -83,7 +83,7 @@ class TenantModule(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     tenant_obj = get_tenant_by_id_string(id_string)
@@ -192,7 +192,7 @@ class TenantModuleDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     tenant_module_obj = get_tenant_module_by_id_string(id_string)

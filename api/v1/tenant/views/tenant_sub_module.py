@@ -8,16 +8,12 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
-from master.models import User
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.tenant.serializers.subscription import SubscriptionListSerializer
-from v1.tenant.views.common_functions import is_data_verified, is_submodule_data_verified
-from v1.tenant.models.tenant_sub_module import get_tenant_submodule_by_id_string, TenantSubModule as TenantSubModuleTbl
-from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from master.models import User
 from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl, get_tenant_submodule_by_id_string
 from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
 
@@ -201,16 +197,6 @@ class TenantSubModuleDetail(GenericAPIView):
                     # Todo fetch user from request start
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
-                    if is_submodule_data_verified(request):
-                        pass
-                    # Request data verification end
-                    #     duplicate_tenant_submodule_obj = TenantSubModuleTbl.objects.filter(id_string=request.data["id_string"],
-                    #                                                         sub_module_name=request.data['sub_module_name'])
-                    #     if duplicate_tenant_submodule_obj:
-                    #         return Response({
-                    #             STATE: DUPLICATE,
-                    #         }, status=status.HTTP_404_NOT_FOUND)
-                    #     else:
 
                     tenant_sub_module_obj = get_tenant_submodule_by_id_string(id_string)
                     if tenant_sub_module_obj:

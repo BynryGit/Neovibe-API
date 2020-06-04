@@ -6,7 +6,6 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework import status, generics
-
 from master.models import User
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
