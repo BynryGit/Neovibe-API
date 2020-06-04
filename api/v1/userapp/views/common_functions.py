@@ -193,9 +193,9 @@ def set_user_validated_data(validated_data):
         else:
             raise CustomAPIException("Department not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "status_id" in validated_data:
-        status = get_user_status_by_id_string(validated_data["status_id"])
+        get_status = get_user_status_by_id_string(validated_data["status_id"])
         if status:
-            validated_data["status_id"] = status.id
+            validated_data["status_id"] = get_status.id
         else:
             raise CustomAPIException("Status not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "bank_id" in validated_data:

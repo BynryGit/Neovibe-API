@@ -7,7 +7,7 @@ from rest_framework.generics import GenericAPIView
 from api.messages import *
 from master.models import get_all_users, get_user_by_id_string, is_email_exists
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id
@@ -88,10 +88,7 @@ class User(GenericAPIView):
                                     RESULTS: view_serializer.data,
                                 }, status=status.HTTP_201_CREATED)
                             else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: '',
-                                }, status=status.HTTP_409_CONFLICT)
+                                raise CustomAPIException("User already exists.", status_code=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
                                 STATE: ERROR,
