@@ -1,9 +1,7 @@
 import traceback
-
 from rest_framework import status,generics
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
-
 from api.messages import *
 from v1.commonapp.models.sub_module import get_all_sub_modules, get_sub_module_by_id_string
 from v1.commonapp.serializers.sub_module import SubModuleListSerializer, SubModuleViewSerializer
