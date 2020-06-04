@@ -8,6 +8,14 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.models.tenant_bank_details import TenantBankDetail as TenantBankDetailTbl
 
 
+class TenantBankDetailShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TenantBankDetailTbl
+        fields = ('id_string', 'bank_name', 'branch_name', 'branch_city', 'account_number', 'account_type',
+                  'account_name')
+
+
 class TenantBankDetailViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)

@@ -36,9 +36,18 @@ class TenantState(models.Model):
 # Create Tenant State table end
 
 
-def get_tenant_state_by_id_string(id_string):
-    return TenantState.objects.get(id_string = id_string)
-
-
 def get_tenant_state_by_id(id):
-    return TenantState.objects.get(id = id)
+    try:
+        return TenantState.objects.get(id=id)
+    except:
+        return False
+
+
+def get_tenant_state_by_id_string(id_string):
+    try:
+        return TenantState.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+

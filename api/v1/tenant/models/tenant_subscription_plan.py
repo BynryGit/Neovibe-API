@@ -15,8 +15,6 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
@@ -24,19 +22,15 @@ from django.db import models  # importing package for database
 
 class TenantSubscriptionPlan(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    subscription_id = models.BigIntegerField(null=True, blank=True)
-    subscription_plan_id = models.BigIntegerField(null=True, blank=True)
     subscription_type = models.CharField(max_length=200, blank=True, null=True)
     subscription_name = models.CharField(max_length=200, blank=True, null=True)
-    subscription_frequency_id = models.BigIntegerField(null=True, blank=True)
     short_name = models.BigIntegerField(null=True, blank=True)
-
     description = models.CharField(max_length=500, blank=True, null=True)
     max_utility  = models.BigIntegerField(null=True, blank=True)
     max_user = models.BigIntegerField(null=True, blank=True)
     max_consumer = models.BigIntegerField(null=True, blank=True)
     max_storage = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -50,19 +44,17 @@ class TenantSubscriptionPlan(models.Model):
 
 # Create Tenant Subscription Plan table end.
 
-def get_subscription_plan_by_id(id):
+
+def get_tenant_subscription_plan_by_id(id):
     try:
-        return TenantSubscriptionPlan.objects.get(id = id)
+        return TenantSubscriptionPlan.objects.get(id=id)
     except:
         return False
 
 
-def get_subscription_plan_by_id_string(id_string):
+def get_tenant_subscription_plan_by_id_string(id_string):
     try:
-        return TenantSubscriptionPlan.objects.get(id_string = id_string)
+        return TenantSubscriptionPlan.objects.get(id_string=id_string)
 
     except:
         return False
-
-def get_subscription_plan_by_tenant_id_string(id_string):
-    return TenantSubscriptionPlan.objects.filter(tenant_id_string=id_string)

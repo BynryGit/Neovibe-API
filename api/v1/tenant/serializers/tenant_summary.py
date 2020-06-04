@@ -1,4 +1,4 @@
-__author__ = "Gauri"
+__author__ = "aki"
 
 from rest_framework import serializers
 from api.settings import DISPLAY_DATE_TIME_FORMAT

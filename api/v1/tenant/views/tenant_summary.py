@@ -1,4 +1,4 @@
-__author__ = "Gauri"
+__author__ = "aki"
 
 import traceback
 from rest_framework.generics import GenericAPIView
@@ -19,8 +19,8 @@ from v1.tenant.models.tenant_summary_on_monthly_basis import get_tenant_usage_su
 # Sub Module: All
 # Interaction: Tenant summary
 # Usage: API will fetch all summary against tenant
-# Tables used:   Tenant Usage Summary
-# Author: Gauri
+# Tables used: Tenant Usage Summary
+# Author: Akshay
 # Created on: 20/05/2020
 
 
