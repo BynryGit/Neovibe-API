@@ -1,35 +1,22 @@
+__author__ = "aki"
+
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.tenant.models.tenant_status import TenantStatus
 from v1.tenant.serializers.tenant_city import TenantCitySerializer
 from v1.tenant.serializers.tenant_country import TenantCountrySerializer
 from v1.tenant.serializers.tenant_state import TenantStateSerializer
-from v1.tenant.serializers.tenant_status import TenantStatusShortViewSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.tenant.views.common_functions import set_tenant_validated_data
-
-
-class GetTenantSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TenantStatus
-        fields = ('name','id_string')
-
-
-class TenantStatusViewSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TenantStatus
-        fields = ('name','id_string')
 
 
 class TenantMasterViewSerializer(serializers.ModelSerializer):
     tenant_country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
     tenant_state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
     tenant_city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
-    status_id = TenantStatusShortViewSerializer(many=False, required=False, source='get_tenant_status')
+    status_id = TenantStatusViewSerializer(many=False, required=False, source='get_tenant_status')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 

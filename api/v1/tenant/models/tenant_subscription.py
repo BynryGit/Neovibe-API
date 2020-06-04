@@ -16,44 +16,55 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from v1.tenant.models.tenant_subscription_plan import get_tenant_subscription_plan_by_id
+from v1.tenant.models.tenant_subscription_plan_rate import get_tenant_subscription_plan_rate_by_id
 
 # Create Tenant Subscription table start.
+
 
 class TenantSubscription(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     subscription_plan_id = models.BigIntegerField(null=True, blank=True)
-    subscription_frequency_id = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    subscription_rate_id = models.BigIntegerField(null=True, blank=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     validity_id = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.subscription_plan_id
+        return str(self.tenant)
 
     def __unicode__(self):
-        return self.subscription_plan_id
+        return str(self.tenant)
+
+    @property
+    def get_subscription_plan_id(self):
+        subscription_plan = get_tenant_subscription_plan_by_id(self.subscription_plan_id)
+        return subscription_plan
+
+    @property
+    def get_subscription_rate_id(self):
+        subscription_rate = get_tenant_subscription_plan_rate_by_id(self.subscription_rate_id)
+        return subscription_rate
 
 # Create Tenant Subscription table end.
-def get_subscription_by_id(id):
+
+
+def get_tenant_subscription_by_id(id):
     try:
-        return TenantSubscription.objects.get(id = id)
+        return TenantSubscription.objects.get(id=id)
     except:
         return False
 
 
-def get_subscription_by_id_string(id_string):
+def get_tenant_subscription_by_id_string(id_string):
     try:
-        return TenantSubscription.objects.get(id_string = id_string)
+        return TenantSubscription.objects.get(id_string=id_string)
     except:
         return False
-def get_subscription_by_tenant_id_string(id_string):
-    return TenantSubscription.objects.filter(tenant_id_string=id_string)

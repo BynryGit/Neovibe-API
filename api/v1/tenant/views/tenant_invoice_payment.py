@@ -1,51 +1,52 @@
 __author__ = "aki"
 
 import traceback
-from rest_framework.exceptions import APIException
-from rest_framework.generics import GenericAPIView
-from rest_framework import generics, status
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, generics
+from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
-from v1.commonapp.common_functions import is_token_valid, is_authorized
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+from master.models import User
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.tenant.models.tenant_invoice_payment import get_tenant_invoice_payment_by_id_string
+from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
-from master.models import User
-from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl, get_tenant_submodule_by_id_string
-from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
+from v1.tenant.serializers.tenant_invoice_payment import TenantInvoicePaymentViewSerializer, \
+     TenantInvoicePaymentSerializer
+from v1.tenant.models.tenant_invoice_payment import TenantInvoicePayment as TenantInvoicePaymentTbl
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, RESULT, DATA_ALREADY_EXISTS
 
 
 # API Header
-# API end Point: api/v1/tenant/id_string/submodule/list
+# API end Point: api/v1/tenant/id_string/payment/list
 # API verb: GET
 # Package: Basic
-# Modules: Tenant
-# Sub Module: SubModule
-# Interaction: Tenant Submodule list
-# Usage: API will fetch Tenant submodule list against single Tenant
-# Tables used: 2.3 Tenant SubModule
+# Modules: All
+# Sub Module: All
+# Interaction: Tenant Invoice Payment list
+# Usage: API will fetch required data for Tenant Invoices Payment list
+# Tables used: Tenant Invoice Payment
 # Author: Akshay
-# Created on: 19/05/2020
+# Created on: 21/05/2020
 
-
-class TenantSubModuleList(generics.ListAPIView):
+class TenantInvoicePaymentList(generics.ListAPIView):
     try:
-        serializer_class = TenantSubModuleViewSerializer
+        serializer_class = TenantInvoicePaymentViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('tenant__id_string',)
         ordering_fields = ('tenant__id_string',)
         ordering = ('tenant__name',)  # always give by default alphabetical order
-        search_fields = ('tenant__name',)
+        search_fields = ('tenant__name', 'invoice_number', )
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    queryset = TenantSubModuleTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
+                    queryset = TenantInvoicePaymentTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -57,19 +58,19 @@ class TenantSubModuleList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/tenant/id_string/submodule
+# API end Point: api/v1/tenant/id_string/payment
 # API verb: POST
 # Package: Basic
-# Modules: All
-# Sub Module: submodule
-# Interaction: Add Tenant Submodule
-# Usage: Add Tenant submodule in the system
-# Tables used:  Tenant Submodule
+# Modules: Tenant
+# Sub Module: Payment
+# Interaction: Add Tenant Payment
+# Usage: Add Tenant Payment
+# Tables used:  Tenant Payment
 # Auther: Akshay
 # Created on: 21/5/2020
 
-class TenantSubModule(GenericAPIView):
-    serializer_class = TenantSubModuleSerializer
+class TenantInvoicePayment(GenericAPIView):
+    serializer_class = TenantInvoicePaymentSerializer
 
     def post(self, request, id_string):
         try:
@@ -82,17 +83,18 @@ class TenantSubModule(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    user = User.objects.get(id=2)
                     # Todo fetch user from request start
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     tenant_obj = get_tenant_by_id_string(id_string)
                     if tenant_obj:
-                        serializer = TenantSubModuleSerializer(data=request.data)
+                        serializer = TenantInvoicePaymentSerializer(data=request.data)
                         if serializer.is_valid():
-                            tenant_sub_module_obj = serializer.create(serializer.validated_data, tenant_obj, user)
-                            if tenant_sub_module_obj:
-                                serializer = TenantSubModuleViewSerializer(tenant_sub_module_obj, context={'request': request})
+                            tenant_invoice_payment_obj = serializer.create(serializer.validated_data, tenant_obj, user)
+                            if tenant_invoice_payment_obj:
+                                serializer = TenantInvoicePaymentViewSerializer(tenant_invoice_payment_obj,
+                                                                         context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULT: serializer.data,
@@ -128,19 +130,19 @@ class TenantSubModule(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/tenant/submodule/id_string
-# API verb: GET, PUT
+# API end Point: api/v1/tenant/payment/id_string
+# API verb: Put,Get
 # Package: Basic
-# Modules: Tenant
-# Sub Module: SubModule
-# Interaction: For get and edit Tenant submodule
-# Usage: API will fetch and edit Tenant submodule details
-# Tables used: 1.3 Tenant SubModule
-# Author: Akshay
-# Created on: 20/05/2020
+# Modules: All
+# Sub Module:
+# Interaction: Get Tenant, Update Tenant payment
+# Usage: Add and Update Tenant Invoices Payment in the system
+# Tables used:  Tenant Invoice Payment
+# Auther: Akshay
+# Created on: 21/5/2020
 
-class TenantSubModuleDetail(GenericAPIView):
-    serializer_class = TenantSubModuleSerializer
+class TenantInvoicePaymentDetail(GenericAPIView):
+    serializer_class = TenantInvoicePaymentSerializer
 
     def get(self, request, id_string):
         try:
@@ -153,13 +155,10 @@ class TenantSubModuleDetail(GenericAPIView):
                 # Checking authorization start
                 if is_authorized():
                     # Checking authorization end
-                    # Todo fetch user from request start
-                    user = User.objects.get(id=2)
-                    # Todo fetch user from request end
 
-                    tenant_sub_module_obj = get_tenant_submodule_by_id_string(id_string)
-                    if tenant_sub_module_obj:
-                        serializer = TenantSubModuleViewSerializer(tenant_sub_module_obj, context={'request': request})
+                    tenant_invoice_payment_obj = get_tenant_invoice_payment_by_id_string(id_string)
+                    if tenant_invoice_payment_obj:
+                        serializer = TenantInvoicePaymentViewSerializer(tenant_invoice_payment_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULT: serializer.data,
@@ -198,12 +197,12 @@ class TenantSubModuleDetail(GenericAPIView):
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    tenant_sub_module_obj = get_tenant_submodule_by_id_string(id_string)
-                    if tenant_sub_module_obj:
-                        serializer = TenantSubModuleSerializer(data=request.data)
+                    tenant_invoice_payment_obj = get_tenant_invoice_payment_by_id_string(id_string)
+                    if tenant_invoice_payment_obj:
+                        serializer = TenantInvoicePaymentSerializer(data=request.data)
                         if serializer.is_valid():
-                            tenant_sub_module_obj = serializer.update(tenant_sub_module_obj, serializer.validated_data, user)
-                            serializer = TenantSubModuleViewSerializer(tenant_sub_module_obj, context={'request': request})
+                            tenant_invoice_payment_obj = serializer.update(tenant_invoice_payment_obj, serializer.validated_data, user)
+                            serializer = TenantInvoicePaymentViewSerializer(tenant_invoice_payment_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULT: serializer.data,
