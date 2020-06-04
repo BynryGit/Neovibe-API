@@ -15,7 +15,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.contract.models.contract import get_contract_by_id_string
 from v1.contract.serializers.contract_invoice import SupplierInvoiceViewSerializer, SupplierInvoiceSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.supplier.models.supplier_invoice import SupplierInvoice as SupplierInvoiceTbl, get_contract_invoice_by_id_string
 
 

@@ -11,7 +11,6 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
 from v1.userapp.views.common_functions import is_role_data_verified, set_role_validated_data
@@ -44,7 +43,7 @@ class RoleList(generics.ListAPIView):
     def get_queryset(self):
         response, user_obj = is_token_valid(self.request.headers['token'])
         if response:
-            if is_authorized(user_obj):
+            if is_authorized(1, 1, 1, user_obj):
                 queryset = get_all_role()
                 return queryset
             else:
@@ -70,8 +69,9 @@ class Role(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_role_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         validated_data = set_role_validated_data(request.data)
@@ -125,8 +125,9 @@ class RoleDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     role = get_role_by_id_string(id_string)
                     if role:
                         serializer = RoleViewSerializer(instance=role, context={'request': request})
@@ -157,8 +158,9 @@ class RoleDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_role_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         role_obj = get_role_by_id_string(id_string)

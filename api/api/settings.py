@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_readonly_field',
     'rest_framework',
     'corsheaders',
     'django_filters',
-    # 'encrypted_model_fields',
+    'master',
     'v1.asset',
     'v1.billing',
     'v1.campaign',
@@ -76,6 +77,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'api.urls'
 
+AUTH_USER_MODEL = 'master.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -98,9 +101,9 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart3602',
+        'NAME': 'smart360',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '5432',
     }

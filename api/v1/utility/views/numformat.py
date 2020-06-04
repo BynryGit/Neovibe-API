@@ -5,9 +5,9 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from master.models import User
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import UserDetail
 from v1.utility.models.utility_services_number_format import \
     UtilityServiceNumberFormat as UtilityServiceNumberFormatTbl, \
     get_utility_service_number_format_by_utility_id_string_and_item
@@ -42,7 +42,7 @@ class UtilityNumformatDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     numformat_obj = get_utility_service_number_format_by_utility_id_string_and_item(id_string, request.data['item'])

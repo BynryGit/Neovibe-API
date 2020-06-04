@@ -54,4 +54,4 @@ def get_user_type_by_id_string(id_string):
 
 
 def get_user_type_by_id(id):
-    return UserType.objects.filter(id_string=id).last()
+    return UserType.objects.filter(id=id).last()

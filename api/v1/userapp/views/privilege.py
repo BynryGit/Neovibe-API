@@ -11,7 +11,6 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_all_privilege, get_privilege_by_id_string
-from v1.userapp.models.user_master import get_user_by_id
 from v1.userapp.serializers.privilege import PrivilegeListSerializer, PrivilegeViewSerializer, PrivilegeSerializer
 from v1.userapp.views.common_functions import is_privilege_data_verified
 
@@ -41,8 +40,9 @@ class PrivilegeList(generics.ListAPIView):
     search_fields = ('name',)
 
     def get_queryset(self):
-        if is_token_valid(self.request.headers['token']):
-            if is_authorized():
+        response, user_obj = is_token_valid(self.request.headers['token'])
+        if response:
+            if is_authorized(1, 1, 1, user_obj):
                 queryset = get_all_privilege()
                 return queryset
             else:
@@ -67,8 +67,9 @@ class Privilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         serializer = PrivilegeSerializer(data=request.data)
@@ -121,8 +122,9 @@ class PrivilegeDetail(GenericAPIView):
 
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     privilege = get_privilege_by_id_string(id_string)
                     if privilege:
                         serializer = PrivilegeViewSerializer(instance=privilege, context={'request': request})
@@ -153,8 +155,9 @@ class PrivilegeDetail(GenericAPIView):
 
     def put(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     if is_privilege_data_verified(request):
                         success, user = is_token_valid(self.request.headers['token'])
                         role_obj = get_privilege_by_id_string(id_string)

@@ -13,7 +13,8 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.tenant.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.serializers.tenant import TenantMasterSerializer
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE, DATA_ALREADY_EXISTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
+from master.models import User
 
 # API Header
 # API end Point: api/v1/tenant/list
@@ -26,7 +27,6 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLIC
 # Tables used: 1.1 Tenant Master
 # Author: Gauri Deshmukh
 # Created on: 18/05/2020
-from v1.userapp.models.user_master import UserDetail
 
 
 class TenantList(generics.ListAPIView):
@@ -37,7 +37,7 @@ class TenantList(generics.ListAPIView):
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('name', 'id_string',)
         ordering_fields = ('name', 'id_string',)
-        ordering = ('created_date',)  # always give by default alphabetical order
+        ordering = ('name',)  # always give by default alphabetical order
         search_fields = ('name', 'email_id',)
 
         def get_queryset(self):
@@ -80,27 +80,27 @@ class Tenant(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     serializer = TenantMasterSerializer(data=request.data)
                     if serializer.is_valid():
                         tenant_obj = serializer.create(serializer.validated_data, user)
                         if tenant_obj:
-                            view_serializer = TenantMasterViewSerializer(instance=tenant_obj, context={'request': request})
+                            serializer = TenantMasterViewSerializer(instance=tenant_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
+                                RESULT: serializer.data,
                             }, status=status.HTTP_201_CREATED)
                         else:
                             return Response({
                                 STATE: DUPLICATE,
-                                RESULTS: DATA_ALREADY_EXISTS,
+                                RESULT: DATA_ALREADY_EXISTS,
                             }, status=status.HTTP_409_CONFLICT)
                     else:
                         return Response({
                             STATE: ERROR,
-                            RESULTS: serializer.errors,
+                            RESULT: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -136,9 +136,9 @@ class TenantDetail(GenericAPIView):
         try:
             if is_token_valid(request.headers['token']):
                 if is_authorized():
-                    tenant = get_tenant_by_id_string(id_string)
-                    if tenant:
-                        serializer = TenantMasterViewSerializer(instance=tenant, context={'request': request})
+                    tenant_obj = get_tenant_by_id_string(id_string)
+                    if tenant_obj:
+                        serializer = TenantMasterViewSerializer(instance=tenant_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             DATA: serializer.data,
@@ -172,7 +172,7 @@ class TenantDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     # Request data verification start
@@ -181,22 +181,20 @@ class TenantDetail(GenericAPIView):
                         serializer = TenantMasterSerializer(data=request.data)
                         if serializer.is_valid():
                             tenant_obj = serializer.update(tenant_obj, serializer.validated_data, user)
-                            view_serializer = TenantMasterViewSerializer(instance=tenant_obj,
-                                                                         context={'request': request})
+                            serializer = TenantMasterViewSerializer(instance=tenant_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
+                                RESULT: serializer.data,
                             }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                                RESULTS: serializer.errors,
+                                RESULT: serializer.errors,
                             }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
                         }, status=status.HTTP_404_NOT_FOUND)
-                    # Save basic details start
                 else:
                     return Response({
                         STATE: ERROR,

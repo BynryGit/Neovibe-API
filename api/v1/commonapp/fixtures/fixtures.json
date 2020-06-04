@@ -1,2214 +1,1745 @@
 [
-	{
-		"pk" : "1",
-		"model" : "tenant.TenantMaster",
-		"fields" : {
-			"name" : "MNGL",
-			"email_id" : "info@mngl.in",
-			"mobile_no" : 18002662696,
-			"tenant_country_id" : 3,
-			"tenant_state_id" : 1,
-			"is_active" : "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "tenant.TenantMaster",
-		"fields": {
-			"name": "BGCL",
-			"email_id": "info@bgcl.in",
-			"mobile_no": 23248070,
-			"tenant_country_id": 3,
-			"tenant_state_id": 2,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "tenant.TenantMaster",
-		"fields": {
-			"name": "INFRA MARK",
-			"email_id": "infra@gmail.com",
-			"mobile_no": 9550209071,
-			"tenant_country_id": 1,
-			"tenant_state_id": 5,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "tenant.TenantMaster",
-		"fields": {
-			"name": "GAIL",
-			"email_id": "gail@gmail.com",
-			"mobile_no": 7020929071,
-			"tenant_country_id": 3,
-			"tenant_state_id": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "tenant.TenantSubscriptionPlan",
-		"fields": {
-			"subscription_id": 1,
-			"subcription_type": "Basic",
-			"description": "If you chooses basic plan you will get only 3 module",
-			"max_utility": 1,
-			"max_user": 120,
-			"max_consumer": 50000,
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "2",
-		"model": "tenant.TenantSubscriptionPlan",
-		"fields": {
-			"subscription_id": 2,
-			"subcription_type": "Advance",
-			"description": "If you choose advance plan you will get",
-			"max_utility": 2,
-			"max_user": 500,
-			"max_consumer": 100000,
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "1",
-		"model": "tenant.TenantSubscriptionPlanRate",
-		"fields": {
-			"tenantsubscriptionplan_id": 1,
-			"base_rate": 50,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"is_taxable": "False",
-			"tax": 5,
-			"effective_date": "2020-04-28",
-			"is_active": "True"
-		}
-
-	},
-	{
-		"pk": "2",
-		"model": "tenant.TenantSubscriptionPlanRate",
-		"fields": {
-			"tenantsubscriptionplan_id": 2,
-			"base_rate": 100,
-			"currency": 1,
-			"region": 3,
-			"country": 3,
-			"is_taxable": "False",
-			"tax": 10,
-			"effective_date": "2020-04-28",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "utility.UtilityMaster",
-		"fields": {
-			"tenant": 1,
-			"name": "MNGL Mumbai",
-			"phone_no": 1111111111,
-			"email_id": "gas@gmail.com",
-			"region_id": 3,
-			"country_id": 3,
-			"state_id": 1,
-			"city_id": 1,
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "2",
-		"model": "utility.UtilityMaster",
-		"fields": {
-			"tenant": 1,
-			"name": "MNGL Pune",
-			"phone_no": 2222222222,
-			"email_id": "power@gmail.com",
-			"region_id": 3,
-			"country_id": 3,
-			"state_id": 1,
-			"city_id": 1,
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "3",
-		"model": "utility.UtilityMaster",
-		"fields": {
-			"tenant": 2,
-			"name": "BGCL Kolkata",
-			"phone_no": 333333333,
-			"email_id": "power@gmail.com",
-			"region_id": 3,
-			"country_id": 3,
-			"state_id": 2,
-			"city_id": 3,
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "1",
-		"model": "utility.UtilityModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_name": "S&M",
-			"module_desc": "S&M contains survey,reports,setting,user",
-			"is_active": "True"
-		}
-
-	},
-	{
-		"pk": "2",
-		"model": "utility.UtilityModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_name": "Consumer Care",
-			"module_desc": "It contains registration,consumer,reports",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "utility.UtilityModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_name": "S&M",
-			"module_desc": "S&M contains survey,reports,setting,user",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "utility.UtilityModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_name": "Consumer Care",
-			"module_desc": "It contains registration,consumer,reports",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "utility.UtilityModule",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"module_name": "Consumer Care",
-			"module_desc": "It contains registration,consumer,reports",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "Dashboard",
-			"submodule_desc": "its used to display count of over all module",
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "2",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "Survey",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "Campaign",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "Consumer",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "Reports",
-			"submodule_desc": "Its user to generate reports in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "6",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "User",
-			"submodule_desc": "It's used to add,edit user in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "7",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 1,
-			"submodule_name": "Setting",
-			"submodule_desc": "Its used for configuration of the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "8",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 2,
-			"submodule_name": "Dashboard",
-			"submodule_desc": "its user to display count of over all module",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "9",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 2,
-			"submodule_name": "Consumer",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "10",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 2,
-			"submodule_name": "Reports",
-			"submodule_desc": "Its user to generate reports in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "11",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 2,
-			"submodule_name": "User",
-			"submodule_desc": "It's used to add,edit user in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "12",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"module_id": 2,
-			"submodule_name": "Setting",
-			"submodule_desc": "Its used for configuration of the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "13",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "Dashboard",
-			"submodule_desc": "its used to display count of over all module",
-			"is_active": "True"
-
-		}
-	},
-	{
-		"pk": "14",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "Survey",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "15",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "Campaign",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "16",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "Consumer",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "17",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "Reports",
-			"submodule_desc": "Its user to generate reports in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "18",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "User",
-			"submodule_desc": "It's used to add,edit user in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "19",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 3,
-			"submodule_name": "Setting",
-			"submodule_desc": "Its used for configuration of the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "20",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 4,
-			"submodule_name": "Dashboard",
-			"submodule_desc": "its user to display count of over all module",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "21",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 4,
-			"submodule_name": "Consumer",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "22",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 4,
-			"submodule_name": "Reports",
-			"submodule_desc": "Its user to generate reports in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "23",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 4,
-			"submodule_name": "User",
-			"submodule_desc": "It's used to add,edit user in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "24",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"module_id": 4,
-			"submodule_name": "Setting",
-			"submodule_desc": "Its used for configuration of the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "25",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"module_id": 5,
-			"submodule_name": "Dashboard",
-			"submodule_desc": "its user to display count of over all module",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "26",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"module_id": 5,
-			"submodule_name": "Consumer",
-			"submodule_desc": "Its used to add,edit records in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "27",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"module_id": 5,
-			"submodule_name": "Reports",
-			"submodule_desc": "Its user to generate reports in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "28",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"module_id": 5,
-			"submodule_name": "User",
-			"submodule_desc": "It's used to add,edit user in the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "29",
-		"model": "utility.UtilitySubModule",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"module_id": 5,
-			"submodule_name": "Setting",
-			"submodule_desc": "Its used for configuration of the system",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.Module",
-		"fields": {
-			"name": "S&M",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "commonapp.Module",
-		"fields": {
-			"name": "Consumer Care",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "commonapp.Module",
-		"fields": {
-			"name": "Consumer Ops",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "commonapp.Module",
-		"fields": {
-			"name": "Admin",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 1,
-			"module_id": 1,
-			"name": "Dashboard",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 2,
-			"module_id": 1,
-			"name": "Survey",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 3,
-			"module_id": 1,
-			"name": "Campaign",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 4,
-			"module_id": 1,
-			"name": "Registrations",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 5,
-			"module_id": 1,
-			"name": "Consumers",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "6",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 6,
-			"module_id": 1,
-			"name": "Reports",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "7",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 7,
-			"module_id": 1,
-			"name": "Users",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "8",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 8,
-			"module_id": 1,
-			"name": "Settings",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "9",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 9,
-			"module_id": 2,
-			"name": "Dashboard",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "10",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 10,
-			"module_id": 2,
-			"name": "Registrations",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "11",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 11,
-			"module_id": 2,
-			"name": "Consumers",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "12",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 12,
-			"module_id": 2,
-			"name": "Reports",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "13",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 13,
-			"module_id": 2,
-			"name": "Users",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "14",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 14,
-			"module_id": 2,
-			"name": "Settings",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "15",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 15,
-			"module_id": 3,
-			"name": "Dashboard",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "16",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 16,
-			"module_id": 3,
-			"name": "Registrations",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "17",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 17,
-			"module_id": 3,
-			"name": "Consumers",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "18",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 18,
-			"module_id": 3,
-			"name": "Meter Data",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "19",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 19,
-			"module_id": 3,
-			"name": "Billing",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "20",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 20,
-			"module_id": 3,
-			"name": "Payment",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "21",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 21,
-			"module_id": 3,
-			"name": "Services",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "22",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 22,
-			"module_id": 3,
-			"name": "Complaints",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "23",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 23,
-			"module_id": 3,
-			"name": "Reports",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "24",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 24,
-			"module_id": 3,
-			"name": "Users",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "25",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 25,
-			"module_id": 3,
-			"name": "Settings",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "25",
-		"model": "commonapp.SubModule",
-		"fields": {
-			"sub_module": 25,
-			"module_id": 4,
-			"name": "Admin",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.Region",
-		"fields": {
-			"name": "America",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "commonapp.Region",
-		"fields": {
-			"name": "Europe",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "commonapp.Region",
-		"fields": {
-			"name": "Asia",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "commonapp.Region",
-		"fields": {
-			"name": "Africa",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "commonapp.Country",
-		"fields": {
-			"tenant": 3,
-			"name": "United States",
-			"region": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "commonapp.Country",
-		"fields": {
-			"name": "Russia",
-			"region": 2,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "commonapp.Country",
-		"fields": {
-			"tenant": 1,
-			"name": "India",
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "4",
-		"model": "commonapp.Country",
-		"fields": {
-			"tenant": 2,
-			"name": "India",
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.Area",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"name": "Kothrud",
-			"city_id": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.SubArea",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"area": 1,
-			"name": "Bhusari colony",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.State",
-		"fields": {
-			"tenant": 1,
-			"name": "Maharashtra",
-			"country": 3,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "commonapp.State",
-		"fields": {
-			"tenant": 2,
-			"name": "West Bengal",
-			"country": 4,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "commonapp.State",
-		"fields": {
-			"tenant": 1,
-			"name": "Telangana",
-			"country": 3,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "commonapp.State",
-		"fields": {
-			"tenant": 2,
-			"name": "Andhra Pradesh",
-			"country": 3,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.City",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Pune",
-			"state": 1,
-			"country": 3,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "commonapp.City",
-		"fields": {
-			"tenant": 1,
-			"utility": 2,
-			"name": "Nashik",
-			"state": 1,
-			"country": 3,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "commonapp.City",
-		"fields": {
-			"tenant": 2,
-			"utility": 2,
-			"name": "Kolkata",
-			"state": 2,
-			"country": 3,
-			"region": 3,
-			"is_active": "True"
-		}
-	},
-
-
-
   {
-		"pk": "1",
-		"model": "userapp.Privilege",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "View",
-			"is_active": "True"
-		}
-	},
-  {
-		"pk": "2",
-		"model": "userapp.Privilege",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Edit",
-			"is_active": "True"
-		}
-	},
-
-  {
-        "pk": "1",
-		"model": "userapp.RolePrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "role_id": 1,
-          "module_id": 1,
-          "sub_module_id":1,
-          "privilege_id": 1,
-          "is_active": "True"
-
-        }
+    "pk": "1",
+    "model": "tenant.TenantMaster",
+    "fields": {
+      "name": "MNGL",
+      "email_id": "info@mngl.in",
+      "mobile_no": 18002662696,
+      "tenant_country_id": 3,
+      "tenant_state_id": 1,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "2",
-		"model": "userapp.RolePrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "role_id": 1,
-          "module_id": 1,
-          "sub_module_id":2,
-          "privilege_id": 2,
-          "is_active": "True"
-
-        }
+    "pk": "2",
+    "model": "tenant.TenantMaster",
+    "fields": {
+      "name": "BGCL",
+      "email_id": "info@bgcl.in",
+      "mobile_no": 23248070,
+      "tenant_country_id": 3,
+      "tenant_state_id": 2,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "3",
-		"model": "userapp.RolePrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "role_id": 2,
-          "module_id": 1,
-          "sub_module_id":3,
-          "privilege_id": 1,
-          "is_active": "True"
-
-        }
+    "pk": "3",
+    "model": "tenant.TenantMaster",
+    "fields": {
+      "name": "INFRA MARK",
+      "email_id": "infra@gmail.com",
+      "mobile_no": 9550209071,
+      "tenant_country_id": 1,
+      "tenant_state_id": 5,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "4",
-		"model": "userapp.RolePrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "role_id": 2,
-          "module_id": 1,
-          "sub_module_id":4,
-          "privilege_id": 2,
-          "is_active": "True"
-
-        }
-  },
-	{
-        "pk": "5",
-		"model": "userapp.RolePrivilege",
-		"fields": {
-          "tenant": 2,
-          "utility": 3,
-          "role_id": 1,
-          "module_id": 5,
-          "sub_module_id":1,
-          "privilege_id": 1,
-          "is_active": "True"
-
-        }
-  },
-
-{
-        "pk": "6",
-		"model": "userapp.RolePrivilege",
-		"fields": {
-          "tenant": 2,
-          "utility": 3,
-          "role_id": 2,
-          "module_id": 5,
-          "sub_module_id":2,
-          "privilege_id": 2,
-          "is_active": "True"
-
-        }
-  },
-
-  {
-        "pk": "1",
-		"model": "userapp.RoleSubType",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "employee",
-          "role_type_id": 2,
-          "is_active": "True"
-        }
-  },
-{
-        "pk": "2",
-		"model": "userapp.RoleSubType",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "vendor",
-          "role_type_id": 2,
-          "is_active": "True"
-        }
+    "pk": "4",
+    "model": "tenant.TenantMaster",
+    "fields": {
+      "name": "GAIL",
+      "email_id": "gail@gmail.com",
+      "mobile_no": 7020929071,
+      "tenant_country_id": 3,
+      "tenant_state_id": 1,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "3",
-		"model": "userapp.RoleSubType",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "supplier",
-          "role_type_id": 2,
-          "is_active": "True"
-        }
-  },
-{
-        "pk": "1",
-		"model": "userapp.RoleType",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Tenant",
-          "is_active": "True"
-        }
+    "pk": "1",
+    "model": "utility.UtilityMaster",
+    "fields": {
+      "tenant": 1,
+      "name": "MNGL Mumbai",
+      "phone_no": 1111111111,
+      "email_id": "gas@gmail.com",
+      "region_id": 3,
+      "country_id": 3,
+      "state_id": 1,
+      "city_id": 1,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "2",
-		"model": "userapp.RoleType",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Utility",
-          "is_active": "True"
-        }
+    "pk": "2",
+    "model": "utility.UtilityMaster",
+    "fields": {
+      "tenant": 1,
+      "name": "MNGL Pune",
+      "phone_no": 2222222222,
+      "email_id": "power@gmail.com",
+      "region_id": 3,
+      "country_id": 3,
+      "state_id": 1,
+      "city_id": 1,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "1",
-		"model": "userapp.UserArea",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user": 1,
-          "area": "Kothrud",
-          "is_active": "True"
-        }
+    "pk": "3",
+    "model": "utility.UtilityMaster",
+    "fields": {
+      "tenant": 2,
+      "name": "BGCL Kolkata",
+      "phone_no": 333333333,
+      "email_id": "power@gmail.com",
+      "region_id": 3,
+      "country_id": 3,
+      "state_id": 2,
+      "city_id": 3,
+      "is_active": "True"
+    }
   },
   {
-        "pk": "2",
-		"model": "userapp.UserArea",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user": 1,
-          "area": "Karvenagar",
-          "is_active": "True"
-        }
-  },
-
-  {
-        "pk": "1",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
+    "pk": "1",
+    "model": "utility.UtilityModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_name": "S&M",
+      "module_desc": "S&M contains survey,reports,setting,user",
+      "is_active": "True"
+    }
   },
   {
-        "pk": "2",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
+    "pk": "2",
+    "model": "utility.UtilityModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_name": "Consumer Care",
+      "module_desc": "It contains registration,consumer,reports",
+      "is_active": "True"
+    }
   },
   {
-        "pk": "3",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
-  },
-{
-        "pk": "4",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
-  },
-{
-        "pk": "5",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
+    "pk": "3",
+    "model": "utility.UtilityModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_name": "S&M",
+      "module_desc": "S&M contains survey,reports,setting,user",
+      "is_active": "True"
+    }
   },
   {
-        "pk": "6",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
+    "pk": "4",
+    "model": "utility.UtilityModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_name": "Consumer Care",
+      "module_desc": "It contains registration,consumer,reports",
+      "is_active": "True"
+    }
   },
   {
-        "pk": "7",
-		"model": "userapp.UserPrivilege",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 1,
-          "role_id": 1,
-          "is_active": "True"
-        }
-  },
-
-  {
-        "pk": "1",
-		"model": "userapp.UserRole",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "role": "Admin",
-          "is_active": "True"
-
-        }
+    "pk": "5",
+    "model": "utility.UtilityModule",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "module_name": "Consumer Care",
+      "module_desc": "It contains registration,consumer,reports",
+      "is_active": "True"
+    }
   },
   {
-        "pk": "2",
-		"model": "userapp.UserRole",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "role": "Executive",
-          "is_active": "True"
-
-        }
-  },
-
-  {
-		"pk": "1",
-		"model": "userapp.UserType",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Tenant",
-			"is_active": "True"
-		}
-	},
-  {
-		"pk": "2",
-		"model": "userapp.UserType",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Utility",
-			"is_active": "True"
-		}
-	},
-  {
-		"pk": "1",
-		"model": "commonapp.Department",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "S&M",
-			"is_active": "True"
-		}
-	},
-  {
-		"pk": "2",
-		"model": "commonapp.Department",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Consumer care",
-			"is_active": "True"
-		}
-	},
-  {
-		"pk": "1",
-		"model": "commonapp.FormFactor",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Web",
-          "is_active": "True"
-        }
+    "pk": "1",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "Dashboard",
+      "submodule_desc": "its used to display count of over all module",
+      "is_active": "True"
+    }
   },
   {
-		"pk": "2",
-		"model": "commonapp.FormFactor",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Mobile",
-          "is_active": "True"
-        }
+    "pk": "2",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "Survey",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
   },
-
-	{
-		"pk": "1",
-		"model": "commonapp.Area",
-		"fields": {
-          "tenant": 4,
-          "utility": 1,
-          "name": "Kothrud",
-		  "city_id": 1,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "2",
-		"model": "commonapp.Area",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Shivaji Nagar",
-		  "city_id": 1,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "3",
-		"model": "commonapp.Area",
-		"fields": {
-          "tenant": 2,
-          "utility": 3,
-          "name": "Alipur",
-		  "city_id": 3,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "4",
-		"model": "commonapp.Area",
-		"fields": {
-          "tenant": 4,
-          "utility": 3,
-          "name": "Bhowanipur",
-		  "city_id": 3,
-          "is_active": "True"
-        }
-  	},
-
-	{
-		"pk": "1",
-		"model": "commonapp.SubArea",
-		"fields": {
-          "tenant": 4,
-          "utility": 1,
-          "name": "Righ bhusari colony",
-			"area": 1,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "2",
-		"model": "commonapp.SubArea",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Left bhusari colony",
-			"area": 1,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "3",
-		"model": "commonapp.SubArea",
-		"fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Modern colony",
-			"area": 2,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "4",
-		"model": "commonapp.SubArea",
-		"fields": {
-          "tenant": 4,
-          "utility": 3,
-          "name": "Alipur Road",
-			"area": 3,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "5",
-		"model": "commonapp.SubArea",
-		"fields": {
-          "tenant": 2,
-          "utility": 3,
-          "name": "Sarat Bose Road",
-			"area": 4,
-          "is_active": "True"
-        }
-  	},
-	{
-		"pk": "1",
-		"model": "consumer.ConsumerCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "CNG",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "2",
-		"model": "consumer.ConsumerCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "PNG",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "3",
-		"model": "consumer.ConsumerCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "CNG",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "consumer.ConsumerCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "PNG",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "CNG1",
-			"category": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "CNG2",
-			"category": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Commercial",
-			"category": 2,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Domestic",
-			"category": 2,
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "5",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Industrial",
-			"category": 2,
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "6",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "CNG1",
-			"category": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "7",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "CNG2",
-			"category": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "8",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Commercial",
-			"category": 4,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "9",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Domestic",
-			"category": 4,
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "10",
-		"model": "consumer.ConsumerSubCategory",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Industrial",
-			"category": 4,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "utility.UtilityServicePlan",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Domestic-Tarrif",
-			"description": "Domestic-Tarrif is for domestic consumers",
-			"is_active": "True",
-			"start_date": "2020-04-05",
-			"end_date": "2020-07-05"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "utility.UtilityServicePlan",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Commercial",
-			"description": "Commercial-Tarrif is for Commercial consumers",
-			"is_active": "True",
-			"start_date": "2020-04-05",
-			"end_date": "2020-07-05"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "utility.UtilityServicePlan",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Industrial",
-			"description": "Industrial-Tarrif is for Industrial consumers",
-			"is_active": "True",
-			"start_date": "2020-04-05",
-			"end_date": "2020-07-05"
-		}
-	},
-
-	{
-		"pk": "4",
-		"model": "utility.UtilityServicePlan",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Domestic-Tarrif",
-			"description": "Domestic-Tarrif is for domestic consumers",
-			"is_active": "True",
-			"start_date": "2020-04-05",
-			"end_date": "2020-07-05"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "utility.UtilityServicePlan",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Commercial",
-			"description": "Commercial-Tarrif is for Commercial consumers",
-			"is_active": "True",
-			"start_date": "2020-04-05",
-			"end_date": "2020-07-05"
-		}
-	},
-	{
-		"pk": "6",
-		"model": "utility.UtilityServicePlan",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Industrial",
-			"description": "Industrial-Tarrif is for Industrial consumers",
-			"is_active": "True",
-			"start_date": "2020-04-05",
-			"end_date": "2020-07-05"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "utility.UtilityServicePlanRate",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"utility_service_plan_id": 1,
-			"max_unit_range": 50,
-			"unit_id": 10,
-			"base_rate": 5,
-			"is_taxable": "True",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "utility.UtilityServicePlanRate",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"utility_service_plan_id": 1,
-			"max_unit_range": 50,
-			"unit_id": 10,
-			"base_rate": 10,
-			"is_taxable": "True",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "utility.UtilityServicePlanRate",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"utility_service_plan_id": 1,
-			"max_unit_range": 50,
-			"unit_id": 10,
-			"base_rate": 10,
-			"is_taxable": "True",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "4",
-		"model": "utility.UtilityServicePlanRate",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"utility_service_plan_id": 1,
-			"max_unit_range": 50,
-			"unit_id": 10,
-			"base_rate": 5,
-			"is_taxable": "True",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "utility.UtilityServicePlanRate",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"utility_service_plan_id": 1,
-			"max_unit_range": 50,
-			"unit_id": 10,
-			"base_rate": 10,
-			"is_taxable": "True",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "6",
-		"model": "utility.UtilityServicePlanRate",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"utility_service_plan_id": 1,
-			"max_unit_range": 50,
-			"unit_id": 10,
-			"base_rate": 10,
-			"is_taxable": "True",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "userapp.UserToken",
-		"fields": {
-			"token": "ag20202323366",
-			"form_factor": 1,
-			"is_active": "True"
-		}
-	},
-	{
-
-		"pk": "2",
-		"model": "userapp.UserToken",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"token": "tgur25598753693",
-			"form_factor": 2,
-			"is_active": "True"
-		}
-	},
-	{
-
-		"pk": "3",
-		"model": "userapp.UserToken",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"token": "agujy02323366",
-			"form_factor": 1,
-			"is_active": "True"
-		}
-	},
-	{
-
-		"pk": "4",
-		"model": "userapp.UserToken",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"token": "tguroli98753693",
-			"form_factor": 2,
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "dispatcher.ServiceAssign",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"service_request": 1,
-			"sop_master_detail": 1,
-			"parent_record": ,
-			"status": 1,
-			"city": 1,
-			"area": 1,
-			"subarea": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.ServiceAssign",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"service_request": 2,
-			"sop_master_detail": 2,
-			"parent_record": ,
-			"status": 2,
-			"city": 1,
-			"area": 1,
-			"subarea": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.ServiceAssign",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"service_request": 3,
-			"sop_master_detail": 3,
-			"parent_record": ,
-			"status": 3,
-			"city": 3,
-			"area": 3,
-			"subarea": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "dispatcher.ServiceAssign",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"service_request": 4,
-			"sop_master_detail": 4,
-			"parent_record": ,
-			"status": 4,
-			"city": 3,
-			"area": 3,
-			"subarea": 3,
-			"is_active": "True"
-		}
-	},
-
-
-	{
-		"pk": "1",
-		"model": "dispatcher.SopMaster",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"city": 1,
-			"service_type": ,
-			"name": "SOP-1",
-			"effective_start_date": "2020-06-10",
-			"effective_end_date": "2020-07-10",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.SopMaster",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"city": 1,
-			"service_type": ,
-			"name": "SOP-2",
-			"effective_start_date": "2020-06-15",
-			"effective_end_date": "2020-07-15",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.SopMaster",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"city": 3,
-			"service_type": ,
-			"name": "SOP-3",
-			"effective_start_date": "2020-06-10",
-			"effective_end_date": "2020-07-10",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "dispatcher.SopMaster",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"city": 3,
-			"service_type": ,
-			"name": "SOP-4",
-			"effective_start_date": "2020-06-15",
-			"effective_end_date": "2020-07-15",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "dispatcher.SopMasterDetails",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"sop_master": 1,
-			"service_type": ,
-			"sub_sop_name": "Sub SOP-1",
-			"task_type": 1,
-			"field_type": 1,
-			"field_name": "Field-1",
-			"field_unit": 1,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.SopMasterDetails",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"sop_master": 1,
-			"service_type": ,
-			"sub_sop_name": "Sub SOP-2",
-			"task_type": 2,
-			"field_type": 2,
-			"field_name": "Field-2",
-			"field_unit": 2,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.SopMasterDetails",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"sop_master": 2,
-			"service_type": ,
-			"sub_sop_name": "Sub SOP-3",
-			"task_type": 3,
-			"field_type": 3,
-			"field_name": "Field-3",
-			"field_unit": 3,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "dispatcher.SopMasterDetails",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"sop_master": 3,
-			"service_type": ,
-			"sub_sop_name": "Sub SOP-4",
-			"task_type": 4,
-			"field_type": 4,
-			"field_name": "Field-4",
-			"field_unit": 4,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "dispatcher.SopMasterDetails",
-		"fields": {
-			"tenant": 2,
-			"utility":3,
-			"sop_master": 3,
-			"service_type": ,
-			"sub_sop_name": "Sub SOP-5",
-			"task_type": 5,
-			"field_type": 5,
-			"field_name": "Field-5",
-			"field_unit": 5,
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "6",
-		"model": "dispatcher.SopMasterDetails",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"sop_master": 4,
-			"service_type": ,
-			"sub_sop_name": "Sub SOP-6",
-			"task_type": 6,
-			"field_type": 6,
-			"field_name": "Field-6",
-			"field_unit": 6,
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "dispatcher.SopStatus",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Active",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.SopStatus",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Inactive",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.SopStatus",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Active",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "dispatcher.SopStatus",
-		"fields": {
-			"tenant": 2,
-			"utility": 3,
-			"name": "Inactive",
-			"is_active": "True"
-		}
-	},
-
-	{
-		"pk": "1",
-		"model": "dispatcher.TaskType",
-		"fields": {
-			"utility": 1,
-			"name": "Image",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "2",
-		"model": "dispatcher.TaskType",
-		"fields": {
-			"utility": 1,
-			"name": "Parameter",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "3",
-		"model": "dispatcher.TaskType",
-		"fields": {
-			"utility": 1,
-			"name": "Material",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "4",
-		"model": "dispatcher.TaskType",
-		"fields": {
-			"utility": 3,
-			"name": "Image",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "dispatcher.TaskType",
-		"fields": {
-			"utility": 3,
-			"name": "Parameter",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "6",
-		"model": "dispatcher.TaskType",
-		"fields": {
-			"utility": 3,
-			"name": "Material",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "1",
-		"model": "commonapp.ServiceType",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Installation",
-			"is_active": "True",
-			"created_by": 2,
-			"updated_by": 2
-			}
-	},
   {
-		"pk": "2",
-		"model": "commonapp.ServiceType",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Conversion",
-			"is_active": "True",
-			"created_by": 2,
-			"updated_by": 2
-			}
-	},
+    "pk": "3",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "Campaign",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
   {
-		"pk": "3",
-		"model": "commonapp.ServiceType",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Maintenance",
-			"is_active": "True",
-			"created_by": 2,
-			"updated_by": 2
-			}
-	},
-	  {
-		"pk": "4",
-		"model": "commonapp.ServiceType",
-		"fields": {
-			"tenant": 1,
-			"utility": 1,
-			"name": "Emergency",
-			"is_active": "True",
-			"created_by": 2,
-			"updated_by": 2
-			}
-	}
-
+    "pk": "4",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "Consumer",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "Reports",
+      "submodule_desc": "Its user to generate reports in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "User",
+      "submodule_desc": "It's used to add,edit user in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "7",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 1,
+      "submodule_name": "Setting",
+      "submodule_desc": "Its used for configuration of the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "8",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 2,
+      "submodule_name": "Dashboard",
+      "submodule_desc": "its user to display count of over all module",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "9",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 2,
+      "submodule_name": "Consumer",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "10",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 2,
+      "submodule_name": "Reports",
+      "submodule_desc": "Its user to generate reports in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "11",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 2,
+      "submodule_name": "User",
+      "submodule_desc": "It's used to add,edit user in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "12",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "module_id": 2,
+      "submodule_name": "Setting",
+      "submodule_desc": "Its used for configuration of the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "13",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "Dashboard",
+      "submodule_desc": "its used to display count of over all module",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "14",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "Survey",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "15",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "Campaign",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "16",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "Consumer",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "17",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "Reports",
+      "submodule_desc": "Its user to generate reports in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "18",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "User",
+      "submodule_desc": "It's used to add,edit user in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "19",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 3,
+      "submodule_name": "Setting",
+      "submodule_desc": "Its used for configuration of the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "20",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 4,
+      "submodule_name": "Dashboard",
+      "submodule_desc": "its user to display count of over all module",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "21",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 4,
+      "submodule_name": "Consumer",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "22",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 4,
+      "submodule_name": "Reports",
+      "submodule_desc": "Its user to generate reports in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "23",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 4,
+      "submodule_name": "User",
+      "submodule_desc": "It's used to add,edit user in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "24",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "module_id": 4,
+      "submodule_name": "Setting",
+      "submodule_desc": "Its used for configuration of the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "25",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "module_id": 5,
+      "submodule_name": "Dashboard",
+      "submodule_desc": "its user to display count of over all module",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "26",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "module_id": 5,
+      "submodule_name": "Consumer",
+      "submodule_desc": "Its used to add,edit records in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "27",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "module_id": 5,
+      "submodule_name": "Reports",
+      "submodule_desc": "Its user to generate reports in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "28",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "module_id": 5,
+      "submodule_name": "User",
+      "submodule_desc": "It's used to add,edit user in the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "29",
+    "model": "utility.UtilitySubModule",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "module_id": 5,
+      "submodule_name": "Setting",
+      "submodule_desc": "Its used for configuration of the system",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.Module",
+    "fields": {
+      "name": "S&M",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.Module",
+    "fields": {
+      "name": "Consumer Care",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.Module",
+    "fields": {
+      "name": "Consumer Ops",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.Module",
+    "fields": {
+      "name": "Admin",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 1,
+      "module_id": 1,
+      "name": "Dashboard",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 2,
+      "module_id": 1,
+      "name": "Survey",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 3,
+      "module_id": 1,
+      "name": "Campaign",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 4,
+      "module_id": 1,
+      "name": "Registrations",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 5,
+      "module_id": 1,
+      "name": "Consumers",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 6,
+      "module_id": 1,
+      "name": "Reports",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "7",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 7,
+      "module_id": 1,
+      "name": "Users",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "8",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 8,
+      "module_id": 1,
+      "name": "Settings",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "9",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 9,
+      "module_id": 2,
+      "name": "Dashboard",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "10",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 10,
+      "module_id": 2,
+      "name": "Registrations",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "11",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 11,
+      "module_id": 2,
+      "name": "Consumers",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "12",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 12,
+      "module_id": 2,
+      "name": "Reports",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "13",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 13,
+      "module_id": 2,
+      "name": "Users",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "14",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 14,
+      "module_id": 2,
+      "name": "Settings",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "15",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 15,
+      "module_id": 3,
+      "name": "Dashboard",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "16",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 16,
+      "module_id": 3,
+      "name": "Registrations",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "17",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 17,
+      "module_id": 3,
+      "name": "Consumers",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "18",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 18,
+      "module_id": 3,
+      "name": "Meter Data",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "19",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 19,
+      "module_id": 3,
+      "name": "Billing",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "20",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 20,
+      "module_id": 3,
+      "name": "Payment",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "21",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 21,
+      "module_id": 3,
+      "name": "Services",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "22",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 22,
+      "module_id": 3,
+      "name": "Complaints",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "23",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 23,
+      "module_id": 3,
+      "name": "Reports",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "24",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 24,
+      "module_id": 3,
+      "name": "Users",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "25",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 25,
+      "module_id": 3,
+      "name": "Settings",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "25",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "sub_module": 25,
+      "module_id": 4,
+      "name": "Admin",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.Region",
+    "fields": {
+      "name": "America",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.Region",
+    "fields": {
+      "name": "Europe",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.Region",
+    "fields": {
+      "name": "Asia",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.Region",
+    "fields": {
+      "name": "Africa",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.Country",
+    "fields": {
+      "tenant": 3,
+      "name": "United States",
+      "region": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.Country",
+    "fields": {
+      "name": "Russia",
+      "region": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.Country",
+    "fields": {
+      "tenant": 1,
+      "name": "India",
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.Country",
+    "fields": {
+      "tenant": 2,
+      "name": "India",
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.Area",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "name": "Kothrud",
+      "city_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.SubArea",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "area": 1,
+      "name": "Bhusari colony",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.State",
+    "fields": {
+      "tenant": 1,
+      "name": "Maharashtra",
+      "country": 3,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.State",
+    "fields": {
+      "tenant": 2,
+      "name": "West Bengal",
+      "country": 4,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.State",
+    "fields": {
+      "tenant": 1,
+      "name": "Telangana",
+      "country": 3,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.State",
+    "fields": {
+      "tenant": 2,
+      "name": "Andhra Pradesh",
+      "country": 3,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.City",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Pune",
+      "state": 1,
+      "country": 3,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.City",
+    "fields": {
+      "tenant": 1,
+      "utility": 2,
+      "name": "Nashik",
+      "state": 1,
+      "country": 3,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.City",
+    "fields": {
+      "tenant": 2,
+      "utility": 2,
+      "name": "Kolkata",
+      "state": 2,
+      "country": 3,
+      "region": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.Privilege",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "View",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.Privilege",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Edit",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.RolePrivilege",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "role_id": 1,
+      "module_id": 1,
+      "sub_module_id": 1,
+      "privilege_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.RolePrivilege",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "role_id": 1,
+      "module_id": 1,
+      "sub_module_id": 2,
+      "privilege_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "userapp.RolePrivilege",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "role_id": 2,
+      "module_id": 1,
+      "sub_module_id": 3,
+      "privilege_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "userapp.RolePrivilege",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "role_id": 2,
+      "module_id": 1,
+      "sub_module_id": 4,
+      "privilege_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "userapp.RolePrivilege",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "role_id": 1,
+      "module_id": 5,
+      "sub_module_id": 1,
+      "privilege_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "userapp.RolePrivilege",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "role_id": 2,
+      "module_id": 5,
+      "sub_module_id": 2,
+      "privilege_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.RoleSubType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "employee",
+      "role_type_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.RoleSubType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "vendor",
+      "role_type_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "userapp.RoleSubType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "supplier",
+      "role_type_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.RoleType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Tenant",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.RoleType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Utility",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserArea",
+    "fields": {
+      "tenant": 1,
+      "user_id": 1,
+      "area_id": "1",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.UserArea",
+    "fields": {
+      "tenant": 1,
+      "user_id": 1,
+      "area_id": "2",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "7",
+    "model": "userapp.UserRole",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "role_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.Role",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "role": "Admin",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.Role",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "role": "Executive",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Tenant",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.UserType",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Utility",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.Department",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "S&M",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.Department",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Consumer care",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.FormFactor",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Web",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.FormFactor",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Mobile",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.Area",
+    "fields": {
+      "tenant": 4,
+      "utility": 1,
+      "name": "Kothrud",
+      "city_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.Area",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Shivaji Nagar",
+      "city_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.Area",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Alipur",
+      "city_id": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.Area",
+    "fields": {
+      "tenant": 4,
+      "utility": 3,
+      "name": "Bhowanipur",
+      "city_id": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "commonapp.SubArea",
+    "fields": {
+      "tenant": 4,
+      "utility": 1,
+      "name": "Righ bhusari colony",
+      "area": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "commonapp.SubArea",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Left bhusari colony",
+      "area": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "commonapp.SubArea",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Modern colony",
+      "area": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "commonapp.SubArea",
+    "fields": {
+      "tenant": 4,
+      "utility": 3,
+      "name": "Alipur Road",
+      "area": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "commonapp.SubArea",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Sarat Bose Road",
+      "area": 4,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "consumer.ConsumerCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "CNG",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "consumer.ConsumerCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "PNG",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "consumer.ConsumerCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "CNG",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "consumer.ConsumerCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "PNG",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "CNG1",
+      "category": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "CNG2",
+      "category": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Commercial",
+      "category": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Domestic",
+      "category": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Industrial",
+      "category": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "CNG1",
+      "category": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "7",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "CNG2",
+      "category": 3,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "8",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Commercial",
+      "category": 4,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "9",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Domestic",
+      "category": 4,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "10",
+    "model": "consumer.ConsumerSubCategory",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Industrial",
+      "category": 4,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "utility.UtilityServicePlan",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Domestic-Tarrif",
+      "description": "Domestic-Tarrif is for domestic consumers",
+      "is_active": "True",
+      "start_date": "2020-04-05",
+      "end_date": "2020-07-05"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "utility.UtilityServicePlan",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Commercial",
+      "description": "Commercial-Tarrif is for Commercial consumers",
+      "is_active": "True",
+      "start_date": "2020-04-05",
+      "end_date": "2020-07-05"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "utility.UtilityServicePlan",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "name": "Industrial",
+      "description": "Industrial-Tarrif is for Industrial consumers",
+      "is_active": "True",
+      "start_date": "2020-04-05",
+      "end_date": "2020-07-05"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "utility.UtilityServicePlan",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Domestic-Tarrif",
+      "description": "Domestic-Tarrif is for domestic consumers",
+      "is_active": "True",
+      "start_date": "2020-04-05",
+      "end_date": "2020-07-05"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "utility.UtilityServicePlan",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Commercial",
+      "description": "Commercial-Tarrif is for Commercial consumers",
+      "is_active": "True",
+      "start_date": "2020-04-05",
+      "end_date": "2020-07-05"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "utility.UtilityServicePlan",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "name": "Industrial",
+      "description": "Industrial-Tarrif is for Industrial consumers",
+      "is_active": "True",
+      "start_date": "2020-04-05",
+      "end_date": "2020-07-05"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "utility.UtilityServicePlanRate",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "utility_service_plan_id": 1,
+      "max_unit_range": 50,
+      "unit_id": 10,
+      "base_rate": 5,
+      "is_taxable": "True",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "utility.UtilityServicePlanRate",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "utility_service_plan_id": 1,
+      "max_unit_range": 50,
+      "unit_id": 10,
+      "base_rate": 10,
+      "is_taxable": "True",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "utility.UtilityServicePlanRate",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "utility_service_plan_id": 1,
+      "max_unit_range": 50,
+      "unit_id": 10,
+      "base_rate": 10,
+      "is_taxable": "True",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "utility.UtilityServicePlanRate",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "utility_service_plan_id": 1,
+      "max_unit_range": 50,
+      "unit_id": 10,
+      "base_rate": 5,
+      "is_taxable": "True",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "utility.UtilityServicePlanRate",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "utility_service_plan_id": 1,
+      "max_unit_range": 50,
+      "unit_id": 10,
+      "base_rate": 10,
+      "is_taxable": "True",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "6",
+    "model": "utility.UtilityServicePlanRate",
+    "fields": {
+      "tenant": 2,
+      "utility": 3,
+      "utility_service_plan_id": 1,
+      "max_unit_range": 50,
+      "unit_id": 10,
+      "base_rate": 10,
+      "is_taxable": "True",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "1",
+    "model": "userapp.UserToken",
+    "fields": {
+      "tenant": 1,
+      "token": "ag20202323366",
+      "form_factor_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "userapp.UserToken",
+    "fields": {
+      "tenant": 1,
+      "token": "tgur25598753693",
+      "form_factor_id": 2,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "userapp.UserToken",
+    "fields": {
+      "tenant": 2,
+      "token": "agujy02323366",
+      "form_factor_id": 1,
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "userapp.UserToken",
+    "fields": {
+      "tenant": 2,
+      "token": "tguroli98753693",
+      "form_factor_id": 2,
+      "is_active": "True"
+    }
+  }
 ]

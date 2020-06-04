@@ -13,7 +13,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.supplier.serializers.supplier import SupplierViewSerializer, SupplierSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.supplier.models.supplier import Supplier as SupplierTbl, get_supplier_by_id_string
 
 

@@ -18,7 +18,6 @@ from v1.asset.serializer.asset import AssetListSerializer,AssetViewSerializer,As
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from v1.asset.models.asset_master import Asset as AssetTbl,get_asset_by_id_string
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
-from v1.userapp.models.user_master import UserDetail
 
 
 
@@ -81,7 +80,7 @@ class Asset(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=5)
+                    user = User.objects.get(id=5)
                     if is_data_verified(request):
                         serializer = AssetSerializer(data=request.data)
                         if serializer.is_valid():

@@ -69,9 +69,9 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"country": 1,
-			"state": 1,
-			"city": 1,
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
 			"name": "Supplier 1",
 			"description": "Supplier 1 is vendor of Advertisement 1",
 			"phone_no": "9011613929",
@@ -79,7 +79,7 @@
 			"address_line_1": "Pune",
 			"street": "pune",
 			"zipcode": 1234546,
-			"status": 1,
+			"status_id": 1,
 			"is_active": "True"
 
 		}
@@ -90,9 +90,9 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"country": 1,
-			"state": 1,
-			"city": 1,
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
 			"name": "Supplier 2",
 			"description": "Supplier 2 is vendor of Advertisement 2",
 			"phone_no": "9011613929",
@@ -100,7 +100,7 @@
 			"address_line_1": "Pune",
 			"street": "pune",
 			"zipcode": 1234546,
-			"status": 1,
+			"status_id": 1,
 			"is_active": "True"
 
 		}
@@ -111,9 +111,9 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"country": 1,
-			"state": 1,
-			"city": 1,
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
 			"name": "Supplier 3",
 			"description": "Supplier 3 is vendor of Advertisement 3",
 			"phone_no": "9011613929",
@@ -121,7 +121,7 @@
 			"address_line_1": "Pune",
 			"street": "pune",
 			"zipcode": 1234546,
-			"status": 2,
+			"status_id": 2,
 			"is_active": "True"
 		}
 	},
@@ -131,9 +131,9 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"country": 1,
-			"state": 1,
-			"city": 1,
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
 			"name": "Supplier 4",
 			"description": "Supplier 4 is vendor of Advertisement 4",
 			"phone_no": "9011613929",
@@ -141,7 +141,7 @@
 			"address_line_1": "Pune",
 			"street": "pune",
 			"zipcode": 1234546,
-			"status": 2,
+			"status_id": 2,
 			"is_active": "True"
 
 		}

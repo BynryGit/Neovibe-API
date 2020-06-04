@@ -58,3 +58,11 @@ class Skills(models.Model):
 
 def get_skills_by_utility_id_string(id_string):
     return Skills.objects.filter(utility__id_string=id_string)
+
+
+def get_skill_by_id_string(id_string):
+    return Skills.objects.filter(id_string=id_string).last()
+
+
+def get_skill_by_id(id):
+    return Skills.objects.filter(id=id).last()

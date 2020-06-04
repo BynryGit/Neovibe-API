@@ -7,13 +7,48 @@ from api.settings import INPUT_DATE_FORMAT
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
+from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
+from v1.tenant.models.tenant_city import get_tenant_city_by_id_string
+from v1.tenant.models.tenant_country import get_tenant_country_by_id_string
 from v1.tenant.models.tenant_module import get_tenant_module_by_id_string
+from v1.tenant.models.tenant_state import get_tenant_state_by_id_string
 from v1.tenant.models.tenant_status import get_tenant_status_by_id_string
-from v1.tenant.models.tenant_subscription_plan import get_subscription_plan_by_id, get_subscription_plan_by_id_string, \
-    get_subscription_plan_by_tenant_id_string
+from v1.tenant.models.tenant_subscription_plan import get_subscription_plan_by_id_string
+
+
+def set_tenant_validated_data(validated_data):
+    if "tenant_country_id" in validated_data:
+        tenant_country = get_tenant_country_by_id_string(validated_data["tenant_country_id"])
+        validated_data["tenant_country_id"] = tenant_country.id
+    if "tenant_state_id" in validated_data:
+        tenant_state = get_tenant_state_by_id_string(validated_data["tenant_state_id"])
+        validated_data["tenant_state_id"] = tenant_state.id
+    if "tenant_city_id" in validated_data:
+        tenant_city = get_tenant_city_by_id_string(validated_data["tenant_city_id"])
+        validated_data["tenant_city_id"] = tenant_city.id
+    if "status_id" in validated_data:
+        tenant_status = get_tenant_status_by_id_string(validated_data["status_id"])
+        validated_data["status_id"] = tenant_status.id
+    return validated_data
+
+
+def set_tenant_module_validated_data(validated_data):
+    if "module_id" in validated_data:
+        module = get_module_by_id_string(validated_data["module_id"])
+        validated_data["module_id"] = module.id
+    return validated_data
+
+
+def set_tenant_sub_module_validated_data(validated_data):
+    if "sub_module_id" in validated_data:
+        sub_module = get_sub_module_by_id_string(validated_data["sub_module_id"])
+        validated_data["module_id"] = sub_module.module_id
+        validated_data["sub_module_id"] = sub_module.id
+    return validated_data
 
 
 def get_tenant(request, user):

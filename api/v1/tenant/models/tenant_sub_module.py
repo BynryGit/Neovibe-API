@@ -15,36 +15,42 @@
 
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
+
+from v1.commonapp.models.module import get_module_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
 
-from v1.tenant.models.tenant_module import get_tenant_module_by_id
-
-
 # Create Tenant Sub-Module table start.
+
+
 class TenantSubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    sub_module_name = models.CharField(max_length=200, blank=True, null=True)
     module_id = models.BigIntegerField(null=True, blank=True)
-    submodule_desc =  models.CharField(max_length=500, blank=True, null=True)
+    sub_module_id = models.BigIntegerField(null=True, blank=True)
     subscription_id = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.sub_module_name
+        return str(self.sub_module_id)
 
     def __unicode__(self):
-        return self.sub_module_name
+        return str(self.sub_module_id)
 
     @property
-    def get_tenant_sub_module(self):
-        module = get_tenant_module_by_id(self.module_id)
-        return module.module_name
+    def get_module(self):
+        module = get_module_by_id(self.module_id)
+        return module
+
+    @property
+    def get_sub_module(self):
+        sub_module = get_sub_module_by_id(self.sub_module_id)
+        return sub_module
 
 
 # Create Utility Sub Module table end.
@@ -62,6 +68,7 @@ def get_tenant_submodule_by_id_string(id_string):
         return TenantSubModule.objects.get(id_string=id_string)
     except:
         return False
+
 
 def get_tenant_submodules_by_tenant_id_string(id_string):
     return TenantSubModule.objects.filter(tenant_id_string=id_string)

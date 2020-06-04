@@ -16,7 +16,6 @@ from v1.tenant.models.tenant_subscription_plan import get_subscription_plan_by_i
 from v1.tenant.views.common_functions import is_data_verified, is_subscription_data_verified, \
     is_subscription_plan_data_verified
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE, DATA_ALREADY_EXISTS
-from v1.userapp.models.user_master import UserDetail
 
 # API Header
 # API end Point: api/v1/tenant/subscription-plan/list
@@ -73,7 +72,7 @@ class SubscriptionPlan(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     serializer = SubscriptionPlanSerializer(data=request.data)
@@ -171,7 +170,7 @@ class SubscriptionPlanDetail(GenericAPIView):
                         # Request data verification end
 
                         # Save basic details start
-                        user = UserDetail.objects.get(id=2)
+                        user = User.objects.get(id=2)
                         subscription_plan_obj = get_subscription_plan_by_id_string(id_string)
 
                         if subscription_plan_obj:

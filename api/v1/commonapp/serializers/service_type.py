@@ -5,13 +5,23 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.service_type import ServiceType
 
 
+
+class GetServiceTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServiceType
+        fields = ('name', 'id_string')
+
+
 class ServiceTypeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceType
         fields = ('name', 'id_string')
 
+
 class ServiceTypeViewSerializer(serializers.ModelSerializer):
+
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 

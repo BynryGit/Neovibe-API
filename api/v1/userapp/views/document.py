@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
+from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.document import get_document_by_user_id, get_document_by_id_string
 from v1.commonapp.models.document_type import get_document_type_by_name
 from v1.commonapp.views.logger import logger
-from v1.userapp.models.user_master import get_user_by_id_string, get_user_by_id
 from v1.userapp.serializers.document import DocumentViewSerializer, DocumentSerializer
 
 # API Header

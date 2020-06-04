@@ -15,7 +15,6 @@ from rest_framework.response import Response
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
-from v1.userapp.models.user_master import UserDetail,get_user_by_id_string
 from v1.userapp.serializers.user import UserListSerializer,UserViewSerializer,UserSerializer
 from v1.userapp.views.common_functions import is_user_data_verified
 
@@ -47,7 +46,7 @@ class ResourceList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(0):
                 if is_authorized():
-                    queryset = UserDetail.objects.filter(tenant=1,utility=1)
+                    queryset = User.objects.filter(tenant=1,utility=1)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

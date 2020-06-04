@@ -45,8 +45,8 @@ class UserSubType(models.Model):
     def get_utility(self):
         return self.utility
 
-    class Meta:
-        unique_together = ('user_type_id', 'name',)
+    # class Meta:
+        # unique_together = ('user_type_id', 'name',)
 
 # Create User sub Type table end
 
@@ -56,4 +56,4 @@ def get_user_sub_type_by_id_string(id_string):
 
 
 def get_user_sub_type_by_id(id):
-    return UserSubType.objects.filter(id_string=id).last()
+    return UserSubType.objects.filter(id=id).last()

@@ -6,7 +6,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.userapp.models.user_master import UserDetail
 from v1.campaign.models.campaign import Campaign
 from v1.campaign.models.campaign_status import CampaignStatus
 from v1.consumer.models.consumer_category import ConsumerCategory
@@ -52,7 +51,7 @@ class CampaignTestCase(APITestCase):
     # for save valid campaign details
     def create_valid_campaign(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
-        UserDetail.objects.create(tenant=tenant_obj,user_type_id=1, user_subtype_id=1, form_factor_id=1, middle_name="Testing")
+        User.objects.create(tenant=tenant_obj,user_type_id=1, user_subtype_id=1, form_factor_id=1, middle_name="Testing")
         response = self.client.post("api/v1/campaign/", self.valid_payload)
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -60,7 +59,7 @@ class CampaignTestCase(APITestCase):
     # for save invalid campaign details and through error
     def create_invalid_campaign(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
-        UserDetail.objects.create(tenant=tenant_obj,user_type_id=1, user_subtype_id=1,form_factor_id=1,middle_name="Testing")
+        User.objects.create(tenant=tenant_obj,user_type_id=1, user_subtype_id=1,form_factor_id=1,middle_name="Testing")
         response = self.client.post("api/v1/campaign/", self.invalid_payload)
         print("response",response.content)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -68,7 +67,7 @@ class CampaignTestCase(APITestCase):
     # for getting all campaign list by search, filter, and total records
     def get_all_campaign(self):
         tenant_obj = TenantMaster.objects.create(name="tenant_test")
-        UserDetail.objects.create(tenant=tenant_obj,user_type_id=1,user_subtype_id=1,form_factor_id=1,middle_name="Testing")
+        User.objects.create(tenant=tenant_obj,user_type_id=1,user_subtype_id=1,form_factor_id=1,middle_name="Testing")
         CampaignStatus.objects.create(tenant=tenant_obj,name="Created")
         ConsumerCategory.objects.create(tenant=tenant_obj,name="Domestic")
         ConsumerSubCategory.objects.create(tenant=tenant_obj,name="Builder",category=1)

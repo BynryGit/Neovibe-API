@@ -8,11 +8,11 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from master.models import User
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.models.user_master import UserDetail
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, UtilitySubModule as UtilitySubModuleTbl
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer, UtilitySubModuleSerializer
 
@@ -120,7 +120,7 @@ class UtilitySubModuleDetail(GenericAPIView):
                 if is_authorized():
                     # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     utility_submodule_obj = get_utility_submodule_by_id_string(id_string)

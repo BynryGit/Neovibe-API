@@ -28,7 +28,6 @@ class UserToken(models.Model):
     form_factor_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
     ip_address = models.CharField(max_length=200,null=True, blank=True)
-    status = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -46,6 +45,10 @@ class UserToken(models.Model):
 
 def get_token_by_user_id(id):
     return UserToken.objects.filter(user_id=id, is_active=True).last()
+
+
+def get_token_by_token(token):
+    return UserToken.objects.get(token=token, is_active=True)
 
 
 def check_token_exists(token):

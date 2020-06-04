@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, RESULT, DATA_ALREADY_EXISTS
+from master.models import User
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, \
     ObjectNotFoundException
@@ -15,7 +16,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.contract.models.contract import get_contract_by_id_string
 from v1.contract.serializers.term_and_condition import TermsAndConditionViewSerializer, TermsAndConditionSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.contract.models.terms_and_conditions import TermsAndCondition as TermsAndConditionTbl, \
     get_contract_term_and_condition_by_id_string
 
@@ -89,7 +89,7 @@ class ContractTermAndCondition(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
                     contract_obj = get_contract_by_id_string(id_string)
                     if contract_obj:
@@ -197,7 +197,7 @@ class ContractTermAndConditionDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     contract_term_and_condition_obj = get_contract_term_and_condition_by_id_string(id_string)

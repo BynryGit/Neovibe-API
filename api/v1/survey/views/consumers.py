@@ -7,7 +7,6 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from rest_framework.exceptions import APIException
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
-from v1.userapp.models.user_master import UserDetail
 from v1.survey.models.survey import get_survey_by_id_string
 from v1.survey.models.survey_consumer import SurveyConsumer,get_survey_consumer_by_id_string
 from v1.survey.serializers.consumers import ConsumerSerializer
@@ -77,7 +76,7 @@ class Consumers(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=2)
+                    user = Userl.objects.get(id=2)
                     if is_data_verified(request):
                         survey = get_survey_by_id_string(id_string)
                         if survey:
@@ -159,7 +158,7 @@ class ConsumerDetail(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     print()
                     consumer_obj = get_survey_consumer_by_id_string(id_string)
                     if consumer_obj:
