@@ -165,15 +165,12 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_user_role_validated_data(validated_data)
-        if UserRole.objects.exclude(id_string=instance.id_string).filter(user_id=validated_data['user_id'], role_id=validated_data['role_id'], tenant=user.tenant).exists():
-            raise CustomAPIException("Role already exists for this user!", status_code=status.HTTP_409_CONFLICT)
-        else:
-            with transaction.atomic():
-                user_role_obj = super(UserRoleSerializer, self).update(instance, validated_data)
-                user_role_obj.updated_by = user.id
-                user_role_obj.updated_date = datetime.utcnow()
-                user_role_obj.save()
-                return user_role_obj
+        with transaction.atomic():
+            user_role_obj = super(UserRoleSerializer, self).update(instance, validated_data)
+            user_role_obj.updated_by = user.id
+            user_role_obj.updated_date = datetime.utcnow()
+            user_role_obj.save()
+            return user_role_obj
 
 
 class UserRoleViewSerializer(serializers.ModelSerializer):

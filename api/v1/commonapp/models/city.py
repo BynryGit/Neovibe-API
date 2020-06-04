@@ -46,11 +46,11 @@ class City(models.Model):
 
 
 def get_city_by_id_string(id_string):
-    return City.objects.get(id_string = id_string)
+    return City.objects.filter(id_string = id_string).last()
 
 
 def get_city_by_id(id):
-    return City.objects.get(id = id)
+    return City.objects.filter(id = id).last()
 
 # End the Code
 
