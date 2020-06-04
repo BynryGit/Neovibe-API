@@ -19,7 +19,7 @@ def is_token_valid(token):
             if user_obj:
                 return True, user_obj
             else:
-                return True
+                return False
         else:
             return False
     except Exception as e:
