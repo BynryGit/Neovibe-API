@@ -14,7 +14,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.tenant.serializers.tenant_module import TenantModuleViewSerializer, TenantModuleSerializer
-from v1.userapp.models.user_master import UserDetail
 from v1.tenant.models.tenant_module import TenantModule as TenantModuleTbl, get_tenant_module_by_id_string
 
 
