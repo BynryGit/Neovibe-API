@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
-    'encrypted_model_fields',
+    # 'encrypted_model_fields',
     'v1.asset',
     'v1.billing',
     'v1.campaign',
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -142,6 +143,8 @@ DISPLAY_DATE_FORMAT = "%d-%b-%Y"
 DISPLAY_DATE_TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
 
 INPUT_DATE_FORMAT = "%d-%b-%Y"
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Static files (CSS, JavaScript, Images)

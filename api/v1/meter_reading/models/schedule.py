@@ -15,6 +15,8 @@
 
 from datetime import datetime # importing package for datetime
 from v1.meter_reading.models.activity_type import get_activity_type_by_id
+from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
+from v1.meter_reading.models.schedule_status import get_schedule_status_by_id
 from v1.meter_reading.models.schedule_type import get_schedule_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
@@ -54,6 +56,16 @@ class Schedule(models.Model):
     def get_activity_type(self):
         activity_type = get_activity_type_by_id(self.activity_type_id)
         return activity_type
+
+    @property
+    def get_bill_cycle(self):
+        bill_cycle = get_bill_cycle_by_id(self.bill_cycle_id)
+        return bill_cycle
+
+    @property
+    def get_schedule_status(self):
+        schedule_status = get_schedule_status_by_id(self.schedule_status_id)
+        return schedule_status
 
     def __str__(self):
         return self.bill_cycle
