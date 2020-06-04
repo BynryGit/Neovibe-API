@@ -73,8 +73,7 @@ class Role(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user):
                     if is_role_data_verified(request):
-                        validated_data = set_role_validated_data(request.data)
-                        serializer = RoleSerializer(data=validated_data)
+                        serializer = RoleSerializer(data=request.data)
                         if serializer.is_valid(raise_exception=False):
                             role_obj = serializer.create(serializer.validated_data, user)
                             view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
@@ -164,8 +163,7 @@ class RoleDetail(GenericAPIView):
                     if is_role_data_verified(request):
                         role_obj = get_role_by_id_string(id_string)
                         if role_obj:
-                            validated_data = set_role_validated_data(request.data)
-                            serializer = RoleSerializer(data=validated_data)
+                            serializer = RoleSerializer(data=request.data)
                             if serializer.is_valid(raise_exception=False):
                                 role_obj = serializer.update(role_obj, serializer.validated_data, user)
                                 view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
