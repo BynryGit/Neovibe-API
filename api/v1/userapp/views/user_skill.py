@@ -75,8 +75,7 @@ class UserSkill(GenericAPIView):
                     if is_user_skill_data_verified(request):
                         for skill in request.data['skills']:
                             validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string']}
-                            validated_data = set_user_skill_validated_data(validate_data)
-                            serializer = UserSkillSerializer(data=validated_data)
+                            serializer = UserSkillSerializer(data=validate_data)
                             if serializer.is_valid(raise_exception=False):
                                 user_skill_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserSkillViewSerializer(instance=user_skill_obj,

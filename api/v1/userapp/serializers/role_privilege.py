@@ -2,16 +2,18 @@ __author__ = "Arpita"
 
 from django.db import transaction
 from datetime import datetime
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
+from v1.userapp.views.common_functions import set_role_privilege_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
 
@@ -27,14 +29,18 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data, user):
-        with transaction.atomic():
-            role_privilege_obj = super(RolePrivilegeSerializer, self).create(validated_data)
-            role_privilege_obj.created_by = user.id
-            role_privilege_obj.created_date = datetime.utcnow()
-            role_privilege_obj.tenant = user.tenant
-            role_privilege_obj.is_active = True
-            role_privilege_obj.save()
-            return role_privilege_obj
+        validated_data = set_role_privilege_validated_data(validated_data)
+        if RolePrivilege.objects.filter(role_id=validated_data['role_id'], module_id=validated_data['module_id'], sub_module_id=validated_data['sub_module_id'], privilege_id=validated_data['privilege_id'], tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Privilege already exists for specified role!", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                role_privilege_obj = super(RolePrivilegeSerializer, self).create(validated_data)
+                role_privilege_obj.created_by = user.id
+                role_privilege_obj.created_date = datetime.utcnow()
+                role_privilege_obj.tenant = user.tenant
+                role_privilege_obj.is_active = True
+                role_privilege_obj.save()
+                return role_privilege_obj
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():

@@ -2,8 +2,9 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 
-from rest_framework import serializers
+from rest_framework import serializers, status
 
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant import GetTenantSerializer
 from v1.userapp.models.user_bank_detail import UserBankDetail
 from v1.utility.serializers.utility import UtilitySerializer
@@ -54,21 +55,27 @@ class UserBankSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data, user):
-        with transaction.atomic():
-            user_bank_obj = super(UserBankSerializer, self).create(validated_data)
-            user_bank_obj.created_by = user.id
-            user_bank_obj.created_date = datetime.utcnow()
-            user_bank_obj.tenant = user.tenant
-            user_bank_obj.utility = user.utility
-            user_bank_obj.is_active = True
-            user_bank_obj.save()
-            return user_bank_obj
+        if UserBankDetail.objects.filter(bank_name=validated_data['bank_name'], branch_name=validated_data['branch_name'], branch_city=validated_data['branch_city'], tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Role already exists!", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                user_bank_obj = super(UserBankSerializer, self).create(validated_data)
+                user_bank_obj.created_by = user.id
+                user_bank_obj.created_date = datetime.utcnow()
+                user_bank_obj.tenant = user.tenant
+                user_bank_obj.utility = user.utility
+                user_bank_obj.is_active = True
+                user_bank_obj.save()
+                return user_bank_obj
 
     def update(self, instance, validated_data, user):
-        with transaction.atomic():
-            user_bank_obj = super(UserBankSerializer, self).update(instance, validated_data)
-            user_bank_obj.updated_by = user.id
-            user_bank_obj.updated_date = datetime.utcnow()
-            user_bank_obj.is_active = True
-            user_bank_obj.save()
-            return user_bank_obj
+        if UserBankDetail.objects.exclude(id_string=instance.id_string).filter(bank_name=validated_data['bank_name'], branch_name=validated_data['branch_name'], branch_city=validated_data['branch_city'], tenant=user.tenant, is_active=True).exists():
+            raise CustomAPIException("Role already exists!", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                user_bank_obj = super(UserBankSerializer, self).update(instance, validated_data)
+                user_bank_obj.updated_by = user.id
+                user_bank_obj.updated_date = datetime.utcnow()
+                user_bank_obj.is_active = True
+                user_bank_obj.save()
+                return user_bank_obj

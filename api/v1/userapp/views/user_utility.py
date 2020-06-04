@@ -75,8 +75,7 @@ class UserUtility(GenericAPIView):
                     if is_user_utility_data_verified(request):
                         for utility in request.data['utilities']:
                             validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
-                            validated_data = set_user_utility_validated_data(validate_data)
-                            serializer = UserUtilitySerializer(data=validated_data)
+                            serializer = UserUtilitySerializer(data=validate_data)
                             if serializer.is_valid(raise_exception=False):
                                 user_utility_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,

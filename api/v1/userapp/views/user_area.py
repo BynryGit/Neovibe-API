@@ -75,8 +75,7 @@ class UserArea(GenericAPIView):
                     if is_user_area_data_verified(request):
                         for area in request.data['areas']:
                             validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string']}
-                            validated_data = set_user_area_validated_data(validate_data)
-                            serializer = UserAreaSerializer(data=validated_data)
+                            serializer = UserAreaSerializer(data=validate_data)
                             if serializer.is_valid(raise_exception=False):
                                 user_area_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserAreaViewSerializer(instance=user_area_obj,

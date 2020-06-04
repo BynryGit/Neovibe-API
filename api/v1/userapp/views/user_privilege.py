@@ -49,8 +49,7 @@ class UserPrivilege(GenericAPIView):
                                 validate_data['sub_module_id'] = sub_module['sub_module_id']
                                 validate_data['privilege_id'] = sub_module['privilege_id']
                                 validate_data['is_active'] = sub_module['is_active']
-                                validated_data = set_user_privilege_validated_data(validate_data)
-                                serializer = UserPrivilegeSerializer(data=validated_data)
+                                serializer = UserPrivilegeSerializer(data=validate_data)
                                 if serializer.is_valid(raise_exception=False):
                                     privilege_obj = serializer.create(serializer.validated_data, user)
                                     view_serializer = UserPrivilegeViewSerializer(instance=privilege_obj,
