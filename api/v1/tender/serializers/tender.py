@@ -10,6 +10,8 @@ from v1.tenant.serializers.tenant_city import TenantCitySerializer
 from v1.tenant.serializers.tenant_country import TenantCountrySerializer
 from v1.tenant.serializers.tenant_state import TenantStateSerializer
 from v1.tender.models.tender import Tender as TenderTbl
+from v1.tender.serializers.tender_status import TenderStatusShortViewSerializer
+from v1.tender.serializers.tender_type import TenderTypeShortViewSerializer
 from v1.tender.views.common_functions import set_tender_validated_data
 
 
@@ -17,7 +19,7 @@ class TenderShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenderTbl
-        fields = ('id_string', 'name')
+        fields = ('id_string', 'tender_name')
 
 
 class TenderViewSerializer(serializers.ModelSerializer):
@@ -26,8 +28,8 @@ class TenderViewSerializer(serializers.ModelSerializer):
     country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
     state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
     city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
-    status_id = TenantCitySerializer(many=False, required=False, source='get_tenant_status')
-    type_id = TenantCitySerializer(many=False, required=False, source='get_tenant_type')
+    status_id = TenderStatusShortViewSerializer(many=False, required=False, source='get_tender_status')
+    type_id = TenderTypeShortViewSerializer(many=False, required=False, source='get_tender_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 

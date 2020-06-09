@@ -16,6 +16,8 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.tender.models.tender_status import get_tender_status_by_id
+from v1.tender.models.tender_type import get_tender_type_by_id
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
@@ -55,6 +57,16 @@ class Tender(models.Model):
 
     def __unicode__(self):
         return self.tender_name
+
+    @property
+    def get_tender_status(self):
+        tender = get_tender_status_by_id(self.status_id)
+        return tender
+
+    @property
+    def get_tender_type(self):
+        tender = get_tender_type_by_id(self.type_id)
+        return tender
 
 # Create Tender Master table end.
 
