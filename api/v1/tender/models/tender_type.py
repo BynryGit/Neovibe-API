@@ -38,6 +38,7 @@ class TenderType(models.Model):
     def __unicode__(self):
         return self.type
 
+
  # Create TenderStatus table end
 
 

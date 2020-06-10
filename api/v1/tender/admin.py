@@ -15,5 +15,3 @@ admin.site.register(TenderStatus)
 admin.site.register(TenderVendor)
 admin.site.register(TenderType)
 admin.site.register(TenderTermsAndCondition)
-
-
