@@ -56,12 +56,12 @@ class TenderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_tender_validated_data(validated_data)
-        if TenderTbl.objects.filter(tenant=user.tenant, utility=user.utility, name=validated_data["name"]).exists():
+        if TenderTbl.objects.filter(tenant=user.tenant, utility_id=1, tender_name=validated_data["tender_name"]).exists():
             return False
         with transaction.atomic():
             tender_obj = super(TenderSerializer, self).create(validated_data)
             tender_obj.tenant = user.tenant
-            tender_obj.utility = 1
+            tender_obj.utility_id = 1
             tender_obj.created_by = user.id
             tender_obj.save()
             return tender_obj
@@ -71,7 +71,7 @@ class TenderSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             tender_obj = super(TenderSerializer, self).update(instance, validated_data)
             tender_obj.tenant = user.tenant
-            tender_obj.utility = 1
+            tender_obj.utility_id = 1
             tender_obj.updated_by = user.id
             tender_obj.updated_date = timezone.now()
             tender_obj.save()

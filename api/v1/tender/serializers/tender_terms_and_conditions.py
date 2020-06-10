@@ -31,13 +31,13 @@ class TenderTermsAndConditionSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
     def create(self, validated_data, tender_obj, user):
-        if TenderTermsAndConditionTbl.objects.filter(tenant=user.tenant, utility=user.utility, tender_id=tender_obj.id,
+        if TenderTermsAndConditionTbl.objects.filter(tenant=user.tenant, utility_id=1, tender_id=tender_obj.id,
                                                      terms_name=validated_data["terms_name"]).exists():
             return False
         with transaction.atomic():
             tender_term_and_condition_obj = super(TenderTermsAndConditionSerializer, self).create(validated_data)
             tender_term_and_condition_obj.tenant = user.tenant
-            tender_term_and_condition_obj.utility = user.utility
+            tender_term_and_condition_obj.utility_id = 1
             tender_term_and_condition_obj.tender_id = tender_obj.id
             tender_term_and_condition_obj.created_by = user.id
             tender_term_and_condition_obj.save()
@@ -47,7 +47,7 @@ class TenderTermsAndConditionSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             tender_term_and_condition_obj = super(TenderTermsAndConditionSerializer, self).update(instance, validated_data)
             tender_term_and_condition_obj.tenant = user.tenant
-            tender_term_and_condition_obj.utility = user.utility
+            tender_term_and_condition_obj.utility_id = 1
             tender_term_and_condition_obj.updated_by = user.id
             tender_term_and_condition_obj.updated_date = timezone.now()
             tender_term_and_condition_obj.save()

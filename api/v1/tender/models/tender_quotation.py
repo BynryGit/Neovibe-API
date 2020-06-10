@@ -16,8 +16,8 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.tender.models.tender import get_tender_by_id_string
-from v1.tender.models.tender_vendor import get_tender_vendor_by_id_string
+from v1.tender.models.tender import get_tender_by_id
+from v1.tender.models.tender_vendor import get_tender_vendor_by_id
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
@@ -47,12 +47,12 @@ class TenderQuotation(models.Model):
 
     @property
     def get_tender(self):
-        tender = get_tender_by_id_string(self.tender_id)
+        tender = get_tender_by_id(self.tender_id)
         return tender
 
     @property
     def get_vendor(self):
-        vendor = get_tender_vendor_by_id_string(self.vendor_id)
+        vendor = get_tender_vendor_by_id(self.vendor_id)
         return vendor
 
 # Create Tender Quotation table end
