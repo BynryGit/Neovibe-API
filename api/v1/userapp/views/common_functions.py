@@ -19,62 +19,7 @@ from v1.userapp.models.role import get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_type import get_user_type_by_id_string
-
-
-# Check only mandatory fields for role api
 from v1.utility.models.utility_master import get_utility_by_id_string
-
-
-def is_role_data_verified(request):
-    return True
-
-
-def is_role_privilege_data_verified(request):
-    return True
-
-
-def is_user_privilege_data_verified(request):
-    return True
-
-
-def is_user_role_data_verified(request):
-    return True
-
-
-def is_user_utility_data_verified(request):
-    return True
-
-
-def is_user_area_data_verified(request):
-    return True
-
-
-def is_user_skill_data_verified(request):
-    return True
-
-
-def is_user_note_data_verified(request):
-    return True
-
-
-def is_user_data_verified(request):
-    return True
-
-
-def is_bank_data_verified(request):
-    return True
-
-
-def is_document_data_verified(request):
-    return True
-
-
-def is_note_data_verified(request):
-    return True
-
-
-def is_privilege_data_verified(request):
-    return True
 
 
 def set_role_validated_data(validated_data):

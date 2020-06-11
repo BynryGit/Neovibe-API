@@ -10,7 +10,7 @@ from v1.commonapp.serializers.area import GetAreaSerializer
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_area import get_area_by_user_id, get_record_by_values
 from v1.userapp.serializers.user_area import UserAreaSerializer, UserAreaViewSerializer
-from v1.userapp.views.common_functions import is_user_area_data_verified, set_user_area_validated_data
+from v1.userapp.views.common_functions import set_user_area_validated_data
 
 
 # API Header
@@ -72,28 +72,23 @@ class UserArea(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user):
                     data = []
-                    if is_user_area_data_verified(request):
-                        for area in request.data['areas']:
-                            validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string']}
-                            serializer = UserAreaSerializer(data=validate_data)
-                            if serializer.is_valid(raise_exception=False):
-                                user_area_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = UserAreaViewSerializer(instance=user_area_obj,
-                                                                         context={'request': request})
-                                data.append(view_serializer.data)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                    for area in request.data['areas']:
+                        validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string']}
+                        serializer = UserAreaSerializer(data=validate_data)
+                        if serializer.is_valid(raise_exception=False):
+                            user_area_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserAreaViewSerializer(instance=user_area_obj,
+                                                                     context={'request': request})
+                            data.append(view_serializer.data)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: data,
+                    }, status=status.HTTP_201_CREATED)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -117,34 +112,29 @@ def put(self, request, id_string):
             if response:
                 if is_authorized(1, 1, 1, user):
                     data = []
-                    if is_user_area_data_verified(request):
-                        for area in request.data['areas']:
-                            validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string'],
-                                             "is_active": area['is_active']}
-                            validated_data = set_user_area_validated_data(validate_data)
-                            serializer = UserAreaSerializer(data=validated_data)
-                            if serializer.is_valid(raise_exception=False):
-                                user_area = get_record_by_values(str(id_string), validate_data['area_id'])
-                                if user_area:
-                                    user_area_obj = serializer.update(user_area, serializer.validated_data, user)
-                                else:
-                                    user_area_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = UserAreaViewSerializer(instance=user_area_obj,
-                                                                         context={'request': request})
-                                data.append(view_serializer.data)
+                    for area in request.data['areas']:
+                        validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string'],
+                                         "is_active": area['is_active']}
+                        validated_data = set_user_area_validated_data(validate_data)
+                        serializer = UserAreaSerializer(data=validated_data)
+                        if serializer.is_valid(raise_exception=False):
+                            user_area = get_record_by_values(str(id_string), validate_data['area_id'])
+                            if user_area:
+                                user_area_obj = serializer.update(user_area, serializer.validated_data, user)
                             else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                                user_area_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserAreaViewSerializer(instance=user_area_obj,
+                                                                     context={'request': request})
+                            data.append(view_serializer.data)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,

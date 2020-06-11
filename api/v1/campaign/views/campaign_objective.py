@@ -10,7 +10,7 @@ from v1.campaign.models.campaign_objective import CampaignObjective,get_cam_obje
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 
 # objective/list
 class CampaignObjectiveList(generics.ListAPIView):

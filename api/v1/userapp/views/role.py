@@ -13,7 +13,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
-from v1.userapp.views.common_functions import is_role_data_verified, set_role_validated_data
 
 
 # API Header
@@ -72,23 +71,18 @@ class Role(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_role_data_verified(request):
-                        serializer = RoleSerializer(data=request.data)
-                        if serializer.is_valid(raise_exception=False):
-                            role_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                    serializer = RoleSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        role_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: view_serializer.data,
+                        }, status=status.HTTP_201_CREATED)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -160,30 +154,25 @@ class RoleDetail(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_role_data_verified(request):
-                        role_obj = get_role_by_id_string(id_string)
-                        if role_obj:
-                            serializer = RoleSerializer(data=request.data)
-                            if serializer.is_valid(raise_exception=False):
-                                role_obj = serializer.update(role_obj, serializer.validated_data, user)
-                                view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
+                    role_obj = get_role_by_id_string(id_string)
+                    if role_obj:
+                        serializer = RoleSerializer(data=request.data)
+                        if serializer.is_valid(raise_exception=False):
+                            role_obj = serializer.update(role_obj, serializer.validated_data, user)
+                            view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                            }, status=status.HTTP_404_NOT_FOUND)
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,

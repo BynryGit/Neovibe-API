@@ -65,13 +65,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    bank_detail_id = models.BigIntegerField(null=True, blank=True)
-    user_ID = models.CharField(max_length=200, null=True, blank=True)
     password = models.CharField(max_length=200, verbose_name='password')
     first_name = models.CharField(max_length=200, blank=True)
     middle_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
-    email = models.CharField(max_length=200, blank=True, unique=True)
+    email = models.CharField(max_length=200, blank=False, unique=True)
     USERNAME_FIELD = 'email'
     user_image = models.URLField(null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)

@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from v1.asset.views.common_function import is_data_verified
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.asset.serializer.asset import AssetListSerializer,AssetViewSerializer,AssetSerializer
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from v1.asset.models.asset_master import Asset as AssetTbl,get_asset_by_id_string
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 

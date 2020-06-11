@@ -25,7 +25,6 @@ from v1.userapp.serializers.notes import NoteSerializer, NoteViewSerializer
 # Author: Arpita
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
-from v1.userapp.views.common_functions import is_user_note_data_verified, is_note_data_verified
 
 
 class UserNote(GenericAPIView):
@@ -35,28 +34,23 @@ class UserNote(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_note_data_verified(request):
-                        data = []
-                        user = get_user_by_id_string(id_string)
-                        service_type = get_service_type_by_name('User')
-                        user_notes_obj = get_notes_by_user_id(user.id,service_type.id)
-                        if user_notes_obj:
-                            for user_note in user_notes_obj:
-                                serializer = NoteViewSerializer(instance=user_note, context={'request': request})
-                                data.append(serializer.data)
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: '',
-                            }, status=status.HTTP_404_NOT_FOUND)
+                    data = []
+                    user = get_user_by_id_string(id_string)
+                    service_type = get_service_type_by_name('User')
+                    user_notes_obj = get_notes_by_user_id(user.id,service_type.id)
+                    if user_notes_obj:
+                        for user_note in user_notes_obj:
+                            serializer = NoteViewSerializer(instance=user_note, context={'request': request})
+                            data.append(serializer.data)
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: data,
+                        }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                            RESULTS: '',
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -78,24 +72,19 @@ class UserNote(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_note_data_verified(request):
-                        request.data['identification_id'] = str(id_string)
-                        serializer = NoteSerializer(data=request.data)
-                        if serializer.is_valid(raise_exception=False):
-                            note_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                    request.data['identification_id'] = str(id_string)
+                    serializer = NoteSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        note_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: view_serializer.data,
+                        }, status=status.HTTP_201_CREATED)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -118,31 +107,26 @@ class UserNote(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_note_data_verified(request):
-                        request.data['identification_id'] = str(id_string)
-                        note = get_note_by_id_string(request.data['note_id'])
-                        if note:
-                            serializer = NoteSerializer(data=request.data)
-                            if serializer.is_valid(raise_exception=False):
-                                note_obj = serializer.update(note, serializer.validated_data, user)
-                                view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
+                    request.data['identification_id'] = str(id_string)
+                    note = get_note_by_id_string(request.data['note_id'])
+                    if note:
+                        serializer = NoteSerializer(data=request.data)
+                        if serializer.is_valid(raise_exception=False):
+                            note_obj = serializer.update(note, serializer.validated_data, user)
+                            view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                            }, status=status.HTTP_404_NOT_FOUND)
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,

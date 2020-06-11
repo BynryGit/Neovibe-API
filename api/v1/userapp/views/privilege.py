@@ -12,7 +12,6 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.privilege import get_all_privilege, get_privilege_by_id_string
 from v1.userapp.serializers.privilege import PrivilegeListSerializer, PrivilegeViewSerializer, PrivilegeSerializer
-from v1.userapp.views.common_functions import is_privilege_data_verified
 
 
 # API Header
@@ -70,24 +69,20 @@ class Privilege(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_privilege_data_verified(request):
-                        serializer = PrivilegeSerializer(data=request.data)
-                        if serializer.is_valid(raise_exception=False):
-                            privilege_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = PrivilegeViewSerializer(instance=privilege_obj,
-                                                                      context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+
+                    serializer = PrivilegeSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        privilege_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = PrivilegeViewSerializer(instance=privilege_obj,
+                                                                  context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: view_serializer.data,
+                        }, status=status.HTTP_201_CREATED)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
@@ -158,31 +153,26 @@ class PrivilegeDetail(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_privilege_data_verified(request):
-                        role_obj = get_privilege_by_id_string(id_string)
-                        if role_obj:
-                            serializer = PrivilegeSerializer(data=request.data)
-                            if serializer.is_valid(raise_exception=False):
-                                privilege_obj = serializer.update(role_obj, serializer.validated_data, user)
-                                view_serializer = PrivilegeViewSerializer(instance=privilege_obj,
-                                                                          context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
+                    role_obj = get_privilege_by_id_string(id_string)
+                    if role_obj:
+                        serializer = PrivilegeSerializer(data=request.data)
+                        if serializer.is_valid(raise_exception=False):
+                            privilege_obj = serializer.update(role_obj, serializer.validated_data, user)
+                            view_serializer = PrivilegeViewSerializer(instance=privilege_obj,
+                                                                      context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                            }, status=status.HTTP_404_NOT_FOUND)
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,

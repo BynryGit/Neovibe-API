@@ -6,7 +6,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
-from v1.commonapp.common_functions import is_token_valid, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.dispatcher.views.common_functions import is_data_verified
 from v1.dispatcher.serializers.service_request import ServiceRequestViewSerializer
 from v1.asset.models.asset_master import get_asset_by_id_string

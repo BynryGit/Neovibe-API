@@ -3,7 +3,6 @@ import uuid
 
 import jwt
 
-from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 
 from rest_framework.views import APIView
@@ -20,17 +19,15 @@ from v1.userapp.models.user_token import UserToken, check_token_exists, get_toke
 
 
 def validate_login_data(request):
-    if 'username' in request.data and 'password' in request.data:
+    if 'email' in request.data and 'password' in request.data:
         return True
     else:
         return False
 
 
-def set_login_trail(username, password, status):
-    password = make_password(password)
+def set_login_trail(email, status):
     LoginTrail(
-        username=username,
-        password=password,
+        email=email,
         status=status
     ).save()
 
@@ -46,9 +43,6 @@ def login(request, user):
     try:
         user_obj = get_user_by_email(user.email)
         form_factor = get_form_factor_by_id(user_obj.form_factor_id)
-        if form_factor.name == 'Mobile':
-            if request.data['imei'] != user_obj.imei:
-                return False
         payload = {'user_id_string': str(user_obj.id_string), 'string': str(uuid.uuid4().hex[:6].upper())}
         encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -91,29 +85,29 @@ class LoginApiView(APIView):
     def post(self, request, format=None):
         try:
             if validate_login_data(request):
-                username = request.data['username']
+                email = request.data['email']
                 password = request.data['password']
 
-                auth = authenticate(username=username, password=password)
+                auth = authenticate(email=email, password=password)
 
                 if auth:
                     token = login(request, auth)  # Call Login function
 
                     if not token:
-                        set_login_trail(username, password, 'Fail')
+                        set_login_trail(email, 'Fail')
                         return Response({
                             STATE: FAIL,
                             RESULTS: INVALID_CREDENTIALS,
                         }, status=status.HTTP_401_UNAUTHORIZED)
                     else:
-                        set_login_trail(username, password, 'Success')
+                        set_login_trail(email, 'Success')
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: SUCCESSFUL_LOGIN,
                             Token: token,
                         }, status=status.HTTP_200_OK)
                 else:
-                    set_login_trail(username, password, 'Fail')
+                    set_login_trail(email, 'Fail')
                     return Response({
                         STATE: FAIL,
                         RESULTS: INVALID_CREDENTIALS,
@@ -160,9 +154,8 @@ class LogoutApiView(APIView):
                 token = request.headers['token']
 
                 if check_token_exists(token):
-                    token = get_token_by_token(token)  # Call Login function
-                    token.is_active = False
-                    token.save()
+                    token = get_token_by_token(token)
+                    token.delete()
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: SUCCESSFUL_LOGOUT,

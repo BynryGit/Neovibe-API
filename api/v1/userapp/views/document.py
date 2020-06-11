@@ -24,7 +24,6 @@ from v1.userapp.serializers.document import DocumentViewSerializer, DocumentSeri
 # Author: Arpita
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
-from v1.userapp.views.common_functions import is_document_data_verified
 
 
 class UserDocument(GenericAPIView):
@@ -34,29 +33,23 @@ class UserDocument(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_document_data_verified(request):
-                        data = []
-                        user = get_user_by_id_string(id_string)
-                        document_type = get_document_type_by_name('User')
-                        user_document_obj = get_document_by_user_id(user.id,document_type.id)
-                        if user_document_obj:
-                            for user_document in user_document_obj:
-                                serializer = DocumentViewSerializer(instance=user_document, context={'request': request})
-                                data.append(serializer.data)
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: '',
-                            }, status=status.HTTP_404_NOT_FOUND)
+                    data = []
+                    user = get_user_by_id_string(id_string)
+                    document_type = get_document_type_by_name('User')
+                    user_document_obj = get_document_by_user_id(user.id,document_type.id)
+                    if user_document_obj:
+                        for user_document in user_document_obj:
+                            serializer = DocumentViewSerializer(instance=user_document, context={'request': request})
+                            data.append(serializer.data)
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: data,
+                        }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: '',
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -78,24 +71,19 @@ class UserDocument(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_document_data_verified(request):
-                        request.data['identification_id'] = str(id_string)
-                        serializer = DocumentSerializer(data=request.data)
-                        if serializer.is_valid(raise_exception=False):
-                            document_obj = serializer.create(serializer.validated_data, user)
-                            view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                    request.data['identification_id'] = str(id_string)
+                    serializer = DocumentSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        document_obj = serializer.create(serializer.validated_data, user)
+                        view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: view_serializer.data,
+                        }, status=status.HTTP_201_CREATED)
                     else:
                         return Response({
                             STATE: ERROR,
+                            RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({

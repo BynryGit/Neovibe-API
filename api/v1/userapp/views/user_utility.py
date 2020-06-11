@@ -8,7 +8,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values
 from v1.userapp.serializers.user_utility import UserUtilitySerializer, UserUtilityViewSerializer
-from v1.userapp.views.common_functions import is_user_utility_data_verified, set_user_utility_validated_data
+from v1.userapp.views.common_functions import set_user_utility_validated_data
 from v1.utility.models.utility_master import get_utility_by_id
 from v1.utility.serializers.utility import UtilityMasterViewSerializer
 
@@ -72,28 +72,23 @@ class UserUtility(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user):
                     data = []
-                    if is_user_utility_data_verified(request):
-                        for utility in request.data['utilities']:
-                            validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
-                            serializer = UserUtilitySerializer(data=validate_data)
-                            if serializer.is_valid(raise_exception=False):
-                                user_utility_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
-                                                                         context={'request': request})
-                                data.append(view_serializer.data)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                    for utility in request.data['utilities']:
+                        validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
+                        serializer = UserUtilitySerializer(data=validate_data)
+                        if serializer.is_valid(raise_exception=False):
+                            user_utility_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
+                                                                     context={'request': request})
+                            data.append(view_serializer.data)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: data,
+                    }, status=status.HTTP_201_CREATED)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -116,34 +111,29 @@ class UserUtility(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user):
                     data = []
-                    if is_user_utility_data_verified(request):
-                        for utility in request.data['utilities']:
-                            validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string'],
-                                             "is_active": utility['is_active']}
-                            validated_data = set_user_utility_validated_data(validate_data)
-                            serializer = UserUtilitySerializer(data=validated_data)
-                            if serializer.is_valid(raise_exception=False):
-                                user_utility = get_record_by_values(str(id_string), validate_data['utility_id'])
-                                if user_utility:
-                                    user_utility_obj = serializer.update(user_utility, serializer.validated_data, user)
-                                else:
-                                    user_utility_obj = serializer.create(serializer.validated_data, user)
-                                view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
-                                                                         context={'request': request})
-                                data.append(view_serializer.data)
+                    for utility in request.data['utilities']:
+                        validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string'],
+                                         "is_active": utility['is_active']}
+                        validated_data = set_user_utility_validated_data(validate_data)
+                        serializer = UserUtilitySerializer(data=validated_data)
+                        if serializer.is_valid(raise_exception=False):
+                            user_utility = get_record_by_values(str(id_string), validate_data['utility_id'])
+                            if user_utility:
+                                user_utility_obj = serializer.update(user_utility, serializer.validated_data, user)
                             else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                                user_utility_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
+                                                                     context={'request': request})
+                            data.append(view_serializer.data)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,

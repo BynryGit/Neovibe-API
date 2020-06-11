@@ -47,16 +47,16 @@ class RoleSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_role_validated_data(validated_data)
-        if Role.objects.exclude(id_string=instance.id_string).filter(role=validated_data['role'], type_id=validated_data['type_id'], sub_type_id=validated_data['sub_type_id'], form_factor_id=validated_data['form_factor_id'], department_id=validated_data['department_id'], tenant=user.tenant, is_active=True).exists():
-            raise CustomAPIException("Role already exists!", status_code=status.HTTP_409_CONFLICT)
-        else:
-            with transaction.atomic():
-                role_obj = super(RoleSerializer, self).update(instance, validated_data)
-                role_obj.updated_by = user.id
-                role_obj.updated_date = datetime.utcnow()
-                role_obj.is_active = True
-                role_obj.save()
-                return role_obj
+        # if Role.objects.exclude(id_string=instance.id_string).filter(role=validated_data['role'], type_id=validated_data['type_id'], sub_type_id=validated_data['sub_type_id'], form_factor_id=validated_data['form_factor_id'], department_id=validated_data['department_id'], tenant=user.tenant, is_active=True).exists():
+        #     raise CustomAPIException("Role already exists!", status_code=status.HTTP_409_CONFLICT)
+        # else:
+        with transaction.atomic():
+            role_obj = super(RoleSerializer, self).update(instance, validated_data)
+            role_obj.updated_by = user.id
+            role_obj.updated_date = datetime.utcnow()
+            role_obj.is_active = True
+            role_obj.save()
+            return role_obj
 
 
 class RoleListSerializer(serializers.ModelSerializer):

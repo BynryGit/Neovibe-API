@@ -10,7 +10,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.survey.models.survey_type import SurveyType,get_survey_type_by_id_string
 from v1.survey.serializers.survey_type import SurveyTypeListSerializer,SurveyTypeViewSerializer
 from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 
 # type/list/
 class SurveyTypeList(generics.ListAPIView):

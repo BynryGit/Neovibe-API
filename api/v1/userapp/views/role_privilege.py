@@ -14,7 +14,7 @@ from v1.userapp.models.role_privilege import get_role_privilege_by_role_id, get_
 from v1.userapp.serializers.privilege import GetPrivilegeSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.serializers.role_privilege import RolePrivilegeSerializer, RolePrivilegeViewSerializer
-from v1.userapp.views.common_functions import is_role_privilege_data_verified, set_role_privilege_validated_data
+from v1.userapp.views.common_functions import set_role_privilege_validated_data
 
 
 # API Header
@@ -39,37 +39,31 @@ class RolePrivilege(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user):
                     data = []
-                    if is_role_privilege_data_verified(request):
-                        module_list = request.data['module_id']
-                        for module in module_list:
-                            validate_data = {}
-                            sub_module_list = module['sub_module_id']
-                            for sub_module in sub_module_list:
-                                validate_data['role_id'] = request.data['role_id']
-                                validate_data['module_id'] = module['module_id']
-                                validate_data['sub_module_id'] = sub_module['sub_module_id']
-                                validate_data['privilege_id'] = sub_module['privilege_id']
-                                validate_data['is_active'] = sub_module['is_active']
-                                serializer = RolePrivilegeSerializer(data=validate_data)
-                                if serializer.is_valid(raise_exception=False):
-                                    privilege_obj = serializer.create(serializer.validated_data, user)
-                                    view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
-                                                                              context={'request': request})
-                                    data.append(view_serializer.data)
-                                else:
-                                    return Response({
-                                        STATE: ERROR,
-                                        RESULTS: serializer.errors,
-                                    }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_201_CREATED)
-                        # Save privilege details start
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                    module_list = request.data['module_id']
+                    for module in module_list:
+                        validate_data = {}
+                        sub_module_list = module['sub_module_id']
+                        for sub_module in sub_module_list:
+                            validate_data['role_id'] = request.data['role_id']
+                            validate_data['module_id'] = module['module_id']
+                            validate_data['sub_module_id'] = sub_module['sub_module_id']
+                            validate_data['privilege_id'] = sub_module['privilege_id']
+                            validate_data['is_active'] = sub_module['is_active']
+                            serializer = RolePrivilegeSerializer(data=validate_data)
+                            if serializer.is_valid(raise_exception=False):
+                                privilege_obj = serializer.create(serializer.validated_data, user)
+                                view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
+                                                                          context={'request': request})
+                                data.append(view_serializer.data)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: data,
+                    }, status=status.HTTP_201_CREATED)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -159,46 +153,41 @@ class RolePrivilegeDetail(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user):
                     data = []
-                    if is_role_privilege_data_verified(request):
-                        role = get_role_by_id_string(id_string)
-                        if role:
-                            module_list = request.data['module_id']
-                            for module in module_list:
-                                validate_data = {}
-                                sub_module_list = module['sub_module_id']
-                                for sub_module in sub_module_list:
-                                    validate_data['role_id'] = str(id_string)
-                                    validate_data['module_id'] = module['module_id']
-                                    validate_data['sub_module_id'] = sub_module['sub_module_id']
-                                    validate_data['privilege_id'] = sub_module['privilege_id']
-                                    validate_data['is_active'] = sub_module['is_active']
-                                    validated_data = set_role_privilege_validated_data(validate_data)
-                                    serializer = RolePrivilegeSerializer(data=validated_data)
-                                    if serializer.is_valid(raise_exception=False):
-                                        role_privilege = get_record_values_by_id(role.id, validate_data['module_id'],
-                                                                              validate_data['sub_module_id'],
-                                                                              validate_data['privilege_id'])
+                    role = get_role_by_id_string(id_string)
+                    if role:
+                        module_list = request.data['module_id']
+                        for module in module_list:
+                            validate_data = {}
+                            sub_module_list = module['sub_module_id']
+                            for sub_module in sub_module_list:
+                                validate_data['role_id'] = str(id_string)
+                                validate_data['module_id'] = module['module_id']
+                                validate_data['sub_module_id'] = sub_module['sub_module_id']
+                                validate_data['privilege_id'] = sub_module['privilege_id']
+                                validate_data['is_active'] = sub_module['is_active']
+                                validated_data = set_role_privilege_validated_data(validate_data)
+                                serializer = RolePrivilegeSerializer(data=validated_data)
+                                if serializer.is_valid(raise_exception=False):
+                                    role_privilege = get_record_values_by_id(role.id, validate_data['module_id'],
+                                                                          validate_data['sub_module_id'],
+                                                                          validate_data['privilege_id'])
 
-                                        if role_privilege:
-                                            role_privilege_obj = serializer.update(role_privilege, serializer.validated_data, user)
-                                        else:
-                                            role_privilege_obj = serializer.create(serializer.validated_data, user)
-                                        view_serializer = RolePrivilegeViewSerializer(instance=role_privilege_obj,
-                                                                                      context={'request': request})
-                                        data.append(view_serializer.data)
+                                    if role_privilege:
+                                        role_privilege_obj = serializer.update(role_privilege, serializer.validated_data, user)
                                     else:
-                                        return Response({
-                                            STATE: ERROR,
-                                            RESULTS: serializer.errors,
-                                        }, status=status.HTTP_400_BAD_REQUEST)
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: data,
-                                }, status=status.HTTP_200_OK)
-                        else:
+                                        role_privilege_obj = serializer.create(serializer.validated_data, user)
+                                    view_serializer = RolePrivilegeViewSerializer(instance=role_privilege_obj,
+                                                                                  context={'request': request})
+                                    data.append(view_serializer.data)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        RESULTS: serializer.errors,
+                                    }, status=status.HTTP_400_BAD_REQUEST)
                             return Response({
-                                STATE: ERROR,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                                STATE: SUCCESS,
+                                RESULTS: data,
+                            }, status=status.HTTP_200_OK)
                     else:
                         return Response({
                             STATE: ERROR,

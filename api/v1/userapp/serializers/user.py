@@ -54,8 +54,6 @@ class UserSerializer(serializers.ModelSerializer):
                 user_obj.tenant = user.tenant
                 user_obj.is_active = True
                 user_obj.save()
-                user_obj.user_ID = str(user_obj.username) + str(user_obj.tenant)
-                user_obj.save()
                 return user_obj
 
     def update(self, instance, validated_data, user):
@@ -78,14 +76,14 @@ class GetUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'id_string')
+        fields = ('email', 'id_string')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserStatus
-        fields = ('status', 'id_string')
+        fields = ('id_string', 'status')
 
 
 class UserTypeSerializer(serializers.ModelSerializer):
@@ -114,8 +112,8 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id_string', 'tenant', 'department', 'first_name', 'last_name', 'user_ID', 'phone_mobile',
-                  'status', 'email', 'created_date')
+        fields = ('id_string', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'tenant',
+                  'department',  'status')
 
 
 class UserViewSerializer(serializers.ModelSerializer):
@@ -130,14 +128,12 @@ class UserViewSerializer(serializers.ModelSerializer):
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
-    bank = UserBankViewSerializer(many=False, required=True, source='get_user_bank')
     created_date = serializers.SerializerMethodField('get_created_date')
 
     class Meta:
         model = User
-        fields = ('id_string', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city', 'department', 'bank',
-                  'status', 'user_ID','first_name', 'middle_name', 'last_name', 'email', 'user_image', 'phone_mobile',
-                  'phone_landline', 'created_date')
+        fields = ('id_string', 'first_name', 'middle_name', 'last_name', 'email', 'phone_mobile', 'phone_landline',
+                  'created_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city', 'department', 'status')
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
