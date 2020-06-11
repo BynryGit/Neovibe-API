@@ -94,7 +94,10 @@ def get_role_by_id(id):
 
 
 def get_role_by_id_string(id_string):
-    return Role.objects.filter(id_string=id_string, is_active=True).last()
+    try:
+        return Role.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
 
 
 def get_role_by_tenant_id_string(id_string):

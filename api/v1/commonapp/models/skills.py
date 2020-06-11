@@ -61,7 +61,10 @@ def get_skills_by_utility_id_string(id_string):
 
 
 def get_skill_by_id_string(id_string):
-    return Skills.objects.filter(id_string=id_string).last()
+    try:
+        return Skills.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_skill_by_id(id):

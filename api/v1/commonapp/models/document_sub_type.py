@@ -43,7 +43,10 @@ class DocumentSubType(models.Model):
 
 
 def get_document_sub_type_by_id_string(id_string):
-    return DocumentSubType.objects.filter(id_string=id_string).last()
+    try:
+        return DocumentSubType.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_document_sub_type_by_id(id):

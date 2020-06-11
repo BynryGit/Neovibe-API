@@ -57,8 +57,14 @@ def get_role_type_by_tenant_id_string(id_string):
 
 
 def get_role_type_by_id_string(id_string):
-    return RoleType.objects.filter(id_string=id_string, is_active=True).last()
+    try:
+        return RoleType.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
 
 
 def get_role_type_by_id(id):
-    return RoleType.objects.filter(id=id, is_active=True).last()
+    try:
+        return RoleType.objects.get(id=id, is_active=True)
+    except:
+        return False

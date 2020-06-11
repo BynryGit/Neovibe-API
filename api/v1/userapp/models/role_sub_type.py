@@ -62,11 +62,17 @@ def get_role_sub_type_by_tenant_id_string(id_string):
 
 
 def get_role_sub_type_by_id_string(id_string):
-    return RoleSubType.objects.filter(id_string=id_string, is_active=True).last()
+    try:
+        return RoleSubType.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
 
 
 def get_role_sub_type_by_id(id):
-    return RoleSubType.objects.filter(id=id, is_active=True).last()
+    try:
+        return RoleSubType.objects.get(id=id, is_active=True)
+    except:
+        return False
 
 
 def get_sub_type_by_type_id(id):

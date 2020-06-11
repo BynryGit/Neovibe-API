@@ -43,7 +43,10 @@ class DocumentType(models.Model):
 
 
 def get_document_type_by_id_string(id_string):
-    return DocumentType.objects.filter(id_string=id_string).last()
+    try:
+        return DocumentType.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_document_type_by_id(id):

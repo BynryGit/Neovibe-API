@@ -34,7 +34,10 @@ class UserStatus(models.Model):
 
 
 def get_user_status_by_id_string(id_string):
-    return UserStatus.objects.filter(id_string=id_string).last()
+    try:
+        return UserStatus.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_user_status_by_id(id):

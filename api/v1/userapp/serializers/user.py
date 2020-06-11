@@ -27,8 +27,6 @@ class UserSerializer(serializers.ModelSerializer):
     form_factor_id = serializers.CharField(required=False, max_length=200)
     department_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
-    bank_id = serializers.CharField(required=False, max_length=200)
-    user_ID = serializers.CharField(required=False, max_length=200)
     email = serializers.CharField(required=False, max_length=200)
     password = serializers.CharField(required=False, max_length=200)
     first_name = serializers.CharField(required=False, max_length=200)

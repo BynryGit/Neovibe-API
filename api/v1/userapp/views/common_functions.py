@@ -143,12 +143,6 @@ def set_user_validated_data(validated_data):
             validated_data["status_id"] = get_status.id
         else:
             raise CustomAPIException("Status not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "bank_id" in validated_data:
-        bank = get_bank_by_id_string(validated_data["bank_id"])
-        if bank:
-            validated_data["bank_id"] = bank.id
-        else:
-            raise CustomAPIException("Bank not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

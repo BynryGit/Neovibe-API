@@ -50,7 +50,10 @@ class UserType(models.Model):
 
 
 def get_user_type_by_id_string(id_string):
-    return UserType.objects.filter(id_string=id_string).last()
+    try:
+        return UserType.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_user_type_by_id(id):
