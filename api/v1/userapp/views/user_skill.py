@@ -68,14 +68,15 @@ class UserSkill(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
                     data = []
                     for skill in request.data['skills']:
                         validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string']}
                         serializer = UserSkillSerializer(data=validate_data)
                         if serializer.is_valid(raise_exception=False):
+                            user = get_user_by_id_string(user_id_string)
                             user_skill_obj = serializer.create(serializer.validated_data, user)
                             view_serializer = UserSkillViewSerializer(instance=user_skill_obj,
                                                                      context={'request': request})

@@ -39,7 +39,6 @@ class UserSkillViewSerializer(serializers.ModelSerializer):
 class UserSkillSerializer(serializers.ModelSerializer):
     user_id = serializers.CharField(required=False, max_length=200)
     skill_id = serializers.CharField(required=False, max_length=200)
-    is_active = serializers.BooleanField(required=False)
 
     class Meta:
         model = UserSkill

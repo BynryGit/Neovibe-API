@@ -21,7 +21,6 @@ class UserPrivilegeSerializer(serializers.ModelSerializer):
     module_id = serializers.CharField(required=False, max_length=200)
     sub_module_id = serializers.CharField(required=False, max_length=200)
     privilege_id = serializers.CharField(required=False, max_length=200)
-    is_active = serializers.BooleanField(required=False)
 
     class Meta:
         model = UserPrivilege

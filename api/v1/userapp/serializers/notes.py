@@ -36,6 +36,7 @@ class NoteViewSerializer(serializers.ModelSerializer):
 
 
 class NoteSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField( required=False, max_length=200)
     module_id = serializers.CharField( required=False, max_length=200)
     sub_module_id = serializers.CharField(required=False, max_length=200)
     service_type_id = serializers.CharField(required=False, max_length=200)
@@ -54,7 +55,6 @@ class NoteSerializer(serializers.ModelSerializer):
             note_obj = super(NoteSerializer, self).create(validated_data)
             note_obj.created_by = user.id
             note_obj.tenant = user.tenant
-            note_obj.utility = user.utility
             note_obj.is_active = True
             note_obj.save()
             return note_obj

@@ -251,13 +251,14 @@ class UserBankDetail(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
                     user_obj = get_user_by_id_string(id_string)
                     if user_obj:
                         serializer = UserSerializer(data=request.data)
                         if serializer.is_valid(raise_exception=False):
+                            user = get_user_by_id_string(user_id_string)
                             user_obj = serializer.update(user_obj, serializer.validated_data, user)
                             view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
                             return Response({

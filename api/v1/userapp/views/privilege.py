@@ -6,6 +6,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.messages import *
+from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -66,12 +67,13 @@ class Privilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
 
                     serializer = PrivilegeSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=False):
+                        user = get_user_by_id_string(user_id_string)
                         privilege_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = PrivilegeViewSerializer(instance=privilege_obj,
                                                                   context={'request': request})

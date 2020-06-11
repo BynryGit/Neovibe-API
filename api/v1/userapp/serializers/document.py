@@ -37,6 +37,7 @@ class DocumentViewSerializer(serializers.ModelSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField( required=False, max_length=200)
     module_id = serializers.CharField( required=False, max_length=200)
     sub_module_id = serializers.CharField(required=False, max_length=200)
     document_type_id = serializers.CharField(required=False, max_length=200)
@@ -55,7 +56,6 @@ class DocumentSerializer(serializers.ModelSerializer):
             document_obj = super(DocumentSerializer, self).create(validated_data)
             document_obj.created_by = user.id
             document_obj.tenant = user.tenant
-            document_obj.utility = user.utility
             document_obj.is_active = True
             document_obj.save()
             return document_obj

@@ -69,12 +69,13 @@ class UserNote(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
                     request.data['identification_id'] = str(id_string)
                     serializer = NoteSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=False):
+                        user = get_user_by_id_string(user_id_string)
                         note_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
                         return Response({

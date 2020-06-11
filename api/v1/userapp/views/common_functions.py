@@ -23,6 +23,12 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 def set_role_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "type_id" in validated_data:
         type = get_role_type_by_id_string(validated_data["type_id"])
         if type:
@@ -51,6 +57,12 @@ def set_role_validated_data(validated_data):
 
 
 def set_role_privilege_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "role_id" in validated_data:
         role = get_role_by_id_string(validated_data["role_id"])
         if role:
@@ -79,6 +91,12 @@ def set_role_privilege_validated_data(validated_data):
 
 
 def set_user_privilege_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_id" in validated_data:
         user = get_user_by_id_string(validated_data["user_id"])
         if user:

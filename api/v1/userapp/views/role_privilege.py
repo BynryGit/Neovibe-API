@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework import status, generics
 from api.messages import *
+from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
@@ -35,11 +36,11 @@ class RolePrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
                     data = []
-                    module_list = request.data['module_id']
+                    module_list = request.data['data']
                     for module in module_list:
                         validate_data = {}
                         sub_module_list = module['sub_module_id']
@@ -48,9 +49,9 @@ class RolePrivilege(GenericAPIView):
                             validate_data['module_id'] = module['module_id']
                             validate_data['sub_module_id'] = sub_module['sub_module_id']
                             validate_data['privilege_id'] = sub_module['privilege_id']
-                            validate_data['is_active'] = sub_module['is_active']
                             serializer = RolePrivilegeSerializer(data=validate_data)
                             if serializer.is_valid(raise_exception=False):
+                                user = get_user_by_id_string(user_id_string)
                                 privilege_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = RolePrivilegeViewSerializer(instance=privilege_obj,
                                                                           context={'request': request})
@@ -109,20 +110,26 @@ class RolePrivilegeDetail(GenericAPIView):
                         roles = GetRoleSerializer(instance=role, context={'request': request})
                         data.append(roles.data)
                         role_privileges = get_role_privilege_by_role_id(role.id)
-                        for role_privilege in role_privileges:
-                            sub_module_obj = get_sub_module_by_id(role_privilege.sub_module_id)
-                            sub_module = SubModuleSerializer(instance=sub_module_obj, context={'request': request})
-                            sub_modules.append(sub_module.data)
-                            privilege_obj = get_privilege_by_id(role_privilege.privilege_id)
-                            privilege = GetPrivilegeSerializer(instance=privilege_obj, context={'request': request})
-                            index = sub_modules.index(sub_module.data)
-                            sub_modules[index]['privilege'] = privilege.data
+                        if role_privileges:
+                            for role_privilege in role_privileges:
+                                sub_module_obj = get_sub_module_by_id(role_privilege.sub_module_id)
+                                sub_module = SubModuleSerializer(instance=sub_module_obj, context={'request': request})
+                                sub_modules.append(sub_module.data)
+                                privilege_obj = get_privilege_by_id(role_privilege.privilege_id)
+                                privilege = GetPrivilegeSerializer(instance=privilege_obj, context={'request': request})
+                                index = sub_modules.index(sub_module.data)
+                                sub_modules[index]['privilege'] = privilege.data
 
-                        data[0]['sub_module'] = sub_modules
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: data,
-                        }, status=status.HTTP_200_OK)
+                            data[0]['sub_module'] = sub_modules
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: data,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: ROLE_PRIVILEGE_NOT_FOUND,
+                            }, status=status.HTTP_404_NOT_FOUND)
                     else:
                         return Response({
                             STATE: EXCEPTION,
@@ -164,7 +171,6 @@ class RolePrivilegeDetail(GenericAPIView):
                                 validate_data['module_id'] = module['module_id']
                                 validate_data['sub_module_id'] = sub_module['sub_module_id']
                                 validate_data['privilege_id'] = sub_module['privilege_id']
-                                validate_data['is_active'] = sub_module['is_active']
                                 validated_data = set_role_privilege_validated_data(validate_data)
                                 serializer = RolePrivilegeSerializer(data=validated_data)
                                 if serializer.is_valid(raise_exception=False):

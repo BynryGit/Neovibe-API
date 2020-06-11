@@ -40,7 +40,6 @@ class UserAreaViewSerializer(serializers.ModelSerializer):
 class UserAreaSerializer(serializers.ModelSerializer):
     user_id = serializers.CharField(required=False, max_length=200)
     area_id = serializers.CharField(required=False, max_length=200)
-    is_active = serializers.BooleanField(required=False)
 
     class Meta:
         model = UserArea

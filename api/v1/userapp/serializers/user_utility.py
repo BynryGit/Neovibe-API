@@ -41,7 +41,6 @@ class UserUtilityViewSerializer(serializers.ModelSerializer):
 class UserUtilitySerializer(serializers.ModelSerializer):
     user_id = serializers.CharField(required=False, max_length=200)
     utility_id = serializers.CharField(required=False, max_length=200)
-    is_active = serializers.BooleanField(required=False)
 
     class Meta:
         model = UserUtility

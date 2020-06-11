@@ -34,9 +34,9 @@ class UserPrivilege(GenericAPIView):
 
     def post(self, request, format=None):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
                     data = []
                     module_list = request.data['module_id']
                     for module in module_list:
@@ -50,6 +50,7 @@ class UserPrivilege(GenericAPIView):
                             validate_data['is_active'] = sub_module['is_active']
                             serializer = UserPrivilegeSerializer(data=validate_data)
                             if serializer.is_valid(raise_exception=False):
+                                user = get_user_by_id_string(user_id_string)
                                 privilege_obj = serializer.create(serializer.validated_data, user)
                                 view_serializer = UserPrivilegeViewSerializer(instance=privilege_obj,
                                                                           context={'request': request})

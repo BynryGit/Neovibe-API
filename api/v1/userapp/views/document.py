@@ -68,12 +68,13 @@ class UserDocument(GenericAPIView):
 
     def post(self, request, id_string):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
+            response, user_id_string = is_token_valid(self.request.headers['token'])
             if response:
-                if is_authorized(1, 1, 1, user):
+                if is_authorized(1, 1, 1, user_id_string):
                     request.data['identification_id'] = str(id_string)
                     serializer = DocumentSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=False):
+                        user = get_user_by_id_string(user_id_string)
                         document_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
                         return Response({
@@ -106,31 +107,26 @@ class UserDocument(GenericAPIView):
             response, user = is_token_valid(self.request.headers['token'])
             if response:
                 if is_authorized(1, 1, 1, user):
-                    if is_document_data_verified(request):
-                        request.data['identification_id'] = str(id_string)
-                        document = get_document_by_id_string(request.data['document_id'])
-                        if document:
-                            serializer = DocumentSerializer(data=request.data)
-                            if serializer.is_valid(raise_exception=False):
-                                document_obj = serializer.update(document, serializer.validated_data, user)
-                                view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
+                    request.data['identification_id'] = str(id_string)
+                    document = get_document_by_id_string(request.data['document_id'])
+                    if document:
+                        serializer = DocumentSerializer(data=request.data)
+                        if serializer.is_valid(raise_exception=False):
+                            document_obj = serializer.update(document, serializer.validated_data, user)
+                            view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                            }, status=status.HTTP_404_NOT_FOUND)
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,
