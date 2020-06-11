@@ -10,7 +10,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.decorators import is_token_validate, role_required
+from v1.userapp.decorators import is_token_validate, role_required, utility_required
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_bank_detail import get_bank_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values

@@ -12,6 +12,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.userapp.decorators import utility_required
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
 
@@ -67,6 +68,7 @@ class RoleList(generics.ListAPIView):
 
 class Role(GenericAPIView):
 
+    @utility_required(5, 1)
     def post(self, request, format=None):
         try:
             response, user_id_string = is_token_valid(self.request.headers['token'])

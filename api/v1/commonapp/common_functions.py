@@ -41,10 +41,10 @@ def is_authorized(module_id, sub_module_id, privilege_id, user_id):
 
 def is_utility(utility_id, user_obj):
     try:
-            if check_user_utility_exists(user_obj.id, utility_id):
-                return True
-            else:
-                return False
+        if check_user_utility_exists(user_obj.id, utility_id):
+            return True
+        else:
+            return False
 
     except Exception as e:
         logger().log(e, 'ERROR', user='test', name='test')
