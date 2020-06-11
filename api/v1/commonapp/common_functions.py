@@ -8,7 +8,10 @@ from v1.userapp.models.user_utility import check_user_utility_exists
 
 
 def get_payload(token):
-    return jwt.decode(token, SECRET_KEY, algorithms='HS256')
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms='HS256')
+    except:
+        return False
 
 
 def is_token_valid(token):

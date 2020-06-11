@@ -64,7 +64,7 @@ class UserPrivilegeViewSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user = GetUserSerializer(many=False, required=True, source='get_user')
     # module = ModuleSerializer(many=False, required=True, source='get_module')
-    sub_module = SubModuleViewSerializer(many=False, required=True, source='get_sub_module')
+    sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     # privilege = GetPrivilegeSerializer(many=False, required=True, source='get_privilege')
     created_date = serializers.SerializerMethodField('get_created_date')
 

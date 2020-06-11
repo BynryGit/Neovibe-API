@@ -8,6 +8,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.logger import logger
+from v1.userapp.decorators import is_token_validate
 from v1.userapp.models.privilege import get_privilege_by_id
 from v1.userapp.models.role_privilege import get_record_by_values
 from v1.userapp.models.user_privilege import get_user_privilege_by_user_id, get_record_values_by_id
@@ -38,7 +39,7 @@ class UserPrivilege(GenericAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_id_string):
                     data = []
-                    module_list = request.data['module']
+                    module_list = request.data['data']
                     for module in module_list:
                         validate_data = {}
                         sub_module_list = module['sub_module']
@@ -96,6 +97,7 @@ class UserPrivilege(GenericAPIView):
 
 class UserPrivilegeDetail(GenericAPIView):
 
+    @is_token_validate
     def get(self, request, id_string):
         try:
             response, user_id_string = is_token_valid(self.request.headers['token'])
