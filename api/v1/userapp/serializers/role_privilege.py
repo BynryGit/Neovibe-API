@@ -22,6 +22,7 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
     sub_module_id = serializers.CharField(required=False, max_length=200)
     utility_id = serializers.CharField(required=False, max_length=200)
     privilege_id = serializers.CharField(required=False, max_length=200)
+    is_active = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = RolePrivilege
