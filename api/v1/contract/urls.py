@@ -34,8 +34,6 @@ urlpatterns = [
     path('t&c/<uuid:id_string>', ContractTermAndConditionDetail.as_view(),name='contract_term_and_condition_detail'),
 
     path('status/list', ContractStatusList.as_view(), name='contract_status_list'),
-
     path('type/list', ContracttypeList.as_view(), name='contract_type_list'),
-
     path('period/list', ContractperiodList.as_view(), name='Contract_period_list'),
 ]

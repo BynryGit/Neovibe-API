@@ -14,27 +14,27 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
     ObjectNotFoundException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.contract.models.contract import get_contract_by_id_string
-from v1.contract.serializers.contract_invoice import SupplierInvoiceViewSerializer, SupplierInvoiceSerializer
-from v1.supplier.models.supplier_invoice import SupplierInvoice as SupplierInvoiceTbl, get_contract_invoice_by_id_string
+from v1.tender.models.tender import get_tender_by_id_string
+from v1.tender.models.tender_quotation import TenderQuotation as TenderQuotationTbl, get_tender_quotation_by_id_string
+from v1.tender.serializers.tender_quotation import TenderQuotationViewSerializer, TenderQuotationSerializer
 
 
 # API Header
-# API end Point: api/v1/contract/id_string/invoice/list
+# API end Point: api/v1/tender/id_string/quotation/list
 # API verb: GET
 # Package: Basic
-# Modules: Contract
-# Sub Module: Invoice
-# Interaction: Get contract invoice list
-# Usage: API will fetch required data for contract invoice list.
-# Tables used: 2.5.9 Supplier Invoice
+# Modules: Tender
+# Sub Module: Quotation
+# Interaction: Get tender quotation list
+# Usage: API will fetch required data for tender quotation list.
+# Tables used: 2.7.5 Tender Quotation
 # Author: Akshay
-# Created on: 28/05/2020
+# Created on: 09/06/2020
 
 
-class ContractInvoiceList(generics.ListAPIView):
+class TenderQuotationList(generics.ListAPIView):
     try:
-        serializer_class = SupplierInvoiceViewSerializer
+        serializer_class = TenderQuotationViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -46,9 +46,9 @@ class ContractInvoiceList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    contract_obj = get_contract_by_id_string(self.kwargs['id_string'])
-                    if contract_obj:
-                        queryset = SupplierInvoiceTbl.objects.filter(contract=contract_obj.id, is_active=True)
+                    tender_obj = get_tender_by_id_string(self.kwargs['id_string'])
+                    if tender_obj:
+                        queryset = TenderQuotationTbl.objects.filter(tender_id=tender_obj.id, is_active=True)
                         return queryset
                     else:
                         raise ObjectNotFoundException
@@ -62,19 +62,19 @@ class ContractInvoiceList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/contract/id_string/invoice
+# API end Point: api/v1/tender/id_string/quotation
 # API verb: POST
 # Package: Basic
-# Modules: Contract
-# Sub Module: Invoice
-# Interaction: Create contract invoice
-# Usage: API will create contract invoice object based on valid data
-# Tables used: 2.5.9 Supplier Invoice
+# Modules: Tender
+# Sub Module: Quotation
+# Interaction: Create tender quotation
+# Usage: API will create tender quotation object based on valid data
+# Tables used: 2.7.5 Tender Quotation
 # Author: Akshay
-# Created on: 28/05/2020
+# Created on: 09/06/2020
 
-class ContractInvoice(GenericAPIView):
-    serializer_class = SupplierInvoiceSerializer
+class TenderQuotation(GenericAPIView):
+    serializer_class = TenderQuotationSerializer
 
     def post(self, request, id_string):
         try:
@@ -90,13 +90,13 @@ class ContractInvoice(GenericAPIView):
                     # Todo fetch user from request start
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
-                    contract_obj = get_contract_by_id_string(id_string)
-                    if contract_obj:
-                        serializer = SupplierInvoiceSerializer(data=request.data)
+                    tender_obj = get_tender_by_id_string(id_string)
+                    if tender_obj:
+                        serializer = TenderQuotationSerializer(data=request.data)
                         if serializer.is_valid():
-                            contract_invoice_obj = serializer.create(serializer.validated_data, contract_obj, user)
-                            if contract_invoice_obj:
-                                serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
+                            tender_quotation_obj = serializer.create(serializer.validated_data, tender_obj, user)
+                            if tender_quotation_obj:
+                                serializer = TenderQuotationViewSerializer(tender_quotation_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULT: serializer.data,
@@ -132,19 +132,19 @@ class ContractInvoice(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/contract/invoice/id_string
+# API end Point: api/v1/tender/quotation/id_string
 # API verb: GET, PUT
 # Package: Basic
-# Modules: Contract
-# Sub Module: Invoice
-# Interaction: For edit and get single contract invoice
-# Usage: API will edit and get contract invoice
-# Tables used: 2.5.9 Supplier Invoice
+# Modules: Tender
+# Sub Module: Quotation
+# Interaction: For edit and get single tender quotation
+# Usage: API will edit and get tender quotation
+# Tables used: 2.7.5 Tender Quotation
 # Author: Akshay
-# Created on: 28/05/2020
+# Created on: 09/06/2020
 
-class ContractInvoiceDetail(GenericAPIView):
-    serializer_class = SupplierInvoiceSerializer
+class TenderQuotationDetail(GenericAPIView):
+    serializer_class = TenderQuotationSerializer
 
     def get(self, request, id_string):
         try:
@@ -158,9 +158,9 @@ class ContractInvoiceDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
-                    if contract_invoice_obj:
-                        serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
+                    tender_quotation_obj = get_tender_quotation_by_id_string(id_string)
+                    if tender_quotation_obj:
+                        serializer = TenderQuotationViewSerializer(tender_quotation_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULT: serializer.data,
@@ -199,12 +199,12 @@ class ContractInvoiceDetail(GenericAPIView):
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
-                    if contract_invoice_obj:
-                        serializer = SupplierInvoiceSerializer(data=request.data)
+                    tender_quotation_obj = get_tender_quotation_by_id_string(id_string)
+                    if tender_quotation_obj:
+                        serializer = TenderQuotationSerializer(data=request.data)
                         if serializer.is_valid():
-                            contract_invoice_obj = serializer.update(contract_invoice_obj, serializer.validated_data, user)
-                            serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
+                            tender_quotation_obj = serializer.update(tender_quotation_obj, serializer.validated_data, user)
+                            serializer = TenderQuotationViewSerializer(tender_quotation_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULT: serializer.data,

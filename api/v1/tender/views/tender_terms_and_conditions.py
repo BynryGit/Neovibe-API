@@ -14,41 +14,43 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
     ObjectNotFoundException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.contract.models.contract import get_contract_by_id_string
-from v1.contract.serializers.contract_invoice import SupplierInvoiceViewSerializer, SupplierInvoiceSerializer
-from v1.supplier.models.supplier_invoice import SupplierInvoice as SupplierInvoiceTbl, get_contract_invoice_by_id_string
+from v1.tender.models.tender import get_tender_by_id_string
+from v1.tender.serializers.tender_terms_and_conditions import TenderTermsAndConditionViewSerializer, \
+    TenderTermsAndConditionSerializer
+from v1.tender.models.tender_terms_and_conditions import TenderTermsAndCondition as TenderTermsAndConditionTbl, \
+    get_tender_term_and_condition_by_id_string
 
 
 # API Header
-# API end Point: api/v1/contract/id_string/invoice/list
+# API end Point: api/v1/tender/id_string/t&c/list
 # API verb: GET
 # Package: Basic
-# Modules: Contract
-# Sub Module: Invoice
-# Interaction: Get contract invoice list
-# Usage: API will fetch required data for contract invoice list.
-# Tables used: 2.5.9 Supplier Invoice
+# Modules: Tender
+# Sub Module: T&C
+# Interaction: Get tender t&c list
+# Usage: API will fetch required data for tender t&c list.
+# Tables used: Tender Terms & Conditions
 # Author: Akshay
-# Created on: 28/05/2020
+# Created on: 09/06/2020
 
 
-class ContractInvoiceList(generics.ListAPIView):
+class TenderTermAndConditionList(generics.ListAPIView):
     try:
-        serializer_class = SupplierInvoiceViewSerializer
+        serializer_class = TenderTermsAndConditionViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('tenant__id_string', 'utility__id_string')
-        ordering_fields = ('tenant__name', 'utility__name')
-        ordering = ('tenant__name',)  # always give by default alphabetical order
-        search_fields = ('tenant__name', 'utility__name',)
+        filter_fields = ('utility__id_string', 'terms_name',)
+        ordering_fields = ('utility__id_string', 'terms')
+        ordering = ('terms_name',)  # always give by default alphabetical order
+        search_fields = ('terms_name', 'terms',)
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    contract_obj = get_contract_by_id_string(self.kwargs['id_string'])
-                    if contract_obj:
-                        queryset = SupplierInvoiceTbl.objects.filter(contract=contract_obj.id, is_active=True)
+                    tender_obj = get_tender_by_id_string(self.kwargs['id_string'])
+                    if tender_obj:
+                        queryset = TenderTermsAndConditionTbl.objects.filter(tender_id=tender_obj.id, is_active=True)
                         return queryset
                     else:
                         raise ObjectNotFoundException
@@ -62,19 +64,19 @@ class ContractInvoiceList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/contract/id_string/invoice
+# API end Point: api/v1/tender/id_string/t&c
 # API verb: POST
 # Package: Basic
-# Modules: Contract
-# Sub Module: Invoice
-# Interaction: Create contract invoice
-# Usage: API will create contract invoice object based on valid data
-# Tables used: 2.5.9 Supplier Invoice
+# Modules: Tender
+# Sub Module: T&C
+# Interaction: Create tender t&c
+# Usage: API will create tender t&c object based on valid data
+# Tables used: Tender Terms & Conditions
 # Author: Akshay
-# Created on: 28/05/2020
+# Created on: 09/06/2020
 
-class ContractInvoice(GenericAPIView):
-    serializer_class = SupplierInvoiceSerializer
+class TenderTermAndCondition(GenericAPIView):
+    serializer_class = TenderTermsAndConditionSerializer
 
     def post(self, request, id_string):
         try:
@@ -90,13 +92,13 @@ class ContractInvoice(GenericAPIView):
                     # Todo fetch user from request start
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
-                    contract_obj = get_contract_by_id_string(id_string)
-                    if contract_obj:
-                        serializer = SupplierInvoiceSerializer(data=request.data)
+                    tender_obj = get_tender_by_id_string(id_string)
+                    if tender_obj:
+                        serializer = TenderTermsAndConditionSerializer(data=request.data)
                         if serializer.is_valid():
-                            contract_invoice_obj = serializer.create(serializer.validated_data, contract_obj, user)
-                            if contract_invoice_obj:
-                                serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
+                            tender_term_and_condition_obj = serializer.create(serializer.validated_data, tender_obj, user)
+                            if tender_term_and_condition_obj:
+                                serializer = TenderTermsAndConditionViewSerializer(tender_term_and_condition_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
                                     RESULT: serializer.data,
@@ -132,19 +134,19 @@ class ContractInvoice(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/contract/invoice/id_string
+# API end Point: api/v1/tender/t&c/id_string
 # API verb: GET, PUT
 # Package: Basic
-# Modules: Contract
-# Sub Module: Invoice
-# Interaction: For edit and get single contract invoice
-# Usage: API will edit and get contract invoice
-# Tables used: 2.5.9 Supplier Invoice
+# Modules: Tender
+# Sub Module: T&C
+# Interaction: For edit and get single tender t&c
+# Usage: API will edit and get tender t&c
+# Tables used: Tender Terms & Conditions
 # Author: Akshay
-# Created on: 28/05/2020
+# Created on: 09/06/2020
 
-class ContractInvoiceDetail(GenericAPIView):
-    serializer_class = SupplierInvoiceSerializer
+class TenderTermAndConditionDetail(GenericAPIView):
+    serializer_class = TenderTermsAndConditionSerializer
 
     def get(self, request, id_string):
         try:
@@ -158,9 +160,9 @@ class ContractInvoiceDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
-                    if contract_invoice_obj:
-                        serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
+                    tender_term_and_condition_obj = get_tender_term_and_condition_by_id_string(id_string)
+                    if tender_term_and_condition_obj:
+                        serializer = TenderTermsAndConditionViewSerializer(tender_term_and_condition_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULT: serializer.data,
@@ -199,12 +201,12 @@ class ContractInvoiceDetail(GenericAPIView):
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
-                    if contract_invoice_obj:
-                        serializer = SupplierInvoiceSerializer(data=request.data)
+                    tender_term_and_condition_obj = get_tender_term_and_condition_by_id_string(id_string)
+                    if tender_term_and_condition_obj:
+                        serializer = TenderTermsAndConditionSerializer(data=request.data)
                         if serializer.is_valid():
-                            contract_invoice_obj = serializer.update(contract_invoice_obj, serializer.validated_data, user)
-                            serializer = SupplierInvoiceViewSerializer(contract_invoice_obj, context={'request': request})
+                            tender_term_and_condition_obj = serializer.update(tender_term_and_condition_obj, serializer.validated_data, user)
+                            serializer = TenderTermsAndConditionViewSerializer(tender_term_and_condition_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULT: serializer.data,

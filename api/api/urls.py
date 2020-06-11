@@ -27,6 +27,7 @@ from v1.commonapp import urls as common_urls
 from v1.tenant import urls as tenant_urls
 from v1.billing import urls as billing_urls
 from v1.asset import urls as asset_urls
+from v1.tender import urls as tender_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,5 +45,6 @@ urlpatterns = [
     path('api/v1/user/', include(user_urls)),
     path('api/v1/role/', include(role_urls)),
     path('api/v1/privilege/', include(privilege_urls)),
+    path('api/v1/tender/', include(tender_urls)),
 
 ]
