@@ -19,6 +19,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
+
 # Create Bill Cycle table start
 
 class BillCycle(models.Model):
@@ -26,7 +27,7 @@ class BillCycle(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     code = models.BigIntegerField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -38,17 +39,18 @@ class BillCycle(models.Model):
     def __unicode__(self):
         return self.code
 
-def get_bill_cycle_by_id_string(id_string):
-    try:
-        return BillCycle.objects.get(id_string = id_string)
-    except:
-        return False
+# Create Bill Cycle table end
 
 
 def get_bill_cycle_by_id(id):
     try:
-        return BillCycle.objects.get(id = id)
+        return BillCycle.objects.get(id=id)
     except:
         return False
 
-# Create Bill Cycle table end
+
+def get_bill_cycle_by_id_string(id_string):
+    try:
+        return BillCycle.objects.get(id_string=id_string)
+    except:
+        return False

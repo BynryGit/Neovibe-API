@@ -39,15 +39,19 @@ class ScheduleStatus(models.Model):
 
 # Create Schedule Status table end
 
-def get_schedule_status_by_id_string(id_string):
-    try:
-        return ScheduleStatus.objects.get(id_string = id_string)
-    except:
-        return False
-
 
 def get_schedule_status_by_id(id):
     try:
-        return ScheduleStatus.objects.get(id = id)
+        return ScheduleStatus.objects.get(id=id)
     except:
         return False
+
+
+def get_schedule_status_by_id_string(id_string):
+    try:
+        return ScheduleStatus.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+

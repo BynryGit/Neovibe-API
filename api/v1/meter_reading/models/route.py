@@ -18,9 +18,10 @@ from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
-
 # Create Route Details table start
-class Routes(models.Model):
+
+
+class Route(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -29,7 +30,7 @@ class Routes(models.Model):
     city = models.BigIntegerField(null=True, blank=True)
     area = models.BigIntegerField(null=True, blank=True)
     subarea = models.BigIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -42,3 +43,17 @@ class Routes(models.Model):
         return self.code
 
 # Create RouteDetails table end
+
+
+def get_route_by_id(id):
+    try:
+        return Route.object.get(id=id)
+    except:
+        return False
+
+
+def get_route_by_id_string(id_string):
+    try:
+        return Route.object.get(id_string=id_string)
+    except:
+        return False
