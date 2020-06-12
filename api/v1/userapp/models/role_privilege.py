@@ -87,6 +87,14 @@ def get_role_privilege_by_id_string(id_string):
     return RolePrivilege.objects.filter(id=id_string, is_active=True).last()
 
 
+def get_role_privilege_by_module_id(module_id):
+    return RolePrivilege.objects.filter(module_id=module_id, is_active=True)
+
+
+def get_role_privilege_by_sub_module_id(sub_module_id):
+    return RolePrivilege.objects.filter(sub_module_id=sub_module_id, is_active=True)
+
+
 def get_privilege_by_role_id(role_id):
     privilege_list = []
     privileges = RolePrivilege.objects.filter(role_id=role_id, is_active=True)
@@ -111,3 +119,45 @@ def get_record_by_values(role_id, module_id_string, sub_module_id_string, privil
 
 def get_record_values_by_id(role_id,module_id,sub_module_id,privilege_id):
     return RolePrivilege.objects.filter(role_id=role_id, module_id=module_id, sub_module_id=sub_module_id, privilege_id=privilege_id, is_active=True).last()
+
+
+def get_module_by_role_id(role_id):
+    module_list = []
+    check_module_list = []
+    sub_module_list = []
+    check_sub_module_list = []
+    privilege_list = []
+    check_privilege_list = []
+    modules = RolePrivilege.objects.filter(role_id=role_id, is_active=True)
+    for module in modules:
+        if not module.module_id in check_module_list:
+            check_module_list.append(module.module_id)
+            module_data = get_module_by_id(module.module_id)
+            sub_modules = get_role_privilege_by_module_id(module_data.id)
+
+            for sub_module in sub_modules:
+                if not sub_module.sub_module_id in check_sub_module_list:
+                    check_sub_module_list.append(sub_module.sub_module_id)
+                    privileges = get_role_privilege_by_sub_module_id(sub_module.sub_module_id)
+
+                    for privilege in privileges:
+                        if not privilege.privilege_id in check_privilege_list:
+                            check_privilege_list.append(privilege.privilege_id)
+                            privilege_data = get_privilege_by_id(privilege.privilege_id)
+                            privilege_list.append({
+                                "id_string": privilege_data.id_string,
+                                "name": privilege_data.name
+                            })
+
+                    sub_module_data = get_sub_module_by_id(sub_module.sub_module_id)
+                    sub_module_list.append({
+                        "id_string": sub_module_data.id_string,
+                        "name": sub_module_data.name,
+                        "privilege" : privilege_list
+                    })
+            module_list.append({
+                    "id_string" : module_data.id_string,
+                    "name" : module_data.name,
+                    "sub_module" : sub_module_list
+                })
+    return {'module' : module_list}

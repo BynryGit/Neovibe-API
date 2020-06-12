@@ -11,7 +11,7 @@ from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role import Role
-from v1.userapp.models.role_privilege import get_privilege_by_role_id
+from v1.userapp.models.role_privilege import get_privilege_by_role_id, get_module_by_role_id
 from v1.userapp.serializers.role_sub_type import RoleSubTypeSerializer, GetRoleSubTypeSerializer
 from v1.userapp.serializers.role_type import RoleTypeSerializer, GetRoleTypeSerializer
 from v1.userapp.views.common_functions import set_role_validated_data
@@ -83,7 +83,8 @@ class RoleViewSerializer(serializers.ModelSerializer):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
     def get_privileges(self, obj):
-        return get_privilege_by_role_id(obj.id)
+        # return get_privilege_by_role_id(obj.id)
+        return get_module_by_role_id(obj.id)
 
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
@@ -92,11 +93,11 @@ class RoleViewSerializer(serializers.ModelSerializer):
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
     created_date = serializers.SerializerMethodField('get_created_date')
-    privilege = serializers.SerializerMethodField('get_privileges')
+    privilege_data = serializers.SerializerMethodField('get_privileges')
 
     class Meta:
         model = Role
-        fields = ('id_string', 'role_ID', 'role', 'created_date', 'privilege', 'role_type', 'role_sub_type', 'tenant', 'utility',
+        fields = ('id_string', 'role_ID', 'role', 'created_date', 'privilege_data', 'role_type', 'role_sub_type', 'tenant', 'utility',
                   'department', 'form_factor')
 
 
