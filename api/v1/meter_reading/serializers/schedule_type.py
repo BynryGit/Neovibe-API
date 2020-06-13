@@ -1,9 +1,11 @@
+__author__ = "aki"
+
 from rest_framework import serializers
-from v1.meter_reading.models.schedule_type import ScheduleType
+from v1.meter_reading.models.schedule_type import ScheduleType as ScheduleTypeTbl
 
 
-class ScheduleTypeListSerializer(serializers.ModelSerializer):
+class ScheduleTypeShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = ScheduleType
-        fields = ('id_string','name')
+        model = ScheduleTypeTbl
+        fields = ('id_string', 'name')

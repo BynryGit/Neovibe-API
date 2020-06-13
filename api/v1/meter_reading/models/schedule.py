@@ -34,14 +34,14 @@ class Schedule(models.Model):
     activity_type_id = models.BigIntegerField(null=True, blank=True) #Manual, Photo, SpotBill, SmartMeter
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
+    due_date = models.DateTimeField(null=True, blank=True)
     schedule_status_id = models.BigIntegerField(null=True, blank=True)
     is_valid_next_cycle = models.BooleanField(default=False)
     is_imported = models.BooleanField(default=False)
     is_uploaded = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -74,6 +74,21 @@ class Schedule(models.Model):
         return self.bill_cycle
 
 # Create Schedule Table end
+
+
+def get_schedule_by_id(id):
+    try:
+        return Schedule.objects.get(id=id)
+    except:
+        return False
+
+
+def get_schedule_by_id_string(id_string):
+    try:
+        return Schedule.objects.get(id_string=id_string)
+    except:
+        return False
+
 
 def get_all_schedules():
     return Schedule.objects.all()
