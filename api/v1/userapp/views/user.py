@@ -128,7 +128,7 @@ class User(GenericAPIView):
 class UserDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(5,4,1,1)
+    @role_required(ADMIN, USER, VIEW)
     def get(self, request, id_string):
         try:
             response, user_obj = is_token_valid(self.request.headers['token'])

@@ -1,4 +1,3 @@
-from django.core.exceptions import PermissionDenied
 from v1.commonapp.common_functions import get_payload
 from v1.userapp.models.user_token import check_token_exists_for_user
 from master.models import get_user_by_id_string
@@ -32,7 +31,7 @@ def role_required(module_id, sub_module_id, privilege_id):
             if check_user_privilege_exists(user_obj.id, module_id, sub_module_id, privilege_id):
                 return view_method(request, *args, **kwargs)
             else:
-                raise PermissionDenied
+                raise InvalidAuthorizationException
         return _arguments_wrapper
     return _method_wrapper
 
@@ -48,9 +47,9 @@ def utility_required(utility_id):
                 if request_utility.id == utility_id:
                     return view_method(request, *args, **kwargs)
                 else:
-                    raise PermissionDenied
+                    raise InvalidAuthorizationException
             else:
-                raise PermissionDenied
+                raise InvalidAuthorizationException
         return _arguments_wrapper
     return _method_wrapper
 

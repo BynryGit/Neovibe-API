@@ -68,7 +68,7 @@ class RoleList(generics.ListAPIView):
 
 class Role(GenericAPIView):
 
-    @utility_required(5, 1)
+    @utility_required(MNGL_PUNE)
     def post(self, request, format=None):
         try:
             response, user_id_string = is_token_valid(self.request.headers['token'])
