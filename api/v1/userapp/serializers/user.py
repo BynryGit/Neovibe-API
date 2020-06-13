@@ -15,7 +15,6 @@ from v1.userapp.models.user_role import UserRole
 from v1.userapp.models.user_status import UserStatus
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
-from v1.userapp.serializers.bank_detail import UserBankViewSerializer
 from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.views.common_functions import set_user_validated_data, set_user_role_validated_data
 
@@ -41,33 +40,29 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_user_validated_data(validated_data)
-        if User.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, is_active=True).exists():
-            raise CustomAPIException("Mobile number already exists!", status_code=status.HTTP_409_CONFLICT)
-        else:
-            with transaction.atomic():
-                user_obj = super(UserSerializer, self).create(validated_data)
-                user_obj.set_password(validated_data['password'])
-                user_obj.created_by = user.id
-                user_obj.created_date = datetime.utcnow()
-                user_obj.tenant = user.tenant
-                user_obj.is_active = True
-                user_obj.save()
-                return user_obj
+        with transaction.atomic():
+            user_obj = super(UserSerializer, self).create(validated_data)
+            user_obj.set_password(validated_data['password'])
+            user_obj.created_by = user.id
+            user_obj.updated_by = user.id
+            user_obj.created_date = datetime.utcnow()
+            user_obj.updated_date = datetime.utcnow()
+            user_obj.tenant = user.tenant
+            user_obj.is_active = True
+            user_obj.save()
+            return user_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_user_validated_data(validated_data)
-        if User.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, is_active=True).exists():
-            raise CustomAPIException("Mobile number already exists!", status_code=status.HTTP_409_CONFLICT)
-        else:
-            with transaction.atomic():
-                user_obj = super(UserSerializer, self).update(instance, validated_data)
-                if 'password' in validated_data:
-                    user_obj.set_password(validated_data['password'])
-                user_obj.updated_by = user.id
-                user_obj.updated_date = datetime.utcnow()
-                user_obj.is_active = True
-                user_obj.save()
-                return user_obj
+        with transaction.atomic():
+            user_obj = super(UserSerializer, self).update(instance, validated_data)
+            if 'password' in validated_data:
+                user_obj.set_password(validated_data['password'])
+            user_obj.updated_by = user.id
+            user_obj.updated_date = datetime.utcnow()
+            user_obj.is_active = True
+            user_obj.save()
+            return user_obj
 
 
 class GetUserSerializer(serializers.ModelSerializer):
@@ -150,7 +145,9 @@ class UserRoleSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 user_role_obj = super(UserRoleSerializer, self).create(validated_data)
                 user_role_obj.created_by = user.id
+                user_role_obj.updated_by = user.id
                 user_role_obj.created_date = datetime.utcnow()
+                user_role_obj.update_date = datetime.utcnow()
                 user_role_obj.tenant = user.tenant
                 user_role_obj.is_active = True
                 user_role_obj.save()

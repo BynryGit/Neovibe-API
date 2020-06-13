@@ -17,11 +17,11 @@ def is_token_validate(function):
             if check_token_exists_for_user(token, user_obj.id):
                 return function(request, *args, **kwargs)
             else:
-                # raise InvalidTokenException
-                raise PermissionDenied
+                raise InvalidTokenException
+                # raise PermissionDenied
         else:
-            # raise InvalidTokenException
-            raise PermissionDenied
+            raise InvalidTokenException
+            # raise PermissionDenied
     return wrap
 
 

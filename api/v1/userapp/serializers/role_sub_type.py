@@ -52,7 +52,9 @@ class RoleSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             sub_type_obj = super(RoleSubTypeSerializer, self).create(validated_data)
             sub_type_obj.created_by = user.id
+            sub_type_obj.updated_by = user.id
             sub_type_obj.created_date = datetime.utcnow()
+            sub_type_obj.updated_date = datetime.utcnow()
             sub_type_obj.tenant = user.tenant
             sub_type_obj.utility = user.utility
             sub_type_obj.is_active = True

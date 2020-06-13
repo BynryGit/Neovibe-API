@@ -2,7 +2,7 @@ __author__ = "aki"
 
 from rest_framework import status
 from rest_framework.exceptions import APIException, ValidationError
-from api.messages import INVALID_TOKEN, UNAUTHORIZED_USER, DATA_NOT_EXISTS
+from api.messages import *
 
 
 class InvalidTokenException(APIException):

@@ -54,6 +54,9 @@ class NoteSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             note_obj = super(NoteSerializer, self).create(validated_data)
             note_obj.created_by = user.id
+            note_obj.updated_by = user.id
+            note_obj.created_date = datetime.utcnow()
+            note_obj.updated_date = datetime.utcnow()
             note_obj.tenant = user.tenant
             note_obj.is_active = True
             note_obj.save()

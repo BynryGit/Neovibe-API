@@ -38,7 +38,9 @@ class PrivilegeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             privilege_obj = super(PrivilegeSerializer, self).create(validated_data)
             privilege_obj.created_by = user.id
+            privilege_obj.updated_by = user.id
             privilege_obj.created_date = datetime.utcnow()
+            privilege_obj.update_date = datetime.utcnow()
             privilege_obj.tenant = user.tenant
             privilege_obj.is_active = True
             privilege_obj.save()

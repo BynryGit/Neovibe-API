@@ -15,7 +15,7 @@ from master.models import get_user_by_email
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.login_trail import LoginTrail
-from v1.userapp.models.user_token import UserToken, check_token_exists, get_token_by_token
+from v1.userapp.models.user_token import UserToken, check_token_exists, get_token_by_token, check_token_exists_for_user
 
 
 def validate_login_data(request):
@@ -152,8 +152,9 @@ class LogoutApiView(APIView):
         try:
             if validate_logout_data(request):
                 token = request.headers['token']
+                user_id_string = request.headers['id_string']
 
-                if check_token_exists(token):
+                if check_token_exists_for_user(token, user_id_string):
                     token = get_token_by_token(token)
                     token.delete()
                     return Response({

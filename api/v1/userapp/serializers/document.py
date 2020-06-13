@@ -55,6 +55,9 @@ class DocumentSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             document_obj = super(DocumentSerializer, self).create(validated_data)
             document_obj.created_by = user.id
+            document_obj.updated_by = user.id
+            document_obj.created_date = datetime.utcnow()
+            document_obj.updated_date = datetime.utcnow()
             document_obj.tenant = user.tenant
             document_obj.is_active = True
             document_obj.save()

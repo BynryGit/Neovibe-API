@@ -61,7 +61,9 @@ class UserBankSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 user_bank_obj = super(UserBankSerializer, self).create(validated_data)
                 user_bank_obj.created_by = user.id
+                user_bank_obj.updated_by = user.id
                 user_bank_obj.created_date = datetime.utcnow()
+                user_bank_obj.update_date = datetime.utcnow()
                 user_bank_obj.tenant = user.tenant
                 user_bank_obj.utility = user.utility
                 user_bank_obj.is_active = True

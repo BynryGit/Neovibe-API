@@ -56,7 +56,9 @@ class UserUtilitySerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 user_utility_obj = super(UserUtilitySerializer, self).create(validated_data)
                 user_utility_obj.created_by = user.id
+                user_utility_obj.updated_by = user.id
                 user_utility_obj.created_date = datetime.utcnow()
+                user_utility_obj.updated_date = datetime.utcnow()
                 user_utility_obj.tenant = user.tenant
                 user_utility_obj.is_active = True
                 user_utility_obj.save()

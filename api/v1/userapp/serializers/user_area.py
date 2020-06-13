@@ -55,7 +55,9 @@ class UserAreaSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 user_area_obj = super(UserAreaSerializer, self).create(validated_data)
                 user_area_obj.created_by = user.id
+                user_area_obj.updated_by = user.id
                 user_area_obj.created_date = datetime.utcnow()
+                user_area_obj.updated_date = datetime.utcnow()
                 user_area_obj.tenant = user.tenant
                 user_area_obj.is_active = True
                 user_area_obj.save()
