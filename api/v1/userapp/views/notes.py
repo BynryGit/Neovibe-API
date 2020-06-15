@@ -6,7 +6,7 @@ from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from master.models import get_user_by_id_string
-from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.models.notes import get_notes_by_user_id, get_note_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_name
 from v1.commonapp.views.logger import logger

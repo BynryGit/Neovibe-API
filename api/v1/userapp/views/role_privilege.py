@@ -4,7 +4,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import status, generics
 from api.messages import *
 from master.models import get_user_by_id_string
-from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.logger import logger

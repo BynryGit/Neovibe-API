@@ -25,7 +25,6 @@ class CustomAPIException(ValidationError):
     raises API exceptions with custom messages and custom status codes
     """
     status_code = status.HTTP_400_BAD_REQUEST
-    default_code = 'error'
 
     def __init__(self, detail, status_code=None):
         self.detail = detail

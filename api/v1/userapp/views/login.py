@@ -15,7 +15,7 @@ from master.models import get_user_by_email
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.login_trail import LoginTrail
-from v1.userapp.models.user_token import UserToken, check_token_exists, get_token_by_token, check_token_exists_for_user
+from v1.userapp.models.user_token import UserToken, get_token_by_token, check_token_exists_for_user
 
 
 def validate_login_data(request):
