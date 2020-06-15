@@ -43,11 +43,7 @@ def utility_required(utility_id):
             decoded_token = get_payload(token)
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
             if check_user_utility_exists(user_obj.id, utility_id):
-                request_utility = get_utility_by_id_string(args[0].data['utility_id'])
-                if request_utility.id == utility_id:
-                    return view_method(request, *args, **kwargs)
-                else:
-                    raise InvalidAuthorizationException
+                return view_method(request, *args, **kwargs)
             else:
                 raise InvalidAuthorizationException
         return _arguments_wrapper
