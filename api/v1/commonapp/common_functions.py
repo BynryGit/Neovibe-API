@@ -14,6 +14,11 @@ def get_payload(token):
         return False
 
 
+def get_user_from_token(token):
+    decoded_token = get_payload(token)
+    return decoded_token['user_id_string']
+
+
 def is_token_valid(token):
     try:
         decoded_token = get_payload(token)
