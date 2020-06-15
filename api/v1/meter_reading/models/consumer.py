@@ -21,7 +21,7 @@ from django.db import models  # importing package for database
 
 # Create Temp Consumer Master Table Start
 
-class TempConsumerMaster(models.Model):
+class Consumer(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -61,7 +61,7 @@ class TempConsumerMaster(models.Model):
     is_duplicate = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_account_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -72,4 +72,19 @@ class TempConsumerMaster(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
 # Create Temp Consumer Master Table end
+
+
+def get_consumer_by_id(id):
+    try:
+        return Consumer.objects.get(id=id)
+    except:
+        return False
+
+
+def get_consumer_by_id_string(id_string):
+    try:
+        return Consumer.objects.get(id_string=id_string)
+    except:
+        return False

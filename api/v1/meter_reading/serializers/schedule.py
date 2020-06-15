@@ -3,6 +3,7 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.meter_reading.models.schedule import Schedule as ScheduleTbl
@@ -20,12 +21,14 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     activity_type_id = ActivityTypeShortViewSerializer(many=False, source='get_activity_type')
     bill_cycle_id = BillCycleShortViewSerializer(many=False, source='get_bill_cycle')
     schedule_status_id = ScheduleStatusShortViewSerializer(many=False, source='get_schedule_status')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = ScheduleTbl
         fields = ('id_string','bill_month', 'start_date', 'end_date', 'due_date', 'is_valid_next_cycle', 'is_imported',
                   'is_uploaded', 'schedule_type_id', 'activity_type_id', 'bill_cycle_id', 'schedule_status_id',
-                  'tenant', 'utility')
+                  'created_date', 'updated_date', 'tenant', 'utility')
 
 
 class ScheduleSerializer(serializers.ModelSerializer):

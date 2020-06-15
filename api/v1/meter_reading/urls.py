@@ -3,8 +3,13 @@ __author__ = "aki"
 from django.urls import path
 
 from v1.meter_reading.views.bill_cycle import BillCycleList, BillCycleDetail
+from v1.meter_reading.views.consumer import consumerList, consumerDetail
+# from v1.meter_reading.views.jobcard import AssignRoute
+from v1.meter_reading.views.meter_reader import MeterReaderList, MeterReaderDetail
+from v1.meter_reading.views.meter_reading import MeterReading, MeterReadingList, MeterReadingDetail
 from v1.meter_reading.views.route import RouteList, RouteDetail
 from v1.meter_reading.views.schedule import Schedule, ScheduleList, ScheduleDetail
+from v1.meter_reading.views.validation import ValidationDetail
 
 urlpatterns = [
     path('schedule', Schedule.as_view(), name='schedule'),
@@ -17,4 +22,17 @@ urlpatterns = [
     path('route/list', RouteList.as_view(), name='route_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
 
+    # path('route/<uuid:id_string>/assign', AssignRoute.as_view(), name='assign_route_detail'),
+
+    path('consumer/list', consumerList.as_view(), name='consumer_list'),
+    path('consumer/<uuid:id_string>', consumerDetail.as_view(), name='consumer_detail'),
+
+    path('meterreader/list', MeterReaderList.as_view(), name='meter_reader_list'),
+    path('meterreader/<uuid:id_string>', MeterReaderDetail.as_view(), name='meter_reader_detail'),
+
+    path('meterreading', MeterReading.as_view(), name='MeterReading'),
+    path('meterreading/list', MeterReadingList.as_view(), name='meter_reading_list'),
+    path('meterreading/<uuid:id_string>', MeterReadingDetail.as_view(), name='meter_reading_detail'),
+
+    path('meterreading/<uuid:id_string>/validate', ValidationDetail.as_view(), name='validation_detail'),
 ]
