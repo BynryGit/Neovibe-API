@@ -2,17 +2,15 @@ import traceback
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.filters import OrderingFilter, SearchFilter
 
 from api.messages import *
 from master.models import get_user_by_id_string
-from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.decorators import utility_required
+from v1.userapp.decorators import utility_required, is_token_validate, role_required
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
 
@@ -41,16 +39,11 @@ class RoleList(generics.ListAPIView):
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('role',)
 
+    @is_token_validate
+    @role_required(ADMIN, USER, VIEW)
     def get_queryset(self):
-        response, user_obj = is_token_valid(self.request.headers['token'])
-        if response:
-            if is_authorized(1, 1, 1, user_obj):
-                queryset = get_all_role()
-                return queryset
-            else:
-                raise InvalidAuthorizationException
-        else:
-            raise InvalidTokenException
+        queryset = get_all_role()
+        return queryset
 
 
 # API Header
@@ -68,34 +61,25 @@ class RoleList(generics.ListAPIView):
 
 class Role(GenericAPIView):
 
-    @utility_required(MNGL_PUNE)
+    @is_token_validate
+    @role_required(ADMIN, USER, VIEW)
     def post(self, request, format=None):
         try:
-            response, user_id_string = is_token_valid(self.request.headers['token'])
-            if response:
-                if is_authorized(1, 1, 1, user_id_string):
-                    serializer = RoleSerializer(data=request.data)
-                    if serializer.is_valid(raise_exception=False):
-                        user = get_user_by_id_string(user_id_string)
-                        role_obj = serializer.create(serializer.validated_data, user)
-                        view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: view_serializer.data,
-                        }, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                            RESULTS: serializer.errors,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            serializer = RoleSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                user_id_string = get_user_from_token(request.headers['token'])
+                user = get_user_by_id_string(user_id_string)
+                role_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULTS: serializer.errors,
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -120,31 +104,22 @@ class Role(GenericAPIView):
 
 class RoleDetail(GenericAPIView):
 
+    @is_token_validate
+    @role_required(ADMIN, USER, VIEW)
     def get(self, request, id_string):
         try:
-            response, user_obj = is_token_valid(self.request.headers['token'])
-            if response:
-                if is_authorized(1, 1, 1, user_obj):
-                    role = get_role_by_id_string(id_string)
-                    if role:
-                        serializer = RoleViewSerializer(instance=role, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: EXCEPTION,
-                            RESULTS: '',
-                        }, status=status.HTTP_404_NOT_FOUND)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            role = get_role_by_id_string(id_string)
+            if role:
+                serializer = RoleViewSerializer(instance=role, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    STATE: EXCEPTION,
+                    RESULTS: '',
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -153,38 +128,31 @@ class RoleDetail(GenericAPIView):
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @is_token_validate
+    @role_required(ADMIN, USER, VIEW)
     def put(self, request, id_string):
         try:
-            response, user = is_token_valid(self.request.headers['token'])
-            if response:
-                if is_authorized(1, 1, 1, user):
-                    role_obj = get_role_by_id_string(id_string)
-                    if role_obj:
-                        serializer = RoleSerializer(data=request.data)
-                        if serializer.is_valid(raise_exception=False):
-                            role_obj = serializer.update(role_obj, serializer.validated_data, user)
-                            view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+            role_obj = get_role_by_id_string(id_string)
+            if role_obj:
+                serializer = RoleSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    user_id_string = get_user_from_token(request.headers['token'])
+                    user = get_user_by_id_string(user_id_string)
+                    role_obj = serializer.update(role_obj, serializer.validated_data, user)
+                    view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        RESULTS: serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
