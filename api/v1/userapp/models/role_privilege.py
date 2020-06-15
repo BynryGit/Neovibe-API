@@ -87,12 +87,12 @@ def get_role_privilege_by_id_string(id_string):
     return RolePrivilege.objects.filter(id=id_string, is_active=True).last()
 
 
-def get_role_privilege_by_module_id(module_id):
-    return RolePrivilege.objects.filter(module_id=module_id, is_active=True)
+def get_role_privilege_by_module_id(module_id, role_id):
+    return RolePrivilege.objects.filter(module_id=module_id, role_id=role_id, is_active=True)
 
 
-def get_role_privilege_by_sub_module_id(sub_module_id):
-    return RolePrivilege.objects.filter(sub_module_id=sub_module_id, is_active=True)
+def get_role_privilege_by_sub_module_id(sub_module_id, role_id):
+    return RolePrivilege.objects.filter(sub_module_id=sub_module_id, role_id=role_id, is_active=True)
 
 
 def get_privilege_by_role_id(role_id):
@@ -133,7 +133,7 @@ def get_module_by_role_id(role_id):
 
             check_module_list.append(module.module_id)
             module_data = get_module_by_id(module.module_id)
-            sub_modules = get_role_privilege_by_module_id(module_data.id)
+            sub_modules = get_role_privilege_by_module_id(module_data.id, role_id)
 
             for sub_module in sub_modules:
                 privilege_list = []
@@ -142,7 +142,7 @@ def get_module_by_role_id(role_id):
                     check_privilege_list = []
 
                     check_sub_module_list.append(sub_module.sub_module_id)
-                    privileges = get_role_privilege_by_sub_module_id(sub_module.sub_module_id)
+                    privileges = get_role_privilege_by_sub_module_id(sub_module.sub_module_id,role_id)
 
                     for privilege in privileges:
                         if not privilege.privilege_id in check_privilege_list:
