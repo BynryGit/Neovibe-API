@@ -79,6 +79,30 @@ class RoleListSerializer(serializers.ModelSerializer):
                   'form_factor', 'department' )
 
 
+class RoleDetailViewSerializer(serializers.ModelSerializer):
+
+    def get_created_date(self, obj):
+        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+
+    def get_privileges(self, obj):
+        # return get_privilege_by_role_id(obj.id)
+        return get_module_by_role_id(obj.id)
+
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
+    department = DepartmentSerializer(many=False, required=True, source='get_department')
+    form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
+    role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
+    role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+    created_date = serializers.SerializerMethodField('get_created_date')
+    modules = serializers.SerializerMethodField('get_privileges')
+
+    class Meta:
+        model = Role
+        fields = ('id_string', 'role_ID', 'role', 'created_date', 'modules', 'role_type', 'role_sub_type', 'tenant', 'utility',
+                  'department', 'form_factor')
+
+
 class RoleViewSerializer(serializers.ModelSerializer):
 
     def get_created_date(self, obj):
@@ -95,11 +119,10 @@ class RoleViewSerializer(serializers.ModelSerializer):
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
     created_date = serializers.SerializerMethodField('get_created_date')
-    privilege_data = serializers.SerializerMethodField('get_privileges')
 
     class Meta:
         model = Role
-        fields = ('id_string', 'role_ID', 'role', 'created_date', 'privilege_data', 'role_type', 'role_sub_type', 'tenant', 'utility',
+        fields = ('id_string', 'role_ID', 'role', 'created_date', 'role_type', 'role_sub_type', 'tenant', 'utility',
                   'department', 'form_factor')
 
 

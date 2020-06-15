@@ -10,7 +10,7 @@ from v1.utility.models.utility_master import get_utility_id
 S_AND_M = get_module_id(1)
 CONSUMER_CARE = get_module_id(1)
 CONSUMER_OPS = get_module_id(1)
-ADMIN = get_module_id(1)
+ADMIN = get_module_id(4)
 
 
 # *********** SUB MODULE CONSTANTS **************

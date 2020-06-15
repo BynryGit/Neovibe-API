@@ -124,19 +124,23 @@ def get_record_values_by_id(role_id,module_id,sub_module_id,privilege_id):
 def get_module_by_role_id(role_id):
     module_list = []
     check_module_list = []
-    sub_module_list = []
-    check_sub_module_list = []
-    privilege_list = []
-    check_privilege_list = []
     modules = RolePrivilege.objects.filter(role_id=role_id, is_active=True)
     for module in modules:
+        sub_module_list = []
+
         if not module.module_id in check_module_list:
+            check_sub_module_list = []
+
             check_module_list.append(module.module_id)
             module_data = get_module_by_id(module.module_id)
             sub_modules = get_role_privilege_by_module_id(module_data.id)
 
             for sub_module in sub_modules:
+                privilege_list = []
+
                 if not sub_module.sub_module_id in check_sub_module_list:
+                    check_privilege_list = []
+
                     check_sub_module_list.append(sub_module.sub_module_id)
                     privileges = get_role_privilege_by_sub_module_id(sub_module.sub_module_id)
 

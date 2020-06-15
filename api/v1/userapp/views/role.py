@@ -12,7 +12,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import utility_required, is_token_validate, role_required
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
-from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer
+from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer, RoleDetailViewSerializer
 
 
 # API Header
@@ -70,7 +70,7 @@ class Role(GenericAPIView):
                 user_id_string = get_user_from_token(request.headers['token'])
                 user = get_user_by_id_string(user_id_string)
                 role_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                view_serializer = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
@@ -110,7 +110,7 @@ class RoleDetail(GenericAPIView):
         try:
             role = get_role_by_id_string(id_string)
             if role:
-                serializer = RoleViewSerializer(instance=role, context={'request': request})
+                serializer = RoleDetailViewSerializer(instance=role, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: serializer.data,
@@ -139,7 +139,7 @@ class RoleDetail(GenericAPIView):
                     user_id_string = get_user_from_token(request.headers['token'])
                     user = get_user_by_id_string(user_id_string)
                     role_obj = serializer.update(role_obj, serializer.validated_data, user)
-                    view_serializer = RoleViewSerializer(instance=role_obj, context={'request': request})
+                    view_serializer = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,
