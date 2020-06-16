@@ -6,15 +6,17 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
+from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, DATA_ALREADY_EXISTS, RESULT
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from master.models import User
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.meter_reading.models.schedule import Schedule as ScheduleTbl, get_schedule_by_id_string
 from v1.meter_reading.serializers.meter_reading import MeterReadingViewSerializer, MeterReadingSerializer
+from v1.meter_reading.models.meter_reading import MeterReading as MeterReadingTbl, get_meter_reading_by_id_string
+from v1.meter_reading.serializers.meter_reading_image import MeterImageSerializer
 
 
 # API Header
@@ -44,7 +46,7 @@ class MeterReadingList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    queryset = ScheduleTbl.objects.filter(is_active=True)
+                    queryset = MeterReadingTbl.objects.filter(is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -82,28 +84,30 @@ class MeterReading(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = User.objects.get(id=2)
+                    user = User.objects.get(request.user)
                     # Todo fetch user from request end
-
-                    serializer = MeterReadingSerializer(data=request.data)
-                    if serializer.is_valid():
-                        schedule_obj = serializer.create(serializer.validated_data, user)
-                        if schedule_obj:
-                            serializer = MeterReadingViewSerializer(instance=schedule_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULT: serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: DUPLICATE,
-                                RESULT: DATA_ALREADY_EXISTS,
-                            }, status=status.HTTP_409_CONFLICT)
-                    else:
+                    meter_reading_data = request.data
+                    with transaction.atomic():
+                        for data in meter_reading_data:
+                            serializer = MeterReadingSerializer(data=data)
+                            if serializer.is_valid():
+                                serializer.create(serializer.validated_data, user)
+                                serializer = MeterImageSerializer(data=data)
+                                if serializer.is_valid():
+                                    serializer.create(serializer.validated_data, user)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        RESULT: serializer.errors,
+                                    }, status=status.HTTP_400_BAD_REQUEST)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
                         return Response({
-                            STATE: ERROR,
-                            RESULT: serializer.errors,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                            STATE: SUCCESS,
+                        }, status=status.HTTP_201_CREATED)
                 else:
                     return Response({
                         STATE: ERROR,
@@ -147,9 +151,9 @@ class MeterReadingDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
 
-                    schedule_obj = get_schedule_by_id_string(id_string)
-                    if schedule_obj:
-                        serializer = MeterReadingViewSerializer(instance=schedule_obj, context={'request': request})
+                    meter_reading_obj = get_meter_reading_by_id_string(id_string)
+                    if meter_reading_obj:
+                        serializer = MeterReadingViewSerializer(instance=meter_reading_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULT: serializer.data,
@@ -188,12 +192,12 @@ class MeterReadingDetail(GenericAPIView):
                     user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
-                    schedule_obj = get_schedule_by_id_string(id_string)
-                    if schedule_obj:
+                    meter_reading_obj = get_meter_reading_by_id_string(id_string)
+                    if meter_reading_obj:
                         serializer = MeterReadingSerializer(data=request.data)
                         if serializer.is_valid():
-                            schedule_obj = serializer.update(schedule_obj, serializer.validated_data, user)
-                            serializer = MeterReadingViewSerializer(instance=schedule_obj, context={'request': request})
+                            meter_reading_obj = serializer.update(meter_reading_obj, serializer.validated_data, user)
+                            serializer = MeterReadingViewSerializer(instance=meter_reading_obj, context={'request': request})
                             return Response({
                                 STATE: SUCCESS,
                                 RESULT: serializer.data,

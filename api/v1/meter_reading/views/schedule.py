@@ -18,7 +18,7 @@ from v1.meter_reading.models.schedule import Schedule as ScheduleTbl, get_schedu
 
 
 # API Header
-# API end Point: api/v1/meter-data/schedule
+# API end Point: api/v1/meter-data/schedule/list
 # API verb: GET
 # Package: Basic
 # Modules: All

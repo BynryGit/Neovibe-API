@@ -12,8 +12,8 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.consumer.serializers.consumer import ConsumerViewSerializer
 from v1.meter_reading.models.consumer import Consumer as ConsumerTbl, get_consumer_by_id_string
+from v1.meter_reading.serializers.consumer import ConsumerViewSerializer
 
 
 # API Header

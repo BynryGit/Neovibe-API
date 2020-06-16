@@ -47,20 +47,20 @@ class ScheduleSerializer(serializers.ModelSerializer):
                                       bill_cycle_id=validated_data["bill_cycle_id"]).exists():
             return False
         with transaction.atomic():
-            supplier_obj = super(ScheduleSerializer, self).create(validated_data)
-            supplier_obj.tenant = user.tenant
-            supplier_obj.utility_id = 1
-            supplier_obj.created_by = user.id
-            supplier_obj.save()
-            return supplier_obj
+            schedule_obj = super(ScheduleSerializer, self).create(validated_data)
+            schedule_obj.tenant = user.tenant
+            schedule_obj.utility_id = 1
+            schedule_obj.created_by = user.id
+            schedule_obj.save()
+            return schedule_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_schedule_validated_data(validated_data)
         with transaction.atomic():
-            supplier_obj = super(ScheduleSerializer, self).update(instance, validated_data)
-            supplier_obj.tenant = user.tenant
-            supplier_obj.utility_id = 1
-            supplier_obj.updated_by = user.id
-            supplier_obj.updated_date = timezone.now()
-            supplier_obj.save()
-            return supplier_obj
+            schedule_obj = super(ScheduleSerializer, self).update(instance, validated_data)
+            schedule_obj.tenant = user.tenant
+            schedule_obj.utility_id = 1
+            schedule_obj.updated_by = user.id
+            schedule_obj.updated_date = timezone.now()
+            schedule_obj.save()
+            return schedule_obj

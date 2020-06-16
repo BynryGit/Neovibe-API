@@ -1,12 +1,12 @@
-# Table Header : Meter Image Type
+# Table Header
 # Table Type : Lookup (Local)
-# Table Name : 2.12.58 Meter Image Type
-# Description : Meter Image Type and ID of Meter Image Type to be used by Operator or Utility
+# Table Name : Route Assignment Status
+# Description : This table store the schedule status with respect to particular schedule.
+# Sample Table Data : Confirm, Reject, Pending, Consumer Imported
 # Frequency of data changes : Low
-# Sample Table Data :
-# Reference Table : 2.3.8.5 Meter Reading Images
-# Author : Jayshree Kumbhare
-# Creation Date : 21-04-2020
+# Reference Table :
+# Author : Akshay
+# Creation Date : 16/06/2020
 
 # change history
 # <ddmmyyyy>-<changes>-<Author>
@@ -18,9 +18,9 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-# Create Meter Image Type Table Start
+# Create Schedule Status table start
 
-class MeterImageType(models.Model):
+class RouteAssignmentStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -37,18 +37,21 @@ class MeterImageType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Meter Image Type Table end
+# Create Schedule Status table end
 
 
-def get_meter_image_type_by_id(id):
+def get_route_assignment_status_by_id(id):
     try:
-        return MeterImageType.objects.get(id=id)
+        return RouteAssignmentStatus.objects.get(id=id)
     except:
         return False
 
 
-def get_meter_image_type_id_string(id_string):
+def get_route_assignment_status_by_id_string(id_string):
     try:
-        return MeterImageType.objects.get(id_string=id_string)
+        return RouteAssignmentStatus.objects.get(id_string=id_string)
     except:
         return False
+
+
+

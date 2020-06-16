@@ -1,6 +1,8 @@
 __author__ = "aki"
 
 from rest_framework import status
+
+from master.models import get_user_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_reading.models.activity_type import get_activity_type_by_id_string
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id_string
@@ -64,4 +66,11 @@ def set_meter_reading_validated_data(validated_data):
     if "reading_taken_by_id" in validated_data:
         reading_taken_by = get_reading_taken_by_id_string(validated_data["reading_taken_by_id"])
         validated_data["reading_taken_by_id"] = reading_taken_by.id
+    return validated_data
+
+
+def set_route_assignment_validated_data(validated_data):
+    if "meter_reader_id" in validated_data:
+        meter_reader = get_user_by_id_string(validated_data["meter_reader_id"])
+        validated_data["meter_reader_id"] = meter_reader.id
     return validated_data
