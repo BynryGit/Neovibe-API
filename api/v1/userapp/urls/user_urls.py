@@ -3,9 +3,11 @@ from django.urls import path
 from v1.userapp.views.document import UserDocument
 from v1.userapp.views.login import LoginApiView, LogoutApiView
 from v1.userapp.views.notes import UserNote
-from v1.userapp.views.user import User, UserList, UserRole, UserDetail, UserBankDetail
+from v1.userapp.views.user import User, UserList, UserDetail
 from v1.userapp.views.user_area import UserArea
+from v1.userapp.views.user_bank import UserBankDetail
 from v1.userapp.views.user_privilege import UserPrivilege, UserPrivilegeDetail
+from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
 from v1.userapp.views.user_utility import UserUtility
 

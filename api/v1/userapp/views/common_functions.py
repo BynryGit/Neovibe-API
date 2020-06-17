@@ -11,10 +11,10 @@ from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id_string
 from v1.userapp.models.privilege import get_privilege_by_id_string
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
 from v1.userapp.models.role_type import get_role_type_by_id_string
-from v1.userapp.models.user_bank_detail import get_bank_by_id_string
 from v1.userapp.models.role import get_role_by_id_string
 from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
@@ -225,6 +225,22 @@ def set_user_skill_validated_data(validated_data):
             validated_data["skill_id"] = skill.id
         else:
             raise CustomAPIException("Skill not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_user_bank_validated_data(validated_data):
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        if user:
+            validated_data["user_id"] = user.id
+        else:
+            raise CustomAPIException("User not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "bank_id" in validated_data:
+        bank = get_tenant_bank_details_by_id_string(validated_data["bank_id"])
+        if bank:
+            validated_data["bank_id"] = bank.id
+        else:
+            raise CustomAPIException("Bank not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
