@@ -6,7 +6,8 @@ from api.messages import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.models.area import get_area_by_id
-from v1.commonapp.serializers.area import GetAreaSerializer
+from v1.commonapp.serializers.area import GetAreaSerializer, AreaViewSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.userapp.models.user_area import get_area_by_user_id, get_record_by_values
@@ -35,21 +36,24 @@ class UserArea(GenericAPIView):
         try:
             area_list = []
             user = get_user_by_id_string(id_string)
-            user_areas = get_area_by_user_id(user.id)
-            if user_areas:
-                for user_area in user_areas:
-                    area_obj = get_area_by_id(user_area.area_id)
-                    area = GetAreaSerializer(instance=area_obj, context={'request': request})
-                    area_list.append(area.data)
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: area_list,
-                }, status=status.HTTP_200_OK)
+            if user:
+                user_areas = get_area_by_user_id(user.id)
+                if user_areas:
+                    for user_area in user_areas:
+                        area_obj = get_area_by_id(user_area.area_id)
+                        area = AreaViewSerializer(instance=area_obj, context={'request': request})
+                        area_list.append(area.data)
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: area_list,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        DATA: AREA_NOT_ASSIGNED,
+                    }, status=status.HTTP_404_NOT_FOUND)
             else:
-                return Response({
-                    STATE: ERROR,
-                    DATA: 'No records found.',
-                }, status=status.HTTP_400_BAD_REQUEST)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -63,25 +67,29 @@ class UserArea(GenericAPIView):
     def post(self, request, id_string):
         try:
             data = []
-            for area in request.data['areas']:
-                validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string']}
-                serializer = UserAreaSerializer(data=validate_data)
-                if serializer.is_valid(raise_exception=False):
-                    user_id_string = get_user_from_token(request.headers['token'])
-                    user = get_user_by_id_string(user_id_string)
-                    user_area_obj = serializer.create(serializer.validated_data, user)
-                    view_serializer = UserAreaViewSerializer(instance=user_area_obj,
-                                                             context={'request': request})
-                    data.append(view_serializer.data)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULTS: serializer.errors,
-                    }, status=status.HTTP_400_BAD_REQUEST)
-            return Response({
-                STATE: SUCCESS,
-                RESULTS: data,
-            }, status=status.HTTP_201_CREATED)
+            user_obj = get_user_by_id_string(id_string)
+            if user_obj:
+                for area in request.data['areas']:
+                    validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'area_id': area['area_id_string']}
+                    serializer = UserAreaSerializer(data=validate_data)
+                    if serializer.is_valid(raise_exception=False):
+                        user_id_string = get_user_from_token(request.headers['token'])
+                        user = get_user_by_id_string(user_id_string)
+                        user_area_obj = serializer.create(serializer.validated_data, user)
+                        area = get_area_by_id(user_area_obj.area_id)
+                        view_serializer = AreaViewSerializer(instance=area, context={'request': request})
+                        data.append(view_serializer.data)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            RESULTS: serializer.errors,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: data,
+                 }, status=status.HTTP_201_CREATED)
+            else:
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -95,31 +103,36 @@ class UserArea(GenericAPIView):
     def put(self, request, id_string):
         try:
             data = []
-            for area in request.data['areas']:
-                validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string'],
-                                 "is_active": area['is_active']}
-                validated_data = set_user_area_validated_data(validate_data)
-                serializer = UserAreaSerializer(data=validated_data)
-                if serializer.is_valid(raise_exception=False):
-                    user_area = get_record_by_values(str(id_string), validate_data['area_id'])
-                    user_id_string = get_user_from_token(request.headers['token'])
-                    user = get_user_by_id_string(user_id_string)
-                    if user_area:
-                        user_area_obj = serializer.update(user_area, serializer.validated_data, user)
+            user_obj = get_user_by_id_string(id_string)
+            if user_obj:
+                for area in request.data['areas']:
+                    validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string'],
+                                     "is_active": area['is_active']}
+                    validated_data = set_user_area_validated_data(validate_data)
+                    serializer = UserAreaSerializer(data=validated_data)
+                    if serializer.is_valid(raise_exception=False):
+                        user_area = get_record_by_values(str(id_string), validate_data['area_id'])
+                        user_id_string = get_user_from_token(request.headers['token'])
+                        user = get_user_by_id_string(user_id_string)
+                        if user_area:
+                            user_area_obj = serializer.update(user_area, serializer.validated_data, user)
+                        else:
+                            user_area_obj = serializer.create(serializer.validated_data, user)
+                        area = get_area_by_id(user_area_obj.area_id)
+                        view_serializer = AreaViewSerializer(instance=area,
+                                                                 context={'request': request})
+                        data.append(view_serializer.data)
                     else:
-                        user_area_obj = serializer.create(serializer.validated_data, user)
-                    view_serializer = UserAreaViewSerializer(instance=user_area_obj,
-                                                             context={'request': request})
-                    data.append(view_serializer.data)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULTS: serializer.errors,
-                    }, status=status.HTTP_400_BAD_REQUEST)
-            return Response({
-                STATE: SUCCESS,
-                RESULTS: data,
-            }, status=status.HTTP_200_OK)
+                        return Response({
+                            STATE: ERROR,
+                            RESULTS: serializer.errors,
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: data,
+                }, status=status.HTTP_200_OK)
+            else:
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

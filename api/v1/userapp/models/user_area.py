@@ -6,11 +6,13 @@ from django.db import models
 # from master.models import get_user_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 
 
 class UserArea(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     user_id = models.BigIntegerField(null=True, blank=True)
     area_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)

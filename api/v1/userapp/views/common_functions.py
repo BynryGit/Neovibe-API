@@ -203,6 +203,12 @@ def set_user_utility_validated_data(validated_data):
 
 
 def set_user_area_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_id" in validated_data:
         user = get_user_by_id_string(validated_data["user_id"])
         if user:
@@ -219,6 +225,12 @@ def set_user_area_validated_data(validated_data):
 
 
 def set_user_skill_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_id" in validated_data:
         user = get_user_by_id_string(validated_data["user_id"])
         if user:
@@ -257,6 +269,12 @@ def set_user_bank_validated_data(validated_data):
 
 
 def set_note_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "module_id" in validated_data:
         module = get_module_by_id_string(validated_data["module_id"])
         if module:
@@ -285,6 +303,12 @@ def set_note_validated_data(validated_data):
 
 
 def set_document_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "module_id" in validated_data:
         module = get_module_by_id_string(validated_data["module_id"])
         if module:
@@ -319,6 +343,12 @@ def set_document_validated_data(validated_data):
 
 
 def set_role_sub_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "role_type_id" in validated_data:
         type = get_role_type_by_id_string(validated_data["role_type_id"])
         if type:
@@ -329,6 +359,12 @@ def set_role_sub_type_validated_data(validated_data):
 
 
 def set_user_sub_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_type_id" in validated_data:
         user_type = get_user_type_by_id_string(validated_data["user_type_id"])
         if user_type:

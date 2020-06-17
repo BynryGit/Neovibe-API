@@ -11,7 +11,6 @@ from v1.userapp.decorators import is_token_validate, role_required, utility_requ
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values, get_record_values_by_id
 from v1.userapp.serializers.role import RoleViewSerializer
-from v1.userapp.serializers.user import UserRoleSerializer, UserRoleViewSerializer
 
 
 # API Header
@@ -26,6 +25,8 @@ from v1.userapp.serializers.user import UserRoleSerializer, UserRoleViewSerializ
 # Author: Arpita
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
+from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSerializer
+
 
 class UserRole(GenericAPIView):
 
@@ -85,7 +86,7 @@ class UserRole(GenericAPIView):
                     RESULTS: data,
                 }, status=status.HTTP_201_CREATED)
             else:
-                raise CustomAPIException("User id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -125,7 +126,7 @@ class UserRole(GenericAPIView):
                     RESULTS: data,
                 }, status=status.HTTP_200_OK)
             else:
-                raise CustomAPIException("User id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -161,7 +162,7 @@ class UserRole(GenericAPIView):
                     RESULTS: ROLES_DELETED,
                 }, status=status.HTTP_200_OK)
             else:
-                raise CustomAPIException("User id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

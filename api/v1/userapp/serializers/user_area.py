@@ -35,6 +35,7 @@ class UserAreaViewSerializer(serializers.ModelSerializer):
 
 
 class UserAreaSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField(required=False, max_length=200)
     user_id = serializers.CharField(required=False, max_length=200)
     area_id = serializers.CharField(required=False, max_length=200)
 
