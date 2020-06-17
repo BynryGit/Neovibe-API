@@ -95,13 +95,10 @@ class UserSubTypeSerializer(serializers.ModelSerializer):
 
 class UserListSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = User
@@ -111,9 +108,6 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class UserViewSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
     user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_user_sub_type')
@@ -121,7 +115,7 @@ class UserViewSerializer(serializers.ModelSerializer):
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = User
@@ -130,8 +124,10 @@ class UserViewSerializer(serializers.ModelSerializer):
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField(required=False, max_length=200)
     user_id = serializers.CharField(required=False, max_length=200)
     role_id = serializers.CharField(required=False, max_length=200)
+    is_active = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = UserRole
@@ -165,13 +161,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
 class UserRoleViewSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     role = GetRoleSerializer(many=False, required=True, source='get_role')
     user = GetUserSerializer(many=False, required=True, source='get_user')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = RolePrivilege

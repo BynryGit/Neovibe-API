@@ -5,6 +5,7 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.serializers.user_type import GetUserTypeSerializer
@@ -23,20 +24,22 @@ class UserSubTypeListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSubType
-        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'is_active')
+        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'created_date')
 
 
 class UserSubTypeViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSubType
-        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'is_active')
+        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'created_date')
 
 
 class UserSubTypeSerializer(serializers.ModelSerializer):

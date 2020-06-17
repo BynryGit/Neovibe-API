@@ -6,6 +6,7 @@ from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.role_sub_type import RoleSubType
 from v1.userapp.models.role_type import RoleType
 from v1.userapp.models.user_area import UserArea
+from v1.userapp.models.user_bank import UserBank
 from v1.userapp.models.user_mobile import UserDetails
 from v1.userapp.models.user_privilege import UserPrivilege
 from v1.userapp.models.user_role import UserRole
@@ -26,6 +27,7 @@ admin.site.register(UserPrivilege)
 admin.site.register(UserUtility)
 admin.site.register(UserSkill)
 admin.site.register(UserArea)
+admin.site.register(UserBank)
 admin.site.register(UserDetails)
 admin.site.register(UserRole)
 admin.site.register(UserType)

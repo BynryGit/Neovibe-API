@@ -46,6 +46,9 @@ class TenantBankDetail(models.Model):
     def __unicode__(self):
         return self.bank_name
 
+    def get_tenant(self):
+        return self.tenant
+
 # Create Tenant Bank Details table end.
 
 

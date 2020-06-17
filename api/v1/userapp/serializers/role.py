@@ -62,16 +62,13 @@ class RoleSerializer(serializers.ModelSerializer):
 
 class RoleListSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Role
@@ -81,11 +78,7 @@ class RoleListSerializer(serializers.ModelSerializer):
 
 class RoleDetailViewSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     def get_privileges(self, obj):
-        # return get_privilege_by_role_id(obj.id)
         return get_module_by_role_id(obj.id)
 
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
@@ -94,7 +87,7 @@ class RoleDetailViewSerializer(serializers.ModelSerializer):
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     modules = serializers.SerializerMethodField('get_privileges')
 
     class Meta:
@@ -105,20 +98,13 @@ class RoleDetailViewSerializer(serializers.ModelSerializer):
 
 class RoleViewSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
-    def get_privileges(self, obj):
-        # return get_privilege_by_role_id(obj.id)
-        return get_module_by_role_id(obj.id)
-
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Role

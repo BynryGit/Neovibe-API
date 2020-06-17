@@ -12,11 +12,8 @@ from v1.userapp.views.common_functions import set_user_skill_validated_data
 
 class GetUserSkillSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     skill = GetSkillSerializer(many=False, required=True, source='get_skill')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSkill
@@ -25,11 +22,8 @@ class GetUserSkillSerializer(serializers.ModelSerializer):
 
 class UserSkillViewSerializer(serializers.ModelSerializer):
 
-    def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
-
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    created_date = serializers.SerializerMethodField('get_created_date')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSkill

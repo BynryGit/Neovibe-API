@@ -157,7 +157,7 @@ def set_user_validated_data(validated_data):
             raise CustomAPIException("Department not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "status_id" in validated_data:
         get_status = get_user_status_by_id_string(validated_data["status_id"])
-        if status:
+        if get_status:
             validated_data["status_id"] = get_status.id
         else:
             raise CustomAPIException("Status not found.", status_code=status.HTTP_404_NOT_FOUND)
@@ -165,6 +165,12 @@ def set_user_validated_data(validated_data):
 
 
 def set_user_role_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_id" in validated_data:
         user = get_user_by_id_string(validated_data["user_id"])
         if user:
@@ -229,6 +235,12 @@ def set_user_skill_validated_data(validated_data):
 
 
 def set_user_bank_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_id" in validated_data:
         user = get_user_by_id_string(validated_data["user_id"])
         if user:

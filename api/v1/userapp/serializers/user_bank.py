@@ -4,15 +4,14 @@ from datetime import datetime
 
 from rest_framework import serializers, status
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_bank import UserBank
 
 from v1.userapp.views.common_functions import set_user_bank_validated_data
 
 
 class UserBankSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField(required=False, max_length=200)
     user_id = serializers.CharField(required=False, max_length=200)
     bank_id = serializers.CharField(required=False, max_length=200)
 
@@ -38,7 +37,8 @@ class UserBankSerializer(serializers.ModelSerializer):
                 user_bank_obj.save()
                 return user_bank_obj
 
-    def update(self, instance, validated_data, user):
+    def update(self, instance, validate_data, user):
+        validated_data = set_user_bank_validated_data(validate_data)
         with transaction.atomic():
             user_bank_obj = super(UserBankSerializer, self).update(instance, validated_data)
             user_bank_obj.updated_by = user.id

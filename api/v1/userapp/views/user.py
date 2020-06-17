@@ -39,8 +39,8 @@ class UserList(generics.ListAPIView):
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('first_name', 'email',)
 
-    @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    # @is_token_validate
+    # @role_required(ADMIN, USER, VIEW)
     def get_queryset(self):
         queryset = get_all_users()
         return queryset
@@ -120,10 +120,7 @@ class UserDetail(GenericAPIView):
                     RESULTS: serializer.data,
                 }, status=status.HTTP_200_OK)
             else:
-                return Response({
-                    STATE: EXCEPTION,
-                    RESULTS: '',
-                }, status=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -154,9 +151,7 @@ class UserDetail(GenericAPIView):
                         RESULTS: list(serializer.errors.values())[0][0],
                     }, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

@@ -5,6 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_status import UserStatus
 from v1.utility.serializers.utility import UtilitySerializer
@@ -20,19 +21,21 @@ class GetUserStatusSerializer(serializers.ModelSerializer):
 class UserStatusListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserStatus
-        fields = ('id_string', 'tenant', 'utility', 'status', 'is_active')
+        fields = ('id_string', 'tenant', 'utility', 'status', 'created_date')
 
 
 class UserStatusViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserStatus
-        fields = ('id_string', 'tenant', 'utility', 'status', 'is_active')
+        fields = ('id_string', 'tenant', 'utility', 'status', 'created_date')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):

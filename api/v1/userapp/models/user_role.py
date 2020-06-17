@@ -88,8 +88,12 @@ def get_record_by_values(user_id_string,role_id_string):
     return UserRole.objects.filter(user_id=user.id, role_id=role.id).last()
 
 
-def get_record_values_by_id(user_id,role_id):
-    return UserRole.objects.filter(user_id=user_id,role_id=role_id).last()
+def get_record_values_by_id(user_id,role_id_string):
+    try:
+        role = get_role_by_id_string(role_id_string)
+        return UserRole.objects.get(user_id=user_id,role_id=role.id)
+    except:
+        return False
 
 
 def check_role_exists(id):

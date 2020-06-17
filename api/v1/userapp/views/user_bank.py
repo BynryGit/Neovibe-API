@@ -8,10 +8,9 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id
-from v1.tenant.serializers.tenant_bank_detail import TenantBankDetailSerializer
+from v1.tenant.serializers.tenant_bank_detail import TenantBankDetailSerializer, TenantBankDetailViewSerializer
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
-from v1.userapp.models.user_bank import get_user_bank_by_user_id
-from v1.userapp.serializers.user import UserSerializer
+from v1.userapp.models.user_bank import get_user_bank_by_user_id, check_user_bank_exists
 
 
 # API Header
@@ -35,16 +34,19 @@ class UserBankDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             user = get_user_by_id_string(id_string)
-            user_bank = get_user_bank_by_user_id(user.id)
-            if user_bank:
-                bank = get_tenant_bank_details_by_id(user_bank.bank_id)
-                serializer = TenantBankDetailSerializer(instance=bank, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: serializer.data,
-                }, status=status.HTTP_200_OK)
+            if user:
+                user_bank = get_user_bank_by_user_id(user.id)
+                if user_bank:
+                    bank = get_tenant_bank_details_by_id(user_bank.bank_id)
+                    serializer = TenantBankDetailViewSerializer(instance=bank, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    raise CustomAPIException("Bank detail not found.", status_code=status.HTTP_404_NOT_FOUND)
             else:
-                raise CustomAPIException("Bank detail not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -59,24 +61,29 @@ class UserBankDetail(GenericAPIView):
         try:
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
-                serializer = UserBankSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=False):
-                    user_id_string = get_user_from_token(request.headers['token'])
-                    user = get_user_by_id_string(user_id_string)
-                    user_bank_obj = serializer.create(serializer.validated_data, user)
-                    bank = get_tenant_bank_details_by_id(user_bank_obj)
-                    view_serializer = TenantBankDetailSerializer(instance=bank, context={'request': request})
-                    return Response({
-                        STATE: SUCCESS,
-                        RESULTS: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
+                request.data['user_id'] = str(id_string)
+                user_bank = check_user_bank_exists(id_string)
+                if not user_bank:
+                    serializer = UserBankSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        user_id_string = get_user_from_token(request.headers['token'])
+                        user = get_user_by_id_string(user_id_string)
+                        user_bank_obj = serializer.create(serializer.validated_data, user)
+                        bank = get_tenant_bank_details_by_id(user_bank_obj.bank_id)
+                        view_serializer = TenantBankDetailViewSerializer(instance=bank, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: view_serializer.data,
+                        }, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            RESULTS: list(serializer.errors.values())[0][0],
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULTS: list(serializer.errors.values())[0][0],
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                    raise CustomAPIException("Bank detail already exists for specified user.", status_code=status.HTTP_404_NOT_FOUND)
             else:
-                raise CustomAPIException("User is string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -91,22 +98,27 @@ class UserBankDetail(GenericAPIView):
         try:
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
-                serializer = UserSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=False):
-                    user_id_string = get_user_from_token(request.headers['token'])
-                    user = get_user_by_id_string(user_id_string)
-                    user_bank_obj = serializer.update(user_obj, serializer.validated_data, user)
-                    bank = get_tenant_bank_details_by_id(user_bank_obj.bank_id)
-                    view_serializer = TenantBankDetailSerializer(instance=bank, context={'request': request})
-                    return Response({
-                        STATE: SUCCESS,
-                        RESULTS: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
+                request.data['user_id'] = str(id_string)
+                user_bank = get_user_bank_by_user_id(user_obj.id)
+                if user_bank:
+                    serializer = UserBankSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        user_id_string = get_user_from_token(request.headers['token'])
+                        user = get_user_by_id_string(user_id_string)
+                        user_bank_obj = serializer.update(user_bank, serializer.validated_data, user)
+                        bank = get_tenant_bank_details_by_id(user_bank_obj.bank_id)
+                        view_serializer = TenantBankDetailViewSerializer(instance=bank, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULTS: view_serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            RESULTS: list(serializer.errors.values())[0][0],
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULTS: list(serializer.errors.values())[0][0],
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                    raise CustomAPIException("Bank detail not found for specified user.", status_code=status.HTTP_404_NOT_FOUND)
             else:
                 raise CustomAPIException("User is string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
