@@ -22,7 +22,7 @@ from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
-# Create Route Details table start
+# Create Route Assignment table start
 
 
 class RouteAssignment(models.Model):
@@ -67,7 +67,7 @@ class RouteAssignment(models.Model):
         route_assignment_status = get_route_assignment_status_by_id(self.status_id)
         return route_assignment_status
 
-# Create RouteDetails table end
+# Create Route Assignment table end
 
 
 def get_route_assignment_by_id(id):

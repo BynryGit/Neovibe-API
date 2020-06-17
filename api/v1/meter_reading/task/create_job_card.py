@@ -4,9 +4,10 @@ from v1.commonapp.views.logger import logger
 from v1.meter_reading.models.consumer import Consumer
 from v1.meter_reading.models.jobcard import Jobcard
 from v1.meter_reading.models.route_assignment import RouteAssignment
+from celery.decorators import task
 
 
-# Todo call function in celery
+@task(name="create_job_cards")
 def create_job_card(route_assignment_obj, month):
     try:
         route_assignment_obj = RouteAssignment.objects.get(id=route_assignment_obj, month=month, is_deleted=False)
@@ -34,7 +35,7 @@ def create_job_card(route_assignment_obj, month):
         logger().log(ex, 'ERROR',)
 
 
-# Todo call function in celery
+@task(name="update_job_cards")
 def update_job_card(route_assignment_obj, month):
     try:
         route_assignment_obj = RouteAssignment.objects.get(id=route_assignment_obj, month=month, is_deleted=False)

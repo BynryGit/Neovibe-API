@@ -7,6 +7,7 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_reading.models.activity_type import get_activity_type_by_id_string
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id_string
 from v1.meter_reading.models.jobcard import get_jobcard_by_id_string
+from v1.meter_reading.models.meter_reading import get_meter_reading_by_id_string
 from v1.meter_reading.models.meter_status import get_meter_status_by_id_string
 from v1.meter_reading.models.reader_status import get_reader_status_by_id_string
 from v1.meter_reading.models.reading_status import get_reading_status_by_id_string
@@ -73,4 +74,20 @@ def set_route_assignment_validated_data(validated_data):
     if "meter_reader_id" in validated_data:
         meter_reader = get_user_by_id_string(validated_data["meter_reader_id"])
         validated_data["meter_reader_id"] = meter_reader.id
+    return validated_data
+
+
+def set_validation_validated_data(validated_data):
+    if "bill_cycle_id" in validated_data:
+        bill_cycle = get_bill_cycle_by_id_string(validated_data["bill_cycle_id"])
+        validated_data["bill_cycle_id"] = bill_cycle.id
+    if "route_id" in validated_data:
+        route = get_route_by_id_string(validated_data["route_id"])
+        validated_data["route_id"] = route.id
+    if "meter_reading_id" in validated_data:
+        meter_reading = get_meter_reading_by_id_string(validated_data["meter_reading_id"])
+        validated_data["meter_reading_id"] = meter_reading.id
+    if "validator_id" in validated_data:
+        validator = get_user_by_id_string(validated_data["validator_id"])
+        validated_data["validator_id"] = validator.id
     return validated_data

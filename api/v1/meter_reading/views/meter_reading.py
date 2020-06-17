@@ -16,7 +16,6 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.meter_reading.serializers.meter_reading import MeterReadingViewSerializer, MeterReadingSerializer
 from v1.meter_reading.models.meter_reading import MeterReading as MeterReadingTbl, get_meter_reading_by_id_string
-from v1.meter_reading.serializers.meter_reading_image import MeterImageSerializer
 
 
 # API Header
@@ -92,14 +91,6 @@ class MeterReading(GenericAPIView):
                             serializer = MeterReadingSerializer(data=data)
                             if serializer.is_valid():
                                 serializer.create(serializer.validated_data, user)
-                                serializer = MeterImageSerializer(data=data)
-                                if serializer.is_valid():
-                                    serializer.create(serializer.validated_data, user)
-                                else:
-                                    return Response({
-                                        STATE: ERROR,
-                                        RESULT: serializer.errors,
-                                    }, status=status.HTTP_400_BAD_REQUEST)
                             else:
                                 return Response({
                                     STATE: ERROR,

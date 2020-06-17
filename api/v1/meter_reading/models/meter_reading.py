@@ -14,6 +14,7 @@
 
 from datetime import datetime # importing package for datetime
 
+from api.constants import get_file_name, METER_PICTURE
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
 from v1.meter_reading.models.jobcard import get_jobcard_by_id
 from v1.meter_reading.models.meter_status import get_meter_status_by_id
@@ -29,6 +30,10 @@ from django.db import models  # importing package for database
 
 # Create Meter Reading Table Start
 
+def get_file_path(instance, filename):
+    return get_file_name(METER_PICTURE, filename)
+
+
 class MeterReading(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -40,6 +45,8 @@ class MeterReading(models.Model):
     route_id = models.BigIntegerField(null=True, blank=True)
     consumer_no = models.BigIntegerField(null=True, blank=True)
     meter_no = models.BigIntegerField(null=True, blank=True)
+    meter_image_type_id = models.BigIntegerField(null=True, blank=True)
+    meter_image = models.FileField(upload_to=get_file_path, null=False, blank=False)
     jobcard_id = models.BigIntegerField(null=True, blank=True)
     current_reading = models.FloatField(null=True, blank=True)
     consumption = models.FloatField(null=True, blank=True)
@@ -54,6 +61,8 @@ class MeterReading(models.Model):
     is_solar_meter = models.BooleanField(default=False)
     is_duplicate = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
+    is_assign_to_v1 = models.BooleanField(default=False)
+    is_assign_to_v2 = models.BooleanField(default=False)
     is_account_verified = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

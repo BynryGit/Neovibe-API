@@ -1,5 +1,6 @@
-from django.contrib import admin
+__author__ = "aki"
 
+from django.contrib import admin
 from v1.contract.models.contract_period import ContractPeriod
 from v1.contract.models.contract_status import ContractStatus
 from v1.contract.models.contract_type import ContractType

@@ -17,6 +17,13 @@ from v1.meter_reading.serializers.route import RouteShortViewSerializer
 from v1.meter_reading.views.common_functions import set_meter_reading_validated_data
 
 
+class MeterReadingShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MeterReadingTbl
+        fields = ('id_string', 'consumer_no')
+
+
 class MeterReadingViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()
@@ -27,8 +34,17 @@ class MeterReadingViewSerializer(serializers.ModelSerializer):
     meter_status_id = MeterStatusShortViewSerializer(many=False, source='get_meter_status')
     reader_status_id = ReaderStatusShortViewSerializer(many=False, source='get_reader_status_id')
     reading_taken_by_id = ReadingTakenByShortViewSerializer(many=False, source='get_reading_taken_by')
+    meter_image_url = serializers.SerializerMethodField()
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+
+    def get_meter_image_url(self, meter_reading_tbl):
+        request = self.context.get('request')
+        if meter_reading_tbl.meter_image:
+            meter_image_url = request.build_absolute_uri(meter_reading_tbl.meter_image.url)
+        else:
+            meter_image_url = ''
+        return meter_image_url
 
     class Meta:
         model = MeterReadingTbl

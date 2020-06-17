@@ -18,7 +18,7 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-# Create Schedule Status table start
+# Create Route Assignment Status table start
 
 class RouteAssignmentStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -37,7 +37,7 @@ class RouteAssignmentStatus(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Schedule Status table end
+# Create Route Assignment Status table end
 
 
 def get_route_assignment_status_by_id(id):
