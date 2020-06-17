@@ -4,7 +4,6 @@ from datetime import datetime
 from django.db import models
 
 # from master.models import get_user_by_id_string
-from v1.commonapp.models.area import get_area_by_id_string
 from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
 
