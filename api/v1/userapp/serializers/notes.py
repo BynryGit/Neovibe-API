@@ -25,11 +25,12 @@ class NoteViewSerializer(serializers.ModelSerializer):
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Notes
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'service_type', 'note_name', 'note_color',
-                  'note', 'is_active', 'created_date')
+                  'note', 'created_date', 'updated_date')
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -79,8 +80,9 @@ class NoteListSerializer(serializers.ModelSerializer):
     service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'service_type', 'identification',
-                  'note_name', 'note_color', 'note', 'status', 'is_active', 'created_date')
+                  'note_name', 'note_color', 'note', 'status', 'created_date', 'updated_date')

@@ -25,10 +25,11 @@ class UserSubTypeListSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSubType
-        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'created_date', 'updated_date')
 
 
 class UserSubTypeViewSerializer(serializers.ModelSerializer):
@@ -36,10 +37,11 @@ class UserSubTypeViewSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSubType
-        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'user_type', 'name', 'created_date', 'updated_date')
 
 
 class UserSubTypeSerializer(serializers.ModelSerializer):

@@ -69,10 +69,11 @@ class RoleListSerializer(serializers.ModelSerializer):
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Role
-        fields = ('id_string', 'role', 'role_ID',  'created_date',  'role_type', 'role_sub_type', 'tenant', 'utility',
+        fields = ('id_string', 'role', 'role_ID',  'created_date',  'updated_date', 'role_type', 'role_sub_type', 'tenant', 'utility',
                   'form_factor', 'department' )
 
 
@@ -88,11 +89,12 @@ class RoleDetailViewSerializer(serializers.ModelSerializer):
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     modules = serializers.SerializerMethodField('get_privileges')
 
     class Meta:
         model = Role
-        fields = ('id_string', 'role_ID', 'role', 'created_date', 'modules', 'role_type', 'role_sub_type', 'tenant', 'utility',
+        fields = ('id_string', 'role_ID', 'role', 'created_date', 'updated_date', 'modules', 'role_type', 'role_sub_type', 'tenant', 'utility',
                   'department', 'form_factor')
 
 
@@ -105,10 +107,11 @@ class RoleViewSerializer(serializers.ModelSerializer):
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Role
-        fields = ('id_string', 'role_ID', 'role', 'created_date', 'role_type', 'role_sub_type', 'tenant', 'utility',
+        fields = ('id_string', 'role_ID', 'role', 'created_date', 'updated_date', 'role_type', 'role_sub_type', 'tenant', 'utility',
                   'department', 'form_factor')
 
 

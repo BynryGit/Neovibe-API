@@ -15,10 +15,11 @@ class GetUserUtilitySerializer(serializers.ModelSerializer):
 
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserUtility
-        fields = ('utility', 'id_string', 'created_date')
+        fields = ('utility', 'id_string', 'created_date', 'updated_date')
 
 
 class UserUtilityViewSerializer(serializers.ModelSerializer):
@@ -26,10 +27,11 @@ class UserUtilityViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserUtility
-        fields = ('id_string', 'tenant', 'utility', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'created_date', 'updated_date')
 
 
 class UserUtilitySerializer(serializers.ModelSerializer):

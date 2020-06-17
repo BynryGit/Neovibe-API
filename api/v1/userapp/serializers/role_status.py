@@ -22,20 +22,22 @@ class RoleStatusListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = RoleStatus
-        fields = ('id_string', 'tenant', 'utility', 'status', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'status', 'created_date', 'updated_date')
 
 
 class RoleStatusViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = RoleStatus
-        fields = ('id_string', 'tenant', 'utility', 'status', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'status', 'created_date', 'updated_date')
 
 
 class RoleStatusSerializer(serializers.ModelSerializer):

@@ -16,20 +16,22 @@ class GetUserAreaSerializer(serializers.ModelSerializer):
 
     area = GetAreaSerializer(many=False, required=True, source='get_area')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserArea
-        fields = ('id_string', 'area', 'created_date')
+        fields = ('id_string', 'area', 'created_date', 'updated_date')
 
 
 class UserAreaViewSerializer(serializers.ModelSerializer):
 
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserArea
-        fields = ('id_string', 'tenant', 'created_date')
+        fields = ('id_string', 'tenant', 'created_date', 'updated_date')
 
 
 class UserAreaSerializer(serializers.ModelSerializer):

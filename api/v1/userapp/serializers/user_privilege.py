@@ -66,7 +66,8 @@ class UserPrivilegeViewSerializer(serializers.ModelSerializer):
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     # privilege = GetPrivilegeSerializer(many=False, required=True, source='get_privilege')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserPrivilege
-        fields = ('id_string', 'created_date', 'tenant', 'utility', 'user', 'sub_module')
+        fields = ('id_string', 'created_date', 'updated_date', 'tenant', 'utility', 'user', 'sub_module')

@@ -14,20 +14,22 @@ class GetUserSkillSerializer(serializers.ModelSerializer):
 
     skill = GetSkillSerializer(many=False, required=True, source='get_skill')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSkill
-        fields = ('id_string', 'skill',)
+        fields = ('id_string', 'skill', 'created_date', 'updated_date')
 
 
 class UserSkillViewSerializer(serializers.ModelSerializer):
 
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSkill
-        fields = ('id_string', 'tenant', 'created_date')
+        fields = ('id_string', 'tenant', 'created_date' 'updated_date')
 
 
 class UserSkillSerializer(serializers.ModelSerializer):

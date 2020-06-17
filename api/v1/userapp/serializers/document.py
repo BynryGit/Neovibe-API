@@ -26,11 +26,12 @@ class DocumentViewSerializer(serializers.ModelSerializer):
     document_type = DocumentTypeSerializer(many=False, required=True, source='get_type')
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
-                  'name', 'link', 'is_active', 'created_date')
+                  'name', 'link', 'created_date', 'updated_date')
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -81,8 +82,9 @@ class DocumentListSerializer(serializers.ModelSerializer):
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
-                  'identification', 'name', 'link', 'is_active', 'created_date')
+                  'identification', 'name', 'link', 'created_date', 'updated_date')
