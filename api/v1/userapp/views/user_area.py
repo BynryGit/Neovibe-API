@@ -34,13 +34,17 @@ class UserArea(GenericAPIView):
     def get(self, request, id_string):
         try:
             area_list = []
+            data = {}
             user = get_user_by_id_string(id_string)
             if user:
+                data['email'] = user.email
+                data['id_string'] = id_string
                 user_areas = get_area_by_user_id(user.id)
                 if user_areas:
                     for user_area in user_areas:
                         area = UserAreaViewSerializer(instance=user_area, context={'request': request})
-                        area_list.append(area.data)
+                        area_list.append(area.data['area'])
+                    data['areas'] = area_list
                     return Response({
                         STATE: SUCCESS,
                         DATA: area_list,
@@ -64,9 +68,12 @@ class UserArea(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
-            data = []
+            data = {}
+            area_list = []
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for area in request.data['areas']:
                     validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'area_id': area['area_id_string']}
                     serializer = UserAreaSerializer(data=validate_data)
@@ -75,12 +82,13 @@ class UserArea(GenericAPIView):
                         user = get_user_by_id_string(user_id_string)
                         user_area_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserAreaViewSerializer(instance=user_area_obj, context={'request': request})
-                        data.append(view_serializer.data)
+                        area_list.append(view_serializer.data['area'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['areas'] = area_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,
@@ -99,9 +107,12 @@ class UserArea(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
-            data = []
+            data = {}
+            area_list = []
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for area in request.data['areas']:
                     validate_data = {'user_id': str(id_string), 'area_id': area['area_id_string'],
                                      "is_active": area['is_active']}
@@ -117,12 +128,13 @@ class UserArea(GenericAPIView):
                             user_area_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserAreaViewSerializer(instance=user_area_obj,
                                                                  context={'request': request})
-                        data.append(view_serializer.data)
+                        area_list.append(view_serializer.data['area'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['areas'] = area_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,
