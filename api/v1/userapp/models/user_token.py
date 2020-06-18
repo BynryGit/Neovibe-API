@@ -14,8 +14,6 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-
-from master.models import get_user_by_id_string
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -57,6 +55,5 @@ def check_token_exists(token):
     return UserToken.objects.filter(token=token, is_active=True).exists()
 
 
-def check_token_exists_for_user(token, user_id_string):
-    user = get_user_by_id_string(user_id_string)
-    return UserToken.objects.filter(token=token, user_id=user.id, is_active=True).exists()
+def check_token_exists_for_user(token, user_id):
+    return UserToken.objects.filter(token=token, user_id=user_id, is_active=True).exists()

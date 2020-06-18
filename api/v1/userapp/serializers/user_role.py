@@ -7,7 +7,7 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_role import UserRole
-from v1.userapp.serializers.role import GetRoleSerializer
+from v1.userapp.serializers.role import GetRoleSerializer, RoleViewSerializer
 from v1.userapp.serializers.user import GetUserSerializer
 from v1.userapp.views.common_functions import set_user_role_validated_data
 
@@ -50,12 +50,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
 class UserRoleViewSerializer(serializers.ModelSerializer):
 
-    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    role = GetRoleSerializer(many=False, required=True, source='get_role')
-    user = GetUserSerializer(many=False, required=True, source='get_user')
+    role = RoleViewSerializer(many=False, required=True, source='get_role')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserRole
-        fields = ('id_string', 'tenant', 'role', 'user', 'created_date', 'updated_date')
+        fields = ('id_string', 'created_date', 'updated_date', 'role')

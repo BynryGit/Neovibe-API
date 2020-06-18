@@ -25,6 +25,7 @@ from v1.userapp.serializers.role import RoleViewSerializer
 # Author: Arpita
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
+from v1.userapp.serializers.user import GetUserSerializer
 from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSerializer
 
 
@@ -34,18 +35,21 @@ class UserRole(GenericAPIView):
     @role_required(ADMIN, USER, VIEW)
     def get(self, request, id_string):
         try:
+            data = {}
             role_list = []
             user = get_user_by_id_string(id_string)
             if user:
+                data['email'] = user.email
+                data['id_string'] = user.id_string
                 user_roles = get_user_role_by_user_id(user.id)
                 if user_roles:
                     for user_role in user_roles:
-                        role_obj = get_role_by_id(user_role.role_id)
-                        role = RoleViewSerializer(instance=role_obj, context={'request': request})
+                        role = UserRoleViewSerializer(instance=user_role, context={'request': request})
                         role_list.append(role.data)
+                    data['roles'] = role_list
                     return Response({
                         STATE: SUCCESS,
-                        DATA: role_list,
+                        DATA: data,
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({

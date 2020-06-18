@@ -11,7 +11,7 @@ from rest_framework import status
 
 from api.messages import *
 from api.settings import SECRET_KEY
-from master.models import get_user_by_email
+from master.models import get_user_by_email, get_user_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.views.logger import logger
 from v1.userapp.models.login_trail import LoginTrail
@@ -152,9 +152,9 @@ class LogoutApiView(APIView):
         try:
             if validate_logout_data(request):
                 token = request.headers['token']
-                user_id_string = request.headers['id-string']
+                user = get_user_by_id_string(request.headers['id-string'])
 
-                if check_token_exists_for_user(token, user_id_string):
+                if check_token_exists_for_user(token, user.id):
                     token = get_token_by_token(token)
                     token.delete()
                     return Response({

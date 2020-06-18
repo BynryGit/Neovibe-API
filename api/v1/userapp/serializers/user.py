@@ -65,7 +65,7 @@ class GetUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'id_string')
+        fields = ('username', 'id_string')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):
