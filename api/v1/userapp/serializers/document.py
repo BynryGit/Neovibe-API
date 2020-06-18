@@ -30,19 +30,19 @@ class DocumentViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
-        fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
-                  'name', 'link', 'created_date', 'updated_date')
+        fields = ('id_string', 'name', 'link', 'created_date', 'updated_date', 'tenant', 'utility', 'module',
+                  'sub_module', 'document_type', 'document_sub_type')
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    utility_id = serializers.CharField( required=False, max_length=200)
-    module_id = serializers.CharField( required=False, max_length=200)
-    sub_module_id = serializers.CharField(required=False, max_length=200)
-    document_type_id = serializers.CharField(required=False, max_length=200)
-    document_sub_type_id = serializers.CharField(required=False, max_length=200)
-    identification_id = serializers.CharField(required=False, max_length=200)
-    name = serializers.CharField(required=False, max_length=200)
-    link = serializers.CharField(required=False, max_length=200)
+    utility_id = serializers.CharField( required=True, max_length=200)
+    module_id = serializers.CharField( required=True, max_length=200)
+    sub_module_id = serializers.CharField(required=True, max_length=200)
+    document_type_id = serializers.CharField(required=True, max_length=200)
+    document_sub_type_id = serializers.CharField(required=True, max_length=200)
+    identification_id = serializers.CharField(required=True, max_length=200)
+    name = serializers.CharField(required=True, max_length=200)
+    link = serializers.CharField(required=True, max_length=200)
 
     class Meta:
         model = Document

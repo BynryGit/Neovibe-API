@@ -54,4 +54,7 @@ def get_document_type_by_id(id):
 
 
 def get_document_type_by_name(name):
-    return DocumentType.objects.get(name=name)
+    try:
+        return DocumentType.objects.get(name=name)
+    except:
+        return False

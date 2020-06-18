@@ -97,7 +97,10 @@ def get_documents_by_user_id(id):
 
 
 def get_document_by_id_string(id_string):
-    return Document.objects.filter(id_string=id_string).last()
+    try:
+        return Document.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_document_by_id(id):

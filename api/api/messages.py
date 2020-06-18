@@ -44,7 +44,7 @@ EXCEPTION = 'exception'
 UNAUTHORIZED = 'Unauthorized'
 
 
-# *********** CUSTOM CONSTANTS **************
+# *********** USER CUSTOM CONSTANTS **************
 ROLE_PRIVILEGE_NOT_FOUND = 'No Privileges attached to role.'
 USER_PRIVILEGE_NOT_FOUND = 'No Privileges assigned to user.'
 PRIVILEGE_NOT_FOUND = 'No Privileges found.'
@@ -57,4 +57,9 @@ AREA_NOT_ASSIGNED = 'No areas assigned to user.'
 SKILL_NOT_ASSIGNED = 'No skills assigned to user.'
 UTILITY_NOT_ASSIGNED = 'No utilities assigned to user.'
 NOTES_NOT_FOUND = 'No notes found for user.'
-DOCUMENT_NOT_FOUND = 'No Documents found for user.'
+NO_DOCUMENT_NOT_FOUND = 'No Documents found for user.'
+DOCUMENT_NOT_FOUND = 'Document not found.'
+UTILITY_NOT_FOUND="Utility not found"
+DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
+DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
+

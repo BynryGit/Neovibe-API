@@ -3,6 +3,7 @@ from master.models import get_user_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.department import get_department_by_id_string
+from v1.commonapp.models.document import get_document_by_id_string
 from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id_string
 from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
@@ -346,6 +347,12 @@ def set_document_validated_data(validated_data):
             validated_data["identification_id"] = identification.id
         else:
             raise CustomAPIException("Identification not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "document_id" in validated_data:
+        document = get_document_by_id_string(validated_data["document_id"])
+        if document:
+            validated_data["document_id"] = document.id
+        else:
+            raise CustomAPIException("Document not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

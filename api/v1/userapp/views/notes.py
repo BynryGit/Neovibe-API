@@ -87,9 +87,8 @@ class UserNote(GenericAPIView):
             if user_obj:
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
-                request.data['identification_id'] = str(id_string)
                 for note in request.data['notes']:
-                    validate_data = {'identification_id': request.data['identification_id'], 'utility_id': request.data['utility_id'], 'module_id': request.data['module_id'], 'sub_module_id': request.data['sub_module_id'], 'service_type_id': request.data['service_type_id'], 'note_name' : note['note_name'], 'note_color': note['note_color'], 'note': note['note']}
+                    validate_data = {'identification_id': str(id_string), 'utility_id': request.data['utility_id'], 'module_id': request.data['module_id'], 'sub_module_id': request.data['sub_module_id'], 'service_type_id': request.data['service_type_id'], 'note_name' : note['note_name'], 'note_color': note['note_color'], 'note': note['note']}
                     serializer = NoteSerializer(data=validate_data)
                     if serializer.is_valid(raise_exception=False):
                         user_id_string = get_user_from_token(request.headers['token'])
