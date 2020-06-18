@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 
 from api.messages import *
+from api.constants import *
 from v1.commonapp.models.skills import get_skills_by_utility_id_string
 from v1.userapp.serializers.skills import SkillListSerializer
 from v1.userapp.decorators import is_token_validate, role_required

@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart360',
+        'NAME': 'smart3603',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
@@ -191,14 +191,14 @@ CRONJOBS = [
 ]
 
 # Amazon s3 Configuration
-AWS_ACCESS_KEY_ID = ''
-AWS_SECRET_ACCESS_KEY = ''
-AWS_STORAGE_BUCKET_NAME = ''
-AWS_S3_ENDPOINT_URL = ''
-AWS_DEFAULT_ACL = None
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_LOCATION = ''
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+# AWS_ACCESS_KEY_ID = ''
+# AWS_SECRET_ACCESS_KEY = ''
+# AWS_STORAGE_BUCKET_NAME = ''
+# AWS_S3_ENDPOINT_URL = ''
+# AWS_DEFAULT_ACL = None
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+# AWS_LOCATION = ''
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
