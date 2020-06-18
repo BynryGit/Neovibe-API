@@ -58,12 +58,19 @@ def get_privilege_by_id(id):
     return Privilege.objects.filter(id=id, is_active=True).last()
 
 
+def get_privilege_id(id):
+    return id
+
+
 def get_privilege_by_utility_id(id):
     return Privilege.objects.filter(utility_id=id, is_active=True)
 
 
 def get_privilege_by_id_string(id_string):
-    return Privilege.objects.filter(id_string=id_string, is_active=True).last()
+    try:
+        return Privilege.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
 
 
 def filter_privilege_by_id_string(id_string):

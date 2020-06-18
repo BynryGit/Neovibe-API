@@ -13,7 +13,7 @@ from v1.commonapp.views.logger import logger
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 from v1.dispatcher.serializers.service_request import ServiceRequestViewSerializer
 from v1.dispatcher.models.service_appointments import ServiceRequest

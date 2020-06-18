@@ -1,4 +1,4 @@
-__author__ = "Gauri"
+__author__ = "aki"
 
 import traceback
 from rest_framework.exceptions import APIException
@@ -27,7 +27,7 @@ from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerialize
 # Interaction: Tenant Submodule list
 # Usage: API will fetch Tenant submodule list against single Tenant
 # Tables used: 2.3 Tenant SubModule
-# Author: Gauri
+# Author: Akshay
 # Created on: 19/05/2020
 
 
@@ -65,7 +65,7 @@ class TenantSubModuleList(generics.ListAPIView):
 # Interaction: Add Tenant Submodule
 # Usage: Add Tenant submodule in the system
 # Tables used:  Tenant Submodule
-# Auther: Gauri Deshmukh
+# Auther: Akshay
 # Created on: 21/5/2020
 
 class TenantSubModule(GenericAPIView):
@@ -136,7 +136,7 @@ class TenantSubModule(GenericAPIView):
 # Interaction: For get and edit Tenant submodule
 # Usage: API will fetch and edit Tenant submodule details
 # Tables used: 1.3 Tenant SubModule
-# Author: Gauri Deshmukh
+# Author: Akshay
 # Created on: 20/05/2020
 
 class TenantSubModuleDetail(GenericAPIView):

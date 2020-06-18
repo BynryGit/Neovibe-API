@@ -11,7 +11,7 @@ from v1.commonapp.serializers.document_sub_type import DocumentSubTypeSerializer
 from v1.commonapp.serializers.document_type import DocumentTypeSerializer
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.serializers.user import UserSerializer
 from v1.userapp.views.common_functions import set_document_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
@@ -22,7 +22,7 @@ class DocumentViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
@@ -37,6 +37,7 @@ class DocumentViewSerializer(serializers.ModelSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField( required=False, max_length=200)
     module_id = serializers.CharField( required=False, max_length=200)
     sub_module_id = serializers.CharField(required=False, max_length=200)
     document_type_id = serializers.CharField(required=False, max_length=200)
@@ -54,8 +55,10 @@ class DocumentSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             document_obj = super(DocumentSerializer, self).create(validated_data)
             document_obj.created_by = user.id
+            document_obj.updated_by = user.id
+            document_obj.created_date = datetime.utcnow()
+            document_obj.updated_date = datetime.utcnow()
             document_obj.tenant = user.tenant
-            document_obj.utility = user.utility
             document_obj.is_active = True
             document_obj.save()
             return document_obj
@@ -76,7 +79,7 @@ class DocumentListSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')

@@ -14,7 +14,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.campaign.models.campaign import get_campaign_by_id_string
 from v1.campaign.models.advertisement import Advertisements,get_advertisements_by_id_string
 from v1.campaign.serializers.advertisment import AdvertismentViewSerializer,AdvertismentListSerializer,AdvertisementSerializer
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from v1.campaign.views.common_functions import is_data_verified
 
 # API Header

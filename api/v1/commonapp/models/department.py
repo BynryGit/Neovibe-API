@@ -58,8 +58,10 @@ def get_department_by_tenant_id_string(id_string):
 
 
 def get_department_by_id_string(id_string):
-    return Department.objects.filter(id_string=id_string).last()
-
+    try:
+        return Department.objects.get(id_string=id_string)
+    except:
+        return False
 
 def get_department_by_id(id):
     return Department.objects.filter(id=id).last()

@@ -40,9 +40,15 @@ class TenantCity(models.Model):
 # Create Tenant City table end
 
 
-def get_tenant_city_by_id_string(id_string):
-    return TenantCity.objects.get(id_string = id_string)
-
-
 def get_tenant_city_by_id(id):
-    return TenantCity.objects.get(id = id)
+    try:
+        return TenantCity.objects.get(id=id)
+    except:
+        return False
+
+
+def get_tenant_city_by_id_string(id_string):
+    try:
+        return TenantCity.objects.get(id_string=id_string)
+    except:
+        return False

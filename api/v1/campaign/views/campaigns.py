@@ -14,7 +14,7 @@ from v1.campaign.models.campaign import get_campaign_by_id_string,Campaign as Ca
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.serializers.campaign import CampaignViewSerializer,CampaignListSerializer,CampaignSerializer
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from v1.campaign.views.common_functions import is_data_verified,set_validated_data
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 

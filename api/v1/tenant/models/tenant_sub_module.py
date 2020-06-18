@@ -15,7 +15,6 @@
 
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
-
 from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -68,11 +67,3 @@ def get_tenant_submodule_by_id_string(id_string):
         return TenantSubModule.objects.get(id_string=id_string)
     except:
         return False
-
-
-def get_tenant_submodules_by_tenant_id_string(id_string):
-    return TenantSubModule.objects.filter(tenant_id_string=id_string)
-
-
-def get_tenant_submodules_by_module_id(id):
-    return TenantSubModule.objects.filter(module_id=id)

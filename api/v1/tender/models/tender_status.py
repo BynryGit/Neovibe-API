@@ -23,10 +23,10 @@ from django.db import models  # importing package for database
 
 class TenderStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -39,3 +39,17 @@ class TenderStatus(models.Model):
         return self.status
 
  # Create TenderStatus table end
+
+
+def get_tender_status_by_id(id):
+    try:
+        return TenderStatus.objects.get(id=id)
+    except:
+        return False
+
+
+def get_tender_status_by_id_string(id_string):
+    try:
+        return TenderStatus.objects.get(id_string=id_string)
+    except:
+        return False

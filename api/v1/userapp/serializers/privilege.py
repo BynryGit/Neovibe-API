@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.privilege import Privilege
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -17,7 +17,7 @@ class PrivilegeListSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     created_date = serializers.SerializerMethodField('get_created_date')
 
@@ -38,7 +38,9 @@ class PrivilegeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             privilege_obj = super(PrivilegeSerializer, self).create(validated_data)
             privilege_obj.created_by = user.id
+            privilege_obj.updated_by = user.id
             privilege_obj.created_date = datetime.utcnow()
+            privilege_obj.update_date = datetime.utcnow()
             privilege_obj.tenant = user.tenant
             privilege_obj.is_active = True
             privilege_obj.save()
@@ -59,7 +61,7 @@ class PrivilegeViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     created_date = serializers.SerializerMethodField('get_created_date')
 

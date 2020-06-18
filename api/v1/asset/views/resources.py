@@ -13,10 +13,9 @@ from v1.commonapp.views.logger import logger
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 from v1.userapp.serializers.user import UserListSerializer,UserViewSerializer,UserSerializer
-from v1.userapp.views.common_functions import is_user_data_verified
 
 # API Header
 # API end Point: api/v1/asset/resource
@@ -109,32 +108,27 @@ class ResourceDetail(GenericAPIView):
         try:
             if is_token_valid(1):
                 if is_authorized():
-                    if is_user_data_verified(request):
-                        user = get_user_by_id_string(id_string)
-                        # success, user = is_token_valid(self.request.headers['token'])
-                        user_obj = get_user_by_id_string(id_string)
-                        if user_obj:
-                            serializer = UserSerializer(data=request.data)
-                            if serializer.is_valid():
-                                user_obj = serializer.update(user_obj, serializer.validated_data, user)
-                                view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                            else:
-                                return Response({
-                                    STATE: ERROR,
-                                    RESULTS: serializer.errors,
-                                }, status=status.HTTP_400_BAD_REQUEST)
+                    user = get_user_by_id_string(id_string)
+                    # success, user = is_token_valid(self.request.headers['token'])
+                    user_obj = get_user_by_id_string(id_string)
+                    if user_obj:
+                        serializer = UserSerializer(data=request.data)
+                        if serializer.is_valid():
+                            user_obj = serializer.update(user_obj, serializer.validated_data, user)
+                            view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
                         else:
                             return Response({
                                 STATE: ERROR,
-                            }, status=status.HTTP_404_NOT_FOUND)
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,

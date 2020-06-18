@@ -52,7 +52,10 @@ class UserSubType(models.Model):
 
 
 def get_user_sub_type_by_id_string(id_string):
-    return UserSubType.objects.filter(id_string=id_string).last()
+    try:
+        return UserSubType.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_user_sub_type_by_id(id):

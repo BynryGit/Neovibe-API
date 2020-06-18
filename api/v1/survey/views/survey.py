@@ -13,7 +13,7 @@ from v1.survey.models.survey import get_survey_by_id_string,Survey as Surveytbl
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.survey.serializers.survey import SurveyViewSerializer,SurveyListSerializer,SurveySerializer
 from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from v1.survey.views.common_functions import is_data_verified
 
 # API Header

@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.asset.models.asset_status import AssetStatus,get_asset_status_by_id_string
 from v1.asset.serializer.asset_status import AssetStatusListSerializer,AssetStatusViewSerializer
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 
 # status-list
 class AssetstatusList(generics.ListAPIView):

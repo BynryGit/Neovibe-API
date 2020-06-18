@@ -53,3 +53,7 @@ def get_token_by_token(token):
 
 def check_token_exists(token):
     return UserToken.objects.filter(token=token, is_active=True).exists()
+
+
+def check_token_exists_for_user(token, user_id):
+    return UserToken.objects.filter(token=token, user_id=user_id, is_active=True).exists()

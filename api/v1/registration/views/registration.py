@@ -53,7 +53,7 @@ class RegistrationList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'ERROR')
-        raise APIException
+        # raise APIException
 
 
 

@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.asset.models.asset_sub_category import AssetSubCategory,get_asset_sub_category_by_id_string
 from v1.asset.serializer.sub_category import AssetSubCategoryListSerializer,AssetSubCategoryViewSerializer
-from v1.commonapp.common_functions import is_token_valid, get_payload, get_user, is_authorized
+from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 
 # sub_category-list
 class AssetSubCategoryList(generics.ListAPIView):

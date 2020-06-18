@@ -4,7 +4,8 @@ from datetime import datetime
 
 from django.db import transaction
 from rest_framework import serializers
-from v1.tenant.serializers.tenant import GetTenantSerializer
+
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.serializers.user_type import GetUserTypeSerializer
 from v1.userapp.views.common_functions import set_user_sub_type_validated_data
@@ -19,7 +20,7 @@ class GetUserSubTypeSerializer(serializers.ModelSerializer):
 
 
 class UserSubTypeListSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
 
@@ -29,7 +30,7 @@ class UserSubTypeListSerializer(serializers.ModelSerializer):
 
 
 class UserSubTypeViewSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
 
@@ -51,7 +52,9 @@ class UserSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             sub_type_obj = super(UserSubTypeSerializer, self).create(validated_data)
             sub_type_obj.created_by = user.id
+            sub_type_obj.updated_by = user.id
             sub_type_obj.created_date = datetime.utcnow()
+            sub_type_obj.updated_date = datetime.utcnow()
             sub_type_obj.tenant = user.tenant
             sub_type_obj.utility = user.utility
             sub_type_obj.is_active = True

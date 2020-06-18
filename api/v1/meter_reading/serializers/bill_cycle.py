@@ -1,21 +1,25 @@
+__author__ = "aki"
+
 from rest_framework import serializers
+from api.settings import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
+from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from v1.meter_reading.models.bill_cycle import BillCycle as BillCycleTbl
 
-from v1.meter_reading.models.bill_cycle import BillCycle
 
-
-class BillCycleListSerializer(serializers.ModelSerializer):
+class BillCycleShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = BillCycle
-        fields = ('code', 'id_string')
+        model = BillCycleTbl
+        fields = ('id_string', 'code')
 
 
 class BillCycleViewSerializer(serializers.ModelSerializer):
-    tenant = serializers.ReadOnlyField(source='tenant.name')
-    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
-    utility = serializers.ReadOnlyField(source='utility.name')
-    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    tenant = TenantMasterViewSerializer()
+    utility = UtilityMasterViewSerializer()
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
-        model = BillCycle
-        fields = ('id_string', 'code', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string')
+        model = BillCycleTbl
+        fields = ('id_string', 'code', 'created_date', 'updated_date', 'tenant', 'utility')

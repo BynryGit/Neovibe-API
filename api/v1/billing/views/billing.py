@@ -12,7 +12,7 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.meter_reading.models.schedule import get_all_schedules
-from v1.meter_reading.serializers.schedule import ScheduleListSerializer
+# from v1.meter_reading.serializers.schedule import ScheduleListSerializer
 from v1.registration.views.common_functions import is_data_verified
 
 # API Header
@@ -175,7 +175,7 @@ class InvoiceBillDetail(GenericAPIView):
 
 class BillingList(generics.ListAPIView):
     try:
-        serializer_class = ScheduleListSerializer
+        # serializer_class = ScheduleListSerializer
         pagination_class = StandardResultsSetPagination
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('',)

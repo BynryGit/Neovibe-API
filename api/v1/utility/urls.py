@@ -1,7 +1,6 @@
 __author__ = "aki"
 
 from django.urls import path
-
 from v1.utility.views.document import UtilityDocumentList, UtilityDocumentDetail
 from v1.utility.views.notes import UtilityNoteList, UtilityNoteDetail
 from v1.utility.views.numformat import UtilityNumformatDetail

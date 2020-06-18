@@ -38,3 +38,17 @@ class ReadingTakenBy(models.Model):
         return self.name
 
 # Create Reading Taken By table end
+
+
+def get_reading_taken_by_id(id):
+    try:
+        return ReadingTakenBy.objects.get(id=id)
+    except:
+        return False
+
+
+def get_reading_taken_by_id_string(id_string):
+    try:
+        return ReadingTakenBy.objects.get(id_string=id_string)
+    except:
+        return False

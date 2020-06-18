@@ -54,3 +54,7 @@ def get_module_by_id_string(id_string):
         return Module.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+
+def get_module_id(id):
+    return id

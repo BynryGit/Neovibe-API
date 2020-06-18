@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from v1.tenant.serializers.tenant import GetTenantSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role_type import RoleType
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -14,11 +14,11 @@ class GetRoleTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RoleType
-        fields = ('name', 'id_string')
+        fields = ('id_string', 'name')
 
 
 class RoleTypeListSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
@@ -27,7 +27,7 @@ class RoleTypeListSerializer(serializers.ModelSerializer):
 
 
 class RoleTypeViewSerializer(serializers.ModelSerializer):
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
@@ -47,7 +47,9 @@ class RoleTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             type_obj = super(RoleTypeSerializer, self).create(validated_data)
             type_obj.created_by = user.id
+            type_obj.updated_by = user.id
             type_obj.created_date = datetime.utcnow()
+            type_obj.updated_date = datetime.utcnow()
             type_obj.tenant = user.tenant
             type_obj.utility = user.utility
             type_obj.is_active = True

@@ -8,6 +8,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, DATA_ALREADY_EXISTS, RESULT
+from master.models import User
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
@@ -80,7 +81,7 @@ class Supplier(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     serializer = SupplierSerializer(data=request.data)
@@ -183,7 +184,7 @@ class SupplierDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     supplier_obj = get_supplier_by_id_string(id_string)

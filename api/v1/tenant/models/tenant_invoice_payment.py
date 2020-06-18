@@ -15,8 +15,8 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_invoice import get_tenant_invoice_by_id
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
@@ -25,41 +25,43 @@ from django.db import models  # importing package for database
 class TenantInvoicePayment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    invoice_number = models.CharField(max_length=200, blank=False, null=False)
-    payment_method = models.CharField(max_length=200, blank=False, null=False)
-    payment_channel = models.CharField(max_length=200, blank=False, null=False)
-    transaction_no = models.CharField(max_length=200, blank=False, null=False)
-    transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
-    tax_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
-    currency = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    invoice_id = models.BigIntegerField(null=True, blank=True)
+    payment_method = models.CharField(max_length=200, blank=True, null=True)
+    payment_channel = models.CharField(max_length=200, blank=True, null=True)
+    transaction_no = models.CharField(max_length=200, blank=True, null=True)
+    transaction_date = models.DateTimeField(null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    tax_amount = models.FloatField(null=True, blank=True)
+    currency = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.invoice_number
+        return str(self.invoice_id)
 
     def __unicode__(self):
-        return self.invoice_number
+        return str(self.invoice_id)
+
+    @property
+    def get_invoice_id(self):
+        tenant_invoice = get_tenant_invoice_by_id(self.invoice_id)
+        return tenant_invoice
 
 # Create Tenant Invoice Transaction table end.
 
 
-def get_tenant_payment_by_id(id):
+def get_tenant_invoice_payment_by_id(id):
     try:
-        return TenantInvoicePayment.objects.get(id = id)
+        return TenantInvoicePayment.objects.get(id=id)
     except:
         return False
 
 
-def get_tenant_payment_by_id_string(id_string):
+def get_tenant_invoice_payment_by_id_string(id_string):
     try:
-        return TenantInvoicePayment.objects.get(id_string = id_string)
+        return TenantInvoicePayment.objects.get(id_string=id_string)
     except:
         return False
-
-def get_tenant_payment_by_tenant_id_string(id_string):
-    return TenantInvoicePayment.objects.filter(tenant_id_string=id_string)

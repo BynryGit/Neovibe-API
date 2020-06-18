@@ -14,10 +14,7 @@
 
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
-
 from django.db import models  # importing package for database
-
-from v1.tenant.models.tenant_master import TenantMaster
 
 
 # Create Tenant Currency table start

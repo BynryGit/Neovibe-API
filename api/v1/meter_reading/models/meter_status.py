@@ -39,3 +39,17 @@ class MeterStatus(models.Model):
 
 # Create Meter Status Table end
 
+
+def get_meter_status_by_id(id):
+    try:
+        return MeterStatus.objects.get(id=id)
+    except:
+        return False
+
+
+def get_meter_status_by_id_string(id_string):
+    try:
+        return MeterStatus.objects.get(id_string=id_string)
+    except:
+        return False
+

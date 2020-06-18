@@ -38,9 +38,15 @@ class TenantCountry(models.Model):
 # Create Tenant Country table end
 
 
-def get_tenant_country_by_id_string(id_string):
-    return TenantCountry.objects.get(id_string = id_string)
-
-
 def get_tenant_country_by_id(id):
-    return TenantCountry.objects.get(id = id)
+    try:
+        return TenantCountry.objects.get(id=id)
+    except:
+        return False
+
+
+def get_tenant_country_by_id_string(id_string):
+    try:
+        return TenantCountry.objects.get(id_string=id_string)
+    except:
+        return False

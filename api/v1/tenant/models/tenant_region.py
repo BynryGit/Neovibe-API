@@ -14,7 +14,6 @@
 
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
-from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
 
 
@@ -38,9 +37,15 @@ class TenantRegion(models.Model):
 # Create Tenant Region table end.
 
 
-def get_tenant_region_by_id_string(id_string):
-    return TenantRegion.objects.get(id_string = id_string)
-
-
 def get_tenant_region_by_id(id):
-    return TenantRegion.objects.get(id = id)
+    try:
+        return TenantRegion.objects.get(id=id)
+    except:
+        return False
+
+
+def get_tenant_region_by_id_string(id_string):
+    try:
+        return TenantRegion.objects.get(id_string=id_string)
+    except:
+        return False

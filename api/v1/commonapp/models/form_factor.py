@@ -58,7 +58,10 @@ def get_form_factor_by_tenant_id_string(id_string):
 
 
 def get_form_factor_by_id_string(id_string):
-    return FormFactor.objects.filter(id_string=id_string).last()
+    try:
+        return FormFactor.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_form_factor_by_id(id):

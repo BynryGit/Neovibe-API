@@ -11,8 +11,8 @@ from v1.commonapp.models.notes import Notes
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
-from v1.tenant.serializers.tenant import GetTenantSerializer
-from v1.userapp.serializers.user import UserSerializer, GetUserSerializer
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
+from v1.userapp.serializers.user import UserSerializer
 from v1.userapp.views.common_functions import set_note_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
 
@@ -22,7 +22,7 @@ class NoteViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
@@ -36,6 +36,7 @@ class NoteViewSerializer(serializers.ModelSerializer):
 
 
 class NoteSerializer(serializers.ModelSerializer):
+    utility_id = serializers.CharField( required=False, max_length=200)
     module_id = serializers.CharField( required=False, max_length=200)
     sub_module_id = serializers.CharField(required=False, max_length=200)
     service_type_id = serializers.CharField(required=False, max_length=200)
@@ -53,8 +54,10 @@ class NoteSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             note_obj = super(NoteSerializer, self).create(validated_data)
             note_obj.created_by = user.id
+            note_obj.updated_by = user.id
+            note_obj.created_date = datetime.utcnow()
+            note_obj.updated_date = datetime.utcnow()
             note_obj.tenant = user.tenant
-            note_obj.utility = user.utility
             note_obj.is_active = True
             note_obj.save()
             return note_obj
@@ -75,7 +78,7 @@ class NoteListSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
         return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
 
-    tenant = GetTenantSerializer(many=False, required=True, source='get_tenant')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')

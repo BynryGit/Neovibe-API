@@ -65,13 +65,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    bank_detail_id = models.BigIntegerField(null=True, blank=True)
-    user_ID = models.CharField(max_length=200, null=True, blank=True)
     password = models.CharField(max_length=200, verbose_name='password')
     first_name = models.CharField(max_length=200, blank=True)
     middle_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
-    email = models.CharField(max_length=200, blank=True, unique=True)
+    email = models.CharField(max_length=200, blank=False, unique=True)
     USERNAME_FIELD = 'email'
     user_image = models.URLField(null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
@@ -84,7 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True)
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     objects = MyUserManager()
     REQUIRED_FIELDS = []
@@ -159,7 +157,10 @@ def is_contact_exists(phone_mobile, tenant_id):
 
 
 def get_user_by_id_string(id_string):
-    return User.objects.filter(id_string=id_string, is_active=True).last()
+    try:
+        return User.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
 
 
 def get_user_by_id(id):
@@ -192,7 +193,3 @@ def get_notes_by_user_id_string(id_string):
 
 def check_user_id_string_exists(id_string):
     return User.objects.filter(id_string=id_string, is_active=True).exists()
-
-
-def authenticate_user(email, password):
-    return User.objects.filter(email=email, password=password, is_active=True).exists()

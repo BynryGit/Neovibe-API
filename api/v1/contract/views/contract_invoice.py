@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, RESULT, DATA_ALREADY_EXISTS
+from master.models import User
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, \
     ObjectNotFoundException
@@ -87,7 +88,7 @@ class ContractInvoice(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
                     contract_obj = get_contract_by_id_string(id_string)
                     if contract_obj:
@@ -195,7 +196,7 @@ class ContractInvoiceDetail(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = UserDetail.objects.get(id=2)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
 
                     contract_invoice_obj = get_contract_invoice_by_id_string(id_string)
