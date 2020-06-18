@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 from django.contrib import admin
 from v1.utility.models.mandatory_fields import UtilityMandetoryFields
 from v1.utility.models.utility_master import UtilityMaster

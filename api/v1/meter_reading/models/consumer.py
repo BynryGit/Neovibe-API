@@ -21,7 +21,7 @@ from django.db import models  # importing package for database
 
 # Create Temp Consumer Master Table Start
 
-class TempConsumerMaster(models.Model):
+class Consumer(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -34,14 +34,14 @@ class TempConsumerMaster(models.Model):
     address_line_1 = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
     zipcode = models.BigIntegerField(null=True, blank=True)
-    country = models.BigIntegerField(null=True, blank=True)
-    state = models.BigIntegerField(null=True, blank=True)
-    city = models.BigIntegerField(null=True, blank=True)
-    area = models.BigIntegerField(null=True, blank=True)
-    subarea = models.BigIntegerField(null=True, blank=True)
-    bill_cycle = models.BigIntegerField(null=True, blank=True)
+    country_id = models.BigIntegerField(null=True, blank=True)
+    state_id = models.BigIntegerField(null=True, blank=True)
+    city_id = models.BigIntegerField(null=True, blank=True)
+    area_id = models.BigIntegerField(null=True, blank=True)
+    subarea_id = models.BigIntegerField(null=True, blank=True)
+    bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     bill_month = models.BigIntegerField(null=True, blank=True)
-    route = models.BigIntegerField(null=True, blank=True)
+    route_id = models.BigIntegerField(null=True, blank=True)
     meter_no = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.BigIntegerField(null=True, blank=True)
     current_reading = models.CharField(max_length=200, null=True, blank=True)
@@ -52,7 +52,7 @@ class TempConsumerMaster(models.Model):
     scheme = models.BigIntegerField(null=True, blank=True)
     outstanding = models.BigIntegerField(null=True, blank=True)
     meter_reading = models.BigIntegerField(null=True, blank=True)
-    jobcard = models.BigIntegerField(null=True, blank=True)
+    jobcard_id = models.BigIntegerField(null=True, blank=True)
     month = models.CharField(max_length=200, null=True, blank=True)
     suspicious_activity = models.BooleanField(default=False)
     is_qr_tempered = models.BooleanField(default=False)
@@ -61,7 +61,7 @@ class TempConsumerMaster(models.Model):
     is_duplicate = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_account_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -72,4 +72,19 @@ class TempConsumerMaster(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
 # Create Temp Consumer Master Table end
+
+
+def get_consumer_by_id(id):
+    try:
+        return Consumer.objects.get(id=id)
+    except:
+        return False
+
+
+def get_consumer_by_id_string(id_string):
+    try:
+        return Consumer.objects.get(id_string=id_string)
+    except:
+        return False

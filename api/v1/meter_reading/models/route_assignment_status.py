@@ -1,12 +1,12 @@
 # Table Header
 # Table Type : Lookup (Local)
-# Table Name : 2.12.53 Meter Status
-# Description : This table store the Meter Status with respect to particular Meter.
+# Table Name : Route Assignment Status
+# Description : This table store the schedule status with respect to particular schedule.
+# Sample Table Data : Confirm, Reject, Pending, Consumer Imported
 # Frequency of data changes : Low
-# Sample Table Data : RCNT, Faulty, Normal
-# Reference Table : 2.3.8.1 Schedule
-# Author : Jayshree Kumbhare
-# Creation Date : 22-04-2020
+# Reference Table :
+# Author : Akshay
+# Creation Date : 16/06/2020
 
 # change history
 # <ddmmyyyy>-<changes>-<Author>
@@ -18,9 +18,9 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-# Create Meter Status Table Start
+# Create Route Assignment Status table start
 
-class MeterStatus(models.Model):
+class RouteAssignmentStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -29,7 +29,7 @@ class MeterStatus(models.Model):
     updated_by = models.BigIntegerField(null=False, blank=False)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -37,19 +37,21 @@ class MeterStatus(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Meter Status Table end
+# Create Route Assignment Status table end
 
 
-def get_meter_status_by_id(id):
+def get_route_assignment_status_by_id(id):
     try:
-        return MeterStatus.objects.get(id=id)
+        return RouteAssignmentStatus.objects.get(id=id)
     except:
         return False
 
 
-def get_meter_status_by_id_string(id_string):
+def get_route_assignment_status_by_id_string(id_string):
     try:
-        return MeterStatus.objects.get(id_string=id_string)
+        return RouteAssignmentStatus.objects.get(id_string=id_string)
     except:
         return False
+
+
 

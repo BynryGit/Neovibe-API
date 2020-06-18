@@ -1,5 +1,6 @@
-from django.contrib import admin
+__author__ = "aki"
 
+from django.contrib import admin
 from v1.supplier.models.product_category import ProductCategory
 from v1.supplier.models.product_subcategory import ProductSubCategory
 from v1.supplier.models.supplier_invoice import SupplierInvoice

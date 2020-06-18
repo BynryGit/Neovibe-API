@@ -38,3 +38,17 @@ class ReadingStatus(models.Model):
         return self.name
 
 # Create Reading Status table end
+
+
+def get_reading_status_by_id(id):
+    try:
+        return ReadingStatus.objects.get(id=id)
+    except:
+        return False
+
+
+def get_reading_status_by_id_string(id_string):
+    try:
+        return ReadingStatus.objects.get(id_string=id_string)
+    except:
+        return False

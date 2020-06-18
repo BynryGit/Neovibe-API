@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'storages',
     'corsheaders',
     'django_filters',
+    'django_crontab',
     'master',
     'v1.asset',
     'v1.billing',
@@ -100,7 +102,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart3603',
+        'NAME': 'smart360',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
@@ -174,3 +176,29 @@ STATIC_URL = '/static/'
 #         },
 #     },
 # }
+
+# CELERY STUFF
+BROKER_URL = 'redis://localhost:6379'  # Todo redis broker is use for message transform
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
+# Cronjob configuration
+CRONJOBS = [
+    ('0 */30 * * *', 'meter_reading.task.validation_assignment.assign_validation','>> /path of log file/validation.log')
+]
+
+# Amazon s3 Configuration
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+AWS_STORAGE_BUCKET_NAME = ''
+AWS_S3_ENDPOINT_URL = ''
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = ''
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)

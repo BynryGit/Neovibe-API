@@ -14,6 +14,7 @@ from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializ
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.registration.models.registrations import get_registration_by_id_string
+from v1.registration.serializers.registration import *
 from v1.registration.views.common_functions import is_data_verified
 from api.messages import *
 
@@ -41,8 +42,9 @@ class RegistrationList(generics.ListAPIView):
         search_fields = ('first_name', 'last_name',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
                     queryset = RegTbl.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -72,17 +74,17 @@ class Registration(GenericAPIView):
     def post(self, request):
         try:
             # Checking authentication start
-            if is_token_valid(request.headers['token']):
+            response, user_obj = is_token_valid(self.request.headers['token'])
+            if response:
                 # Checking authentication end
 
                 # Checking authorization start
-                if is_authorized():
+                if is_authorized(1,1,1,user_obj):
                     # Checking authorization end
 
-                    user = User.objects.get(id = 2)
                     serializer = RegistrationSerializer(data=request.data)
                     if serializer.is_valid(raise_exception=False):
-                        registration_obj = serializer.create(serializer.validated_data, user)
+                        registration_obj = serializer.create(serializer.validated_data, user_obj)
                         view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
