@@ -5,21 +5,9 @@ from rest_framework import serializers, status
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_utility import UserUtility
 from v1.userapp.views.common_functions import set_user_utility_validated_data
-from v1.utility.serializers.utility import UtilitySerializer, UtilityMasterViewSerializer
-
-
-class GetUserUtilitySerializer(serializers.ModelSerializer):
-
-    utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-
-    class Meta:
-        model = UserUtility
-        fields = ('utility', 'id_string', 'created_date', 'updated_date')
+from v1.utility.serializers.utility import UtilityMasterViewSerializer
 
 
 class UserUtilityViewSerializer(serializers.ModelSerializer):

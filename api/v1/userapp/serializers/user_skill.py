@@ -3,22 +3,10 @@ from django.db import transaction
 from rest_framework import serializers, status
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
-from v1.commonapp.serializers.skill import GetSkillSerializer, SkillViewSerializer
+from v1.commonapp.serializers.skill import SkillViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_skill import UserSkill
 from v1.userapp.views.common_functions import set_user_skill_validated_data
-
-
-class GetUserSkillSerializer(serializers.ModelSerializer):
-
-    skill = GetSkillSerializer(many=False, required=True, source='get_skill')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-
-    class Meta:
-        model = UserSkill
-        fields = ('id_string', 'skill', 'created_date', 'updated_date')
 
 
 class UserSkillViewSerializer(serializers.ModelSerializer):
