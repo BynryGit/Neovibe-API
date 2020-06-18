@@ -8,6 +8,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import utility_required, is_token_validate, role_required
@@ -39,8 +40,8 @@ class RoleList(generics.ListAPIView):
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('role',)
 
-    @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    # @is_token_validate
+    # @role_required(ADMIN, USER, VIEW)
     def get_queryset(self):
         queryset = get_all_role()
         return queryset
@@ -76,10 +77,7 @@ class Role(GenericAPIView):
                     RESULTS: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: serializer.errors,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -118,7 +116,7 @@ class RoleDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: EXCEPTION,
-                    RESULTS: '',
+                    RESULTS: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
@@ -150,9 +148,7 @@ class RoleDetail(GenericAPIView):
                         RESULTS: serializer.errors,
                     }, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

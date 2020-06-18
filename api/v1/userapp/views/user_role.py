@@ -36,20 +36,26 @@ class UserRole(GenericAPIView):
         try:
             role_list = []
             user = get_user_by_id_string(id_string)
-            user_roles = get_user_role_by_user_id(user.id)
-            if user_roles:
-                for user_role in user_roles:
-                    role_obj = get_role_by_id(user_role.role_id)
-                    role = RoleViewSerializer(instance=role_obj, context={'request': request})
-                    role_list.append(role.data)
-                return Response({
-                    STATE: SUCCESS,
-                    DATA: role_list,
-                }, status=status.HTTP_200_OK)
+            if user:
+                user_roles = get_user_role_by_user_id(user.id)
+                if user_roles:
+                    for user_role in user_roles:
+                        role_obj = get_role_by_id(user_role.role_id)
+                        role = RoleViewSerializer(instance=role_obj, context={'request': request})
+                        role_list.append(role.data)
+                    return Response({
+                        STATE: SUCCESS,
+                        DATA: role_list,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        DATA: ROLES_NOT_ASSIGNED,
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                    DATA: ROLES_NOT_ASSIGNED,
+                    DATA: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
