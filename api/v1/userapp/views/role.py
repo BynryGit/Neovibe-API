@@ -104,6 +104,7 @@ class RoleDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, USER, VIEW)
+    @utility_required(MNGL_PUNE,)
     def get(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)

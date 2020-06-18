@@ -42,7 +42,7 @@ DELETE = get_privilege_id(1)
 
 
 # *********** UTILITY CONSTANTS **************
-MNGL_PUNE = get_utility_id(1)
+MNGL_PUNE = get_utility_id(2)
 MNGL_MUMBAI = get_utility_id(1)
 BGCL_KOLKATA = get_utility_id(1)
 
