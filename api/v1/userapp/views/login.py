@@ -152,7 +152,7 @@ class LogoutApiView(APIView):
         try:
             if validate_logout_data(request):
                 token = request.headers['token']
-                user = get_user_by_id_string(request.headers['id-string'])
+                user = get_user_by_id_string(request.data['id_string'])
 
                 if check_token_exists_for_user(token, user.id):
                     token = get_token_by_token(token)

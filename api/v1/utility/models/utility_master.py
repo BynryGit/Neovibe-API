@@ -67,5 +67,6 @@ def get_utility_by_id_string(id_string):
         return False
 
 
-def get_utility_id(id):
-    return id
+def get_utility_by_name(name):
+    utility = UtilityMaster.objects.get(name=name)
+    return utility.id

@@ -67,5 +67,6 @@ def get_submodule_by_module_id(id):
     return SubModule.objects.filter(module_id=id,is_active=True)
 
 
-def get_sub_module_id(id):
-    return id
+def get_sub_module_by_name(name):
+    sub_module = SubModule.objects.get(name=name)
+    return sub_module.id
