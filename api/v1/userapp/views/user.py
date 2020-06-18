@@ -121,7 +121,10 @@ class UserDetail(GenericAPIView):
                     RESULTS: serializer.data,
                 }, status=status.HTTP_200_OK)
             else:
-                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+                return Response({
+                    STATE: EXCEPTION,
+                    RESULTS: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_200_OK)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({

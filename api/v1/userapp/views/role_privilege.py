@@ -6,17 +6,13 @@ from api.messages import *
 from api.constants import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
-from v1.commonapp.models.sub_module import get_sub_module_by_id
-from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.userapp.models.privilege import get_privilege_by_id
-from v1.userapp.models.role import get_role_by_id_string, get_role_by_id
-from v1.userapp.models.role_privilege import get_role_privilege_by_role_id, get_record_values_by_id
-from v1.userapp.serializers.privilege import GetPrivilegeSerializer
-from v1.userapp.serializers.role import GetRoleSerializer, RoleDetailViewSerializer
-from v1.userapp.serializers.role_privilege import RolePrivilegeSerializer, RolePrivilegeViewSerializer
+from v1.userapp.models.role import get_role_by_id_string
+from v1.userapp.models.role_privilege import get_record_values_by_id
+from v1.userapp.serializers.role import RoleDetailViewSerializer
+from v1.userapp.serializers.role_privilege import RolePrivilegeSerializer
 from v1.userapp.views.common_functions import set_role_privilege_validated_data
 
 

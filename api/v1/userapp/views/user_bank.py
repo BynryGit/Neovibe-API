@@ -8,8 +8,6 @@ from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
-from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id
-from v1.tenant.serializers.tenant_bank_detail import TenantBankDetailSerializer, TenantBankDetailViewSerializer
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
 from v1.userapp.models.user_bank import get_user_bank_by_user_id, check_user_bank_exists
 

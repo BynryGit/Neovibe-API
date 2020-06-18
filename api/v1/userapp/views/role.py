@@ -14,7 +14,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import utility_required, is_token_validate, role_required
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
-from v1.userapp.serializers.role import RoleListSerializer, RoleViewSerializer, RoleSerializer, RoleDetailViewSerializer
+from v1.userapp.serializers.role import RoleListSerializer, RoleSerializer, RoleDetailViewSerializer
 
 
 # API Header
@@ -79,7 +79,7 @@ class Role(GenericAPIView):
                     RESULTS: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -151,7 +151,7 @@ class RoleDetail(GenericAPIView):
                         RESULTS: serializer.errors,
                     }, status=status.HTTP_400_BAD_REQUEST)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

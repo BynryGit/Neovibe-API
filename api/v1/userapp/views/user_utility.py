@@ -12,8 +12,6 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values
 from v1.userapp.serializers.user_utility import UserUtilitySerializer, UserUtilityViewSerializer
 from v1.userapp.views.common_functions import set_user_utility_validated_data
-from v1.utility.models.utility_master import get_utility_by_id
-from v1.utility.serializers.utility import UtilityMasterViewSerializer
 
 
 # API Header
