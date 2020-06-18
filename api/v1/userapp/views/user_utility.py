@@ -40,8 +40,7 @@ class UserUtility(GenericAPIView):
                 user_utilities = get_utility_by_user(user.id)
                 if user_utilities:
                     for user_utility in user_utilities:
-                        utility_obj = get_utility_by_id(user_utility.utility_id)
-                        utility = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                        utility = UserUtilityViewSerializer(instance=user_utility, context={'request': request})
                         utility_list.append(utility.data)
                     return Response({
                         STATE: SUCCESS,
@@ -106,8 +105,7 @@ class UserUtility(GenericAPIView):
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
                 for utility in request.data['utilities']:
-                    validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string'],
-                                     "is_active": utility['is_active']}
+                    validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
                     validated_data = set_user_utility_validated_data(validate_data)
                     serializer = UserUtilitySerializer(data=validated_data)
                     if serializer.is_valid(raise_exception=False):

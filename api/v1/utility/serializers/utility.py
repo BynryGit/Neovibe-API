@@ -3,6 +3,9 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
+
+from api.settings import DISPLAY_DATE_TIME_FORMAT
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl
 from v1.utility.views.common_functions import set_utility_validated_data
 
@@ -15,12 +18,13 @@ class UtilitySerializer(serializers.ModelSerializer):
 
 
 class UtilityMasterViewSerializer(serializers.ModelSerializer):
-    tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UtilityMasterTbl
-        fields = ('id_string', 'tenant_id_string', 'tenant_name', 'short_name', 'name', 'phone_no', 'email_id')
+        fields = ('id_string', 'short_name', 'name', 'phone_no', 'email_id',  'created_date', 'updated_date', 'tenant')
 
 
 class UtilityMasterSerializer(serializers.ModelSerializer):

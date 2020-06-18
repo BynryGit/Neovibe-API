@@ -8,7 +8,7 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_utility import UserUtility
 from v1.userapp.views.common_functions import set_user_utility_validated_data
-from v1.utility.serializers.utility import UtilitySerializer
+from v1.utility.serializers.utility import UtilitySerializer, UtilityMasterViewSerializer
 
 
 class GetUserUtilitySerializer(serializers.ModelSerializer):
@@ -24,14 +24,13 @@ class GetUserUtilitySerializer(serializers.ModelSerializer):
 
 class UserUtilityViewSerializer(serializers.ModelSerializer):
 
-    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    utility = UtilitySerializer(many=False, required=True, source='get_utility')
+    utility = UtilityMasterViewSerializer(many=False, required=True, source='get_utility')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserUtility
-        fields = ('id_string', 'tenant', 'utility', 'created_date', 'updated_date')
+        fields = ('id_string', 'created_date', 'updated_date', 'utility')
 
 
 class UserUtilitySerializer(serializers.ModelSerializer):

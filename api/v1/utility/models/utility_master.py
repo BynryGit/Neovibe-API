@@ -47,6 +47,9 @@ class UtilityMaster(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_tenant(self):
+        return self.tenant
+
 # Create Utility Master table end.
 
 
