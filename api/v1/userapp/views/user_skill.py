@@ -112,7 +112,7 @@ class UserSkill(GenericAPIView):
             data = {}
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
-                ata['email'] = user_obj.email
+                data['email'] = user_obj.email
                 data['id_string'] = id_string
                 for skill in request.data['skills']:
                     validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string'],
