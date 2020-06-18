@@ -40,8 +40,8 @@ class PrivilegeList(generics.ListAPIView):
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('name',)
 
-    @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    # @is_token_validate
+    # @role_required(ADMIN, USER, VIEW)
     def get_queryset(self):
         queryset = get_all_privilege()
         return queryset
@@ -62,7 +62,7 @@ class PrivilegeList(generics.ListAPIView):
 class Privilege(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def post(self, request, format=None):
         try:
             serializer = PrivilegeSerializer(data=request.data)
@@ -129,7 +129,7 @@ class PrivilegeDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
             role_obj = get_privilege_by_id_string(id_string)

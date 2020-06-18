@@ -37,7 +37,7 @@ from v1.userapp.views.common_functions import set_role_privilege_validated_data
 class RolePrivilegeDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
             role_obj = get_role_by_id_string(id_string)
@@ -102,7 +102,7 @@ class RolePrivilegeDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)

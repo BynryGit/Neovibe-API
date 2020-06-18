@@ -34,7 +34,7 @@ from v1.userapp.views.common_functions import set_user_privilege_validated_data
 class UserPrivilege(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def post(self, request, format=None):
         try:
             data = []
@@ -134,7 +134,7 @@ class UserPrivilegeDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
             data = []

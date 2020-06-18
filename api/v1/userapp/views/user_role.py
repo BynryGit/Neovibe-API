@@ -9,9 +9,7 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
-from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values, get_record_values_by_id
-from v1.userapp.serializers.role import RoleViewSerializer
 
 
 # API Header
@@ -71,7 +69,7 @@ class UserRole(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
             data = []
@@ -107,7 +105,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
             data = []
