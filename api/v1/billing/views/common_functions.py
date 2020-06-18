@@ -1,9 +1,10 @@
-from v1.billing.models.invoice_bill import get_consumer_invoice_bill_by_month, get_previous_consumer_bill
+from v1.billing.models.invoice_bill import get_consumer_invoice_bill_by_month, get_previous_consumer_bill, InvoiceBill
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
-from v1.consumer.models.consumer_master import ConsumerMaster
+from v1.consumer.models.consumer_master import ConsumerMaster, get_consumer_by_consumer_no
 from v1.consumer.models.consumer_scheme_master import ConsumerSchemeMaster
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.meter_reading.models.meter_reading import get_consumer_meter_reading_by_bill_month, MeterReading
+from v1.meter_reading.models.temp_consumer_master import TempConsumerMaster
 from v1.payment.models.consumer_payment import Payment
 from v1.utility.models.utility_service_plan import get_utility_service_plans_by_dates, UtilityServicePlan
 from v1.utility.models.utility_service_plan_rate import get_utility_service_plans_rates, UtilityServicePlanRate
@@ -21,15 +22,32 @@ def set_validated_data(validated_data):
 
 def run_bill(consumer, bill_month, due_date, schedule):
     try:
-        pass
+        generate_consumer_bill(consumer, bill_month, due_date, schedule)
     except:
         pass
 
 
-def generate_consumer_bill(consumer, bill_month):
+def generate_consumer_bill(consumer, bill_month, due_date, schedule):
     try:
-        meter_reading = get_consumer_meter_reading_by_bill_month(consumer, bill_month)
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+        consumer_obj = TempConsumerMaster.objects.get(consumer_no = consumer, bill_month = bill_month)
+        if InvoiceBill.objects.filter(consumer_no = consumer, bill_month = bill_month).exists():
+            pass
+        else:
+            bill = InvoiceBill()
+            bill.tenant = schedule.tenent
+            bill.utility = schedule.utility
+            bill.consumer_no = consumer
+            bill.bill_month = bill_month
+            bill.due_date = due_date
+            bill.address = consumer_obj.address_line_1
+            bill.contact = consumer_obj.phone_mobile
+            bill.route_id = consumer_obj.route
+            bill.cycle_id = consumer_obj.bill_cycle
+            if InvoiceBill.objects.filter(consumer_no = consumer).exists():
+                bill.bill_count = InvoiceBill.objects.filter(consumer_no = consumer).count() + 1
+            else:
+                bill.bill_count = 1
+            bill.save()
     except:
         pass
 
@@ -108,9 +126,16 @@ def save_emi(consumer, bill_month):
 
 def save_meter_data(consumer, bill_month):
     try:
+        consumption = 0.0
+        current_reading = 0.0
+        readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        if bill.bill_count == 1:
-            pass
+        for reading in readings:
+            current_reading += reading.current_reading
+            consumption += reading.consumption
+        bill.current_reading = current_reading
+        bill.consumption = consumption
+        bill.save()
     except:
         pass
 

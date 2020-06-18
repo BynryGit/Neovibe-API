@@ -82,6 +82,13 @@ def get_consumer_by_id(id):
         return False
 
 
+def get_consumer_by_consumer_no(consumer_no):
+    try:
+        return ConsumerMaster.objects.get(consumer_no = consumer_no)
+    except:
+        return False
+
+
 def get_consumer_by_registration_id(id):
     try:
         return ConsumerMaster.objects.get(registration_id = id)
