@@ -29,7 +29,7 @@ class UserSkillViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserSkill
-        fields = ('id_string', 'tenant', 'created_date' 'updated_date')
+        fields = ('id_string', 'tenant', 'created_date', 'updated_date')
 
 
 class UserSkillSerializer(serializers.ModelSerializer):
