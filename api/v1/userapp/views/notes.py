@@ -57,12 +57,12 @@ class UserNote(GenericAPIView):
                     else:
                         return Response({
                             STATE: ERROR,
-                            RESULTS: NOTES_NOT_FOUND,
+                            RESULTS: NO_NOTES_NOT_FOUND,
                         }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     return Response({
                         STATE: ERROR,
-                        RESULTS: NOTES_NOT_FOUND,
+                        RESULTS: SERVICE_TYPE_NOT_FOUND,
                     }, status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({
@@ -87,27 +87,31 @@ class UserNote(GenericAPIView):
             if user_obj:
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
-                for note in request.data['notes']:
-                    validate_data = {'identification_id': str(id_string), 'utility_id': request.data['utility_id'], 'module_id': request.data['module_id'], 'sub_module_id': request.data['sub_module_id'], 'service_type_id': request.data['service_type_id'], 'note_name' : note['note_name'], 'note_color': note['note_color'], 'note': note['note']}
-                    serializer = NoteSerializer(data=validate_data)
-                    if serializer.is_valid(raise_exception=False):
-                        user_id_string = get_user_from_token(request.headers['token'])
-                        user = get_user_by_id_string(user_id_string)
-                        note_obj = serializer.create(serializer.validated_data, user)
-                        view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
-                        note_list.append(view_serializer.data)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                            RESULTS: serializer.errors,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                data['notes'] = note_list
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: data,
-                }, status=status.HTTP_201_CREATED)
+                service_type = get_service_type_by_name('User')
+                if service_type:
+                    for note in request.data['notes']:
+                        validate_data = {'identification_id': str(id_string), 'utility_id': request.data['utility_id'], 'module_id': request.data['module_id'], 'sub_module_id': request.data['sub_module_id'], 'service_type_id': str(service_type.id_string), 'note_name' : note['note_name'], 'note_color': note['note_color'], 'note': note['note']}
+                        serializer = NoteSerializer(data=validate_data)
+                        if serializer.is_valid(raise_exception=False):
+                            user_id_string = get_user_from_token(request.headers['token'])
+                            user = get_user_by_id_string(user_id_string)
+                            note_obj = serializer.create(serializer.validated_data, user)
+                            view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                            note_list.append(view_serializer.data)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    data['notes'] = note_list
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: data,
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    raise CustomAPIException(SERVICE_TYPE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -122,28 +126,33 @@ class UserNote(GenericAPIView):
         try:
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
-                request.data['identification_id'] = str(id_string)
-                note = get_note_by_id_string(request.data['note_id'])
-                if note:
-                    serializer = NoteSerializer(data=request.data)
-                    if serializer.is_valid(raise_exception=False):
-                        user_id_string = get_user_from_token(request.headers['token'])
-                        user = get_user_by_id_string(user_id_string)
-                        note_obj = serializer.update(note, serializer.validated_data, user)
-                        view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: view_serializer.data,
-                        }, status=status.HTTP_200_OK)
+                service_type = get_service_type_by_name('User')
+                if service_type:
+                    request.data['identification_id'] = str(id_string)
+                    request.data['service_type_id'] = str(service_type.id_string)
+                    note = get_note_by_id_string(request.data['note_id'])
+                    if note:
+                        serializer = NoteSerializer(data=request.data)
+                        if serializer.is_valid(raise_exception=False):
+                            user_id_string = get_user_from_token(request.headers['token'])
+                            user = get_user_by_id_string(user_id_string)
+                            note_obj = serializer.update(note, serializer.validated_data, user)
+                            view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: view_serializer.data,
+                            }, status=status.HTTP_200_OK)
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
-                        return Response({
-                            STATE: ERROR,
-                            RESULTS: serializer.errors,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        raise CustomAPIException(NOTES_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
                 else:
-                    raise CustomAPIException("Note not found.", status_code=status.HTTP_404_NOT_FOUND)
+                    raise CustomAPIException(SERVICE_TYPE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

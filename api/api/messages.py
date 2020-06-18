@@ -56,10 +56,11 @@ ROLES_NOT_ASSIGNED = 'No roles assigned to user.'
 AREA_NOT_ASSIGNED = 'No areas assigned to user.'
 SKILL_NOT_ASSIGNED = 'No skills assigned to user.'
 UTILITY_NOT_ASSIGNED = 'No utilities assigned to user.'
-NOTES_NOT_FOUND = 'No notes found for user.'
+NO_NOTES_NOT_FOUND = 'No notes found for user.'
+NOTES_NOT_FOUND = 'Note not found.'
 NO_DOCUMENT_NOT_FOUND = 'No Documents found for user.'
 DOCUMENT_NOT_FOUND = 'Document not found.'
 UTILITY_NOT_FOUND="Utility not found"
 DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
-DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
+SERVICE_TYPE_NOT_FOUND="No record found for user service type"
 
