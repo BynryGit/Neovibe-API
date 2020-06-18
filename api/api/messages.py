@@ -45,6 +45,8 @@ UNAUTHORIZED = 'Unauthorized'
 
 
 # *********** USER CUSTOM CONSTANTS **************
+BANK_ALREADY_EXISTS = '"Bank detail already exists for specified user.".'
+BANK_NOT_FOUND = 'Bank detail not found for specified user.'
 ROLE_PRIVILEGE_NOT_FOUND = 'No Privileges attached to role.'
 USER_PRIVILEGE_NOT_FOUND = 'No Privileges assigned to user.'
 PRIVILEGE_NOT_FOUND = 'No Privileges found.'

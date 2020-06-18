@@ -54,10 +54,13 @@ class UserUtility(GenericAPIView):
                 else:
                     return Response({
                         STATE: ERROR,
-                        DATA: 'No records found.',
+                        DATA: UTILITY_NOT_ASSIGNED,
                     }, status=status.HTTP_400_BAD_REQUEST)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -97,7 +100,7 @@ class UserUtility(GenericAPIView):
                     RESULTS: data,
                 }, status=status.HTTP_201_CREATED)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -142,7 +145,7 @@ class UserUtility(GenericAPIView):
                     RESULTS: data,
                 }, status=status.HTTP_200_OK)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

@@ -44,9 +44,15 @@ class UserBankDetail(GenericAPIView):
                         DATA: serializer.data,
                     }, status=status.HTTP_200_OK)
                 else:
-                    raise CustomAPIException("Bank detail not found.", status_code=status.HTTP_404_NOT_FOUND)
+                    return Response({
+                        STATE: EXCEPTION,
+                        DATA: BANK_NOT_FOUND,
+                    }, status=status.HTTP_200_OK)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                return Response({
+                    STATE: EXCEPTION,
+                    DATA: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_200_OK)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             return Response({
@@ -80,9 +86,9 @@ class UserBankDetail(GenericAPIView):
                             RESULTS: list(serializer.errors.values())[0][0],
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    raise CustomAPIException("Bank detail already exists for specified user.", status_code=status.HTTP_404_NOT_FOUND)
+                    raise CustomAPIException(BANK_ALREADY_EXISTS, status_code=status.HTTP_404_NOT_FOUND)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -116,9 +122,9 @@ class UserBankDetail(GenericAPIView):
                             RESULTS: list(serializer.errors.values())[0][0],
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    raise CustomAPIException("Bank detail not found for specified user.", status_code=status.HTTP_404_NOT_FOUND)
+                    raise CustomAPIException(BANK_ALREADY_EXISTS, status_code=status.HTTP_404_NOT_FOUND)
             else:
-                raise CustomAPIException("User is string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)

@@ -68,7 +68,7 @@ class RolePrivilegeDetail(GenericAPIView):
                     RESULTS: serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
@@ -140,7 +140,7 @@ class RolePrivilegeDetail(GenericAPIView):
                     RESULTS: serializer.data,
                 }, status=status.HTTP_200_OK)
             else:
-                raise CustomAPIException("Id string not found.", status_code=status.HTTP_404_NOT_FOUND)
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
             res = self.handle_exception(e)
