@@ -24,8 +24,8 @@ from django.db import models  # importing package for database
 
 class Privilege(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    # tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    # utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=500, null=False, blank=False) #View,Edit
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

@@ -6,8 +6,6 @@ from api.messages import *
 from api.constants import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
-from v1.commonapp.models.skills import get_skill_by_id
-from v1.commonapp.serializers.skill import GetSkillSerializer, SkillViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
@@ -35,17 +33,21 @@ class UserSkill(GenericAPIView):
     @role_required(ADMIN, USER, VIEW)
     def get(self, request, id_string):
         try:
+            data = {}
             skill_list = []
             user = get_user_by_id_string(id_string)
             if user:
+                data['email'] = user.email
+                data['id_string'] = user.id_string
                 user_skills = get_skill_by_user_id(user.id)
                 if user_skills:
                     for user_skill in user_skills:
                         skill = UserSkillViewSerializer(instance=user_skill, context={'request': request})
-                        skill_list.append(skill.data)
+                        skill_list.append(skill.data['skill'])
+                    data['skills']  = skill_list
                     return Response({
                         STATE: SUCCESS,
-                        DATA: skill_list,
+                        DATA: data,
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({

@@ -44,7 +44,7 @@ class UserRole(GenericAPIView):
                 if user_roles:
                     for user_role in user_roles:
                         role = UserRoleViewSerializer(instance=user_role, context={'request': request})
-                        role_list.append(role.data)
+                        role_list.append(role.data['role'])
                     data['roles'] = role_list
                     return Response({
                         STATE: SUCCESS,
@@ -72,9 +72,12 @@ class UserRole(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
-            data = []
+            role_list = []
+            data = {}
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for role in request.data['roles']:
                     validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'role_id': role['role_id_string']}
                     serializer = UserRoleSerializer(data=validate_data)
@@ -84,12 +87,13 @@ class UserRole(GenericAPIView):
                         user_role_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserRoleViewSerializer(instance=user_role_obj,
                                                                       context={'request': request})
-                        data.append(view_serializer.data)
+                        role_list.append(view_serializer.data['role'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: list(serializer.errors.values())[0][0],
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['roles'] = role_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,
@@ -108,9 +112,12 @@ class UserRole(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
-            data = []
+            data = {}
+            role_list = []
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for role in request.data['roles']:
                     validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
                     serializer = UserRoleSerializer(data=validate_data)
@@ -124,12 +131,13 @@ class UserRole(GenericAPIView):
                             user_role_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserRoleViewSerializer(instance=user_role_obj,
                                                                       context={'request': request})
-                        data.append(view_serializer.data)
+                        role_list.append(view_serializer.data['role'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: list(serializer.errors.values())[0][0],
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['roles'] = role_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,

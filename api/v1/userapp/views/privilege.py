@@ -118,7 +118,7 @@ class PrivilegeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: EXCEPTION,
-                    RESULTS: '',
+                    RESULTS: PRIVILEGE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
@@ -153,6 +153,7 @@ class PrivilegeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULTS: PRIVILEGE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'ERROR', user='test', name='test')
