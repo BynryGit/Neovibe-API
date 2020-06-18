@@ -21,6 +21,7 @@ DUPLICATE = 'duplicate'
 
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER="User is not authorised"
+UNAUTHORIZED_UTILITY="User not authorised for utility"
 INVALID_TOKEN="User token is not valid"
 SUCCESSFUL_LOGIN="User logged in successfully"
 SUCCESSFUL_LOGOUT="User logged out successfully"

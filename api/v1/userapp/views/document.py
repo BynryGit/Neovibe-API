@@ -11,7 +11,7 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.models.document import get_document_by_user_id, get_document_by_id_string
 from v1.commonapp.models.document_type import get_document_type_by_name
 from v1.commonapp.views.logger import logger
-from v1.userapp.decorators import is_token_validate, role_required
+from v1.userapp.decorators import is_token_validate, role_required, utility_required
 from v1.userapp.serializers.document import DocumentViewSerializer, DocumentSerializer
 
 # API Header
@@ -60,6 +60,7 @@ class UserDocument(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
+    @utility_required
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
@@ -88,6 +89,7 @@ class UserDocument(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
+    @utility_required
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:

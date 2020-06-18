@@ -64,6 +64,7 @@ class RoleList(generics.ListAPIView):
 class Role(GenericAPIView):
 
     @is_token_validate
+    @utility_required
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, format=None):
         try:
@@ -105,7 +106,6 @@ class RoleDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, USER, VIEW)
-    @utility_required(MNGL_PUNE,)
     def get(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
@@ -129,6 +129,7 @@ class RoleDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
+    @utility_required
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
