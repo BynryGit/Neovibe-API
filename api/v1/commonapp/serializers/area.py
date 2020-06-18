@@ -1,5 +1,9 @@
 from rest_framework import serializers
+
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.area import Area
+from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
+from v1.utility.serializers.utility import UtilitySerializer
 
 
 class GetAreaSerializer(serializers.ModelSerializer):
@@ -17,11 +21,11 @@ class AreaListSerializer(serializers.ModelSerializer):
 
 
 class AreaViewSerializer(serializers.ModelSerializer):
-    tenant = serializers.ReadOnlyField(source='tenant.name')
-    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
-    utility = serializers.ReadOnlyField(source='utility.name')
-    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_tenant')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = Area
-        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string')
+        fields = ('id_string', 'name', 'created_date', 'updated_date', 'tenant', 'utility')

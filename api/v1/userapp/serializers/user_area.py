@@ -5,9 +5,8 @@ from rest_framework import serializers, status
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 
-from v1.commonapp.serializers.area import GetAreaSerializer
+from v1.commonapp.serializers.area import GetAreaSerializer, AreaViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_area import UserArea
 from v1.userapp.views.common_functions import set_user_area_validated_data
 
@@ -25,13 +24,13 @@ class GetUserAreaSerializer(serializers.ModelSerializer):
 
 class UserAreaViewSerializer(serializers.ModelSerializer):
 
-    tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
+    area = AreaViewSerializer(many=False, required=True, source='get_area')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserArea
-        fields = ('id_string', 'tenant', 'created_date', 'updated_date')
+        fields = ('id_string', 'created_date', 'updated_date', 'area')
 
 
 class UserAreaSerializer(serializers.ModelSerializer):

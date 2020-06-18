@@ -5,8 +5,6 @@ from rest_framework.generics import GenericAPIView
 from api.messages import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
-from v1.commonapp.models.area import get_area_by_id
-from v1.commonapp.serializers.area import GetAreaSerializer, AreaViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
@@ -40,8 +38,7 @@ class UserArea(GenericAPIView):
                 user_areas = get_area_by_user_id(user.id)
                 if user_areas:
                     for user_area in user_areas:
-                        area_obj = get_area_by_id(user_area.area_id)
-                        area = AreaViewSerializer(instance=area_obj, context={'request': request})
+                        area = UserAreaViewSerializer(instance=user_area, context={'request': request})
                         area_list.append(area.data)
                     return Response({
                         STATE: SUCCESS,
@@ -76,8 +73,7 @@ class UserArea(GenericAPIView):
                         user_id_string = get_user_from_token(request.headers['token'])
                         user = get_user_by_id_string(user_id_string)
                         user_area_obj = serializer.create(serializer.validated_data, user)
-                        area = get_area_by_id(user_area_obj.area_id)
-                        view_serializer = AreaViewSerializer(instance=area, context={'request': request})
+                        view_serializer = UserAreaViewSerializer(instance=user_area_obj, context={'request': request})
                         data.append(view_serializer.data)
                     else:
                         return Response({
@@ -118,8 +114,7 @@ class UserArea(GenericAPIView):
                             user_area_obj = serializer.update(user_area, serializer.validated_data, user)
                         else:
                             user_area_obj = serializer.create(serializer.validated_data, user)
-                        area = get_area_by_id(user_area_obj.area_id)
-                        view_serializer = AreaViewSerializer(instance=area,
+                        view_serializer = UserAreaViewSerializer(instance=user_area_obj,
                                                                  context={'request': request})
                         data.append(view_serializer.data)
                     else:

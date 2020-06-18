@@ -4,7 +4,7 @@ from datetime import datetime
 from django.db import models
 
 # from master.models import get_user_by_id_string
-from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.area import get_area_by_id_string, get_area_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -29,6 +29,9 @@ class UserArea(models.Model):
 
     def get_tenant(self):
         return self.tenant
+
+    def get_area(self):
+        return get_area_by_id(self.area_id)
 
 
 def get_area_by_user_id(user_id):
