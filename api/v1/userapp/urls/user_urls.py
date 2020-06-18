@@ -6,7 +6,7 @@ from v1.userapp.views.notes import UserNote
 from v1.userapp.views.user import User, UserList, UserDetail
 from v1.userapp.views.user_area import UserArea
 from v1.userapp.views.user_bank import UserBankDetail
-from v1.userapp.views.user_privilege import UserPrivilege, UserPrivilegeDetail
+from v1.userapp.views.user_privilege import UserPrivilegeDetail
 from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
 from v1.userapp.views.user_utility import UserUtility
@@ -19,8 +19,6 @@ urlpatterns = [
     path('<uuid:id_string>/bank/', UserBankDetail.as_view()),
 
     path('<uuid:id_string>/role/', UserRole.as_view()),
-
-    path('privilege/', UserPrivilege.as_view()),
 
     path('<uuid:id_string>/privilege/', UserPrivilegeDetail.as_view()),
 

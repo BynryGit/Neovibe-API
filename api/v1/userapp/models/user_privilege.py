@@ -33,6 +33,7 @@ class UserPrivilege(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     user_id = models.BigIntegerField(null=True, blank=True)
+    role_id = models.BigIntegerField(null=True, blank=True)
     module_id = models.BigIntegerField(null=True, blank=True)
     sub_module_id = models.BigIntegerField(null=True, blank=True)
     privilege_id = models.BigIntegerField(null=True, blank=True) # View, Edit
