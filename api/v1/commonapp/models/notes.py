@@ -95,9 +95,5 @@ def get_notes_by_user_id(user_id,service_type_id):
     return Notes.objects.filter(identification_id=user_id, service_type_id=service_type_id)
 
 
-def get_note_by_id_string(id_string):
-    return Notes.objects.filter(id_string=id_string).last()
-
-
 def get_note_by_id(id):
     return Notes.objects.filter(id=id).last()

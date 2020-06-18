@@ -7,6 +7,7 @@ from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id_st
 from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
+from v1.commonapp.models.notes import get_note_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
@@ -280,13 +281,13 @@ def set_note_validated_data(validated_data):
         if module:
             validated_data["module_id"] = module.id
         else:
-            raise CustomAPIException("User not found.", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Module not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "sub_module_id" in validated_data:
         sub_module = get_sub_module_by_id_string(validated_data["sub_module_id"])
         if sub_module:
             validated_data["sub_module_id"] = sub_module.id
         else:
-            raise CustomAPIException("Role not found.", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Sub module not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "service_type_id" in validated_data:
         service_type = get_service_type_by_id_string(validated_data["service_type_id"])
         if service_type:
@@ -299,6 +300,12 @@ def set_note_validated_data(validated_data):
             validated_data["identification_id"] = identification.id
         else:
             raise CustomAPIException("Identification not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "note_id" in validated_data:
+        note = get_note_by_id_string(validated_data["note_id"])
+        if note:
+            validated_data["note_id"] = note.id
+        else:
+            raise CustomAPIException("Note not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

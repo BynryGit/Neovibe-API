@@ -52,5 +52,8 @@ def get_service_type_by_id(id):
 
 
 def get_service_type_by_name(name):
-    return ServiceType.objects.get(name=name)
+    try:
+        return ServiceType.objects.get(name=name)
+    except:
+        return False
 # End the Code
