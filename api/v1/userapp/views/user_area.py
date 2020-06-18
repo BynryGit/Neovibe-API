@@ -47,7 +47,7 @@ class UserArea(GenericAPIView):
                     data['areas'] = area_list
                     return Response({
                         STATE: SUCCESS,
-                        DATA: area_list,
+                        DATA: data,
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({
