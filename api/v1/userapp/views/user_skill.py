@@ -40,8 +40,7 @@ class UserSkill(GenericAPIView):
                 user_skills = get_skill_by_user_id(user.id)
                 if user_skills:
                     for user_skill in user_skills:
-                        skill_obj = get_skill_by_id(user_skill.skill_id)
-                        skill = SkillViewSerializer(instance=skill_obj, context={'request': request})
+                        skill = UserSkillViewSerializer(instance=user_skill, context={'request': request})
                         skill_list.append(skill.data)
                     return Response({
                         STATE: SUCCESS,

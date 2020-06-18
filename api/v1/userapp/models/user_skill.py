@@ -4,7 +4,7 @@ from datetime import datetime
 from django.db import models
 
 # from master.models import get_user_by_id_string
-from v1.commonapp.models.skills import get_skill_by_id_string
+from v1.commonapp.models.skills import get_skill_by_id_string, get_skill_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 
 
@@ -27,6 +27,9 @@ class UserSkill(models.Model):
 
     def get_tenant(self):
         return self.tenant
+
+    def get_skill(self):
+        return get_skill_by_id(self.skill_id)
 
 
 def get_skill_by_user_id(user_id):
