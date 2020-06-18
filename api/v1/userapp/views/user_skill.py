@@ -38,7 +38,7 @@ class UserSkill(GenericAPIView):
             user = get_user_by_id_string(id_string)
             if user:
                 data['email'] = user.email
-                data['id_string'] = user.id_string
+                data['id_string'] = id_string
                 user_skills = get_skill_by_user_id(user.id)
                 if user_skills:
                     for user_skill in user_skills:
@@ -68,9 +68,12 @@ class UserSkill(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
-            data = []
+            skill_list = []
+            data = {}
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for skill in request.data['skills']:
                     validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string']}
                     serializer = UserSkillSerializer(data=validate_data)
@@ -80,12 +83,13 @@ class UserSkill(GenericAPIView):
                         user_skill_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserSkillViewSerializer(instance=user_skill_obj,
                                                                  context={'request': request})
-                        data.append(view_serializer.data)
+                        skill_list.append(view_serializer.data['skill'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['skills'] = skill_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,
@@ -104,9 +108,12 @@ class UserSkill(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
-            data = []
+            skill_list = []
+            data = {}
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                ata['email'] = user_obj.email
+                data['id_string'] = id_string
                 for skill in request.data['skills']:
                     validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string'],
                                      "is_active": skill['is_active']}
@@ -122,12 +129,13 @@ class UserSkill(GenericAPIView):
                             user_skill_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserSkillViewSerializer(instance=user_skill_obj,
                                                                  context={'request': request})
-                        data.append(view_serializer.data)
+                        skill_list.append(view_serializer.data['skill'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['skills'] = skill_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,

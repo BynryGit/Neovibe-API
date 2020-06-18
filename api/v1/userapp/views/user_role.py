@@ -39,7 +39,7 @@ class UserRole(GenericAPIView):
             user = get_user_by_id_string(id_string)
             if user:
                 data['email'] = user.email
-                data['id_string'] = user.id_string
+                data['id_string'] = id_string
                 user_roles = get_user_role_by_user_id(user.id)
                 if user_roles:
                     for user_role in user_roles:
