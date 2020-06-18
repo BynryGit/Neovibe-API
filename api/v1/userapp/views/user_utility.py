@@ -36,16 +36,20 @@ class UserUtility(GenericAPIView):
     def get(self, request, id_string):
         try:
             utility_list = []
+            data = {}
             user = get_user_by_id_string(id_string)
             if user:
+                data['email'] = user.email
+                data['id_string'] = id_string
                 user_utilities = get_utility_by_user(user.id)
                 if user_utilities:
                     for user_utility in user_utilities:
                         utility = UserUtilityViewSerializer(instance=user_utility, context={'request': request})
-                        utility_list.append(utility.data)
+                        utility_list.append(utility.data['utility'])
+                    data['utilities'] = utility_list
                     return Response({
                         STATE: SUCCESS,
-                        DATA: utility_list,
+                        DATA: data,
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({
@@ -66,9 +70,12 @@ class UserUtility(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, id_string):
         try:
-            data = []
+            utility_list = []
+            data = {}
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for utility in request.data['utilities']:
                     validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
                     serializer = UserUtilitySerializer(data=validate_data)
@@ -78,12 +85,13 @@ class UserUtility(GenericAPIView):
                         user_utility_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
                                                                  context={'request': request})
-                        data.append(view_serializer.data)
+                        utility_list.append(view_serializer.data['utility'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['utilities'] = utility_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,
@@ -102,9 +110,12 @@ class UserUtility(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
-            data = []
+            utility_list = []
+            data = {}
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
+                data['email'] = user_obj.email
+                data['id_string'] = id_string
                 for utility in request.data['utilities']:
                     validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
                     validated_data = set_user_utility_validated_data(validate_data)
@@ -119,12 +130,13 @@ class UserUtility(GenericAPIView):
                             user_utility_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
                                                                  context={'request': request})
-                        data.append(view_serializer.data)
+                        utility_list.append(view_serializer.data['utility'])
                     else:
                         return Response({
                             STATE: ERROR,
                             RESULTS: serializer.errors,
                         }, status=status.HTTP_400_BAD_REQUEST)
+                data['utilities'] = utility_list
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: data,
