@@ -4,10 +4,22 @@ from datetime import datetime
 
 from rest_framework import serializers, status
 
+from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.tenant.serializers.tenant_bank_detail import TenantBankDetailViewSerializer
 from v1.userapp.models.user_bank import UserBank
-
 from v1.userapp.views.common_functions import set_user_bank_validated_data
+
+
+class UserBankViewSerializer(serializers.ModelSerializer):
+
+    bank = TenantBankDetailViewSerializer(many=False, required=True, source='get_bank')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+
+    class Meta:
+        model = UserBank
+        fields = ('id_string', 'created_date', 'updated_date', 'bank')
 
 
 class UserBankSerializer(serializers.ModelSerializer):

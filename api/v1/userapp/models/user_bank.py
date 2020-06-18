@@ -5,7 +5,7 @@ from django.db import models
 
 # from master.models import get_user_by_id_string
 from master.models import get_user_by_id_string
-from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id_string
+from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id_string, get_tenant_bank_details_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -30,6 +30,9 @@ class UserBank(models.Model):
 
     def get_tenant(self):
         return self.tenant
+
+    def get_bank(self):
+        return get_tenant_bank_details_by_id(self.bank_id)
 
 
 def get_user_bank_by_user_id(user_id):

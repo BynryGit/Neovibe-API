@@ -24,7 +24,7 @@ from v1.userapp.models.user_bank import get_user_bank_by_user_id, check_user_ban
 # Tables used: 2.5 Users & Privileges - User Bank Details
 # Author: Arpita
 # Created on: 21/05/2020
-from v1.userapp.serializers.user_bank import UserBankSerializer
+from v1.userapp.serializers.user_bank import UserBankSerializer, UserBankViewSerializer
 
 
 class UserBankDetail(GenericAPIView):
@@ -37,8 +37,7 @@ class UserBankDetail(GenericAPIView):
             if user:
                 user_bank = get_user_bank_by_user_id(user.id)
                 if user_bank:
-                    bank = get_tenant_bank_details_by_id(user_bank.bank_id)
-                    serializer = TenantBankDetailViewSerializer(instance=bank, context={'request': request})
+                    serializer = UserBankViewSerializer(instance=user_bank, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         DATA: serializer.data,
@@ -69,8 +68,7 @@ class UserBankDetail(GenericAPIView):
                         user_id_string = get_user_from_token(request.headers['token'])
                         user = get_user_by_id_string(user_id_string)
                         user_bank_obj = serializer.create(serializer.validated_data, user)
-                        bank = get_tenant_bank_details_by_id(user_bank_obj.bank_id)
-                        view_serializer = TenantBankDetailViewSerializer(instance=bank, context={'request': request})
+                        view_serializer = UserBankViewSerializer(instance=user_bank_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: view_serializer.data,
@@ -106,8 +104,7 @@ class UserBankDetail(GenericAPIView):
                         user_id_string = get_user_from_token(request.headers['token'])
                         user = get_user_by_id_string(user_id_string)
                         user_bank_obj = serializer.update(user_bank, serializer.validated_data, user)
-                        bank = get_tenant_bank_details_by_id(user_bank_obj.bank_id)
-                        view_serializer = TenantBankDetailViewSerializer(instance=bank, context={'request': request})
+                        view_serializer = UserBankViewSerializer(instance=user_bank_obj, context={'request': request})
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: view_serializer.data,
