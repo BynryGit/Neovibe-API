@@ -91,3 +91,13 @@ def set_validation_validated_data(validated_data):
         validator = get_user_by_id_string(validated_data["validator_id"])
         validated_data["validator_id"] = validator.id
     return validated_data
+
+
+def set_route_upload_validated_data(validated_data):
+    if "bill_cycle_id" in validated_data:
+        bill_cycle = get_bill_cycle_by_id_string(validated_data["bill_cycle_id"])
+        validated_data["bill_cycle_id"] = bill_cycle.id
+    if "route_id" in validated_data:
+        route = get_route_by_id_string(validated_data["route_id"])
+        validated_data["route_id"] = route.id
+    return validated_data
