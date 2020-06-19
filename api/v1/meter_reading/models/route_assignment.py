@@ -35,6 +35,8 @@ class RouteAssignment(models.Model):
     assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     month = models.CharField(max_length=20, blank=False, null=False)
     status_id = models.BigIntegerField(null=True, default=1, blank=True)
+    is_meter_reading = models.BooleanField(default=False)
+    is_bill_distribution = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

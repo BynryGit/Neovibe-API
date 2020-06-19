@@ -61,6 +61,8 @@ class Consumer(models.Model):
     is_duplicate = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_account_verified = models.BooleanField(default=False)
+    is_meter_reading = models.BooleanField(default=False)
+    is_bill_distribution = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

@@ -187,7 +187,8 @@ CELERY_TIMEZONE = 'Asia/Kolkata'
 
 # Cronjob configuration
 CRONJOBS = [
-    ('0 */30 * * *', 'meter_reading.task.validation_assignment.assign_validation','>> /path of log file/validation.log')
+    ('0 */30 * * *', 'meter_reading.task.validation_assignment.assign_validation','>> /path of log file/validation.log'),
+    ('0 */30 * * *', 'meter_reading.task.bill_distribution.import_bill_distribution_data','>> /path of log file/bill_distribution.log')
 ]
 
 # Amazon s3 Configuration

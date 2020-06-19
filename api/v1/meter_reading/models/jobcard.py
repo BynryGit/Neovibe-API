@@ -42,6 +42,8 @@ class Jobcard(models.Model):
     is_deleted_for_mr = models.BooleanField(default=False)
     is_reading_completed = models.BooleanField(default=False)
     is_revisit = models.BooleanField(default=False)
+    is_meter_reading = models.BooleanField(default=False)
+    is_bill_distribution = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
