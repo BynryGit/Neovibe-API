@@ -9,6 +9,7 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
+from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values, get_record_values_by_id
 
 
@@ -24,6 +25,7 @@ from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_
 # Author: Arpita
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
+from v1.userapp.serializers.role import RoleDetailViewSerializer
 from v1.userapp.serializers.user import GetUserSerializer
 from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSerializer
 
@@ -43,8 +45,9 @@ class UserRole(GenericAPIView):
                 user_roles = get_user_role_by_user_id(user.id)
                 if user_roles:
                     for user_role in user_roles:
-                        role = UserRoleViewSerializer(instance=user_role, context={'request': request})
-                        role_list.append(role.data['role'])
+                        role_obj = get_role_by_id(user_role.role_id)
+                        role = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
+                        role_list.append(role.data)
                     data['roles'] = role_list
                     return Response({
                         STATE: SUCCESS,
@@ -85,9 +88,10 @@ class UserRole(GenericAPIView):
                         user_id_string = get_user_from_token(request.headers['token'])
                         user = get_user_by_id_string(user_id_string)
                         user_role_obj = serializer.create(serializer.validated_data, user)
-                        view_serializer = UserRoleViewSerializer(instance=user_role_obj,
+                        role_obj = get_role_by_id(user_role_obj.role_id)
+                        view_serializer = RoleDetailViewSerializer(instance=role_obj,
                                                                       context={'request': request})
-                        role_list.append(view_serializer.data['role'])
+                        role_list.append(view_serializer.data)
                     else:
                         return Response({
                             STATE: ERROR,
@@ -129,7 +133,8 @@ class UserRole(GenericAPIView):
                             user_role_obj = serializer.update(user_role, serializer.validated_data, user)
                         else:
                             user_role_obj = serializer.create(serializer.validated_data, user)
-                        view_serializer = UserRoleViewSerializer(instance=user_role_obj,
+                        role_obj = get_role_by_id(user_role_obj.role_id)
+                        view_serializer = RoleDetailViewSerializer(instance=role_obj,
                                                                       context={'request': request})
                         role_list.append(view_serializer.data['role'])
                     else:

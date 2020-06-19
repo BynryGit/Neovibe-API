@@ -121,6 +121,13 @@ def get_record_values_by_id(role_id,module_id,sub_module_id,privilege_id):
     return RolePrivilege.objects.filter(role_id=role_id, module_id=module_id, sub_module_id=sub_module_id, privilege_id=privilege_id, is_active=True).last()
 
 
+def check_role_privilege_exists(roles, module_id, sub_module_id, privilege_id):
+    for role in roles:
+        if RolePrivilege.objects.filter(role_id=role.role_id, module_id=module_id, sub_module_id=sub_module_id, privilege_id=privilege_id, is_active=True).exists():
+            return True
+    return False
+
+
 def get_module_by_role_id(role_id):
     module_list = []
     check_module_list = []
