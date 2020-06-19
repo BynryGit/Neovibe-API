@@ -8,6 +8,7 @@ from v1.meter_reading.views.route_assignment import RouteAssignment, RouteAssign
 from v1.meter_reading.views.meter_reader import MeterReaderList, MeterReaderDetail
 from v1.meter_reading.views.meter_reading import MeterReading, MeterReadingList, MeterReadingDetail
 from v1.meter_reading.views.route import RouteList, RouteDetail
+from v1.meter_reading.views.route_upload import RouteUpload
 from v1.meter_reading.views.schedule import Schedule, ScheduleList, ScheduleDetail
 from v1.meter_reading.views.validation import ValidationList, ValidationDetail
 
@@ -39,4 +40,6 @@ urlpatterns = [
 
     path('validation/list', ValidationList.as_view(), name='validation_list'),
     path('validation/<uuid:id_string>', ValidationDetail.as_view(), name='validation_detail'),
+
+    path('route/<uuid:id_string>/upload', RouteUpload.as_view(), name='route_upload'),
 ]
