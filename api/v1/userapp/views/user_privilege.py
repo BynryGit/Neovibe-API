@@ -24,18 +24,18 @@ from v1.userapp.views.common_functions import set_user_privilege_validated_data
 # Package: Basic
 # Modules: Roles & Privileges
 # Sub Module: Privilege
-# Interaction: Add user-privilege details
-# Usage: Add privilege details
-# Tables used: 2.5.1. Users & Privileges - User Privileges
+# Interaction: View privilege details, Edit privilege details
+# Usage: View, Edit privilege details
+# Tables used: 2.5.1. Users & Privileges - User Detail, User Privileges
 # Author: Arpita
 # Created on: 02/06/2020
 
 
-class UserPrivilege(GenericAPIView):
+class UserPrivilegeDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, USER, EDIT)
-    def post(self, request, format=None):
+    def post(self, request, id_string):
         try:
             data = []
             module_list = request.data['data']
@@ -43,7 +43,7 @@ class UserPrivilege(GenericAPIView):
                 validate_data = {}
                 sub_module_list = module['sub_module']
                 for sub_module in sub_module_list:
-                    validate_data['user_id'] = request.data['user_id']
+                    validate_data['user_id'] = str(id_string)
                     validate_data['module_id'] = module['module_id']
                     validate_data['sub_module_id'] = sub_module['sub_module_id']
                     validate_data['privilege_id'] = sub_module['privilege_id']
@@ -54,7 +54,7 @@ class UserPrivilege(GenericAPIView):
                         user = get_user_by_id_string(user_id_string)
                         privilege_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserPrivilegeViewSerializer(instance=privilege_obj,
-                                                                  context={'request': request})
+                                                                      context={'request': request})
                         data.append(view_serializer.data)
                     else:
                         return Response({
@@ -72,22 +72,6 @@ class UserPrivilege(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
-
-# API Header
-# API end Point: api/v1/user/:id_string/privileges
-# API verb: POST
-# Package: Basic
-# Modules: Roles & Privileges
-# Sub Module: Privilege
-# Interaction: View privilege details, Edit privilege details
-# Usage: View, Edit privilege details
-# Tables used: 2.5.1. Users & Privileges - User Detail, User Privileges
-# Author: Arpita
-# Created on: 02/06/2020
-
-
-class UserPrivilegeDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, USER, VIEW)

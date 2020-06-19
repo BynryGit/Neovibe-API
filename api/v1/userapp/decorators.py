@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from v1.commonapp.common_functions import get_payload
+from v1.userapp.models.role_privilege import check_role_privilege_exists
+from v1.userapp.models.user_role import get_user_role_by_user_id
 from v1.userapp.models.user_token import check_token_exists_for_user
 from master.models import get_user_by_id_string
 from v1.userapp.models.user_privilege import check_user_privilege_exists
@@ -37,7 +39,8 @@ def role_required(module_id, sub_module_id, privilege_id):
             token = args[0].headers['Token']
             decoded_token = get_payload(token)
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
-            if check_user_privilege_exists(user_obj.id, module_id, sub_module_id, privilege_id):
+            roles = get_user_role_by_user_id(user_obj.id)
+            if check_role_privilege_exists(roles, module_id, sub_module_id, privilege_id):
                 return view_method(request, *args, **kwargs)
             else:
                 return Response({
