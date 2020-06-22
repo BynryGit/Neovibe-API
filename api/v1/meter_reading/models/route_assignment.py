@@ -74,13 +74,13 @@ class RouteAssignment(models.Model):
 
 def get_route_assignment_by_id(id):
     try:
-        return RouteAssignment.object.get(id=id)
+        return RouteAssignment.objects.get(id=id)
     except:
         return False
 
 
 def get_route_assignment_by_id_string(id_string):
     try:
-        return RouteAssignment.object.get(id_string=id_string)
+        return RouteAssignment.objects.get(id_string=id_string)
     except:
         return False

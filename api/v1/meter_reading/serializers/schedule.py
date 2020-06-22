@@ -22,13 +22,16 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     bill_cycle_id = BillCycleShortViewSerializer(many=False, source='get_bill_cycle')
     schedule_status_id = ScheduleStatusShortViewSerializer(many=False, source='get_schedule_status')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    due_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = ScheduleTbl
         fields = ('id_string','bill_month', 'start_date', 'end_date', 'due_date', 'is_valid_next_cycle', 'is_imported',
-                  'is_uploaded', 'schedule_type_id', 'activity_type_id', 'bill_cycle_id', 'schedule_status_id',
-                  'created_date', 'updated_date', 'tenant', 'utility')
+                  'is_uploaded', 'created_date', 'updated_date', 'schedule_type_id', 'activity_type_id',
+                  'bill_cycle_id', 'schedule_status_id', 'tenant', 'utility')
 
 
 class ScheduleSerializer(serializers.ModelSerializer):

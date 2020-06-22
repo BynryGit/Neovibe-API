@@ -68,10 +68,10 @@ class Schedule(models.Model):
         return schedule_status
 
     def __str__(self):
-        return self.bill_cycle
+        return str(self.id_string)
 
     def __unicode__(self):
-        return self.bill_cycle
+        return str(self.id_string)
 
 # Create Schedule Table end
 

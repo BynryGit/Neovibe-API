@@ -43,7 +43,7 @@ class ValidationList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    queryset = ValidationTbl.objects.filter(validator_id=self.request.user, is_active=True)
+                    queryset = ValidationTbl.objects.filter(validator_id=1, is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

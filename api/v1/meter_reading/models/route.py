@@ -13,6 +13,8 @@
 # <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
+
+from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
@@ -47,18 +49,23 @@ class Route(models.Model):
     def __unicode__(self):
         return self.code
 
+    @property
+    def get_bill_cycle(self):
+        bill_cycle = get_bill_cycle_by_id(self.bill_cycle_id)
+        return bill_cycle
+
 # Create RouteDetails table end
 
 
 def get_route_by_id(id):
     try:
-        return Route.object.get(id=id)
+        return Route.objects.get(id=id)
     except:
         return False
 
 
 def get_route_by_id_string(id_string):
     try:
-        return Route.object.get(id_string=id_string)
+        return Route.objects.get(id_string=id_string)
     except:
         return False

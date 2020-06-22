@@ -37,7 +37,7 @@ class Jobcard(models.Model):
     route_id = models.BigIntegerField(null=True, blank=True)
     route_assigned_id = models.BigIntegerField(null=True, blank=True)
     assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    status = models.BigIntegerField(null=True, blank=True)
+    status_id = models.BigIntegerField(null=True, blank=True)
     completion_date = models.DateTimeField(null=True, blank=True)
     is_deleted_for_mr = models.BooleanField(default=False)
     is_reading_completed = models.BooleanField(default=False)

@@ -25,7 +25,7 @@ class SmartMeterData(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    consumer = models.BigIntegerField(null=True, blank=True)
+    consumer_id = models.BigIntegerField(null=True, blank=True)
     meter = models.BigIntegerField(null=True, blank=True)
     meter_reading = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.BigIntegerField(null=True, blank=True)
@@ -39,9 +39,9 @@ class SmartMeterData(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.consumer
+        return str(self.consumer_id)
 
     def __unicode__(self):
-        return self.consumer
+        return str(self.consumer_id)
 
 # Create Smart Meter Data Table end

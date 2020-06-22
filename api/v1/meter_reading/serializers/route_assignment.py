@@ -14,6 +14,12 @@ from v1.meter_reading.views.common_functions import set_route_assignment_validat
 from v1.userapp.serializers.user import UserViewSerializer
 
 
+class RouteAssignmentShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RouteAssignmentTbl
+        fields = ('id_string', 'month')
+
+
 class RouteAssignmentViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)

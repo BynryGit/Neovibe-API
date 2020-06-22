@@ -26,14 +26,13 @@ class ReadingAdditionalParameters(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    meter_reading = models.BigIntegerField(null=True, blank=True)
+    meter_reading_id = models.BigIntegerField(null=True, blank=True)
     lat = models.CharField(max_length=200, null=True, blank=True)
     long = models.CharField(max_length=200, null=True, blank=True)
     new_sequence = models.CharField(max_length=500, null=True, blank=True)
     prev_sequence = models.CharField(max_length=500, null=True, blank=True)
     location_guidance = models.CharField(max_length=500, null=True, blank=True)
     time_taken = models.CharField(max_length=200, null=True, blank=True)
-
     extra_parameter = models.BigIntegerField(null=True, blank=True)
     extra_parameter_remark = models.CharField(max_length=500, null=True, blank=True)
     parameter_flag_type = models.BigIntegerField(null=True, blank=True)
@@ -41,7 +40,7 @@ class ReadingAdditionalParameters(models.Model):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.consumer_no
