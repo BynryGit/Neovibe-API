@@ -41,3 +41,6 @@ def import_bill_distribution_data():
     except Exception as ex:
         print(ex)
         logger().log(ex, 'ERROR', )
+
+
+import_bill_distribution_data()

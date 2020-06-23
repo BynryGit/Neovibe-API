@@ -10,16 +10,16 @@ from celery.decorators import task
 @task(name="create_job_cards")
 def create_job_card(route_assignment_obj, month):
     try:
-        route_assignment_obj = RouteAssignment.objects.get(id=route_assignment_obj, month=month, is_deleted=False)
+        route_assignment_obj = RouteAssignment.objects.get(id=route_assignment_obj, month=month, is_active=True)
         consumer_obj = Consumer.objects.filter(route_id=route_assignment_obj.route_id,
                                                bill_month=route_assignment_obj.month)
-        for consumers in consumer_obj:
+        for consumer in consumer_obj:
             jobcard_obj = Jobcard(
-                billcycle_id=route_assignment_obj.bill_cycle_id,
+                bill_cycle_id=route_assignment_obj.bill_cycle_id,
                 route_id=route_assignment_obj.route_id,
-                consumer_no=consumers.consumer_no,
-                consumer_id=consumers,
-                route_assigned=route_assignment_obj,
+                consumer_no=consumer.consumer_no,
+                consumer_id=consumer.id,
+                route_assigned_id=route_assignment_obj.id,
                 meter_reader_id=route_assignment_obj.meter_reader_id,
                 month=month,
                 created_by=1,
@@ -38,7 +38,7 @@ def create_job_card(route_assignment_obj, month):
 @task(name="update_job_cards")
 def update_job_card(route_assignment_obj, month):
     try:
-        route_assignment_obj = RouteAssignment.objects.get(id=route_assignment_obj, month=month, is_deleted=False)
+        route_assignment_obj = RouteAssignment.objects.get(id=route_assignment_obj, month=month, is_active=True)
         Jobcard.objects.filter(billcycle_id=route_assignment_obj.bill_cycle_id, month=month,
                                              route_id=route_assignment_obj.route_id).update(is_active=False)
     except Exception as ex:

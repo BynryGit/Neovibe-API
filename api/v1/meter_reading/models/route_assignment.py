@@ -44,10 +44,10 @@ class RouteAssignment(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.route_id
+        return str(self.id_string)
 
     def __unicode__(self):
-        return self.route_id
+        return str(self.id_string)
 
     @property
     def get_bill_cycle(self):

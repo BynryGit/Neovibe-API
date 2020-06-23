@@ -8,7 +8,9 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.meter_reading.models.meter_reading import MeterReading as MeterReadingTbl
 from v1.meter_reading.serializers.bill_cycle import BillCycleShortViewSerializer
+from v1.meter_reading.serializers.consumer import ConsumerShortViewSerializer
 from v1.meter_reading.serializers.job_card import JobcardShortViewSerializer
+from v1.meter_reading.serializers.meter_image_type import MeterImageTypeShortViewSerializer
 from v1.meter_reading.serializers.meter_status import MeterStatusShortViewSerializer
 from v1.meter_reading.serializers.reader_status import ReaderStatusShortViewSerializer
 from v1.meter_reading.serializers.reading_status import ReadingStatusShortViewSerializer
@@ -34,6 +36,8 @@ class MeterReadingViewSerializer(serializers.ModelSerializer):
     meter_status_id = MeterStatusShortViewSerializer(many=False, source='get_meter_status')
     reader_status_id = ReaderStatusShortViewSerializer(many=False, source='get_reader_status_id')
     reading_taken_by_id = ReadingTakenByShortViewSerializer(many=False, source='get_reading_taken_by')
+    consumer_id = ConsumerShortViewSerializer(many=False, source='get_consumer')
+    meter_image_type_id = MeterImageTypeShortViewSerializer(many=False, source='get_meter_image_type')
     meter_image_url = serializers.SerializerMethodField()
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
@@ -48,7 +52,12 @@ class MeterReadingViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MeterReadingTbl
-        fields = ('__all__')
+        fields = ('id_string', 'month', 'consumer_no', 'meter_no', 'meter_image_url', 'meter_image', 'current_reading',
+                  'consumption', 'suspicious_activity', 'is_qr_tempered', 'is_solar_meter', 'is_duplicate', 'is_new',
+                  'is_assign_to_v1', 'is_assign_to_v2', 'is_account_verified', 'reading_date', 'created_date',
+                  'updated_date', 'meter_image_type_id', 'consumer_id', 'bill_cycle_id', 'route_id', 'jobcard_id',
+                  'reading_status_id', 'meter_status_id', 'reader_status_id', 'reading_taken_by_id', 'tenant',
+                  'utility')
 
 
 class MeterReadingSerializer(serializers.ModelSerializer):
