@@ -9,6 +9,7 @@ from v1.meter_reading.models.consumer import Consumer
 from v1.meter_reading.models.jobcard import Jobcard
 from v1.meter_reading.models.jobcard_status import JobCardStatus
 from v1.meter_reading.models.meter_image_type import MeterImageType
+from v1.meter_reading.models.meter_reading import MeterReading
 from v1.meter_reading.models.meter_status import MeterStatus
 from v1.meter_reading.models.reader_status import ReaderStatus
 from v1.meter_reading.models.reading_additional_parameters import ReadingAdditionalParameters
@@ -52,3 +53,4 @@ admin.site.register(SmartMeterData)
 admin.site.register(Unit)
 admin.site.register(Validation)
 admin.site.register(ValidationType)
+admin.site.register(MeterReading)

@@ -37,10 +37,10 @@ class BillCycleReadingAllocation(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.bill_cycle
+        return str(self.id_string)
 
     def __unicode__(self):
-        return self.bill_cycle
+        return str(self.id_string)
 
 # Create Bill Reading Allocation table end
 

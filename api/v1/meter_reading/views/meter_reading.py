@@ -8,7 +8,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
 from master.models import User
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
@@ -83,22 +83,51 @@ class MeterReading(GenericAPIView):
                 if is_authorized():
                 # Checking authorization end
                     # Todo fetch user from request start
-                    user = User.objects.get(request.user)
+                    user = User.objects.get(id=2)
                     # Todo fetch user from request end
-                    meter_reading_data = request.data
                     with transaction.atomic():
-                        for data in meter_reading_data:
-                            serializer = MeterReadingSerializer(data=data)
+                        try:
+                            meter_reading_data = request.data['Readings']
+                            for data in meter_reading_data:
+                                serializer = MeterReadingSerializer(data=data)
+                                if serializer.is_valid():
+                                    meter_reading_obj = serializer.create(serializer.validated_data, user)
+                                    if meter_reading_obj:
+                                        MeterReadingViewSerializer(meter_reading_obj, context={'request': request})
+                                        return Response({
+                                            STATE: SUCCESS,
+                                        }, status=status.HTTP_201_CREATED)
+                                    else:
+                                        return Response({
+                                            STATE: DUPLICATE,
+                                            RESULT: DATA_ALREADY_EXISTS,
+                                        }, status=status.HTTP_409_CONFLICT)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        RESULT: serializer.errors,
+                                    }, status=status.HTTP_400_BAD_REQUEST)
+                        except:
+                            serializer = MeterReadingSerializer(data=request.data)
                             if serializer.is_valid():
-                                serializer.create(serializer.validated_data, user)
+                                meter_reading_obj = serializer.create(serializer.validated_data, user)
+                                if meter_reading_obj:
+                                    serializer = MeterReadingViewSerializer(meter_reading_obj,
+                                                                            context={'request': request})
+                                    return Response({
+                                        STATE: SUCCESS,
+                                        RESULT: serializer.data,
+                                    }, status=status.HTTP_201_CREATED)
+                                else:
+                                    return Response({
+                                        STATE: DUPLICATE,
+                                        RESULT: DATA_ALREADY_EXISTS,
+                                    }, status=status.HTTP_409_CONFLICT)
                             else:
                                 return Response({
                                     STATE: ERROR,
                                     RESULT: serializer.errors,
                                 }, status=status.HTTP_400_BAD_REQUEST)
-                        return Response({
-                            STATE: SUCCESS,
-                        }, status=status.HTTP_201_CREATED)
                 else:
                     return Response({
                         STATE: ERROR,

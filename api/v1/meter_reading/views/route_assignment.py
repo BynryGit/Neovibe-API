@@ -50,8 +50,8 @@ class RouteAssignment(GenericAPIView):
                         serializer = RouteAssignmentSerializer(data=request.data)
                         if serializer.is_valid():
                             route_assignment_obj = serializer.create(serializer.validated_data, route_obj, user)
-                            create_job_card.delay(route_assignment_obj.id, route_assignment_obj.month)
                             if route_assignment_obj:
+                                create_job_card.delay(route_assignment_obj.id, route_assignment_obj.month)
                                 serializer = RouteAssignmentViewSerializer(route_assignment_obj, context={'request': request})
                                 return Response({
                                     STATE: SUCCESS,
