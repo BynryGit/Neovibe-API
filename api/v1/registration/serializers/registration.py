@@ -37,6 +37,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
 class RegistrationSerializer(serializers.ModelSerializer):
     phone_mobile = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field phone_mobile is required."})
     area_id = serializers.CharField(required=False, max_length=200)
+    utility_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
     registration_type_id = serializers.CharField(required=False, max_length=200)
     country_id = serializers.CharField(required=False, max_length=200)
@@ -57,7 +58,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data =  set_validated_data(validated_data)
-        if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'],tenant=user.tenant,utility=user.utility).exists():
+        if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility_id=validated_data['utility_id']).exists():
             raise CustomAPIException("Mobile number already exists!",status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
@@ -65,13 +66,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 registration_obj.created_by = user.id
                 registration_obj.created_date = datetime.utcnow()
                 registration_obj.tenant = user.tenant
-                registration_obj.utility = user.utility
                 registration_obj.save()
                 return registration_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
-        if Registration.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'],tenant=user.tenant,utility=user.utility).exists():
+        if Registration.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'],tenant=user.tenant,utility=instance.utility).exists():
             raise CustomAPIException("Mobile number already exists!",status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

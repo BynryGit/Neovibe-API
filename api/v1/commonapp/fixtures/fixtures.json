@@ -967,8 +967,6 @@
     "pk": "1",
     "model": "userapp.Privilege",
     "fields": {
-      "tenant": 1,
-      "utility": 1,
       "name": "View",
       "is_active": "True"
     }
@@ -977,8 +975,6 @@
     "pk": "2",
     "model": "userapp.Privilege",
     "fields": {
-      "tenant": 1,
-      "utility": 1,
       "name": "Edit",
       "is_active": "True"
     }

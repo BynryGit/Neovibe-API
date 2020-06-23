@@ -37,6 +37,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     payment_mode_id = serializers.CharField(required=False, max_length=200)
     payment_channel_id = serializers.CharField(required=False, max_length=200)
     payment_source_id = serializers.CharField(required=False, max_length=200)
+    utility_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = Payment
@@ -49,9 +50,8 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment.created_by = user.id
             payment.created_date = datetime.utcnow()
             payment.tenant = user.tenant
-            payment.utility = user.utility
+            payment.utility.id = validated_data['utility_id']
             payment.identification_id = obj.id
-            payment.consumer_no = obj.consumer_no
             payment.save()
         return payment
 

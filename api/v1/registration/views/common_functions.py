@@ -13,6 +13,7 @@ from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 def is_data_verified(request):
@@ -20,6 +21,12 @@ def is_data_verified(request):
 
 
 def set_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.",status_code=status.HTTP_404_NOT_FOUND)
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         if area:
