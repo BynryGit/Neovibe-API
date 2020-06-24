@@ -12,15 +12,13 @@ from v1.registration.views.common_functions import set_validated_data
 
 
 class RegistrationListSerializer(serializers.ModelSerializer):
-    status = RegistrationStatusViewSerializer(many=False,required=True,source='get_status')
 
     class Meta:
         model = Registration
         fields = ('id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
-                  'street', 'zipcode', 'status')
+                  'street', 'zipcode', 'state')
 
 class RegistrationViewSerializer(serializers.ModelSerializer):
-    status = RegistrationStatusViewSerializer(many=False, source='get_status')
     area = AreaListSerializer(many=False, source='get_area')
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
@@ -31,7 +29,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
-                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'reg_created_date', 'status', 'area')
+                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'reg_created_date', 'state', 'area')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

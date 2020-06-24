@@ -26,10 +26,23 @@ from v1.utility.models.utility_master import UtilityMaster
 
 
 class Payment(models.Model):
+    CHOICES = (
+        ('created', 'CREATED'),
+        ('approved', 'APPROVED'),
+        ('rejected', 'REJECTED'),
+    )
+
+    state_machine = {
+        'created': '__all__',
+        'approved': ('created',),
+        'rejected': ('created',),
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='tenant')
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=30, choices=CHOICES, default='created')
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no

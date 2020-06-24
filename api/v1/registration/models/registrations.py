@@ -11,23 +11,49 @@
 
 # change history
 # <ddmmyyyy><changes><author>
-
+import traceback
 from datetime import datetime # importing package for datetime
+from django.dispatch import receiver
+from rest_framework import status
 from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.registration.models.registration_status import get_registration_status_by_id
+from v1.registration.signals.signals import payment_created, payment_approved
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
 from django.db import models
+import fsm
 # Remove all fields as compulsory
 # Create Consumer Registration table start.
-class Registration(models.Model):
+class Registration(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        ('created', 'CREATED'),
+        ('pending', 'PENDING'),
+        ('approved', 'APPROVED'),
+        ('rejected', 'REJECTED'),
+        ('hold', 'HOLD'),
+        ('completed', 'COMPLETED'),
+        ('archived', 'ARCHIVED'),
+    )
+
+    state_machine = {
+        'created': '__all__',
+        'pending': ('approved', 'rejected', 'hold', 'pending',),
+        'approved': ('archived', 'approved'),
+        'rejected': ('archived', 'rejected',),
+        'hold': ('approved','rejected','hold',),
+        'completed': ('archived','completed',),
+        'archived': ('archived',),
+
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     registration_no = models.CharField(max_length=200, blank=True, null=True)
     registration_type_id = models.BigIntegerField(null=True, blank=True)
-    status_id = models.BigIntegerField(null=True, blank=True)
+    state = models.CharField(max_length=30, choices=CHOICES, default='created')
     first_name = models.CharField(max_length=200, blank=True, null=True)
     middle_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
@@ -74,11 +100,32 @@ class Registration(models.Model):
         area = get_area_by_id(self.area_id)
         return area
 
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        self.save()
+
+@receiver([payment_created,payment_approved])
+def after_payment(sender, **kwargs):
+    try:
+        if sender.state == 'created':
+            registration = get_registration_by_id(sender.identification_id)
+            registration.change_state('archived')
+        if sender.state == 'approved':
+            pass
+        if sender.state == 'rejected':
+            pass
+    except Exception as e:
+        raise CustomAPIException(str(e),status_code=status.HTTP_404_NOT_FOUND)
 
 
 def get_registration_by_id_string(id_string):
     try:
         return Registration.objects.get(id_string = id_string)
+    except:
+        return  False
+
+def get_registration_by_id(id):
+    try:
+        return Registration.objects.get(id = id)
     except:
         return  False
 # Create Consumer Registration table end.

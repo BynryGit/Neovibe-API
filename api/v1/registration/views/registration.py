@@ -1,7 +1,4 @@
-import traceback
-
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
@@ -11,14 +8,13 @@ from master.models import User, get_user_by_id_string
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.consumer.models.consumer_master import get_consumer_by_registration_id
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
 from v1.registration.models.registrations import Registration as RegTbl
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.serializers.registration import *
-from v1.registration.views.common_functions import is_data_verified
+from v1.registration.signals.signals import payment_created, payment_approved
 from api.messages import *
 
 
@@ -58,7 +54,7 @@ class RegistrationList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'ERROR')
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
         # raise APIException
 
 
@@ -97,7 +93,7 @@ class Registration(GenericAPIView):
                     RESULT: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -135,7 +131,7 @@ class RegistrationDetail(GenericAPIView):
                     RESULT: DATA_NOT_EXISTS,
                 }, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
-            logger().log(e, 'ERROR', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
             return Response({
                 STATE: EXCEPTION,
                 RESULT: '',
@@ -166,7 +162,7 @@ class RegistrationDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -196,8 +192,10 @@ class RegistrationPayment(GenericAPIView):
             registration_obj = get_registration_by_id_string(id_string)
             serializer = PaymentSerializer(data=request.data)
             if serializer.is_valid():
-                payment = serializer.create(serializer.validated_data, user, registration_obj)
-                view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
+                with transaction.atomic():
+                    payment = serializer.create(serializer.validated_data, user, registration_obj)
+                    view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
+                    payment_created.send(payment)
                 return Response({
                     STATE: SUCCESS,
                     RESULT: view_serializer.data,
@@ -208,11 +206,12 @@ class RegistrationPayment(GenericAPIView):
                     RESULT: serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', module = 'Consumer Ops', Sub_module='Registration/payments')
+            logger().log(e, 'HIGH', module = 'Consumer Ops', Sub_module='Registration/payments')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -245,11 +244,12 @@ class RegistrationPaymentDetail(GenericAPIView):
                     RESULT: '',
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
-            logger().log(e, 'ERROR', module = 'Consumer Ops', Sub_module='Registration/payments')
+            logger().log(e, 'MEDIUM', module = 'Consumer Ops', Sub_module='Registration/payments')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                RESULT: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     @is_token_validate
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
@@ -264,6 +264,7 @@ class RegistrationPaymentDetail(GenericAPIView):
                 if serializer.is_valid(request.data):
                     payment = serializer.update(payment, serializer.validated_data, user)
                     view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
+                    payment_approved.send(payment)
                     return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
@@ -275,10 +276,11 @@ class RegistrationPaymentDetail(GenericAPIView):
                 }, status=status.HTTP_404_NOT_FOUND)
             # Save basic details start
         except Exception as e:
-            logger().log(e, 'ERROR', module = 'Consumer Ops', Sub_module='Registration/payments')
+            logger().log(e, 'HIGH', module = 'Consumer Ops', Sub_module='Registration/payments')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
