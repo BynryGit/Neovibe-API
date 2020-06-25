@@ -37,7 +37,7 @@ class TenantStatusList(generics.ListAPIView):
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+                if is_authorized(1,1,1,1):
                     queryset = TenantStatusTbl.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -45,5 +45,5 @@ class TenantStatusList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'ERROR')
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT/SUBSCRIPTION-RATE')
         raise APIException

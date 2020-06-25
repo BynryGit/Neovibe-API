@@ -1,10 +1,12 @@
-__author__ = "Gauri"
+__author__ = "aki"
 
 from django.db import transaction
 from django.utils import timezone
-from rest_framework import serializers
+from rest_framework import serializers, status
+from api.messages import ACCOUNT_NO_ALREADY_EXIST
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_bank_details import TenantBankDetail as TenantBankDetailTbl
 
 
@@ -45,7 +47,7 @@ class TenantBankDetailSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, tenant_obj, user):
         if TenantBankDetailTbl.objects.filter(tenant=tenant_obj, account_number=validated_data["account_number"]).exists():
-            return False
+            raise CustomAPIException(ACCOUNT_NO_ALREADY_EXIST,status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             tenant_bank_obj = super(TenantBankDetailSerializer, self).create(validated_data)
             tenant_bank_obj.tenant = tenant_obj
