@@ -1,10 +1,10 @@
 __author__ = "aki"
 
+from celery.task import task
 from v1.commonapp.views.logger import logger
 from v1.meter_reading.models.consumer import Consumer
 from v1.meter_reading.models.jobcard import Jobcard
 from v1.meter_reading.models.route_assignment import RouteAssignment
-from celery.decorators import task
 
 
 @task(name="create_job_cards")

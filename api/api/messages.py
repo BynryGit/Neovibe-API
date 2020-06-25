@@ -65,4 +65,5 @@ DOCUMENT_NOT_FOUND = 'Document not found.'
 UTILITY_NOT_FOUND="Utility not found"
 DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
 SERVICE_TYPE_NOT_FOUND="No record found for user service type"
+MOBILE_ALREADY_EXISTS = "Mobile number already exists!"
 

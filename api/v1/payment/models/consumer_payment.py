@@ -1,3 +1,17 @@
+import uuid  # importing package for guid
+from datetime import datetime # importing package for datetime
+import fsm
+from v1.payment.models.payment_channel import get_payment_channel_by_id
+from v1.payment.models.payment_mode import get_payment_mode_by_id
+from v1.payment.models.payment_source import get_payment_source_by_id
+from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
+from v1.payment.models.payment_type import get_payment_type_by_id
+from django.db import models  # importing package for database
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
+
+
+
 # Table Header
 # Module: Consumer Care | Sub-Module : Billing
 # Table Type : Master (Global)
@@ -8,24 +22,8 @@
 # Reference Table : None
 # Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
-
-
-import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
-from v1.payment.models.payment_channel import get_payment_channel_by_id
-from v1.payment.models.payment_mode import get_payment_mode_by_id
-from v1.payment.models.payment_source import get_payment_source_by_id
-from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
-from v1.payment.models.payment_type import get_payment_type_by_id
-from django.db import models  # importing package for database
-
-
 # Create Consumer Payments Table Start.
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
-
-
-class Payment(models.Model):
+class Payment(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
         ('created', 'CREATED'),
         ('approved', 'APPROVED'),
@@ -34,8 +32,8 @@ class Payment(models.Model):
 
     state_machine = {
         'created': '__all__',
-        'approved': ('created',),
-        'rejected': ('created',),
+        'approved': ('approved',),
+        'rejected': ('rejected',),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -94,6 +92,9 @@ class Payment(models.Model):
     def get_payment_channel(self):
         payment_channel = get_payment_channel_by_id(self.payment_channel_id)
         return payment_channel
+
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        self.save()
 
 
 def get_payment_by_id_string(id_string):

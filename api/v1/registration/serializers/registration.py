@@ -3,6 +3,7 @@ from django.db import transaction
 from rest_framework import serializers, status
 from rest_framework.validators import UniqueTogetherValidator
 
+from api.messages import MOBILE_ALREADY_EXISTS
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -57,7 +58,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data =  set_validated_data(validated_data)
         if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility_id=validated_data['utility_id']).exists():
-            raise CustomAPIException("Mobile number already exists!",status_code=status.HTTP_409_CONFLICT)
+            raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
                 registration_obj = super(RegistrationSerializer, self).create(validated_data)
@@ -70,7 +71,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
         if Registration.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'],tenant=user.tenant,utility=instance.utility).exists():
-            raise CustomAPIException("Mobile number already exists!",status_code=status.HTTP_409_CONFLICT)
+            raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
                 registration_obj = super(RegistrationSerializer, self).update(instance, validated_data)

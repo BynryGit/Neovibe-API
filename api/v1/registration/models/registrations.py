@@ -1,3 +1,18 @@
+from datetime import datetime # importing package for datetime
+from django.dispatch import receiver
+from rest_framework import status
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.registration.models.registration_status import get_registration_status_by_id
+from v1.registration.signals.signals import registration_payment_created, registration_payment_approved
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
+import uuid
+from django.db import models
+import fsm
+
+
+
 # table header
 # module: S&M,Consumer care and ops | sub-module - Registration
 # table type : Master
@@ -9,22 +24,6 @@
 # author : Rohan Wagh
 # created on : 21/04/2020
 
-# change history
-# <ddmmyyyy><changes><author>
-import traceback
-from datetime import datetime # importing package for datetime
-from django.dispatch import receiver
-from rest_framework import status
-from v1.commonapp.models.area import get_area_by_id
-from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.registration.models.registration_status import get_registration_status_by_id
-from v1.registration.signals.signals import payment_created, payment_approved
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
-import uuid
-from django.db import models
-import fsm
-# Remove all fields as compulsory
 # Create Consumer Registration table start.
 class Registration(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
@@ -45,7 +44,6 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         'hold': ('approved','rejected','hold',),
         'completed': ('archived','completed',),
         'archived': ('archived',),
-
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -103,14 +101,15 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     def on_change_state(self, previous_state, next_state, **kwargs):
         self.save()
 
-@receiver([payment_created,payment_approved])
+@receiver([registration_payment_created,registration_payment_approved])
 def after_payment(sender, **kwargs):
     try:
         if sender.state == 'created':
             registration = get_registration_by_id(sender.identification_id)
-            registration.change_state('archived')
+            registration.change_state('pending')
         if sender.state == 'approved':
-            pass
+            registration = get_registration_by_id(sender.identification_id)
+            registration.change_state('approved')
         if sender.state == 'rejected':
             pass
     except Exception as e:
