@@ -2,9 +2,12 @@ __author__ = "aki"
 
 from django.db import transaction
 from django.utils import timezone
-from rest_framework import serializers
+from rest_framework import serializers, status
+
+from api.messages import SUBSCRIPTION_ALREADY_EXIST
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_subscription import TenantSubscription as TenantSubscriptionTbl
 from v1.tenant.serializers.tenant_subscription_plan import TenantSubscriptionPlanViewSerializer
 from v1.tenant.serializers.tenant_subscription_plan_rate import TenantSubscriptionPlanRateViewSerializer
@@ -41,9 +44,10 @@ class TenantSubscriptionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, tenant_obj, user):
         validated_data = set_tenant_subscription_validated_data(validated_data)
-        if TenantSubscriptionTbl.objects.filter(tenant=tenant_obj, subscription_plan_id=validated_data["subscription_plan_id"],
+        if TenantSubscriptionTbl.objects.filter(tenant=tenant_obj,
+                                                subscription_plan_id=validated_data["subscription_plan_id"],
                                                 subscription_rate_id=validated_data["subscription_rate_id"]).exists():
-            return False
+            raise CustomAPIException(SUBSCRIPTION_ALREADY_EXIST,status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             tenant_subscription_obj = super(TenantSubscriptionSerializer, self).create(validated_data)
             tenant_subscription_obj.tenant = tenant_obj

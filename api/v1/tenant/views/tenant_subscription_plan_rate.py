@@ -1,7 +1,7 @@
 __author__ = "aki"
 
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, generics
+from rest_framework import generics
 from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
@@ -38,7 +38,7 @@ class TenantSubscriptionPlanRateList(generics.ListAPIView):
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+                if is_authorized(1,1,1,1):
                     queryset = TenantSubscriptionPlanRateTbl.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -46,5 +46,5 @@ class TenantSubscriptionPlanRateList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'ERROR')
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT/SUBSCRIPTION-RATE')
         raise APIException
