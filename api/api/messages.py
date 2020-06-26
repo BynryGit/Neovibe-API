@@ -70,6 +70,9 @@ SUBSCRIPTION_PLAN_NOT_FOUND = "Subscription Plan Not Found"
 SUBSCRIPTION_RATE_NOT_FOUND = "Subscription Rate Not Found"
 BANK_NOT_FOUND = "Bank Not Found"
 INVOICE_NOT_FOUND = "Invoice Not Found"
+REGISTRATION_NOT_FOUND = "Registration not found"
+PAYMENT_NOT_FOUND = "Payment not found"
+BILL_NOT_FOUND = "Bill not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

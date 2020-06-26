@@ -9,6 +9,12 @@ from v1.payment.serializer.payment_type import PaymentTypeListSerializer
 from v1.payment.views.common_functions import set_validated_data
 
 
+class ChoiceField(serializers.ChoiceField):
+
+    def to_representation(self, obj):
+        return self._choices[obj]
+
+
 class PaymentListSerializer(serializers.ModelSerializer):
     payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
     payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
@@ -25,6 +31,7 @@ class PaymentViewSerializer(serializers.ModelSerializer):
     payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
     payment_mode = PaymentModeListSerializer(many=False, source='get_payment_mode')
     payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_channel')
+    state = ChoiceField(choices=Payment.CHOICES)
 
     class Meta:
         model = Payment

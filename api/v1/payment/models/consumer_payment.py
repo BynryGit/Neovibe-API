@@ -25,22 +25,22 @@ from v1.utility.models.utility_master import UtilityMaster
 # Create Consumer Payments Table Start.
 class Payment(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
-        ('created', 'CREATED'),
-        ('approved', 'APPROVED'),
-        ('rejected', 'REJECTED'),
+        (1, 'CREATED'),
+        (2, 'APPROVED'),
+        (3, 'REJECTED'),
     )
 
     state_machine = {
-        'created': '__all__',
-        'approved': ('approved',),
-        'rejected': ('rejected',),
+        1: (2, 3,),
+        2: (2,),
+        3: (3,),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='tenant')
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    state = models.CharField(max_length=30, choices=CHOICES, default='created')
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=1)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no

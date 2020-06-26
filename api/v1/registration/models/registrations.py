@@ -1,10 +1,6 @@
 from datetime import datetime # importing package for datetime
-from django.dispatch import receiver
-from rest_framework import status
 from v1.commonapp.models.area import get_area_by_id
-from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.registration.models.registration_status import get_registration_status_by_id
-from v1.registration.signals.signals import registration_payment_created, registration_payment_approved
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
@@ -27,23 +23,23 @@ import fsm
 # Create Consumer Registration table start.
 class Registration(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
-        ('created', 'CREATED'),
-        ('pending', 'PENDING'),
-        ('approved', 'APPROVED'),
-        ('rejected', 'REJECTED'),
-        ('hold', 'HOLD'),
-        ('completed', 'COMPLETED'),
-        ('archived', 'ARCHIVED'),
+        (1, 'CREATED'),
+        (2, 'PENDING'),
+        (3, 'APPROVED'),
+        (4, 'REJECTED'),
+        (5, 'HOLD'),
+        (6, 'COMPLETED'),
+        (7, 'ARCHIVED'),
     )
 
     state_machine = {
-        'created': '__all__',
-        'pending': ('approved', 'rejected', 'hold', 'pending',),
-        'approved': ('archived', 'approved'),
-        'rejected': ('archived', 'rejected',),
-        'hold': ('approved','rejected','hold',),
-        'completed': ('archived','completed',),
-        'archived': ('archived',),
+        1: (2,),
+        2: (3, 4, 5, 2,),
+        3: (6, 3,),
+        4: (7, 4,),
+        5: (3, 4, 5,),
+        6: (7, 6,),
+        7: (7,),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -51,7 +47,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     registration_no = models.CharField(max_length=200, blank=True, null=True)
     registration_type_id = models.BigIntegerField(null=True, blank=True)
-    state = models.CharField(max_length=30, choices=CHOICES, default='created')
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=1)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     middle_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
@@ -100,20 +96,6 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         self.save()
-
-@receiver([registration_payment_created,registration_payment_approved])
-def after_payment(sender, **kwargs):
-    try:
-        if sender.state == 'created':
-            registration = get_registration_by_id(sender.identification_id)
-            registration.change_state('pending')
-        if sender.state == 'approved':
-            registration = get_registration_by_id(sender.identification_id)
-            registration.change_state('approved')
-        if sender.state == 'rejected':
-            pass
-    except Exception as e:
-        raise CustomAPIException(str(e),status_code=status.HTTP_404_NOT_FOUND)
 
 
 def get_registration_by_id_string(id_string):

@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from api.constants import *
-from master.models import User, get_user_by_id_string
+from master.models import get_user_by_id_string
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -126,14 +126,15 @@ class RegistrationDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: DATA_NOT_EXISTS,
-                }, status=status.HTTP_204_NO_CONTENT)
+                    RESULT: REGISTRATION_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                RESULT: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
     @is_token_validate
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
@@ -146,18 +147,22 @@ class RegistrationDetail(GenericAPIView):
                 request.data['phone_mobile'] = registration_obj.phone_mobile
             if registration_obj:
                 serializer = RegistrationSerializer(data=request.data)
-                if serializer.is_valid(request.data):
+                if serializer.is_valid(raise_exception=False):
                     registration_obj = serializer.update(registration_obj, serializer.validated_data, user)
-                    view_serializer = RegistrationViewSerializer(instance=registration_obj,
-                                                                 context={'request': request})
+                    view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
                     }, status=status.HTTP_200_OK)
-            # Save basic details end
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULT: REGISTRATION_NOT_FOUND
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
@@ -189,7 +194,7 @@ class RegistrationPayment(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             registration_obj = get_registration_by_id_string(id_string)
             serializer = PaymentSerializer(data=request.data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=False):
                 with transaction.atomic():
                     payment = serializer.create(serializer.validated_data, user, registration_obj)
                     view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
@@ -203,9 +208,10 @@ class RegistrationPayment(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: serializer.errors,
+                    RESULT: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print(e)
             logger().log(e, 'HIGH', module = 'Consumer Ops', Sub_module='Registration/payments')
             res = self.handle_exception(e)
             return Response({
@@ -240,9 +246,9 @@ class RegistrationPaymentDetail(GenericAPIView):
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    RESULT: '',
-                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    STATE: ERROR,
+                    RESULT: PAYMENT_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module = 'Consumer Ops', Sub_module='Registration/payments')
             res = self.handle_exception(e)
@@ -255,25 +261,28 @@ class RegistrationPaymentDetail(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
-            # Save basic details start
             user_id_string = get_user_from_token(request.headers['token'])
             user = get_user_by_id_string(user_id_string)
             payment = get_payment_by_id_string(id_string)
             if payment:
                 serializer = PaymentSerializer(data=request.data)
-                if serializer.is_valid(request.data):
+                if serializer.is_valid(raise_exception=False):
                     payment = serializer.update(payment, serializer.validated_data, user)
                     view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
                     }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: 'Payment not found!'
+                    RESULT: PAYMENT_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
-            # Save basic details start
         except Exception as e:
             logger().log(e, 'HIGH', module = 'Consumer Ops', Sub_module='Registration/payments')
             res = self.handle_exception(e)
@@ -303,7 +312,7 @@ class RegistrationPaymentApprove(GenericAPIView):
             payment = get_payment_by_id_string(id_string)
             if payment:
                 with transaction.atomic():
-                    payment.change_state('approved')
+                    payment.change_state(2)
                     # signal to registration start
                     registration_payment_approved.send(payment)
                     # signal to registration end
@@ -315,15 +324,14 @@ class RegistrationPaymentApprove(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: 'Payment not found!'
+                    RESULT: PAYMENT_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration/payments')
-            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
                 RESULT: str(e),
-            }, status=res.status_code)
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
 
 
 # API Header
@@ -346,7 +354,7 @@ class RegistrationPaymentReject(GenericAPIView):
             payment = get_payment_by_id_string(id_string)
             if payment:
                 with transaction.atomic():
-                    payment.change_state('rejected')
+                    payment.change_state(3)
                 serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
@@ -355,14 +363,13 @@ class RegistrationPaymentReject(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: 'Payment not found!'
+                    RESULT: PAYMENT_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration/payments')
-            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
                 RESULT: str(e),
-            }, status=res.status_code)
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
 
 

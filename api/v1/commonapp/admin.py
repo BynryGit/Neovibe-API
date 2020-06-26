@@ -13,6 +13,7 @@ from v1.commonapp.models.region import Region
 from v1.commonapp.models.service_type import ServiceType
 from v1.commonapp.models.skills import Skills
 from v1.commonapp.models.state import State
+from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.models.sub_area import SubArea
 from v1.commonapp.models.sub_module import SubModule
 
@@ -32,3 +33,4 @@ admin.site.register(ServiceType)
 admin.site.register(DocumentType)
 admin.site.register(DocumentSubType)
 admin.site.register(Skills)
+admin.site.register(StateConfiguration)
