@@ -19,6 +19,24 @@ REGISTRATION_STATES = (
     )
 
 # Just for reference
+PAYMENT_DICT = {
+    "CREATED"  : 1,
+    "APPROVED" : 2,
+    "REJECTED" : 3,
+}
+
+# Just for reference
+REGISTRATION_DICT = {
+    "CREATED"    : 1,
+    "PENDING"    : 2,
+    "APPROVED"   : 3,
+    "REJECTED"   : 4,
+    "HOLD"       : 5,
+    "COMPLETED"  : 6,
+    "ARCHIVED"   : 7,
+}
+
+# Just for reference
 PAYMENT_STATES = (
         (1, 'CREATED'),
         (2, 'APPROVED'),
@@ -28,12 +46,12 @@ PAYMENT_STATES = (
 # Default switch cases
 def payment_switch(payment_state, registration):
     try:
-        if payment_state == 1:
-            registration.change_state(2)
-        if payment_state == 2:
-            registration.change_state(2)
-        if payment_state == 3:
-            registration.change_state(2)
+        if payment_state == PAYMENT_DICT["CREATED"]:
+            registration.change_state(REGISTRATION_DICT["PENDING"])
+        if payment_state == PAYMENT_DICT["APPROVED"]:
+            registration.change_state(REGISTRATION_DICT["PENDING"])
+        if payment_state == PAYMENT_DICT["REJECTED"]:
+            registration.change_state(REGISTRATION_DICT["PENDING"])
     except Exception as e:
         raise CustomAPIException(str(e),status_code=status.HTTP_412_PRECONDITION_FAILED)
 
