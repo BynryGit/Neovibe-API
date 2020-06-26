@@ -7,6 +7,25 @@ from v1.commonapp.models.sub_module import get_sub_module_by_name
 from v1.userapp.models.privilege import get_privilege_by_name
 from v1.utility.models.utility_master import get_utility_by_name
 
+# *********** REGISTRATION CONSTANTS **************
+REGISTRATION_DICT = {
+    "CREATED"    : 1,
+    "PENDING"    : 2,
+    "APPROVED"   : 3,
+    "REJECTED"   : 4,
+    "HOLD"       : 5,
+    "COMPLETED"  : 6,
+    "ARCHIVED"   : 7,
+}
+
+
+# *********** PAYMENT CONSTANTS **************
+PAYMENT_DICT = {
+    "CREATED"  : 1,
+    "APPROVED" : 2,
+    "REJECTED" : 3,
+}
+
 
 # *********** MODULE CONSTANTS **************
 S_AND_M = get_module_by_name('S&M')

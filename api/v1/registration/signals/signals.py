@@ -3,6 +3,7 @@ __author__ = "Rohan"
 import django.dispatch
 from django.dispatch import receiver
 from rest_framework import status
+from api.constants import *
 from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.registration.models.registrations import get_registration_by_id
@@ -17,24 +18,6 @@ REGISTRATION_STATES = (
         (6, 'COMPLETED'),
         (7, 'ARCHIVED'),
     )
-
-# Just for reference
-PAYMENT_DICT = {
-    "CREATED"  : 1,
-    "APPROVED" : 2,
-    "REJECTED" : 3,
-}
-
-# Just for reference
-REGISTRATION_DICT = {
-    "CREATED"    : 1,
-    "PENDING"    : 2,
-    "APPROVED"   : 3,
-    "REJECTED"   : 4,
-    "HOLD"       : 5,
-    "COMPLETED"  : 6,
-    "ARCHIVED"   : 7,
-}
 
 # Just for reference
 PAYMENT_STATES = (
