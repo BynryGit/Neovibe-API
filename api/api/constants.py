@@ -9,11 +9,12 @@ from v1.utility.models.utility_master import get_utility_by_name
 
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
-    "CREATED"    : 1,
-    "PENDING"    : 2,
-    "APPROVED"   : 3,
-    "REJECTED"   : 4,
-    "HOLD"       : 5,
+    "CREATED"    : 0,
+    "PENDING"    : 1,
+    "APPROVED"   : 2,
+    "REJECTED"   : 3,
+    "HOLD"       : 4,
+    "CANCELED"   : 5,
     "COMPLETED"  : 6,
     "ARCHIVED"   : 7,
 }

@@ -73,6 +73,9 @@ INVOICE_NOT_FOUND = "Invoice Not Found"
 REGISTRATION_NOT_FOUND = "Registration not found"
 PAYMENT_NOT_FOUND = "Payment not found"
 BILL_NOT_FOUND = "Bill not found"
+CONSUMER_NOT_FOUND = "Consumer not found"
+COMPLAINT_NOT_FOUND = "Complaint not found"
+SCHEME_NOT_FOUND = "Scheme not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

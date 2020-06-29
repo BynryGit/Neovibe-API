@@ -44,7 +44,7 @@ class Consumer(GenericAPIView):
             user_id_string = get_user_from_token(request.headers['token'])
             user = get_user_by_id_string(user_id_string)
             serializer = ConsumerSerializer(data=request.data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=False):
                 consumer_obj = serializer.create(serializer.validated_data, user)
                 view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
                 return Response({
@@ -92,7 +92,7 @@ class ConsumerDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: EXCEPTION,
-                    RESULT: 'Consumer not found!',
+                    RESULT: CONSUMER_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer')
@@ -112,7 +112,7 @@ class ConsumerDetail(GenericAPIView):
             consumer = get_consumer_by_id_string(id_string)
             if consumer:
                 serializer = ConsumerSerializer(data=request.data)
-                if serializer.is_valid(request.data):
+                if serializer.is_valid(raise_exception=False):
                     consumer_obj = serializer.update(consumer, serializer.validated_data, user)
                     view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
                     return Response({
@@ -122,7 +122,7 @@ class ConsumerDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: 'Consumer not found!'
+                    RESULT: CONSUMER_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer')
@@ -274,8 +274,8 @@ class ConsumerBillDetail(GenericAPIView):
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
-                    STATE: EXCEPTION,
-                    RESULT: 'Bill not found!',
+                    STATE: ERROR,
+                    RESULT: BILL_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer/Bill')
@@ -295,17 +295,22 @@ class ConsumerBillDetail(GenericAPIView):
             bill = get_invoice_bill_by_id_string(id_string)
             if bill:
                 serializer = InvoiceBillSerializer(data=request.data)
-                if serializer.is_valid(request.data):
+                if serializer.is_valid(raise_exception=False):
                     bill = serializer.update(bill, serializer.validated_data, user)
                     view_serializer = InvoiceBillViewSerializer(instance=bill, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
                     }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: 'Bill not found!'
+                    RESULT: BILL_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer/Bill')
@@ -337,7 +342,7 @@ class ConsumerPayment(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             consumer_obj = get_consumer_by_id_string(id_string)
             serializer = PaymentSerializer(data=request.data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=False):
                 payment = serializer.create(serializer.validated_data, user, consumer_obj)
                 view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                 return Response({
@@ -347,7 +352,7 @@ class ConsumerPayment(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: serializer.errors,
+                    RESULT: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer/payments')
@@ -386,7 +391,7 @@ class ConsumerPaymentDetail(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                     RESULT: DATA_NOT_EXISTS,
-                }, status=status.HTTP_204_NO_CONTENT)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer/payments')
             res = self.handle_exception(e)
@@ -404,16 +409,22 @@ class ConsumerPaymentDetail(GenericAPIView):
             payment = get_payment_by_id_string(id_string)
             if payment:
                 serializer = PaymentSerializer(data=request.data)
-                if serializer.is_valid(request.data):
+                if serializer.is_valid(raise_exception=False):
                     payment = serializer.update(payment, serializer.validated_data, user)
                     view_serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,
                     }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULT: PAYMENT_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer/payments')
@@ -437,46 +448,34 @@ class ConsumerPaymentDetail(GenericAPIView):
 # Created on: 22/05/2020
 class ConsumerComplaint(GenericAPIView):
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
-            if is_token_valid(request.headers['token']):
-                if is_authorized():
-                    if is_data_verified(request):
-                        user = UserDetail.objects.get(id=2)
-                        consumer_obj = get_consumer_by_id_string(id_string)
-                        request.data['consumer_no'] = consumer_obj.consumer_no
-                        serializer = ComplaintSerializer(data=request.data)
-                        if serializer.is_valid():
-                            complaint = serializer.create(serializer.validated_data, user)
-                            view_serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            user_id_string = get_user_from_token(request.headers['token'])
+            user = get_user_by_id_string(user_id_string)
+            consumer_obj = get_consumer_by_id_string(id_string)
+            request.data['consumer_no'] = consumer_obj.consumer_no
+            serializer = ComplaintSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                complaint = serializer.create(serializer.validated_data, user)
+                view_serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print("#########",e)
-            # logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer/complaint')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -492,88 +491,58 @@ class ConsumerComplaint(GenericAPIView):
 # Created on: 22/05/2020
 class ConsumerComplaintDetail(GenericAPIView):
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
-                    complaint = get_consumer_complaint_by_id_string(id_string)
-                    if complaint:
-                        serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            DATA: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_204_NO_CONTENT)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            complaint = get_consumer_complaint_by_id_string(id_string)
+            if complaint:
+                serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: COMPLAINT_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer/complaint')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
-                    if is_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic details start
-                        user = UserDetail.objects.get(id=2)
-                        complaint = get_consumer_complaint_by_id_string(id_string)
-                        if complaint:
-                            serializer = ComplaintSerializer(data=request.data)
-                            if serializer.is_valid(request.data):
-                                complaint = serializer.update(complaint, serializer.validated_data, user)
-                                view_serializer = ComplaintViewSerializer(instance=complaint,
-                                                                             context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                            }, status=status.HTTP_204_NO_CONTENT)
-                        # Save basic details start
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                else:
+            user_id_string = get_user_from_token(request.headers['token'])
+            user = get_user_by_id_string(user_id_string)
+            complaint = get_consumer_complaint_by_id_string(id_string)
+            if complaint:
+                serializer = ComplaintSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    complaint = serializer.update(complaint, serializer.validated_data, user)
+                    view_serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
                     return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: COMPLAINT_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer/complaint')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -589,46 +558,35 @@ class ConsumerComplaintDetail(GenericAPIView):
 # Created on: 23/05/2020
 class ConsumerScheme(GenericAPIView):
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
-            if is_token_valid(request.headers['token']):
-                if is_authorized():
-                    if is_data_verified(request):
-                        user = UserDetail.objects.get(id=2)
-                        consumer_obj = get_consumer_by_id_string(id_string)
-                        serializer = ConsumerSchemeMasterSerializer(data=request.data)
-                        if serializer.is_valid():
-                            scheme = serializer.create(serializer.validated_data, user)
-                            consumer_obj.scheme_id = scheme.id
-                            consumer_obj.save()
-                            view_serializer = ConsumerSchemeMasterViewSerializer(instance=scheme, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULTS: view_serializer.data,
-                            }, status=status.HTTP_201_CREATED)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            user_id_string = get_user_from_token(request.headers['token'])
+            user = get_user_by_id_string(user_id_string)
+            consumer_obj = get_consumer_by_id_string(id_string)
+            serializer = ConsumerSchemeMasterSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                scheme = serializer.create(serializer.validated_data, user)
+                consumer_obj.scheme_id = scheme.id
+                consumer_obj.save()
+                view_serializer = ConsumerSchemeMasterViewSerializer(instance=scheme, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer/scheme')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -644,85 +602,60 @@ class ConsumerScheme(GenericAPIView):
 # Created on: 23/05/2020
 class ConsumerSchemeDetail(GenericAPIView):
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
-                    scheme = get_scheme_by_id_string(id_string)
-                    if scheme:
-                        serializer = ConsumerSchemeMasterViewSerializer(instance=scheme, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            DATA: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: EXCEPTION,
-                            DATA: '',
-                        }, status=status.HTTP_204_NO_CONTENT)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            scheme = get_scheme_by_id_string(id_string)
+            if scheme:
+                serializer = ConsumerSchemeMasterViewSerializer(instance=scheme, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: SCHEME_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer/scheme')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                DATA: '',
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                    # Checking authorization end
-
-                    # Request data verification start
-                    if is_data_verified(request):
-                        # Request data verification end
-
-                        # Save basic details start
-                        user = UserDetail.objects.get(id=2)
-                        scheme = get_scheme_by_id_string(id_string)
-                        if scheme:
-                            serializer = ConsumerSchemeMasterSerializer(data=request.data)
-                            if serializer.is_valid(request.data):
-                                scheme = serializer.update(scheme, serializer.validated_data, user)
-                                view_serializer = ConsumerSchemeMasterViewSerializer(instance=scheme,
-                                                                             context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULTS: view_serializer.data,
-                                }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                            }, status=status.HTTP_204_NO_CONTENT)
-                        # Save basic details start
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+            scheme = get_scheme_by_id_string(id_string)
+            user_id_string = get_user_from_token(request.headers['token'])
+            user = get_user_by_id_string(user_id_string)
+            if scheme:
+                serializer = ConsumerSchemeMasterSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    scheme = serializer.update(scheme, serializer.validated_data, user)
+                    view_serializer = ConsumerSchemeMasterViewSerializer(instance=scheme, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: SCHEME_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer/scheme')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: ERROR
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULT: str(e),
+            }, status=res.status_code)

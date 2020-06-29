@@ -163,7 +163,7 @@ class RegistrationDetail(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                     RESULT: REGISTRATION_NOT_FOUND
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
             res = self.handle_exception(e)
@@ -312,7 +312,7 @@ class RegistrationPaymentApprove(GenericAPIView):
             payment = get_payment_by_id_string(id_string)
             if payment:
                 with transaction.atomic():
-                    payment.change_state(2)
+                    payment.change_state(PAYMENT_DICT["APPROVED"])
                     # signal to registration start
                     registration_payment_approved.send(payment)
                     # signal to registration end
@@ -354,7 +354,7 @@ class RegistrationPaymentReject(GenericAPIView):
             payment = get_payment_by_id_string(id_string)
             if payment:
                 with transaction.atomic():
-                    payment.change_state(3)
+                    payment.change_state(PAYMENT_DICT["REJECTED"])
                 serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                 return Response({
                     STATE: SUCCESS,

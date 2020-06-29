@@ -1,5 +1,7 @@
 from datetime import datetime # importing package for datetime
+from api.constants import REGISTRATION_DICT
 from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.transition_configuration import TransitionConfiguration
 from v1.registration.models.registration_status import get_registration_status_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
@@ -23,23 +25,26 @@ import fsm
 # Create Consumer Registration table start.
 class Registration(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
-        (1, 'CREATED'),
-        (2, 'PENDING'),
-        (3, 'APPROVED'),
-        (4, 'REJECTED'),
-        (5, 'HOLD'),
+        (0, 'CREATED'),
+        (1, 'PENDING'),
+        (2, 'APPROVED'),
+        (3, 'REJECTED'),
+        (4, 'HOLD'),
+        (5, 'CANCELED'),
         (6, 'COMPLETED'),
         (7, 'ARCHIVED'),
     )
 
     state_machine = {
-        1: (2,),
-        2: (3, 4, 5, 2,),
-        3: (6, 3,),
-        4: (7, 4,),
-        5: (3, 4, 5,),
-        6: (7, 6,),
-        7: (7,),
+        REGISTRATION_DICT['CREATED']    :   (REGISTRATION_DICT['PENDING'],),
+        REGISTRATION_DICT['PENDING']    :   (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['HOLD'], REGISTRATION_DICT['REJECTED'],
+                                                        REGISTRATION_DICT['CANCELED'], REGISTRATION_DICT['PENDING'],),
+        REGISTRATION_DICT['APPROVED']   :   (REGISTRATION_DICT['COMPLETED'], REGISTRATION_DICT['APPROVED'],),
+        REGISTRATION_DICT['REJECTED']   :   (REGISTRATION_DICT['PENDING'], REGISTRATION_DICT['REJECTED'],),
+        REGISTRATION_DICT['HOLD']       :   (REGISTRATION_DICT['PENDING'], REGISTRATION_DICT['HOLD'],),
+        REGISTRATION_DICT['CANCELED']   :   (REGISTRATION_DICT['ARCHIVED'], REGISTRATION_DICT['CANCELED'],),
+        REGISTRATION_DICT['COMPLETED']  :   (REGISTRATION_DICT['ARCHIVED'], REGISTRATION_DICT['COMPLETED'],),
+        REGISTRATION_DICT['ARCHIVED']   :   (REGISTRATION_DICT['ARCHIVED'],),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -47,7 +52,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     registration_no = models.CharField(max_length=200, blank=True, null=True)
     registration_type_id = models.BigIntegerField(null=True, blank=True)
-    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=1)
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     middle_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
@@ -95,6 +100,13 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         return area
 
     def on_change_state(self, previous_state, next_state, **kwargs):
+        if TransitionConfiguration.objects.filter(transition_object = "Registration",
+                                                  transition_state = next_state, utility = self.utility).exists():
+            transition_objects = TransitionConfiguration.objects.filter(transition_object = "Registration",
+                                                  transition_state = next_state, utility = self.utility)
+            for transition_object in transition_objects:
+                if transition_object.event == "SMS":
+                    print("Sending SMS.........")
         self.save()
 
 

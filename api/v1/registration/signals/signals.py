@@ -1,5 +1,7 @@
 __author__ = "Rohan"
 
+
+import logging
 import django.dispatch
 from django.dispatch import receiver
 from rest_framework import status
@@ -7,6 +9,9 @@ from api.constants import *
 from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.registration.models.registrations import get_registration_by_id
+
+# Local logging
+logger = logging.getLogger('django')
 
 # Just for reference
 REGISTRATION_STATES = (
