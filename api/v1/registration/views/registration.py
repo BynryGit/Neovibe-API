@@ -7,6 +7,7 @@ from api.constants import *
 from master.models import get_user_by_id_string
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
+from v1.commonapp.views.notifications import send_mail
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
