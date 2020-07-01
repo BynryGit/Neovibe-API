@@ -22,9 +22,9 @@ REGISTRATION_DICT = {
 
 # *********** PAYMENT CONSTANTS **************
 PAYMENT_DICT = {
-    "CREATED"  : 1,
-    "APPROVED" : 2,
-    "REJECTED" : 3,
+    "CREATED"  : 0,
+    "APPROVED" : 1,
+    "REJECTED" : 2,
 }
 
 

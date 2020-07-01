@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_twilio',
     'rest_framework',
     'storages',
     'corsheaders',
@@ -211,3 +212,7 @@ EMAIT_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'Rohan-wagh'
 EMAIL_HOST_PASSWORD = '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'
+
+# SMS configuration
+TWILIO_ACCOUNT_SID = 'ACf8545f63b2bf3513b90b2ac626b53d8b'
+TWILIO_AUTH_TOKEN = '413b55d88e459cc05c713b4510808dec'

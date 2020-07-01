@@ -1,6 +1,8 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 import fsm
+
+from api.constants import PAYMENT_DICT
 from v1.payment.models.payment_channel import get_payment_channel_by_id
 from v1.payment.models.payment_mode import get_payment_mode_by_id
 from v1.payment.models.payment_source import get_payment_source_by_id
@@ -25,15 +27,15 @@ from v1.utility.models.utility_master import UtilityMaster
 # Create Consumer Payments Table Start.
 class Payment(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
-        (1, 'CREATED'),
-        (2, 'APPROVED'),
-        (3, 'REJECTED'),
+        (0, 'CREATED'),
+        (1, 'APPROVED'),
+        (2, 'REJECTED'),
     )
 
     state_machine = {
-        1: (2, 3,),
-        2: (2,),
-        3: (3,),
+        PAYMENT_DICT['CREATED']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
+        PAYMENT_DICT['APPROVED']  : (PAYMENT_DICT['APPROVED'],),
+        PAYMENT_DICT['REJECTED']  : (PAYMENT_DICT['REJECTED'],),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

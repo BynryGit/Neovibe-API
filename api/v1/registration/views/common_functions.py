@@ -14,12 +14,13 @@ from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 
 
 def is_data_verified(request):
     return True
 
-
+# Function for converting id_strings to id's
 def set_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -106,3 +107,19 @@ def set_validated_data(validated_data):
         else:
             raise CustomAPIException("Source not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
+
+# Function for generating regisration number aaccording to utility
+def generate_registration_no(registration):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant = registration.tenant, utility = registration.utility, item = 'Registration')
+        if format_obj.is_prefix == True:
+            registration_no = format_obj.prefix + str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        else:
+            registration_no = str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        return registration_no
+    except Exception as e:
+        raise CustomAPIException("Rgistration no generation failed.",status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -9,7 +9,8 @@ from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.registration.models.registrations import Registration
 from v1.registration.serializers.registration_status import RegistrationStatusViewSerializer
-from v1.registration.views.common_functions import set_validated_data
+from v1.registration.views.common_functions import set_validated_data, generate_registration_no
+
 
 class ChoiceField(serializers.ChoiceField):
 
@@ -75,6 +76,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 registration_obj.created_by = user.id
                 registration_obj.created_date = datetime.utcnow()
                 registration_obj.tenant = user.tenant
+                registration_obj.registration_no = generate_registration_no(registration_obj)
                 registration_obj.save()
                 return registration_obj
 

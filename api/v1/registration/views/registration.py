@@ -7,7 +7,7 @@ from api.constants import *
 from master.models import get_user_by_id_string
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
-from v1.commonapp.views.notifications import send_mail
+from v1.commonapp.views.notifications import send_mail, send_sms
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
@@ -76,6 +76,7 @@ class Registration(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
     def post(self, request):
         try:
+            send_sms()
             user_id_string = get_user_from_token(request.headers['token'])
             user = get_user_by_id_string(user_id_string)
             serializer = RegistrationSerializer(data=request.data)
