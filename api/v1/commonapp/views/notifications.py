@@ -1,25 +1,21 @@
+import traceback
 from celery.task import task
-from sendgrid import Mail, SendGridAPIClient
 from twilio.rest import Client
 from api.settings import *
 from v1.commonapp.views.logger import logger
+from django.core.mail import EmailMultiAlternatives
 
 
 @task(name = 'send_mail')
-def send_mail():
-    message = Mail(
-        from_email='rohan.wagh@bynry.com',
-        to_emails='waghrohan218@gmail.com',
-        subject='Sending with Twilio SendGrid is Fun',
-        html_content='<strong>and easy to do anywhere, even with Python</strong>'),
+def send_mail(subject, body, from_email, to, connection = None, attachments = None, cc = None, html = None):
     try:
-        sg = SendGridAPIClient(EMAIL_HOST_PASSWORD)
-        response = sg.send(message)
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
+        msg = EmailMultiAlternatives(subject=subject, body=body, from_email=from_email, to=to, connection=connection,
+                                     attachments=attachments)
+        if html is not None:
+            msg.attach_alternative(html, "text/html")
+        msg.send(fail_silently=False)
     except Exception as e:
-        logger().log(e, 'LOW', message = str(e))
+        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations')
 
 
 @task(name = 'send_sms')
@@ -37,3 +33,5 @@ def send_sms():
         print(message.sid)
     except Exception as e:
         logger().log(e, 'LOW', message = str(e))
+
+

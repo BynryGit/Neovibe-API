@@ -6,6 +6,7 @@ from v1.commonapp.models.department import Department
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.document_sub_type import DocumentSubType
 from v1.commonapp.models.document_type import DocumentType
+from v1.commonapp.models.email_configurations import EmailConfiguration
 from v1.commonapp.models.form_factor import FormFactor
 from v1.commonapp.models.module import Module
 from v1.commonapp.models.notes import Notes
@@ -36,3 +37,4 @@ admin.site.register(DocumentSubType)
 admin.site.register(Skills)
 admin.site.register(StateConfiguration)
 admin.site.register(TransitionConfiguration)
+admin.site.register(EmailConfiguration)

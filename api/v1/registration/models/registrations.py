@@ -1,8 +1,8 @@
 from datetime import datetime # importing package for datetime
 from api.constants import REGISTRATION_DICT
 from v1.commonapp.models.area import get_area_by_id
-from v1.commonapp.models.transition_configuration import TransitionConfiguration
 from v1.registration.models.registration_status import get_registration_status_by_id
+from v1.registration.views.common_functions import *
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
@@ -100,14 +100,12 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         return area
 
     def on_change_state(self, previous_state, next_state, **kwargs):
-        if TransitionConfiguration.objects.filter(transition_object = "Registration",
-                                                  transition_state = next_state, utility = self.utility).exists():
-            transition_objects = TransitionConfiguration.objects.filter(transition_object = "Registration",
-                                                  transition_state = next_state, utility = self.utility)
-            for transition_object in transition_objects:
-                if transition_object.event == "SMS":
-                    print("Sending SMS.........")
-        self.save()
+        try:
+            perform_events(next_state, self)
+            perform_triggers(next_state, self)
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Registration transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 
 def get_registration_by_id_string(id_string):

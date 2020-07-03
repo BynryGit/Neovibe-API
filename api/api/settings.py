@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '4urz*1-p45#e2nnlg$fjqb*rhv^w_l35n4#^l%m^8$*2t5slpg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -210,8 +210,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIT_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'Rohan-wagh'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
 
 # SMS configuration
 TWILIO_ACCOUNT_SID = 'ACf8545f63b2bf3513b90b2ac626b53d8b'

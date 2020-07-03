@@ -17,9 +17,19 @@ class TransitionConfiguration(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=True)
+    is_attachment = models.BooleanField(default=False)
+    attachment = models.CharField(max_length=200, null=True, blank=True)
+    is_template = models.BooleanField(default=False)
+    template = models.TextField(max_length = 10000, null=True, blank=True)
 
     def __str__(self):
         return self.utility.name
 
     def __unicode__(self):
         return self.utility.name
+
+def get_transition_configuration_by_id(id):
+    try:
+        return TransitionConfiguration.objects.get(id = id)
+    except Exception as e:
+        return False

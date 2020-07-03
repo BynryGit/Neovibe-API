@@ -52,8 +52,10 @@ registration_payment_approved = django.dispatch.Signal()
 def after_payment(sender, **kwargs):
     try:
         registration = get_registration_by_id(sender.identification_id)
-        if StateConfiguration.objects.filter(utility = registration.utility, sender_object = 'Payment', receiver_object = 'Registration', is_active = True).exists():
-            state_object = StateConfiguration.objects.get(utility = registration.utility, sender_object = 'Payment', receiver_object = 'Registration')
+        if StateConfiguration.objects.filter(utility = registration.utility, sender_object = 'payment',
+                                             receiver_object = 'registration', is_active = True).exists():
+            state_object = StateConfiguration.objects.get(utility = registration.utility,
+                                             sender_object = 'payment', receiver_object = 'registration')
             if sender.state == state_object.sender_state:
                 registration.change_state(state_object.receiver_state)
         else:

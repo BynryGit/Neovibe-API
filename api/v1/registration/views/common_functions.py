@@ -4,6 +4,7 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.transition_configuration import TransitionConfiguration
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
@@ -13,6 +14,7 @@ from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
+from v1.registration.views.registration_notifications import registration_completed_email_to_consumer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 
@@ -123,3 +125,23 @@ def generate_registration_no(registration):
         return registration_no
     except Exception as e:
         raise CustomAPIException("Rgistration no generation failed.",status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Function for performing registration transition events
+def perform_events(next_state, self):
+    try:
+        if TransitionConfiguration.objects.filter(transition_object="registration", transition_state=next_state, utility=self.utility,
+                                                  event="registration_completed_email_to_consumer").exists():
+            transition_obj = TransitionConfiguration.objects.get(transition_object="registration", transition_state=next_state,
+                                                                 utility=self.utility, event="registration_completed_email_to_consumer")
+            registration_completed_email_to_consumer(self.id, transition_obj.id)
+        else:
+            pass
+    except Exception as e:
+        raise CustomAPIException(str(e),status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Function for performing registration triggers
+def perform_triggers(next_state, self):
+    try:
+        pass
+    except Exception as e:
+        pass
