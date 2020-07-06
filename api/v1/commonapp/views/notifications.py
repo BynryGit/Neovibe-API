@@ -1,4 +1,3 @@
-import traceback
 from celery.task import task
 from twilio.rest import Client
 from api.settings import *
@@ -15,7 +14,7 @@ def send_mail(subject, body, from_email, to, connection = None, attachments = No
             msg.attach_alternative(html, "text/html")
         msg.send(fail_silently=False)
     except Exception as e:
-        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations')
+        logger().log(e, 'LOW')
 
 
 @task(name = 'send_sms')

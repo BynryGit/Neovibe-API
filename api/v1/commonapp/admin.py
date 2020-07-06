@@ -10,6 +10,7 @@ from v1.commonapp.models.email_configurations import EmailConfiguration
 from v1.commonapp.models.form_factor import FormFactor
 from v1.commonapp.models.module import Module
 from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notification_template import NotificationTemplate
 from v1.commonapp.models.region import Region
 from v1.commonapp.models.service_type import ServiceType
 from v1.commonapp.models.skills import Skills
@@ -38,3 +39,4 @@ admin.site.register(Skills)
 admin.site.register(StateConfiguration)
 admin.site.register(TransitionConfiguration)
 admin.site.register(EmailConfiguration)
+admin.site.register(NotificationTemplate)

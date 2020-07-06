@@ -1,7 +1,7 @@
-import traceback
 from django.core.mail.backends.smtp import EmailBackend
 from api.settings import EMAIL_HOST_PASSWORD
 from v1.commonapp.models.email_configurations import EmailConfiguration
+from v1.commonapp.models.notification_template import get_notification_template_by_id
 from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.notifications import send_mail
@@ -12,7 +12,7 @@ def registration_completed_email_to_consumer(registration_id, transition_obj_id)
     try:
         registration_obj = registrations.get_registration_by_id(registration_id)
         transition_obj = get_transition_configuration_by_id(transition_obj_id)
-        html = transition_obj.template
+        html = get_notification_template_by_id(transition_obj.template_id)
         html = html.replace("{name}",registration_obj.first_name)
         if EmailConfiguration.objects.filter(tenant = registration_obj.tenant, utility = registration_obj.utility).exists():
             email_configuration_obj = EmailConfiguration.objects.get(tenant = registration_obj.tenant, utility = registration_obj.utility)
@@ -24,4 +24,4 @@ def registration_completed_email_to_consumer(registration_id, transition_obj_id)
         else:
             pass
     except Exception as e:
-        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations')
+        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations', registration = registration_id)

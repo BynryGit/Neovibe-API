@@ -8,7 +8,7 @@ from rest_framework import status
 from api.constants import *
 from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.registration.models.registrations import get_registration_by_id
+from v1.registration.models import registrations
 
 # Local logging
 logger = logging.getLogger('django')
@@ -47,11 +47,14 @@ def payment_switch(payment_state, registration):
 registration_payment_created = django.dispatch.Signal()
 registration_payment_approved = django.dispatch.Signal()
 
+# Signals for consumer from registration
+registration_completed = django.dispatch.Signal()
+
 # Signal receiver for registration
 @receiver([registration_payment_created, registration_payment_approved])
 def after_payment(sender, **kwargs):
     try:
-        registration = get_registration_by_id(sender.identification_id)
+        registration = registrations.get_registration_by_id(sender.identification_id)
         if StateConfiguration.objects.filter(utility = registration.utility, sender_object = 'payment',
                                              receiver_object = 'registration', is_active = True).exists():
             state_object = StateConfiguration.objects.get(utility = registration.utility,

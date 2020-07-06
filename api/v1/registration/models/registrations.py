@@ -102,7 +102,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
             perform_events(next_state, self)
-            perform_triggers(next_state, self)
+            perform_signals(next_state, self)
             self.save()
         except Exception as e:
             raise CustomAPIException("Registration transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
