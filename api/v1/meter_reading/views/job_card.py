@@ -39,7 +39,7 @@ class JobcardList(generics.ListAPIView):
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
                 if is_authorized():
-                    queryset = JobcardTbl.objects.filter(meter_reader_id=self.request.user, is_active=True)
+                    queryset = JobcardTbl.objects.filter(meter_reader_id=1, is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

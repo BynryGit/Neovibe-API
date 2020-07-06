@@ -1,3 +1,19 @@
+import uuid  # importing package for guid
+from datetime import datetime # importing package for datetime
+import fsm
+
+from api.constants import PAYMENT_DICT
+from v1.payment.models.payment_channel import get_payment_channel_by_id
+from v1.payment.models.payment_mode import get_payment_mode_by_id
+from v1.payment.models.payment_source import get_payment_source_by_id
+from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
+from v1.payment.models.payment_type import get_payment_type_by_id
+from django.db import models  # importing package for database
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
+
+
+
 # Table Header
 # Module: Consumer Care | Sub-Module : Billing
 # Table Type : Master (Global)
@@ -8,28 +24,25 @@
 # Reference Table : None
 # Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
-
-
-import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
-from v1.payment.models.payment_channel import get_payment_channel_by_id
-from v1.payment.models.payment_mode import get_payment_mode_by_id
-from v1.payment.models.payment_source import get_payment_source_by_id
-from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
-from v1.payment.models.payment_type import get_payment_type_by_id
-from django.db import models  # importing package for database
-
-
 # Create Consumer Payments Table Start.
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
+class Payment(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'APPROVED'),
+        (2, 'REJECTED'),
+    )
 
+    state_machine = {
+        PAYMENT_DICT['CREATED']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
+        PAYMENT_DICT['APPROVED']  : (PAYMENT_DICT['APPROVED'],),
+        PAYMENT_DICT['REJECTED']  : (PAYMENT_DICT['REJECTED'],),
+    }
 
-class Payment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='tenant')
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=1)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
@@ -81,6 +94,9 @@ class Payment(models.Model):
     def get_payment_channel(self):
         payment_channel = get_payment_channel_by_id(self.payment_channel_id)
         return payment_channel
+
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        self.save()
 
 
 def get_payment_by_id_string(id_string):

@@ -1,11 +1,5 @@
 __author__ = 'aki'
 
-from v1.commonapp.models.module import get_module_by_name
-from v1.commonapp.models.sub_module import get_sub_module_by_name
-from v1.userapp.models.privilege import get_privilege_by_name
-from v1.utility.models.utility_master import get_utility_by_name
-
-
 # *********** KEY CONSTANTS **************
 RESULTS='results'
 RESULT='result'
@@ -16,8 +10,6 @@ STATE = 'state'
 DATA = 'data'
 ERROR = 'error'
 DUPLICATE = 'duplicate'
-
-
 
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER="User is not authorised"
@@ -43,9 +35,8 @@ SUCCESS = 'success'
 EXCEPTION = 'exception'
 UNAUTHORIZED = 'Unauthorized'
 
-
 # *********** USER CUSTOM CONSTANTS **************
-BANK_ALREADY_EXISTS = '"Bank detail already exists for specified user.".'
+BANK_ALREADY_EXISTS = '"Bank detail already exists for specified user.".' # need to remove
 BANK_NOT_FOUND = 'Bank detail not found for specified user.'
 ROLE_PRIVILEGE_NOT_FOUND = 'No Privileges attached to role.'
 USER_PRIVILEGE_NOT_FOUND = 'No Privileges assigned to user.'
@@ -65,4 +56,31 @@ DOCUMENT_NOT_FOUND = 'Document not found.'
 UTILITY_NOT_FOUND="Utility not found"
 DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
 SERVICE_TYPE_NOT_FOUND="No record found for user service type"
+MOBILE_ALREADY_EXISTS = "Mobile number already exists!"
 
+# *********** NOT FOUND CONSTANTS **************
+COUNTRY_NOT_FOUND = "Country Not Found"
+STATE_NOT_FOUND = "State Not Found"
+CITY_NOT_FOUND = "City Not Found"
+STATUS_NOT_FOUND = "Status Not Found"
+MODULE_NOT_FOUND = "Module Not Found"
+SUBMODULE_NOT_FOUND = "SubModule Not Found"
+SUBSCRIPTION_NOT_FOUND = "Subscription Not Found"
+SUBSCRIPTION_PLAN_NOT_FOUND = "Subscription Plan Not Found"
+SUBSCRIPTION_RATE_NOT_FOUND = "Subscription Rate Not Found"
+BANK_NOT_FOUND = "Bank Not Found"
+INVOICE_NOT_FOUND = "Invoice Not Found"
+REGISTRATION_NOT_FOUND = "Registration not found"
+PAYMENT_NOT_FOUND = "Payment not found"
+BILL_NOT_FOUND = "Bill not found"
+CONSUMER_NOT_FOUND = "Consumer not found"
+COMPLAINT_NOT_FOUND = "Complaint not found"
+SCHEME_NOT_FOUND = "Scheme not found"
+
+# *********** ALREADY EXIST CONSTANTS **************
+NAME_ALREADY_EXIST = "Name Already Exist"
+ACCOUNT_NO_ALREADY_EXIST = "Account Number Already Exist"
+INVOICE_ALREADY_EXIST = "Invoice Already Exist"
+MODULE_ALREADY_EXIST = "Module Already Exist"
+SUBMODULE_ALREADY_EXIST = "SubModule Already Exist"
+SUBSCRIPTION_ALREADY_EXIST = "Subscription Already Exist"

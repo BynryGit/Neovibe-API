@@ -13,6 +13,9 @@
 # <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
+
+from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
+from v1.meter_reading.models.route import get_route_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
@@ -30,7 +33,7 @@ class Consumer(models.Model):
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     last_name = models.CharField(max_length=200, null=True, blank=True)
     email_id = models.CharField(max_length=200, null=True, blank=True)
-    phone_mobile = models.BigIntegerField(max_length=200, null=True, blank=True)
+    phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     address_line_1 = models.CharField(max_length=500, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
     zipcode = models.BigIntegerField(null=True, blank=True)
@@ -43,15 +46,15 @@ class Consumer(models.Model):
     bill_month = models.BigIntegerField(null=True, blank=True)
     route_id = models.BigIntegerField(null=True, blank=True)
     meter_no = models.CharField(max_length=200, null=True, blank=True)
-    meter_status = models.BigIntegerField(null=True, blank=True)
+    meter_status_id = models.BigIntegerField(null=True, blank=True)
     current_reading = models.CharField(max_length=200, null=True, blank=True)
-    reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    reading_status = models.BigIntegerField(null=True, blank=True)
-    reader_status = models.BigIntegerField(null=True, blank=True)
+    reading_date = models.DateTimeField(null=True, blank=True)
+    reading_status_id = models.BigIntegerField(null=True, blank=True)
+    reader_status_id = models.BigIntegerField(null=True, blank=True)
     reading_img = models.BigIntegerField(null=True, blank=True)
-    scheme = models.BigIntegerField(null=True, blank=True)
+    scheme_id = models.BigIntegerField(null=True, blank=True)
     outstanding = models.BigIntegerField(null=True, blank=True)
-    meter_reading = models.BigIntegerField(null=True, blank=True)
+    meter_reading_id = models.BigIntegerField(null=True, blank=True)
     jobcard_id = models.BigIntegerField(null=True, blank=True)
     month = models.CharField(max_length=200, null=True, blank=True)
     suspicious_activity = models.BooleanField(default=False)
@@ -61,6 +64,8 @@ class Consumer(models.Model):
     is_duplicate = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_account_verified = models.BooleanField(default=False)
+    is_meter_reading = models.BooleanField(default=False)
+    is_bill_distribution = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -72,6 +77,16 @@ class Consumer(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
+    @property
+    def get_bill_cycle(self):
+        bill_cycle = get_bill_cycle_by_id(self.bill_cycle_id)
+        return bill_cycle
+
+    @property
+    def get_route(self):
+        route = get_route_by_id(self.route_id)
+        return route
 
 # Create Temp Consumer Master Table end
 

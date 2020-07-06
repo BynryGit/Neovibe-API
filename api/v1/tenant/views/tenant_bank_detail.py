@@ -1,20 +1,21 @@
 __author__ = "aki"
 
-import traceback
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework import status, generics
-from master.models import User
+from master.models import get_user_by_id_string
+from api.constants import ADMIN, VIEW, TENANT, EDIT
+from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.tenant.serializers.tenant_bank_detail import TenantBankDetailViewSerializer, TenantBankDetailSerializer
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DUPLICATE, DATA_ALREADY_EXISTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.tenant.models.tenant_bank_details import TenantBankDetail as TenantBankDetailTbl, \
     get_tenant_bank_details_by_id_string
 
@@ -44,7 +45,7 @@ class TenantBankList(generics.ListAPIView):
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+                if is_authorized(1,1,1,1):
                     queryset = TenantBankDetailTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset
                 else:
@@ -52,7 +53,7 @@ class TenantBankList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'ERROR')
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT/BANK')
         raise APIException
 
 
@@ -71,60 +72,38 @@ class TenantBankList(generics.ListAPIView):
 class TenantBank (GenericAPIView):
     serializer_class = TenantBankDetailSerializer
 
+    @is_token_validate
+    @role_required(ADMIN, TENANT, EDIT)
     def post(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                    # Checking authorization end
-                    # Todo fetch user from request start
-                    user = User.objects.get(id=2)
-                    # Todo fetch user from request end
-
-                    tenant_obj = get_tenant_by_id_string(id_string)
-                    if tenant_obj:
-                        serializer = TenantBankDetailSerializer(data=request.data)
-                        if serializer.is_valid():
-                            tenant_bank_obj = serializer.create(serializer.validated_data, tenant_obj, user)
-                            if tenant_bank_obj:
-                                serializer = TenantBankDetailViewSerializer(tenant_bank_obj, context={'request': request})
-                                return Response({
-                                    STATE: SUCCESS,
-                                    RESULT: serializer.data,
-                                }, status=status.HTTP_201_CREATED)
-                            else:
-                                return Response({
-                                    STATE: DUPLICATE,
-                                    RESULT: DATA_ALREADY_EXISTS,
-                                }, status=status.HTTP_409_CONFLICT)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+            user_id_string = get_user_from_token(request.headers['token'])
+            user = get_user_by_id_string(user_id_string)
+            tenant_obj = get_tenant_by_id_string(id_string)
+            if tenant_obj:
+                serializer = TenantBankDetailSerializer(data=request.data)
+                if serializer.is_valid():
+                    tenant_bank_obj = serializer.create(serializer.validated_data, tenant_obj, user)
+                    serializer = TenantBankDetailViewSerializer(tenant_bank_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: serializer.data,
+                    }, status=status.HTTP_201_CREATED)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        RESULT: serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'HIGH', module='ADMIN', sub_module='TENANT/BANK')
+            response = self.handle_exception(ex)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                ERROR: str(ex)
+            }, status=response.status_code)
 
 
 # API Header
@@ -142,89 +121,58 @@ class TenantBank (GenericAPIView):
 class TenantBankDetail(GenericAPIView):
     serializer_class = TenantBankDetailSerializer
 
+    @is_token_validate
+    @role_required(ADMIN, TENANT, VIEW)
     def get(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                    # Checking authorization end
-
-                    tenant_bank_obj = get_tenant_bank_details_by_id_string(id_string)
-                    if tenant_bank_obj:
-                        serializer = TenantBankDetailViewSerializer(tenant_bank_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULT: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            tenant_bank_obj = get_tenant_bank_details_by_id_string(id_string)
+            if tenant_bank_obj:
+                serializer = TenantBankDetailViewSerializer(tenant_bank_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT/BANK')
+            response = self.handle_exception(ex)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                ERROR: str(ex)
+            }, status=response.status_code)
 
+    @is_token_validate
+    @role_required(ADMIN, TENANT, EDIT)
     def put(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                    # Checking authorization end
-                    # Todo fetch user from request start
-                    user = User.objects.get(id=2)
-                    # Todo fetch user from request end
-
-                    tenant_bank_obj = get_tenant_bank_details_by_id_string(id_string)
-                    if tenant_bank_obj:
-                        serializer = TenantBankDetailSerializer(data=request.data)
-                        if serializer.is_valid():
-                            tenant_bank_obj = serializer.update(tenant_bank_obj, serializer.validated_data, user)
-                            serializer = TenantBankDetailViewSerializer(tenant_bank_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULT: serializer.data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+            user_id_string = get_user_from_token(request.headers['token'])
+            user = get_user_by_id_string(user_id_string)
+            tenant_bank_obj = get_tenant_bank_details_by_id_string(id_string)
+            if tenant_bank_obj:
+                serializer = TenantBankDetailSerializer(data=request.data)
+                if serializer.is_valid():
+                    tenant_bank_obj = serializer.update(tenant_bank_obj, serializer.validated_data, user)
+                    serializer = TenantBankDetailViewSerializer(tenant_bank_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: serializer.data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        RESULT: serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'HIGH', module='ADMIN', sub_module='TENANT/BANK')
+            response = self.handle_exception(ex)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                ERROR: str(ex)
+            }, status=response.status_code)

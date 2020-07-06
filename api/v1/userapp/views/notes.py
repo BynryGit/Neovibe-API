@@ -70,7 +70,7 @@ class UserNote(GenericAPIView):
                     RESULTS: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User notes')
             return Response({
                 STATE: EXCEPTION,
                 RESULTS: '',
@@ -113,7 +113,7 @@ class UserNote(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User notes')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -154,7 +154,7 @@ class UserNote(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User notes')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,

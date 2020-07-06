@@ -16,7 +16,9 @@ from datetime import datetime # importing package for datetime
 
 from api.constants import get_file_name, METER_PICTURE
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
+from v1.meter_reading.models.consumer import get_consumer_by_id
 from v1.meter_reading.models.jobcard import get_jobcard_by_id
+from v1.meter_reading.models.meter_image_type import get_meter_image_type_by_id
 from v1.meter_reading.models.meter_status import get_meter_status_by_id
 from v1.meter_reading.models.reader_status import get_reader_status_by_id
 from v1.meter_reading.models.reading_status import get_reading_status_by_id
@@ -43,10 +45,11 @@ class MeterReading(models.Model):
     month = models.CharField(max_length=200, null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     route_id = models.BigIntegerField(null=True, blank=True)
-    consumer_no = models.BigIntegerField(null=True, blank=True)
-    meter_no = models.BigIntegerField(null=True, blank=True)
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    consumer_id = models.BigIntegerField(null=True, blank=True)
+    meter_no = models.CharField(max_length=200, null=True, blank=True)
     meter_image_type_id = models.BigIntegerField(null=True, blank=True)
-    meter_image = models.FileField(upload_to=get_file_path, null=False, blank=False)
+    meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
     jobcard_id = models.BigIntegerField(null=True, blank=True)
     current_reading = models.FloatField(null=True, blank=True)
     consumption = models.FloatField(null=True, blank=True)
@@ -111,6 +114,16 @@ class MeterReading(models.Model):
         reading_taken_by = get_reading_taken_by_id(self.reading_taken_by_id)
         return reading_taken_by
 
+    @property
+    def get_consumer(self):
+        consumer = get_consumer_by_id(self.consumer_id)
+        return consumer
+
+    @property
+    def get_meter_image_type(self):
+        meter_image_type = get_meter_image_type_by_id(self.meter_image_type_id)
+        return meter_image_type
+
 # Create Meter Reading Table end
 
 
@@ -130,6 +143,6 @@ def get_meter_reading_by_id_string(id_string):
 
 def get_consumer_meter_reading_by_bill_month(consumer, month):
     try:
-        return MeterReading.object.get(consumer_no = consumer, month = month)
+        return MeterReading.object.get(consumer_no=consumer, month=month)
     except:
         return False

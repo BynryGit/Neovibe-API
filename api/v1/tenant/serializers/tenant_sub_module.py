@@ -1,10 +1,12 @@
 __author__ = "aki"
 
-from rest_framework import serializers
+from rest_framework import serializers, status
 from django.db import transaction
 from django.utils import timezone
+from api.messages import SUBMODULE_ALREADY_EXIST
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl
 from v1.tenant.views.common_functions import set_tenant_sub_module_validated_data
 
@@ -31,7 +33,7 @@ class TenantSubModuleSerializer(serializers.ModelSerializer):
         validated_data = set_tenant_sub_module_validated_data(validated_data)
         if TenantSubModuleTbl.objects.filter(tenant=tenant_obj, module_id=validated_data["module_id"],
                                              sub_module_id=validated_data["sub_module_id"]).exists():
-            return False
+            raise CustomAPIException(SUBMODULE_ALREADY_EXIST,status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             tenant_sub_module_obj = super(TenantSubModuleSerializer, self).create(validated_data)
             tenant_sub_module_obj.tenant = tenant_obj

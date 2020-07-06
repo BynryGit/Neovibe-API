@@ -4,6 +4,7 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.transition_configuration import TransitionConfiguration
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
@@ -13,13 +14,22 @@ from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
+from v1.registration.views.registration_notifications import registration_completed_email_to_consumer
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 
 
 def is_data_verified(request):
     return True
 
-
+# Function for converting id_strings to id's
 def set_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.",status_code=status.HTTP_404_NOT_FOUND)
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         if area:
@@ -99,3 +109,39 @@ def set_validated_data(validated_data):
         else:
             raise CustomAPIException("Source not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
+
+# Function for generating regisration number aaccording to utility
+def generate_registration_no(registration):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant = registration.tenant, utility = registration.utility, item = 'Registration')
+        if format_obj.is_prefix == True:
+            registration_no = format_obj.prefix + str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        else:
+            registration_no = str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        return registration_no
+    except Exception as e:
+        raise CustomAPIException("Rgistration no generation failed.",status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Function for performing registration transition events
+def perform_events(next_state, self):
+    try:
+        if TransitionConfiguration.objects.filter(transition_object="registration", transition_state=next_state, utility=self.utility,
+                                                  event="registration_completed_email_to_consumer").exists():
+            transition_obj = TransitionConfiguration.objects.get(transition_object="registration", transition_state=next_state,
+                                                                 utility=self.utility, event="registration_completed_email_to_consumer")
+            registration_completed_email_to_consumer(self.id, transition_obj.id)
+        else:
+            pass
+    except Exception as e:
+        raise CustomAPIException(str(e),status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Function for performing registration triggers
+def perform_triggers(next_state, self):
+    try:
+        pass
+    except Exception as e:
+        pass

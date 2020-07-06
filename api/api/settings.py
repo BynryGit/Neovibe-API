@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_twilio',
     'rest_framework',
     'storages',
     'corsheaders',
@@ -157,7 +158,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATIC_URL = '/static/'
 
 
-#
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -172,7 +173,6 @@ STATIC_URL = '/static/'
 #         'django': {
 #             'handlers': ['file'],
 #             'level': 'INFO',
-#             'propagate': True,
 #         },
 #     },
 # }
@@ -187,7 +187,8 @@ CELERY_TIMEZONE = 'Asia/Kolkata'
 
 # Cronjob configuration
 CRONJOBS = [
-    ('0 */30 * * *', 'meter_reading.task.validation_assignment.assign_validation','>> /path of log file/validation.log')
+    ('*/1 * * * *', 'v1.meter_reading.task.validation_assignment.assign_validation', '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
+    ('0 */30 * * *', 'meter_reading.task.bill_distribution.import_bill_distribution_data', '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
 ]
 
 # Amazon s3 Configuration
@@ -202,3 +203,16 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_LOCATION = ''
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIT_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+
+# SMS configuration
+TWILIO_ACCOUNT_SID = 'ACf8545f63b2bf3513b90b2ac626b53d8b'
+TWILIO_AUTH_TOKEN = '413b55d88e459cc05c713b4510808dec'

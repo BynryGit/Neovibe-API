@@ -7,6 +7,26 @@ from v1.commonapp.models.sub_module import get_sub_module_by_name
 from v1.userapp.models.privilege import get_privilege_by_name
 from v1.utility.models.utility_master import get_utility_by_name
 
+# *********** REGISTRATION CONSTANTS **************
+REGISTRATION_DICT = {
+    "CREATED"    : 0,
+    "PENDING"    : 1,
+    "APPROVED"   : 2,
+    "REJECTED"   : 3,
+    "HOLD"       : 4,
+    "CANCELED"   : 5,
+    "COMPLETED"  : 6,
+    "ARCHIVED"   : 7,
+}
+
+
+# *********** PAYMENT CONSTANTS **************
+PAYMENT_DICT = {
+    "CREATED"  : 0,
+    "APPROVED" : 1,
+    "REJECTED" : 2,
+}
+
 
 # *********** MODULE CONSTANTS **************
 # S_AND_M = get_module_by_name('S&M')
@@ -34,7 +54,7 @@ from v1.utility.models.utility_master import get_utility_by_name
 # SUPPLIER = get_sub_module_by_name('Supplier')
 # SURVEY = get_sub_module_by_name('S&M-Survey')
 # SYSTEM = get_sub_module_by_name('System')
-# TENANT = get_sub_module_by_name('Tenant')
+TENANT = get_sub_module_by_name('Tenant')
 # TENDER = get_sub_module_by_name('Tender')
 # USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')

@@ -66,7 +66,7 @@ class UserPrivilegeDetail(GenericAPIView):
                 RESULTS: data,
             }, status=status.HTTP_201_CREATED)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Privilege')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -110,7 +110,7 @@ class UserPrivilegeDetail(GenericAPIView):
                     RESULTS: USER_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Privilege')
             return Response({
                 STATE: EXCEPTION,
                 RESULTS: '',
@@ -164,7 +164,7 @@ class UserPrivilegeDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Privilege')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -218,7 +218,7 @@ class UserPrivilegeDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Privilege')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,

@@ -13,8 +13,8 @@ class ActivityType(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    created_by = models.BigIntegerField(null=False, blank=False)
-    updated_by = models.BigIntegerField(null=False, blank=False)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=True)
@@ -30,13 +30,13 @@ class ActivityType(models.Model):
 
 def get_activity_type_by_id(id):
     try:
-        return ActivityType.object.get(id=id)
+        return ActivityType.objects.get(id=id)
     except:
         return False
 
 
 def get_activity_type_by_id_string(id_string):
     try:
-        return ActivityType.object.get(id_string=id_string)
+        return ActivityType.objects.get(id_string=id_string)
     except:
         return False

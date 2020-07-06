@@ -35,6 +35,8 @@ class RouteAssignment(models.Model):
     assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     month = models.CharField(max_length=20, blank=False, null=False)
     status_id = models.BigIntegerField(null=True, default=1, blank=True)
+    is_meter_reading = models.BooleanField(default=False)
+    is_bill_distribution = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -42,10 +44,10 @@ class RouteAssignment(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.route_id
+        return str(self.id_string)
 
     def __unicode__(self):
-        return self.route_id
+        return str(self.id_string)
 
     @property
     def get_bill_cycle(self):
@@ -72,13 +74,13 @@ class RouteAssignment(models.Model):
 
 def get_route_assignment_by_id(id):
     try:
-        return RouteAssignment.object.get(id=id)
+        return RouteAssignment.objects.get(id=id)
     except:
         return False
 
 
 def get_route_assignment_by_id_string(id_string):
     try:
-        return RouteAssignment.object.get(id_string=id_string)
+        return RouteAssignment.objects.get(id_string=id_string)
     except:
         return False

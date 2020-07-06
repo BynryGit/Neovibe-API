@@ -1,0 +1,790 @@
+[
+	{
+		"pk": "1",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "15",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "16",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "21",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.BillCycle",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "22",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.Route",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "15135",
+			"token": "654",
+			"bill_cycle_id": 1,
+			"month": "202007",
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Route",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "15154",
+			"token": "65413",
+			"bill_cycle_id": 2,
+			"month": "202007",
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.Route",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "1515454",
+			"token": "6541354",
+			"bill_cycle_id": 1,
+			"month": "202007",
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.Route",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"code": "151543",
+			"token": "6541334",
+			"bill_cycle_id": 2,
+			"month": "202007",
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ActivityType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Activity 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ActivityType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Activity 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.BillCycleReadingAllocation",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 1,
+			"validator_one_id": 2,
+			"validator_two": 2
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.BillCycleReadingAllocation",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 2,
+			"validator_one_id": 2,
+			"validator_two": 2
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Job card status 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.JobCardStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Job card status 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.MeterImageType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Type 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.MeterImageType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Type 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Meter Status 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.MeterStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Meter Status 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Reader Status 1",
+			"meter_status_id": 1
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ReaderStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Reader Status 2",
+			"meter_status_id": 2
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Reading Status 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ReadingStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Reading Status 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ReadingTakenBy",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Aman",
+			"meter_reader_id": 1
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ReadingTakenBy",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Niraj",
+			"meter_reader_id": 2
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.RouteAssignmentStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Confirm"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.RouteAssignmentStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Reject"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.RouteAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"meter_reader_id": 1,
+			"month": "202007",
+			"status_id": 1,
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.RouteAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 2,
+			"route_id": 2,
+			"meter_reader_id": 1,
+			"month": "202007",
+			"status_id": 2,
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.RouteAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"meter_reader_id": 1,
+			"month": "202007",
+			"status_id": 1,
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.RouteAssignment",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 2,
+			"route_id": 2,
+			"meter_reader_id": 1,
+			"month": "202007",
+			"status_id": 2,
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.RouteUploadStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Route upload Status 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.RouteUploadStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Route upload status 2"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.RouteUpload",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"token": "2531",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"month": "202007",
+			"route_upload_status_id": 1,
+			"remark": "remark 1"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.RouteUpload",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"token": "265531",
+			"bill_cycle_id": 2,
+			"route_id": 2,
+			"month": "202007",
+			"route_upload_status_id": 2,
+			"remark": "remark 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ScheduleStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Schedule Status 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ScheduleStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Schedule status 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ScheduleType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Schedule type 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ScheduleType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Schedule type 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.Schedule",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"schedule_type_id": 1,
+			"activity_type_id": 1,
+			"bill_cycle_id": 1,
+			"schedule_status_id": 1,
+			"bill_month": "202007"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Schedule",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"schedule_type_id": 2,
+			"activity_type_id": 2,
+			"bill_cycle_id": 2,
+			"schedule_status_id": 2,
+			"bill_month": "202007"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.Consumer",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "215454",
+			"first_name": "Amir",
+			"middle_name": "bhai",
+			"last_name": "Siddiki",
+			"email_id": "amir@gmail.com",
+			"phone_mobile": "5465453513",
+			"address_line_1": "kalam street",
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"bill_cycle_id": 1,
+			"bill_month": "202007",
+			"route_id": 1,
+			"meter_no": "3543543",
+			"meter_status_id": 1,
+			"current_reading": "5435",
+			"reading_status_id": 1,
+			"reader_status_id": 1,
+			"scheme_id": 1,
+			"month": "202007",
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Consumer",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "24515454",
+			"first_name": "vijay",
+			"middle_name": "s",
+			"last_name": "Bhaduria",
+			"email_id": "vijay@gmail.com",
+			"phone_mobile": "5453513",
+			"address_line_1": "gandhi street",
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"bill_cycle_id": 1,
+			"bill_month": "202007",
+			"route_id": 1,
+			"meter_no": "3543543",
+			"meter_status_id": 1,
+			"current_reading": "5435",
+			"reading_status_id": 1,
+			"reader_status_id": 1,
+			"scheme_id": 1,
+			"month": "202007",
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.Consumer",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "215454",
+			"first_name": "Amir",
+			"middle_name": "bhai",
+			"last_name": "Siddiki",
+			"email_id": "amir@gmail.com",
+			"phone_mobile": "5465453513",
+			"address_line_1": "kalam street",
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"bill_cycle_id": 1,
+			"bill_month": "202007",
+			"route_id": 1,
+			"meter_no": "3543543",
+			"meter_status_id": 1,
+			"current_reading": "5435",
+			"reading_status_id": 1,
+			"reader_status_id": 1,
+			"scheme_id": 1,
+			"month": "202007",
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.Consumer",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "24515454",
+			"first_name": "vijay",
+			"middle_name": "s",
+			"last_name": "Bhaduria",
+			"email_id": "vijay@gmail.com",
+			"phone_mobile": "5453513",
+			"address_line_1": "gandhi street",
+			"country_id": 1,
+			"state_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"bill_cycle_id": 1,
+			"bill_month": "202007",
+			"route_id": 1,
+			"meter_no": "3543543",
+			"meter_status_id": 1,
+			"current_reading": "5435",
+			"reading_status_id": 1,
+			"reader_status_id": 1,
+			"scheme_id": 1,
+			"month": "202007",
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "215454",
+			"consumer_id": 1,
+			"meter_reader_id": 1,
+			"month": "202007",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"route_assigned_id": 1,
+			"status_id": 1,
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "21545454",
+			"consumer_id": 2,
+			"meter_reader_id": 1,
+			"month": "202007",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"route_assigned_id": 1,
+			"status_id": 1,
+			"is_meter_reading": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "215454",
+			"consumer_id": 1,
+			"meter_reader_id": 2,
+			"month": "202007",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"route_assigned_id": 1,
+			"status_id": 1,
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "meter_reading.Jobcard",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "2155454",
+			"consumer_id": 2,
+			"meter_reader_id": 2,
+			"month": "202007",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"route_assigned_id": 1,
+			"status_id": 1,
+			"is_bill_distribution": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.MeterReading",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"reading_type_id": 1,
+			"reading_type_status_id": 1,
+			"month": "202007",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"consumer_no": "21545454",
+			"consumer_id": 1,
+			"meter_no": "26532",
+			"meter_image_type_id": 1,
+			"jobcard_id": 1,
+			"current_reading": 123.23,
+			"consumption": 12,
+			"reading_status_id": 1,
+			"meter_status_id": 1,
+			"reader_status_id": 1,
+			"reading_taken_by_id": 1
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.MeterReading",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"reading_type_id": 1,
+			"reading_type_status_id": 1,
+			"month": "202007",
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"consumer_no": "545454",
+			"consumer_id": 2,
+			"meter_no": "2654532",
+			"meter_image_type_id": 1,
+			"jobcard_id": 1,
+			"current_reading": 1123.23,
+			"consumption": 182,
+			"reading_status_id": 1,
+			"meter_status_id": 1,
+			"reader_status_id": 1,
+			"reading_taken_by_id": 1
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ReadingAdditionalParameters",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "545454",
+			"meter_reading_id": 1,
+			"lat": "1351",
+			"long": "15351",
+			"new_sequence": "4515351",
+			"prev_sequence": "1545351",
+			"location_guidance": "shbb",
+			"time_taken": "53"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ReadingAdditionalParameters",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"consumer_no": "545454",
+			"meter_reading_id": 2,
+			"lat": "13551",
+			"long": "155351",
+			"new_sequence": "44515351",
+			"prev_sequence": "41545351",
+			"location_guidance": "sjhhbb",
+			"time_taken": "553"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.Unit",
+		"fields": {
+			"tenant": 1,
+			"name": "Unit 1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Unit",
+		"fields": {
+			"tenant": 4,
+			"name": "Unit 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.ValidationType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "V1"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.ValidationType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "V2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "meter_reading.Validation",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"consumer_no": "21545454",
+			"meter_reading_id": 1,
+			"month": "202007",
+			"validation_type_id": 1,
+			"validator_id": 1,
+			"validator_meter_status_id": 1,
+			"validator_reader_status_id": 1,
+			"validator_reading": "26532",
+			"validator_comment": "comment 1",
+			"validator_image_remark": "clear",
+			"is_meter_matching": "True",
+			"is_reading_matching": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "meter_reading.Validation",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"bill_cycle_id": 1,
+			"route_id": 1,
+			"consumer_no": "545454",
+			"meter_reading_id": 2,
+			"month": "202007",
+			"validation_type_id": 1,
+			"validator_id": 1,
+			"validator_meter_status_id": 1,
+			"validator_reader_status_id": 1,
+			"validator_reading": "426532",
+			"validator_comment": "comment 2",
+			"validator_image_remark": "clear",
+			"is_meter_matching": "True",
+			"is_reading_matching": "True"
+		}
+	}
+]

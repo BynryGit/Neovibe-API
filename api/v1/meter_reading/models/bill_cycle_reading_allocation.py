@@ -27,9 +27,9 @@ class BillCycleReadingAllocation(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    bill_cycle = models.ForeignKey(BillCycle, blank=False, null=False, on_delete=models.SET_NULL)
-    validator_one = models.ForeignKey(User, blank=False, null=False, related_name="validator_one", on_delete=models.SET_NULL)
-    validator_two = models.ForeignKey(User, blank=False, null=False, related_name="validator_two", on_delete=models.SET_NULL)
+    bill_cycle = models.ForeignKey(BillCycle, blank=True, null=True, on_delete=models.SET_NULL)
+    validator_one = models.ForeignKey(User, blank=True, null=True, related_name="validator_one", on_delete=models.SET_NULL)
+    validator_two = models.ForeignKey(User, blank=True, null=True, related_name="validator_two", on_delete=models.SET_NULL)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -37,10 +37,10 @@ class BillCycleReadingAllocation(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.bill_cycle
+        return str(self.id_string)
 
     def __unicode__(self):
-        return self.bill_cycle
+        return str(self.id_string)
 
 # Create Bill Reading Allocation table end
 
