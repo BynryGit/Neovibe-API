@@ -22,10 +22,14 @@ from v1.utility.models.utility_master import UtilityMaster
 
 
 class UtilityServiceNumberFormat(models.Model):
+    CHOICES = (
+        (0, 'REGISTRATION'),
+        (1, 'PAYMENT'),
+    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    item = models.CharField(max_length=200, blank=False, null=False) #Survey, Campaign, Registration, Consumer, Receipt, Contract
+    item = models.BigIntegerField(null=True, blank=True, choices=CHOICES, default=0) #Survey, Campaign, Registration, Consumer, Receipt, Contract
     is_prefix = models.BooleanField(default=False)
     prefix = models.CharField(max_length=5, blank=True, null=True) #Emp, TEC
     startingno = models.BigIntegerField(null=True, blank=True) #Range as in =0,00001,100001
@@ -37,10 +41,10 @@ class UtilityServiceNumberFormat(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.item
+        return self.utility.name
 
     def __unicode__(self):
-        return self.item
+        return self.utility.name
 
 # Create Utility Service Number Format table end.
 

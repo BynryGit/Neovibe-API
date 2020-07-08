@@ -76,7 +76,6 @@ class Registration(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
     def post(self, request):
         try:
-            send_sms()
             user_id_string = get_user_from_token(request.headers['token'])
             user = get_user_by_id_string(user_id_string)
             serializer = RegistrationSerializer(data=request.data)
@@ -356,7 +355,9 @@ class RegistrationPaymentReject(GenericAPIView):
             payment = get_payment_by_id_string(id_string)
             if payment:
                 with transaction.atomic():
+                    # State change for payment start
                     payment.change_state(PAYMENT_DICT["REJECTED"])
+                    # State change for payment end
                 serializer = PaymentViewSerializer(instance=payment, context={'request': request})
                 return Response({
                     STATE: SUCCESS,

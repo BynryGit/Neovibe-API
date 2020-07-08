@@ -20,11 +20,30 @@ REGISTRATION_DICT = {
 }
 
 
+# *********** CONSUMER CONSTANTS **************
+CONSUMER_DICT = {
+    "CREATED"                    : 0,
+    "REGISTERED"                 : 1,
+    "INSTALLED"                  : 2,
+    "CONNECTED"                  : 3,
+    "TEMPORARY DISCONNECTED"     : 4,
+    "PERMANENTLY DISCONNECTED"   : 5,
+    "ARCHIVED"                   : 6,
+}
+
+
 # *********** PAYMENT CONSTANTS **************
 PAYMENT_DICT = {
     "CREATED"  : 0,
     "APPROVED" : 1,
     "REJECTED" : 2,
+}
+
+
+# *********** UTILITY CONSTANTS **************
+UTILITY_SERVICE_NUMBER_ITEM_DICT = {
+    "REGISTRATION"  : 0,
+    "PAYMENT" : 1,
 }
 
 

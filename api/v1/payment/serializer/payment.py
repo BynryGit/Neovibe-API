@@ -6,7 +6,7 @@ from v1.payment.serializer.payment_channel import PaymentChannelListSerializer
 from v1.payment.serializer.payment_mode import PaymentModeListSerializer
 from v1.payment.serializer.payment_sub_type import PaymentSubTypeListSerializer
 from v1.payment.serializer.payment_type import PaymentTypeListSerializer
-from v1.payment.views.common_functions import set_validated_data
+from v1.payment.views.common_functions import set_validated_data, generate_receipt_no
 
 
 class ChoiceField(serializers.ChoiceField):
@@ -59,6 +59,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment.tenant = user.tenant
             payment.utility.id = validated_data['utility_id']
             payment.identification_id = obj.id
+            payment.receipt_no = generate_receipt_no(payment)
             payment.save()
         return payment
 

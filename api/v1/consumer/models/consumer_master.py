@@ -12,6 +12,11 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+import fsm
+from rest_framework import status
+
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -19,7 +24,16 @@ from django.db import models  # importing package for database
 
 
 # Create Consumer Master table start.
-class ConsumerMaster(models.Model):
+class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'REGISTERED'),
+        (2, 'INSTALLED'),
+        (3, 'CONNECTED'),
+        (4, 'TEMPORARY DISCONNECTED'),
+        (5, 'PERMANENTLY DISCONNECTED'),
+        (6, 'ARCHIVED'),
+    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -51,7 +65,7 @@ class ConsumerMaster(models.Model):
     is_connectivity = models.BooleanField(default=False)
     gas_demand = models.CharField(max_length=200, null=True, blank=True)
     monthly_demand = models.CharField(max_length=200, null=True, blank=True)
-    consumer_status_id = models.BigIntegerField(null=True, blank=True)
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
     consumption_ltd = models.CharField(max_length=200, null=True, blank=True)
     invoice_amount_ltd = models.CharField(max_length=200, null=True, blank=True)
     payment_ltd = models.CharField(max_length=200, null=True, blank=True)
@@ -67,6 +81,12 @@ class ConsumerMaster(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Consumer transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 def get_consumer_by_id_string(id_string):
     try:

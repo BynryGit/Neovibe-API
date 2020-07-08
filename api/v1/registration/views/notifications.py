@@ -1,3 +1,5 @@
+__author__ = "Rohan"
+
 from django.core.mail.backends.smtp import EmailBackend
 from api.settings import EMAIL_HOST_PASSWORD
 from v1.commonapp.models.email_configurations import EmailConfiguration

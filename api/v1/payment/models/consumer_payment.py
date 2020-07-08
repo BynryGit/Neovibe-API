@@ -42,7 +42,7 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='tenant')
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=1)
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
