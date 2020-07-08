@@ -6,7 +6,6 @@ from v1.userapp.models.role_privilege import check_role_privilege_exists
 from v1.userapp.models.user_role import get_user_role_by_user_id
 from v1.userapp.models.user_token import check_token_exists_for_user
 from master.models import get_user_by_id_string
-from v1.userapp.models.user_privilege import check_user_privilege_exists
 from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.commonapp.views.custom_exception import *
 from v1.utility.models.utility_master import get_utility_by_id_string

@@ -31,7 +31,7 @@ PAYMENT_DICT = {
 # *********** MODULE CONSTANTS **************
 # S_AND_M = get_module_by_name('S&M')
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
-# CONSUMER_OPS = get_module_by_name('Consumer Ops')
+CONSUMER_OPS = get_module_by_name('Consumer Ops')
 # ADMIN = get_module_by_name('Admin')
 
 
@@ -39,14 +39,14 @@ PAYMENT_DICT = {
 # DASHBOARD = get_sub_module_by_name('Dashboard')
 # BILLING = get_sub_module_by_name('Billing')
 # CAMPAIGN = get_sub_module_by_name('S&M-Campaign')
-# CONSUMER = get_sub_module_by_name('Consumers')
+CONSUMER = get_sub_module_by_name('Consumers')
 # CONTRACT = get_sub_module_by_name('S&M-Contract')
 # DISPATCHER = get_sub_module_by_name('Dispatcher')
 # EMPLOYEE = get_sub_module_by_name('Employee')
 # METER_READING = get_sub_module_by_name('Meter reading')
 # PAYMENT = get_sub_module_by_name('Payment')
 # PAYROLL = get_sub_module_by_name('Payroll')
-# REGISTRATION = get_sub_module_by_name('Registrations')
+REGISTRATION = get_sub_module_by_name('Registrations')
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')
@@ -70,10 +70,10 @@ TENANT = get_sub_module_by_name('Tenant')
 # MNGL_PUNE = get_utility_by_name('MNGL Pune')
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
-ADMIN = ''
-USER = ''
-VIEW = ''
-EDIT = ''
+ADMIN = 2
+USER = 1
+VIEW = 1
+EDIT = 2
 
 METER_PICTURE = 'media/meter'
 
