@@ -60,7 +60,7 @@ class UserSkill(GenericAPIView):
                     DATA: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Skills')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -100,7 +100,7 @@ class UserSkill(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Skills')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -146,7 +146,7 @@ class UserSkill(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Skilss')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,

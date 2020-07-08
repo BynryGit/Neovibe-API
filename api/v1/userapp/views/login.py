@@ -42,7 +42,6 @@ def set_login_trail(email, status):
 def login(request, user):
     try:
         user_obj = get_user_by_email(user.email)
-        form_factor = get_form_factor_by_id(user_obj.form_factor_id)
         payload = {'user_id_string': str(user_obj.id_string), 'string': str(uuid.uuid4().hex[:6].upper())}
         encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -63,7 +62,7 @@ def login(request, user):
         return token_obj.token
     except Exception as e:
         print(traceback.print_exc())
-        logger().log(e, 'ERROR', user='test', name='test')
+        logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Login')
         return False
 
 
@@ -119,7 +118,7 @@ class LoginApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            logger().log(ex, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Login')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),
@@ -173,7 +172,7 @@ class LogoutApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            logger().log(ex, 'ERROR', user='test', name='test')
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Logout')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),
