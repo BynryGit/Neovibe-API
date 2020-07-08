@@ -13,6 +13,7 @@ from v1.registration.models import registrations
 # Local logging
 logger = logging.getLogger('django')
 
+
 # Just for reference
 REGISTRATION_STATES = (
         (1, 'CREATED'),
@@ -24,12 +25,14 @@ REGISTRATION_STATES = (
         (7, 'ARCHIVED'),
     )
 
+
 # Just for reference
 PAYMENT_STATES = (
         (1, 'CREATED'),
         (2, 'APPROVED'),
         (3, 'REJECTED'),
     )
+
 
 # Default switch cases
 def payment_switch(payment_state, registration):
@@ -43,12 +46,15 @@ def payment_switch(payment_state, registration):
     except Exception as e:
         raise CustomAPIException(str(e),status_code=status.HTTP_412_PRECONDITION_FAILED)
 
+
 # Signals for registration from payments
 registration_payment_created = django.dispatch.Signal()
 registration_payment_approved = django.dispatch.Signal()
 
+
 # Signals for consumer from registration
 registration_completed = django.dispatch.Signal()
+
 
 # Signal receiver for registration
 @receiver([registration_payment_created, registration_payment_approved])

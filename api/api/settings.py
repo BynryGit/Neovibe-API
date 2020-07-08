@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'v1.campaign',
     'v1.commonapp',
     'v1.consumer',
+    'v1.complaint',
+    'v1.service',
     'v1.contract',
     'v1.dispatcher',
     'v1.employee',

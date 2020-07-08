@@ -13,15 +13,14 @@ from v1.commonapp.common_functions import is_authorized, is_token_valid, get_use
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.consumer.models.consumer_complaints import *
+from v1.complaint.models.consumer_complaints import *
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.serializers.consumer import ConsumerSerializer, ConsumerViewSerializer
-from v1.consumer.serializers.consumer_complaints import *
+from v1.complaint.serializers.consumer_complaints import *
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.payment.models.consumer_payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
-from v1.registration.views.common_functions import is_data_verified
 from v1.userapp.decorators import is_token_validate, role_required
 
 # API Header

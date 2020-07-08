@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.db import transaction
 from rest_framework import serializers
-from v1.consumer.models.consumer_complaints import ConsumerComplaints
+from v1.complaint.models.consumer_complaints import ConsumerComplaints
 from v1.consumer.views.common_functions import set_complaint_validated_data
 
 

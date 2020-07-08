@@ -116,7 +116,8 @@ def set_validated_data(validated_data):
 # Function for generating regisration number aaccording to utility
 def generate_registration_no(registration):
     try:
-        format_obj = UtilityServiceNumberFormat.objects.get(tenant = registration.tenant, utility = registration.utility, item = 'Registration')
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant = registration.tenant, utility = registration.utility,
+                                                            item = UTILITY_SERVICE_NUMBER_ITEM_DICT['REGISTRATION'])
         if format_obj.is_prefix == True:
             registration_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
