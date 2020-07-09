@@ -64,7 +64,6 @@ class RoleList(generics.ListAPIView):
 class Role(GenericAPIView):
 
     @is_token_validate
-    @utility_required
     @role_required(ADMIN, USER, EDIT)
     def post(self, request, format=None):
         try:
@@ -79,7 +78,10 @@ class Role(GenericAPIView):
                     RESULTS: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
-                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+                return Response({
+                    STATE: ERROR,
+                    RESULTS: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'HIGH', module = 'Admin', sub_module = 'Role')
             res = self.handle_exception(e)
@@ -129,7 +131,6 @@ class RoleDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @utility_required
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:

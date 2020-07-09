@@ -85,14 +85,17 @@ class Role(models.Model): # change name to role
 # Create User Role table end
 
 
+# For getting all roles in table
 def get_all_role():
     return Role.objects.filter(is_active=True)
 
 
+# For getting role by id
 def get_role_by_id(id):
     return Role.objects.filter(id=id, is_active=True).last()
 
 
+# For getting role by id_string
 def get_role_by_id_string(id_string):
     try:
         return Role.objects.get(id_string=id_string, is_active=True)
@@ -100,9 +103,11 @@ def get_role_by_id_string(id_string):
         return False
 
 
+# For getting role by tenant id_string
 def get_role_by_tenant_id_string(id_string):
     return Role.objects.filter(tenant__id_string=id_string, is_active=True)
 
 
+# For getting role by utility id_string
 def get_role_by_utility_id_string(id_string):
     return Role.objects.filter(utility__id_string=id_string, is_active=True)

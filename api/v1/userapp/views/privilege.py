@@ -35,7 +35,7 @@ class PrivilegeList(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('name', 'tenant__id_string', 'utility__id_string')
+    filter_fields = ('name',)
     ordering_fields = ('name',)
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('name',)
