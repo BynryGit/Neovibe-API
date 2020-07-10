@@ -1,5 +1,4 @@
-from datetime import datetime # importing package for datetime
-from api.constants import REGISTRATION_DICT
+from datetime import datetime
 from v1.commonapp.models.area import get_area_by_id
 from v1.registration.models.registration_status import get_registration_status_by_id
 from v1.registration.views.common_functions import *
@@ -9,7 +8,17 @@ import uuid
 from django.db import models
 import fsm
 
-
+# *********** REGISTRATION CONSTANTS **************
+REGISTRATION_DICT = {
+    "CREATED"      : 0,
+    "PENDING"      : 1,
+    "APPROVED"     : 2,
+    "REJECTED"     : 3,
+    "HOLD"         : 4,
+    "CANCELED"     : 5,
+    "COMPLETED"    : 6,
+    "ARCHIVED"     : 7,
+}
 
 # table header
 # module: S&M,Consumer care and ops | sub-module - Registration

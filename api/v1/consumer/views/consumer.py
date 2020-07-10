@@ -17,10 +17,12 @@ from v1.complaint.models.consumer_complaints import *
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.serializers.consumer import ConsumerSerializer, ConsumerViewSerializer
-from v1.complaint.serializers.consumer_complaints import *
+from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.payment.models.consumer_payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
+from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
+from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 
 # API Header
@@ -189,7 +191,7 @@ class ConsumerPaymentList(generics.ListAPIView):
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('transaction_date',)
         ordering_fields = ('transaction_date',)
-        ordering = ('transaction_date',)  # always give by default alphabetical order
+        ordering = ('transaction_date',)
         search_fields = ('transaction_amount',)
 
         def get_queryset(self):
@@ -236,6 +238,44 @@ class ConsumerComplaintList(generics.ListAPIView):
                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     if consumer:
                         queryset = get_consumer_complaints_by_consumer_no(consumer.consumer_no)
+                        return queryset
+                    else:
+                        raise InvalidAuthorizationException
+                else:
+                    raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/service/list
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Service list
+# Usage: API will fetch required data for Complaint list
+# Tables used: ConsumerService, ConsumerMaster
+# Author: Rohan
+# Created on: 21/05/2020
+class ConsumerServiceList(generics.ListAPIView):
+    try:
+        serializer_class = ServiceDetailListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('request_date',)
+        ordering_fields = ('request_date',)
+        ordering = ('request_date',)
+        search_fields = ('request_date',)
+
+        def get_queryset(self):
+            if is_token_valid(self.request.headers['token']):
+                if is_authorized():
+                    consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    if consumer:
+                        queryset = get_consumer_services_by_consumer_no(consumer.consumer_no)
                         return queryset
                     else:
                         raise InvalidAuthorizationException
@@ -398,6 +438,7 @@ class ConsumerPaymentDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
 
     @is_token_validate
     @role_required(CONSUMER_OPS, CONSUMER, EDIT)

@@ -7,45 +7,6 @@ from v1.commonapp.models.sub_module import get_sub_module_by_name
 from v1.userapp.models.privilege import get_privilege_by_name
 from v1.utility.models.utility_master import get_utility_by_name
 
-# *********** REGISTRATION CONSTANTS **************
-REGISTRATION_DICT = {
-    "CREATED"    : 0,
-    "PENDING"    : 1,
-    "APPROVED"   : 2,
-    "REJECTED"   : 3,
-    "HOLD"       : 4,
-    "CANCELED"   : 5,
-    "COMPLETED"  : 6,
-    "ARCHIVED"   : 7,
-}
-
-
-# *********** CONSUMER CONSTANTS **************
-CONSUMER_DICT = {
-    "CREATED"                    : 0,
-    "REGISTERED"                 : 1,
-    "INSTALLED"                  : 2,
-    "CONNECTED"                  : 3,
-    "TEMPORARY DISCONNECTED"     : 4,
-    "PERMANENTLY DISCONNECTED"   : 5,
-    "ARCHIVED"                   : 6,
-}
-
-
-# *********** PAYMENT CONSTANTS **************
-PAYMENT_DICT = {
-    "CREATED"  : 0,
-    "APPROVED" : 1,
-    "REJECTED" : 2,
-}
-
-
-# *********** UTILITY CONSTANTS **************
-UTILITY_SERVICE_NUMBER_ITEM_DICT = {
-    "REGISTRATION"  : 0,
-    "PAYMENT" : 1,
-}
-
 
 # *********** MODULE CONSTANTS **************
 # S_AND_M = get_module_by_name('S&M')
@@ -76,24 +37,25 @@ REGISTRATION = get_sub_module_by_name('Registrations')
 # TENANT = get_sub_module_by_name('Tenant')
 TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
-# USER = get_sub_module_by_name('Users')
+USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
 
 
 # *********** PRIVILEGE CONSTANTS **************
-# VIEW = get_privilege_by_name('View')
-# EDIT = get_privilege_by_name('Edit')
-# DELETE = get_privilege_by_name('Delete')
+VIEW = get_privilege_by_name('View')
+EDIT = get_privilege_by_name('Edit')
+DELETE = get_privilege_by_name('Delete')
 
 
 # *********** UTILITY CONSTANTS **************
 # MNGL_PUNE = get_utility_by_name('MNGL Pune')
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
+
 ADMIN = 2
-USER = 1
-VIEW = 1
-EDIT = 2
+# USER = 1
+# VIEW = 1
+# EDIT = 2
 
 METER_PICTURE = 'media/meter'
 

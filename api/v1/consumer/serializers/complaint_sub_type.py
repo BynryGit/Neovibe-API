@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from v1.consumer.models.complaint_sub_type import ComplaintSubType
+from v1.complaint.models.complaint_sub_type import ComplaintSubType
 
 
 class ComplaintSubTypeListSerializer(serializers.ModelSerializer):

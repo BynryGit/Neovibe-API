@@ -1,8 +1,8 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 import fsm
-
-from api.constants import PAYMENT_DICT
+from rest_framework import status
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.payment.models.payment_channel import get_payment_channel_by_id
 from v1.payment.models.payment_mode import get_payment_mode_by_id
 from v1.payment.models.payment_source import get_payment_source_by_id
@@ -12,7 +12,13 @@ from django.db import models  # importing package for database
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
-
+# *********** PAYMENT CONSTANTS **************
+PAYMENT_DICT = {
+    "CREATED"  : 0,
+    "APPROVED" : 1,
+    "REJECTED" : 2,
+    "PENDING"  : 3,
+}
 
 # Table Header
 # Module: Consumer Care | Sub-Module : Billing
@@ -30,12 +36,14 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
         (0, 'CREATED'),
         (1, 'APPROVED'),
         (2, 'REJECTED'),
+        (3, 'PENDING'),
     )
 
     state_machine = {
         PAYMENT_DICT['CREATED']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
         PAYMENT_DICT['APPROVED']  : (PAYMENT_DICT['APPROVED'],),
         PAYMENT_DICT['REJECTED']  : (PAYMENT_DICT['REJECTED'],),
+        PAYMENT_DICT['PENDING']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -96,7 +104,10 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
         return payment_channel
 
     def on_change_state(self, previous_state, next_state, **kwargs):
-        self.save()
+        try:
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Payment transition failed.", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 
 def get_payment_by_id_string(id_string):
