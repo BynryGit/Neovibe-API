@@ -521,3 +521,203 @@ class UpdatePrivilegeTestCase(APITestCase):
         response = requests.put(url, data=data, headers=headers)
         print('------test_update_privilege_not_authenticate-------', response.status_code)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GetRolePrivilegeTestCase(APITestCase):
+
+    def test_get_role_privilege_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privileges'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, format='json', headers=headers)
+        print('------test_get_role_privilege_success------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_role_privilege_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0v/privileges'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, format='json', headers=headers)
+        print('------test_get_role_privilege_not_found------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_role_privilege_not_authorized(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privileges'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, format='json', headers=headers)
+        print('------test_get_role_privilege_not_authorized------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateRolePrivilegeTestCase(APITestCase):
+
+    def test_create_role_privilege_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privileges/'
+        data = {
+            "utility_id": "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "data":[
+                {
+                    "module_id": "91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module": [
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id":" 94e65da1-2f9a-422f-a032-d3e192761352"
+                        },
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "9ebfefbc-fd45-4c48-ac4a-ca7b1274f4c9"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_role_privilege_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_role_privilege_conflict(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privileges/'
+        data = {
+            "utility_id": "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "data": [
+                {
+                    "module_id": "91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module": [
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "94e65da1-2f9a-422f-a032-d3e192761352"
+                        },
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "9ebfefbc-fd45-4c48-ac4a-ca7b1274f4c9"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_role_privilege_conflict-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+    def test_create_role_privilege_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0i/privileges/'
+        data = {
+            "utility_id": "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "data": [
+                {
+                    "module_id": "91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module": [
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "94e65da1-2f9a-422f-a032-d3e192761352"
+                        },
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "9ebfefbc-fd45-4c48-ac4a-ca7b1274f4c9"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_role_privilege_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_role_privilege_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privileges/'
+        data = {
+            "utility_id": "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "data": [
+                {
+                    "module_id": "91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module": [
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "94e65da1-2f9a-422f-a032-d3e192761352"
+                        },
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "9ebfefbc-fd45-4c48-ac4a-ca7b1274f4c9"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_role_privilege_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class DeleteRolePrivilegeTestCase(APITestCase):
+
+    def test_delete_role_privilege_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privilege/'
+        data = {
+            "module":[
+                {
+                    "module_id":"91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module":[
+                        {
+                            "sub_module_id":"b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id":"94e65da1-2f9a-422f-a032-d3e192761352"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.put(url, data=data, headers=headers)
+        print('------test_delete_role_privilege_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_role_privilege_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0r/privilege/'
+        data = {
+            "module": [
+                {
+                    "module_id": "91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module": [
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "94e65da1-2f9a-422f-a032-d3e192761352"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.put(url, data=data, headers=headers)
+        print('------test_delete_role_privilege_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_role_privilege_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/role/9d6c3775-b645-436b-9417-0b1d66d9df0d/privilege/'
+        data = {
+            "module": [
+                {
+                    "module_id": "91727a81-d17c-45b0-a8f5-98a462fe7454",
+                    "sub_module": [
+                        {
+                            "sub_module_id": "b8ba583e-2dc2-4638-ac39-ae6603bad141",
+                            "privilege_id": "94e65da1-2f9a-422f-a032-d3e192761352"
+                        }
+                    ]
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.put(url, data=data, headers=headers)
+        print('------test_delete_role_privilege_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
