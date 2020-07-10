@@ -1,5 +1,4 @@
 from rest_framework import status
-from api.constants import *
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
@@ -16,10 +15,11 @@ from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
-from v1.registration.signals.signals import registration_completed
+from v1.registration.signals.signals import registration_approved
 from v1.registration.views.notifications import registration_completed_email_to_consumer
 from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
+from v1.utility.models.utility_services_number_format import *
+from v1.registration.models import registrations
 
 
 def is_data_verified(request):
@@ -131,24 +131,24 @@ def generate_registration_no(registration):
         raise CustomAPIException("Rgistration no generation failed.",status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Function for performing registration transition events
-def perform_events(next_state, registraion):
+def perform_events(next_state, registration):
     try:
-        if TransitionConfiguration.objects.filter(transition_object="registration", transition_state=next_state, utility=registraion.utility,
+        if TransitionConfiguration.objects.filter(transition_object="registration", transition_state=next_state, utility=registration.utility,
                                                   event="registration_completed_email_to_consumer", is_active = True).exists():
             transition_obj = TransitionConfiguration.objects.get(transition_object="registration", transition_state=next_state,
-                                                                 utility=registraion.utility, event="registration_completed_email_to_consumer",
+                                                                 utility=registration.utility, event="registration_completed_email_to_consumer",
                                                                  is_active = True)
-            registration_completed_email_to_consumer(registraion.id, transition_obj.id)
+            registration_completed_email_to_consumer(registration.id, transition_obj.id)
         else:
             pass
     except Exception as e:
-        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations', registration = registraion.id)
+        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations', registration = registration.id)
         pass
 
 # Function for performing registration triggers
 def perform_signals(next_state, self):
     try:
-        if next_state == REGISTRATION_DICT['COMPLETED']:
-            registration_completed.send(self.id)
+        if next_state == registrations.REGISTRATION_DICT['APPROVED']:
+            registration_approved.send(self)
     except Exception as e:
         raise CustomAPIException("Registration transition failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

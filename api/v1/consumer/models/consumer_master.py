@@ -9,19 +9,27 @@
 # Author : Jayshree Kumbhare
 # Creation Date : 23/04/2020
 
-
-import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
-
+import uuid
+from datetime import datetime
 import fsm
 from rest_framework import status
-
+from api.constants import *
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from django.db import models
 
-from django.db import models  # importing package for database
 
+# *********** CONSUMER CONSTANTS **************
+CONSUMER_DICT = {
+    "CREATED"                   : 0,
+    "REGISTERED"                : 1,
+    "INSTALLED"                 : 2,
+    "CONNECTED"                 : 3,
+    "TEMPORARY DISCONNECTED"    : 4,
+    "PERMANENTLY DISCONNECTED"  : 5,
+    "ARCHIVED"                  : 6,
+}
 
 # Create Consumer Master table start.
 class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
@@ -34,6 +42,18 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
         (5, 'PERMANENTLY DISCONNECTED'),
         (6, 'ARCHIVED'),
     )
+
+    state_machine = {
+        CONSUMER_DICT['CREATED']                    : (CONSUMER_DICT['REGISTERED'],CONSUMER_DICT['CREATED'],),
+        CONSUMER_DICT['REGISTERED']                 : (CONSUMER_DICT['INSTALLED'],),
+        CONSUMER_DICT['INSTALLED']                  : (CONSUMER_DICT['CONNECTED'],),
+        CONSUMER_DICT['CONNECTED']                  : (CONSUMER_DICT['TEMPORARY DISCONNECTED'],
+                                                            CONSUMER_DICT['PERMANENTLY DISCONNECTED']),
+        CONSUMER_DICT['TEMPORARY DISCONNECTED']     : (CONSUMER_DICT['CONNECTED'],),
+        CONSUMER_DICT['PERMANENTLY DISCONNECTED']   : (CONSUMER_DICT['ARCHIVED'],),
+        CONSUMER_DICT['ARCHIVED']                   : (CONSUMER_DICT['ARCHIVED'],),
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -77,16 +97,18 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.consumer_no
+        return self.first_name
 
     def __unicode__(self):
-        return self.consumer_no
+        return self.first_name
 
+    # Function for finite state machine state change
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
             self.save()
         except Exception as e:
             raise CustomAPIException("Consumer transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
+
 
 def get_consumer_by_id_string(id_string):
     try:

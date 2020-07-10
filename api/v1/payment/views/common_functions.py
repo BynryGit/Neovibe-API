@@ -1,7 +1,6 @@
 __author__ = "Rohan"
 
 from rest_framework import status
-from api.constants import UTILITY_SERVICE_NUMBER_ITEM_DICT
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.payment.models.payment_channel import get_payment_channel_by_id_string
 from v1.payment.models.payment_mode import get_payment_mode_by_id_string
@@ -9,7 +8,8 @@ from v1.payment.models.payment_source import get_payment_source_by_id_string
 from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat, \
+    UTILITY_SERVICE_NUMBER_ITEM_DICT
 
 
 # Function for converting request data id strings to id's

@@ -1,3 +1,11 @@
+import uuid  # importing package for guid
+from datetime import datetime # importing package for datetime
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
+from django.db import models  # importing package for database
+
+
+
 # Table Header
 # Module : Consumer Care & Ops | Sub-Module : Consumer Complaints
 # Module: Consumer Care | sub-module : Complaints
@@ -11,16 +19,7 @@
 # Creation Date : 23/04/2020
 
 
-import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
-
-from django.db import models  # importing package for database
-
-
 # Create Consumer Complaints Table Start.
-
 class ConsumerComplaints(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)

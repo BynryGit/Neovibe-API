@@ -41,8 +41,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             consumer_obj = super(ConsumerSerializer, self).create(validated_data)
             consumer_obj.tenant = user.tenant
-            consumer_obj.utility = user.utility
-            consumer_obj.consumer_no = consumer_obj.id
+            consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
             consumer_obj.save()
             return consumer_obj
 

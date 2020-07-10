@@ -1,9 +1,8 @@
 from datetime import datetime
-
 from django.db import transaction
 from rest_framework import serializers
 from v1.complaint.models.consumer_complaints import ConsumerComplaints
-from v1.consumer.views.common_functions import set_complaint_validated_data
+from v1.complaint.views.common_functions import set_complaint_validated_data, generate_complaint_no
 
 
 class ComplaintListSerializer(serializers.ModelSerializer):
@@ -37,7 +36,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
         validated_data = set_complaint_validated_data(validated_data)
         with transaction.atomic():
             complaint = super(ComplaintSerializer, self).create(validated_data)
-            complaint.complaint_no = complaint.id
+            complaint.complaint_no = generate_complaint_no(complaint)
             complaint.created_by = user.id
             complaint.created_date = datetime.utcnow()
             complaint.tenant = user.tenant
