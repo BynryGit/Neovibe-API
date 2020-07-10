@@ -105,7 +105,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart360',
+        'NAME': 'smart3603',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
