@@ -24,8 +24,6 @@ from django.db import models  # importing package for database
 
 class Privilege(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    # tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    # utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=500, null=False, blank=False) #View,Edit
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -50,23 +48,23 @@ class Privilege(models.Model):
 # Create Privilege table end
 
 
+# For fetching all privileges in table
 def get_all_privilege():
     return Privilege.objects.filter(is_active=True)
 
 
+# For getting privilege by id
 def get_privilege_by_id(id):
     return Privilege.objects.filter(id=id, is_active=True).last()
 
 
+# For getting privilege by name
 def get_privilege_by_name(name):
     privilege = Privilege.objects.get(name=name)
     return privilege.id
 
 
-def get_privilege_by_utility_id(id):
-    return Privilege.objects.filter(utility_id=id, is_active=True)
-
-
+# for getting privilege by id_string
 def get_privilege_by_id_string(id_string):
     try:
         return Privilege.objects.get(id_string=id_string, is_active=True)
@@ -74,6 +72,7 @@ def get_privilege_by_id_string(id_string):
         return False
 
 
+# check privilege exists for provide id_string or not
 def filter_privilege_by_id_string(id_string):
     if Privilege.objects.filter(id_string=id_string, is_active=True).exists():
         return True

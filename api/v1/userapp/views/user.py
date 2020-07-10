@@ -124,7 +124,7 @@ class UserDetail(GenericAPIView):
                 return Response({
                     STATE: EXCEPTION,
                     RESULTS: ID_STRING_NOT_FOUND,
-                }, status=status.HTTP_200_OK)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User')
             return Response({

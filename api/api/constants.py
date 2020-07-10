@@ -12,7 +12,7 @@ from v1.utility.models.utility_master import get_utility_by_name
 # S_AND_M = get_module_by_name('S&M')
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
 CONSUMER_OPS = get_module_by_name('Consumer Ops')
-ADMIN = get_module_by_name('Admin')
+# ADMIN = get_module_by_name('Admin')
 
 
 # *********** SUB MODULE CONSTANTS **************
@@ -34,7 +34,8 @@ REGISTRATION = get_sub_module_by_name('Registrations')
 # SUPPLIER = get_sub_module_by_name('Supplier')
 # SURVEY = get_sub_module_by_name('S&M-Survey')
 # SYSTEM = get_sub_module_by_name('System')
-TENANT = get_sub_module_by_name('Tenant')
+# TENANT = get_sub_module_by_name('Tenant')
+TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
 USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
@@ -51,6 +52,10 @@ DELETE = get_privilege_by_name('Delete')
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
 
+ADMIN = 2
+# USER = 1
+# VIEW = 1
+# EDIT = 2
 
 METER_PICTURE = 'media/meter'
 

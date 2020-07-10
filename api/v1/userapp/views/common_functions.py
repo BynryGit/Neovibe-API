@@ -24,6 +24,7 @@ from v1.userapp.models.user_type import get_user_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 
 
+# For getting ID's from id_string in role API request
 def set_role_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -58,6 +59,7 @@ def set_role_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in privilege API request
 def set_role_privilege_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -92,6 +94,7 @@ def set_role_privilege_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-privilege API request
 def set_user_privilege_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -126,6 +129,7 @@ def set_user_privilege_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user API request
 def set_user_validated_data(validated_data):
     if "city_id" in validated_data:
         city = get_city_by_id_string(validated_data["city_id"])
@@ -166,6 +170,7 @@ def set_user_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-role API request
 def set_user_role_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -188,6 +193,7 @@ def set_user_role_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-utility API request
 def set_user_utility_validated_data(validated_data):
     if "user_id" in validated_data:
         user = get_user_by_id_string(validated_data["user_id"])
@@ -204,6 +210,7 @@ def set_user_utility_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-area API request
 def set_user_area_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -226,6 +233,7 @@ def set_user_area_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-skill API request
 def set_user_skill_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -248,6 +256,7 @@ def set_user_skill_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-bank API request
 def set_user_bank_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -270,6 +279,7 @@ def set_user_bank_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-note API request
 def set_note_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -310,6 +320,7 @@ def set_note_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-document API request
 def set_document_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -356,6 +367,7 @@ def set_document_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in role-sub-type API request
 def set_role_sub_type_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -372,6 +384,7 @@ def set_role_sub_type_validated_data(validated_data):
     return validated_data
 
 
+# For getting ID's from id_string in user-sub-type API request
 def set_user_sub_type_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])

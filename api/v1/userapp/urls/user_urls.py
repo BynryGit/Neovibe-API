@@ -12,7 +12,7 @@ from v1.userapp.views.user_skill import UserSkill
 from v1.userapp.views.user_utility import UserUtility
 
 urlpatterns = [
-    path('', User.as_view()),
+    path('', User.as_view(), name='create-user'),
     path('<uuid:id_string>', UserDetail.as_view()),
     path('list/', UserList.as_view()),
 
@@ -32,7 +32,7 @@ urlpatterns = [
 
     path('<uuid:id_string>/skill/', UserSkill.as_view()),
 
-    path('login/', LoginApiView.as_view()),
+    path('login/', LoginApiView.as_view(), name='log-in'),
 
     path('logout/', LogoutApiView.as_view()),
 ]
