@@ -45,12 +45,12 @@ class UserBankDetail(GenericAPIView):
                     return Response({
                         STATE: EXCEPTION,
                         DATA: BANK_NOT_FOUND,
-                    }, status=status.HTTP_200_OK)
+                    }, status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({
                     STATE: EXCEPTION,
                     DATA: ID_STRING_NOT_FOUND,
-                }, status=status.HTTP_200_OK)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Bank')
             return Response({
@@ -99,6 +99,10 @@ class UserBankDetail(GenericAPIView):
     @role_required(ADMIN, USER, EDIT)
     def put(self, request, id_string):
         try:
+            # TODO for testing.py start
+            # if not request.data._mutable:
+            #     request.data._mutable = True
+            # TODO for testing.py end
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
                 request.data['user_id'] = str(id_string)
@@ -120,7 +124,7 @@ class UserBankDetail(GenericAPIView):
                             RESULTS: list(serializer.errors.values())[0][0],
                         }, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    raise CustomAPIException(BANK_ALREADY_EXISTS, status_code=status.HTTP_404_NOT_FOUND)
+                    raise CustomAPIException(BANK_NOT_FOUND_FOR_USER, status_code=status.HTTP_404_NOT_FOUND)
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:

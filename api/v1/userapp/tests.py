@@ -489,16 +489,16 @@ class GetPrivilegeTestCase(APITestCase):
 
 class UpdatePrivilegeTestCase(APITestCase):
 
-    def test_update_privilege_success(self):
-        url = 'http://127.0.0.1:8000/api/v1/privilege/180205c7-9e2e-481b-9131-d22291cf7d8e'
-        data = {
-            "name": "new"
-        }
-        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
-        headers = {'token': token}
-        response = requests.put(url, data=data, headers=headers)
-        print('------test_update_privilege_success-------', response.status_code)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    # def test_update_privilege_success(self):
+    #     url = 'http://127.0.0.1:8000/api/v1/privilege/180205c7-9e2e-481b-9131-d22291cf7d8e'
+    #     data = {
+    #         "name": "new"
+    #     }
+    #     token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+    #     headers = {'token': token}
+    #     response = requests.put(url, data=data, headers=headers)
+    #     print('------test_update_privilege_success-------', response.status_code)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_privilege_not_found(self):
         url = 'http://127.0.0.1:8000/api/v1/privilege/180205c7-9e2e-481b-9131-d22291cf7d8y'
@@ -720,4 +720,595 @@ class DeleteRolePrivilegeTestCase(APITestCase):
         headers = {'token': token}
         response = requests.delete(url, data=data, headers=headers)
         print('------test_delete_role_privilege_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateUserRoleTestCase(APITestCase):
+
+    def test_create_user_role_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        data = {
+            "utility_id" : "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "roles" : [
+                {
+                    "role_id_string":"9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string":"c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_role_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_user_role_conflict(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        data = {
+            "utility_id" : "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "roles" : [
+                {
+                    "role_id_string":"9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string":"c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_role_conflict-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+    def test_create_user_role_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e270/role/'
+        data = {
+            "utility_id" : "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "roles" : [
+                {
+                    "role_id_string":"9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string":"c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_role_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_user_role_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        data = {
+            "utility_id" : "8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "roles" : [
+                {
+                    "role_id_string":"9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string":"c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_privilege_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GetUserRoleTestCase(APITestCase):
+
+    def test_get_user_role_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_role_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_user_role_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e270/role/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_role_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_user_role_not_authenticated(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_role_not_authenticated-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class DeleteUserRoleTestCase(APITestCase):
+
+    def test_delete_user_role_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        data = {
+            "roles" : [
+                {
+                    "role_id_string":"9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string":"c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.delete(url, data=data, headers=headers)
+        print('------test_delete_user_role_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_user_role_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        data = {
+            "roles" : [
+                {
+                    "role_id_string":"9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string":"c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.delete(url, data=data, headers=headers)
+        print('------test_delete_user_role_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_user_role_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/role/'
+        data = {
+            "roles": [
+                {
+                    "role_id_string": "9d6c3775-b645-436b-9417-0b1d66d9df0d"
+                },
+                {
+                    "role_id_string": "c616155b-7dd9-4ef2-9b38-0eaafc74abae"
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.delete(url, data=data, headers=headers)
+        print('------test_delete_user_role_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GetUserSkillTestCase(APITestCase):
+
+    def test_get_user_skill_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/skill/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_skill_success------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_user_skill_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c0/skill/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_skill_not_found------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_user_skill_not_authorized(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/skill/'
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_skill_not_authorized------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateUserSkillTestCase(APITestCase):
+
+    def test_create_user_skill_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/skill/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "skills" : [
+                {
+                    "skill_id_string":"e3612d18-c2cd-4f2a-8c40-dd779f092cd0"
+                },
+                {
+                    "skill_id_string":"86a86afa-c85a-4531-89e1-555358f09767"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_skill_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_user_skill_conflict(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/skill/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "skills" : [
+                {
+                    "skill_id_string":"e3612d18-c2cd-4f2a-8c40-dd779f092cd0"
+                },
+                {
+                    "skill_id_string":"86a86afa-c85a-4531-89e1-555358f09767"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_skill_conflict-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+    def test_create_user_skill_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/skill/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "skills" : [
+                {
+                    "skill_id_string":"e3612d18-c2cd-4f2a-8c40-dd779f092cd0"
+                },
+                {
+                    "skill_id_string":"86a86afa-c85a-4531-89e1-555358f09767"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_skill_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_user_skill_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/skill/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "skills" : [
+                {
+                    "skill_id_string":"e3612d18-c2cd-4f2a-8c40-dd779f092cd0"
+                },
+                {
+                    "skill_id_string":"86a86afa-c85a-4531-89e1-555358f09767"
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_skill_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GetUserAreaTestCase(APITestCase):
+
+    def test_get_user_area_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/area/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_area_success------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_user_area_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e270/area/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_area_not_found------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_user_area_not_authorized(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/area/'
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_area_not_authorized------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateUserAreaTestCase(APITestCase):
+
+    def test_create_user_area_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/area/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "areas" : [
+                {
+                    "area_id_string":"b7795190-e27d-4522-8fa9-23343c376eed"
+                },
+                {
+                    "area_id_string":"93f22191-f68e-4767-a1b1-0d21747e01b4"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_area_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_user_area_conflict(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/area/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "areas" : [
+                {
+                    "area_id_string":"b7795190-e27d-4522-8fa9-23343c376eed"
+                },
+                {
+                    "area_id_string":"93f22191-f68e-4767-a1b1-0d21747e01b4"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_area_conflict-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+    def test_create_user_area_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e270/area/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "areas" : [
+                {
+                    "area_id_string":"b7795190-e27d-4522-8fa9-23343c376eed"
+                },
+                {
+                    "area_id_string":"93f22191-f68e-4767-a1b1-0d21747e01b4"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_area_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_user_area_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/area/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "areas" : [
+                {
+                    "area_id_string":"b7795190-e27d-4522-8fa9-23343c376eed"
+                },
+                {
+                    "area_id_string":"93f22191-f68e-4767-a1b1-0d21747e01b4"
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_area_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GetUserUtilityTestCase(APITestCase):
+
+    def test_get_user_utility_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/utility/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_utility_success------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_user_utility_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9co/utility/'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_utility_not_found------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_user_utility_not_authorized(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/utility/'
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_utility_not_authorized------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateUserUtilityTestCase(APITestCase):
+
+    def test_create_user_utility_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/utility/'
+        data = {
+            "utilities" : [
+                {
+                    "utility_id_string":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f"
+                },
+                {
+                    "utility_id_string":"78de46e9-0a05-4fbc-a4e1-12041d7b580a"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_utility_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_user_utility_conflict(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/utility/'
+        data = {
+            "utilities" : [
+                {
+                    "utility_id_string":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f"
+                },
+                {
+                    "utility_id_string":"78de46e9-0a05-4fbc-a4e1-12041d7b580a"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_utility_conflict-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+    def test_create_user_utility_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c0/utility/'
+        data = {
+            "utilities" : [
+                {
+                    "utility_id_string":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f"
+                },
+                {
+                    "utility_id_string":"78de46e9-0a05-4fbc-a4e1-12041d7b580a"
+                }
+            ]
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_utility_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_user_utility_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/3004e182-7dee-4565-afe5-7cd38be6a9c5/utility/'
+        data = {
+            "utilities" : [
+                {
+                    "utility_id_string":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f"
+                },
+                {
+                    "utility_id_string":"78de46e9-0a05-4fbc-a4e1-12041d7b580a"
+                }
+            ]
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_utility_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class GetUserBankTestCase(APITestCase):
+
+    def test_get_user_bank_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/bank'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_bank_success------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_user_bank_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e270/bank'
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_bank_not_found------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_user_bank_not_authorized(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/bank'
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.get(url, headers=headers)
+        print('------test_get_user_bank_not_authorized------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CreateUserBankTestCase(APITestCase):
+
+    def test_create_user_bank_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/bank/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "bank_id":"70a52737-6a73-4f53-9c7b-d01c28a9346b"
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_bank_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_user_bank_conflict(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/bank/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "bank_id":"70a52737-6a73-4f53-9c7b-d01c28a9346b"
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_bank_conflict-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+
+    def test_create_user_bank_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e27a/bank/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "bank_id":"70a52737-6a73-4f53-9c7b-d01c28a9346b"
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_bank_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_user_bank_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/bank/'
+        data = {
+            "utility_id":"8d2b7039-84fe-44cb-8b4e-cf0c011dbf4f",
+            "bank_id":"70a52737-6a73-4f53-9c7b-d01c28a9346b"
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.post(url, data=data, headers=headers)
+        print('------test_create_user_bank_not_authenticate-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class UpdateUserBankTestCase(APITestCase):
+
+    def test_update_user_bank_success(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/10e94252-7991-4f72-b73f-84295969e279/bank/'
+        data = {
+            "bank_id":"ba0ac53f-a2f6-4e97-86be-2d21507ab09c"
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.put(url, data=data, headers=headers)
+        print('------test_update_user_bank_success-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_user_bank_not_found(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/e4d4c8da-31b0-458f-8bdd-7f04bb259c45/bank/'
+        data = {
+            "bank_id":"ba0ac53f-a2f6-4e97-86be-2d21507ab09c"
+        }
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkX3N0cmluZyI6IjEwZTk0MjUyLTc5OTEtNGY3Mi1iNzNmLTg0Mjk1OTY5ZTI3OSIsInN0cmluZyI6IjY3NzEyQSJ9.YQ_tNdxIKZEaYtKn6l_Na6wZd2WgkzRqjAu_GZBDEJM'
+        headers = {'token': token}
+        response = requests.put(url, data=data, headers=headers)
+        print('------test_update_user_bank_not_found-------', response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_user_bank_not_authenticate(self):
+        url = 'http://127.0.0.1:8000/api/v1/user/e4d4c8da-31b0-458f-8bdd-7f04bb259c45/bank/'
+        data = {
+            "bank_id":"ba0ac53f-a2f6-4e97-86be-2d21507ab09c"
+        }
+        token = 'abcd'
+        headers = {'token': token}
+        response = requests.put(url, data=data, headers=headers)
+        print('------test_update_user_bank_not_authenticate-------', response.status_code)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
