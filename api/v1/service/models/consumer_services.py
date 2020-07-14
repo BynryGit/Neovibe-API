@@ -12,15 +12,59 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+
+import fsm
+from rest_framework import status
+
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 from django.db import models  # importing package for database
 
-
+# *********** COMPLAINT CONSTANTS **************
+SERVICE_DICT = {
+    "CREATED"         : 0,
+    "ACCEPTED"        : 1,
+    "REJECTED"        : 2,
+    "IN PROGRESS"     : 3,
+    "NOT ASSIGNED"    : 4,
+    "ASSIGNED"        : 5,
+    "COMPLETED"       : 6,
+    "HOLD"            : 7,
+    "CLOSED"          : 8,
+    "FAILED"          : 9,
+    "ARCHIVED"        : 10,
+}
 # Create Service Details Table Start.
 
-class ServiceDetails(models.Model):
+class ServiceDetails(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'ACCEPTED'),
+        (2, 'REJECTED'),
+        (3, 'IN PROGRESS'),
+        (4, 'NOT ASSIGNED'),
+        (5, 'ASSIGNED'),
+        (6, 'COMPLETED'),
+        (7, 'HOLD'),
+        (8, 'CLOSED'),
+        (9, 'FAILED'),
+        (10, 'ARCHIVED'),
+    )
+
+    state_machine = {
+        SERVICE_DICT['CREATED']     : (SERVICE_DICT['NOT ASSIGNED'],),
+        SERVICE_DICT['ACCEPTED']    : (SERVICE_DICT['COMPLETED'],),
+        SERVICE_DICT['REJECTED']    : (SERVICE_DICT['ASSIGNED'],),
+        SERVICE_DICT['IN PROGRESS'] : (SERVICE_DICT['REJECTED'], SERVICE_DICT['HOLD'],),
+        SERVICE_DICT['NOT ASSIGNED']: (SERVICE_DICT['FAILED'], SERVICE_DICT['IN PROGRESS'], SERVICE_DICT['ASSIGNED']),
+        SERVICE_DICT['ASSIGNED']    : (SERVICE_DICT['ACCEPTED'], SERVICE_DICT['REJECTED'],),
+        SERVICE_DICT['COMPLETED']   : (SERVICE_DICT['HOLD'], SERVICE_DICT['CLOSED'],),
+        SERVICE_DICT['HOLD']        : (SERVICE_DICT['ASSIGNED'], SERVICE_DICT['CLOSED']),
+        SERVICE_DICT['CLOSED']      : (SERVICE_DICT['ARCHIVED'],),
+        SERVICE_DICT['ARCHIVED']    : (SERVICE_DICT['ARCHIVED'],),
+    }
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -35,7 +79,7 @@ class ServiceDetails(models.Model):
     request_due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     request_channel_id = models.BigIntegerField(null=True, blank=True)
     is_field_appointment = models.BooleanField(default=False)
-    service_status_id = models.BigIntegerField(null=True, blank=True)
+    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -47,6 +91,12 @@ class ServiceDetails(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Service transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 # Create Service Details table end.
 

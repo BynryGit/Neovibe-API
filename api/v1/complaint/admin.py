@@ -1,3 +1,6 @@
 from django.contrib import admin
+from v1.complaint.models.complaint import Complaint
+from v1.complaint.models.complaint_assignment import ComplaintAssignment
 
-# Register your models here.
+admin.site.register(Complaint)
+admin.site.register(ComplaintAssignment)

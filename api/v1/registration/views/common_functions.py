@@ -130,6 +130,7 @@ def generate_registration_no(registration):
     except Exception as e:
         raise CustomAPIException("Rgistration no generation failed.",status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 # Function for performing registration transition events
 def perform_events(next_state, registration):
     try:
@@ -144,6 +145,7 @@ def perform_events(next_state, registration):
     except Exception as e:
         logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations', registration = registration.id)
         pass
+
 
 # Function for performing registration triggers
 def perform_signals(next_state, self):
