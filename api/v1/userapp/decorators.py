@@ -11,6 +11,28 @@ from v1.commonapp.views.custom_exception import *
 from v1.utility.models.utility_master import get_utility_by_id_string
 
 
+def token_validate(function):
+    def wrap(request, *args, **kwargs):
+        print('0==================',request)
+        token = args[0].headers['Token']
+        decoded_token = get_payload(token)
+        if decoded_token:
+            user_obj = get_user_by_id_string(decoded_token['user_id_string'])
+            if check_token_exists_for_user(token, user_obj.id):
+                return function(request, *args, **kwargs)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULTS: INVALID_TOKEN,
+                }, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({
+                STATE: ERROR,
+                RESULTS: INVALID_TOKEN,
+            }, status=status.HTTP_401_UNAUTHORIZED)
+    return wrap
+
+
 def is_token_validate(function):
     def wrap(request, *args, **kwargs):
         token = args[0].headers['Token']

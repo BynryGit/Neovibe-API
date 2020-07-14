@@ -12,7 +12,7 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.decorators import utility_required, is_token_validate, role_required
+from v1.userapp.decorators import utility_required, is_token_validate, role_required, token_validate
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleSerializer, RoleDetailViewSerializer
 

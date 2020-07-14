@@ -36,7 +36,7 @@ EXCEPTION = 'exception'
 UNAUTHORIZED = 'Unauthorized'
 
 # *********** USER CUSTOM CONSTANTS **************
-BANK_ALREADY_EXISTS = '"Bank detail already exists for specified user.".' # need to remove
+BANK_ALREADY_EXISTS = 'Bank detail already exists for specified user'
 BANK_NOT_FOUND = 'Bank detail not found for specified user.'
 ROLE_PRIVILEGE_NOT_FOUND = 'No Privileges attached to role.'
 USER_PRIVILEGE_NOT_FOUND = 'No Privileges assigned to user.'
@@ -68,6 +68,7 @@ SUBMODULE_NOT_FOUND = "SubModule Not Found"
 SUBSCRIPTION_NOT_FOUND = "Subscription Not Found"
 SUBSCRIPTION_PLAN_NOT_FOUND = "Subscription Plan Not Found"
 SUBSCRIPTION_RATE_NOT_FOUND = "Subscription Rate Not Found"
+BANK_NOT_FOUND_FOR_USER = "Bank Detail Not Found For User"
 INVOICE_NOT_FOUND = "Invoice Not Found"
 REGISTRATION_NOT_FOUND = "Registration not found"
 PAYMENT_NOT_FOUND = "Payment not found"

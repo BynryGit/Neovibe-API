@@ -38,14 +38,14 @@ REGISTRATION = get_sub_module_by_name('Registrations')
 COMPLAINT = get_sub_module_by_name('Complaint')
 TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
-USER = get_sub_module_by_name('Users')
+# USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
 
 
 # *********** PRIVILEGE CONSTANTS **************
-VIEW = get_privilege_by_name('View')
-EDIT = get_privilege_by_name('Edit')
-DELETE = get_privilege_by_name('Delete')
+# VIEW = get_privilege_by_name('View')
+# EDIT = get_privilege_by_name('Edit')
+# DELETE = get_privilege_by_name('Delete')
 
 
 # *********** UTILITY CONSTANTS **************
@@ -54,9 +54,9 @@ DELETE = get_privilege_by_name('Delete')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
 
 ADMIN = 2
-# USER = 1
-# VIEW = 1
-# EDIT = 2
+USER = 1
+VIEW = 1
+EDIT = 2
 
 METER_PICTURE = 'media/meter'
 

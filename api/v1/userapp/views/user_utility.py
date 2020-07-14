@@ -53,12 +53,12 @@ class UserUtility(GenericAPIView):
                     return Response({
                         STATE: ERROR,
                         DATA: UTILITY_NOT_ASSIGNED,
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                    }, status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({
                     STATE: EXCEPTION,
                     DATA: ID_STRING_NOT_FOUND,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Utility')
             return Response({

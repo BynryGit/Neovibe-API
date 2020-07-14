@@ -189,7 +189,7 @@ class RolePrivilegeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_400_BAD_REQUEST)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module = 'Admin', sub_module = 'Role-Privileges')
             res = self.handle_exception(e)
