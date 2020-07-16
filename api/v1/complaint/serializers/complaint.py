@@ -1,14 +1,14 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
-from v1.complaint.models.consumer_complaints import ConsumerComplaints
+from v1.complaint.models.complaint import Complaint
 from v1.complaint.views.common_functions import set_complaint_validated_data, generate_complaint_no
 
 
 class ComplaintListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = ConsumerComplaints
+        model = Complaint
         fields = ('complaint_name', 'id_string')
 
 
@@ -19,7 +19,7 @@ class ComplaintViewSerializer(serializers.ModelSerializer):
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
 
     class Meta:
-        model = ConsumerComplaints
+        model = Complaint
         fields = ('__all__')
 
 
@@ -29,7 +29,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
     complaint_status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
-        model = ConsumerComplaints
+        model = Complaint
         fields = ('__all__')
 
     def create(self, validated_data, user):

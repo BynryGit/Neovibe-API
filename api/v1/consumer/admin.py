@@ -4,7 +4,6 @@ from v1.complaint.models.complaint_sub_type import ComplaintSubType
 from v1.complaint.models.complaint_type import ComplaintType
 from v1.service.models.consumer_services import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
-from v1.complaint.models.consumer_complaints import ConsumerComplaints
 from v1.consumer.models.consumer_master import ConsumerMaster
 from v1.consumer.models.consumer_meter import ConsumerMeter
 from v1.consumer.models.consumer_ownership import ConsumerOwnership
@@ -24,7 +23,6 @@ admin.site.register(SourceType)
 admin.site.register(ComplaintStatus)
 admin.site.register(ConsumerOwnership)
 admin.site.register(ServiceDetails)
-admin.site.register(ConsumerComplaints)
 admin.site.register(ConsumerMaster)
 admin.site.register(ConsumerMeter)
 admin.site.register(ConsumerSchemeMaster)

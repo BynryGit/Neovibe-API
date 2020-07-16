@@ -35,6 +35,7 @@ REGISTRATION = get_sub_module_by_name('Registrations')
 # SURVEY = get_sub_module_by_name('S&M-Survey')
 # SYSTEM = get_sub_module_by_name('System')
 # TENANT = get_sub_module_by_name('Tenant')
+COMPLAINT = get_sub_module_by_name('Complaint')
 TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
 # USER = get_sub_module_by_name('Users')

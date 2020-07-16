@@ -29,6 +29,7 @@ from v1.billing import urls as billing_urls
 from v1.asset import urls as asset_urls
 from v1.tender import urls as tender_urls
 from v1.meter_reading import urls as meterreading_urls
+from v1.complaint import urls as complaint_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,5 +49,5 @@ urlpatterns = [
     path('api/v1/privilege/', include(privilege_urls)),
     path('api/v1/tender/', include(tender_urls)),
     path('api/v1/meter-data/', include(meterreading_urls)),
-
+    path('api/v1/complaint/', include(complaint_urls)),
 ]
