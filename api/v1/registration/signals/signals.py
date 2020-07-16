@@ -6,7 +6,6 @@ from django.dispatch import receiver, Signal
 from rest_framework import status
 from v1.commonapp.models.state_configuration import StateConfiguration, STATE_CONFIGURATION_DICT
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.consumer.views.common_functions import create_consumer_after_registration
 from v1.payment.models.consumer_payment import PAYMENT_DICT
 from v1.registration.models import registrations
 
@@ -53,12 +52,6 @@ def after_payment(sender, **kwargs):
         raise CustomAPIException(str(e),status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 
-# Signal receiver for consumer
-@receiver([registration_approved])
-def after_registration_approved(sender, **kwargs):
-    try:
-        create_consumer_after_registration(sender.id)
-    except Exception as e:
-        raise CustomAPIException(str(e),status_code=status.HTTP_412_PRECONDITION_FAILED)
+
 
 

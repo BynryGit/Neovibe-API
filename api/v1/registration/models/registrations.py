@@ -1,5 +1,5 @@
-from datetime import datetime
 from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 from v1.registration.models.registration_status import get_registration_status_by_id
 from v1.registration.views.common_functions import *
 from v1.tenant.models.tenant_master import TenantMaster
@@ -110,7 +110,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
-            perform_events(next_state, self)
+            perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT["REGISTRATION"])
             perform_signals(next_state, self)
             self.save()
         except Exception as e:
