@@ -10,10 +10,25 @@ from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.commonapp.views.custom_exception import *
 from v1.utility.models.utility_master import get_utility_by_id_string
 
+from rest_framework import permissions
+
+
+class tokenValidate(permissions.BasePermission):
+    """
+    Global permission check for blacklisted IPs.
+    """
+
+    def has_permission(self, request, view):
+        print('------------',self)
+        print('------------',self.request)
+        print('------------',self.request.headers)
 
 def token_validate(function):
     def wrap(request, *args, **kwargs):
-        print('0==================',request)
+        print('+++++++++++++', function)
+        print('==============', function(request.headers))
+        print('------------', request.self)
+
         token = args[0].headers['Token']
         decoded_token = get_payload(token)
         if decoded_token:
