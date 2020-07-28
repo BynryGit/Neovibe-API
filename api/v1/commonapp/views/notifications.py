@@ -1,8 +1,14 @@
+import logging
 from celery.task import task
 from twilio.rest import Client
 from api.settings import *
 from v1.commonapp.views.logger import logger
 from django.core.mail import EmailMultiAlternatives
+
+
+
+# Local logging
+local_logger = logging.getLogger('django')
 
 
 @task(name = 'send_mail')
@@ -14,6 +20,7 @@ def send_mail(subject, body, from_email, to, connection = None, attachments = No
             msg.attach_alternative(html, "text/html")
         msg.send(fail_silently=False)
     except Exception as e:
+        local_logger.info("In send mail "+str(e))
         logger().log(e, 'LOW')
 
 

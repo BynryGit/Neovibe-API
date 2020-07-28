@@ -4,7 +4,8 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
-from v1.commonapp.models.transition_configuration import TransitionConfiguration
+from v1.commonapp.models.transition_configuration import TransitionConfiguration, TRANSITION_CHANNEL_DICT, \
+    is_transition_configuration_exists
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
@@ -12,11 +13,12 @@ from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_s
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
+from v1.consumer.signals.signals import after_registration_approved
 from v1.payment.models.consumer_payment import get_payment_by_id_string
 from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.registration.signals.signals import registration_approved
-from v1.registration.views.notifications import registration_completed_email_to_consumer
+from v1.registration.views.notifications import registration_email_to_consumer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_services_number_format import *
 from v1.registration.models import registrations
@@ -132,14 +134,18 @@ def generate_registration_no(registration):
 
 
 # Function for performing registration transition events
-def perform_events(next_state, registration):
+def perform_events(next_state, registration, transition_object):
     try:
-        if TransitionConfiguration.objects.filter(transition_object="registration", transition_state=next_state, utility=registration.utility,
-                                                  event="registration_completed_email_to_consumer", is_active = True).exists():
-            transition_obj = TransitionConfiguration.objects.get(transition_object="registration", transition_state=next_state,
-                                                                 utility=registration.utility, event="registration_completed_email_to_consumer",
-                                                                 is_active = True)
-            registration_completed_email_to_consumer(registration.id, transition_obj.id)
+        if is_transition_configuration_exists(transition_object, next_state, registration.utility):
+            transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
+                                                utility=registration.utility, is_active=True)
+            for transition_obj in transition_objs:
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
+                    registration_email_to_consumer(registration.id, transition_obj.id)
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
+                    pass
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['WHATSAPP']:
+                    pass
         else:
             pass
     except Exception as e:
@@ -148,9 +154,12 @@ def perform_events(next_state, registration):
 
 
 # Function for performing registration triggers
-def perform_signals(next_state, self):
+def perform_signals(next_state, registration):
     try:
         if next_state == registrations.REGISTRATION_DICT['APPROVED']:
-            registration_approved.send(self)
+            registration_approved.connect(after_registration_approved)
+            registration_approved.send(registration)
     except Exception as e:
         raise CustomAPIException("Registration transition failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
