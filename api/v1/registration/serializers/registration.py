@@ -1,14 +1,14 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
-from rest_framework.validators import UniqueTogetherValidator
 
 from api.messages import MOBILE_ALREADY_EXISTS
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer
+from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryViewSerializer
 from v1.registration.models.registrations import Registration
-from v1.registration.serializers.registration_status import RegistrationStatusViewSerializer
 from v1.registration.views.common_functions import set_validated_data, generate_registration_no
 
 
@@ -19,14 +19,17 @@ class ChoiceField(serializers.ChoiceField):
 
 
 class RegistrationListSerializer(serializers.ModelSerializer):
+    area = AreaListSerializer(many=False, source='get_area')
 
     class Meta:
         model = Registration
         fields = ('id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
-                  'street', 'zipcode', 'state')
+                  'street', 'zipcode', 'state', 'area', 'created_date')
 
 class RegistrationViewSerializer(serializers.ModelSerializer):
     area = AreaListSerializer(many=False, source='get_area')
+    category = ConsumerCategoryViewSerializer(many=False, source='get_consumer_category')
+    sub_category = ConsumerSubCategoryViewSerializer(many=False, source='get_consumer_sub_category')
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
@@ -41,7 +44,8 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
-                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'registration_date', 'state', 'area')
+                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'registration_date', 'state',
+                  'area', 'category', 'sub_category', 'created_date')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
