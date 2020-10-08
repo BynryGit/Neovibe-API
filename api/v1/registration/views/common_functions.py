@@ -15,7 +15,6 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
 from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.consumer.signals.signals import after_registration_approved
 from v1.payment.models.consumer_payment import get_payment_by_id_string
-from v1.registration.models.registration_status import get_registration_status_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.registration.signals.signals import registration_approved
 from v1.registration.views.notifications import registration_email_to_consumer
@@ -41,12 +40,6 @@ def set_validated_data(validated_data):
             validated_data["area_id"] = area.id
         else:
             raise CustomAPIException("Area not found.",status_code=status.HTTP_404_NOT_FOUND)
-    if "status_id" in validated_data:
-        registration_status = get_registration_status_by_id_string(validated_data["status_id"])
-        if registration_status:
-            validated_data["status_id"] = registration_status.id
-        else:
-            raise CustomAPIException("Status not found.", status.HTTP_404_NOT_FOUND)
     if "registration_type_id" in validated_data:
         registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
         if registration_type:

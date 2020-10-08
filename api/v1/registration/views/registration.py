@@ -11,12 +11,14 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.payment.models.consumer_payment import get_payment_by_id_string, PAYMENT_DICT
 from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
-from v1.registration.models.registrations import Registration as RegTbl
+from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.serializers.registration import *
+from v1.registration.serializers.registration_status import RegistrationStatusListSerializer
 from v1.registration.signals.signals import registration_payment_approved, registration_payment_created
 from api.messages import *
+from v1.registration.models.registration_status import RegistrationStatus
 from v1.userapp.decorators import is_token_validate, role_required
 
 
@@ -43,7 +45,7 @@ class RegistrationList(generics.ListAPIView):
         search_fields = ('first_name', 'last_name',)
 
         def get_queryset(self):
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1,1,1,user_obj):
                     queryset = RegTbl.objects.filter(is_active=True)
@@ -54,8 +56,6 @@ class RegistrationList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
-
-
 
 
 
@@ -191,7 +191,7 @@ class RegistrationPayment(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
     def post(self, request, id_string):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             registration_obj = get_registration_by_id_string(id_string)
             serializer = PaymentSerializer(data=request.data)
@@ -238,6 +238,7 @@ class RegistrationPaymentDetail(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, VIEW)
     def get(self, request, id_string):
         try:
+            registration = get_registration_by_id_string(id_string)
             payment = get_payment_by_id_string(id_string)
             if payment:
                 serializer = PaymentViewSerializer(instance=payment, context={'request': request})
@@ -376,3 +377,110 @@ class RegistrationPaymentReject(GenericAPIView):
             }, status=status.HTTP_412_PRECONDITION_FAILED)
 
 
+# API Header
+# API end Point: api/v1/registration/status-list
+# API verb: GET
+# Package: Basic
+# Modules: S & M
+# Sub Module: Registration
+# Interaction: Get registration statuses
+# Usage: View
+# Tables used: RegistrationStatus
+# Auther: Rohan
+# Created on: 28/09/2020
+class RegistrationStatusList(generics.ListAPIView):
+    try:
+        serializer_class = RegistrationStatusListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = RegistrationStatus.objects.filter(is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/reject
+# API verb: Put
+# Package: Basic
+# Modules: S & M
+# Sub Module: Registration
+# Interaction: Reject registration
+# Usage: View
+# Tables used: Registration
+# Auther: Rohan
+# Created on: 28/09/2020
+class RegistrationReject(GenericAPIView):
+    @is_token_validate
+    @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
+    def put(self, request, id_string):
+        try:
+            registration = get_registration_by_id_string(id_string)
+            if registration:
+                with transaction.atomic():
+                    # State change for registration start
+                    registration.change_state(REGISTRATION_DICT["REJECTED"])
+                    # State change for registration end
+                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: REGISTRATION_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/hold
+# API verb: Put
+# Package: Basic
+# Modules: S & M
+# Sub Module: Registration
+# Interaction: Hold registration
+# Usage: View
+# Tables used: Registration
+# Auther: Rohan
+# Created on: 29/09/2020
+class RegistrationHold(GenericAPIView):
+    @is_token_validate
+    @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
+    def put(self, request, id_string):
+        try:
+            registration = get_registration_by_id_string(id_string)
+            if registration:
+                with transaction.atomic():
+                    # State change for registration start
+                    registration.change_state(REGISTRATION_DICT["HOLD"])
+                    # State change for registration end
+                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: REGISTRATION_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)

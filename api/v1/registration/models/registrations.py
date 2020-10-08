@@ -1,6 +1,7 @@
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
-from v1.registration.models.registration_status import get_registration_status_by_id
+from v1.consumer.models.consumer_category import *
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 from v1.registration.views.common_functions import *
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
@@ -99,14 +100,19 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         return self.first_name
 
     @property
-    def get_status(self):
-        status = get_registration_status_by_id(self.status_id)
-        return status
-
-    @property
     def get_area(self):
         area = get_area_by_id(self.area_id)
         return area
+
+    @property
+    def get_consumer_category(self):
+        category = get_consumer_category_by_id(self.consumer_category_id)
+        return category
+
+    @property
+    def get_consumer_sub_category(self):
+        sub_category = get_consumer_sub_category_by_id(self.sub_category_id)
+        return sub_category
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:

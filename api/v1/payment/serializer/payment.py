@@ -61,7 +61,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment.identification_id = obj.id
             payment.receipt_no = generate_receipt_no(payment)
             payment.save()
-        return payment
+            return payment
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
