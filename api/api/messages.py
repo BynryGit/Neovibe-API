@@ -9,7 +9,8 @@ Token = 'token'
 STATE = 'state'
 DATA = 'data'
 ERROR = 'error'
-DUPLICATE = 'duplicate'
+DUPLICATE = 'duplicate',
+ID_STRING = 'id_string'
 
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER="User is not authorised"

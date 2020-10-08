@@ -9,43 +9,43 @@ from master.models import get_user_by_id_string
 from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.commonapp.views.custom_exception import *
 from v1.utility.models.utility_master import get_utility_by_id_string
-
 from rest_framework import permissions
 
 
-class tokenValidate(permissions.BasePermission):
+class TokenValidate(permissions.BasePermission):
     """
     Global permission check for blacklisted IPs.
     """
 
     def has_permission(self, request, view):
-        print('------------',self)
-        print('------------',self.request)
-        print('------------',self.request.headers)
-
-def token_validate(function):
-    def wrap(request, *args, **kwargs):
-        print('+++++++++++++', function)
-        print('==============', function(request.headers))
-        print('------------', request.self)
-
-        token = args[0].headers['Token']
+        token = request.headers['Token']
         decoded_token = get_payload(token)
         if decoded_token:
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
             if check_token_exists_for_user(token, user_obj.id):
-                return function(request, *args, **kwargs)
+                return True
             else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: INVALID_TOKEN,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                return False
         else:
-            return Response({
-                STATE: ERROR,
-                RESULTS: INVALID_TOKEN,
-            }, status=status.HTTP_401_UNAUTHORIZED)
-    return wrap
+            return False
+
+
+class RoleValidate(permissions.BasePermission):
+    """
+    Global permission check for blacklisted IPs.
+    """
+    
+    def has_permission(self, request, view):
+        print('=======666666666666666========',view)
+        token = request.headers['Token']
+        decoded_token = get_payload(token)
+        user_obj = get_user_by_id_string(decoded_token['user_id_string'])
+        roles = get_user_role_by_user_id(user_obj.id)
+        # if check_role_privilege_exists(roles, module_id, sub_module_id, privilege_id):
+        #     return True
+        # else:
+        #     return False
+        return False
 
 
 def is_token_validate(function):
