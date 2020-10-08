@@ -1,10 +1,12 @@
+from datetime import datetime, timedelta, timezone
+
 from rest_framework import status
 from rest_framework.response import Response
 
 from v1.commonapp.common_functions import get_payload
 from v1.userapp.models.role_privilege import check_role_privilege_exists
 from v1.userapp.models.user_role import get_user_role_by_user_id
-from v1.userapp.models.user_token import check_token_exists_for_user
+from v1.userapp.models.user_token import check_token_exists_for_user, get_token_by_token
 from master.models import get_user_by_id_string
 from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.commonapp.views.custom_exception import *
@@ -19,7 +21,7 @@ class TokenValidate(permissions.BasePermission):
 
     def has_permission(self, request, view):
         token = request.headers['Token']
-        
+
     def token_validate(function):
         def wrap(request, *args, **kwargs):
             print('0==================',request)
@@ -55,12 +57,20 @@ class RoleValidate(permissions.BasePermission):
 
 def is_token_validate(function):
     def wrap(request, *args, **kwargs):
-        token = args[0].headers['Authorization']
+        token = args[0].headers['Token']
         decoded_token = get_payload(token)
         if decoded_token:
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
             if check_token_exists_for_user(token, user_obj.id):
-                return function(request, *args, **kwargs)
+                token_obj = get_token_by_token(token)
+                if (token_obj.created_date + timedelta(hours=4)).replace(tzinfo=None) < datetime.now():
+                    token_obj.delete()
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: TOKEN_EXPIRED,
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+                else:
+                    return function(request, *args, **kwargs)
             else:
                 return Response({
                     STATE: ERROR,
@@ -77,7 +87,7 @@ def is_token_validate(function):
 def role_required(module_id, sub_module_id, privilege_id):
     def _method_wrapper(view_method):
         def _arguments_wrapper(request, *args, **kwargs):
-            token = args[0].headers['Authorization']
+            token = args[0].headers['Token']
             decoded_token = get_payload(token)
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
             roles = get_user_role_by_user_id(user_obj.id)
