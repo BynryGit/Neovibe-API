@@ -6,11 +6,13 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from api.constants import *
 from master.models import get_user_by_id_string
+from v1.commonapp.models.notes import Notes
+from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, NoteViewSerializer
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.payment.models.consumer_payment import get_payment_by_id_string, PAYMENT_DICT
-from v1.payment.serializer.payment import PaymentSerializer, PaymentViewSerializer
+from v1.payment.serializer.payment import *
 from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.registration.models.registrations import get_registration_by_id_string
@@ -76,15 +78,16 @@ class Registration(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
     def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             serializer = RegistrationSerializer(data=request.data)
+            print(request.data)
             if serializer.is_valid(raise_exception=False):
                 registration_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                # view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: view_serializer.data,
+                    # RESULT: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
@@ -220,44 +223,6 @@ class RegistrationPayment(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
-
-# API Header
-# API end Point: api/v1/registration/payment/:id_string
-# API verb: GET, PUT
-# Package: Basic
-# Modules: S&M, Consumer Care, Consumer Ops
-# Sub Module: Registration
-# Interaction: View, Update registration payment
-# Usage: View, Update
-# Tables used: 2.4.2. Consumer - Registration
-# Auther: Rohan
-# Created on: 18/05/2020
-class RegistrationPaymentDetail(GenericAPIView):
-
-    @is_token_validate
-    @role_required(CONSUMER_OPS, REGISTRATION, VIEW)
-    def get(self, request, id_string):
-        try:
-            registration = get_registration_by_id_string(id_string)
-            payment = get_payment_by_id_string(id_string)
-            if payment:
-                serializer = PaymentViewSerializer(instance=payment, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULT: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULT: PAYMENT_NOT_FOUND,
-                }, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            logger().log(e, 'MEDIUM', module = 'Consumer Ops', Sub_module='Registration/payments')
-            res = self.handle_exception(e)
-            return Response({
-                STATE: EXCEPTION,
-                RESULT: str(e),
-            }, status=res.status_code)
 
     @is_token_validate
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
@@ -484,3 +449,153 @@ class RegistrationHold(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/approve
+# API verb: Put
+# Package: Basic
+# Modules: S & M
+# Sub Module: Registration
+# Interaction: Approve registration
+# Usage: View
+# Tables used: Registration
+# Auther: Rohan
+# Created on: 30/09/2020
+class RegistrationApprove(GenericAPIView):
+    @is_token_validate
+    @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
+    def put(self, request, id_string):
+        try:
+            registration = get_registration_by_id_string(id_string)
+            if registration:
+                with transaction.atomic():
+                    # State change for registration start
+                    registration.change_state(REGISTRATION_DICT["APPROVED"])
+                    # State change for registration end
+                serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: REGISTRATION_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/notes
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Registration notes
+# Usage: API will fetch required data for Registration notes
+# Tables used: Notes
+# Author: Rohan
+# Created on: 1/10/2020
+class RegistrationNoteList(generics.ListAPIView):
+    try:
+        serializer_class = NoteListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    registration = get_registration_by_id_string(self.kwargs['id_string'])
+                    queryset = Notes.objects.filter(registration_id = registration.id, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Notes not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/note
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Add registration note
+# Usage: Add
+# Tables used: Note
+# Auther: Rohan
+# Created on: 05/10/2020
+class RegistrationNote(GenericAPIView):
+
+    @is_token_validate
+    @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
+    def post(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            registration = get_registration_by_id_string((id_string))
+            serializer = NoteSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                note_obj = serializer.create(serializer.validated_data, user)
+                note_obj.registration_id = registration.id
+                note_obj.save()
+                view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/payments
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Registration payments
+# Usage: API will fetch required data for Registration payments
+# Tables used: Consumer Payment
+# Author: Rohan
+# Created on: 6/10/2020
+class RegistrationPaymentList(generics.ListAPIView):
+    try:
+        serializer_class = PaymentListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    registration = get_registration_by_id_string(self.kwargs['id_string'])
+                    queryset = Payment.objects.filter(identification_id = registration.id, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Payments not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')

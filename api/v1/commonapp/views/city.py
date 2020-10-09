@@ -1,64 +1,31 @@
 __author__ = "aki"
 
-import traceback
-from rest_framework.response import Response
 from rest_framework import generics, status
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from v1.commonapp.serializers.city import CitySerializer
+from v1.commonapp.models.city import City
+from v1.commonapp.serializers.city import *
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.tenant.models.tenant_city import TenantCity as TenantCityTbl
-
-
-# API Header
-# API end Point: api/v1/cities
-# API verb: GET
-# Package: Basic
-# Modules: All
-# Sub Module: All
-# Interaction: city list
-# Usage: API will fetch all city list
-# Tables used: TenantCity
-# Author: Akshay
-# Created on: 15/05/2020
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 class CityList(generics.ListAPIView):
+    try:
+        serializer_class = CityListSerializer
 
-    def get(self, request):
-        try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-
-                    city_obj = TenantCityTbl.objects.filter(is_active=True)
-                    if city_obj:
-                        serializer = CitySerializer(city_obj, many=True)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: serializer.data,
-                        }, status=status.HTTP_200_OK)
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = City.objects.filter(utility = utility, is_active = True)
+                    if queryset:
+                        return queryset
                     else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException("Cities not found.", status.HTTP_404_NOT_FOUND)
                 else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                    raise InvalidAuthorizationException
             else:
-                return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
-        except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
-            return Response({
-                STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Commonapp', sub_module = 'Commonapp')

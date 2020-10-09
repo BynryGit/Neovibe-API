@@ -54,6 +54,7 @@ def get_utility_module_by_id(id):
 
 
 def get_utility_module_by_id_string(id_string):
+    print(UtilityModule.objects.get(id_string = id_string))
     try:
         return UtilityModule.objects.get(id_string = id_string)
     except:

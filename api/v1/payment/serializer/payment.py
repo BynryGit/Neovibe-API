@@ -23,7 +23,7 @@ class PaymentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = ('id_string', 'state', 'transaction_amount', 'transaction_charges', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel')
+        fields = ('id_string', 'state', 'transaction_amount', 'transaction_charges', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel', 'transaction_date', 'receipt_no')
 
 
 class PaymentViewSerializer(serializers.ModelSerializer):
