@@ -4,6 +4,7 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.decorators import permission_classes
 
 from api.messages import *
 from api.constants import *
@@ -12,10 +13,9 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.userapp.decorators import utility_required, is_token_validate, role_required, token_validate
+from v1.userapp.decorators import utility_required, is_token_validate, role_required, TokenValidate, RoleValidate
 from v1.userapp.models.role import get_role_by_id_string, get_all_role
 from v1.userapp.serializers.role import RoleListSerializer, RoleSerializer, RoleDetailViewSerializer
-
 
 # API Header
 # API end Point: api/v1/role/list
@@ -31,6 +31,7 @@ from v1.userapp.serializers.role import RoleListSerializer, RoleSerializer, Role
 # Created on: 04/05/2020
 # Updated on: 09/05/2020
 
+
 class RoleList(generics.ListAPIView):
     serializer_class = RoleListSerializer
     pagination_class = StandardResultsSetPagination
@@ -41,8 +42,9 @@ class RoleList(generics.ListAPIView):
     ordering = ('created_date',)  # always give by default alphabetical order
     search_fields = ('role',)
 
-    # @is_token_validate
-    # @role_required(ADMIN, USER, VIEW)
+    # permission_classes = (TokenValidate,)
+    # permission_classes = (RoleValidate, ADMIN, USER, EDIT,)
+
     def get_queryset(self):
         queryset = get_all_role()
         return queryset

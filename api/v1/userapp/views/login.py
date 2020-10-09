@@ -100,10 +100,12 @@ class LoginApiView(APIView):
                         }, status=status.HTTP_401_UNAUTHORIZED)
                     else:
                         set_login_trail(email, 'Success')
+                        user = get_user_by_email(email)
                         return Response({
                             STATE: SUCCESS,
                             RESULTS: SUCCESSFUL_LOGIN,
                             Token: token,
+                            ID_STRING: user.id_string
                         }, status=status.HTTP_200_OK)
                 else:
                     set_login_trail(email, 'Fail')
@@ -118,7 +120,7 @@ class LoginApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Login')
+            logger().log(ex, 'HIGH', module = 'Admin', sub_module = 'User Login')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),

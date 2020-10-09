@@ -9,12 +9,14 @@ Token = 'token'
 STATE = 'state'
 DATA = 'data'
 ERROR = 'error'
-DUPLICATE = 'duplicate'
+DUPLICATE = 'duplicate',
+ID_STRING = 'id_string'
 
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER="User is not authorised"
 UNAUTHORIZED_UTILITY="User not authorised for utility"
 INVALID_TOKEN="User token is not valid"
+TOKEN_EXPIRED="This token is expired. please log in again to continue"
 SUCCESSFUL_LOGIN="User logged in successfully"
 SUCCESSFUL_LOGOUT="User logged out successfully"
 SUCCESSFULLY_DATA_SAVE='Data has been saved successfully.'

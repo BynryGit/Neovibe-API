@@ -9,6 +9,7 @@ from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
+from v1.userapp.models.user_role import get_role_count_by_user
 from v1.userapp.models.user_status import UserStatus
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
@@ -91,16 +92,21 @@ class UserSubTypeSerializer(serializers.ModelSerializer):
 
 class UserListSerializer(serializers.ModelSerializer):
 
+    def get_role(self, obj):
+        role = get_role_count_by_user(obj.id)
+        return role
+
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    role = serializers.SerializerMethodField('get_role')
 
     class Meta:
         model = User
-        fields = ('id_string', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date', 'tenant',
-                  'department',  'status')
+        fields = ('id_string', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date',
+                  'role', 'tenant', 'department',  'status')
 
 
 class UserViewSerializer(serializers.ModelSerializer):
