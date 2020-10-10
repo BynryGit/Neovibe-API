@@ -100,4 +100,16 @@ def check_role_exists(id):
     return UserRole.objects.filter(user_id=id, is_active=True)
 
 
+def get_role_count_by_user(user_id):
+    role = UserRole.objects.filter(user_id=user_id).count()
+    if role == 1:
+        role_obj = UserRole.objects.get(user_id=user_id)
+        get_role = get_role_by_id(role_obj.role_id)
+        return get_role.role
+    elif role > 1:
+        return 'multiple'
+    else:
+        return 'No Role Attached'
+
+
 

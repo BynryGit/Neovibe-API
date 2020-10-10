@@ -14,4 +14,7 @@ urlpatterns = [
     path('complaint/<uuid:id_string>',ConsumerComplaintDetail.as_view()),
     path('<uuid:id_string>/scheme',ConsumerScheme.as_view()),
     path('scheme/<uuid:id_string>',ConsumerSchemeDetail.as_view()),
+    path('<uuid:id_string>/categories',ConsumerCategoryList.as_view()),
+    path('<uuid:id_string>/sub-categories',ConsumerSubCategoryList.as_view()),
+    path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),
 ]

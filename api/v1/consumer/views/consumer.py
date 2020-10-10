@@ -14,10 +14,14 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.complaint.models.complaint import *
+from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.consumer.models.consumer_ownership import ConsumerOwnership
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
+from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
 from v1.consumer.serializers.consumer import ConsumerSerializer, ConsumerViewSerializer
 from v1.complaint.serializers.complaint import *
+from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.payment.models.consumer_payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
@@ -36,6 +40,9 @@ from v1.userapp.decorators import is_token_validate, role_required
 # Tables used: ConsumerMaster
 # Auther: Rohan
 # Created on: 19/05/2020
+from v1.utility.models.utility_master import get_utility_by_id_string
+
+
 class Consumer(GenericAPIView):
 
     @is_token_validate
@@ -699,3 +706,102 @@ class ConsumerSchemeDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/categories
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer categories
+# Usage: API will fetch required data for Consumer categories
+# Tables used: Consumer category
+# Author: Rohan
+# Created on: 09/10/2020
+class ConsumerCategoryList(generics.ListAPIView):
+    try:
+        serializer_class = ConsumerCategoryListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ConsumerCategory.objects.filter(utility = utility, is_active = True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Consumer categories not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Consumer')
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/sub-categories
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer sub categories
+# Usage: API will fetch required data for Consumer sub categories
+# Tables used: Consumer sub category
+# Author: Rohan
+# Created on: 09/10/2020
+class ConsumerSubCategoryList(generics.ListAPIView):
+    try:
+        serializer_class = ConsumerSubCategoryListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ConsumerSubCategory.objects.filter(utility = utility, is_active = True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Consumer sub categories not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Consumer')
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/ownerships
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer ownerships
+# Usage: API will fetch required data for Consumer ownerships
+# Tables used: Consumer ownership
+# Author: Rohan
+# Created on: 09/10/2020
+class ConsumerOwnershipList(generics.ListAPIView):
+    try:
+        serializer_class = ConsumerOwnershipListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ConsumerOwnership.objects.filter(utility = utility, is_active = True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Consumer ownership not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Consumer')

@@ -23,7 +23,7 @@ class PaymentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = ('id_string', 'state', 'transaction_amount', 'transaction_charges', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel')
+        fields = ('id_string', 'state', 'transaction_amount', 'transaction_charges', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel', 'transaction_date', 'receipt_no')
 
 
 class PaymentViewSerializer(serializers.ModelSerializer):
@@ -61,7 +61,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             payment.identification_id = obj.id
             payment.receipt_no = generate_receipt_no(payment)
             payment.save()
-        return payment
+            return payment
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)

@@ -38,4 +38,8 @@ urlpatterns = [
     # This api used for utility dropdown end
     path('service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
     path('service_type/<uuid:id_string>', ServiceTypeDetail.as_view(), name="service_type_detail"),
+    path('<uuid:id_string>/areas', AreaList.as_view()),
+    path('<uuid:id_string>/sub-areas', SubAreaList.as_view()),
+    path('<uuid:id_string>/cities', CityList.as_view()),
+    path('<uuid:id_string>/states', StateList.as_view()),
 ]

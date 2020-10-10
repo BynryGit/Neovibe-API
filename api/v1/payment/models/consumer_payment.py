@@ -19,6 +19,11 @@ PAYMENT_DICT = {
     "REJECTED" : 2,
     "PENDING"  : 3,
 }
+PAYMENT_TYPE_DICT = {
+    "REGISTRATION"  : 0,
+    "BILL"          : 1,
+    "SERVICE"       : 2,
+}
 
 # Table Header
 # Module: Consumer Care | Sub-Module : Billing
@@ -38,6 +43,11 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
         (2, 'REJECTED'),
         (3, 'PENDING'),
     )
+    PAYMENT_TYPE_CHOICES = (
+        (0, 'REGISTRATION'),
+        (1, 'BILL'),
+        (2, 'SERVICE'),
+    )
 
     state_machine = {
         PAYMENT_DICT['CREATED']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
@@ -50,7 +60,7 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='tenant')
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
     payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
@@ -115,6 +125,7 @@ def get_payment_by_id_string(id_string):
         return Payment.objects.get(id_string = id_string)
     except:
         return False
+
 
 
 def get_payments_by_consumer_no(consumer_no):

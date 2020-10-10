@@ -100,8 +100,8 @@ class UserBankDetail(GenericAPIView):
     def put(self, request, id_string):
         try:
             # TODO for testing.py start
-            # if not request.data._mutable:
-            #     request.data._mutable = True
+            if not request.data._mutable:
+                request.data._mutable = True
             # TODO for testing.py end
             user_obj = get_user_by_id_string(id_string)
             if user_obj:
