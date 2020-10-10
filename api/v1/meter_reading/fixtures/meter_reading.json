@@ -109,7 +109,7 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"name": "Activity 1"
+			"name": "Manual"
 		}
 	},
 	{
@@ -118,7 +118,7 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"name": "Activity 2"
+			"name": "Photo"
 		}
 	},
 	{
@@ -399,7 +399,7 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"name": "Schedule type 1"
+			"name": "Meter Reading"
 		}
 	},
 	{
@@ -408,7 +408,16 @@
 		"fields": {
 			"tenant": 4,
 			"utility": 2,
-			"name": "Schedule type 2"
+			"name": "Bill Distribution"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "meter_reading.ScheduleType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Notices"
 		}
 	},
 	{
@@ -419,6 +428,8 @@
 			"utility": 2,
 			"schedule_type_id": 1,
 			"activity_type_id": 1,
+			"area_id": 1,
+			"sub_area_id": 1,
 			"bill_cycle_id": 1,
 			"schedule_status_id": 1,
 			"bill_month": "202007"
@@ -432,6 +443,8 @@
 			"utility": 2,
 			"schedule_type_id": 2,
 			"activity_type_id": 2,
+			"area_id": 1,
+			"sub_area_id": 1,
 			"bill_cycle_id": 2,
 			"schedule_status_id": 2,
 			"bill_month": "202007"

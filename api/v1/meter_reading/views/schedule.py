@@ -41,8 +41,9 @@ class ScheduleList(generics.ListAPIView):
         search_fields = ('utility__name',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            token, user_obj = is_token_valid(self.request.headers['authorization'])
+            if token:
+                if is_authorized(1,1,1,user_obj):
                     queryset = ScheduleTbl.objects.filter(is_active=True)
                     return queryset
                 else:
