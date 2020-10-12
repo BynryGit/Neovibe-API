@@ -8,4 +8,4 @@ class TenantRegionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantRegionTbl
-        fields = ('id_string', 'region')
+        fields = ('__all__')

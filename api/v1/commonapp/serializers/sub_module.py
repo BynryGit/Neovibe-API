@@ -20,7 +20,7 @@ class SubModuleListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubModule
-        fields = ('id_string', 'module', 'name', 'is_active')
+        fields = ('__all__')
 
 
 class SubModuleViewSerializer(serializers.ModelSerializer):
