@@ -5,6 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from rest_framework.response import Response
 from api.constants import ADMIN, VIEW, TENANT, EDIT
+from v1.tenant.models.tenant_module import get_tenant_module_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -48,6 +49,52 @@ class TenantSubModuleList(generics.ListAPIView):
                 if is_authorized(1,1,1,1):
                     queryset = TenantSubModuleTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT/SUBMODULE')
+        raise APIException
+
+
+# API Header
+# API end Point: api/v1/tenant/module/id_string/submodule/list
+# API verb: GET
+# Package: Basic
+# Modules: Tenant
+# Sub Module: SubModule
+# Interaction: Tenant Submodule list by module is_string
+# Usage: API will fetch Tenant submodule list against single module
+# Tables used: 2.3 Tenant SubModule
+# Author: Akshay
+# Created on: 14/10/2020
+
+
+class TenantSubModuleListByModule(generics.ListAPIView):
+    try:
+        serializer_class = TenantSubModuleViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant__id_string',)
+        ordering = ('tenant__name',)  # always give by default alphabetical order
+        search_fields = ('tenant__name',)
+
+        def get_queryset(self):
+            token, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if token:
+                if is_authorized(1,1,1,user_obj):
+                    tenant_module_obj = get_tenant_module_by_id_string(self.kwargs['id_string'])
+                    print("obj",tenant_module_obj, "id",tenant_module_obj.id)
+                    if tenant_module_obj:
+                        queryset = TenantSubModuleTbl.objects.filter(module_id=tenant_module_obj.id, is_active=True)
+                        return queryset
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
