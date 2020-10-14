@@ -42,8 +42,9 @@ class UtilitySubModuleList(generics.ListAPIView):
         search_fields = ('submodule_name', 'tenant__name', 'utility__name',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
                     queryset = UtilitySubModuleTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset
                 else:
@@ -73,7 +74,7 @@ class UtilitySubModuleDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(request.headers['token']):
+            if is_token_valid(request.headers['Authorization']):
                 # payload = get_payload(request.headers['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end

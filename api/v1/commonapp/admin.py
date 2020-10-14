@@ -18,6 +18,7 @@ from v1.commonapp.models.state import State
 from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.models.sub_area import SubArea
 from v1.commonapp.models.sub_module import SubModule
+from v1.commonapp.models.products import Product
 from v1.commonapp.models.transition_configuration import TransitionConfiguration
 
 admin.site.register(Region)
@@ -40,3 +41,4 @@ admin.site.register(StateConfiguration)
 admin.site.register(TransitionConfiguration)
 admin.site.register(EmailConfiguration)
 admin.site.register(NotificationTemplate)
+admin.site.register(Product)

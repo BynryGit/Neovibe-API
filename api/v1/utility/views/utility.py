@@ -41,8 +41,9 @@ class UtilityList(generics.ListAPIView):
         search_fields = ('name', 'tenant__name',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
                     queryset = UtilityMasterTbl.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -137,15 +138,13 @@ class UtilityDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             # Checking authentication start
-            if is_token_valid(request.headers['token']):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
                 # payload = get_payload(request.headers['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-
+                
                     utility_obj = get_utility_by_id_string(id_string)
                     if utility_obj:
                         serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})

@@ -57,7 +57,7 @@ class RoleValidate(permissions.BasePermission):
 
 def is_token_validate(function):
     def wrap(request, *args, **kwargs):
-        token = args[0].headers['Token']
+        token = args[0].headers['Authorization']
         decoded_token = get_payload(token)
         if decoded_token:
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
@@ -87,7 +87,7 @@ def is_token_validate(function):
 def role_required(module_id, sub_module_id, privilege_id):
     def _method_wrapper(view_method):
         def _arguments_wrapper(request, *args, **kwargs):
-            token = args[0].headers['Token']
+            token = args[0].headers['Authorization']
             decoded_token = get_payload(token)
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
             roles = get_user_role_by_user_id(user_obj.id)

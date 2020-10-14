@@ -44,7 +44,7 @@ class TenantSubModuleList(generics.ListAPIView):
         search_fields = ('tenant__name',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
+            if is_token_valid(self.request.headers['Authorization']):
                 if is_authorized(1,1,1,1):
                     queryset = TenantSubModuleTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset
