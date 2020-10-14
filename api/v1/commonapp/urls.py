@@ -11,7 +11,6 @@ from v1.commonapp.views.module import ModuleList
 from v1.commonapp.views.sub_modules import SubModule, SubModuleList
 from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
 from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail
-from v1.commonapp.views.category import ConsumerCategoryList
 from v1.commonapp.views.products import ProductList
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 # from v1.userapp.views.role_type import RoleType, RoleTypeList
@@ -33,7 +32,6 @@ urlpatterns = [
     path('department/<uuid:id_string>', Department.as_view()),
     path('department/list', DepartmentList.as_view()),
     path('module/list', ModuleList.as_view()),
-    path('category/list', ConsumerCategoryList.as_view()),
     path('submodule/<uuid:id_string>', SubModule.as_view()),
     path('submodule/list', SubModuleList.as_view()),
     # This api used for utility dropdown start
