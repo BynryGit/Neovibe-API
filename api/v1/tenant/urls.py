@@ -7,7 +7,8 @@ from v1.tenant.views.tenant_invoice_payment import TenantInvoicePaymentList, Ten
 from v1.tenant.views.tenant_subscription import TenantSubscriptionList, TenantSubscription, TenantSubscriptionDetail
 from v1.tenant.views.tenant import TenantList,TenantDetail,Tenant
 from v1.tenant.views.tenant_module import TenantModuleList, TenantModule, TenantModuleDetail
-from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModuleDetail, TenantSubModule
+from v1.tenant.views.tenant_sub_module import TenantSubModuleList, TenantSubModuleDetail, TenantSubModule, \
+    TenantSubModuleListByModule
 from v1.tenant.views.tenant_subscription_plan import TenantSubscriptionPlanList
 from v1.tenant.views.tenant_subscription_plan_rate import TenantSubscriptionPlanRateList
 from v1.tenant.views.tenant_summary import TenantSummaryDetail
@@ -28,6 +29,7 @@ urlpatterns = [
     path('<uuid:id_string>/submodule/list', TenantSubModuleList.as_view(), name='tenant_submodule_list'),
     path('<uuid:id_string>/submodule', TenantSubModule.as_view(), name='tenant_submodule'),
     path('submodule/<uuid:id_string>', TenantSubModuleDetail.as_view(), name='tenant_submodule_details'),
+    path('module/<uuid:id_string>/submodule/list', TenantSubModuleListByModule.as_view(), name='tenant_submodule_list_by_module'),
 
     path('<uuid:id_string>/bank/list', TenantBankList.as_view(), name='tenant_bank_list'),
     path('<uuid:id_string>/bank', TenantBank.as_view(), name='tenant_bank'),

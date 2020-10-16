@@ -45,7 +45,7 @@ class TenantList(generics.ListAPIView):
         search_fields = ('name', 'email_id',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
+            if is_token_valid(self.request.headers['Authorization']):
                 if is_authorized(1,1,1,1):
                     queryset = TenantMasterTbl.objects.filter(is_active=True)
                     return queryset

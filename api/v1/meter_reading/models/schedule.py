@@ -14,6 +14,8 @@
 # <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.meter_reading.models.activity_type import get_activity_type_by_id
 from v1.meter_reading.models.bill_cycle import get_bill_cycle_by_id
 from v1.meter_reading.models.schedule_status import get_schedule_status_by_id
@@ -32,6 +34,8 @@ class Schedule(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     schedule_type_id = models.BigIntegerField(null=True, blank=True) #Meter Reading, Bill Distribution, Notices
     activity_type_id = models.BigIntegerField(null=True, blank=True) #Manual, Photo, SpotBill, SmartMeter
+    area_id = models.BigIntegerField(null=True, blank=True)
+    sub_area_id = models.BigIntegerField(null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
@@ -66,6 +70,16 @@ class Schedule(models.Model):
     def get_schedule_status(self):
         schedule_status = get_schedule_status_by_id(self.schedule_status_id)
         return schedule_status
+
+    @property
+    def get_area_name(self):
+        area = get_area_by_id(self.area_id)
+        return area
+
+    @property
+    def get_sub_area_name(self):
+        sub_area = get_sub_area_by_id(self.sub_area_id)
+        return sub_area
 
     def __str__(self):
         return str(self.id_string)
