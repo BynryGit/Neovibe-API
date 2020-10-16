@@ -11,7 +11,7 @@ from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, No
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.payment.models.consumer_payment import get_payment_by_id_string, PAYMENT_DICT
+from v1.payment.models.payment import get_payment_by_id_string, PAYMENT_DICT
 from v1.payment.serializer.payment import *
 from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
@@ -78,23 +78,47 @@ class Registration(GenericAPIView):
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
     def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['Authorization'])
-            user = get_user_by_id_string(user_id_string)
-            serializer = RegistrationSerializer(data=request.data)
-            print(request.data)
-            if serializer.is_valid(raise_exception=False):
-                registration_obj = serializer.create(serializer.validated_data, user)
-                # view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    # RESULT: view_serializer.data,
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULT: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
+            with transaction.atomic():
+                transactions = []
+                payment = {}
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                if 'transactions' in request.data:
+                    transactions = request.data.pop('transactions')
+                if 'payment' in request.data:
+                    payment = request.data.pop('payment')
+                registration_serializer = RegistrationSerializer(data=request.data)
+                if registration_serializer.is_valid(raise_exception=False):
+                    registration_obj = registration_serializer.create(registration_serializer.validated_data, user)
+                    # payment and transaction save code start
+                    if payment and transactions:
+                        payment_serializer = PaymentSerializer(data=payment)
+                        if payment_serializer.is_valid(raise_exception=True):
+                            payment_obj = payment_serializer.create(payment_serializer.validated_data, user)
+                            payment_obj.identification_id = registration_obj.id
+                            payment_obj.save()
+                            for item in transactions:
+                                transaction_serializer = PaymentTransactionSerializer(data=item)
+                                if transaction_serializer.is_valid(raise_exception=True):
+                                    transaction_obj = transaction_serializer.create(transaction_serializer.validated_data, user)
+                                    transaction_obj.utility = registration_obj.utility
+                                    transaction_obj.tenant = registration_obj.tenant
+                                    transaction_obj.payment_id = payment_obj.id
+                                    transaction_obj.identification_id = registration_obj.id
+                                    transaction_obj.save()
+                                    # payment and transaction save code end
+                    view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(registration_serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print(e)
             logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
             res = self.handle_exception(e)
             return Response({

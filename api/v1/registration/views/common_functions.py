@@ -14,7 +14,7 @@ from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.consumer.signals.signals import after_registration_approved
-from v1.payment.models.consumer_payment import get_payment_by_id_string
+from v1.payment.models.payment import get_payment_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.registration.signals.signals import registration_approved
 from v1.registration.views.notifications import registration_email_to_consumer
@@ -38,6 +38,12 @@ def set_validated_data(validated_data):
         area = get_area_by_id_string(validated_data["area_id"])
         if area:
             validated_data["area_id"] = area.id
+        else:
+            raise CustomAPIException("Area not found.",status_code=status.HTTP_404_NOT_FOUND)
+    if "billing_area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["billing_area_id"])
+        if area:
+            validated_data["billing_area_id"] = area.id
         else:
             raise CustomAPIException("Area not found.",status_code=status.HTTP_404_NOT_FOUND)
     if "registration_type_id" in validated_data:
@@ -64,6 +70,18 @@ def set_validated_data(validated_data):
             validated_data["city_id"] = city.id
         else:
             raise CustomAPIException("City not found.", status.HTTP_404_NOT_FOUND)
+    if "billing_state_id" in validated_data:
+        state = get_state_by_id_string(validated_data["billing_state_id"])
+        if state:
+            validated_data["billing_state_id"] = state.id
+        else:
+            raise CustomAPIException("State not found.", status.HTTP_404_NOT_FOUND)
+    if "billing_city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["billing_city_id"])
+        if city:
+            validated_data["billing_city_id"] = city.id
+        else:
+            raise CustomAPIException("City not found.", status.HTTP_404_NOT_FOUND)
     if "scheme_id" in validated_data:
         scheme = get_scheme_by_id_string(validated_data["scheme_id"])
         if scheme:
@@ -74,6 +92,12 @@ def set_validated_data(validated_data):
         sub_area = get_sub_area_by_id_string(validated_data["sub_area_id"])
         if sub_area:
             validated_data["sub_area_id"] = sub_area.id
+        else:
+            raise CustomAPIException("Sub area not found.", status.HTTP_404_NOT_FOUND)
+    if "billing_sub_area_id" in validated_data:
+        sub_area = get_sub_area_by_id_string(validated_data["billing_sub_area_id"])
+        if sub_area:
+            validated_data["billing_sub_area_id"] = sub_area.id
         else:
             raise CustomAPIException("Sub area not found.", status.HTTP_404_NOT_FOUND)
     if "payment_id" in validated_data:

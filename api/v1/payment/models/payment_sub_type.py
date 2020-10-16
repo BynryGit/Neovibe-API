@@ -21,6 +21,8 @@ from django.db import models  # importing package for database
 class PaymentSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    payment_type_id = models.BigIntegerField(null=True, blank=True)
+    gl_code_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -29,7 +31,7 @@ class PaymentSubType(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name + " " + str(self.id_string)
+        return self.name
 
     def __unicode__(self):
         return self.name

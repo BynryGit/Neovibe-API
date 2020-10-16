@@ -62,11 +62,11 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     state = models.BigIntegerField(choices=CHOICES, default=0)
     payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
-    payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
+    # payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
     identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
-    transaction_amount = models.FloatField(blank=False, null=False)
-    transaction_charges = models.FloatField(blank=False, null=False)
+    transaction_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
+    transaction_charges = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
     transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     payment_mode_id = models.BigIntegerField(null=True, blank=True)
     payment_channel_id = models.BigIntegerField(null=True, blank=True)
