@@ -1,5 +1,4 @@
 from django.urls import path
-
 from v1.userapp.views.document import UserDocument
 from v1.userapp.views.login import LoginApiView, LogoutApiView
 from v1.userapp.views.notes import UserNote

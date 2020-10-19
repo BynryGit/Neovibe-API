@@ -35,8 +35,10 @@ class PaymentType(models.Model):
         return self.name
 
 def get_payment_type_by_id_string(id_string):
-    return PaymentType.objects.get(id_string = id_string)
-
+    try:
+        return PaymentType.objects.get(id_string = id_string)
+    except:
+        return False
 
 def get_payment_type_by_id(id):
     try:
