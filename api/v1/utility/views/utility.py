@@ -73,7 +73,7 @@ class Utility(GenericAPIView):
     def post(self, request):
         try:
             # Checking authentication start
-            if is_token_valid(request.headers['token']):
+            if is_token_valid(request.headers['Authorization']):
                 # payload = get_payload(request.headers['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
