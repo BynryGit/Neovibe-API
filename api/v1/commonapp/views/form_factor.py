@@ -4,11 +4,17 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-
+from v1.commonapp.views.logger import logger
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from rest_framework.exceptions import APIException
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.common_functions import is_token_valid, is_authorized
 from api.messages import STATE, DATA, SUCCESS, ERROR, EXCEPTION
 from v1.commonapp.models.form_factor import get_form_factor_by_tenant_id_string, get_form_factor_by_id_string
 from v1.commonapp.serializers.form_factor import FormFactorListSerializer, FormFactorViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.commonapp.models.form_factor import FormFactor as FormFactorTbl
 
 
 # API Header
@@ -25,17 +31,29 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 # Updated on: 12/05/2020
 
 class FormFactorList(generics.ListAPIView):
-    serializer_class = FormFactorListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = FormFactorListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    def get_queryset(self):
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name', 'utility__name',)
 
-        queryset = get_form_factor_by_tenant_id_string(1)
-        utility_id_string = self.request.query_params.get('utility', None)
-
-        if utility_id_string is not None:
-            queryset = queryset.filter(utility__id_string=utility_id_string)
-        return queryset
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = FormFactorTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
 
 
 # API Header

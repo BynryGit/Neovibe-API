@@ -8,7 +8,6 @@ urlpatterns = [
     path('', Role.as_view()),
     path('<uuid:id_string>', RoleDetail.as_view()),
     path('list/', RoleList.as_view()),
-
     path('<uuid:id_string>/privileges/', RolePrivilegeDetail.as_view()),
 
 ]
