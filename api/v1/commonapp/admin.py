@@ -11,6 +11,7 @@ from v1.commonapp.models.form_factor import FormFactor
 from v1.commonapp.models.gl_code import GlCode
 from v1.commonapp.models.module import Module
 from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notification import Notification
 from v1.commonapp.models.notification_template import NotificationTemplate
 from v1.commonapp.models.region import Region
 from v1.commonapp.models.service_type import ServiceType
@@ -44,3 +45,4 @@ admin.site.register(TransitionConfiguration)
 admin.site.register(EmailConfiguration)
 admin.site.register(NotificationTemplate)
 admin.site.register(Product)
+admin.site.register(Notification)
