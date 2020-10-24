@@ -11,15 +11,16 @@ import fsm
 
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
-    "CREATED"      : 0,
-    "PENDING"      : 1,
-    "APPROVED"     : 2,
-    "REJECTED"     : 3,
-    "HOLD"         : 4,
-    "CANCELED"     : 5,
-    "COMPLETED"    : 6,
-    "ARCHIVED"     : 7,
+    "CREATED": 0,
+    "PENDING": 1,
+    "APPROVED": 2,
+    "REJECTED": 3,
+    "HOLD": 4,
+    "CANCELED": 5,
+    "COMPLETED": 6,
+    "ARCHIVED": 7,
 }
+
 
 # table header
 # module: S&M,Consumer care and ops | sub-module - Registration
@@ -46,15 +47,16 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     )
 
     state_machine = {
-        REGISTRATION_DICT['CREATED']    :   (REGISTRATION_DICT['PENDING'],),
-        REGISTRATION_DICT['PENDING']    :   (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['HOLD'], REGISTRATION_DICT['REJECTED'],
-                                                        REGISTRATION_DICT['CANCELED'], REGISTRATION_DICT['PENDING'],),
-        REGISTRATION_DICT['APPROVED']   :   (REGISTRATION_DICT['COMPLETED'], REGISTRATION_DICT['APPROVED'],),
-        REGISTRATION_DICT['REJECTED']   :   (REGISTRATION_DICT['PENDING'], REGISTRATION_DICT['REJECTED'],),
-        REGISTRATION_DICT['HOLD']       :   (REGISTRATION_DICT['PENDING'], REGISTRATION_DICT['HOLD'],),
-        REGISTRATION_DICT['CANCELED']   :   (REGISTRATION_DICT['ARCHIVED'], REGISTRATION_DICT['CANCELED'],),
-        REGISTRATION_DICT['COMPLETED']  :   (REGISTRATION_DICT['ARCHIVED'], REGISTRATION_DICT['COMPLETED'],),
-        REGISTRATION_DICT['ARCHIVED']   :   (REGISTRATION_DICT['ARCHIVED'],),
+        REGISTRATION_DICT['CREATED']: (REGISTRATION_DICT['PENDING'],),
+        REGISTRATION_DICT['PENDING']: (
+        REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['HOLD'], REGISTRATION_DICT['REJECTED'],
+        REGISTRATION_DICT['CANCELED'], REGISTRATION_DICT['PENDING'],),
+        REGISTRATION_DICT['APPROVED']: (REGISTRATION_DICT['COMPLETED'], REGISTRATION_DICT['APPROVED'],),
+        REGISTRATION_DICT['REJECTED']: (REGISTRATION_DICT['PENDING'], REGISTRATION_DICT['REJECTED'],),
+        REGISTRATION_DICT['HOLD']: (REGISTRATION_DICT['PENDING'], REGISTRATION_DICT['HOLD'],),
+        REGISTRATION_DICT['CANCELED']: (REGISTRATION_DICT['ARCHIVED'], REGISTRATION_DICT['CANCELED'],),
+        REGISTRATION_DICT['COMPLETED']: (REGISTRATION_DICT['ARCHIVED'], REGISTRATION_DICT['COMPLETED'],),
+        REGISTRATION_DICT['ARCHIVED']: (REGISTRATION_DICT['ARCHIVED'],),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -71,7 +73,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     address_line_1 = models.CharField(max_length=200, blank=True, null=True)
     street = models.CharField(max_length=200, blank=True, null=True)
-    zipcode = models.CharField(max_length=200,null=True, blank=True)
+    zipcode = models.CharField(max_length=200, null=True, blank=True)
     country_id = models.BigIntegerField(null=True, blank=True)
     state_id = models.BigIntegerField(null=True, blank=True)
     city_id = models.BigIntegerField(null=True, blank=True)
@@ -132,13 +134,14 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
 
 def get_registration_by_id_string(id_string):
     try:
-        return Registration.objects.get(id_string = id_string)
+        return Registration.objects.get(id_string=id_string)
     except:
-        return  False
+        return False
+
 
 def get_registration_by_id(id):
     try:
-        return Registration.objects.get(id = id)
+        return Registration.objects.get(id=id)
     except:
-        return  False
+        return False
 # Create Consumer Registration table end.

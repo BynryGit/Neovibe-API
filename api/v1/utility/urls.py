@@ -2,6 +2,8 @@ __author__ = "aki"
 
 from django.urls import path
 from v1.utility.views.document import UtilityDocumentList, UtilityDocumentDetail
+from v1.utility.views.document_sub_type import UtilityDocumentSubTypeList
+from v1.utility.views.document_type import UtilityDocumentTypeList
 from v1.utility.views.notes import UtilityNoteList, UtilityNoteDetail
 from v1.utility.views.numformat import UtilityNumformatDetail
 from v1.utility.views.status import UtilityStatusList
@@ -32,4 +34,6 @@ urlpatterns = [
     path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(),name='numformat'),
 
     path('<uuid:id_string>/status/list', UtilityStatusList.as_view(),name='utility_status_list'),
+    path('<uuid:id_string>/document-type/list', UtilityDocumentTypeList.as_view(), name='utility_document_type_list'),
+    path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(), name='utility_document_sub_type_list'), 
 ]

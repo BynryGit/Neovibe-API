@@ -10,3 +10,10 @@ class DocumentSubTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = DocumentSubType
         fields = ('name', 'id_string')
+
+
+class DocumentSubTypeListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DocumentSubType
+        fields = ('name', 'id_string')
