@@ -68,5 +68,5 @@ def get_submodule_by_module_id(id):
 
 
 def get_sub_module_by_name(name):
-    sub_module = SubModule.objects.get(name=name)
+    sub_module = SubModule.objects.get(name=name,is_active=True)
     return sub_module.id

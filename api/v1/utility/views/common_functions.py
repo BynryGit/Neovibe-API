@@ -1,5 +1,7 @@
 __author__ = "aki"
 
+from v1.commonapp.models.module import get_module_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.tenant.models.tenant_city import get_tenant_city_by_id_string
 from v1.tenant.models.tenant_country import get_tenant_country_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
@@ -28,4 +30,18 @@ def set_utility_validated_data(validated_data):
     if "status_id" in validated_data:
         status = get_utility_status_by_id_string(validated_data["status_id"])
         validated_data["status_id"] = status.id
+    return validated_data
+
+
+def set_utility_module_validated_data(validated_data):
+    if "module_id" in validated_data:
+        module = get_module_by_id_string(validated_data["module_id"])
+        validated_data["module_id"] = module.id
+    return validated_data
+
+
+def set_utility_submodule_validated_data(validated_data):
+    if "submodule_id" in validated_data:
+        submodule = get_sub_module_by_id_string(validated_data["submodule_id"])
+        validated_data["submodule_id"] = submodule.id
     return validated_data
