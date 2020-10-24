@@ -70,14 +70,14 @@ class TenantMaster(models.Model):
 
 def get_tenant_by_id(id):
     try:
-        return TenantMaster.objects.get(id=id)
+        return TenantMaster.objects.get(id=id, is_active=True)
     except:
         return False
 
 
 def get_tenant_by_id_string(id_string):
     try:
-        return TenantMaster.objects.get(id_string=id_string)
+        return TenantMaster.objects.get(id_string=id_string, is_active=True)
     except:
         return False
 
