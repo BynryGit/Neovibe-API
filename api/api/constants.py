@@ -11,8 +11,8 @@ from v1.utility.models.utility_master import get_utility_by_name
 # *********** MODULE CONSTANTS **************
 # S_AND_M = get_module_by_name('S&M')
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
-# CONSUMER_OPS = get_module_by_name('Consumer Ops')
-CONSUMER_OPS = ''
+CONSUMER_OPS = get_module_by_name('Consumer Ops')
+# CONSUMER_OPS = ''
 # ADMIN = get_module_by_name('Admin')
 
 
@@ -28,8 +28,8 @@ CONSUMER = ''
 # METER_READING = get_sub_module_by_name('Meter reading')
 PAYMENT = get_sub_module_by_name('Payment')
 # PAYROLL = get_sub_module_by_name('Payroll')
-# REGISTRATION = get_sub_module_by_name('Registrations')
-REGISTRATION = ''
+REGISTRATION = get_sub_module_by_name('Registrations')
+# REGISTRATION = ''
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')

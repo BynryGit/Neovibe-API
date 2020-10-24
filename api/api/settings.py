@@ -62,10 +62,10 @@ INSTALLED_APPS = [
     'v1.store',
     'v1.supplier',
     'v1.survey',
-    'v1.tenant',
-    'v1.tender',
     'v1.userapp',
+    'v1.tender',
     'v1.utility',
+    'v1.tenant',
 ]
 
 MIDDLEWARE = [
@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
         'USER': 'postgres',
-        'PASSWORD': 'root',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
     }

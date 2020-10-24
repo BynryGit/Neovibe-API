@@ -8,8 +8,10 @@ from v1.commonapp.models.document_sub_type import DocumentSubType
 from v1.commonapp.models.document_type import DocumentType
 from v1.commonapp.models.email_configurations import EmailConfiguration
 from v1.commonapp.models.form_factor import FormFactor
+from v1.commonapp.models.gl_code import GlCode
 from v1.commonapp.models.module import Module
 from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notification import Notification
 from v1.commonapp.models.notification_template import NotificationTemplate
 from v1.commonapp.models.region import Region
 from v1.commonapp.models.service_type import ServiceType
@@ -22,6 +24,7 @@ from v1.commonapp.models.products import Product
 from v1.commonapp.models.transition_configuration import TransitionConfiguration
 
 admin.site.register(Region)
+admin.site.register(GlCode)
 admin.site.register(Country)
 admin.site.register(State)
 admin.site.register(City)
@@ -42,3 +45,4 @@ admin.site.register(TransitionConfiguration)
 admin.site.register(EmailConfiguration)
 admin.site.register(NotificationTemplate)
 admin.site.register(Product)
+admin.site.register(Notification)

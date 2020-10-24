@@ -303,7 +303,7 @@ from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_s
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.source_type import get_source_type_by_id_string
-from v1.payment.models.consumer_payment import get_payment_by_id_string
+from v1.payment.models.payment import get_payment_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 
 

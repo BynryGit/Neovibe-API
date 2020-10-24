@@ -23,7 +23,7 @@ from v1.consumer.serializers.consumer import ConsumerSerializer, ConsumerViewSer
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
-from v1.payment.models.consumer_payment import get_payments_by_consumer_no, get_payment_by_id_string
+from v1.payment.models.payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
 from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer

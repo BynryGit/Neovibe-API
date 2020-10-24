@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from api.constants import *
 from api.messages import *
 from v1.commonapp.views.logger import logger
-from v1.payment.models.consumer_payment import get_payment_by_id_string, PAYMENT_DICT, PAYMENT_TYPE_DICT
+from v1.payment.models.payment import get_payment_by_id_string, PAYMENT_DICT, PAYMENT_TYPE_DICT
 from v1.payment.serializer.payment import PaymentViewSerializer
 from v1.registration.signals.signals import registration_payment_approved, registration_approved, after_payment
 from v1.userapp.decorators import is_token_validate, role_required

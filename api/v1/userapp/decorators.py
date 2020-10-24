@@ -20,7 +20,7 @@ class TokenValidate(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        token = request.headers['Token']
+        token = request.headers['Authorization']
 
     def token_validate(function):
         def wrap(request, *args, **kwargs):
@@ -44,7 +44,7 @@ class RoleValidate(permissions.BasePermission):
     
     def has_permission(self, request, view):
         print('=======666666666666666========',view)
-        token = request.headers['Token']
+        token = request.headers['Authorization']
         decoded_token = get_payload(token)
         user_obj = get_user_by_id_string(decoded_token['user_id_string'])
         roles = get_user_role_by_user_id(user_obj.id)
