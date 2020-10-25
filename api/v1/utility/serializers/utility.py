@@ -3,7 +3,6 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
-
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl
@@ -32,7 +31,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
     short_name = serializers.CharField(required=False, max_length=200)
     name = serializers.CharField(required=True, max_length=200)
     phone_no = serializers.CharField(required=False, max_length=200)
-    email_id = serializers.CharField(required=True, max_length=200)
+    email_id = serializers.CharField(required=False, max_length=200)
     region_id = serializers.IntegerField(required=False)
     country_id = serializers.IntegerField(required=False)
     state_id = serializers.IntegerField(required=False)
@@ -53,6 +52,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
                 tenant = validated_data.pop('tenant')
             utility_obj = super(UtilityMasterSerializer, self).create(validated_data)
             utility_obj.created_by = user.id
+            utility_obj.updated_by = user.id
             utility_obj.tenant_id = tenant
             utility_obj.save()
             return utility_obj

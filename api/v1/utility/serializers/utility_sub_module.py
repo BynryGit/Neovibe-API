@@ -6,6 +6,7 @@ from django.utils import timezone
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl
+from v1.utility.views.common_functions import set_utility_submodule_validated_data
 
 
 class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
@@ -19,11 +20,23 @@ class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
 
 
 class UtilitySubModuleSerializer(serializers.ModelSerializer):
-    is_active = serializers.BooleanField(required=True)
+    submodule_id = serializers.UUIDField(required=True)
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('is_active',)
+        fields = ('id_string', 'tenant', 'utility', 'module_id', 'submodule_id', 'is_active', 'created_by',
+                  'updated_by', 'created_date', 'updated_date')
+
+    def create(self, validated_data, user):
+        validated_data = set_utility_submodule_validated_data(validated_data)
+        if UtilitySubModuleTbl.objects.filter(submodule_id=validated_data["submodule_id"]).exists():
+            return False
+        with transaction.atomic():
+            utility_submodule_obj = super(UtilitySubModuleSerializer, self).create(validated_data)
+            utility_submodule_obj.updated_by = user.id
+            utility_submodule_obj.updated_date = timezone.now()
+            utility_submodule_obj.save()
+            return utility_submodule_obj
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():

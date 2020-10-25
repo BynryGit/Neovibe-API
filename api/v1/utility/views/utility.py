@@ -1,6 +1,7 @@
 __author__ = "aki"
 
 import traceback
+from django.db import transaction
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -15,6 +16,8 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
+from v1.utility.serializers.utility_module import UtilityModuleSerializer
+from v1.utility.serializers.utility_sub_module import UtilitySubModuleSerializer
 
 
 # API Header
@@ -28,6 +31,7 @@ from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityM
 # Tables used: 2.1. Utility Master
 # Author: Akshay
 # Created on: 08/05/2020
+
 
 class UtilityList(generics.ListAPIView):
     try:
@@ -73,48 +77,76 @@ class Utility(GenericAPIView):
     def post(self, request):
         print('------------')
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['Authorization']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-                    # Todo fetch user from request start
-                    user = User.objects.get(id=2)
-                    # Todo fetch user from request end
-
-                    serializer = UtilityMasterSerializer(data=request.data)
-                    if serializer.is_valid():
-                        utility_obj = serializer.create(serializer.validated_data, user)
-                        if utility_obj:
-                            serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULT: serializer.data,
-                            }, status=status.HTTP_201_CREATED)
+            with transaction.atomic():
+                token, user_obj = is_token_valid(self.request.headers['Authorization'])
+                if token:
+                    if is_authorized(1,1,1,user_obj):
+                        user = User.objects.get(id=2)# need to delete
+                        if 'utility_module_submodule' in request.data:
+                            utility_module_submodule = request.data.pop('utility_module_submodule')
+                        serializer = UtilityMasterSerializer(data=request.data)
+                        if serializer.is_valid():
+                            utility_obj = serializer.create(serializer.validated_data, user)
+                            if utility_obj:
+                                if utility_module_submodule:
+                                    for utility_mod_sub in utility_module_submodule:
+                                        print(utility_mod_sub['utility_module'])
+                                        utility_module_serializer = UtilityModuleSerializer(data=utility_mod_sub['utility_module'])
+                                        if utility_module_serializer.is_valid():
+                                            utility_module_obj = utility_module_serializer.create(utility_module_serializer.validated_data, user)
+                                            utility_module_obj.tenant = utility_obj.tenant
+                                            utility_module_obj.utility = utility_obj
+                                            utility_module_obj.save()
+                                            if utility_module_obj:
+                                                for submodule in utility_mod_sub['utility_submodule']:
+                                                    print(submodule)
+                                                    utility_submodule_serializer = UtilitySubModuleSerializer(data=submodule)
+                                                    if utility_submodule_serializer.is_valid():
+                                                        utility_submodule_obj = utility_submodule_serializer.create(utility_submodule_serializer.validated_data, user)
+                                                        utility_submodule_obj.tenant = utility_obj.tenant
+                                                        utility_submodule_obj.utility = utility_obj
+                                                        utility_submodule_obj.module_id = utility_module_obj.module_id
+                                                        utility_submodule_obj.save()
+                                                    else:
+                                                        return Response({
+                                                            STATE: ERROR,
+                                                            RESULT: utility_submodule_serializer.errors,
+                                                        }, status=status.HTTP_400_BAD_REQUEST)
+                                            else:
+                                                return Response({
+                                                    STATE: DUPLICATE,
+                                                    RESULT: DATA_ALREADY_EXISTS,
+                                                }, status=status.HTTP_409_CONFLICT)
+                                        else:
+                                            return Response({
+                                                STATE: ERROR,
+                                                RESULT: utility_module_serializer.errors,
+                                            }, status=status.HTTP_400_BAD_REQUEST)
+                                serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                                return Response({
+                                    STATE: SUCCESS,
+                                    RESULT: serializer.data,
+                                }, status=status.HTTP_201_CREATED)
+                            else:
+                                return Response({
+                                    STATE: DUPLICATE,
+                                    RESULT: DATA_ALREADY_EXISTS,
+                                }, status=status.HTTP_409_CONFLICT)
                         else:
                             return Response({
-                                STATE: DUPLICATE,
-                                RESULT: DATA_ALREADY_EXISTS,
-                            }, status=status.HTTP_409_CONFLICT)
+                                STATE: ERROR,
+                                RESULT: serializer.errors,
+                            }, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response({
                             STATE: ERROR,
-                            RESULT: serializer.errors,
-                        }, status=status.HTTP_400_BAD_REQUEST)
+                        }, status=status.HTTP_403_FORBIDDEN)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
-            else:
-                return Response({
-                    STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    }, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

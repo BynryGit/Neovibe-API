@@ -4,6 +4,7 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.transition_configuration import TransitionConfiguration, TRANSITION_CHANNEL_DICT, \
     is_transition_configuration_exists
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -26,6 +27,7 @@ from v1.registration.models import registrations
 def is_data_verified(request):
     return True
 
+
 # Function for converting id_strings to id's
 def set_validated_data(validated_data):
     if "utility_id" in validated_data:
@@ -33,19 +35,19 @@ def set_validated_data(validated_data):
         if utility:
             validated_data["utility_id"] = utility.id
         else:
-            raise CustomAPIException("Utility not found.",status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "area_id" in validated_data:
         area = get_area_by_id_string(validated_data["area_id"])
         if area:
             validated_data["area_id"] = area.id
         else:
-            raise CustomAPIException("Area not found.",status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Area not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "billing_area_id" in validated_data:
         area = get_area_by_id_string(validated_data["billing_area_id"])
         if area:
             validated_data["billing_area_id"] = area.id
         else:
-            raise CustomAPIException("Area not found.",status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Area not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "registration_type_id" in validated_data:
         registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
         if registration_type:
@@ -132,11 +134,12 @@ def set_validated_data(validated_data):
             raise CustomAPIException("Source not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
 
+
 # Function for generating regisration number aaccording to utility
 def generate_registration_no(registration):
     try:
-        format_obj = UtilityServiceNumberFormat.objects.get(tenant = registration.tenant, utility = registration.utility,
-                                                            item = UTILITY_SERVICE_NUMBER_ITEM_DICT['REGISTRATION'])
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=registration.tenant, utility=registration.utility,
+                                                            item=UTILITY_SERVICE_NUMBER_ITEM_DICT['REGISTRATION'])
         if format_obj.is_prefix == True:
             registration_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
@@ -147,15 +150,16 @@ def generate_registration_no(registration):
             format_obj.save()
         return registration_no
     except Exception as e:
-        raise CustomAPIException("Rgistration no generation failed.",status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        raise CustomAPIException("Registration no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # Function for performing registration transition events
 def perform_events(next_state, registration, transition_object):
     try:
         if is_transition_configuration_exists(transition_object, next_state, registration.utility):
-            transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
-                                                utility=registration.utility, is_active=True)
+            transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object,
+                                                                     transition_state=next_state,
+                                                                     utility=registration.utility, is_active=True)
             for transition_obj in transition_objs:
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
                     registration_email_to_consumer(registration.id, transition_obj.id)
@@ -166,7 +170,7 @@ def perform_events(next_state, registration, transition_object):
         else:
             pass
     except Exception as e:
-        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations', registration = registration.id)
+        logger().log(e, 'LOW', module='Consumer Ops', sub_module='Registrations', registration=registration.id)
         pass
 
 
@@ -180,3 +184,24 @@ def perform_signals(next_state, registration):
         raise CustomAPIException("Registration transition failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+# Function for saving registration timeline
+def save_registration_timeline(obj, module, sub_module, title, text, state, user):
+    try:
+        LifeCycle(
+            tenant=obj.tenant,
+            utility=obj.utility,
+            module_id=module.id,
+            sub_module_id=sub_module.id,
+            object_id=obj.id,
+            title=title,
+            lifecycle_text=text,
+            state=state,
+            log_date=datetime.now(),
+            is_active=True,
+            created_by=user.id,
+            updated_by=user.id,
+            created_date=datetime.now(),
+            updated_date=datetime.now()
+        ).save()
+    except:
+        raise CustomAPIException("Registration timeline save failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
