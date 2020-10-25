@@ -15,6 +15,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, UtilitySubModule as UtilitySubModuleTbl
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer, UtilitySubModuleSerializer
+from v1.utility.models.utility_module import get_utility_module_by_id_string
 
 
 # API Header
@@ -54,6 +55,53 @@ class UtilitySubModuleList(generics.ListAPIView):
     except Exception as ex:
         logger().log(ex, 'ERROR')
         raise APIException
+
+
+
+# API Header
+# API end Point: api/v1/utility/module/id_string/submodule/list
+# API verb: GET
+# Package: Basic
+# Modules: utility
+# Sub Module: SubModule
+# Interaction: utility Submodule list by module is_string
+# Usage: API will fetch utility submodule list against single module
+# Tables used: 2.3 utility SubModule
+# Author: Akshay
+# Created on: 14/10/2020
+
+
+class UtilitySubModuleListByModule(generics.ListAPIView):
+    try:
+        serializer_class = UtilitySubModuleViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant__id_string',)
+        ordering = ('tenant__name',)  # always give by default alphabetical order
+        search_fields = ('tenant__name',)
+
+        def get_queryset(self):
+            token, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if token:
+                if is_authorized(1,1,1,user_obj):
+                    utility_module_obj = get_utility_module_by_id_string(self.kwargs['id_string'])
+                    if utility_module_obj:
+                        queryset = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.id, is_active=True)
+                        return queryset
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY/SUBMODULE')
+        raise APIException
+
 
 
 # API Header

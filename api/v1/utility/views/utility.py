@@ -71,6 +71,7 @@ class Utility(GenericAPIView):
     serializer_class = UtilityMasterSerializer
 
     def post(self, request):
+        print('------------')
         try:
             # Checking authentication start
             if is_token_valid(request.headers['Authorization']):

@@ -12,7 +12,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from api.messages import STATE, DATA, SUCCESS, ERROR, EXCEPTION
 from v1.commonapp.models.form_factor import get_form_factor_by_tenant_id_string, get_form_factor_by_id_string
-from v1.commonapp.serializers.form_factor import FormFactorListSerializer, FormFactorViewSerializer
+from v1.commonapp.serializers.form_factor import FormFactorSerializer, FormFactorViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.models.form_factor import FormFactor as FormFactorTbl
 
@@ -32,7 +32,7 @@ from v1.commonapp.models.form_factor import FormFactor as FormFactorTbl
 
 class FormFactorList(generics.ListAPIView):
     try:
-        serializer_class = FormFactorListSerializer
+        serializer_class = FormFactorSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)

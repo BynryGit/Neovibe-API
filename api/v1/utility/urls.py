@@ -8,9 +8,10 @@ from v1.utility.views.status import UtilityStatusList
 from v1.utility.views.utility import UtilityList, UtilityDetail, Utility
 from v1.utility.views.summary import UtilitySummaryDetail
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
-from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail
+from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail,UtilitySubModuleListByModule
 from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
+
 
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
 
     path('<uuid:id_string>/submodule/list', UtilitySubModuleList.as_view(), name='utility_submodule_list'),
     path('submodule/<uuid:id_string>', UtilitySubModuleDetail.as_view(), name='utility_submodule_details'),
+    path('module/<uuid:id_string>/submodule/list', UtilitySubModuleListByModule.as_view(), name='utility_submodule_list_by_module'),
 
     path('<uuid:id_string>/documents', UtilityDocumentList.as_view(), name='utility_document_list'),
     path('document/<uuid:id_string>', UtilityDocumentDetail.as_view(), name='utility_document_details'),

@@ -22,7 +22,7 @@ class UtilityModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('is_active',)
+        fields = ('id_string', 'module_name','is_active',)
 
     def update(self, instance, validated_data, user):
         with transaction.atomic():
