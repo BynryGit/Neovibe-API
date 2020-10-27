@@ -65,10 +65,11 @@ class RoleList(generics.ListAPIView):
 
 class Role(GenericAPIView):
 
-    @is_token_validate
-    @role_required(ADMIN, USER, EDIT)
+    # @is_token_validate
+    # @role_required(ADMIN, USER, EDIT)
     def post(self, request, format=None):
         try:
+            print('-------------',request.data)
             serializer = RoleSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 user_id_string = get_user_from_token(request.headers['token'])

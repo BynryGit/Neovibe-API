@@ -12,7 +12,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from api.messages import *
 from v1.commonapp.models.department import Department as DepartmentTbl,get_department_by_tenant_id_string, get_department_by_id_string
-from v1.commonapp.serializers.department import DepartmentListSerializer, DepartmentViewSerializer
+from v1.commonapp.serializers.department import DepartmentSerializer, DepartmentViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 # API Header
@@ -31,7 +31,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 class DepartmentList(generics.ListAPIView):
     try:
-        serializer_class = DepartmentListSerializer
+        serializer_class = DepartmentSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)

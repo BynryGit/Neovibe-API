@@ -25,8 +25,10 @@ class RegistrationListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
-                  'street', 'zipcode', 'state', 'area', 'created_date')
+        fields = (
+            'id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
+            'street', 'zipcode', 'state', 'area', 'created_date')
+
 
 class RegistrationViewSerializer(serializers.ModelSerializer):
     area = AreaListSerializer(many=False, source='get_area')
@@ -45,13 +47,16 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
-                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'registration_date', 'state',
-                  'area', 'category', 'sub_category', 'created_date')
+        fields = (
+            'id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
+            'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'registration_date',
+            'state',
+            'area', 'category', 'sub_category', 'created_date')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    phone_mobile = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field phone_mobile is required."})
+    phone_mobile = serializers.CharField(required=True, max_length=200,
+                                         error_messages={"required": "The field phone_mobile is required."})
     area_id = serializers.CharField(required=False, max_length=200)
     billing_area_id = serializers.CharField(required=False, max_length=200)
     utility_id = serializers.CharField(required=False, max_length=200)
@@ -75,11 +80,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = Registration
         fields = ('__all__')
 
-
     def create(self, validated_data, user):
         with transaction.atomic():
-            validated_data =  set_validated_data(validated_data)
-            if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility_id=validated_data['utility_id']).exists():
+            validated_data = set_validated_data(validated_data)
+            if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant,
+                                           utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
             else:
                 registration_obj = super(RegistrationSerializer, self).create(validated_data)
@@ -92,7 +97,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
-        if Registration.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'],tenant=user.tenant,utility=instance.utility).exists():
+        if Registration.objects.exclude(id_string=instance.id_string).filter(
+                phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility=instance.utility).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

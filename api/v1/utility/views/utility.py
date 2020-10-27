@@ -78,6 +78,7 @@ class Utility(GenericAPIView):
     # @is_token_validate
     # @role_required(ADMIN, UTILITY, EDIT)
     def post(self, request):
+        print('------------')
         try:
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])

@@ -25,6 +25,7 @@ class UtilityModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityModuleTbl
+        # fields = ('id_string', 'module_name','is_active',)
         fields = ('id_string', 'tenant', 'utility', 'subscription_id', 'module_id', 'is_active', 'created_by',
                   'updated_by', 'created_date', 'updated_date')
 

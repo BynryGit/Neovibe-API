@@ -1,5 +1,6 @@
 from django.contrib import admin
 from v1.commonapp.models.area import Area
+from v1.commonapp.models.audit_log import AuditLog
 from v1.commonapp.models.city import City
 from v1.commonapp.models.country import Country
 from v1.commonapp.models.department import Department
@@ -21,6 +22,7 @@ from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.models.sub_area import SubArea
 from v1.commonapp.models.sub_module import SubModule
 from v1.commonapp.models.products import Product
+from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.transition_configuration import TransitionConfiguration
 
 admin.site.register(Region)
@@ -46,3 +48,5 @@ admin.site.register(EmailConfiguration)
 admin.site.register(NotificationTemplate)
 admin.site.register(Product)
 admin.site.register(Notification)
+admin.site.register(LifeCycle)
+admin.site.register(AuditLog)

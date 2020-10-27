@@ -15,14 +15,9 @@ from v1.utility.serializers.utility import UtilitySerializer
 
 class PrivilegeListSerializer(serializers.ModelSerializer):
 
-    # tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    # utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-
     class Meta:
         model = Privilege
-        fields = ('id_string', 'name', 'created_date', 'updated_date')
+        fields = ('id_string', 'name')
 
 
 class PrivilegeSerializer(serializers.ModelSerializer):
