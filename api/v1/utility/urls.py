@@ -15,7 +15,6 @@ from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
 
 
-
 urlpatterns = [
     path('', Utility.as_view(), name='utility'),
     path('list', UtilityList.as_view(), name='utility_list'),
