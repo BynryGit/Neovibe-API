@@ -21,6 +21,7 @@ from v1.registration.serializers.registration_status import RegistrationStatusLi
 from v1.registration.signals.signals import registration_payment_approved, registration_payment_created
 from api.messages import *
 from v1.registration.models.registration_status import RegistrationStatus
+from v1.registration.views.tasks import save_registration_timeline
 from v1.userapp.decorators import is_token_validate, role_required
 
 
@@ -49,7 +50,7 @@ class RegistrationList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     queryset = RegTbl.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -57,8 +58,7 @@ class RegistrationList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
-
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')
 
 
 # API Header
@@ -90,6 +90,11 @@ class Registration(GenericAPIView):
                 registration_serializer = RegistrationSerializer(data=request.data)
                 if registration_serializer.is_valid(raise_exception=False):
                     registration_obj = registration_serializer.create(registration_serializer.validated_data, user)
+                    # Timeline code start
+                    transaction.on_commit(
+                        lambda: save_registration_timeline.delay(registration_obj, "Registration", "Text", "CREATED",
+                                                                 user))
+                    # Timeline code end
                     # payment and transaction save code start
                     if payment and transactions:
                         payment_serializer = PaymentSerializer(data=payment)
@@ -97,17 +102,25 @@ class Registration(GenericAPIView):
                             payment_obj = payment_serializer.create(payment_serializer.validated_data, user)
                             payment_obj.identification_id = registration_obj.id
                             payment_obj.save()
+                            # Timeline code start
+                            transaction.on_commit(
+                                lambda: save_registration_timeline.delay(registration_obj, "Payment", "Text",
+                                                                         "CREATED",
+                                                                         user))
+                            # Timeline code end
                             for item in transactions:
                                 transaction_serializer = PaymentTransactionSerializer(data=item)
                                 if transaction_serializer.is_valid(raise_exception=True):
-                                    transaction_obj = transaction_serializer.create(transaction_serializer.validated_data, user)
+                                    transaction_obj = transaction_serializer.create(
+                                        transaction_serializer.validated_data, user)
                                     transaction_obj.utility = registration_obj.utility
                                     transaction_obj.tenant = registration_obj.tenant
                                     transaction_obj.payment_id = payment_obj.id
                                     transaction_obj.identification_id = registration_obj.id
                                     transaction_obj.save()
                                     # payment and transaction save code end
-                    view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                    view_serializer = RegistrationViewSerializer(instance=registration_obj,
+                                                                 context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
@@ -119,7 +132,7 @@ class Registration(GenericAPIView):
                     }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
-            logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Registations')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -177,7 +190,8 @@ class RegistrationDetail(GenericAPIView):
                 serializer = RegistrationSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
                     registration_obj = serializer.update(registration_obj, serializer.validated_data, user)
-                    view_serializer = RegistrationViewSerializer(instance=registration_obj, context={'request': request})
+                    view_serializer = RegistrationViewSerializer(instance=registration_obj,
+                                                                 context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
@@ -193,7 +207,7 @@ class RegistrationDetail(GenericAPIView):
                     RESULT: REGISTRATION_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Registations')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -240,13 +254,12 @@ class RegistrationPayment(GenericAPIView):
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
-            logger().log(e, 'HIGH', module = 'Consumer Ops', Sub_module='Registration/payments')
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration/payments')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
 
     @is_token_validate
     @role_required(CONSUMER_OPS, REGISTRATION, EDIT)
@@ -275,7 +288,7 @@ class RegistrationPayment(GenericAPIView):
                     RESULT: PAYMENT_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Consumer Ops', Sub_module='Registration/payments')
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Registration/payments')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -384,7 +397,7 @@ class RegistrationStatusList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     queryset = RegistrationStatus.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -392,7 +405,7 @@ class RegistrationStatusList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')
 
 
 # API Header
@@ -533,9 +546,9 @@ class RegistrationNoteList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
-                    queryset = Notes.objects.filter(registration_id = registration.id, is_active=True)
+                    queryset = Notes.objects.filter(registration_id=registration.id, is_active=True)
                     if queryset:
                         return queryset
                     else:
@@ -545,7 +558,7 @@ class RegistrationNoteList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')
 
 
 # API Header
@@ -584,7 +597,7 @@ class RegistrationNote(GenericAPIView):
                     RESULT: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Consumer Ops', sub_module = 'Registations')
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Registations')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -610,9 +623,9 @@ class RegistrationPaymentList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
-                    queryset = Payment.objects.filter(identification_id = registration.id, is_active=True)
+                    queryset = Payment.objects.filter(identification_id=registration.id, is_active=True)
                     if queryset:
                         return queryset
                     else:
@@ -622,4 +635,4 @@ class RegistrationPaymentList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Registations')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')

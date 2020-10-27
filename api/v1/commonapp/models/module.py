@@ -50,6 +50,13 @@ def get_module_by_id(id):
         return False
 
 
+def get_module_by_key(key):
+    try:
+        return Module.objects.get(key=key, is_active=True)
+    except:
+        return False
+
+
 def get_module_by_id_string(id_string):
     try:
         return Module.objects.get(id_string=id_string, is_active=True)

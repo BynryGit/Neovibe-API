@@ -3,7 +3,7 @@ __author__ = "aki"
 import uuid
 import os
 from v1.commonapp.models.module import get_module_by_name
-from v1.commonapp.models.sub_module import get_sub_module_by_name
+from v1.commonapp.models.sub_module import get_sub_module_by_name, get_sub_module_by_key, get_sub_module_id_by_key
 from v1.userapp.models.privilege import get_privilege_by_name
 from v1.utility.models.utility_master import get_utility_by_name
 
@@ -13,8 +13,8 @@ from v1.utility.models.utility_master import get_utility_by_name
 S_AND_M = ""
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
 CONSUMER_CARE = ""
-# CONSUMER_OPS = get_module_by_name('Consumer Ops')
-CONSUMER_OPS = ""
+CONSUMER_OPS = get_module_by_name('Consumer Ops')
+# CONSUMER_OPS = ""
 # ADMIN = get_module_by_name('Admin')
 ADMIN = ""
 
@@ -30,7 +30,7 @@ CONSUMER = ''
 # CONTRACT = get_sub_module_by_name('S&M-Contract')
 CONTRACT = ""
 # DISPATCHER = get_sub_module_by_name('Dispatcher')
-DISPATCHER =""
+DISPATCHER = ""
 # EMPLOYEE = get_sub_module_by_name('Employee')
 EMPLOYEE = ""
 # METER_READING = get_sub_module_by_name('Meter reading')
@@ -39,8 +39,8 @@ METER_READING = ""
 PAYMENT = ""
 # PAYROLL = get_sub_module_by_name('Payroll')
 PAYROLL = ""
-# REGISTRATION = get_sub_module_by_name('Registrations')
-REGISTRATION = ''
+REGISTRATION = get_sub_module_id_by_key('REGISTRATION')
+# REGISTRATION = ''
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')
@@ -59,7 +59,7 @@ TENANT = ''
 
 # *********** PRIVILEGE CONSTANTS **************
 # VIEW = get_privilege_by_name('View')
-# EDIT = get_privilege_by_name('Edit')
+EDIT = get_privilege_by_name('Edit')
 # DELETE = get_privilege_by_name('Delete')
 
 

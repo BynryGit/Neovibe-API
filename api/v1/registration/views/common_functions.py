@@ -183,25 +183,3 @@ def perform_signals(next_state, registration):
     except Exception as e:
         raise CustomAPIException("Registration transition failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-# Function for saving registration timeline
-def save_registration_timeline(obj, module, sub_module, title, text, state, user):
-    try:
-        LifeCycle(
-            tenant=obj.tenant,
-            utility=obj.utility,
-            module_id=module.id,
-            sub_module_id=sub_module.id,
-            object_id=obj.id,
-            title=title,
-            lifecycle_text=text,
-            state=state,
-            log_date=datetime.now(),
-            is_active=True,
-            created_by=user.id,
-            updated_by=user.id,
-            created_date=datetime.now(),
-            updated_date=datetime.now()
-        ).save()
-    except:
-        raise CustomAPIException("Registration timeline save failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

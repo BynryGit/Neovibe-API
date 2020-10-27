@@ -113,7 +113,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
         'USER': 'postgres',
-        'PASSWORD': 'root',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -188,8 +188,8 @@ STATIC_URL = '/static/'
 # CELERY STUFF
 BROKER_URL = 'redis://localhost:6379'  # Todo redis broker is use for message transform
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['application/json', 'application/x-python-serialize']
+CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
