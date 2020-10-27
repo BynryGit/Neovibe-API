@@ -22,6 +22,7 @@ from django.db import models  # importing package for database
 
 class Module(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    key = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(blank=True, null=True)
     updated_by = models.BigIntegerField(blank=True, null=True)
