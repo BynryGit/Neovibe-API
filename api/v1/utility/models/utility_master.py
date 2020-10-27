@@ -62,7 +62,7 @@ def get_utility_by_id(id):
 
 def get_utility_by_id_string(id_string):
     try:
-        return UtilityMaster.objects.get(id_string = id_string)
+        return UtilityMaster.objects.get(id_string=id_string, is_active=True)
     except:
         return False
 

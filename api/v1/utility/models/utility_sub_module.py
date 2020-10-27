@@ -31,6 +31,7 @@ class UtilitySubModule(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     module_id =  models.BigIntegerField(null=True, blank=True)
     submodule_id =  models.BigIntegerField(null=True, blank=True)
+    label = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -38,11 +39,10 @@ class UtilitySubModule(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.utility
-
+        return str(self.utility)
 
     def __unicode__(self):
-        return self.utility
+        return str(self.utility)
 
     @property
     def get_utility_module(self):
