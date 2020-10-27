@@ -38,9 +38,9 @@ class UtilitySubModuleList(generics.ListAPIView):
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('tenant__id_string', 'utility__id_string')
-        ordering_fields = ('submodule_name', 'tenant__name', 'utility__name')
-        ordering = ('submodule_name',)  # always give by default alphabetical order
-        search_fields = ('submodule_name', 'tenant__name', 'utility__name',)
+        ordering_fields = ('tenant__name', 'utility__name')
+        ordering = ('utility__name',)  # always give by default alphabetical order
+        search_fields = ('tenant__name', 'utility__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])

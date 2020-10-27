@@ -9,7 +9,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from master.models import User, get_user_by_id_string
+from master.models import get_user_by_id_string
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, DATA_ALREADY_EXISTS, RESULT
 from v1.commonapp.models.module import get_module_by_id
 from v1.userapp.decorators import is_token_validate, role_required
@@ -58,7 +58,7 @@ class UtilityList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'ERROR')
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY')
         raise APIException
 
 
@@ -75,8 +75,8 @@ class UtilityList(generics.ListAPIView):
 # Created on: 13/05/2020
 
 class Utility(GenericAPIView):
-    # @is_token_validate
-    # @role_required(ADMIN, UTILITY, EDIT)
+    @is_token_validate
+    @role_required(ADMIN, UTILITY, EDIT)
     def post(self, request):
         print('------------')
         try:
@@ -158,37 +158,21 @@ class Utility(GenericAPIView):
 # Created on: 08/05/2020
 
 class UtilityDetail(GenericAPIView):
-    serializer_class = UtilityMasterSerializer
-
+    @is_token_validate
+    @role_required(ADMIN, UTILITY, VIEW)
     def get(self, request, id_string):
         try:
-            # Checking authentication start
-            response, user_obj = is_token_valid(self.request.headers['Authorization'])
-            if response:
-                if is_authorized(1,1,1,user_obj):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-                
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
-                        serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULT: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            utility_obj = get_utility_by_id_string(id_string)
+            if utility_obj:
+                serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
             logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({
@@ -196,48 +180,31 @@ class UtilityDetail(GenericAPIView):
                 ERROR: str(traceback.print_exc(ex))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @is_token_validate
+    @role_required(ADMIN, UTILITY, EDIT)
     def put(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-                    # Todo fetch user from request start
-                    user = User.objects.get(id=2)
-                    # Todo fetch user from request end
-
-                    utility_obj = get_utility_by_id_string(id_string)
-                    if utility_obj:
-                        serializer = UtilityMasterSerializer(data=request.data)
-                        if serializer.is_valid():
-                            utility_obj = serializer.update(utility_obj, serializer.validated_data, user)
-                            serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULT: serializer.data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            utility_obj = get_utility_by_id_string(id_string)
+            if utility_obj:
+                serializer = UtilityMasterSerializer(data=request.data)
+                if serializer.is_valid():
+                    utility_obj = serializer.update(utility_obj, serializer.validated_data, user)
+                    serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: serializer.data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        RESULT: serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
             logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
             return Response({

@@ -7,6 +7,13 @@ from v1.commonapp.serializers.module import ModuleSerializer
 # from v1.userapp.serializers.user import PrivilegeSerializer
 
 
+class SubModuleShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SubModule
+        fields = ('id_string', 'name')
+
+
 class SubModuleSerializer(serializers.ModelSerializer):
     # module = ModuleSerializer(many=False, required=True, source='get_module')
 

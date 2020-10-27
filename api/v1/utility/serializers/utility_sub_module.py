@@ -3,6 +3,9 @@ __author__ = "aki"
 from rest_framework import serializers
 from django.db import transaction
 from django.utils import timezone
+from api.settings import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.serializers.module import ModuleShortViewSerializer
+from v1.commonapp.serializers.sub_module import SubModuleShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl
@@ -12,11 +15,15 @@ from v1.utility.views.common_functions import set_utility_submodule_validated_da
 class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
-    utility_module = serializers.ReadOnlyField(source='get_utility_module')
+    module_id = ModuleShortViewSerializer(many=False, source='get_module')
+    submodule_id = SubModuleShortViewSerializer(many=False, source='get_submodule')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('id_string', 'submodule_name', 'submodule_desc', 'utility_module', 'is_active', 'tenant', 'utility')
+        fields = ('id_string', 'label', 'created_date', 'updated_date', 'is_active', 'module_id', 'submodule_id',
+                  'tenant', 'utility')
 
 
 class UtilitySubModuleSerializer(serializers.ModelSerializer):

@@ -3,6 +3,8 @@ __author__ = "aki"
 from django.db import transaction
 from rest_framework import serializers
 from django.utils import timezone
+from api.settings import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.serializers.module import ModuleShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl
@@ -12,10 +14,14 @@ from v1.utility.views.common_functions import set_utility_module_validated_data
 class UtilityModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
+    module_id = ModuleShortViewSerializer(many=False, source='get_module')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('id_string', 'module_name', 'module_desc', 'subscription_id', 'is_active', 'tenant', 'utility',)
+        fields = ('id_string', 'is_active', 'label', 'created_date', 'updated_date', 'subscription_id', 'module_id',
+                  'tenant', 'utility',)
 
 
 class UtilityModuleSerializer(serializers.ModelSerializer):
@@ -25,7 +31,6 @@ class UtilityModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityModuleTbl
-        # fields = ('id_string', 'module_name','is_active',)
         fields = ('id_string', 'tenant', 'utility', 'subscription_id', 'module_id', 'is_active', 'created_by',
                   'updated_by', 'created_date', 'updated_date')
 

@@ -17,10 +17,11 @@ __author__ = "aki"
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+from v1.commonapp.models.module import get_module_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from v1.utility.models.utility_module import get_utility_module_by_id
 
 
 # Create Utility Sub Module table start.
@@ -45,9 +46,14 @@ class UtilitySubModule(models.Model):
         return str(self.utility)
 
     @property
-    def get_utility_module(self):
-        module = get_utility_module_by_id(self.module_id)
-        return module.module_name
+    def get_module(self):
+        module = get_module_by_id(self.module_id)
+        return module
+
+    @property
+    def get_submodule(self):
+        submodule = get_sub_module_by_id(self.submodule_id)
+        return submodule
 
 # Create Utility Sub Module table end.
 

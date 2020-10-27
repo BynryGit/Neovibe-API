@@ -1,7 +1,6 @@
 __author__ = "aki"
 
 import traceback
-
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
@@ -16,7 +15,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_module import get_utility_module_by_id_string, \
     UtilityModule as UtilityModuleTbl
-from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, UtilityModuleSerializer,UtilityModuleSerializer
+from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, UtilityModuleSerializer
 
 
 # API Header
@@ -34,14 +33,14 @@ from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, U
 
 class UtilityModuleList(generics.ListAPIView):
     try:
-        serializer_class = UtilityModuleSerializer
+        serializer_class = UtilityModuleViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('tenant__id_string', 'utility__id_string')
-        ordering_fields = ('module_name', 'tenant__name', 'utility__name')
-        ordering = ('module_name',)  # always give by default alphabetical order
-        search_fields = ('module_name', 'tenant__name', 'utility__name',)
+        ordering_fields = ('tenant__name', 'utility__name')
+        ordering = ('utility__name',)  # always give by default alphabetical order
+        search_fields = ('tenant__name', 'utility__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
