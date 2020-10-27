@@ -16,7 +16,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_module import get_utility_module_by_id_string, \
     UtilityModule as UtilityModuleTbl
-from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, UtilityModuleSerializer
+from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, UtilityModuleSerializer,UtilityModuleSerializer
 
 
 # API Header
@@ -34,7 +34,7 @@ from v1.utility.serializers.utility_module import UtilityModuleViewSerializer, U
 
 class UtilityModuleList(generics.ListAPIView):
     try:
-        serializer_class = UtilityModuleViewSerializer
+        serializer_class = UtilityModuleSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
