@@ -45,5 +45,5 @@ class UtilityStatusList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'ERROR')
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY/STATUS')
         raise APIException
