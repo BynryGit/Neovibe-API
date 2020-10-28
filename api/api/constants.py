@@ -55,7 +55,7 @@ TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
 # USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
-
+UTILITY = ""
 
 # *********** PRIVILEGE CONSTANTS **************
 # VIEW = get_privilege_by_name('View')

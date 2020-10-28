@@ -6,7 +6,6 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 
-
 class PaymentTransaction(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
         (0, 'CREATED'),
@@ -14,8 +13,10 @@ class PaymentTransaction(models.Model, fsm.FiniteStateMachineMixin):
     )
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='payment_transaction_tenant')
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='payment_transaction_utility')
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL,
+                               related_name='payment_transaction_tenant')
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL,
+                                related_name='payment_transaction_utility')
     identification_id = models.BigIntegerField(null=True, blank=True)
     transaction_type_id = models.BigIntegerField(null=True, blank=True)
     transaction_sub_type_id = models.BigIntegerField(null=True, blank=True)
@@ -31,7 +32,6 @@ class PaymentTransaction(models.Model, fsm.FiniteStateMachineMixin):
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-
 
     def __unicode__(self):
         return str(self.utility)

@@ -3,7 +3,6 @@ from rest_framework import serializers
 from v1.commonapp.common_functions import set_note_validated_data
 from v1.commonapp.models.notes import Notes
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
-from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.serializers.utility import UtilitySerializer
 
 
@@ -13,7 +12,7 @@ class NoteListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'note_name', 'note_color', 'note', 'created_date')
 
 
 class NoteViewSerializer(serializers.ModelSerializer):
@@ -25,9 +24,9 @@ class NoteViewSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'created_date')
 
 class NoteSerializer(serializers.ModelSerializer):
-    utility_id = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field utility_id is required."})
-    module_id = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field module_id is required."})
-    sub_module_id = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field sub_module_id is required."})
+    utility_id = serializers.CharField(required=False, max_length=200, error_messages={"required":"The field utility_id is required."})
+    module_id = serializers.CharField(required=False, max_length=200, error_messages={"required":"The field module_id is required."})
+    sub_module_id = serializers.CharField(required=False, max_length=200, error_messages={"required":"The field sub_module_id is required."})
     identification_id = serializers.CharField(required=False, max_length=200)
     note_name = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field note_name is required."})
     note = serializers.CharField(required=False, max_length=200)
