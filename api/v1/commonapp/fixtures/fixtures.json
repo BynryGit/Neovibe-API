@@ -98,8 +98,7 @@
     "fields": {
       "tenant": 1,
       "utility": 1,
-      "module_name": "S&M",
-      "module_desc": "S&M contains survey,reports,setting,user",
+      "module_id": 1,
       "is_active": "True"
     }
   },
@@ -109,8 +108,7 @@
     "fields": {
       "tenant": 1,
       "utility": 1,
-      "module_name": "Consumer Care",
-      "module_desc": "It contains registration,consumer,reports",
+      "module_id": 2,
       "is_active": "True"
     }
   },
@@ -120,8 +118,7 @@
     "fields": {
       "tenant": 1,
       "utility": 2,
-      "module_name": "S&M",
-      "module_desc": "S&M contains survey,reports,setting,user",
+      "module_id": 1,
       "is_active": "True"
     }
   },
@@ -131,8 +128,7 @@
     "fields": {
       "tenant": 1,
       "utility": 2,
-      "module_name": "Consumer Care",
-      "module_desc": "It contains registration,consumer,reports",
+      "module_id": 2,
       "is_active": "True"
     }
   },
@@ -142,8 +138,7 @@
     "fields": {
       "tenant": 2,
       "utility": 3,
-      "module_name": "Consumer Care",
-      "module_desc": "It contains registration,consumer,reports",
+      "module_id": 2,
       "is_active": "True"
     }
   },
@@ -154,8 +149,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "Dashboard",
-      "submodule_desc": "its used to display count of over all module",
+      "submodule_id": 1,
       "is_active": "True"
     }
   },
@@ -166,8 +160,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "Survey",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 2,
       "is_active": "True"
     }
   },
@@ -178,8 +171,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "Campaign",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 3,
       "is_active": "True"
     }
   },
@@ -190,8 +182,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "Consumer",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 4,
       "is_active": "True"
     }
   },
@@ -202,8 +193,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "Reports",
-      "submodule_desc": "Its user to generate reports in the system",
+      "submodule_id": 5,
       "is_active": "True"
     }
   },
@@ -214,8 +204,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "User",
-      "submodule_desc": "It's used to add,edit user in the system",
+      "submodule_id": 6,
       "is_active": "True"
     }
   },
@@ -226,8 +215,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 1,
-      "submodule_name": "Setting",
-      "submodule_desc": "Its used for configuration of the system",
+      "submodule_id": 7,
       "is_active": "True"
     }
   },
@@ -238,8 +226,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 2,
-      "submodule_name": "Dashboard",
-      "submodule_desc": "its user to display count of over all module",
+      "submodule_id": 1,
       "is_active": "True"
     }
   },
@@ -250,8 +237,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 2,
-      "submodule_name": "Consumer",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 10,
       "is_active": "True"
     }
   },
@@ -262,8 +248,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 2,
-      "submodule_name": "Reports",
-      "submodule_desc": "Its user to generate reports in the system",
+      "submodule_id": 11,
       "is_active": "True"
     }
   },
@@ -274,8 +259,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 2,
-      "submodule_name": "User",
-      "submodule_desc": "It's used to add,edit user in the system",
+      "submodule_id": 12,
       "is_active": "True"
     }
   },
@@ -286,8 +270,7 @@
       "tenant": 1,
       "utility": 1,
       "module_id": 2,
-      "submodule_name": "Setting",
-      "submodule_desc": "Its used for configuration of the system",
+      "submodule_id": 13,
       "is_active": "True"
     }
   },
@@ -298,8 +281,7 @@
       "tenant": 1,
       "utility": 2,
       "module_id": 3,
-      "submodule_name": "Dashboard",
-      "submodule_desc": "its used to display count of over all module",
+      "submodule_id": 14,
       "is_active": "True"
     }
   },
@@ -310,8 +292,7 @@
       "tenant": 1,
       "utility": 2,
       "module_id": 3,
-      "submodule_name": "Survey",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 15,
       "is_active": "True"
     }
   },
@@ -322,8 +303,7 @@
       "tenant": 1,
       "utility": 2,
       "module_id": 3,
-      "submodule_name": "Campaign",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 16,
       "is_active": "True"
     }
   },
@@ -334,167 +314,11 @@
       "tenant": 1,
       "utility": 2,
       "module_id": 3,
-      "submodule_name": "Consumer",
-      "submodule_desc": "Its used to add,edit records in the system",
+      "submodule_id": 17,
       "is_active": "True"
     }
   },
-  {
-    "pk": "17",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 3,
-      "submodule_name": "Reports",
-      "submodule_desc": "Its user to generate reports in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "18",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 3,
-      "submodule_name": "User",
-      "submodule_desc": "It's used to add,edit user in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "19",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 3,
-      "submodule_name": "Setting",
-      "submodule_desc": "Its used for configuration of the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "20",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 4,
-      "submodule_name": "Dashboard",
-      "submodule_desc": "its user to display count of over all module",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "21",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 4,
-      "submodule_name": "Consumer",
-      "submodule_desc": "Its used to add,edit records in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "22",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 4,
-      "submodule_name": "Reports",
-      "submodule_desc": "Its user to generate reports in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "23",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 4,
-      "submodule_name": "User",
-      "submodule_desc": "It's used to add,edit user in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "24",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 1,
-      "utility": 2,
-      "module_id": 4,
-      "submodule_name": "Setting",
-      "submodule_desc": "Its used for configuration of the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "25",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 2,
-      "utility": 3,
-      "module_id": 5,
-      "submodule_name": "Dashboard",
-      "submodule_desc": "its user to display count of over all module",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "26",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 2,
-      "utility": 3,
-      "module_id": 5,
-      "submodule_name": "Consumer",
-      "submodule_desc": "Its used to add,edit records in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "27",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 2,
-      "utility": 3,
-      "module_id": 5,
-      "submodule_name": "Reports",
-      "submodule_desc": "Its user to generate reports in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "28",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 2,
-      "utility": 3,
-      "module_id": 5,
-      "submodule_name": "User",
-      "submodule_desc": "It's used to add,edit user in the system",
-      "is_active": "True"
-    }
-  },
-  {
-    "pk": "29",
-    "model": "utility.UtilitySubModule",
-    "fields": {
-      "tenant": 2,
-      "utility": 3,
-      "module_id": 5,
-      "submodule_name": "Setting",
-      "submodule_desc": "Its used for configuration of the system",
-      "is_active": "True"
-    }
-  },
+
   {
     "pk": "1",
     "model": "commonapp.Module",
@@ -528,10 +352,17 @@
     }
   },
   {
+    "pk": "5",
+    "model": "commonapp.Module",
+    "fields": {
+      "name": "Admin",
+      "is_active": "True"
+    }
+  },
+  {
     "pk": "1",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 1,
       "module_id": 1,
       "name": "Dashboard",
       "is_active": "True"
@@ -541,7 +372,6 @@
     "pk": "2",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 2,
       "module_id": 1,
       "name": "Survey",
       "is_active": "True"
@@ -551,7 +381,6 @@
     "pk": "3",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 3,
       "module_id": 1,
       "name": "Campaign",
       "is_active": "True"
@@ -561,7 +390,6 @@
     "pk": "4",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 4,
       "module_id": 1,
       "name": "Registrations",
       "is_active": "True"
@@ -571,7 +399,6 @@
     "pk": "5",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 5,
       "module_id": 1,
       "name": "Consumers",
       "is_active": "True"
@@ -581,7 +408,6 @@
     "pk": "6",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 6,
       "module_id": 1,
       "name": "Reports",
       "is_active": "True"
@@ -591,7 +417,6 @@
     "pk": "7",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 7,
       "module_id": 1,
       "name": "Users",
       "is_active": "True"
@@ -601,7 +426,6 @@
     "pk": "8",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 8,
       "module_id": 1,
       "name": "Settings",
       "is_active": "True"
@@ -611,7 +435,6 @@
     "pk": "9",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 9,
       "module_id": 2,
       "name": "Dashboard",
       "is_active": "True"
@@ -621,7 +444,6 @@
     "pk": "10",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 10,
       "module_id": 2,
       "name": "Registrations",
       "is_active": "True"
@@ -631,7 +453,6 @@
     "pk": "11",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 11,
       "module_id": 2,
       "name": "Consumers",
       "is_active": "True"
@@ -641,7 +462,6 @@
     "pk": "12",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 12,
       "module_id": 2,
       "name": "Reports",
       "is_active": "True"
@@ -651,7 +471,6 @@
     "pk": "13",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 13,
       "module_id": 2,
       "name": "Users",
       "is_active": "True"
@@ -661,7 +480,6 @@
     "pk": "14",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 14,
       "module_id": 2,
       "name": "Settings",
       "is_active": "True"
@@ -671,7 +489,6 @@
     "pk": "15",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 15,
       "module_id": 3,
       "name": "Dashboard",
       "is_active": "True"
@@ -681,7 +498,6 @@
     "pk": "16",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 16,
       "module_id": 3,
       "name": "Registrations",
       "is_active": "True"
@@ -691,7 +507,6 @@
     "pk": "17",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 17,
       "module_id": 3,
       "name": "Consumers",
       "is_active": "True"
@@ -701,7 +516,6 @@
     "pk": "18",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 18,
       "module_id": 3,
       "name": "Meter Data",
       "is_active": "True"
@@ -711,7 +525,6 @@
     "pk": "19",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 19,
       "module_id": 3,
       "name": "Billing",
       "is_active": "True"
@@ -721,7 +534,6 @@
     "pk": "20",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 20,
       "module_id": 3,
       "name": "Payment",
       "is_active": "True"
@@ -731,7 +543,6 @@
     "pk": "21",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 21,
       "module_id": 3,
       "name": "Services",
       "is_active": "True"
@@ -741,7 +552,6 @@
     "pk": "22",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 22,
       "module_id": 3,
       "name": "Complaints",
       "is_active": "True"
@@ -751,7 +561,6 @@
     "pk": "23",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 23,
       "module_id": 3,
       "name": "Reports",
       "is_active": "True"
@@ -761,7 +570,6 @@
     "pk": "24",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 24,
       "module_id": 3,
       "name": "Users",
       "is_active": "True"
@@ -771,7 +579,6 @@
     "pk": "25",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 25,
       "module_id": 3,
       "name": "Settings",
       "is_active": "True"
@@ -781,9 +588,35 @@
     "pk": "25",
     "model": "commonapp.SubModule",
     "fields": {
-      "sub_module": 25,
       "module_id": 4,
       "name": "Admin",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "26",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "module_id": 5,
+      "name": "Utility Master",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "27",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "module_id": 5,
+      "name": "System Configuration",
+      "is_active": "True"
+    }
+  },
+  {
+    "pk": "28",
+    "model": "commonapp.SubModule",
+    "fields": {
+      "module_id": 5,
+      "name": "Utility Configuration",
       "is_active": "True"
     }
   },
@@ -1735,6 +1568,28 @@
       "tenant": 2,
       "token": "tguroli98753693",
       "form_factor_id": 2,
+      "is_active": "True"
+    }
+  },
+
+  {
+    "pk": "1",
+    "model": "userapp.UserUtility",
+    "fields": {
+      "tenant": 1,
+      "utility": 1,
+      "user_id": 1,
+      "is_active": "True"
+    }
+  },
+
+  {
+    "pk": "2",
+    "model": "userapp.UserUtility",
+    "fields": {
+      "tenant": 2,
+      "utility": 2,
+      "user_id": 1,
       "is_active": "True"
     }
   }

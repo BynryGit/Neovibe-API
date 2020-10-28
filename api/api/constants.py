@@ -13,8 +13,8 @@ from v1.utility.models.utility_master import get_utility_by_name
 S_AND_M = ""
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
 CONSUMER_CARE = ""
-CONSUMER_OPS = get_module_by_name('Consumer Ops')
-# CONSUMER_OPS = ""
+# CONSUMER_OPS = get_module_by_name('Consumer Ops')
+CONSUMER_OPS = ""
 # ADMIN = get_module_by_name('Admin')
 ADMIN = ""
 
@@ -39,8 +39,8 @@ METER_READING = ""
 PAYMENT = ""
 # PAYROLL = get_sub_module_by_name('Payroll')
 PAYROLL = ""
-REGISTRATION = get_sub_module_id_by_key('REGISTRATION')
-# REGISTRATION = ''
+# REGISTRATION = get_sub_module_id_by_key('REGISTRATION')
+REGISTRATION = ''
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')
@@ -55,11 +55,12 @@ TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
 # USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
+UTILITY = ''
 
 
 # *********** PRIVILEGE CONSTANTS **************
 # VIEW = get_privilege_by_name('View')
-EDIT = get_privilege_by_name('Edit')
+# EDIT = get_privilege_by_name('Edit')
 # DELETE = get_privilege_by_name('Delete')
 
 
@@ -68,7 +69,7 @@ EDIT = get_privilege_by_name('Edit')
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
 
-# ADMIN = 2
+ADMIN = 2
 USER = 1
 VIEW = 1
 EDIT = 2
