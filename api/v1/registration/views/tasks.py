@@ -31,5 +31,4 @@ def save_registration_timeline(obj, title, text, state, user):
             updated_date=datetime.now()
         ).save()
     except Exception as e:
-        print("################", e)
         raise CustomAPIException("Registration timeline save failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

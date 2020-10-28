@@ -6,13 +6,18 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from api.constants import *
 from master.models import get_user_by_id_string
+from v1.commonapp.models.lifecycle import LifeCycle
+from v1.commonapp.models.module import get_module_by_key
 from v1.commonapp.models.notes import Notes
+from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, NoteViewSerializer
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.payment.models.payment import get_payment_by_id_string, PAYMENT_DICT
+from v1.payment.models.payment_transactions import PaymentTransaction
 from v1.payment.serializer.payment import *
+from v1.payment.serializer.payment_transactions import PaymentTransactionListSerializer
 from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.registration.models.registrations import get_registration_by_id_string
@@ -558,7 +563,7 @@ class RegistrationNoteList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
 
 
 # API Header
@@ -581,10 +586,16 @@ class RegistrationNote(GenericAPIView):
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             registration = get_registration_by_id_string((id_string))
+            module = get_module_by_key("CONSUMEROPS")
+            sub_module = get_sub_module_by_key("REGISTRATION")
             serializer = NoteSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 note_obj = serializer.create(serializer.validated_data, user)
                 note_obj.registration_id = registration.id
+                note_obj.tenant = registration.tenant
+                note_obj.utility = registration.utility
+                note_obj.module_id = module.id
+                note_obj.sub_module_id = sub_module.id
                 note_obj.save()
                 view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
                 return Response({
@@ -597,7 +608,7 @@ class RegistrationNote(GenericAPIView):
                     RESULT: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Registations')
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Registration')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -625,7 +636,7 @@ class RegistrationPaymentList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
-                    queryset = Payment.objects.filter(identification_id=registration.id, is_active=True)
+                    queryset = Payment.objects.all()
                     if queryset:
                         return queryset
                     else:
@@ -635,4 +646,74 @@ class RegistrationPaymentList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registations')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/life-cycles
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Registration lifecycles
+# Usage: API will fetch required data for Registration lifecycles
+# Tables used: LifeCycles
+# Author: Rohan
+# Created on: 28/10/2020
+class RegistrationLifeCycleList(generics.ListAPIView):
+    try:
+        serializer_class = LifeCycleListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    registration = get_registration_by_id_string(self.kwargs['id_string'])
+                    module = get_module_by_key("CONSUMEROPS")
+                    sub_module = get_sub_module_by_key("REGISTRATION")
+                    queryset = LifeCycle.objects.filter(object_id=registration.id, module_id=module.id, sub_module_id=sub_module.id, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
+
+
+# API Header
+# API end Point: api/v1/registration/:id_string/payment-transactions
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Registration
+# Interaction: Registration Payment Transactions
+# Usage: API will fetch required data for Registration payment transactions
+# Tables used: Payment Transaction
+# Author: Rohan
+# Created on: 28/10/2020
+class RegistrationPaymentTransactionList(generics.ListAPIView):
+    try:
+        serializer_class = PaymentTransactionListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            print("$$$$$$$$$$$$$$$$$$", user_obj)
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    payment = get_payment_by_id_string(self.kwargs['id_string'])
+                    queryset = PaymentTransaction.objects.filter(payment_id = payment.id)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Transactions not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        print("@@@@@@@@@@@@@@@@@@@@@@",e)
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')

@@ -34,7 +34,7 @@ class Notes(models.Model):
     service_type_id = models.BigIntegerField(null=True, blank=True)
     registration_id = models.BigIntegerField(null=True, blank=True)
     note_name = models.CharField(max_length=200, blank=True, null=True)
-    note_color = models.BigIntegerField(null=True, blank=True)
+    note_color = models.CharField(max_length=200, blank=True, null=True)
     note = models.CharField(max_length=500, blank=True, null=True)
     status = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)

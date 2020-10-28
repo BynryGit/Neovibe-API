@@ -43,7 +43,7 @@ class UtilitySummaryDetail(GenericAPIView):
                     STATE: ERROR,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY/SUMMARY')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))

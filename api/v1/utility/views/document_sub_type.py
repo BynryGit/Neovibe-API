@@ -1,3 +1,5 @@
+__author__ = "aki"
+
 from rest_framework import generics, status
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.models.document_sub_type import DocumentSubType
@@ -5,6 +7,7 @@ from v1.commonapp.serializers.document_sub_type import DocumentSubTypeListSerial
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_master import get_utility_by_id_string
+from rest_framework.exceptions import APIException
 
 
 class UtilityDocumentSubTypeList(generics.ListAPIView):
@@ -25,5 +28,6 @@ class UtilityDocumentSubTypeList(generics.ListAPIView):
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
-    except Exception as e:
-        logger().log(e, 'MEDIUM', module='Utility', sub_module='Utility')
+    except Exception as ex:
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY/DOCUMENT-SUBTYPE')
+        raise APIException

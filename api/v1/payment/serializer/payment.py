@@ -17,25 +17,26 @@ class ChoiceField(serializers.ChoiceField):
 
 class PaymentListSerializer(serializers.ModelSerializer):
     payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
-    payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
-    payment_mode = PaymentModeListSerializer(many=False, source='get_payment_mode')
-    payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_channel')
-
-    class Meta:
-        model = Payment
-        fields = ('id_string', 'state', 'transaction_amount', 'transaction_charges', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel', 'transaction_date', 'receipt_no')
-
-
-class PaymentViewSerializer(serializers.ModelSerializer):
-    payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
-    payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
+    # payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
     payment_mode = PaymentModeListSerializer(many=False, source='get_payment_mode')
     payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_channel')
     state = ChoiceField(choices=Payment.CHOICES)
 
     class Meta:
         model = Payment
-        fields = ('id_string', 'transaction_amount', 'transaction_charges', 'state', 'payment_type', 'payment_sub_type', 'payment_mode', 'payment_channel')
+        fields = ('id_string', 'transaction_amount', 'transaction_charges', 'state', 'payment_type', 'payment_mode', 'payment_channel')
+
+
+class PaymentViewSerializer(serializers.ModelSerializer):
+    payment_type = PaymentTypeListSerializer(many=False, source='get_payment_type')
+    # payment_sub_type = PaymentSubTypeListSerializer(many=False, source='get_payment_sub_type')
+    payment_mode = PaymentModeListSerializer(many=False, source='get_payment_mode')
+    payment_channel = PaymentChannelListSerializer(many=False, source='get_payment_channel')
+    state = ChoiceField(choices=Payment.CHOICES)
+
+    class Meta:
+        model = Payment
+        fields = ('id_string', 'transaction_amount', 'transaction_charges', 'state', 'payment_type', 'payment_mode', 'payment_channel')
 
 
 class PaymentSerializer(serializers.ModelSerializer):
