@@ -2,6 +2,9 @@ import uuid
 from datetime import datetime
 import fsm
 from django.db import models
+
+from v1.payment.models.payment_sub_type import get_payment_sub_type_by_id
+from v1.payment.models.payment_type import get_payment_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -38,3 +41,13 @@ class PaymentTransaction(models.Model, fsm.FiniteStateMachineMixin):
 
     def __str__(self):
         return str(self.utility)
+
+    @property
+    def get_transaction_type(self):
+        transaction_type = get_payment_type_by_id(self.transaction_type_id)
+        return transaction_type
+
+    @property
+    def get_transaction_sub_type(self):
+        transaction_sub_type = get_payment_sub_type_by_id(self.transaction_sub_type_id)
+        return transaction_sub_type
