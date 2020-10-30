@@ -701,7 +701,6 @@ class RegistrationPaymentTransactionList(generics.ListAPIView):
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
-            print("$$$$$$$$$$$$$$$$$$", user_obj)
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     payment = get_payment_by_id_string(self.kwargs['id_string'])
@@ -715,5 +714,4 @@ class RegistrationPaymentTransactionList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        print("@@@@@@@@@@@@@@@@@@@@@@",e)
         logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
