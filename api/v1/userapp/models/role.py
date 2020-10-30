@@ -20,8 +20,8 @@ from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 from v1.userapp.models.role_status import get_role_status_by_id
-from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
-from v1.userapp.models.role_type import get_role_type_by_id
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id, get_role_sub_type_by_id_string
+from v1.userapp.models.role_type import get_role_type_by_id, get_role_type_by_id_string
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 from django.db import models  # importing package for database
 
@@ -111,3 +111,10 @@ def get_role_by_tenant_id_string(id_string):
 # For getting role by utility id_string
 def get_role_by_utility_id_string(id_string):
     return Role.objects.filter(utility__id_string=id_string, is_active=True)
+
+
+# For getting role by type and sub-type id_string
+def get_role_by_type_and_sub_type(type_id_string, sub_type_id_string):
+    type = get_role_type_by_id_string(type_id_string)
+    sub_type = get_role_sub_type_by_id_string(sub_type_id_string)
+    return Role.objects.filter(type_id=type.id, sub_type_id=sub_type.id, is_active=True)

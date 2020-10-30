@@ -13,9 +13,10 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
+
 
 # Create Payment Type table start
 class PaymentSubType(models.Model):
@@ -23,6 +24,7 @@ class PaymentSubType(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     payment_type_id = models.BigIntegerField(null=True, blank=True)
     gl_code_id = models.BigIntegerField(null=True, blank=True)
+    tax = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -36,15 +38,17 @@ class PaymentSubType(models.Model):
     def __unicode__(self):
         return self.name
 
+
 def get_payment_sub_type_by_id_string(id_string):
     try:
         return PaymentSubType.objects.get(id_string=id_string)
     except:
         return False
 
+
 def get_payment_sub_type_by_id(id):
     try:
-        return PaymentSubType.objects.get(id = id)
+        return PaymentSubType.objects.get(id=id)
     except:
         return False
 # Create Payment Type table end
