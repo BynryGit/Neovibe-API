@@ -6,7 +6,7 @@ class PaymentSubTypeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentSubType
-        fields = ('name', 'id_string')
+        fields = ('name', 'id_string', 'tax')
 
 
 class PaymentSubTypeViewSerializer(serializers.ModelSerializer):
