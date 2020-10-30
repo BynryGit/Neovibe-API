@@ -45,7 +45,7 @@ class FormFactorList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1,1,1,user_obj):
-                    queryset = FormFactorTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    queryset = FormFactorTbl.objects.filter(is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
