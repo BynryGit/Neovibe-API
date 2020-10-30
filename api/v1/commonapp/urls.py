@@ -15,6 +15,7 @@ from v1.commonapp.views.products import ProductList
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 from v1.userapp.views.role_type import RoleTypeList
 from v1.commonapp.views.skills import SkillsList
+from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
 
 urlpatterns = [
     path('area/<uuid:id_string>', AreaDetail.as_view()),
@@ -50,6 +51,8 @@ urlpatterns = [
     path('<uuid:id_string>/states', StateList.as_view()),
     path('role-type/list', RoleTypeList.as_view()),
     path('<uuid:id_string>/skill/list', SkillsList.as_view()),
+    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
+
 
 
 ]

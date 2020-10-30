@@ -13,7 +13,7 @@ from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDeta
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
-from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
+
 
 
 urlpatterns = [
@@ -46,5 +46,4 @@ urlpatterns = [
 
     path('<uuid:id_string>/role-type/list', RoleTypeListByUtility.as_view()),
 
-    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
 ]
