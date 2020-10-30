@@ -15,6 +15,7 @@ from v1.tenant.views.tenant_summary import TenantSummaryDetail
 from v1.tenant.views.tenant_bank_detail import TenantBankDetail,TenantBank
 from v1.tenant.views.tenant_bank_detail import TenantBankList
 from v1.tenant.views.tenant_status import TenantStatusList
+from v1.utility.views.utility import UtilityListByTenant
 
 
 urlpatterns = [
@@ -52,4 +53,7 @@ urlpatterns = [
          name='tenant_subscription_plan_rate_list'),
     path('status', TenantStatusList.as_view(), name='tenant_status_list'),
     path('<uuid:id_string>/summary', TenantSummaryDetail.as_view(), name='tenant_summary'),
+
+    path('<uuid:id_string>/utility/list', UtilityListByTenant.as_view(), name='utility_list_by_tenant_id_string'),
+
 ]

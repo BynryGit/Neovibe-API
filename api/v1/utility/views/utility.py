@@ -63,6 +63,45 @@ class UtilityList(generics.ListAPIView):
 
 
 # API Header
+# API end Point: api/v1/:id_string/utility/list
+# API verb: GET
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: Utility list by tenant id_string
+# Usage: API will fetch required data for utility list by tenant id_string
+# Tables used: 2.1. Utility Master
+# Author: Priyanka
+# Created on: 08/05/2020
+
+
+class UtilityListByTenant(generics.ListAPIView):
+    try:
+        serializer_class = UtilityMasterViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('name', 'tenant__id_string',)
+        ordering_fields = ('name', 'tenant',)
+        ordering = ('name',) # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = UtilityMasterTbl.objects.filter(tenant__id_string=self.kwargs['id_string'],is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY')
+        raise APIException
+
+
+# API Header
 # API end Point: api/v1/utility
 # API verb: POST
 # Package: Basic
@@ -78,7 +117,6 @@ class Utility(GenericAPIView):
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
     def post(self, request):
-        print('------------')
         try:
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
