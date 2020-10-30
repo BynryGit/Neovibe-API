@@ -22,6 +22,7 @@ from django.db import models  # importing package for database
 
 class Module(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    key = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(blank=True, null=True)
     updated_by = models.BigIntegerField(blank=True, null=True)
@@ -45,6 +46,13 @@ def get_all_modules():
 def get_module_by_id(id):
     try:
         return Module.objects.get(id=id,is_active=True)
+    except:
+        return False
+
+
+def get_module_by_key(key):
+    try:
+        return Module.objects.get(key=key, is_active=True)
     except:
         return False
 

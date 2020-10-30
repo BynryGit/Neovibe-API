@@ -140,6 +140,7 @@ def get_module_by_role_id(role_id):
 
             check_module_list.append(module.module_id)
             module_data = get_module_by_id(module.module_id)
+
             sub_modules = get_role_privilege_by_module_id(module_data.id, role_id)
 
             for sub_module in sub_modules:

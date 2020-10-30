@@ -6,7 +6,7 @@ from django.dispatch import receiver, Signal
 from rest_framework import status
 from v1.commonapp.models.state_configuration import StateConfiguration, STATE_CONFIGURATION_DICT
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.payment.models.consumer_payment import PAYMENT_DICT
+from v1.payment.models.payment import PAYMENT_DICT
 from v1.registration.models import registrations
 
 

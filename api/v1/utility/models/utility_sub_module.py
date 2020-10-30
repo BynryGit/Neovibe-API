@@ -17,10 +17,11 @@ __author__ = "aki"
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
+from v1.commonapp.models.module import get_module_by_id
+from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from v1.utility.models.utility_module import get_utility_module_by_id
 
 
 # Create Utility Sub Module table start.
@@ -30,8 +31,8 @@ class UtilitySubModule(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     module_id =  models.BigIntegerField(null=True, blank=True)
-    submodule_name  = models.CharField(max_length=200, blank=False, null=False)
-    submodule_desc  = models.CharField(max_length=500, blank=False, null=False)
+    submodule_id =  models.BigIntegerField(null=True, blank=True)
+    label = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -39,16 +40,20 @@ class UtilitySubModule(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.submodule_name
-
+        return str(self.utility)
 
     def __unicode__(self):
-        return self.submodule_name
+        return str(self.utility)
 
     @property
-    def get_utility_module(self):
-        module = get_utility_module_by_id(self.module_id)
-        return module.module_name
+    def get_module(self):
+        module = get_module_by_id(self.module_id)
+        return module
+
+    @property
+    def get_submodule(self):
+        submodule = get_sub_module_by_id(self.submodule_id)
+        return submodule
 
 # Create Utility Sub Module table end.
 

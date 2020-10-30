@@ -1,5 +1,6 @@
 from django.contrib import admin
 from v1.commonapp.models.area import Area
+from v1.commonapp.models.audit_log import AuditLog
 from v1.commonapp.models.city import City
 from v1.commonapp.models.country import Country
 from v1.commonapp.models.department import Department
@@ -8,8 +9,10 @@ from v1.commonapp.models.document_sub_type import DocumentSubType
 from v1.commonapp.models.document_type import DocumentType
 from v1.commonapp.models.email_configurations import EmailConfiguration
 from v1.commonapp.models.form_factor import FormFactor
+from v1.commonapp.models.gl_code import GlCode
 from v1.commonapp.models.module import Module
 from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notification import Notification
 from v1.commonapp.models.notification_template import NotificationTemplate
 from v1.commonapp.models.region import Region
 from v1.commonapp.models.service_type import ServiceType
@@ -18,9 +21,12 @@ from v1.commonapp.models.state import State
 from v1.commonapp.models.state_configuration import StateConfiguration
 from v1.commonapp.models.sub_area import SubArea
 from v1.commonapp.models.sub_module import SubModule
+from v1.commonapp.models.products import Product
+from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.transition_configuration import TransitionConfiguration
 
 admin.site.register(Region)
+admin.site.register(GlCode)
 admin.site.register(Country)
 admin.site.register(State)
 admin.site.register(City)
@@ -40,3 +46,7 @@ admin.site.register(StateConfiguration)
 admin.site.register(TransitionConfiguration)
 admin.site.register(EmailConfiguration)
 admin.site.register(NotificationTemplate)
+admin.site.register(Product)
+admin.site.register(Notification)
+admin.site.register(LifeCycle)
+admin.site.register(AuditLog)

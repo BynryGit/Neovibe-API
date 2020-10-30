@@ -15,17 +15,16 @@ from v1.tenant.views.common_functions import set_tenant_validated_data
 
 
 class TenantMasterViewSerializer(serializers.ModelSerializer):
-    tenant_country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
-    tenant_state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
-    tenant_city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
-    status_id = TenantStatusViewSerializer(many=False, required=False, source='get_tenant_status')
+    # tenant_country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
+    # tenant_state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
+    # tenant_city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
+    # status_id = TenantStatusViewSerializer(many=False, required=False, source='get_tenant_status')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = TenantMaster
-        fields = ('id_string', 'short_name', 'name', 'email_id', 'mobile_no', 'created_date', 'updated_date', 'status_id',
-                  'tenant_country_id', 'tenant_state_id', 'tenant_city_id')
+        fields = ('__all__')
 
 
 class TenantMasterSerializer(serializers.ModelSerializer):

@@ -12,6 +12,14 @@ from v1.tenant.models.tenant_module import TenantModule as TenantModuleTbl
 from v1.tenant.views.common_functions import set_tenant_module_validated_data
 
 
+class TenantModuleListSerializer(serializers.ModelSerializer):
+    module_id = ModuleSerializer(many=False, required=False, source='get_module')
+
+    class Meta:
+        model = TenantModuleTbl
+        fields = ('id_string','module_id')
+
+
 class TenantModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     module_id = ModuleSerializer(many=False, required=False, source='get_module')

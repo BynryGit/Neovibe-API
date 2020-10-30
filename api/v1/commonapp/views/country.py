@@ -28,13 +28,14 @@ class CountryList(generics.ListAPIView):
     def get(self, request):
         try:
             # Checking authentication start
-            if is_token_valid(request.headers['token']):
+            if is_token_valid(request.headers['Authorization']):
+                response, user_obj = is_token_valid(self.request.headers['Authorization'])
                 # payload = get_payload(request.headers['token'])
                 # user = get_user(payload['id_string'])
                 # Checking authentication end
 
                 # Checking authorization start
-                if is_authorized():
+                if is_authorized(1,1,1,user_obj):
                 # Checking authorization end
 
                     country_obj = TenantCountryTbl.objects.filter(is_active=True)

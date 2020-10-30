@@ -22,8 +22,8 @@ from v1.commonapp.models.module import get_module_by_id
 
 class SubModule(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    sub_module = models.BigIntegerField(null=True, blank=True)
     module_id = models.BigIntegerField(null=True, blank=True)
+    key = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -52,6 +52,13 @@ def get_sub_module_by_id(id):
         return False
 
 
+def get_sub_module_by_key(key):
+    try:
+        return SubModule.objects.get(key = key, is_active=True)
+    except:
+        return False
+
+
 def get_sub_module_by_id_string(id_string):
     try:
         return SubModule.objects.get(id_string=id_string, is_active=True)
@@ -64,9 +71,19 @@ def get_all_sub_modules():
 
 
 def get_submodule_by_module_id(id):
-    return SubModule.objects.filter(module_id=id,is_active=True)
+    return SubModule.objects.filter(module_id=id, is_active=True)
 
 
 def get_sub_module_by_name(name):
-    sub_module = SubModule.objects.get(name=name)
+    sub_module = SubModule.objects.get(name=name, is_active=True)
+    return sub_module.id
+
+
+def get_sub_module_by_key(key):
+    sub_module = SubModule.objects.get(key=key, is_active=True)
+    return sub_module
+
+
+def get_sub_module_id_by_key(key):
+    sub_module = SubModule.objects.get(key=key, is_active=True)
     return sub_module.id

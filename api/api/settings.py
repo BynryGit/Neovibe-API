@@ -62,10 +62,10 @@ INSTALLED_APPS = [
     'v1.store',
     'v1.supplier',
     'v1.survey',
-    'v1.tenant',
-    'v1.tender',
     'v1.userapp',
+    'v1.tender',
     'v1.utility',
+    'v1.tenant',
 ]
 
 MIDDLEWARE = [
@@ -111,9 +111,9 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart3603',
+        'NAME': 'smart3605',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -188,8 +188,8 @@ STATIC_URL = '/static/'
 # CELERY STUFF
 BROKER_URL = 'redis://localhost:6379'  # Todo redis broker is use for message transform
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['application/json', 'application/x-python-serialize']
+CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 

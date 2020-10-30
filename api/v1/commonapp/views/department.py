@@ -4,10 +4,15 @@ from rest_framework import status,generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-
+from v1.commonapp.views.logger import logger
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from rest_framework.exceptions import APIException
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.common_functions import is_token_valid, is_authorized
 from api.messages import *
-from v1.commonapp.models.department import get_department_by_tenant_id_string, get_department_by_id_string
-from v1.commonapp.serializers.department import DepartmentListSerializer, DepartmentViewSerializer
+from v1.commonapp.models.department import Department as DepartmentTbl,get_department_by_tenant_id_string, get_department_by_id_string
+from v1.commonapp.serializers.department import DepartmentSerializer, DepartmentViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 # API Header
@@ -25,17 +30,31 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 
 class DepartmentList(generics.ListAPIView):
-    serializer_class = DepartmentListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = DepartmentSerializer
+        pagination_class = StandardResultsSetPagination
 
-    def get_queryset(self):
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name', 'utility__name',)
 
-        queryset = get_department_by_tenant_id_string(1)
-        utility_id_string = self.request.query_params.get('utility', None)
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    # queryset = DepartmentTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    queryset = DepartmentTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
 
-        if utility_id_string is not None:
-            queryset = queryset.filter(utility__id_string=utility_id_string)
-        return queryset
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
 
 
 # API Header

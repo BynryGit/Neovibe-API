@@ -14,7 +14,7 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
-from v1.tenant.serializers.tenant_module import TenantModuleViewSerializer, TenantModuleSerializer
+from v1.tenant.serializers.tenant_module import TenantModuleViewSerializer, TenantModuleSerializer,TenantModuleListSerializer
 from master.models import get_user_by_id_string
 from v1.tenant.models.tenant_module import TenantModule as TenantModuleTbl, get_tenant_module_by_id_string
 
@@ -34,7 +34,7 @@ from v1.tenant.models.tenant_module import TenantModule as TenantModuleTbl, get_
 
 class TenantModuleList(generics.ListAPIView):
     try:
-        serializer_class = TenantModuleViewSerializer
+        serializer_class = TenantModuleListSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -44,7 +44,7 @@ class TenantModuleList(generics.ListAPIView):
         search_fields = ('tenant__name', )
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
+            if is_token_valid(self.request.headers['Authorization']):
                 if is_authorized(1,1,1,1):
                     queryset = TenantModuleTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
                     return queryset

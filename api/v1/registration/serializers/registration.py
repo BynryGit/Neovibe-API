@@ -8,6 +8,8 @@ from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryViewSerializer
+from v1.payment.serializer.payment_transactions import PaymentTransactionSerializer
+from v1.payment.views.common_functions import set_payment_transaction_validated_data
 from v1.registration.models.registrations import Registration
 from v1.registration.views.common_functions import set_validated_data, generate_registration_no
 
@@ -23,8 +25,10 @@ class RegistrationListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
-                  'street', 'zipcode', 'state', 'area', 'created_date')
+        fields = (
+            'id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
+            'street', 'zipcode', 'state', 'area', 'created_date')
+
 
 class RegistrationViewSerializer(serializers.ModelSerializer):
     area = AreaListSerializer(many=False, source='get_area')
@@ -43,22 +47,28 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
-                  'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'registration_date', 'state',
-                  'area', 'category', 'sub_category', 'created_date')
+        fields = (
+            'id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no', 'first_name',
+            'last_name', 'email_id', 'phone_mobile', 'address_line_1', 'street', 'zipcode', 'registration_date',
+            'state', 'area', 'category', 'sub_category', 'created_date', 'billing_address_line_1')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    phone_mobile = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field phone_mobile is required."})
+    phone_mobile = serializers.CharField(required=True, max_length=200,
+                                         error_messages={"required": "The field phone_mobile is required."})
     area_id = serializers.CharField(required=False, max_length=200)
+    billing_area_id = serializers.CharField(required=False, max_length=200)
     utility_id = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
     registration_type_id = serializers.CharField(required=False, max_length=200)
     country_id = serializers.CharField(required=False, max_length=200)
     state_id = serializers.CharField(required=False, max_length=200)
     city_id = serializers.CharField(required=False, max_length=200)
+    billing_state_id = serializers.CharField(required=False, max_length=200)
+    billing_city_id = serializers.CharField(required=False, max_length=200)
     scheme_id = serializers.CharField(required=False, max_length=200)
     sub_area_id = serializers.CharField(required=False, max_length=200)
+    billing_sub_area_id = serializers.CharField(required=False, max_length=200)
     payment_id = serializers.CharField(required=False, max_length=200)
     ownership_id = serializers.CharField(required=False, max_length=200)
     consumer_category_id = serializers.CharField(required=False, max_length=200)
@@ -69,13 +79,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = Registration
         fields = ('__all__')
 
-
     def create(self, validated_data, user):
-        validated_data =  set_validated_data(validated_data)
-        if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility_id=validated_data['utility_id']).exists():
-            raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
-        else:
-            with transaction.atomic():
+        with transaction.atomic():
+            validated_data = set_validated_data(validated_data)
+            if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant,
+                                           utility_id=validated_data['utility_id']).exists():
+                raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+            else:
                 registration_obj = super(RegistrationSerializer, self).create(validated_data)
                 registration_obj.created_by = user.id
                 registration_obj.created_date = datetime.utcnow()
@@ -86,7 +96,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_validated_data(validated_data)
-        if Registration.objects.exclude(id_string=instance.id_string).filter(phone_mobile=validated_data['phone_mobile'],tenant=user.tenant,utility=instance.utility).exists():
+        if Registration.objects.exclude(id_string=instance.id_string).filter(
+                phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility=instance.utility).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
