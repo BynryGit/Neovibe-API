@@ -8,4 +8,4 @@ class UtilityCurrencyListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityCurrency
-        fields = ('id_string', 'label', 'currency')
+        fields = ('id_string', 'currency_symbol', 'currency')
