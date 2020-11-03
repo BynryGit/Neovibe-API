@@ -1,6 +1,7 @@
 from django.urls import path
 from v1.commonapp.views.city import CityList
 from v1.commonapp.views.country import CountryList
+from v1.commonapp.views.currency import CurrencyList
 from v1.commonapp.views.region import RegionList
 from v1.commonapp.views.state import StateList
 from v1.commonapp.views.area import AreaList, AreaDetail
@@ -50,6 +51,6 @@ urlpatterns = [
     path('<uuid:id_string>/states', StateList.as_view()),
     path('role-type/list', RoleTypeList.as_view()),
     path('<uuid:id_string>/skill/list', SkillsList.as_view()),
-
+    path('currency/list', CurrencyList.as_view()),
 
 ]

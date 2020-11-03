@@ -3,6 +3,7 @@ from v1.commonapp.models.area import Area
 from v1.commonapp.models.audit_log import AuditLog
 from v1.commonapp.models.city import City
 from v1.commonapp.models.country import Country
+from v1.commonapp.models.currency import Currency
 from v1.commonapp.models.department import Department
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.document_sub_type import DocumentSubType
@@ -50,3 +51,4 @@ admin.site.register(Product)
 admin.site.register(Notification)
 admin.site.register(LifeCycle)
 admin.site.register(AuditLog)
+admin.site.register(Currency)

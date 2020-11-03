@@ -9,6 +9,7 @@ from v1.utility.views.numformat import UtilityNumformatDetail
 from v1.utility.views.status import UtilityStatusList
 from v1.utility.views.utility import UtilityList, UtilityDetail, Utility
 from v1.utility.views.summary import UtilitySummaryDetail
+from v1.utility.views.utility_currency import UtilityCurrencyList
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule
@@ -45,6 +46,6 @@ urlpatterns = [
     path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(), name='utility_document_sub_type_list'),
 
     path('<uuid:id_string>/role-type/list', RoleTypeListByUtility.as_view()),
-
+    path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
 ]
