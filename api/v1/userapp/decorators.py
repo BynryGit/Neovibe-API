@@ -14,47 +14,6 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from rest_framework import permissions
 
 
-class TokenValidate(permissions.BasePermission):
-    """
-    Global permission check for blacklisted IPs.
-    """
-
-    def has_permission(self, request, view):
-        token = request.headers['Authorization']
-
-    def token_validate(function):
-        def wrap(request, *args, **kwargs):
-            print('0==================',request)
-            token = args[0].headers['Authorization']
-            decoded_token = get_payload(token)
-            if decoded_token:
-                user_obj = get_user_by_id_string(decoded_token['user_id_string'])
-                if check_token_exists_for_user(token, user_obj.id):
-                    return True
-                else:
-                    return False
-            else:
-                return False
-
-
-class RoleValidate(permissions.BasePermission):
-    """
-    Global permission check for blacklisted IPs.
-    """
-    
-    def has_permission(self, request, view):
-        print('=======666666666666666========',view)
-        token = request.headers['Authorization']
-        decoded_token = get_payload(token)
-        user_obj = get_user_by_id_string(decoded_token['user_id_string'])
-        roles = get_user_role_by_user_id(user_obj.id)
-        # if check_role_privilege_exists(roles, module_id, sub_module_id, privilege_id):
-        #     return True
-        # else:
-        #     return False
-        return False
-
-
 def is_token_validate(function):
     def wrap(request, *args, **kwargs):
         token = args[0].headers['Authorization']
