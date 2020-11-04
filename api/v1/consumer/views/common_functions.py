@@ -93,6 +93,21 @@ def set_scheme_validated_data(validated_data):
             raise CustomAPIException("Scheme not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
 
+def set_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.",status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.",status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
 
 # Function for generating consumer number aaccording to utility
 def generate_consumer_no(consumer):

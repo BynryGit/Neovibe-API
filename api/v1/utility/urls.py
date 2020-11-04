@@ -18,6 +18,10 @@ from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
 
 # from v1.userapp.views.role_type import RoleTypeListByUtility
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
+from v1.utility.views.utility_region import UtilityRegionList
+from v1.utility.views.utility_country import UtilityCountryList
+from v1.utility.views.utility_state import UtilityStateList
+
 
 
 urlpatterns = [
@@ -53,4 +57,7 @@ urlpatterns = [
 
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
+    path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
+    path('<uuid:id_string>/country/list', UtilityCountryList.as_view()),
+    path('<uuid:id_string>/state/list', UtilityStateList.as_view()),
 ]

@@ -39,9 +39,9 @@ urlpatterns = [
     path('submodule/<uuid:id_string>', SubModule.as_view()),
     path('submodule/list', SubModuleList.as_view()),
     # This api used for utility dropdown start
-    path('regions', RegionList.as_view(), name='regions_list'),
-    path('countries', CountryList.as_view(), name='country_list'),
-    path('states', StateList.as_view(), name='state_list'),
+    path('region/list', RegionList.as_view(), name='regions_list'),
+    path('country/list', CountryList.as_view(), name='country_list'),
+    path('state/list', StateList.as_view(), name='state_list'),
     path('<uuid:id_string>/cities', CityList.as_view(), name='city_list'),
     # This api used for utility dropdown end
     path('service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
@@ -53,6 +53,7 @@ urlpatterns = [
     path('role-type/list', RoleTypeList.as_view()),
     path('<uuid:id_string>/skill/list', SkillsList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
+    path('<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
 
 
     path('currency/list', CurrencyList.as_view()),

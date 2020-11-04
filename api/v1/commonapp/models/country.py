@@ -23,8 +23,7 @@ from v1.utility.models.utility_master import UtilityMaster
 
 class Country(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    key = models.CharField(max_length=200,blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     region = models.BigIntegerField(null=False, blank=False)
     is_active = models.BooleanField(default=False)
@@ -50,4 +49,3 @@ def get_country_by_id(id):
     return Country.objects.get(id = id)
 
 # End the Code
-
