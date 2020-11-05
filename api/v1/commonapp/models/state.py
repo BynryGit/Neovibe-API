@@ -20,8 +20,7 @@ from v1.utility.models.utility_master import UtilityMaster
 
 class State(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    key = models.CharField(max_length=200,blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     country = models.BigIntegerField(blank=False, null=False)
     region = models.BigIntegerField(blank=False, null=False)
@@ -36,6 +35,7 @@ class State(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 # Create State table end
 

@@ -17,13 +17,14 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from v1.commonapp.views.custom_exception import CustomAPIException
+from rest_framework import status
 
 # Create Region table start
 
 class Region(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=False, null=True, on_delete=models.SET_NULL) # to be removed
-    utility = models.ForeignKey(UtilityMaster, blank=False, null=True, on_delete=models.SET_NULL) # to be removed
+    key = models.CharField(max_length=200,blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -40,8 +41,8 @@ class Region(models.Model):
 def get_region_by_id(id):
     try:
         return Region.objects.get(id = id)
-    except:
-        return False
+    except Exception as e:
+        raise CustomAPIException("Region does not exists.",status_code=status.HTTP_404_NOT_FOUND)
 
 
 def get_region_by_id_string(id_string):
@@ -49,5 +50,4 @@ def get_region_by_id_string(id_string):
         return Region.objects.get(id_string = id_string)
     except:
         return False
-
 # Create Region table end.

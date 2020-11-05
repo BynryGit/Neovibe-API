@@ -11,6 +11,9 @@ from v1.utility.models.utility_services_number_format import UtilityServiceNumbe
 from v1.utility.models.utility_status import UtilityStatus
 from v1.utility.models.utility_sub_module import UtilitySubModule
 from v1.utility.models.utility_usage_summary import UtilityUsageSummary
+from v1.utility.models.utility_country import UtilityCountry
+from v1.utility.models.utility_state import UtilityState
+from v1.utility.models.utility_region import UtilityRegion
 
 admin.site.register(UtilityModule)
 admin.site.register(UtilitySubModule)
@@ -22,3 +25,6 @@ admin.site.register(UtilityServiceNumberFormat)
 admin.site.register(UtilityStatus)
 admin.site.register(UtilityUsageSummary)
 admin.site.register(UtilityCurrency)
+admin.site.register(UtilityCountry)
+admin.site.register(UtilityState)
+admin.site.register(UtilityRegion)
