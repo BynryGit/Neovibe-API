@@ -8,7 +8,7 @@ from v1.userapp.views.user_bank import UserBankDetail
 from v1.userapp.views.user_privilege import UserPrivilegeDetail
 from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
-from v1.userapp.views.user_utility import UserUtility
+from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
 
 urlpatterns = [
     path('', User.as_view(), name='create-user'),
@@ -28,6 +28,8 @@ urlpatterns = [
     path('<uuid:id_string>/utility/', UserUtility.as_view()),
 
     path('<uuid:id_string>/area/', UserArea.as_view()),
+
+    path('tenant/<uuid:id_string>/utility/list', UesrUtilityList.as_view()),
 
     path('<uuid:id_string>/skill/', UserSkill.as_view()),
 

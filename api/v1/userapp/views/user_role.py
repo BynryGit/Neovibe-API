@@ -39,13 +39,16 @@ class UserRole(GenericAPIView):
             data = {}
             role_list = []
             user = get_user_by_id_string(id_string)
+            print('************',user)
             if user:
                 data['email'] = user.email
                 data['id_string'] = id_string
                 user_roles = get_user_role_by_user_id(user.id)
+                print('===user_roles',user_roles)
                 if user_roles:
                     for user_role in user_roles:
                         role_obj = get_role_by_id(user_role.role_id)
+                        print('====',role_obj)
                         role = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
                         role_list.append(role.data)
                     data['roles'] = role_list
@@ -81,11 +84,13 @@ class UserRole(GenericAPIView):
             if user_obj:
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
-                for role in request.data['roles']:
-                    validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'role_id': role['role_id_string']}
+                for role in request.data:
+                    # validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'role_id': role['role_id_string']}
+                    validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string']}
+
                     serializer = UserRoleSerializer(data=validate_data)
                     if serializer.is_valid(raise_exception=False):
-                        user_id_string = get_user_from_token(request.headers['token'])
+                        user_id_string = get_user_from_token(request.headers['Authorization'])
                         user = get_user_by_id_string(user_id_string)
                         user_role_obj = serializer.create(serializer.validated_data, user)
                         role_obj = get_role_by_id(user_role_obj.role_id)
