@@ -9,25 +9,24 @@
 # Author : Jayshree Kumbhare
 # Creation Date : 21/04/2020
 
-# change history
-# <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
 # Create Currency table start
+from rest_framework import status
+
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 
 class Currency(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    country = models.BigIntegerField(blank=False, null=False)
+    key = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -40,4 +39,9 @@ class Currency(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Currency table end
+
+def get_currency_by_id(id):
+    try:
+        return Currency.objects.get(id=id)
+    except Exception as e:
+        raise CustomAPIException("Currency not exists.", status_code=status.HTTP_404_NOT_FOUND)
