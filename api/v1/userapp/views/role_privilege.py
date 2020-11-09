@@ -47,17 +47,19 @@ class RolePrivilegeDetail(GenericAPIView):
                         validate_data['utility_id'] = request.data['utility_id']
                         validate_data['module_id'] = module['module_id']
                         validate_data['sub_module_id'] = sub_module['sub_module_id']
-                        validate_data['privilege_id'] = sub_module['privilege_id']
-                        serializer = RolePrivilegeSerializer(data=validate_data)
-                        if serializer.is_valid(raise_exception=False):
-                            user_id_string = get_user_from_token(request.headers['token'])
-                            user = get_user_by_id_string(user_id_string)
-                            serializer.create(serializer.validated_data, user)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULTS: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
+                        privilege_list = sub_module['privilege']
+                        for privilege in privilege_list:
+                            validate_data['privilege_id'] = privilege['privilege_id']
+                            serializer = RolePrivilegeSerializer(data=validate_data)
+                            if serializer.is_valid(raise_exception=False):
+                                user_id_string = get_user_from_token(request.headers['token'])
+                                user = get_user_by_id_string(user_id_string)
+                                serializer.create(serializer.validated_data, user)
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULTS: serializer.errors,
+                                }, status=status.HTTP_400_BAD_REQUEST)
                 serializer = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
