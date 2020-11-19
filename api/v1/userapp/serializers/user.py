@@ -13,7 +13,8 @@ from v1.userapp.models.user_role import get_role_count_by_user
 from v1.userapp.models.user_status import UserStatus
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
-from v1.userapp.views.common_functions import set_user_validated_data
+from v1.userapp.views.common_functions import set_user_validated_data,generate_user_id
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -45,7 +46,10 @@ class UserSerializer(serializers.ModelSerializer):
             user_obj.created_date = datetime.utcnow()
             user_obj.updated_date = datetime.utcnow()
             user_obj.tenant = user.tenant
+            user_obj.status_id = 2
             user_obj.is_active = True
+            user_obj.save()
+            user_obj.user_id = generate_user_id(user_obj)
             user_obj.save()
             return user_obj
 
@@ -106,14 +110,14 @@ class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id_string', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date',
-                  'role', 'tenant', 'department',  'status')
+                  'user_id','role', 'tenant', 'department',  'status')
 
 
 class UserViewSerializer(serializers.ModelSerializer):
 
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
-    user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_user_sub_type')
+    user_type = UserTypeSerializer(many=False, required=True, source='get_role_type')
+    user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     city = CitySerializer(many=False, required=True, source='get_city')
@@ -123,5 +127,5 @@ class UserViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id_string', 'first_name', 'middle_name', 'last_name', 'email', 'phone_mobile', 'phone_landline',
+        fields = ('id_string', 'first_name', 'middle_name', 'last_name', 'email', 'phone_mobile', 'phone_landline','user_id',
                   'created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city', 'department', 'status')

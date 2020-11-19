@@ -22,7 +22,7 @@ from v1.userapp.models.user_status import get_user_status_by_id_string
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id_string
 from v1.userapp.models.user_type import get_user_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
-
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 
 # For getting ID's from id_string in role API request
 def set_role_validated_data(validated_data):
@@ -138,13 +138,13 @@ def set_user_validated_data(validated_data):
         else:
             raise CustomAPIException("City not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_type_id" in validated_data:
-        user_type = get_user_type_by_id_string(validated_data["user_type_id"])
+        user_type = get_role_type_by_id_string(validated_data["user_type_id"])
         if user_type:
             validated_data["user_type_id"] = user_type.id
         else:
             raise CustomAPIException("User Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "user_subtype_id" in validated_data:
-        user_subtype = get_user_sub_type_by_id_string(validated_data["user_subtype_id"])
+        user_subtype = get_role_sub_type_by_id_string(validated_data["user_subtype_id"])
         if user_subtype:
             validated_data["user_subtype_id"] = user_subtype.id
         else:
@@ -399,3 +399,20 @@ def set_user_sub_type_validated_data(validated_data):
         else:
             raise CustomAPIException("User type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+
+# Function for generating userID aaccording to utility
+def generate_user_id(user):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=user.tenant,item=3)
+        if format_obj.is_prefix == True:
+            user_id = format_obj.prefix + str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        else:
+            user_id = str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        return user_id
+    except Exception as e:
+        raise CustomAPIException("User ID generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -25,6 +25,7 @@ UTILITY_SERVICE_NUMBER_ITEM_DICT = {
     "REGISTRATION"  : 0,
     "PAYMENT"       : 1,
     'CONSUMER'      : 2,
+    "USER"          : 3,
 }
 
 class UtilityServiceNumberFormat(models.Model):
@@ -32,6 +33,7 @@ class UtilityServiceNumberFormat(models.Model):
         (0, 'REGISTRATION'),
         (1, 'PAYMENT'),
         (2, 'CONSUMER'),
+        (3, 'USER'),
     )
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

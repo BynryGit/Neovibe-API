@@ -210,13 +210,9 @@ class UserRoleByUtilityModules(GenericAPIView):
             utility_module_obj = get_utility_modules_by_utility_id_string(utility_id_string)
             module_obj_data=[]
             if user:
-                data['email'] = user.email
-                data['id_string'] = user_id_string
-
                 user_roles = get_user_role_by_user_id(user.id)
                 if user_roles:
                     for user_role in user_roles:
-                        # print('************',user_role.role_id)
                         role_obj = get_role_by_id(user_role.role_id)
                         role = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
                         role_list.append(role.data)
@@ -331,9 +327,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
 
             new_list=[]
             for roleprivilege in module_obj_list:
-                # print('************',roleprivilege['name'])
                 for utility in utility_submodule_list:
-                    # print('-----------',utility['label'])
                     data={}
                     if (roleprivilege['name'] == utility['label']) &(roleprivilege['modulename'] == utility['module_id']['name']) :
                         data['module_name'] = utility['module_id']['name']
