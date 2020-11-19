@@ -9,10 +9,13 @@ from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
-from v1.userapp.models.user_role import get_role_count_by_user
+from v1.userapp.models.role import get_role_by_id
+from v1.userapp.models.user_role import get_role_count_by_user, get_user_role_by_user_id
 from v1.userapp.models.user_status import UserStatus
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_type import UserType
+from v1.userapp.serializers.role import GetRoleSerializer
+from v1.userapp.serializers.user_role import UserRoleViewSerializer
 from v1.userapp.views.common_functions import set_user_validated_data
 
 
@@ -111,6 +114,15 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class UserViewSerializer(serializers.ModelSerializer):
 
+    # def get_role(self, obj):
+    #     role_list = []
+    #     user_roles = get_user_role_by_user_id(obj.id)
+    #     for user_role in user_roles:
+    #         role = get_role_by_id(user_role.role_id)
+    #         serializer = GetRoleSerializer(instance=role)
+    #         role_list.append(serializer.data)
+    #     return role_list
+
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     user_type = UserTypeSerializer(many=False, required=True, source='get_user_type')
     user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_user_sub_type')
@@ -118,10 +130,12 @@ class UserViewSerializer(serializers.ModelSerializer):
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
+    # roles = serializers.SerializerMethodField('get_role')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = User
         fields = ('id_string', 'first_name', 'middle_name', 'last_name', 'email', 'phone_mobile', 'phone_landline',
-                  'created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city', 'department', 'status')
+                  'created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city',
+                  'department', 'status')
