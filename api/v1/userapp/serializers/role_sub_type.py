@@ -17,7 +17,7 @@ class GetRoleSubTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RoleSubType
-        fields = ('name', 'id_string','key')
+        fields = ('id_string', 'name','key')
 
 
 class RoleSubTypeListSerializer(serializers.ModelSerializer):
