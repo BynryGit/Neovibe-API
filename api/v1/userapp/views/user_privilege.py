@@ -84,6 +84,7 @@ class UserPrivilegeDetail(GenericAPIView):
                 users = GetUserSerializer(instance=user, context={'request': request})
                 data.append(users.data)
                 user_privileges = get_user_privilege_by_user_id(user.id)
+                print('**************',user_privileges)
                 if user_privileges:
                     for user_privilege in user_privileges:
                         sub_module_obj = get_sub_module_by_id(user_privilege.sub_module_id)

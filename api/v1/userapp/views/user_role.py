@@ -210,17 +210,14 @@ class UserRoleByUtilityModules(GenericAPIView):
             utility_module_obj = get_utility_modules_by_utility_id_string(utility_id_string)
             module_obj_data=[]
             if user:
-                data['email'] = user.email
-                data['id_string'] = user_id_string
-
                 user_roles = get_user_role_by_user_id(user.id)
                 if user_roles:
                     for user_role in user_roles:
                         role_obj = get_role_by_id(user_role.role_id)
                         role = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
                         role_list.append(role.data)
+                    module_obj_list = []                    
                     for a in role_list:
-                        module_obj_list = []
                         for d in a['modules']['module']:
                             module_data ={}
                             module_data['name'] = d['name'] 
@@ -254,8 +251,9 @@ class UserRoleByUtilityModules(GenericAPIView):
                     data={}
                     if roleprivilege['name'] == utility['module_id']['name']:
                         data['name'] = utility['module_id']['name']
-                        data['id_string'] = utility['id_string']
+                        data['id_string'] = utility['id_string']                                        
                         new_list.append(data)
+            
             return Response({
                 STATE: SUCCESS,
                 DATA: new_list,
@@ -286,7 +284,6 @@ class UserRoleByUtilitySubModule(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
 
             utility_module_obj = get_utility_module_by_id_string(module_id_string)
-            print('utility_module_obj',utility_module_obj.id)
             sub_module_list = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.id, is_active=True)
             module_obj_data=[]
             if user:
@@ -320,7 +317,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
                     module = UtilitySubModuleViewSerializer(instance=submodule_obj, context={'request': request})
                     module_obj_data.append(module.data)
                 utility_submodule_list=[]
-                for l in module_obj_data:  
+                for l in module_obj_data:
                     utility_submodule_list.append(l)
             else:
                 return Response({
@@ -337,7 +334,6 @@ class UserRoleByUtilitySubModule(GenericAPIView):
                         data['name'] = utility['submodule_id']['name']
                         data['id_string'] = utility['id_string']
                         new_list.append(data)
-                   
             return Response({
                 STATE: SUCCESS,
                 DATA: new_list,

@@ -21,6 +21,8 @@ from v1.userapp.models.user_skill import get_skill_by_user_id
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
+from v1.userapp.models.role_type import get_role_type_by_id
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
 from v1.userapp.models.user_utility import get_utility_by_user
 
 
@@ -59,6 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = None
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    user_id = models.CharField(max_length=200, blank=True, null=True)
     city_id = models.BigIntegerField(blank=True, null=True)
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
@@ -109,8 +112,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         return get_user_type_by_id(self.user_type_id)
 
     @property
+    def get_role_type(self):
+        return get_role_type_by_id(self.user_type_id)
+
+    @property
     def get_user_sub_type(self):
         return get_user_sub_type_by_id(self.user_subtype_id)
+
+    @property
+    def get_role_sub_type(self):
+        return get_role_sub_type_by_id(self.user_subtype_id)
 
     @property
     def get_department(self):

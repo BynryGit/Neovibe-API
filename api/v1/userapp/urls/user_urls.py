@@ -9,13 +9,15 @@ from v1.userapp.views.user_privilege import UserPrivilegeDetail
 from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
 from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
+from v1.userapp.views.user_sub_type import UserSubTypeByUserType
 
 urlpatterns = [
     path('', User.as_view(), name='create-user'),
     path('<uuid:id_string>', UserDetail.as_view()),
     path('list/', UserList.as_view()),
-
-    path('<uuid:id_string>/bank/', UserBankDetail.as_view()),
+    path('<uuid:id_string>/bank/', UserBankDetail.as_view()),  
+     
+    path('type/<uuid:id_string>/sub-type/list', UserSubTypeByUserType.as_view()),
 
     path('<uuid:id_string>/role/', UserRole.as_view()),
 
