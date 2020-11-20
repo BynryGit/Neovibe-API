@@ -13,6 +13,7 @@ from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.models.notes import get_notes_by_userid
+from v1.supplier.models.supplier import get_supplier_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_area import get_area_by_user_id
@@ -73,6 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_image = models.URLField(null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
+    supplier_id = models.BigIntegerField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -137,6 +139,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def get_user_skill(self):
         return get_skill_by_user_id(self.id)
+
+    @property
+    def get_supplier(self):
+        return get_supplier_by_id(self.supplier_id)
 
 
 def get_user_by_email(email):

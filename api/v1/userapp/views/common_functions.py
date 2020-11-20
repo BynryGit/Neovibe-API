@@ -13,6 +13,7 @@ from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.supplier.models.supplier import get_supplier_by_id_string
 from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id_string
 from v1.userapp.models.privilege import get_privilege_by_id_string
 from v1.userapp.models.role_sub_type import get_role_sub_type_by_id_string
@@ -167,6 +168,12 @@ def set_user_validated_data(validated_data):
             validated_data["status_id"] = get_status.id
         else:
             raise CustomAPIException("Status not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "supplier_id" in validated_data:
+        get_supplier = get_supplier_by_id_string(validated_data["supplier_id"])
+        if get_supplier:
+            validated_data["supplier_id"] = get_supplier.id
+        else:
+            raise CustomAPIException("Supplier not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
