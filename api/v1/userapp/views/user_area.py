@@ -77,11 +77,12 @@ class UserArea(GenericAPIView):
             if user_obj:
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
-                for area in request.data['areas']:
-                    validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'area_id': area['area_id_string']}
+                for area in request.data:
+                    # validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'area_id': area['area_id_string']}
+                    validate_data = {'user_id': str(id_string),'area_id': area['area_id_string']}
                     serializer = UserAreaSerializer(data=validate_data)
                     if serializer.is_valid(raise_exception=False):
-                        user_id_string = get_user_from_token(request.headers['token'])
+                        user_id_string = get_user_from_token(request.headers['Authorization'])
                         user = get_user_by_id_string(user_id_string)
                         user_area_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserAreaViewSerializer(instance=user_area_obj, context={'request': request})

@@ -285,6 +285,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
 
             utility_module_obj = get_utility_module_by_id_string(module_id_string)
             sub_module_list = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.id, is_active=True)
+
             module_obj_data=[]
             if user:
                 data['email'] = user.email
@@ -329,8 +330,8 @@ class UserRoleByUtilitySubModule(GenericAPIView):
             for roleprivilege in module_obj_list:
                 for utility in utility_submodule_list:
                     data={}
-                    if (roleprivilege['name'] == utility['label']) &(roleprivilege['modulename'] == utility['module_id']['name']) :
-                        data['module_name'] = utility['module_id']['name']
+                    if (roleprivilege['name'] == utility['label']) &(roleprivilege['modulename'] == utility['utility_module_id']['module_id']['name']) :
+                        data['module_name'] = utility['utility_module_id']['module_id']['name']
                         data['name'] = utility['submodule_id']['name']
                         data['id_string'] = utility['id_string']
                         new_list.append(data)
