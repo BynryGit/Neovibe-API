@@ -8,7 +8,7 @@ from master.models import User
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
-from v1.supplier.serializers.supplier import SupplierShortViewSerializer
+from v1.supplier.serializers.supplier import SupplierViewSerializer
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_role import get_role_count_by_user, get_user_role_by_user_id
@@ -137,7 +137,7 @@ class UserViewSerializer(serializers.ModelSerializer):
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     city = CitySerializer(many=False, required=True, source='get_city')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
-    supplier = SupplierShortViewSerializer(many=False, required=True, source='get_supplier')
+    supplier = SupplierViewSerializer(many=False, required=True, source='get_supplier')
     # roles = serializers.SerializerMethodField('get_role')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
