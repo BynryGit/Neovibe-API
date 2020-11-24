@@ -68,7 +68,7 @@ class UserArea(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, EDIT)
+    @role_required(ADMIN, USER, VIEW)
     def post(self, request, id_string):
         try:
             data = {}

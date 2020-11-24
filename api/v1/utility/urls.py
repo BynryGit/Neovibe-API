@@ -17,7 +17,7 @@ from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySub
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
 
 # from v1.userapp.views.role_type import RoleTypeListByUtility
-from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
+from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType,RoleSubTypeListByUtility
 from v1.utility.views.utility_region import UtilityRegionList
 from v1.utility.views.utility_country import UtilityCountryList
 from v1.utility.views.utility_state import UtilityStateList
@@ -54,9 +54,10 @@ urlpatterns = [
     path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(), name='utility_document_sub_type_list'),
 
     path('<uuid:id_string>/role-type/list', RoleTypeListByUtility.as_view()),
+    path('<uuid:id_string>/role-subtype/list', RoleSubTypeListByUtility.as_view()),
 
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
-    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
+    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='role_subtype_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
     path('<uuid:id_string>/country/list', UtilityCountryList.as_view()),
     path('<uuid:id_string>/state/list', UtilityStateList.as_view()),
