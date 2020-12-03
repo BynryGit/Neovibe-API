@@ -14,14 +14,13 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
 # Create Consumer Category table start
-
 
 
 class ConsumerCategory(models.Model):
@@ -42,10 +41,12 @@ class ConsumerCategory(models.Model):
     def __unicode__(self):
         return self.name
 
+
 # Create Consumer Category table end
 
 def get_consumer_category_by_tenant_id_string(id_string):
-    return ConsumerCategory.objects.filter(tenant__id_string = id_string)
+    return ConsumerCategory.objects.filter(tenant__id_string=id_string)
+
 
 def get_consumer_category_by_id_string(id_string):
     try:
@@ -56,9 +57,8 @@ def get_consumer_category_by_id_string(id_string):
 
 def get_consumer_category_by_id(id):
     try:
-        return ConsumerCategory.objects.get(id = id)
+        return ConsumerCategory.objects.get(id=id)
     except:
         return False
 
 # End The Code
-

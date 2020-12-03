@@ -12,22 +12,22 @@ from v1.utility.views.summary import UtilitySummaryDetail
 from v1.utility.views.utility_currency import UtilityCurrencyList
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
 from v1.utility.views.utility_module_submodule import UtilityModuleSubmoduleList
+from v1.utility.views.utility_service import UtilityServiceList
+from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule
-from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
+from v1.userapp.views.role_type import RoleTypeList, RoleTypeListByUtility
 
 # from v1.userapp.views.role_type import RoleTypeListByUtility
-from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType,RoleSubTypeListByUtility
+from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType, RoleSubTypeListByUtility
 from v1.utility.views.utility_region import UtilityRegionList
 from v1.utility.views.utility_country import UtilityCountryList
 from v1.utility.views.utility_state import UtilityStateList
 
-
-
 urlpatterns = [
     path('', Utility.as_view(), name='utility'),
     path('list', UtilityList.as_view(), name='utility_list'),
-    path('<uuid:id_string>', UtilityDetail.as_view(),name='utility_detail'),
+    path('<uuid:id_string>', UtilityDetail.as_view(), name='utility_detail'),
 
     path('<uuid:id_string>/summary', UtilitySummaryDetail.as_view(), name='utility_summary'),
 
@@ -47,18 +47,22 @@ urlpatterns = [
     path('<uuid:id_string>/notes', UtilityNoteList.as_view(), name='utility_notes_list'),
     path('note/<uuid:id_string>', UtilityNoteDetail.as_view(), name='utility_note_details'),
 
-    path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(),name='numformat'),
+    path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(), name='numformat'),
 
-    path('<uuid:id_string>/status/list', UtilityStatusList.as_view(),name='utility_status_list'),
+    path('<uuid:id_string>/status/list', UtilityStatusList.as_view(), name='utility_status_list'),
     path('<uuid:id_string>/document-type/list', UtilityDocumentTypeList.as_view(), name='utility_document_type_list'),
-    path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(), name='utility_document_sub_type_list'),
+    path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(),
+         name='utility_document_sub_type_list'),
 
     path('<uuid:id_string>/role-type/list', RoleTypeListByUtility.as_view()),
     path('<uuid:id_string>/role-subtype/list', RoleSubTypeListByUtility.as_view()),
 
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
-    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='role_subtype_list'),
+    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(), name='role_subtype_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
     path('<uuid:id_string>/country/list', UtilityCountryList.as_view()),
     path('<uuid:id_string>/state/list', UtilityStateList.as_view()),
+    path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
+    path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
+         name='utility_service_contract_master_list'),
 ]

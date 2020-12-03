@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_service_master import get_service_master_by_id
 
 
 class UtilityService(models.Model):
@@ -17,7 +18,26 @@ class UtilityService(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.utility.name
+        return self.utility.name + " " + str(self.id_string)
 
     def __unicode__(self):
         return self.utility.name
+
+    @property
+    def get_service(self):
+        state = get_service_master_by_id(self.service_id)
+        return state
+
+
+def get_utility_service_by_id_string(id_string):
+    try:
+        return UtilityService.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_utility_service_by_id(id):
+    try:
+        return UtilityService.objects.get(id=id)
+    except:
+        return False

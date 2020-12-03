@@ -20,3 +20,10 @@ class UtilityServiceMaster(models.Model):
 
     def __unicode__(self):
         return self.service_name
+
+
+def get_service_master_by_id(id):
+    try:
+        return UtilityServiceMaster.objects.get(id=id)
+    except:
+        return False

@@ -14,7 +14,7 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
@@ -28,7 +28,7 @@ class ConsumerSubCategory(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    category = models.BigIntegerField(blank=True, null=True)
+    category_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -41,23 +41,24 @@ class ConsumerSubCategory(models.Model):
     def __unicode__(self):
         return self.name
 
+
 # Create Consumer Sub Category table end
 
 def get_consumer_sub_category_by_id_string(id_string):
     try:
-        return ConsumerSubCategory.objects.get(id_string = id_string)
+        return ConsumerSubCategory.objects.get(id_string=id_string)
     except:
         return False
 
+
 def get_consumer_sub_category_by_tenant_id_string(id_string):
-    return ConsumerSubCategory.objects.filter(tenant__id_string = id_string)
+    return ConsumerSubCategory.objects.filter(tenant__id_string=id_string)
 
 
 def get_consumer_sub_category_by_id(id):
     try:
-        return ConsumerSubCategory.objects.get(id = id)
+        return ConsumerSubCategory.objects.get(id=id)
     except:
         return False
 
 # End the Code
-

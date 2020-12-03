@@ -24,3 +24,17 @@ class UtilityServiceContractMaster(models.Model):
 
     def __unicode__(self):
         return self.utility.name
+
+
+def get_utility_service_contract_master_by_id_string(id_string):
+    try:
+        return UtilityServiceContractMaster.objects.get(id_string=id_string)
+    except:
+        False
+
+
+def get_utility_service_contract_master_by_id(id):
+    try:
+        return UtilityServiceContractMaster.objects.get(id=id)
+    except:
+        False
