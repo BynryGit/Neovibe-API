@@ -12,7 +12,7 @@ class UtilityStateList(generics.ListAPIView):
         serializer_class = UtilityStateListSerializer
 
         def get_queryset(self):
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])

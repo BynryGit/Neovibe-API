@@ -14,7 +14,7 @@ S_AND_M = ""
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
 CONSUMER_CARE = ""
 # CONSUMER_OPS = get_module_by_name('Consumer Ops')
-CONSUMER_OPS = ""
+CONSUMER_OPS = 3
 # ADMIN = get_module_by_name('Admin')
 ADMIN = ""
 
@@ -40,7 +40,7 @@ PAYMENT = ""
 # PAYROLL = get_sub_module_by_name('Payroll')
 PAYROLL = ""
 # REGISTRATION = get_sub_module_id_by_key('REGISTRATION')
-REGISTRATION = ''
+REGISTRATION = 10
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')

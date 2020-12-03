@@ -11,7 +11,8 @@ from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryVie
 from v1.payment.serializer.payment_transactions import PaymentTransactionSerializer
 from v1.payment.views.common_functions import set_payment_transaction_validated_data
 from v1.registration.models.registrations import Registration
-from v1.registration.views.common_functions import set_validated_data, generate_registration_no
+from v1.registration.views.common_functions import generate_registration_no, \
+    set_registration_validated_data
 
 
 class ChoiceField(serializers.ChoiceField):
@@ -81,7 +82,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         with transaction.atomic():
-            validated_data = set_validated_data(validated_data)
+            validated_data = set_registration_validated_data(validated_data)
             if Registration.objects.filter(phone_mobile=validated_data['phone_mobile'], tenant=user.tenant,
                                            utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
@@ -95,7 +96,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 return registration_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_validated_data(validated_data)
+        validated_data = set_registration_validated_data(validated_data)
         if Registration.objects.exclude(id_string=instance.id_string).filter(
                 phone_mobile=validated_data['phone_mobile'], tenant=user.tenant, utility=instance.utility).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)

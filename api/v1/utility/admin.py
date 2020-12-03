@@ -5,6 +5,10 @@ from v1.utility.models.mandatory_fields import UtilityMandetoryFields
 from v1.utility.models.utility_currency import UtilityCurrency
 from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_module import UtilityModule
+from v1.utility.models.utility_service import UtilityService
+from v1.utility.models.utility_service_contract_master import UtilityServiceContractMaster
+from v1.utility.models.utility_service_contract_template import UtilityServiceContractTemplate
+from v1.utility.models.utility_service_master import UtilityServiceMaster
 from v1.utility.models.utility_service_plan import UtilityServicePlan
 from v1.utility.models.utility_service_plan_rate import UtilityServicePlanRate
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
@@ -28,3 +32,7 @@ admin.site.register(UtilityCurrency)
 admin.site.register(UtilityCountry)
 admin.site.register(UtilityState)
 admin.site.register(UtilityRegion)
+admin.site.register(UtilityService)
+admin.site.register(UtilityServiceContractMaster)
+admin.site.register(UtilityServiceContractTemplate)
+admin.site.register(UtilityServiceMaster)
