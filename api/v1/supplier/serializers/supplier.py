@@ -23,16 +23,16 @@ class SupplierShortViewSerializer(serializers.ModelSerializer):
 class SupplierViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()
-    country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
-    state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
-    city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
+    # country_id = TenantCountrySerializer(many=False, required=False, source='get_tenant_country')
+    # state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
+    # city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = SupplierTbl
         fields = ('id_string', 'name', 'description', 'phone_no', 'email_id', 'address_line_1', 'created_date',
-                  'updated_date', 'tenant', 'utility', 'country_id', 'state_id', 'city_id')
+                  'updated_date', 'tenant', 'utility')
 
 
 class SupplierSerializer(serializers.ModelSerializer):

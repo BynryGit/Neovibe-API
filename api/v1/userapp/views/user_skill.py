@@ -77,11 +77,11 @@ class UserSkill(GenericAPIView):
             if user_obj:
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
-                for skill in request.data['skills']:
+                for skill in request.data:
                     validate_data = {'user_id': str(id_string), 'skill_id': skill['skill_id_string']}
                     serializer = UserSkillSerializer(data=validate_data)
                     if serializer.is_valid(raise_exception=False):
-                        user_id_string = get_user_from_token(request.headers['token'])
+                        user_id_string = get_user_from_token(request.headers['Authorization'])
                         user = get_user_by_id_string(user_id_string)
                         user_skill_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserSkillViewSerializer(instance=user_skill_obj,

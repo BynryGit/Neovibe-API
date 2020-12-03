@@ -15,7 +15,7 @@ class GetUserTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserType
-        fields = ('name', 'id_string')
+        fields = ('name', 'id_string','key')
 
 
 class UserTypeListSerializer(serializers.ModelSerializer):

@@ -70,6 +70,7 @@ UTILITY = ''
 
 ADMIN = 2
 USER = 1
+UTILITY = 1
 VIEW = 1
 EDIT = 2
 

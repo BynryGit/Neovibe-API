@@ -107,7 +107,7 @@ class CountryList(generics.ListAPIView):
         serializer_class = CountryListSerializer
 
         def get_queryset(self):
-            response, user_obj = is_token_valid(self.request.headers['token'])
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1,1,1,user_obj):
                     queryset = CountryModel.objects.all()

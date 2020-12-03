@@ -10,6 +10,11 @@ from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl
 from v1.utility.views.common_functions import set_utility_module_validated_data
 
+class UtilityModuleShortViewSerializer(serializers.ModelSerializer):
+    module_id = ModuleShortViewSerializer(many=False, source='get_module')
+    class Meta:
+        model = UtilityModuleTbl
+        fields = ('id_string','label','module_id')
 
 class UtilityModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
