@@ -21,6 +21,7 @@ from django.db import models  # importing package for database
 # Create Consumer Sub Category table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
 
 
 class ConsumerSubCategory(models.Model):
@@ -40,6 +41,11 @@ class ConsumerSubCategory(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    @property
+    def get_category_type(self):
+        consumer_category = get_consumer_category_by_id(self.category_id)
+        return consumer_category
 
 
 # Create Consumer Sub Category table end

@@ -61,7 +61,7 @@ class UtilitySubModule(models.Model):
 
 def get_utility_submodule_by_id(id):
     try:
-        return UtilitySubModule.objects.get(id = id)
+        return UtilitySubModule.objects.filter(id = id)
     except:
         return False
 

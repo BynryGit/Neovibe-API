@@ -1,5 +1,8 @@
 import traceback
 from django.db.models import Q
+from rest_framework import status
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from datetime import datetime
 from django.core.paginator import Paginator
 from v1.survey.models.survey import Survey
@@ -18,6 +21,10 @@ from v1.survey.models.survey_objective import get_survey_objective_by_id_string,
 from v1.commonapp.models.area import get_area_by_id_string,get_area_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.survey.models.survey_type import get_survey_type_by_id_string
+from v1.survey.models.survey_subtype import get_survey_subtype_by_id_string
+from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.commonapp.views.logger import logger
 
 
 
@@ -493,5 +500,73 @@ def set_survey_validate_data(validated_data):
         survey_id = get_survey_by_id_string(validated_data["survey_id"])
         validated_data["survey_id"] = survey_id.id
 
+    return validated_data
+
+
+def set_survey_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_survey_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "survey_type_id" in validated_data:
+        survey_type = get_survey_type_by_id_string(validated_data["survey_type_id"])
+        if survey_type:
+            validated_data["survey_type_id"] = survey_type.id
+        else:
+            raise CustomAPIException("Survey Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    
+    return validated_data
+
+
+def set_survey_objective_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "survey_type_id" in validated_data:
+        survey_type = get_survey_type_by_id_string(validated_data["survey_type_id"])
+        if survey_type:
+            validated_data["survey_type_id"] = survey_type.id
+        else:
+            raise CustomAPIException("Survey Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    
+    if "survey_subtype_id" in validated_data:
+        survey_subtype = get_survey_subtype_by_id_string(validated_data["survey_subtype_id"])
+        if survey_subtype:
+            validated_data["survey_subtype_id"] = survey_subtype.id
+        else:
+            raise CustomAPIException("Survey Sub Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    
     return validated_data
 

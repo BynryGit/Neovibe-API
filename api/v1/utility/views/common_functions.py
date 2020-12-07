@@ -9,7 +9,12 @@ from v1.tenant.models.tenant_region import get_tenant_region_by_id_string
 from v1.tenant.models.tenant_state import get_tenant_state_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_status import get_utility_status_by_id_string
-
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from rest_framework import generics, status
+from v1.utility.models.utility_services_number_format import get_item_by_id
+from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string,get_utility_submodule_by_id
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
+from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 
 def set_utility_validated_data(validated_data):
     if "tenant" in validated_data:
@@ -65,3 +70,41 @@ def set_utility_submodule_validated_data(validated_data):
         submodule = get_sub_module_by_id_string(validated_data["submodule_id"])
         validated_data["submodule_id"] = submodule.id
     return validated_data
+
+def set_numformat_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "sub_module_id" in validated_data:
+        submodule_id = get_sub_module_by_id_string(validated_data["sub_module_id"])
+        if submodule_id:
+            validated_data["sub_module_id"] = submodule_id.id
+        else:
+            raise CustomAPIException("SubModule Not Found", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def generate_current_no(user):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=user.tenant,utility=user.utility)
+        print(format_obj)
+        if format_obj.is_prefix == True:
+            currentno = format_obj.prefix + str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        else:
+            currentno = str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        return currentno
+    except Exception:
+        raise CustomAPIException("Current No generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

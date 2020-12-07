@@ -9,7 +9,7 @@ class ComplaintListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Complaint
-        fields = ('complaint_name', 'id_string')
+        fields = ('complaint_name', 'id_string','created_by','state','consumer_no','complaint_no','created_date')
 
 
 class ComplaintViewSerializer(serializers.ModelSerializer):

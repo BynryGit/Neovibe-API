@@ -16,7 +16,7 @@ CONSUMER_CARE = ""
 CONSUMER_OPS = get_module_by_name('Consumer Ops')
 # CONSUMER_OPS = 3
 # ADMIN = get_module_by_name('Admin')
-ADMIN = ""
+ADMIN = 1
 
 # *********** SUB MODULE CONSTANTS **************
 # DASHBOARD = get_sub_module_by_name('Dashboard')
@@ -55,7 +55,7 @@ TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
 # USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
-UTILITY = ''
+UTILITY = 1
 
 # *********** PRIVILEGE CONSTANTS **************
 # VIEW = get_privilege_by_name('View')
