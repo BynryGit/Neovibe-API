@@ -10,7 +10,7 @@
 # Creation Date : 23/04/2020
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -42,10 +42,12 @@ class ConsumerMeter(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.utility.name + " " + str(self.id_string)
+
     def __unicode__(self):
-        return str(self.meter_id) + '-' + str(self.consumer_id) + '-' + str(self.assign_date) + '-' + str(
-            self.initial_reading) + '-' + str(self.status)
-# Create Consumer meter table end.
+        return self.utility.name
+
 
 def get_consumer_meter_by_id(id):
     try:

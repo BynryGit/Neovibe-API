@@ -10,7 +10,6 @@ from v1.commonapp.models.document_sub_type import DocumentSubType
 from v1.commonapp.models.document_type import DocumentType
 from v1.commonapp.models.email_configurations import EmailConfiguration
 from v1.commonapp.models.form_factor import FormFactor
-from v1.commonapp.models.gl_code import GlCode
 from v1.commonapp.models.module import Module
 from v1.commonapp.models.notes import Notes
 from v1.commonapp.models.notification import Notification
@@ -27,7 +26,6 @@ from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.transition_configuration import TransitionConfiguration
 
 admin.site.register(Region)
-admin.site.register(GlCode)
 admin.site.register(Country)
 admin.site.register(State)
 admin.site.register(City)

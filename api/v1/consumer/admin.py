@@ -2,12 +2,14 @@ from django.contrib import admin
 from v1.complaint.models.complaint_status import ComplaintStatus
 from v1.complaint.models.complaint_sub_type import ComplaintSubType
 from v1.complaint.models.complaint_type import ComplaintType
+from v1.consumer.models.consumer_credit_rating import ConsumerCreditRating
 from v1.consumer.models.consumer_down_payment import ConsumerDownPayment
 from v1.consumer.models.consumer_loan import ConsumerLoan
 from v1.consumer.models.consumer_notification import ConsumerNotification
 from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail
 from v1.consumer.models.consumer_offer_master import ConsumerOfferMaster
 from v1.consumer.models.consumer_personal_detail import ConsumerPersonalDetail
+from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.service.models.consumer_services import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_master import ConsumerMaster
@@ -50,3 +52,5 @@ admin.site.register(ConsumerLoan)
 admin.site.register(ConsumerOfferDetail)
 admin.site.register(ConsumerOfferMaster)
 admin.site.register(ConsumerPersonalDetail)
+admin.site.register(ConsumerCreditRating)
+admin.site.register(ConsumerServiceContractDetail)

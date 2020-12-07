@@ -13,8 +13,8 @@ from v1.utility.models.utility_master import get_utility_by_name
 S_AND_M = ""
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
 CONSUMER_CARE = ""
-# CONSUMER_OPS = get_module_by_name('Consumer Ops')
-CONSUMER_OPS = 3
+CONSUMER_OPS = get_module_by_name('Consumer Ops')
+# CONSUMER_OPS = 3
 # ADMIN = get_module_by_name('Admin')
 ADMIN = ""
 
@@ -25,8 +25,8 @@ DASHBOARD = ""
 BILLING = ""
 # CAMPAIGN = get_sub_module_by_name('S&M-Campaign')
 CAMPAIGN = ""
-# CONSUMER = get_sub_module_by_name('Consumers')
-CONSUMER = ''
+CONSUMER = get_sub_module_by_name('Consumers')
+# CONSUMER = ''
 # CONTRACT = get_sub_module_by_name('S&M-Contract')
 CONTRACT = ""
 # DISPATCHER = get_sub_module_by_name('Dispatcher')
@@ -59,7 +59,7 @@ UTILITY = ''
 
 # *********** PRIVILEGE CONSTANTS **************
 # VIEW = get_privilege_by_name('View')
-# EDIT = get_privilege_by_name('Edit')
+EDIT = get_privilege_by_name('Edit')
 # DELETE = get_privilege_by_name('Delete')
 
 
@@ -72,7 +72,7 @@ ADMIN = 2
 USER = 1
 UTILITY = 1
 VIEW = 1
-EDIT = 2
+# EDIT = 2
 
 METER_PICTURE = 'media/meter'
 
