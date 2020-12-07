@@ -8,6 +8,7 @@ from v1.commonapp.serializers.module import ModuleShortViewSerializer
 from v1.commonapp.serializers.sub_module import SubModuleShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from v1.utility.serializers.utility_module import UtilityModuleShortViewSerializer
 from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl
 from v1.utility.views.common_functions import set_utility_submodule_validated_data
 from v1.commonapp.models.sub_module import SubModule as SubModuleTbl
@@ -16,14 +17,14 @@ from v1.commonapp.models.sub_module import SubModule as SubModuleTbl
 class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
-    module_id = ModuleShortViewSerializer(many=False, source='get_module')
+    utility_module_id = UtilityModuleShortViewSerializer(many=False, source='get_module')
     submodule_id = SubModuleShortViewSerializer(many=False, source='get_submodule')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('id_string', 'label', 'created_date', 'updated_date', 'is_active', 'module_id', 'submodule_id',
+        fields = ('id_string', 'label', 'created_date', 'updated_date', 'is_active', 'utility_module_id', 'submodule_id',
                   'tenant', 'utility')
 
 

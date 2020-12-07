@@ -14,7 +14,7 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
@@ -47,23 +47,24 @@ class ConsumerSubCategory(models.Model):
         consumer_category = get_consumer_category_by_id(self.category_id)
         return consumer_category
 
+
 # Create Consumer Sub Category table end
 
 def get_consumer_sub_category_by_id_string(id_string):
     try:
-        return ConsumerSubCategory.objects.get(id_string = id_string)
+        return ConsumerSubCategory.objects.get(id_string=id_string)
     except:
         return False
 
+
 def get_consumer_sub_category_by_tenant_id_string(id_string):
-    return ConsumerSubCategory.objects.filter(tenant__id_string = id_string)
+    return ConsumerSubCategory.objects.filter(tenant__id_string=id_string)
 
 
 def get_consumer_sub_category_by_id(id):
     try:
-        return ConsumerSubCategory.objects.filter(id = id)
+        return ConsumerSubCategory.objects.get(id=id)
     except:
         return False
 
 # End the Code
-

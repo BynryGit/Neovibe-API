@@ -41,9 +41,11 @@ class SupplierList(generics.ListAPIView):
         search_fields = ('name', 'utility__name',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
-                    queryset = SupplierTbl.objects.filter(is_active=True)
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = SupplierTbl.objects.filter(utility__id_string=self.kwargs['id_string'],is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

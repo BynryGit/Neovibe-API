@@ -30,7 +30,7 @@ def is_data_verified(request):
 
 
 # Function for converting id_strings to id's
-def set_validated_data(validated_data):
+def set_registration_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
         if utility:

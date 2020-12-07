@@ -21,6 +21,7 @@ from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_module import get_utility_module_by_id
 from django.db import models  # importing package for database
 
 
@@ -47,7 +48,7 @@ class UtilitySubModule(models.Model):
 
     @property
     def get_module(self):
-        module = get_module_by_id(self.module_id)
+        module = get_utility_module_by_id(self.module_id)
         return module
 
     @property

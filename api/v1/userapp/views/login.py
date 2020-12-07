@@ -140,7 +140,7 @@ class LoginApiView(APIView):
 
 
 def validate_logout_data(request):
-    if 'token' in request.headers:
+    if 'Authorization' in request.headers:
         return True
     else:
         return False
@@ -152,7 +152,7 @@ class LogoutApiView(APIView):
     def post(self, request, format=None):
         try:
             if validate_logout_data(request):
-                token = request.headers['token']
+                token = request.headers['Authorization']
                 user = get_user_by_id_string(request.data['id_string'])
 
                 if check_token_exists_for_user(token, user.id):

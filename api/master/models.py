@@ -13,6 +13,7 @@ from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.document import get_documents_by_user_id
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.models.notes import get_notes_by_userid
+from v1.supplier.models.supplier import get_supplier_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_area import get_area_by_user_id
@@ -20,6 +21,8 @@ from v1.userapp.models.user_skill import get_skill_by_user_id
 from v1.userapp.models.user_status import get_user_status_by_id
 from v1.userapp.models.user_sub_type import get_user_sub_type_by_id
 from v1.userapp.models.user_type import get_user_type_by_id
+from v1.userapp.models.role_type import get_role_type_by_id
+from v1.userapp.models.role_sub_type import get_role_sub_type_by_id
 from v1.userapp.models.user_utility import get_utility_by_user
 
 
@@ -58,6 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = None
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    user_id = models.CharField(max_length=200, blank=True, null=True)
     city_id = models.BigIntegerField(blank=True, null=True)
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
     user_subtype_id = models.BigIntegerField(null=True, blank=True)  # employee, vendor, supplier
@@ -73,6 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_image = models.URLField(null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
+    supplier_id = models.BigIntegerField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -107,8 +112,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         return get_user_type_by_id(self.user_type_id)
 
     @property
+    def get_role_type(self):
+        return get_role_type_by_id(self.user_type_id)
+
+    @property
     def get_user_sub_type(self):
         return get_user_sub_type_by_id(self.user_subtype_id)
+
+    @property
+    def get_role_sub_type(self):
+        return get_role_sub_type_by_id(self.user_subtype_id)
 
     @property
     def get_department(self):
@@ -137,6 +150,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def get_user_skill(self):
         return get_skill_by_user_id(self.id)
+
+    @property
+    def get_supplier(self):
+        return get_supplier_by_id(self.supplier_id)
 
 
 def get_user_by_email(email):

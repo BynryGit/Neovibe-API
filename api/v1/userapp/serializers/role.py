@@ -117,6 +117,9 @@ class RoleViewSerializer(serializers.ModelSerializer):
 
 class GetRoleSerializer(serializers.ModelSerializer):
 
+    role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
+    role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+
     class Meta:
         model = Role
-        fields = ('id_string', 'role_ID', 'role')
+        fields = ('id_string', 'role_ID', 'role', 'role_type', 'role_sub_type')
