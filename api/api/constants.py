@@ -68,11 +68,14 @@ UTILITY = 1
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
 
-ADMIN = 2
-USER = 1
-UTILITY = 1
-VIEW = 1
-EDIT = 2
+# ADMIN = 2
+# USER = 1
+# UTILITY = 1
+# VIEW = 1
+# EDIT = 2
+USER = ''
+VIEW = ''
+EDIT = 1
 
 METER_PICTURE = 'media/meter'
 
