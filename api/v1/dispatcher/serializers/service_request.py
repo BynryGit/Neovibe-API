@@ -8,7 +8,7 @@ from v1.dispatcher.views.common_functions import set_validated_data
 from v1.dispatcher.models.service_appointments import ServiceRequest
 from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
 from v1.commonapp.serializers.city import CitySerializer
-from v1.consumer.serializers.consumer import ConsumerViewSerializer
+from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
 from v1.asset.serializer.asset import AssetViewSerializer
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.serializers.sub_area import SubAreaListSerializer

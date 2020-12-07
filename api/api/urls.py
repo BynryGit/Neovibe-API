@@ -28,7 +28,7 @@ from v1.tenant import urls as tenant_urls
 from v1.billing import urls as billing_urls
 from v1.asset import urls as asset_urls
 from v1.tender import urls as tender_urls
-from v1.meter_reading import urls as meterreading_urls
+from v1.meter_data_management import urls as meterreading_urls
 from v1.complaint import urls as complaint_urls
 from v1.payment import urls as payment_urls
 from v1.store import urls as store_urls

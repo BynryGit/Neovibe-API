@@ -55,10 +55,17 @@ class State(models.Model):
 
 
 def get_state_by_id_string(id_string):
-    return State.objects.get(id_string=id_string)
+    try:
+        return State.objects.get(id_string=id_string)
+    except:
+        return False
 
 
 def get_state_by_id(id):
-    return State.objects.get(id=id)
+    try:
+        return State.objects.get(id=id)
+    except:
+        False
+
 
 # End the Code
