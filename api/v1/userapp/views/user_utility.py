@@ -4,14 +4,59 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
 from api.constants import *
+from rest_framework.generics import GenericAPIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, status
+from rest_framework.filters import OrderingFilter, SearchFilter
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values
+from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values,UserUtility as UserUtilityTbl
 from v1.userapp.serializers.user_utility import UserUtilitySerializer, UserUtilityViewSerializer
 from v1.userapp.views.common_functions import set_user_utility_validated_data
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
+
+# API Header
+# API end Point: api/v1/user/tenant/id/utility/list
+# API verb: GET
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: UesrUtilityList list
+# Usage: API will fetch required data for UesrUtility list against filter and search
+# Tables used: UesrUtility
+# Author: Priyanka
+# Created on: 15/11/2020
+
+class UesrUtilityList(generics.ListAPIView):
+    try:
+        serializer_class = UserUtilityViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ( 'utility__id_string',)
+        ordering_fields = ( 'utility__id_string',)
+        ordering = ('user_id') # always give by default alphabetical order
+        search_fields = ( 'utility__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = UserUtilityTbl.objects.filter(tenant__id_string=self.kwargs['id_string'],is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        # raise APIException
 
 
 # API Header
@@ -77,11 +122,11 @@ class UserUtility(GenericAPIView):
             if user_obj:
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
-                for utility in request.data['utilities']:
+                for utility in request.data:
                     validate_data = {'user_id': str(id_string), 'utility_id': utility['utility_id_string']}
                     serializer = UserUtilitySerializer(data=validate_data)
                     if serializer.is_valid(raise_exception=False):
-                        user_id_string = get_user_from_token(request.headers['token'])
+                        user_id_string = get_user_from_token(request.headers['Authorization'])
                         user = get_user_by_id_string(user_id_string)
                         user_utility_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,

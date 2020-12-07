@@ -27,7 +27,7 @@ class SurveyType(models.Model):
     tenant = models.ForeignKey(TenantMaster, null=True, blank=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -49,7 +49,7 @@ def get_survey_type_by_id_string(id_string):
         return False
 
 def get_survey_type_by_id(id):
-    return SurveyType.objects.get(id = id)
+    return SurveyType.objects.filter(id = id)
 
 # Create Survey Type table end.
 

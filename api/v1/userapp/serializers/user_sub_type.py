@@ -17,7 +17,7 @@ class GetUserSubTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserSubType
-        fields = ('name', 'id_string')
+        fields = ('name', 'id_string','key')
 
 
 class UserSubTypeListSerializer(serializers.ModelSerializer):

@@ -32,6 +32,7 @@ from v1.meter_reading import urls as meterreading_urls
 from v1.complaint import urls as complaint_urls
 from v1.payment import urls as payment_urls
 from v1.store import urls as store_urls
+from v1.service import urls as service_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -55,4 +56,5 @@ urlpatterns = [
     path('api/v1/payment/', include(payment_urls)),
     path('api/v1/store/', include(store_urls)),
 
+    path('api/v1/service/', include(service_urls)),
 ]

@@ -2,7 +2,12 @@ from django.contrib import admin
 from v1.complaint.models.complaint_status import ComplaintStatus
 from v1.complaint.models.complaint_sub_type import ComplaintSubType
 from v1.complaint.models.complaint_type import ComplaintType
+from v1.consumer.models.consumer_down_payment import ConsumerDownPayment
+from v1.consumer.models.consumer_loan import ConsumerLoan
 from v1.consumer.models.consumer_notification import ConsumerNotification
+from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail
+from v1.consumer.models.consumer_offer_master import ConsumerOfferMaster
+from v1.consumer.models.consumer_personal_detail import ConsumerPersonalDetail
 from v1.service.models.consumer_services import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_master import ConsumerMaster
@@ -19,7 +24,10 @@ from v1.consumer.models.service_request_status import ServiceRequestStatus
 from v1.consumer.models.service_status import ServiceStatus
 from v1.consumer.models.service_sub_type import ServiceSubType
 from v1.consumer.models.source_type import SourceType
-
+from v1.consumer.models.consumer_consent import ConsumerConsent
+from v1.consumer.models.consumer_support import ConsumerSupport
+from v1.consumer.models.consumer_faq import ConsumerFaq
+from v1.consumer.models.service_type import ServiceType
 admin.site.register(SourceType)
 admin.site.register(ComplaintStatus)
 admin.site.register(ConsumerOwnership)
@@ -38,5 +46,11 @@ admin.site.register(ConsumerSubCategory)
 admin.site.register(ComplaintType)
 admin.site.register(ComplaintSubType)
 admin.site.register(ServiceSubType)
+admin.site.register(ServiceType)
 admin.site.register(SchemeType)
 admin.site.register(ConsumerNotification)
+admin.site.register(ConsumerDownPayment)
+admin.site.register(ConsumerLoan)
+admin.site.register(ConsumerOfferDetail)
+admin.site.register(ConsumerOfferMaster)
+admin.site.register(ConsumerPersonalDetail)

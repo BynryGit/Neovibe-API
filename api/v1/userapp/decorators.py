@@ -23,6 +23,7 @@ def is_token_validate(function):
             if check_token_exists_for_user(token, user_obj.id):
                 token_obj = get_token_by_token(token)
                 if (token_obj.created_date + timedelta(hours=4)).replace(tzinfo=None) < datetime.now():
+                # if (token_obj.created_date + timedelta(minutes=5)).replace(tzinfo=None) < datetime.now():
                     token_obj.delete()
                     return Response({
                         STATE: ERROR,

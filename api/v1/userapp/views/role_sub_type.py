@@ -65,3 +65,42 @@ class RoleSubTypeByRoleType(generics.ListAPIView):
         logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT/SUBMODULE')
         raise APIException
 
+
+# API Header
+# API end Point: api/v1/role/subtype/list
+# API verb: GET
+# Package: Basic
+# Modules: User
+# Sub Module: Role
+# Interaction: Get Role Sub Type list
+# Usage: API will fetch required data for Role sub Type list 
+# Tables used: Role sub Type
+# Author: Priyanka
+# Created on: 20/10/2020
+
+
+
+class RoleSubTypeListByUtility(generics.ListAPIView):
+    try:
+        serializer_class = GetRoleSubTypeSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name', 'utility__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = RoleSubTypeTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException

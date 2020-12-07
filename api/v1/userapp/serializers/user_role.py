@@ -5,10 +5,8 @@ from rest_framework import serializers, status
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_role import UserRole
-from v1.userapp.serializers.role import GetRoleSerializer, RoleViewSerializer
-from v1.userapp.serializers.user import GetUserSerializer
+from v1.userapp.serializers.role import RoleViewSerializer
 from v1.userapp.views.common_functions import set_user_role_validated_data
 
 

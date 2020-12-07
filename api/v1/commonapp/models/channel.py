@@ -25,7 +25,8 @@ class Channel(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    key = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -36,6 +37,12 @@ class Channel(models.Model):
 
     def __unicode__(self):
         return self.name
+
+def get_channel_by_id_string(id_string):
+    return Channel.objects.get(id_string = id_string)
+
+def get_channel_by_id(id):
+    return Channel.objects.filter(id = id)
 
 # Create Channel table end
 

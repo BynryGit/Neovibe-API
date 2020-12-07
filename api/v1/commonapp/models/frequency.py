@@ -17,6 +17,9 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from v1.campaign.models.campaign_type import get_campaign_type_by_id
+from v1.commonapp.models.channel import get_channel_by_id
+from v1.utility.models.utility_channel import get_utility_channel_by_id
 
 # Create Frequency table start
 class Frequency(models.Model):
@@ -24,7 +27,9 @@ class Frequency(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    campaign_type_id = models.BigIntegerField(null=True, blank=True)
+    channel_type_id =  models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -35,6 +40,16 @@ class Frequency(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_campaign(self):
+        campaign = get_campaign_type_by_id(self.campaign_type_id)
+        return campaign
+
+    @property
+    def get_channel(self):
+        channel = get_utility_channel_by_id(self.channel_type_id)
+        return channel
 # Create Frequency table end
 
 def get_frequency_by_tenant_id_string(tenant_id_string):
@@ -44,4 +59,4 @@ def get_frequency_by_id_string(id_string):
     return Frequency.objects.get(id_string = id_string)
 
 def get_frequency_by_id(id):
-    return Frequency.objects.get(id = id)
+    return Frequency.objects.filter(id = id)

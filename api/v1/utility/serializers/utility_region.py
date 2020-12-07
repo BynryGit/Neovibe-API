@@ -1,10 +1,13 @@
-from rest_framework import serializers
-from v1.commonapp.serializers.region import RegionSerializer
-from v1.utility.models.utility_region import UtilityRegion
+from rest_framework import serializers, status
+from django.db import transaction
+from v1.commonapp.common_functions import set_region_validated_data
+from datetime import datetime
+from api.messages import REGION_ALREADY_EXIST
+from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.utility.models.utility_region import UtilityRegion as UtilityRegionTbl
+
 
 class UtilityRegionListSerializer(serializers.ModelSerializer):
-    region = RegionSerializer(many=False, source='get_region')
-
     class Meta:
-        model = UtilityRegion
-        fields = ('id_string', 'label', 'region')
+        model = UtilityRegionTbl
+        fields = ('name', 'id_string','is_active','created_by','created_date')

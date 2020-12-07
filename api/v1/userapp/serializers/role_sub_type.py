@@ -14,10 +14,10 @@ from v1.utility.serializers.utility import UtilitySerializer
 
 
 class GetRoleSubTypeSerializer(serializers.ModelSerializer):
-
+    role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     class Meta:
         model = RoleSubType
-        fields = ('name', 'id_string')
+        fields = ('id_string', 'name','key','role_type','created_by','created_date','is_active')
 
 
 class RoleSubTypeListSerializer(serializers.ModelSerializer):

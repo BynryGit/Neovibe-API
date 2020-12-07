@@ -27,13 +27,14 @@ class Skills(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     skill = models.CharField(max_length=200, blank=False, null=False)
-    description = models.CharField(max_length=500, blank=False, null=False)
-    service_type_id = models.BigIntegerField(blank=False, null=False)
-    created_by = models.BigIntegerField(null=False, blank=False)
-    updated_by = models.BigIntegerField(null=False, blank=False)
+    image_url = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
+    service_type_id = models.BigIntegerField(blank=True, null=True)
+    created_by = models.BigIntegerField(blank=True, null=True)
+    updated_by = models.BigIntegerField(blank=True, null=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.skill
@@ -48,6 +49,10 @@ class Skills(models.Model):
     @property
     def get_utility(self):
         return self.utility
+    
+    @property
+    def get_created_by(self):
+        return self.created_by
 
     @property
     def get_service_type(self):

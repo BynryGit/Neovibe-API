@@ -18,6 +18,8 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from v1.survey.models.survey_type import get_survey_type_by_id
+from v1.survey.models.survey_subtype import get_survey_subtype_by_id
 
 
 # Create Survey Objective table start.
@@ -27,7 +29,9 @@ class SurveyObjective(models.Model):
     tenant = models.ForeignKey(TenantMaster, null=True, blank=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, null=True, blank=True, on_delete=models.SET_NULL)
     objective = models.CharField(max_length=500, blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    survey_type_id = models.BigIntegerField(null=True, blank=True)
+    survey_subtype_id = models.BigIntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -38,6 +42,16 @@ class SurveyObjective(models.Model):
 
     def __unicode__(self):
         return self.objective
+    
+    @property
+    def get_survey_type(self):
+        survey_type = get_survey_type_by_id(self.survey_type_id)
+        return survey_type
+
+    @property
+    def get_survey_subtype(self):
+        survey_subtype = get_survey_subtype_by_id(self.survey_subtype_id)
+        return survey_subtype
 
 def get_survey_objective_by_tenant_id_string(id_string):
     return SurveyObjective.objects.filter(tenant__id_string = id_string)

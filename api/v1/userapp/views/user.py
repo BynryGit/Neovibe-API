@@ -69,7 +69,7 @@ class User(GenericAPIView):
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 if not is_email_exists(request.data['email']):
-                    user_id_string = get_user_from_token(request.headers['token'])
+                    user_id_string = get_user_from_token(request.headers['Authorization'])
                     user = get_user_by_id_string(user_id_string)
                     user_obj = serializer.create(serializer.validated_data, user)
                     view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
