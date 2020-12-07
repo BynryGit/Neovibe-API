@@ -7,14 +7,14 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.contract_demand import ContractDemand as ContractDemandTbl
-from v1.contract.serializers.contract import ContractShortViewSerializer
+from v1.contract.serializers.contract import ContractListSerializer
 from v1.contract.views.common_functions import set_contract_demand_validated_data
 
 
 class ContractDemandViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
-    contract = ContractShortViewSerializer(many=False, required=False, source='get_contract')
+    contract = ContractListSerializer(many=False, required=False, source='get_contract')
     due_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     demand_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)

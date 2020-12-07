@@ -43,6 +43,12 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
         (6, 'ARCHIVED'),
     )
 
+    ACCOUNT_TYPE = (
+        (0, 'MASTER'),
+        (1, 'CHILD'),
+        (2, 'TEST'),
+    )
+
     state_machine = {
         CONSUMER_DICT['CREATED']                    : (CONSUMER_DICT['REGISTERED'],CONSUMER_DICT['CREATED'],),
         CONSUMER_DICT['REGISTERED']                 : (CONSUMER_DICT['INSTALLED'],),
@@ -57,6 +63,7 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    master_consumer_no = models.CharField(max_length=200, null=True, blank=True)
     email_id = models.CharField(max_length=200, null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
@@ -77,10 +84,8 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     registration_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
     credit_rating_id = models.BigIntegerField(null=True, blank=True)
-    is_master_account = models.BooleanField(default=False)
-    is_child_account = models.BooleanField(default=False)
+    account_type = models.BigIntegerField(choices=ACCOUNT_TYPE, null=True, blank=True)
     is_auto_pay = models.BooleanField(default=False)
-    is_test_account = models.BooleanField(default=False)
     is_loan = models.BooleanField(default=False)
     is_upfront_amount = models.BooleanField(default=False)
     ownership_id = models.BigIntegerField(null=True, blank=True)
@@ -93,10 +98,10 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.first_name
+        return self.phone_mobile
 
     def __unicode__(self):
-        return self.first_name
+        return self.phone_mobile
 
     # Function for finite state machine state change
     def on_change_state(self, previous_state, next_state, **kwargs):

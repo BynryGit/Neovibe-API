@@ -30,7 +30,6 @@ from api.constants import *
 # Author: Chinmay
 # Created on: 11/11/2020
 
-
 class CityList(generics.ListAPIView):
     try:
         serializer_class = CityListSerializer

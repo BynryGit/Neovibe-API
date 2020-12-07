@@ -25,8 +25,8 @@ class UtilityService(models.Model):
 
     @property
     def get_service(self):
-        state = get_service_master_by_id(self.service_id)
-        return state
+        service = get_service_master_by_id(self.service_id)
+        return service
 
 
 def get_utility_service_by_id_string(id_string):

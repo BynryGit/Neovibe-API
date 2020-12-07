@@ -19,7 +19,7 @@ from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_ownership import ConsumerOwnership
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
-from v1.consumer.serializers.consumer import ConsumerSerializer, ConsumerViewSerializer
+from v1.consumer.serializers.consumer_master import ConsumerSerializer, ConsumerViewSerializer
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
@@ -28,6 +28,9 @@ from v1.payment.serializer.payment import *
 from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_service import get_utility_service_by_id_string
+
 
 # API Header
 # API end Point: api/v1/consumer
@@ -38,19 +41,15 @@ from v1.userapp.decorators import is_token_validate, role_required
 # Interaction: Add
 # Usage: Add
 # Tables used: ConsumerMaster
-# Auther: Rohan
+# Author: Rohan
 # Created on: 19/05/2020
-from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.models.utility_service import get_utility_service_by_id_string
-
-
 class Consumer(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             serializer = ConsumerSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
