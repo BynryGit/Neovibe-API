@@ -59,7 +59,6 @@ from v1.commonapp.models.state import State as StateModel
 from v1.commonapp.models.country import get_country_by_id_string
 
 
-
 # API Header
 # API end Point: api/v1/states
 # API verb: GET

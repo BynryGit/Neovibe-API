@@ -8,6 +8,10 @@ from v1.supplier.views.supplier_payment import SupplierPaymentList, SupplierPaym
 from v1.supplier.views.supplier_product import SupplierProductList, SupplierProduct, SupplierProductDetail
 from v1.supplier.views.supplier_service import SupplierServiceList, SupplierService, SupplierServiceDetail
 from v1.supplier.views.supplier_status import SupplierStatusList
+from v1.supplier.views.supplier_type import SupplierTypeList, SupplierTypeDetail, SupplierType
+from v1.supplier.views.supplier_subtype import SupplierSubTypeList, SupplierSubTypeDetail, SupplierSubType
+from v1.supplier.views.product_category import ProductCategoryList, ProductCategoryDetail, ProductCategory
+from v1.supplier.views.product_subcategory import ProductSubCategoryList, ProductSubCategoryDetail, ProductSubCategory
 
 urlpatterns = [
     path('', Supplier.as_view(), name='supplier'),
@@ -35,4 +39,22 @@ urlpatterns = [
     path('contract/<uuid:id_string>', SupplierContractDetail.as_view(),name='supplier_contract_detail'),
 
     path('status/list', SupplierStatusList.as_view(), name='supplier_status_list'),
+
+    path('<uuid:id_string>/type/list', SupplierTypeList.as_view(), name='supplier_type_list'),
+    path('<uuid:id_string>/type', SupplierTypeDetail.as_view(), name='supplier_type_detail'),
+    path('type', SupplierType.as_view(), name='supplier_type'),
+
+    path('<uuid:id_string>/subtype/list', SupplierSubTypeList.as_view(), name='supplier_subtype_list'),
+    path('<uuid:id_string>/subtype', SupplierSubTypeDetail.as_view(), name='supplier_subtype_detail'),
+    path('subtype', SupplierSubType.as_view(), name='supplier_subtype'),
+
+    path('<uuid:id_string>/product-category/list', ProductCategoryList.as_view(), name='product_category_list'),
+    path('<uuid:id_string>/product-category', ProductCategoryDetail.as_view(), name='product_category_detail'),
+    path('product-category', ProductCategory.as_view(), name='product_category'),
+
+    path('<uuid:id_string>/product-subcategory/list', ProductSubCategoryList.as_view(), name='product_subcategory_list'),
+    path('<uuid:id_string>/product-subcategory', ProductSubCategoryDetail.as_view(), name='product_subcategory_detail'),
+    path('product-subcategory', ProductSubCategory.as_view(), name='product_subcategory'),
+
+
 ]

@@ -2,12 +2,12 @@
 # module: Sourcing  | sub-module - Contract
 # table type : lookup (Local)
 # table name : 2.12.70 Contract Type
-# table description : A lookup table for types of contracts.
+# table description : A lookup table for subtypes of contracts.
 # frequency of data changes : Low
 # sample tale data :"Valid Contract", "Voidable Contract"
 # reference tables : 2.5.6 Contracts Master Table
-# author : Saloni Monde
-# created on : 21/04/2020
+# author : Gaurav
+# created on : 10/11/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,15 +19,16 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from v1.contract.models.contract_type import get_contract_type_by_id
 
+# Create Contract SubType table start.
 
-# Create Contract Type table start.
-
-class ContractType(models.Model):
+class ContractSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
+    type_id = models.BigIntegerField(null=True, blank=True)	
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -40,17 +41,24 @@ class ContractType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Contract Type table end.
+    @property
+    def get_contract_type(self):
+        contract_type = get_contract_type_by_id(self.type_id)
+        return contract_type
 
 
-def get_contract_type_by_id(id):
+# Create Contract SubType table end.
+
+
+def get_contract_subtype_by_id(id):
     try:
-        return ContractType.objects.filter(id=id).last()
+        return ContractSubType.objects.get(id=id)
     except:
         return False
 
-def get_contract_type_by_id_string(id_string):
+def get_contract_subtype_by_id_string(id_string):
     try:
-        return ContractType.objects.get(id_string=id_string)
+        return ContractSubType.objects.get(id_string=id_string)
     except:
         return False
+

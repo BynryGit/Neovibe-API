@@ -6,34 +6,38 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.contract.models.contract_type import ContractType as ContractTypeTbl, get_contract_type_by_id_string
-from v1.contract.serializers.contract_type import ContractTypeViewSerializer, ContractTypeSerializer, ContractTypeListSerializer
+from v1.contract.models.contract_subtype import ContractSubType as ContractSubTypeTbl
+from v1.contract.serializers.contract_subtype import ContractSubTypeListSerializer, ContractSubTypeViewSerializer, ContractSubTypeSerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from rest_framework.generics import GenericAPIView
 from v1.userapp.decorators import is_token_validate, role_required
-from api.messages import CONTRACT_TYPE_NOT_FOUND, STATE, SUCCESS, EXCEPTION, RESULT, ERROR
+from api.messages import CONTRACT_SUBTYPE_NOT_FOUND, STATE, SUCCESS, EXCEPTION, RESULT, ERROR
+from api.constants import *
 from rest_framework.response import Response
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from django.db import transaction
+from v1.contract.models.contract_subtype import get_contract_subtype_by_id_string
 from api.constants import ADMIN, UTILITY, EDIT
 from v1.commonapp.views.custom_exception import CustomAPIException
 
+
+
 # API Header
-# API end Point: api/v1/contract/:id_string/type/list
+# API end Point: api/v1/contract/:id_string/subtype/list
 # API verb: GET
 # Package: Basic
 # Modules: Contract
-# Sub Module: Type
+# Sub Module: SUbType
 # Interaction: Get contract type list
-# Usage: API will fetch required data for contract type list.
-# Tables used: 2.12.70 Contract Type
+# Usage: API will fetch required data for contract subtype list.
+# Tables used: Contract SubType
 # Author: Gaurav
-# Created on: 09/11/2020
+# Created on: 10/11/2020
 
-class ContractTypeList(generics.ListAPIView):
+class ContractSubTypeList(generics.ListAPIView):
     try:
-        serializer_class = ContractTypeListSerializer
+        serializer_class = ContractSubTypeListSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -47,11 +51,11 @@ class ContractTypeList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ContractTypeTbl.objects.filter(utility=utility,is_active=True)
+                    queryset = ContractSubTypeTbl.objects.filter(utility=utility,is_active=True)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException(CONTRACT_TYPE_NOT_FOUND, status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(CONTRACT_SUBTYPE_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -60,26 +64,25 @@ class ContractTypeList(generics.ListAPIView):
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 # API Header
-# API end Point: api/v1/contract/:id_string/type
+# API end Point: api/v1/contract/:id_string/subtype
 # API verb: GET,PUT
 # Package: Basic
 # Modules: Contract
-# Sub Module: Type
-# Interaction: Get single contract, Update single contract
+# Sub Module: SubType
+# Interaction: Get single contract-subtype, Update single contract-subtype
 # Usage: View, Update.
-# Tables used: 2.12.70 Contract Type
+# Tables used: Contract SubType
 # Author: Gaurav
-# Created on: 09/11/2020 
+# Created on: 10/11/2020
 
-
-class ContractTypeDetail(GenericAPIView):
+class ContractSubTypeDetail(GenericAPIView):
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
     def get(self, request, id_string):
         try:
-            contract = get_contract_type_by_id_string(id_string)
-            if contract:
-                serializer = ContractTypeViewSerializer(instance=contract, context={'request': request})
+            contract_subtype = get_contract_subtype_by_id_string(id_string)
+            if contract_subtype:
+                serializer = ContractSubTypeViewSerializer(instance=contract_subtype, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULT: serializer.data,
@@ -87,7 +90,7 @@ class ContractTypeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: CONTRACT_TYPE_NOT_FOUND,
+                    RESULT: CONTRACT_SUBTYPE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
@@ -96,19 +99,18 @@ class ContractTypeDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            contract_type_obj = get_contract_type_by_id_string(id_string)
-            if contract_type_obj:
-                serializer = ContractTypeSerializer(data=request.data)
+            contract_subtype_obj = get_contract_subtype_by_id_string(id_string)
+            if contract_subtype_obj:
+                serializer = ContractSubTypeSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    contract_type_obj = serializer.update(contract_type_obj, serializer.validated_data, user)
-                    view_serializer = ContractTypeViewSerializer(instance=contract_type_obj,
+                    contract_subtype_obj = serializer.update(contract_subtype_obj, serializer.validated_data, user)
+                    view_serializer = ContractSubTypeViewSerializer(instance=contract_subtype_obj,
                                                                  context={'request': request})
                     return Response({
                         STATE: SUCCESS,
@@ -122,7 +124,7 @@ class ContractTypeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: CONTRACT_TYPE_NOT_FOUND
+                    RESULT: CONTRACT_SUBTYPE_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
@@ -132,30 +134,30 @@ class ContractTypeDetail(GenericAPIView):
                 RESULT: str(e),
             }, status=con.status_code)
 
+
 # API Header
-# API end Point: api/v1/contract/type
+# API end Point: api/v1/contract/subtype
 # API verb: POST
 # Package: Basic
 # Modules: Contract
 # Sub Module: Type
-# Interaction: Add contract type 
+# Interaction: Add contract subtype 
 # Usage: API will Add contract type.
-# Tables used: 2.12.70 Contract Type
+# Tables used: Contract SubType
 # Author: Gaurav
-# Created on: 09/11/2020
+# Created on: 10/11/2020
 
-class ContractType(GenericAPIView):
-
+class ContractSubType(GenericAPIView):
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ContractTypeSerializer(data=request.data)
+            serializer = ContractSubTypeSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                contract_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ContractTypeViewSerializer(instance=contract_obj, context={'request': request})
+                contract_subtype_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = ContractSubTypeViewSerializer(instance=contract_subtype_obj, context={'request': request})
                 return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,

@@ -51,7 +51,7 @@ def get_supplier_product_category_by_id_string(id_string):
 
 def get_supplier_product_category_by_id(id):
     try:
-        return ProductCategory.objects.get(id = id)
+        return ProductCategory.objects.filter(id=id).last()
     except:
         return False
 

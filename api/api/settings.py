@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from v1.commonapp.views.secretcache import SecretManager
+secret = SecretManager()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -110,9 +111,9 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart360',
+        'NAME': 'smartapp',
         'USER': 'postgres',
-        'PASSWORD': 'chinmay123',
+        'PASSWORD': 'gaurav@123',
         'HOST': 'localhost',
         'PORT': '5432',
     }

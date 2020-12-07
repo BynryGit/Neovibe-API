@@ -42,7 +42,7 @@ class SupplierList(generics.ListAPIView):
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+                if is_authorized(1,1,1,1):
                     queryset = SupplierTbl.objects.filter(is_active=True)
                     return queryset
                 else:

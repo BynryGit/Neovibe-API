@@ -13,8 +13,9 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.contract.serializers.contract import ContractViewSerializer, ContractSerializer
+from v1.contract.serializers.contract import ContractViewSerializer, ContractSerializer, ContractListSerializer
 from v1.contract.models.contract import Contract as ContractTbl, get_contract_by_id_string
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 # API Header
@@ -30,29 +31,56 @@ from v1.contract.models.contract import Contract as ContractTbl, get_contract_by
 # Created on: 28/05/2020
 
 
+# class ContractList(generics.ListAPIView):
+#     try:
+#         serializer_class = ContractViewSerializer
+#         pagination_class = StandardResultsSetPagination
+
+#         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+#         filter_fields = ('name', 'tenant__id_string', 'utility__id_string')
+#         ordering_fields = ('name', 'tenant__name', 'utility__name')
+#         ordering = ('name',)  # always give by default alphabetical order
+#         search_fields = ('name',)
+
+#         def get_queryset(self):
+#             if is_token_valid(self.request.headers['token']):
+#                 if is_authorized(1,1,1,1):
+#                     queryset = ContractTbl.objects.filter(is_active=True)
+#                     return queryset
+#                 else:
+#                     raise InvalidAuthorizationException
+#             else:
+#                 raise InvalidTokenException
+#     except Exception as ex:
+#         logger().log(ex, 'ERROR')
+#         raise APIException
+
+
+
 class ContractList(generics.ListAPIView):
     try:
-        serializer_class = ContractViewSerializer
+        serializer_class = ContractListSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('name', 'tenant__id_string', 'utility__id_string')
-        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        filter_fields = ('id_string',)
+        ordering_fields = ('name',)
         ordering = ('name',)  # always give by default alphabetical order
-        search_fields = ('name',)
+        search_fields = ('name')
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
-                    queryset = ContractTbl.objects.filter(is_active=True)
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ContractTbl.objects.filter(utility=utility,is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
-    except Exception as ex:
-        logger().log(ex, 'ERROR')
-        raise APIException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
 # API Header

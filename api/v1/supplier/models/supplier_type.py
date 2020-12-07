@@ -1,13 +1,12 @@
 # table header
-# module: Sourcing  | sub-module - Contract
 # table type : lookup (Local)
 # table name : 2.12.70 Contract Type
-# table description : A lookup table for types of contracts.
+# table description : A lookup table for types of Supplier.
 # frequency of data changes : Low
-# sample tale data :"Valid Contract", "Voidable Contract"
-# reference tables : 2.5.6 Contracts Master Table
-# author : Saloni Monde
-# created on : 21/04/2020
+# sample tale data :"Valid Supplier", "Voidable Supplier"
+# reference tables : 
+# author : Gaurav 
+# created on : 20/11/2020
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -21,9 +20,9 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
-# Create Contract Type table start.
+# Create Supplier Type table start.
 
-class ContractType(models.Model):
+class SupplierType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -40,17 +39,17 @@ class ContractType(models.Model):
     def __unicode__(self):
         return self.name
 
-# Create Contract Type table end.
+# Create Supplier Type table end.
 
 
-def get_contract_type_by_id(id):
+def get_supplier_type_by_id(id):
     try:
-        return ContractType.objects.filter(id=id).last()
+        return SupplierType.objects.filter(id=id).last()
     except:
         return False
 
-def get_contract_type_by_id_string(id_string):
+def get_supplier_type_by_id_string(id_string):
     try:
-        return ContractType.objects.get(id_string=id_string)
+        return SupplierType.objects.get(id_string=id_string)
     except:
         return False

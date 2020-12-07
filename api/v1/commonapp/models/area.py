@@ -70,7 +70,7 @@ def get_areas_by_utility_id_string(id_string):
 
 def get_area_by_id(id):
     try:
-        return Area.objects.get(id = id)
+        return Area.objects.filter(id=id).last()
     except:
         return False
 

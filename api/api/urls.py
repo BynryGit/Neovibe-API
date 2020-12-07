@@ -31,6 +31,7 @@ from v1.tender import urls as tender_urls
 from v1.meter_reading import urls as meterreading_urls
 from v1.complaint import urls as complaint_urls
 from v1.payment import urls as payment_urls
+from v1.store import urls as store_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,4 +53,6 @@ urlpatterns = [
     path('api/v1/meter-data/', include(meterreading_urls)),
     path('api/v1/complaint/', include(complaint_urls)),
     path('api/v1/payment/', include(payment_urls)),
+    path('api/v1/store/', include(store_urls)),
+
 ]

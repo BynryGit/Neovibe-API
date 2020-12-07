@@ -27,11 +27,11 @@ class StoreMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     type = models.BigIntegerField(null=True, blank=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=500, blank=True, null=True)
     make = models.CharField(max_length=200, blank=True, null=True)
     model = models.CharField(max_length=200, blank=True, null=True)
-    image = models.UrlField(null=False, blank=False)
+    image = models.CharField(max_length=200, blank=True, null=True)
     quantity = models.BigIntegerField(null=True, blank=True)
     manufacturing_year = models.CharField(max_length=200, blank=True, null=True)
     arrival_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -46,9 +46,9 @@ class StoreMaster(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return self.name
 
     def __unicode__(self):
-        return self.id
+        return self.name
 
 # Create Store Master table end.

@@ -8,11 +8,10 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.utility.models.utility_master import get_utility_by_id_string
 
-
 class CityList(generics.ListAPIView):
     try:
         serializer_class = CityListSerializer
-
+        
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:

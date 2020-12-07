@@ -6,12 +6,12 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.contract.models.contract_type import ContractType as ContractTypeTbl, get_contract_type_by_id_string
-from v1.contract.serializers.contract_type import ContractTypeViewSerializer, ContractTypeSerializer, ContractTypeListSerializer
+from v1.supplier.models.product_category import ProductCategory as ProductCategoryTbl, get_supplier_product_category_by_id_string
+from v1.supplier.serializers.product_category import ProductCategoryListSerializer, ProductCategoryViewSerializer, ProductCategorySerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from rest_framework.generics import GenericAPIView
 from v1.userapp.decorators import is_token_validate, role_required
-from api.messages import CONTRACT_TYPE_NOT_FOUND, STATE, SUCCESS, EXCEPTION, RESULT, ERROR
+from api.messages import PRODUCT_CATEGORY_NOT_FOUND, STATE, SUCCESS, EXCEPTION, RESULT, ERROR
 from rest_framework.response import Response
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
@@ -19,21 +19,22 @@ from django.db import transaction
 from api.constants import ADMIN, UTILITY, EDIT
 from v1.commonapp.views.custom_exception import CustomAPIException
 
+
 # API Header
-# API end Point: api/v1/contract/:id_string/type/list
+# API end Point: api/v1/supplier/id_string/product-category/list
 # API verb: GET
 # Package: Basic
-# Modules: Contract
-# Sub Module: Type
-# Interaction: Get contract type list
-# Usage: API will fetch required data for contract type list.
-# Tables used: 2.12.70 Contract Type
+# Modules: Supplier
+# Sub Module: Product Category
+# Interaction: Get Product Category list
+# Usage: API will fetch required data for supplier Product Category list.
+# Tables used: ProductCategory
 # Author: Gaurav
-# Created on: 09/11/2020
+# Created on: 23/11/2020
 
-class ContractTypeList(generics.ListAPIView):
+class ProductCategoryList(generics.ListAPIView):
     try:
-        serializer_class = ContractTypeListSerializer
+        serializer_class = ProductCategoryListSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -47,11 +48,11 @@ class ContractTypeList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ContractTypeTbl.objects.filter(utility=utility,is_active=True)
+                    queryset = ProductCategoryTbl.objects.filter(utility=utility,is_active=True)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException(CONTRACT_TYPE_NOT_FOUND, status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(PRODUCT_CATEGORY_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -59,27 +60,29 @@ class ContractTypeList(generics.ListAPIView):
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
+
+
 # API Header
-# API end Point: api/v1/contract/:id_string/type
+# API end Point: api/v1/supplier/id_string/product-category
 # API verb: GET,PUT
 # Package: Basic
-# Modules: Contract
-# Sub Module: Type
-# Interaction: Get single contract, Update single contract
-# Usage: View, Update.
-# Tables used: 2.12.70 Contract Type
+# Modules: Supplier
+# Sub Module: Product Category
+# Interaction: For edit and get single product category
+# Usage: API will edit and get product category
+# Tables used: ProductCategory
 # Author: Gaurav
-# Created on: 09/11/2020 
+# Created on: 23/11/2020
 
 
-class ContractTypeDetail(GenericAPIView):
+class ProductCategoryDetail(GenericAPIView):
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
     def get(self, request, id_string):
         try:
-            contract = get_contract_type_by_id_string(id_string)
-            if contract:
-                serializer = ContractTypeViewSerializer(instance=contract, context={'request': request})
+            product_category = get_supplier_product_category_by_id_string(id_string)
+            if product_category:
+                serializer = ProductCategoryViewSerializer(instance=product_category, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULT: serializer.data,
@@ -87,7 +90,7 @@ class ContractTypeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: CONTRACT_TYPE_NOT_FOUND,
+                    RESULT: PRODUCT_CATEGORY_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
@@ -103,12 +106,12 @@ class ContractTypeDetail(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            contract_type_obj = get_contract_type_by_id_string(id_string)
-            if contract_type_obj:
-                serializer = ContractTypeSerializer(data=request.data)
+            product_category_obj = get_supplier_product_category_by_id_string(id_string)
+            if product_category_obj:
+                serializer = ProductCategorySerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    contract_type_obj = serializer.update(contract_type_obj, serializer.validated_data, user)
-                    view_serializer = ContractTypeViewSerializer(instance=contract_type_obj,
+                    product_category_obj = serializer.update(product_category_obj, serializer.validated_data, user)
+                    view_serializer = ProductCategoryViewSerializer(instance=product_category_obj,
                                                                  context={'request': request})
                     return Response({
                         STATE: SUCCESS,
@@ -122,7 +125,7 @@ class ContractTypeDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: CONTRACT_TYPE_NOT_FOUND
+                    RESULT: PRODUCT_CATEGORY_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
@@ -132,19 +135,22 @@ class ContractTypeDetail(GenericAPIView):
                 RESULT: str(e),
             }, status=con.status_code)
 
+
+
 # API Header
-# API end Point: api/v1/contract/type
+# API end Point: api/v1/supplier/product-category
 # API verb: POST
 # Package: Basic
-# Modules: Contract
-# Sub Module: Type
-# Interaction: Add contract type 
-# Usage: API will Add contract type.
-# Tables used: 2.12.70 Contract Type
+# Modules: Supplier
+# Sub Module: Product Category
+# Interaction: Create Product Category
+# Usage: API will create product category object based on valid data
+# Tables used: ProductCategory
 # Author: Gaurav
-# Created on: 09/11/2020
+# Created on: 23/11/2020
 
-class ContractType(GenericAPIView):
+
+class ProductCategory(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
@@ -152,10 +158,10 @@ class ContractType(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ContractTypeSerializer(data=request.data)
+            serializer = ProductCategorySerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                contract_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ContractTypeViewSerializer(instance=contract_obj, context={'request': request})
+                product_category_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = ProductCategoryViewSerializer(instance=product_category_obj, context={'request': request})
                 return Response({
                         STATE: SUCCESS,
                         RESULT: view_serializer.data,
@@ -172,3 +178,5 @@ class ContractType(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+

@@ -72,8 +72,8 @@ class TenantList(generics.ListAPIView):
 
 class Tenant(GenericAPIView):
 
-    @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    # @is_token_validate
+    # @role_required(ADMIN, TENANT, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
