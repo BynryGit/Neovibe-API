@@ -22,6 +22,7 @@ class PaymentType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
+    key = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -42,7 +43,7 @@ def get_payment_type_by_id_string(id_string):
 
 def get_payment_type_by_id(id):
     try:
-        return PaymentType.objects.get(id = id)
+        return PaymentType.objects.filter(id = id)
     except:
         return False
 # Create Payment Type table end

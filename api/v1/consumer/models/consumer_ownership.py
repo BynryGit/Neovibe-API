@@ -19,10 +19,10 @@ class ConsumerOwnership(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.ownership
+        return self.name
 
     def __unicode__(self):
-        return self.ownership
+        return self.name
 
 def get_consumer_ownership_by_id_string(id_string):
     try:

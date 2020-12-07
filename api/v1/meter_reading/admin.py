@@ -29,6 +29,9 @@ from v1.meter_reading.models.validation import Validation
 from v1.meter_reading.models.validation_type import ValidationType
 
 
+
+
+
 admin.site.register(ActivityType)
 admin.site.register(BillCycle)
 admin.site.register(BillCycleReadingAllocation)
@@ -54,3 +57,4 @@ admin.site.register(Unit)
 admin.site.register(Validation)
 admin.site.register(ValidationType)
 admin.site.register(MeterReading)
+

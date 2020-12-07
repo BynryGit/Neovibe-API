@@ -18,6 +18,13 @@ from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_str
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer, UtilitySubModuleSerializer
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from v1.utility.serializers.utility_sub_module import UtilitySubModuleListSerializer
+from v1.commonapp.models.sub_module import SubModule as SubModuleTbl
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.logger import logger
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.utility.models.utility_master import get_utility_by_id_string
+from rest_framework.decorators import api_view
 
 
 # API Header
@@ -171,3 +178,46 @@ class UtilitySubModuleDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 ERROR: str(traceback.print_exc(ex))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class UtilitySubModuleListByUtility(generics.ListAPIView):
+    try:
+        serializer_class = UtilitySubModuleListSerializer
+        pagination_class = StandardResultsSetPagination
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = UtilitySubModuleTbl.objects.filter(utility=utility, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Sub Module not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Admin')  
+
+
+@api_view(['DELETE'])
+def api_delete_submodule(request,id_string):
+    try:
+        sub_module = get_utility_submodule_by_id_string(id_string)
+    except:
+        return Response(status=status.status.HTTP_404_NOT_FOUND)
+    
+    if request.method == "DELETE":
+        print(sub_module)
+        operation = sub_module.delete()
+        data = {}
+        if operation:
+            data["success"] = "Delete Successful"
+        else:
+            data["failure"] = "Delete Failed"
+        
+        return Response(data=data)
+    

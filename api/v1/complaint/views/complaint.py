@@ -12,11 +12,13 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.complaint.models.complaint import get_consumer_complaint_by_id_string, COMPLAINT_DICT
+from v1.complaint.models.complaint import get_consumer_complaint_by_id_string, COMPLAINT_DICT,Complaint as ComplaintTbl
 from v1.complaint.models.complaint_assignment import get_complaint_assignments_by_field_operator_id
-from v1.complaint.serializers.complaint import ComplaintViewSerializer
+from v1.complaint.serializers.complaint import ComplaintViewSerializer,ComplaintListSerializer
 from v1.complaint.serializers.complaint_assignment import ComplaintAssignmentListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
 
 
 # API Header
@@ -216,3 +218,44 @@ class ComplaintComplete(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# API Header
+# API end Point: api/v1/complaint/utility/:id_string/list
+# API verb: GET
+# Package: Basic
+# Modules: Admin
+# Sub Module: Admin
+# Interaction: Complaint list
+# Usage: API will fetch all Complaints list
+# Tables used: Complaint
+# Author: Chinmay
+# Created on: 4/12/2020
+
+class ComplaintList(generics.ListAPIView):
+    try:
+        serializer_class = ComplaintListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('complaint_name', 'tenant__id_string',)
+        ordering_fields = ('complaint_name', 'tenant',)
+        ordering = ('complaint_name',)  # always give by default alphabetical order
+        search_fields = ('complaint_name', 'tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ComplaintTbl.objects.filter(utility=utility, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Complaint not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')

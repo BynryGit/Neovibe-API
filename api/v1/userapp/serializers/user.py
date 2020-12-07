@@ -95,6 +95,7 @@ class UserListSerializer(serializers.ModelSerializer):
     def get_role(self, obj):
         role = get_role_count_by_user(obj.id)
         return role
+    
 
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
@@ -102,11 +103,14 @@ class UserListSerializer(serializers.ModelSerializer):
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     role = serializers.SerializerMethodField('get_role')
+    user_type = serializers.CharField(required=False, max_length=200, source='get_user_type')
+    user_department = serializers.CharField(required=False, max_length=200, source='get_department')
+
 
     class Meta:
         model = User
         fields = ('id_string', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date',
-                  'role', 'tenant', 'department',  'status')
+                  'role', 'tenant', 'department',  'status','user_type','user_department')
 
 
 class UserViewSerializer(serializers.ModelSerializer):

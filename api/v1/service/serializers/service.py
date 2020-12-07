@@ -9,7 +9,7 @@ class ServiceDetailListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceDetails
-        fields = ('name', 'id_string', 'request_date')
+        fields = ('name', 'id_string', 'request_date','created_by','is_active','state','consumer_no','service_request_no')
 
 
 class ServiceDetailViewSerializer(serializers.ModelSerializer):

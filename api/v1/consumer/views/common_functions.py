@@ -16,6 +16,13 @@ from v1.registration.models import registrations
 from v1.utility.models.utility_service_plan import get_utility_service_plan_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat, \
     UTILITY_SERVICE_NUMBER_ITEM_DICT
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.registration.models.registration_type import get_registration_type_by_id_string
+from v1.registration.models.registration_subtype import get_registration_subtype_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.consumer.models.service_type import get_service_type_by_id_string
+
 
 
 # Function for converting id_strings to id's
@@ -93,20 +100,7 @@ def set_scheme_validated_data(validated_data):
             raise CustomAPIException("Scheme not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
 
-def set_validated_data(validated_data):
-    if "utility_id" in validated_data:
-        utility = get_utility_by_id_string(validated_data["utility_id"])
-        if utility:
-            validated_data["utility_id"] = utility.id
-        else:
-            raise CustomAPIException("Utility not found.",status_code=status.HTTP_404_NOT_FOUND)
-    if "tenant_id" in validated_data:
-        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
-        if tenant:
-            validated_data["tenant_id"] = tenant.id
-        else:
-            raise CustomAPIException("Tenant not found.",status_code=status.HTTP_404_NOT_FOUND)
-    return validated_data
+
 
 
 # Function for generating consumer number aaccording to utility
@@ -156,3 +150,180 @@ def create_consumer_after_registration(registration_id):
         consumer.save()
     except Exception as e:
         raise CustomAPIException("Consumer creation failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def set_consumer_category_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_consumer_subcategory_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "category_id" in validated_data:
+        category_id = get_consumer_category_by_id_string(validated_data["category_id"])
+        if category_id:
+            validated_data["category_id"] = category_id.id
+        else:
+            raise CustomAPIException("Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_consumer_ownership_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_consumer_consent_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "registration_type_id" in validated_data:
+        registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
+        if registration_type:
+            validated_data["registration_type_id"] = registration_type.id
+        else:
+            raise CustomAPIException("Registration Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "registration_subtype_id" in validated_data:
+        registration_subtype = get_registration_subtype_by_id_string(validated_data["registration_subtype_id"])
+        if registration_subtype:
+            validated_data["registration_subtype_id"] = registration_subtype.id
+        else:
+            raise CustomAPIException("Registration SubType not found", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_consumer_support_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "category_id" in validated_data:
+        category_id = get_consumer_category_by_id_string(validated_data["category_id"])
+        if category_id:
+            validated_data["category_id"] = category_id.id
+        else:
+            raise CustomAPIException("Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "subcategory_id" in validated_data:
+        subcategory_id = get_consumer_sub_category_by_id_string(validated_data["subcategory_id"])
+        if subcategory_id:
+            validated_data["subcategory_id"] = subcategory_id.id
+        else:
+            raise CustomAPIException("SubCategory not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        if city:
+            validated_data["city_id"] = city.id
+        else:
+            raise CustomAPIException("City not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_consumer_faq_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "category_id" in validated_data:
+        category_id = get_consumer_category_by_id_string(validated_data["category_id"])
+        if category_id:
+            validated_data["category_id"] = category_id.id
+        else:
+            raise CustomAPIException("Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "subcategory_id" in validated_data:
+        subcategory_id = get_consumer_sub_category_by_id_string(validated_data["subcategory_id"])
+        if subcategory_id:
+            validated_data["subcategory_id"] = subcategory_id.id
+        else:
+            raise CustomAPIException("SubCategory not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_service_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_service_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "service_type_id" in validated_data:
+        service_type = get_service_type_by_id_string(validated_data["service_type_id"])
+        if service_type:
+            validated_data["service_type_id"] = service_type.id
+        else:
+            raise CustomAPIException("Service Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data

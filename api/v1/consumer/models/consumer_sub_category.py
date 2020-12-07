@@ -21,6 +21,7 @@ from django.db import models  # importing package for database
 # Create Consumer Sub Category table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
 
 
 class ConsumerSubCategory(models.Model):
@@ -28,7 +29,7 @@ class ConsumerSubCategory(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    category = models.BigIntegerField(blank=True, null=True)
+    category_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -40,6 +41,11 @@ class ConsumerSubCategory(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    @property
+    def get_category_type(self):
+        consumer_category = get_consumer_category_by_id(self.category_id)
+        return consumer_category
 
 # Create Consumer Sub Category table end
 
@@ -55,7 +61,7 @@ def get_consumer_sub_category_by_tenant_id_string(id_string):
 
 def get_consumer_sub_category_by_id(id):
     try:
-        return ConsumerSubCategory.objects.get(id = id)
+        return ConsumerSubCategory.objects.filter(id = id)
     except:
         return False
 

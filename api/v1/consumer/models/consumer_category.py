@@ -55,7 +55,7 @@ def get_consumer_category_by_id_string(id_string):
 
 def get_consumer_category_by_id(id):
     try:
-        return ConsumerCategory.objects.get(id = id)
+        return ConsumerCategory.objects.filter(id = id)
     except:
         return False
 

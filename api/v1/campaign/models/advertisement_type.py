@@ -33,13 +33,13 @@ class AdvertisementType(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.status
+        return self.name
 
     def __unicode__(self):
-        return self.status
+        return self.name
 
 def get_advert_type_by_id(id):
-    return AdvertisementType.objects.get(id = id)
+    return AdvertisementType.objects.filter(id = id)
 
 def get_advert_type_by_id_string(id_string):
     try:
