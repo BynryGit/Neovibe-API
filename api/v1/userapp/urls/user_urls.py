@@ -10,7 +10,7 @@ from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
 from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
 from v1.userapp.views.user_sub_type import UserSubTypeByUserType
-
+from v1.userapp.views.user_role import UserRoleByUtilityModules,UserRoleByUtilitySubModule
 urlpatterns = [
     path('', User.as_view(), name='create-user'),
     path('<uuid:id_string>', UserDetail.as_view()),
@@ -38,4 +38,7 @@ urlpatterns = [
     path('login/', LoginApiView.as_view(), name='log-in'),
 
     path('logout/', LogoutApiView.as_view()),
+    path('<uuid:user_id_string>/utility/<uuid:utility_id_string>', UserRoleByUtilityModules.as_view()),
+    path('<uuid:user_id_string>/module/<uuid:module_id_string>', UserRoleByUtilitySubModule.as_view()),
+
 ]

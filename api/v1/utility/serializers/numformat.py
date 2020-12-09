@@ -52,7 +52,7 @@ class UtilityServiceNumberFormatSerializer(serializers.ModelSerializer):
            
 
 class UtilityServiceNumberFormatListSerializer(serializers.ModelSerializer):
-    sub_module = SubModuleShortViewSerializer(many="False", source="get_sub_module_by_id")
+    sub_module = SubModuleShortViewSerializer(source="get_sub_module_by_id")
     is_prefix = serializers.SerializerMethodField(method_name='conversion_bool')
     class Meta:
         model = UtilityServiceNumberFormatTbl
@@ -69,7 +69,7 @@ class UtilityServiceNumberFormatViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    sub_module = SubModuleShortViewSerializer(many="False", source="get_sub_module_by_id")
+    sub_module = SubModuleShortViewSerializer(source="get_sub_module_by_id")
     is_prefix = serializers.SerializerMethodField(method_name='conversion_bool')
 
     class Meta:

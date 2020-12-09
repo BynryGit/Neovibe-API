@@ -14,12 +14,12 @@ class CityViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    state = StateListSerializer(many="False", source="get_state")
+    
 
     class Meta:
         model = CityTbl
         fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'state')
+            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string')
 
 
 class CitySerializer(serializers.ModelSerializer):

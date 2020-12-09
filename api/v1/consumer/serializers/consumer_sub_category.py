@@ -10,7 +10,7 @@ from django.db import transaction
 from datetime import datetime
 
 class ConsumerSubCategoryListSerializer(serializers.ModelSerializer):
-    consumer_category = ConsumerCategoryListSerializer(many="False", source='get_category_type')
+    consumer_category = ConsumerCategoryListSerializer(source='get_category_type')
     class Meta:
         model = ConsumerSubCategoryTbl
         fields = ('name', 'id_string','consumer_category','created_date','is_active','created_by')

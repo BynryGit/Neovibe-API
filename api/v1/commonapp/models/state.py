@@ -27,7 +27,6 @@ class State(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     country_id = models.BigIntegerField(blank=True, null=True)
-    region_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -40,10 +39,6 @@ class State(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
-    def get_region(self):
-        region = get_region_by_id(self.region_id)
-        return region
 
     @property
     def get_country(self):

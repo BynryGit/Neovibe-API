@@ -28,6 +28,7 @@ from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.serializers.state import StateSerializer, StateViewSerializer, StateListSerializer
 from v1.commonapp.models.state import State as StateModel
+from v1.utility.models.utility_region import get_utility_region_by_id
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from api.messages import *

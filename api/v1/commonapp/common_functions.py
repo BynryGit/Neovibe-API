@@ -165,16 +165,10 @@ def set_state_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "region_id" in validated_data:
-        region = get_region_by_id_string(validated_data["region_id"])
-        if region:
-            validated_data["region_id"] = region.id
-        else:
-            raise CustomAPIException("Region not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "country_id" in validated_data:
-        country = get_country_by_id_string(validated_data["country_id"])
-        if country:
-            validated_data["country_id"] = country.id
+        country_name = get_country_by_id_string(validated_data["country_id"])
+        if country_name:
+            validated_data["country_id"] = country_name.id
         else:
             raise CustomAPIException("Country not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data

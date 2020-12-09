@@ -20,6 +20,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_region import get_utility_region_by_id
 from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
+from v1.commonapp.models.region import get_region_by_id
 
 # Create Country table start
 

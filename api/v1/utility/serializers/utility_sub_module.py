@@ -66,13 +66,7 @@ class UtilitySubModuleSerializer(serializers.ModelSerializer):
             utility_submodule.save()
             return utility_submodule
     
-    def destroy(self, instance, validated_data, user):
-        with transaction.atomic():
-            utility_submodule_obj = super(UtilitySubModuleSerializer, self).destroy(instance, validated_data)
-            utility_submodule_obj.updated_by = user.id
-            utility_submodule_obj.updated_date = timezone.now()
-            utility_submodule_obj.save()
-            return utility_submodule_obj
+    
    
 
 

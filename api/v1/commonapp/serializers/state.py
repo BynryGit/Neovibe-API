@@ -17,13 +17,13 @@ class StateViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    country = CountryListSerializer(many="False", source="get_country")
+    
 
 
     class Meta:
         model = StateTbl
         fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'country')
+            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string')
 
 
 class StateSerializer(serializers.ModelSerializer):
@@ -61,8 +61,8 @@ class StateSerializer(serializers.ModelSerializer):
 
 
 class StateListSerializer(serializers.ModelSerializer):
-    country = CountryListSerializer(source="get_country")
+    country_id = CountryListSerializer(source="get_country")
 
     class Meta:
         model = StateTbl
-        fields = ('name', 'id_string', 'country','created_date','is_active','created_by')
+        fields = ('name', 'id_string', 'country_id','created_date','is_active','created_by')

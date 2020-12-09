@@ -14,7 +14,7 @@ from api.messages import COUNTRY_ALREADY_EXIST
 
 
 class CountryViewSerializer(serializers.ModelSerializer):
-    region = UtilityRegionListSerializer(many="False", source="get_utility_region")
+    
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
@@ -22,7 +22,7 @@ class CountryViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountryTbl
-        fields = ('name', 'id_string','utility', 'utility_id_string','tenant', 'tenant_id_string', 'region')
+        fields = ('name', 'id_string','utility', 'utility_id_string','tenant', 'tenant_id_string')
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -62,6 +62,7 @@ class CountrySerializer(serializers.ModelSerializer):
 
 class CountryListSerializer(serializers.ModelSerializer):
     region = UtilityRegionListSerializer(source="get_utility_region")
+    
 
     class Meta:
         model = CountryTbl

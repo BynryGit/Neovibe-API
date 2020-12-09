@@ -6,6 +6,7 @@ from datetime import datetime
 from django.db import transaction
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.common_functions import set_zone_validated_data
+from api.messages import ZONE_ALREADY_EXIST
 
 
 class ZoneViewSerializer(serializers.ModelSerializer):
@@ -13,12 +14,12 @@ class ZoneViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    city = CityListSerializer(many="True", source="get_city")
+    
 
     class Meta:
         model = ZoneTbl
         fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'city')
+            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string')
 
 
 class ZoneSerializer(serializers.ModelSerializer):

@@ -16,7 +16,7 @@ class SubAreaViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    area = AreaListSerializer(many="False", source="get_area")
+    area = AreaListSerializer( source="get_area")
 
     class Meta:
         model = SubAreaTbl

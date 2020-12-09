@@ -47,7 +47,8 @@ class SubModule(models.Model):
 
 def get_sub_module_by_id(id):
     try:
-        return SubModule.objects.filter(id=id)
+        print("Hello:",id)
+        return SubModule.objects.get(id=id)
     except:
         return False
 

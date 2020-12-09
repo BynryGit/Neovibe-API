@@ -16,12 +16,12 @@ class AreaViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    zone = ZoneListSerializer(many="False", source="get_zone")
+    
 
     class Meta:
         model = AreaTbl
         fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'zone')
+            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string')
 
 
 class AreaSerializer(serializers.ModelSerializer):

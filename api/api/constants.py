@@ -14,9 +14,9 @@ S_AND_M = ""
 # CONSUMER_CARE = get_module_by_name('Consumer Care')
 CONSUMER_CARE = ""
 # CONSUMER_OPS = get_module_by_name('Consumer Ops')
-CONSUMER_OPS = 3
+CONSUMER_OPS = ""
 # ADMIN = get_module_by_name('Admin')
-ADMIN = 1
+ADMIN = ""
 
 # *********** SUB MODULE CONSTANTS **************
 # DASHBOARD = get_sub_module_by_name('Dashboard')
@@ -40,7 +40,7 @@ PAYMENT = ""
 # PAYROLL = get_sub_module_by_name('Payroll')
 PAYROLL = ""
 # REGISTRATION = get_sub_module_id_by_key('REGISTRATION')
-REGISTRATION = 10
+REGISTRATION = ""
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')
@@ -55,7 +55,7 @@ TENANT = ''
 # TENDER = get_sub_module_by_name('Tender')
 # USER = get_sub_module_by_name('Users')
 # UTILITY = get_sub_module_by_name('Utility')
-UTILITY = 1
+UTILITY = ''
 
 # *********** PRIVILEGE CONSTANTS **************
 # VIEW = get_privilege_by_name('View')
@@ -68,14 +68,14 @@ UTILITY = 1
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
 
-# ADMIN = 2
+ADMIN = 2
 # USER = 1
-# UTILITY = 1
+UTILITY = 1
 # VIEW = 1
 # EDIT = 2
-USER = ''
-VIEW = ''
-EDIT = 1
+USER = 1
+VIEW = 1
+EDIT = 2
 
 METER_PICTURE = 'media/meter'
 
