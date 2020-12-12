@@ -29,7 +29,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 # Updated on: 12/05/2020
 
 
-class DepartmentList(generics.ListAPIView):
+class DepartmentListByTenant(generics.ListAPIView):
     try:
         serializer_class = DepartmentSerializer
         pagination_class = StandardResultsSetPagination
@@ -55,6 +55,48 @@ class DepartmentList(generics.ListAPIView):
     except Exception as ex:
         logger().log(ex, 'ERROR')
         raise APIException
+
+# API Header
+# API end Point: api/v1/departments/list
+# API verb: GET
+# Package: Basic
+# Modules: Lookup
+# Sub Module: Lookup
+# Interaction: View Departments
+# Usage: This will get the list of departments
+# Tables used: Lookup - 2.12.16 Lookup - Department
+# Author: Arpita
+# Created on: 06/05/2020
+# Updated on: 12/05/2020
+
+
+class DepartmentListByUtility(generics.ListAPIView):
+    try:
+        serializer_class = DepartmentSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string', 'utility__id_string')
+        ordering_fields = ('name', 'tenant__name', 'utility__name')
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name', 'utility__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = DepartmentTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    # queryset = DepartmentTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
+
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'ERROR')
+        raise APIException
+
 
 
 # API Header

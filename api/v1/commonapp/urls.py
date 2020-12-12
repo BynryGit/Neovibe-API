@@ -5,7 +5,7 @@ from v1.commonapp.views.currency import CurrencyList
 from v1.commonapp.views.region import RegionList
 from v1.commonapp.views.state import StateList
 from v1.commonapp.views.area import AreaList, AreaDetail
-from v1.commonapp.views.department import Department, DepartmentList
+from v1.commonapp.views.department import Department, DepartmentListByTenant,DepartmentListByUtility
 from v1.commonapp.views.form_factor import FormFactor, FormFactorList
 from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail
 from v1.commonapp.views.module import ModuleList
@@ -35,7 +35,8 @@ urlpatterns = [
     path('form_factors', FormFactor.as_view()),
     path('form-factor/list', FormFactorList.as_view()),
     path('department/<uuid:id_string>', Department.as_view()),
-    path('<uuid:id_string>/department/list', DepartmentList.as_view()),
+    path('<uuid:id_string>/department/list', DepartmentListByTenant.as_view()),
+    path('<uuid:id_string>/departments/list', DepartmentListByUtility.as_view()),
     path('module/list', ModuleList.as_view()),
     path('submodule/<uuid:id_string>', SubModule.as_view()),
     path('submodule/list', SubModuleList.as_view()),

@@ -40,7 +40,6 @@ class RolePrivilegeDetail(GenericAPIView):
             if role_obj:
                 module_list = request.data['data']
                 for module in module_list:
-                    print('***************',module)
                     validate_data = {}
                     sub_module_list = module['sub_module']
                     for sub_module in sub_module_list:
