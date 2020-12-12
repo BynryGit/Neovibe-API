@@ -7,13 +7,13 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.contract import Contract as ContractTbl
-from v1.contract.serializers.contract_period import ContractPeriodShortViewSerializer
+from v1.contract.serializers.contract_period import ContractPeriodListSerializer
 from v1.contract.serializers.contract_status import ContractStatusShortViewSerializer
-from v1.contract.serializers.contract_type import ContractTypeShortViewSerializer
+from v1.contract.serializers.contract_type import ContractTypeListSerializer
 from v1.contract.views.common_functions import set_contract_validated_data
 
 
-class ContractShortViewSerializer(serializers.ModelSerializer):
+class ContractListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContractTbl
@@ -23,8 +23,8 @@ class ContractShortViewSerializer(serializers.ModelSerializer):
 class ContractViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
-    contract_type = ContractTypeShortViewSerializer(many=False, required=False, source='get_contract_type')
-    contract_period = ContractPeriodShortViewSerializer(many=False, required=False, source='get_contract_period')
+    contract_type = ContractTypeListSerializer(many=False, required=False, source='get_contract_type')
+    contract_period = ContractPeriodListSerializer(many=False, required=False, source='get_contract_period')
     # status = ContractStatusShortViewSerializer(many=False, required=False, source='get_contract_status')
     start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)

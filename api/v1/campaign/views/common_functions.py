@@ -16,6 +16,8 @@ from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.commonapp.models.frequency import get_frequency_by_id_string
 from v1.campaign.models.campaign import get_campaign_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.commonapp.views.custom_exception import CustomAPIException
 
 
 
@@ -305,6 +307,9 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
 from v1.consumer.models.source_type import get_source_type_by_id_string
 from v1.payment.models.payment import get_payment_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
+from rest_framework import status
+from v1.campaign.models.campaign_type import get_campaign_type_by_id_string
+from v1.campaign.models.advertisement_type import get_advert_type_by_id_string
 
 
 def is_data_verified(request):
@@ -351,6 +356,80 @@ def set_validated_data(validated_data):
         status_id = get_advert_status_by_id_string(validated_data["status_id"])
         validated_data["status_id"] = status_id.id
 
+    return validated_data
+
+def set_campaign_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_campaign_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "campaign_type_id" in validated_data:
+        campaign_type = get_campaign_type_by_id_string(validated_data["campaign_type_id"])
+        if campaign_type:
+            validated_data["campaign_type_id"] = campaign_type.id
+        else:
+            raise CustomAPIException("Campaign Type Not Found", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_advertisement_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_advertisement_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "adv_type_id" in validated_data:
+        advertisement_type = get_advert_type_by_id_string(validated_data["adv_type_id"])
+        if tenant:
+            validated_data["adv_type_id"] = advertisement_type.id
+        else:
+            raise CustomAPIException("Advertisement Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

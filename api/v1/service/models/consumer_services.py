@@ -69,6 +69,7 @@ class ServiceDetails(models.Model, fsm.FiniteStateMachineMixin):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     service_request_no = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     service_request_id = models.BigIntegerField(null=True, blank=True)
     service_type_id = models.BigIntegerField(null=True, blank=True)

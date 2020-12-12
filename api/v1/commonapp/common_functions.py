@@ -1,4 +1,4 @@
-import jwt # jwt token library
+import jwt  # jwt token library
 from rest_framework import status
 
 from api.settings import SECRET_KEY
@@ -14,7 +14,21 @@ from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
-
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.commonapp.models.region import get_region_by_id_string
+from v1.commonapp.models.country import get_country_by_id_string
+from v1.commonapp.models.state import get_state_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.zone import get_zone_by_id_string
+from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.utility.models.utility_region import get_utility_region_by_id_string
+from v1.commonapp.models.channel import get_channel_by_id_string
+from v1.campaign.models.campaign_type import get_campaign_type_by_id_string
+from v1.utility.models.utility_channel import get_utility_channel_by_id_string
+from v1.utility.models.utility_payment_subtype import get_utility_payment_subtype_by_id_string
+from v1.utility.models.utility_payment_type import get_utility_payment_type_by_id_string
+from v1.utility.models.utility_payment_mode import get_utility_payment_mode_by_id_string
 
 def get_payload(token):
     try:
@@ -92,3 +106,246 @@ def set_note_validated_data(validated_data):
         else:
             raise CustomAPIException("Service type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+
+def set_region_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "region_id" in validated_data:
+        region = get_region_by_id_string(validated_data["region_id"])
+        if region:
+            validated_data["region_id"] = region.id
+        else:
+            raise CustomAPIException("Region not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_country_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "region_id" in validated_data:
+        region = get_utility_region_by_id_string(validated_data["region_id"])
+        if region:
+            validated_data["region_id"] = region.id
+        else:
+            raise CustomAPIException("Region not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_state_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "country_id" in validated_data:
+        country_name = get_country_by_id_string(validated_data["country_id"])
+        if country_name:
+            validated_data["country_id"] = country_name.id
+        else:
+            raise CustomAPIException("Country not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_city_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "state_id" in validated_data:
+        state = get_state_by_id_string(validated_data["state_id"])
+        if state:
+            validated_data["state_id"] = state.id
+        else:
+            raise CustomAPIException("State not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_zone_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        if city:
+            validated_data["city_id"] = city.id
+        else:
+            raise CustomAPIException("City not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_area_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "zone_id" in validated_data:
+        zone = get_zone_by_id_string(validated_data["zone_id"])
+        if zone:
+            validated_data["zone_id"] = zone.id
+        else:
+            raise CustomAPIException("Zone not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_subarea_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        if area:
+            validated_data["area_id"] = area.id
+        else:
+            raise CustomAPIException("Area not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_premise_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "subarea_id" in validated_data:
+        subarea = get_sub_area_by_id_string(validated_data["subarea_id"])
+        if subarea:
+            validated_data["subarea_id"] = subarea.id
+        else:
+            raise CustomAPIException("SubArea not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_skill_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_frequency_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "campaign_type_id" in validated_data:
+        campaign_type = get_campaign_type_by_id_string(validated_data["campaign_type_id"])
+        if campaign_type:
+            validated_data["campaign_type_id"] = campaign_type.id
+        else:
+            raise CustomAPIException("Campaign Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "channel_type_id" in validated_data:
+        channel_type = get_utility_channel_by_id_string(validated_data["channel_type_id"])
+        if channel_type:
+            validated_data["channel_type_id"] = channel_type.id
+        else:
+            raise CustomAPIException("Channel Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_channel_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "channel_id" in validated_data:
+        channel = get_channel_by_id_string(validated_data["channel_id"])
+        if channel:
+            validated_data["channel_id"] = channel.id
+        else:
+            raise CustomAPIException("Channel not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+    
+

@@ -45,7 +45,7 @@ class SupplierInvoiceList(generics.ListAPIView):
 
         def get_queryset(self):
             if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+                if is_authorized(1,1,1,1):
                     supplier_obj = get_supplier_by_id_string(self.kwargs['id_string'])
                     if supplier_obj:
                         queryset = SupplierInvoiceTbl.objects.filter(supplier=supplier_obj.id, is_active=True)

@@ -31,6 +31,7 @@ class TermsAndCondition(models.Model):
     contract = models.BigIntegerField(null=True, blank=True)
     terms_name = models.CharField(max_length=200, blank=True, null=True)
     terms = models.CharField(max_length=500, blank=True, null=True)
+    remark = models.CharField(max_length=500, blank=True, null=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())

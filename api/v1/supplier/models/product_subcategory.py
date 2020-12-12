@@ -19,6 +19,7 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from v1.supplier.models.product_category import get_supplier_product_category_by_id
 
 
 # Create Product Service Sub Category table start.
@@ -40,6 +41,11 @@ class ProductSubCategory(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_product_category(self):
+        product_category_type = get_supplier_product_category_by_id(self.category)
+        return product_category_type
 
 # Create Product Service Sub Category table end.
 

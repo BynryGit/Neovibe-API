@@ -14,12 +14,12 @@ from v1.commonapp.views.custom_exception import InvalidAuthorizationException, I
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.complaint.models.complaint import *
-from v1.consumer.models.consumer_category import ConsumerCategory
+from v1.consumer.models.consumer_category import ConsumerCategory, get_consumer_category_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_ownership import ConsumerOwnership
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
-from v1.consumer.serializers.consumer import ConsumerSerializer, ConsumerViewSerializer
+from v1.consumer.serializers.consumer_master import ConsumerSerializer, ConsumerViewSerializer
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
@@ -28,6 +28,9 @@ from v1.payment.serializer.payment import *
 from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_service import get_utility_service_by_id_string
+
 
 # API Header
 # API end Point: api/v1/consumer
@@ -38,18 +41,15 @@ from v1.userapp.decorators import is_token_validate, role_required
 # Interaction: Add
 # Usage: Add
 # Tables used: ConsumerMaster
-# Auther: Rohan
+# Author: Rohan
 # Created on: 19/05/2020
-from v1.utility.models.utility_master import get_utility_by_id_string
-
-
 class Consumer(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             serializer = ConsumerSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
@@ -109,7 +109,6 @@ class ConsumerDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
 
     @is_token_validate
     @role_required(CONSUMER_OPS, CONSUMER, EDIT)
@@ -293,7 +292,6 @@ class ConsumerServiceList(generics.ListAPIView):
         raise APIException
 
 
-
 # API Header
 # API end Point: api/v1/consumer/bill/:id_string
 # API verb: GET, PUT
@@ -330,7 +328,6 @@ class ConsumerBillDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
 
     @is_token_validate
     @role_required(CONSUMER_OPS, CONSUMER, EDIT)
@@ -445,7 +442,6 @@ class ConsumerPaymentDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
 
     @is_token_validate
     @role_required(CONSUMER_OPS, CONSUMER, EDIT)
@@ -726,9 +722,12 @@ class ConsumerCategoryList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerCategory.objects.filter(utility = utility, is_active = True)
+                    queryset = ConsumerCategory.objects.filter(utility=utility, is_active=True)
+                    if "service_id" in self.request.query_params:
+                        service = get_utility_service_by_id_string(self.request.query_params['service_id'])
+                        queryset = queryset.filter(service_id=service.id)
                     if queryset:
                         return queryset
                     else:
@@ -738,7 +737,7 @@ class ConsumerCategoryList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Consumer')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Consumer')
 
 
 # API Header
@@ -759,9 +758,12 @@ class ConsumerSubCategoryList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerSubCategory.objects.filter(utility = utility, is_active = True)
+                    queryset = ConsumerSubCategory.objects.filter(utility=utility, is_active=True)
+                    if 'category_id' in self.request.query_params:
+                        category = get_consumer_category_by_id_string(self.request.query_params['category_id'])
+                        queryset = queryset.filter(category_id=category.id)
                     if queryset:
                         return queryset
                     else:
@@ -771,7 +773,7 @@ class ConsumerSubCategoryList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Consumer')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Consumer')
 
 
 # API Header
@@ -792,9 +794,9 @@ class ConsumerOwnershipList(generics.ListAPIView):
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
+                if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerOwnership.objects.filter(utility = utility, is_active = True)
+                    queryset = ConsumerOwnership.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
                     else:
@@ -804,4 +806,4 @@ class ConsumerOwnershipList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module = 'Consumer Ops', sub_module = 'Consumer')
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Consumer')

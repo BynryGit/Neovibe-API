@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+# from v1.commonapp.views.secretcache import SecretManager
+# secret = SecretManager()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -54,7 +55,7 @@ INSTALLED_APPS = [
     'v1.contract',
     'v1.dispatcher',
     'v1.employee',
-    'v1.meter_reading',
+    'v1.meter_data_management',
     'v1.payment',
     'v1.payroll',
     'v1.registration',
@@ -108,29 +109,18 @@ REST_FRAMEWORK = {
 WSGI_APPLICATION = 'api.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'smart360',
-#         'USER': 'postgres',
-#         'PASSWORD': 'chinmay123',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'Latest_Data',
         'NAME': 'smart360_new',
         'USER': 'postgres',
-        'PASSWORD': 'root',
+        'PASSWORD': 'chinmay123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -208,8 +198,8 @@ CELERY_TIMEZONE = 'Asia/Kolkata'
 
 # Cronjob configuration
 CRONJOBS = [
-    ('*/1 * * * *', 'v1.meter_reading.task.validation_assignment.assign_validation', '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
-    ('0 */30 * * *', 'meter_reading.task.bill_distribution.import_bill_distribution_data', '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
+    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation', '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
+    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data', '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
 ]
 
 # Amazon s3 Configuration
@@ -229,7 +219,7 @@ MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIT_PORT = 587
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'

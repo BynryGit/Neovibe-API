@@ -9,6 +9,8 @@ from v1.supplier.models.supplier_product import SupplierProduct
 from v1.supplier.models.supplier_service import SupplierService
 from v1.supplier.models.supplier_status import SupplierStatus
 from v1.supplier.models.supplier import Supplier
+from v1.supplier.models.supplier_type import SupplierType
+from v1.supplier.models.supplier_subtype import SupplierSubType
 
 admin.site.register(SupplierStatus)
 admin.site.register(Supplier)
@@ -18,3 +20,5 @@ admin.site.register(SupplierPayment)
 admin.site.register(SupplierInvoice)
 admin.site.register(ProductSubCategory)
 admin.site.register(ProductCategory)
+admin.site.register(SupplierType)
+admin.site.register(SupplierSubType)

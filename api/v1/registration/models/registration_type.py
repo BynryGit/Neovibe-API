@@ -24,7 +24,7 @@ class RegistrationType(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -42,6 +42,6 @@ def get_registration_type_by_id_string(id_string):
 
 
 def get_registration_type_by_id(id):
-    return RegistrationType.objects.get(id = id)
+    return RegistrationType.objects.filter(id = id)
 
     # Create Registration Type table end

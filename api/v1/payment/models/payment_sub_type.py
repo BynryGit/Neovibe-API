@@ -22,6 +22,7 @@ from django.db import models  # importing package for database
 class PaymentSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    key = models.CharField(max_length=200, blank=True, null=True)
     payment_type_id = models.BigIntegerField(null=True, blank=True)
     gl_code_id = models.BigIntegerField(null=True, blank=True)
     tax = models.BigIntegerField(null=True, blank=True)

@@ -11,6 +11,7 @@ from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.utility.serializers.utility_module import UtilityModuleShortViewSerializer
 from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl
 from v1.utility.views.common_functions import set_utility_submodule_validated_data
+from v1.commonapp.models.sub_module import SubModule as SubModuleTbl
 
 
 class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
@@ -28,8 +29,8 @@ class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
 
 
 class UtilitySubModuleSerializer(serializers.ModelSerializer):
-    tenant = serializers.UUIDField(required=True, source='tenant.id_string')
-    utility = serializers.UUIDField(required=True, source='utility.id_string')
+    tenant = serializers.UUIDField(required=False, source='tenant.id_string')
+    utility = serializers.UUIDField(required=False, source='utility.id_string')
     module_id = serializers.UUIDField(required=True)
     submodule_id = serializers.UUIDField(required=True)
 
@@ -64,3 +65,17 @@ class UtilitySubModuleSerializer(serializers.ModelSerializer):
             utility_submodule.updated_date = timezone.now()
             utility_submodule.save()
             return utility_submodule
+    
+    
+   
+
+
+class UtilitySubModuleListSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = UtilitySubModuleTbl
+        fields = ('id_string','label')
+
+
+

@@ -46,7 +46,10 @@ class Receipt(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.type
+
     def __unicode__(self):
-        return self.id
+        return self.type
 
 # Create Receipt table end.

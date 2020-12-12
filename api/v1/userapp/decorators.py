@@ -20,6 +20,8 @@ def is_token_validate(function):
         decoded_token = get_payload(token)
         if decoded_token:
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
+            print("User",user_obj)
+            print("User ID",user_obj.id)
             if check_token_exists_for_user(token, user_obj.id):
                 token_obj = get_token_by_token(token)
                 if (token_obj.created_date + timedelta(hours=4)).replace(tzinfo=None) < datetime.now():

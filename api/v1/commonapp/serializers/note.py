@@ -23,12 +23,17 @@ class NoteViewSerializer(serializers.ModelSerializer):
         model = Notes
         fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'created_date')
 
+
 class NoteSerializer(serializers.ModelSerializer):
-    utility_id = serializers.CharField(required=False, max_length=200, error_messages={"required":"The field utility_id is required."})
-    module_id = serializers.CharField(required=False, max_length=200, error_messages={"required":"The field module_id is required."})
-    sub_module_id = serializers.CharField(required=False, max_length=200, error_messages={"required":"The field sub_module_id is required."})
+    utility_id = serializers.CharField(required=False, max_length=200,
+                                       error_messages={"required": "The field utility_id is required."})
+    module_id = serializers.CharField(required=False, max_length=200,
+                                      error_messages={"required": "The field module_id is required."})
+    sub_module_id = serializers.CharField(required=False, max_length=200,
+                                          error_messages={"required": "The field sub_module_id is required."})
     identification_id = serializers.CharField(required=False, max_length=200)
-    note_name = serializers.CharField(required=True, max_length=200, error_messages={"required":"The field note_name is required."})
+    note_name = serializers.CharField(required=True, max_length=200,
+                                      error_messages={"required": "The field note_name is required."})
     note = serializers.CharField(required=False, max_length=200)
     note_color = serializers.CharField(required=False, max_length=200)
 
@@ -37,7 +42,7 @@ class NoteSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
     def create(self, validated_data, user):
-        validated_data =  set_note_validated_data(validated_data)
+        validated_data = set_note_validated_data(validated_data)
         with transaction.atomic():
             note_obj = super(NoteSerializer, self).create(validated_data)
             note_obj.is_active = True

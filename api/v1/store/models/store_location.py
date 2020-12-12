@@ -17,15 +17,19 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
-
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.area import get_area_by_id
 
 # Create StoreLocation table start
 class StoreLocation(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, null=False, blank=False)
-    utility = models.ForeignKey(UtilityMaster, null=False, blank=False)
-    store_name = models.CharField(max_length=200, blank=True, null=True)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    store_id = models.BigIntegerField(null=True, blank=True)
+    store_name = models.CharField(max_length=200, blank=False, null=False)
     store_address = models.CharField(max_length=500, blank=True, null=True)
+    latitude = models.BigIntegerField(null=True, blank=True)
+    longitude = models.BigIntegerField(null=True, blank=True)
     contact_mobile = models.BigIntegerField(null=True, blank=True)
     contact_landstore  = models.BigIntegerField(null=True, blank=True)
     city_id  = models.BigIntegerField(null=True, blank=True)
@@ -42,4 +46,26 @@ class StoreLocation(models.Model):
     def __unicode__(self):
         return self.store_name
 
+    @property
+    def get_city(self):
+        city = get_city_by_id(self.city_id)
+        return city
+
+    @property
+    def get_area(self):
+        area = get_area_by_id(self.area_id)
+        return area
+
 # Create StoreLocation table end
+
+def get_store_location_by_id(id):
+    try:
+        return StoreLocation.objects.filter(id=id).last()
+    except:
+        return False
+
+def get_store_location_by_id_string(id_string):
+    try:
+        return StoreLocation.objects.get(id_string=id_string)
+    except:
+        return False

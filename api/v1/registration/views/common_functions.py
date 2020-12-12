@@ -22,6 +22,7 @@ from v1.registration.views.notifications import registration_email_to_consumer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_services_number_format import *
 from v1.registration.models import registrations
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
 
 
 def is_data_verified(request):
@@ -29,7 +30,7 @@ def is_data_verified(request):
 
 
 # Function for converting id_strings to id's
-def set_validated_data(validated_data):
+def set_registration_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
         if utility:
@@ -182,4 +183,44 @@ def perform_signals(next_state, registration):
             registration_approved.send(registration)
     except Exception as e:
         raise CustomAPIException("Registration transition failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def set_registration_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_registration_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "registration_type_id" in validated_data:
+        registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
+        if registration_type:
+            validated_data["registration_type_id"] = registration_type.id
+        else:
+            raise CustomAPIException("Registration not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
 

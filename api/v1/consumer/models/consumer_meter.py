@@ -10,7 +10,7 @@
 # Creation Date : 23/04/2020
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -24,9 +24,17 @@ class ConsumerMeter(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer = models.BigIntegerField(null=True, blank=True)
-    meter = models.BigIntegerField(null=True, blank=True)
+    meter_id = models.BigIntegerField(null=True, blank=True)
     assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     initial_reading = models.BigIntegerField(null=True, blank=True)
+    address_line_1 = models.CharField(max_length=200, blank=True, null=True)
+    street = models.CharField(max_length=200, blank=True, null=True)
+    zipcode = models.CharField(max_length=200, null=True, blank=True)
+    state_id = models.BigIntegerField(null=True, blank=True)
+    city_id = models.BigIntegerField(null=True, blank=True)
+    area_id = models.BigIntegerField(null=True, blank=True)
+    sub_area_id = models.BigIntegerField(null=True, blank=True)
+    premise_id = models.BigIntegerField(null=True, blank=True)
     status = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -34,10 +42,12 @@ class ConsumerMeter(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.utility.name + " " + str(self.id_string)
+
     def __unicode__(self):
-        return str(self.meter_id) + '-' + str(self.consumer_id) + '-' + str(self.assign_date) + '-' + str(
-            self.initial_reading) + '-' + str(self.status)
-# Create Consumer meter table end.
+        return self.utility.name
+
 
 def get_consumer_meter_by_id(id):
     try:

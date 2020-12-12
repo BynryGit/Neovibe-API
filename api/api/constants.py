@@ -40,7 +40,7 @@ PAYMENT = ""
 # PAYROLL = get_sub_module_by_name('Payroll')
 PAYROLL = ""
 # REGISTRATION = get_sub_module_id_by_key('REGISTRATION')
-REGISTRATION = ''
+REGISTRATION = ""
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')
@@ -69,8 +69,11 @@ UTILITY = ''
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
 
 ADMIN = 2
-USER = 1
+# USER = 1
 UTILITY = 1
+# VIEW = 1
+# EDIT = 2
+USER = 1
 VIEW = 1
 EDIT = 2
 

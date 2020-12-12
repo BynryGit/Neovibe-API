@@ -45,7 +45,7 @@ class ContractType(models.Model):
 
 def get_contract_type_by_id(id):
     try:
-        return ContractType.objects.get(id=id)
+        return ContractType.objects.filter(id=id).last()
     except:
         return False
 
@@ -54,4 +54,3 @@ def get_contract_type_by_id_string(id_string):
         return ContractType.objects.get(id_string=id_string)
     except:
         return False
-

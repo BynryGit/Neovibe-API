@@ -14,17 +14,22 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.views.custom_exception import ObjectNotFoundException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.commonapp.models.region import get_region_by_id
+from v1.commonapp.models.country import get_country_by_id
+from v1.commonapp.models.state import get_state_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.zone import get_zone_by_id
+
 
 
 # Create Area table start
-
 
 
 class Area(models.Model):
@@ -32,8 +37,9 @@ class Area(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    city_id = models.BigIntegerField(blank=False, null=False)
-    is_active = models.BooleanField(default=False)
+    zone_id = models.BigIntegerField(blank=False, null=False)
+    pin_code = models.CharField(max_length=200, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -54,8 +60,9 @@ class Area(models.Model):
         return self.utility
 
     @property
-    def get_city(self):
-        return get_city_by_id(self.city_id)
+    def get_zone(self):
+        zone = get_zone_by_id(self.zone_id)
+        return zone
 
 
 # Create Area table end
@@ -70,13 +77,13 @@ def get_areas_by_utility_id_string(id_string):
 
 def get_area_by_id(id):
     try:
-        return Area.objects.get(id = id)
+        return Area.objects.get(id=id)
     except:
         return False
 
 
 def get_area_by_id_string(id_string):
     try:
-        return Area.objects.get(id_string = id_string)
+        return Area.objects.get(id_string=id_string)
     except:
         return False

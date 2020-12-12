@@ -42,4 +42,5 @@ urlpatterns = [
     path('logout/', LogoutApiView.as_view()),
     path('<uuid:user_id_string>/utility/<uuid:utility_id_string>', UserRoleByUtilityModules.as_view()),
     path('<uuid:user_id_string>/module/<uuid:module_id_string>', UserRoleByUtilitySubModule.as_view()),
+
 ]

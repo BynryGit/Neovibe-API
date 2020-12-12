@@ -7,8 +7,8 @@ from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.supplier.models.supplier_product import SupplierProduct as SupplierProductTbl
-from v1.supplier.serializers.product_category import ProductCategorySerializer
-from v1.supplier.serializers.product_subcategory import ProductSubCategorySerializer
+from v1.supplier.serializers.product_category import ProductCategoryListSerializer
+from v1.supplier.serializers.product_subcategory import ProductSubCategoryListSerializer
 from v1.supplier.serializers.supplier import SupplierShortViewSerializer
 from v1.supplier.views.common_functions import set_supplier_product_validated_data
 
@@ -17,8 +17,8 @@ class SupplierProductViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
     supplier = SupplierShortViewSerializer(many=False, required=False, source='get_supplier')
-    product_category = ProductCategorySerializer(many=False, required=False, source='get_product_category')
-    product_subcategory = ProductSubCategorySerializer(many=False, required=False, source='get_product_subcategory')
+    product_category = ProductCategoryListSerializer(many=False, required=False, source='get_product_category')
+    product_subcategory = ProductSubCategoryListSerializer(many=False, required=False, source='get_product_subcategory')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 

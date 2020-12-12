@@ -132,9 +132,8 @@
         "pk": "1",
         "model": "commonapp.Country",
         "fields": {
-          "key":"UNITED STATES",
           "name": "United States",
-          "region": 1,
+          "region_id": 1,
           "is_active": "True"
         }
       },
@@ -142,10 +141,8 @@
         "pk": "2",
         "model": "commonapp.Country",
         "fields": {
-            
-            "key":"RUSSIA",
           "name": "Russia",
-          "region": 2,
+          "region_id": 2,
           "is_active": "True"
         }
       },
@@ -153,9 +150,8 @@
         "pk": "3",
         "model": "commonapp.Country",
         "fields": {
-          "key":"INDIA",
           "name": "India",
-          "region": 3,
+          "region_id": 3,
           "is_active": "True"
         }
       },
@@ -167,7 +163,7 @@
           "tenant": 1,
           "utility": 2,
           "name": "Kothrud",
-          "city_id": 1,
+          "zone_id": 1,
           "is_active": "True"
         }
       },
@@ -178,7 +174,7 @@
           "tenant": 1,
           "utility": 2,
           "name": "Shivaji Nagar",
-          "city_id": 1,
+          "zone_id": 1,
           "is_active": "True"
         }
       },
@@ -188,7 +184,7 @@
         "fields": {
           "tenant": 1,
           "utility": 2,
-          "area": 1,
+          "area_id": 1,
           "name": "Bhusari colony",
           "is_active": "True"
         }
@@ -199,7 +195,7 @@
         "fields": {
           "tenant": 1,
           "utility": 2,
-          "area": 2,
+          "area_id": 2,
           "name": "MG Road",
           "is_active": "True"
         }
@@ -208,10 +204,8 @@
         "pk": "1",
         "model": "commonapp.State",
         "fields": {
-          "key":"MAHARASHTRA",
           "name": "Maharashtra",
-          "country": 3,
-          "region": 3,
+          "country_id": 3,
           "is_active": "True"
         }
       },
@@ -219,10 +213,8 @@
         "pk": "2",
         "model": "commonapp.State",
         "fields": {
-          "key":"WEST BENGAL",
           "name": "West Bengal",
-          "country": 4,
-          "region": 3,
+          "country_id": 3,
           "is_active": "True"
         }
       },
@@ -230,10 +222,8 @@
         "pk": "3",
         "model": "commonapp.State",
         "fields": {
-          "key":"TELANGANA",
           "name": "Telangana",
-          "country": 3,
-          "region": 3,
+          "country_id": 3,
           "is_active": "True"
         }
       },
@@ -241,10 +231,8 @@
         "pk": "4",
         "model": "commonapp.State",
         "fields": {
-          "key":"ANDHRA PRADESH",
           "name": "Andhra Pradesh",
-          "country": 3,
-          "region": 3,
+          "country_id": 3,
           "is_active": "True"
         }
       },
@@ -255,9 +243,7 @@
           "tenant": 1,
           "utility": 1,
           "name": "Pune",
-          "state": 1,
-          "country": 3,
-          "region": 3,
+          "state_id": 1,
           "is_active": "True"
         }
       },
@@ -268,9 +254,7 @@
           "tenant": 1,
           "utility": 2,
           "name": "Nashik",
-          "state": 1,
-          "country": 3,
-          "region": 3,
+          "state_id": 1,
           "is_active": "True"
         }
       },
@@ -281,9 +265,7 @@
           "tenant": 2,
           "utility": 2,
           "name": "Kolkata",
-          "state": 2,
-          "country": 3,
-          "region": 3,
+          "state_id": 1,
           "is_active": "True"
         }
       },
@@ -2831,7 +2813,7 @@
           "tenant": 1,
           "utility": 1,
           "name": "Kothrud",
-          "city_id": 1,
+          "zone_id": 1,
           "is_active": "True"
         }
       },
@@ -2841,7 +2823,7 @@
         "fields": {
           "tenant": 1,
           "utility": 1,
-          "area": 1,
+          "area_id": 1,
           "name": "Bhusari colony",
           "is_active": "True"
         }
@@ -2872,7 +2854,6 @@
         "fields": {
           "tenant": 1,
           "utility": 1,
-          "item": 3,
           "startingno":1000,
           "currentno":1000,
           "is_active": "True"
