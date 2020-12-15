@@ -7,7 +7,6 @@ from v1.commonapp.views.region import RegionList, Region, RegionDetail
 from v1.commonapp.views.state import StateList, State, StateDetail
 from v1.commonapp.views.zone import ZoneList, Zone, ZoneDetail
 from v1.commonapp.views.area import AreaList, AreaDetail, Area
-from v1.commonapp.views.department import Department, DepartmentList
 from v1.commonapp.views.form_factor import FormFactor, FormFactorList
 from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail, SubArea
 from v1.commonapp.views.module import ModuleList
