@@ -5,15 +5,15 @@ from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import COSUMER_OWNERSHIP_ALREADY_EXIST
-from v1.consumer.views.common_functions import set_consumer_ownership_validated_data
 from rest_framework import status
+
+from v1.consumer.views.common_functions import set_consumer_ownership_validated_data
 
 
 class ConsumerOwnershipListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ConsumerOwnershipTbl
-        fields = ('name', 'id_string','created_by','created_date','is_active')
+        fields = ('name', 'id_string', 'created_by', 'created_date', 'is_active')
 
 
 class ConsumerOwnershipViewSerializer(serializers.ModelSerializer):
@@ -26,12 +26,12 @@ class ConsumerOwnershipViewSerializer(serializers.ModelSerializer):
         model = ConsumerOwnershipTbl
         fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string')
 
+
 class ConsumerOwnershipSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, max_length=200,
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
-    
 
     class Meta:
         model = ConsumerOwnershipTbl
@@ -41,7 +41,7 @@ class ConsumerOwnershipSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_consumer_ownership_validated_data(validated_data)
             if ConsumerOwnershipTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                       utility_id=validated_data['utility_id']).exists():
+                                                   utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(COSUMER_OWNERSHIP_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 consumer_ownership_obj = super(ConsumerOwnershipSerializer, self).create(validated_data)

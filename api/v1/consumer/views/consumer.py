@@ -49,6 +49,10 @@ class Consumer(GenericAPIView):
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
+            if 'services' in request.data:
+                services = request.data['services']
+                for service in services:
+                    print(service)
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             serializer = ConsumerSerializer(data=request.data)

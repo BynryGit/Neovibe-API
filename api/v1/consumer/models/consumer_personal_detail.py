@@ -19,7 +19,7 @@ class ConsumerPersonalDetail(models.Model):
     first_name = models.CharField(max_length=200, null=True, blank=True)
     middle_name = models.CharField(max_length=200, null=True, blank=True)
     last_name = models.CharField(max_length=200, null=True, blank=True)
-    type = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
+    type = models.BigIntegerField(choices=CHOICES, default=0)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

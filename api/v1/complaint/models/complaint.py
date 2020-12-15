@@ -79,7 +79,7 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)
     admin_remark = models.CharField(max_length=500, null=True, blank=True)
     complaint_raised_by = models.BigIntegerField(null=True, blank=True)
-    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     close_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     closure_remark = models.CharField(max_length=500, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)

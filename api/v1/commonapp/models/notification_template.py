@@ -14,7 +14,7 @@ class NotificationTemplate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    notification_type = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
+    notification_type = models.BigIntegerField(choices=CHOICES, default=0)
     is_template = models.BooleanField(default=False)
     template = models.TextField(max_length=10000, null=True, blank=True)
     is_attachment = models.BooleanField(default=False)

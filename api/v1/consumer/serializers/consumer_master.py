@@ -2,7 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from v1.consumer.models.consumer_master import ConsumerMaster
-from v1.consumer.views.common_functions import *
+from v1.consumer.views.common_functions import set_consumer_validated_data
 
 
 class ConsumerViewSerializer(serializers.ModelSerializer):
@@ -10,10 +10,17 @@ class ConsumerViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    billing_state = serializers.ReadOnlyField(source='get_state')
+    billing_city = serializers.ReadOnlyField(source='get_city')
+    billing_area = serializers.ReadOnlyField(source='get_area')
+    billing_sub_area = serializers.ReadOnlyField(source='get_sub_area')
+    premise = serializers.ReadOnlyField(source='get_premise')
 
     class Meta:
         model = ConsumerMaster
-        fields = '__all__'
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no',
+                  'master_consumer_no', 'email_id', 'phone_mobile', 'billing_address_line_1', 'billing_street',
+                  'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise')
 
 
 class ConsumerSerializer(serializers.ModelSerializer):
@@ -36,7 +43,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             consumer_obj = super(ConsumerSerializer, self).create(validated_data)
             consumer_obj.tenant = user.tenant
-            consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
+            # consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
             consumer_obj.save()
             return consumer_obj
 

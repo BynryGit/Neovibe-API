@@ -1,5 +1,4 @@
 from api.messages import COSUMER_SUPPORT_ALREADY_EXIST
-from v1.consumer.views.common_functions import set_consumer_support_validated_data
 from rest_framework import status
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer
 from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer
@@ -10,26 +9,30 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from django.db import transaction
 from datetime import datetime
 
+from v1.consumer.views.common_functions import set_consumer_support_validated_data
+
+
 class ConsumerSupportListSerializer(serializers.ModelSerializer):
     consumer_category = ConsumerCategoryListSerializer(many="False", source='get_category_type')
     consumer_subcategory = ConsumerSubCategoryListSerializer(many="False", source='get_category_subtype')
     city = CityListSerializer(many="False", source='get_city')
+
     class Meta:
         model = ConsumerSupportTbl
-        fields = ('name', 'id_string','consumer_category','consumer_subcategory','city','created_date','is_active','created_by')
+        fields = ('name', 'id_string', 'consumer_category', 'consumer_subcategory', 'city', 'created_date', 'is_active',
+                  'created_by')
+
 
 class ConsumerSupportViewSerializer(serializers.ModelSerializer):
-    
-
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    
 
     class Meta:
         model = ConsumerSupportTbl
-        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string','created_date')
+        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date')
+
 
 class ConsumerSupportSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, max_length=200,
@@ -39,7 +42,6 @@ class ConsumerSupportSerializer(serializers.ModelSerializer):
     category_id = serializers.CharField(required=True, max_length=200)
     subcategory_id = serializers.CharField(required=True, max_length=200)
     city_id = serializers.CharField(required=True, max_length=200)
-    
 
     class Meta:
         model = ConsumerSupportTbl
@@ -49,7 +51,7 @@ class ConsumerSupportSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_consumer_support_validated_data(validated_data)
             if ConsumerSupportTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                       utility_id=validated_data['utility_id']).exists():
+                                                 utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(COSUMER_SUPPORT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 consumer_support_obj = super(ConsumerSupportSerializer, self).create(validated_data)

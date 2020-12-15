@@ -21,9 +21,6 @@ from v1.utility.models.utility_payment_type import UtilityPaymentType
 from v1.utility.models.utility_payment_subtype import UtilityPaymentSubtype
 from v1.utility.models.utility_payment_mode import UtilityPaymentMode
 
-
-
-
 admin.site.register(UtilityModule)
 admin.site.register(UtilitySubModule)
 admin.site.register(UtilityServicePlan)
