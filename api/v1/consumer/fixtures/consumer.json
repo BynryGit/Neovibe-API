@@ -1,0 +1,877 @@
+[
+	{
+		"pk": "1",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "1",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Electrical",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Computer",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Electrical",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 3,
+			"name": "Computer",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"insurance_no": 1025,
+			"name": "Fan insurance",
+			"provider": "Power ltd.",
+			"cost": 50000,
+			"effective_start_date": "1/06/2020",
+			"effective_end_date": "31/12/2020",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"insurance_no": 1326,
+			"name": "Computer insurance",
+			"provider": "TDE ltd",
+			"cost": 25000,
+			"effective_start_date": "1/06/2020",
+			"effective_end_date": "31/12/2020",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"insurance_no": 1205,
+			"name": "Fan insurance",
+			"provider": "Power ltd.",
+			"cost": 50000,
+			"effective_start_date": "15/07/2020",
+			"effective_end_date": "15/01/2021",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AsssetInsurance",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 4,
+			"insurance_no": 1579,
+			"name": "Computer insurance",
+			"provider": "TDE ltd",
+			"cost": 25000,
+			"effective_start_date": "15/07/2020",
+			"effective_end_date": "15/01/2021",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"category_id": 1,
+			"name": "Fan",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"category_id": 2,
+			"name": "Hard disk",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"category_id": 3,
+			"name": "Fan",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetSubCategory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"category_id": 4,
+			"name": "Hard disk",
+			"is_active": "True"
+		}
+	},
+
+
+
+	{
+		"pk": "1",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Fan",
+			"asset_no": 101,
+			"description": "Fan",
+			"serial_no": 10025,
+			"manufacturer": "Bajaj",
+			"make": 1,
+			"model": "LF1",
+			"category_id": 1,
+			"sub_category_id": 1,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"address": "EDM colony kothrud",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "15/01/2020",
+			"installation_date": "30/04/2020",
+			"expiry_date": "15/01/2030",
+			"asset_life": 10,
+			"asset_value": 1,
+			"deprecation_method": 1,
+			"deprecation_rate": 5,
+
+			"status_id":1 ,
+			"flag": "True",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Hard disk",
+			"asset_no": 205,
+			"description": "Hard disk",
+			"serial_no": 45623,
+			"manufacturer": "Dell",
+			"make": 1,
+			"model": "D20",
+			"category_id": 2,
+			"sub_category_id": 2,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"address": "Shree colony kothrud",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "13/03/2020",
+			"installation_date": "15/05/2020",
+			"expiry_date": "13/03/2030",
+			"asset_life": 10,
+			"asset_value": 1,
+			"deprecation_method": 1,
+			"deprecation_rate": 2,
+
+			"status_id":1 ,
+			"flag": "False",
+			"is_active": "True"
+		},
+
+
+		{
+		"pk": "3",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Fan",
+			"asset_no": 503,
+			"description": "Fan",
+			"serial_no": 10256,
+			"manufacturer": "Bajaj",
+			"make": 1,
+			"model": "CD1",
+			"category_id": 3,
+			"sub_category_id": 3,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"address": "Ring road",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "10/01/2020",
+			"installation_date": "15/04/2020",
+			"expiry_date": "10/01/2030",
+			"asset_life": 10,
+			"asset_value": 1,
+			"deprecation_method": 1,
+			"deprecation_rate": 5,
+
+			"status_id":1 ,
+			"flag": "True",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "asset.Assset",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Hard disk",
+			"asset_no": 630,
+			"description": "Hard disk",
+			"serial_no": 78965,
+			"manufacturer": "Dell",
+			"make":1 ,
+			"model": "MK8",
+			"category_id": 4,
+			"sub_category_id": 4,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"address": "Ring road",
+			"lat": 18,
+			"long": 79,
+			"manufacturing_date": "10/03/2020",
+			"installation_date": "30/05/2020",
+			"expiry_date": "10/03/2030",
+			"asset_life": 10,
+			"asset_value": 1,
+			"deprecation_method":1 ,
+			"deprecation_rate": 2,
+
+			"status_id": 1,
+			"flag": "True",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "11",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "12",
+		"model": "asset.AssetServiceHistoryStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "cancel",
+			"is_active": "True"
+			}
+	},
+
+
+
+	{
+		"pk": "1",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "2",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "3",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "4",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "5",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "6",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "7",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "created",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "8",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "assigned",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "9",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "started",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "10",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "completed",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "11",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "hold",
+			"is_active": "True"
+			}
+	},
+	{
+		"pk": "12",
+		"model": "asset.AssetStatus",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"status": "cancel",
+			"is_active": "True"
+			}
+	},
+
+
+	{
+		"pk": "1",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"user_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"user_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"user_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.ResourceAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"user_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+
+
+
+{
+		"pk": "1",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"service_request": 1,
+			"service_type": ,
+			"status_id": 1,
+			"maintenance_cost": 2000,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"service_request": 2,
+			"service_type": ,
+			"status_id": 3,
+			"maintenance_cost": 3000,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"service_request": 3,
+			"service_type": ,
+			"status_id": 8,
+			"maintenance_cost": 2000,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.AssetServiceHistory",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"service_request": 4,
+			"service_type": ,
+			"status_id": 11,
+			"maintenance_cost": 3000,
+			"is_active": "True"
+			}
+	},
+
+
+{
+		"pk": "1",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"sop_master_detail": 1,
+			"frequency_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"sop_master_detail": 2,
+			"frequency_id": ,
+			"city_id": 1,
+			"area_id": 1,
+			"subarea_id": 1,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"sop_master_detail": 3,
+			"frequency_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.SopAssign",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"sop_master_detail": 4,
+			"frequency_id": ,
+			"city_id": 3,
+			"area_id": 3,
+			"subarea_id": 3,
+			"is_active": "True"
+			}
+	},
+
+{
+		"pk": "1",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Cash",
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "2",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"name": "Payment Gateway",
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "3",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Cash",
+			"is_active": "True"
+			}
+	},
+{
+		"pk": "4",
+		"model": "asset.TransactionType",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"name": "Payment Gateway",
+			"is_active": "True"
+			}
+	},
+
+
+{
+		"pk": "1",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 1,
+			"contract_no": 23,
+			"contract_name": "Electrical maintenance",
+			"contract_provider": "Electrical supply ltd",
+			"cost": 5000,
+			"no_of_services": 5,
+			"frequency":,
+			"sop": 1,
+			"effective_start_date":"1/07/2020",
+			"effective_end_date":"1/07/2021",
+			"is_active": "True"
+			}
+	},
+
+{
+		"pk": "2",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"asset_id": 2,
+			"contract_no": 20,
+			"contract_name": "IT maintenance",
+			"contract_provider": "Soft solutions",
+			"cost": 3000,
+			"no_of_services": 3,
+			"frequency":,
+			"sop": 2,
+			"effective_start_date":"1/08/2020",
+			"effective_end_date":"1/08/2021",
+			"is_active": "True"
+			}
+	},
+
+
+{
+		"pk": "3",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 3,
+			"contract_no": 56,
+			"contract_name": "Electrical maintenance",
+			"contract_provider": "VGS powers",
+			"cost": 5000,
+			"no_of_services": 6,
+			"frequency":,
+			"sop": 3,
+			"effective_start_date":"1/07/2020",
+			"effective_end_date":"1/07/2021",
+			"is_active": "True"
+			}
+	},
+
+{
+		"pk": "4",
+		"model": "asset.AssetAmcContract",
+		"fields": {
+			"tenant": 2,
+			"utility": 3,
+			"asset_id": 4,
+			"contract_no": 85,
+			"contract_name": "IT maintenance",
+			"contract_provider": "Soft solutions",
+			"cost": 3000,
+			"no_of_services": 4,
+			"frequency":,
+			"sop": 4,
+			"effective_start_date":"1/08/2020",
+			"effective_end_date":"1/08/2021",
+			"is_active": "True"
+			}
+	}
+]

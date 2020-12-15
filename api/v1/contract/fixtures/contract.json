@@ -1,0 +1,188 @@
+[
+	{
+		"pk": "1",
+		"model": "contract.ContractStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Active",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.ContractStatus",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Inactive",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "contract.ContractType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Type 1"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.ContractType",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "Type 2"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "contract.ContractPeriod",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"period": "0-6",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.ContractPeriod",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"period": "1-2",
+			"is_active": "True"
+		}
+	},
+
+	{
+		"pk": "1",
+		"model": "contract.Contract",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "contract 1",
+			"description": "contract 1 is vendor of Advertisement 1",
+            "contract_type": 1,
+            "contract_period": 1,
+            "contract_amount": 2365,
+            "cost_center": 1,
+            "status": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.Contract",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "contract 2",
+			"description": "contract 2 is vendor of Advertisement 2",
+            "contract_type": 1,
+            "contract_period": 1,
+            "contract_amount": 236544,
+            "cost_center": 1,
+            "status": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "contract.Contract",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "contract 3",
+			"description": "contract 3 is vendor of Advertisement 3",
+            "contract_type": 2,
+            "contract_period": 2,
+            "contract_amount": 215365,
+            "cost_center": 2,
+            "status": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "contract.Contract",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"name": "contract 4",
+			"description": "contract 4 is vendor of Advertisement 4",
+            "contract_type": 2,
+            "contract_period": 2,
+            "contract_amount": 215365545,
+            "cost_center": 2,
+            "status": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "contract.ContractDemand",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"contract": 1,
+			"requested_quantity": 125,
+			"unit": 11,
+			"actual_quantity": 1256,
+			"rate": 354,
+			"remark": "testing data",
+			"status_id": 1,
+			"gate_pass_id": 1,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.ContractDemand",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"contract": 2,
+			"requested_quantity": 5125,
+			"unit": 111,
+			"actual_quantity": 12556,
+			"rate": 15354,
+			"remark": "testing data 2",
+			"status_id": 2,
+			"gate_pass_id": 2,
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "contract.TermsAndCondition",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"contract": 1,
+			"terms_name": "Term 1",
+			"terms": "test term",
+			"is_active": "True"
+
+		}
+	},
+	{
+		"pk": "2",
+		"model": "contract.TermsAndCondition",
+		"fields": {
+			"tenant": 4,
+			"utility": 2,
+			"contract": 2,
+			"terms_name": "Term 2",
+			"terms": "test term 2",
+			"is_active": "True"
+
+		}
+	}
+]

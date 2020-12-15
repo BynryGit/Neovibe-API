@@ -1,0 +1,143 @@
+[
+	{
+		"pk" : "1",
+		"model" : "payment.PaymentChannel",
+		"fields" : {
+			"tenant" : 1,
+            "utility" : 2,
+            "name" : "Channel 1",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "2",
+		"model" : "payment.PaymentChannel",
+		"fields" : {
+			"tenant" : 1,
+            "utility" : 2,
+            "name" : "Channel 2",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "3",
+		"model" : "payment.PaymentChannel",
+		"fields" : {
+			"tenant" : 1,
+            "utility" : 2,
+            "name" : "Channel 3",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "1",
+		"model" : "payment.PaymentMode",
+		"fields" : {
+			"tenant" : 1,
+            "utility" : 2,
+            "name" : "Mode 1",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "2",
+		"model" : "payment.PaymentMode",
+		"fields" : {
+			"tenant" : 1,
+            "utility" : 2,
+            "name" : "Mode 2",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "3",
+		"model" : "payment.PaymentMode",
+		"fields" : {
+			"tenant" : 1,
+            "utility" : 2,
+            "name" : "Mode 3",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "1",
+		"model" : "payment.PaymentSource",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Source 1",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "2",
+		"model" : "payment.PaymentSource",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Source 2",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "3",
+		"model" : "payment.PaymentSource",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Source 3",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "1",
+		"model" : "payment.PaymentSubType",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Sub type 1",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "2",
+		"model" : "payment.PaymentSubType",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Sub type 2",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "3",
+		"model" : "payment.PaymentSubType",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Sub type 3",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "1",
+		"model" : "payment.PaymentType",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Payment Type 1",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "2",
+		"model" : "payment.PaymentType",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Payment Type 2",
+			"is_active" : "True"
+		}
+	},
+    {
+		"pk" : "3",
+		"model" : "payment.PaymentType",
+		"fields" : {
+			"tenant" : 1,
+            "name" : "Payment Type 3",
+			"is_active" : "True"
+		}
+	}
+]

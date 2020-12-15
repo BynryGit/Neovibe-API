@@ -1,0 +1,45 @@
+[{
+		"pk" : "1",
+		"model" : "survey.Survey",
+		"fields" : {
+			"tenant": 1,
+			"utility": 1,
+			"name" : "Domestic consumer survey",
+            "objective_id": 1,
+            "description": "This Survey for Domestic consumer ",
+            "type_id": 1,
+            "category_id": 1,
+            "sub_category_id": 1,
+            "no_of_consumers": 2500,
+            "start_date": "2021-03-23",
+            "end_date": "2021-04-26",
+            "area_id": 1,
+            "sub_area_id": 1,
+            "status_id": 1,
+            "completion_date": "2021-03-27",
+			"is_active" : "True"
+		}
+	},
+  {
+		"pk" : "2",
+		"model" : "survey.Survey",
+		"fields" : {
+			"tenant": 1,
+			"utility": 1,
+			"name" : "New Location Survey",
+            "objective_id": 1,
+            "description": "This Survey for New Location ",
+            "type_id": 2,
+            "category_id": 2,
+            "sub_category_id": 2,
+            "no_of_consumers": 5000,
+            "start_date": "2022-03-23",
+            "end_date": "2022-04-26",
+            "area_id": 4,
+            "sub_area_id": 4,
+            "status_id": 2,
+            "completion_date": "2022-03-27",
+			"is_active" : "True"
+		}
+	}
+]
