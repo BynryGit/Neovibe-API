@@ -23,6 +23,8 @@ from v1.consumer.serializers.consumer_master import ConsumerSerializer, Consumer
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
+from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailSerializer
+from v1.meter_data_management.models.meter import get_meter_by_id_string
 from v1.payment.models.payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
 from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
@@ -49,25 +51,39 @@ class Consumer(GenericAPIView):
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
-            if 'services' in request.data:
-                services = request.data['services']
-                for service in services:
-                    print(service)
-            user_id_string = get_user_from_token(request.headers['Authorization'])
-            user = get_user_by_id_string(user_id_string)
-            serializer = ConsumerSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=False):
-                consumer_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULT: view_serializer.data,
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULT: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
+            with transaction.atomic():
+                services = []
+                if 'services' in request.data:
+                    services = request.data.pop('services')
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer_serializer = ConsumerSerializer(data=request.data)
+                if consumer_serializer.is_valid(raise_exception=False):
+                    consumer_obj = consumer_serializer.create(consumer_serializer.validated_data, user)
+                    if services:
+                        for service in services:
+                            consumer_service_contract_serializer = ConsumerServiceContractDetailSerializer(data=service)
+                            consumer_service_contract_serializer.is_valid()
+                            contract_detail_obj = consumer_service_contract_serializer.create(
+                                                  consumer_service_contract_serializer.validated_data, consumer_obj, user)
+                            contract_detail_obj.tenant = consumer_obj.tenant
+                            contract_detail_obj.utility = consumer_obj.utility
+                            contract_detail_obj.consumer_no = consumer_obj.consumer_no
+                            contract_detail_obj.consumer_id = consumer_obj.id
+                            if service['is_new_meter'] == 'False':
+                                meter = get_meter_by_id_string(service['existing_meter_id'])
+                                contract_detail_obj.meter_id = meter.id
+                            contract_detail_obj.save()
+                    view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(consumer_serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
             res = self.handle_exception(e)

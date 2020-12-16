@@ -64,6 +64,7 @@ UTILITY_NOT_FOUND = "Utility not found"
 DOCUMENT_TYPE_NOT_FOUND = "No record found for user document type"
 SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
 MOBILE_ALREADY_EXISTS = "Mobile number already exists!"
+CONTRACT_ALREADY_EXISTS = "Contract already exists"
 
 
 # *********** NOT FOUND CONSTANTS **************

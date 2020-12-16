@@ -11,6 +11,7 @@ from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_s
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
 from v1.registration.models import registrations
+from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat, \
     UTILITY_SERVICE_NUMBER_ITEM_DICT
 from v1.utility.models.utility_master import get_utility_by_id_string
@@ -75,6 +76,17 @@ def set_consumer_validated_data(validated_data):
 
 
 # Function for converting id_strings to id's
+def set_consumer_service_contract_detail_validated_data(validated_data):
+    if "service_contract_id" in validated_data:
+        utility_service_contract_master = get_utility_service_contract_master_by_id_string(validated_data["service_contract_id"])
+        if utility_service_contract_master:
+            validated_data["service_contract_id"] = utility_service_contract_master.id
+        else:
+            raise CustomAPIException("Utility service contract not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+# Function for converting id_strings to id's
 def set_scheme_validated_data(validated_data):
     if "scheme_type_id" in validated_data:
         scheme_type = get_scheme_type_by_id_string(validated_data["scheme_type_id"])
@@ -116,7 +128,6 @@ def generate_consumer_no(consumer):
             format_obj.save()
         return consumer_no
     except Exception as e:
-        print("###########", e)
         raise CustomAPIException("Consumer_no no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
