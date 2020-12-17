@@ -34,11 +34,10 @@ class State(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.name + " " + str(self.id_string)
 
     def __unicode__(self):
         return self.name
-
 
     @property
     def get_country(self):
@@ -61,6 +60,5 @@ def get_state_by_id(id):
         return State.objects.get(id=id)
     except:
         False
-
 
 # End the Code

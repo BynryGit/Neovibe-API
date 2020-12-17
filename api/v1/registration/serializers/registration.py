@@ -8,8 +8,6 @@ from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryViewSerializer
-from v1.payment.serializer.payment_transactions import PaymentTransactionSerializer
-from v1.payment.views.common_functions import set_payment_transaction_validated_data
 from v1.registration.models.registrations import Registration
 from v1.registration.views.common_functions import generate_registration_no, \
     set_registration_validated_data

@@ -64,7 +64,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     registration_no = models.CharField(max_length=200, blank=True, null=True)
     registration_type_id = models.BigIntegerField(null=True, blank=True)
-    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     middle_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)

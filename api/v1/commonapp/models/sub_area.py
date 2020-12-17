@@ -28,7 +28,7 @@ class SubArea(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, null=True, blank=True, unique=True)
-    area_id = models.BigIntegerField(blank=False, null=False)
+    area_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -36,7 +36,7 @@ class SubArea(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.name + " " + str(self.id_string)
 
     def __unicode__(self):
         return self.name

@@ -1,19 +1,17 @@
 import collections
 from rest_framework import status
 from v1.commonapp.models.area import get_area_by_id_string
-from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
+from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_credit_rating import get_consumer_credit_rating_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
-from v1.consumer.serializers.consumer_master import ConsumerSerializer
 from v1.registration.models import registrations
-from v1.tenant.models.tenant_master import get_tenant_by_id_string
-from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat, \
     UTILITY_SERVICE_NUMBER_ITEM_DICT
 from v1.utility.models.utility_master import get_utility_by_id_string
@@ -51,9 +49,9 @@ def set_consumer_validated_data(validated_data):
         else:
             raise CustomAPIException("City not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "billing_sub_area_id" in validated_data:
-        area = get_area_by_id_string(validated_data["billing_sub_area_id"])
-        if area:
-            validated_data["billing_sub_area_id"] = area.id
+        sub_area = get_sub_area_by_id_string(validated_data["billing_sub_area_id"])
+        if sub_area:
+            validated_data["billing_sub_area_id"] = sub_area.id
         else:
             raise CustomAPIException("Sub area not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "premise_id" in validated_data:
@@ -74,6 +72,17 @@ def set_consumer_validated_data(validated_data):
             validated_data["credit_rating_id"] = rating.id
         else:
             raise CustomAPIException("Credit rating not found.", status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+# Function for converting id_strings to id's
+def set_consumer_service_contract_detail_validated_data(validated_data):
+    if "service_contract_id" in validated_data:
+        utility_service_contract_master = get_utility_service_contract_master_by_id_string(validated_data["service_contract_id"])
+        if utility_service_contract_master:
+            validated_data["service_contract_id"] = utility_service_contract_master.id
+        else:
+            raise CustomAPIException("Utility service contract not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
@@ -119,7 +128,6 @@ def generate_consumer_no(consumer):
             format_obj.save()
         return consumer_no
     except Exception as e:
-        print("###########", e)
         raise CustomAPIException("Consumer_no no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

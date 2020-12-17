@@ -7,8 +7,10 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.consumer.models.consumer_category import ConsumerCategory as ConsumerCategoryModel,get_consumer_category_by_id_string
-from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer,ConsumerCategoryViewSerializer,ConsumerCategorySerializer
+from v1.consumer.models.consumer_category import ConsumerCategory as ConsumerCategoryModel, \
+    get_consumer_category_by_id_string
+from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer, ConsumerCategoryViewSerializer, \
+    ConsumerCategorySerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from rest_framework.response import Response
@@ -20,6 +22,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/consumer/utility/:id_string/category/list
@@ -61,6 +64,7 @@ class ConsumerCategoryList(generics.ListAPIView):
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
+
 # API Header
 # API end Point: api/v1/consumer/category
 # API verb: POST
@@ -83,7 +87,8 @@ class ConsumerCategory(GenericAPIView):
             serializer = ConsumerCategorySerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 consumer_category_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ConsumerCategoryViewSerializer(instance=consumer_category_obj, context={'request': request})
+                view_serializer = ConsumerCategoryViewSerializer(instance=consumer_category_obj,
+                                                                 context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
@@ -153,7 +158,7 @@ class ConsumerCategoryDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     consumer_category_obj = serializer.update(consumer_category_obj, serializer.validated_data, user)
                     view_serializer = ConsumerCategoryViewSerializer(instance=consumer_category_obj,
-                                                          context={'request': request})
+                                                                     context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

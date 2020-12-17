@@ -19,7 +19,21 @@ class Meter(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.meter_make
+        return self.meter_make + ' ' + str(self.id_string)
 
     def __unicode__(self):
         return self.meter_make
+
+
+def get_meter_by_id_string(id_string):
+    try:
+        return Meter.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_meter_by_id(id):
+    try:
+        return Meter.objects.get(id=id)
+    except:
+        return False

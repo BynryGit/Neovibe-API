@@ -24,7 +24,7 @@ class UtilityServiceContractMaster(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.utility.name
+        return self.utility.name + " " + str(self.id_string)
 
     def __unicode__(self):
         return self.utility.name

@@ -14,22 +14,27 @@ from datetime import datetime
 import fsm
 from rest_framework import status
 from api.constants import *
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.premises import get_premise_by_id
+from v1.commonapp.models.state import get_state_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models
 
-
 # *********** CONSUMER CONSTANTS **************
 CONSUMER_DICT = {
-    "CREATED"                   : 0,
-    "REGISTERED"                : 1,
-    "INSTALLED"                 : 2,
-    "CONNECTED"                 : 3,
-    "TEMPORARY DISCONNECTED"    : 4,
-    "PERMANENTLY DISCONNECTED"  : 5,
-    "ARCHIVED"                  : 6,
+    "CREATED": 0,
+    "REGISTERED": 1,
+    "INSTALLED": 2,
+    "CONNECTED": 3,
+    "TEMPORARY DISCONNECTED": 4,
+    "PERMANENTLY DISCONNECTED": 5,
+    "ARCHIVED": 6,
 }
+
 
 # Create Consumer Master table start.
 class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
@@ -50,13 +55,14 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     )
 
     state_machine = {
-        CONSUMER_DICT['CREATED']                    : (CONSUMER_DICT['REGISTERED'],CONSUMER_DICT['CREATED'],),
-        CONSUMER_DICT['REGISTERED']                 : (CONSUMER_DICT['INSTALLED'],),
-        CONSUMER_DICT['INSTALLED']                  : (CONSUMER_DICT['CONNECTED'],),
-        CONSUMER_DICT['CONNECTED']                  : (CONSUMER_DICT['TEMPORARY DISCONNECTED'], CONSUMER_DICT['PERMANENTLY DISCONNECTED']),
-        CONSUMER_DICT['TEMPORARY DISCONNECTED']     : (CONSUMER_DICT['CONNECTED'],),
-        CONSUMER_DICT['PERMANENTLY DISCONNECTED']   : (CONSUMER_DICT['ARCHIVED'],),
-        CONSUMER_DICT['ARCHIVED']                   : (CONSUMER_DICT['ARCHIVED'],),
+        CONSUMER_DICT['CREATED']: (CONSUMER_DICT['REGISTERED'], CONSUMER_DICT['CREATED'],),
+        CONSUMER_DICT['REGISTERED']: (CONSUMER_DICT['INSTALLED'],),
+        CONSUMER_DICT['INSTALLED']: (CONSUMER_DICT['CONNECTED'],),
+        CONSUMER_DICT['CONNECTED']: (
+            CONSUMER_DICT['TEMPORARY DISCONNECTED'], CONSUMER_DICT['PERMANENTLY DISCONNECTED']),
+        CONSUMER_DICT['TEMPORARY DISCONNECTED']: (CONSUMER_DICT['CONNECTED'],),
+        CONSUMER_DICT['PERMANENTLY DISCONNECTED']: (CONSUMER_DICT['ARCHIVED'],),
+        CONSUMER_DICT['ARCHIVED']: (CONSUMER_DICT['ARCHIVED'],),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -103,6 +109,46 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     def __unicode__(self):
         return self.phone_mobile
 
+    @property
+    def get_area(self):
+        area = get_area_by_id(self.billing_area_id)
+        return {
+            'name': area.name,
+            'id_string': area.id_string
+        }
+
+    @property
+    def get_sub_area(self):
+        sub_area = get_sub_area_by_id(self.billing_sub_area_id)
+        return {
+            'name': sub_area.name,
+            'id_string': sub_area.id_string
+        }
+
+    @property
+    def get_state(self):
+        state = get_state_by_id(self.billing_state_id)
+        return {
+            'name': state.name,
+            'id_string': state.id_string
+        }
+
+    @property
+    def get_city(self):
+        city = get_city_by_id(self.billing_city_id)
+        return {
+            'name': city.name,
+            'id_string': city.id_string
+        }
+
+    @property
+    def get_premise(self):
+        premise = get_premise_by_id(self.premise_id)
+        return {
+            'name': premise.name,
+            'id_string': premise.id_string
+        }
+
     # Function for finite state machine state change
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
@@ -113,34 +159,34 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
 
 def get_consumer_by_id_string(id_string):
     try:
-        return ConsumerMaster.objects.get(id_string = id_string)
+        return ConsumerMaster.objects.get(id_string=id_string)
     except Exception as e:
         return False
 
 
 def get_consumer_by_id(id):
     try:
-        return ConsumerMaster.objects.get(id = id)
+        return ConsumerMaster.objects.get(id=id)
     except:
         return False
 
 
 def get_consumer_by_consumer_no(consumer_no):
     try:
-        return ConsumerMaster.objects.get(consumer_no = consumer_no)
+        return ConsumerMaster.objects.get(consumer_no=consumer_no)
     except:
         return False
 
 
 def get_consumer_by_registration_id(id):
     try:
-        return ConsumerMaster.objects.get(registration_id = id)
+        return ConsumerMaster.objects.get(registration_id=id)
     except:
         return False
 
 
 def get_consumers_by_cycle_id(id):
     try:
-        return ConsumerMaster.objects.filter(cycle_id = id)
+        return ConsumerMaster.objects.filter(cycle_id=id)
     except:
         return False

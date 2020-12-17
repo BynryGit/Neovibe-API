@@ -80,7 +80,7 @@ class ServiceDetails(models.Model, fsm.FiniteStateMachineMixin):
     request_due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     request_channel_id = models.BigIntegerField(null=True, blank=True)
     is_field_appointment = models.BooleanField(default=False)
-    state = models.BigIntegerField(max_length=30, choices=CHOICES, default=0)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

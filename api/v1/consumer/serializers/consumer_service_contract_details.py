@@ -1,0 +1,39 @@
+from datetime import datetime
+from django.db import transaction
+from rest_framework import serializers, status
+from api.messages import CONTRACT_ALREADY_EXISTS
+from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
+from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
+
+
+class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
+    tenant = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+    utility = serializers.ReadOnlyField(source='utility.name')
+    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+
+    class Meta:
+        model = ConsumerServiceContractDetail
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no')
+
+
+class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):
+    service_contract_id = serializers.CharField(required=False, max_length=200)
+
+    class Meta:
+        model = ConsumerServiceContractDetail
+        fields = '__all__'
+
+    def create(self, validated_data, consumer, user):
+        validated_data = set_consumer_service_contract_detail_validated_data(validated_data)
+        if ConsumerServiceContractDetail.objects.filter().exists():
+            raise CustomAPIException(CONTRACT_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_service_contract_detail_obj = super(ConsumerServiceContractDetailSerializer, self).create(validated_data)
+                consumer_service_contract_detail_obj.is_active = True
+                consumer_service_contract_detail_obj.created_by = user.id
+                consumer_service_contract_detail_obj.created_date = datetime.now()
+                consumer_service_contract_detail_obj.save()
+                return consumer_service_contract_detail_obj

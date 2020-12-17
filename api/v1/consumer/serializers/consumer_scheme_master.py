@@ -28,7 +28,7 @@ class ConsumerSchemeMasterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerSchemeMaster
-        fields = ('__all__')
+        fields = '__all__'
 
     def create(self, validated_data, user):
         validated_data = set_scheme_validated_data(validated_data)
