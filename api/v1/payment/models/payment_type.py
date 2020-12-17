@@ -13,9 +13,10 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
+
 
 # Create Payment Type table start
 class PaymentType(models.Model):
@@ -35,15 +36,17 @@ class PaymentType(models.Model):
     def __unicode__(self):
         return self.name
 
+
 def get_payment_type_by_id_string(id_string):
     try:
-        return PaymentType.objects.get(id_string = id_string)
+        return PaymentType.objects.get(id_string=id_string)
     except:
         return False
 
+
 def get_payment_type_by_id(id):
     try:
-        return PaymentType.objects.filter(id = id)
+        return PaymentType.objects.get(id=id)
     except:
         return False
 # Create Payment Type table end

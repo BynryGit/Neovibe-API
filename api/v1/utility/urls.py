@@ -79,8 +79,6 @@ urlpatterns = [
     path('<uuid:id_string>/sub_module/delete',api_delete_submodule, name="delete" ),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(), name='role_subtype_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
-    # path('<uuid:id_string>/country/list', UtilityCountryList.as_view()),
-    # path('<uuid:id_string>/state/list', UtilityStateList.as_view()),
     path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
          name='utility_service_contract_master_list'),

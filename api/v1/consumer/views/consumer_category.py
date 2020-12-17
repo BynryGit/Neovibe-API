@@ -1,9 +1,5 @@
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from rest_framework.exceptions import APIException
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -11,8 +7,6 @@ from v1.consumer.models.consumer_category import ConsumerCategory as ConsumerCat
     get_consumer_category_by_id_string
 from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer, ConsumerCategoryViewSerializer, \
     ConsumerCategorySerializer
-from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from rest_framework.response import Response
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
@@ -22,6 +16,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+from v1.utility.models.utility_service import get_utility_service_by_id_string
 
 
 # API Header
@@ -35,12 +30,10 @@ from api.constants import *
 # Tables used: Consumer Category
 # Author: Chinmay
 # Created on: 1/12/2020
-
 class ConsumerCategoryList(generics.ListAPIView):
     try:
         serializer_class = ConsumerCategoryListSerializer
         pagination_class = StandardResultsSetPagination
-
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('name', 'tenant__id_string',)
         ordering_fields = ('name', 'tenant',)
@@ -53,6 +46,9 @@ class ConsumerCategoryList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerCategoryModel.objects.filter(utility=utility, is_active=True)
+                    if 'service_id' in self.request.query_params:
+                        service = get_utility_service_by_id_string(self.request.query_params['service_id'])
+                        queryset = queryset.filter(service_id=service.id)
                     if queryset:
                         return queryset
                     else:

@@ -21,12 +21,9 @@ from django.db import models  # importing package for database
 # Create Payment Type table start
 class PaymentSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=200, blank=False, null=False)
     key = models.CharField(max_length=200, blank=True, null=True)
     payment_type_id = models.BigIntegerField(null=True, blank=True)
-    gl_code_id = models.BigIntegerField(null=True, blank=True)
-    tax = models.BigIntegerField(null=True, blank=True)
-    name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
