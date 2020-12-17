@@ -17,6 +17,7 @@ from v1.commonapp.models.notification import Notification
 from v1.commonapp.models.notification_template import NotificationTemplate
 from v1.commonapp.models.region import Region
 from v1.commonapp.models.service_type import ServiceType
+from v1.commonapp.models.service_sub_type import ServiceSubTypes
 from v1.commonapp.models.skills import Skills
 from v1.commonapp.models.state import State
 from v1.commonapp.models.premises import Premise
@@ -43,6 +44,7 @@ admin.site.register(FormFactor)
 admin.site.register(Notes)
 admin.site.register(Document)
 admin.site.register(ServiceType)
+admin.site.register(ServiceSubTypes)
 admin.site.register(DocumentType)
 admin.site.register(DocumentSubType)
 admin.site.register(Skills)

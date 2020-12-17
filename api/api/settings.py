@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'v1.complaint',
     'v1.service',
     'v1.contract',
-    'v1.dispatcher',
     'v1.employee',
     'v1.meter_data_management',
     'v1.payment',
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
     'v1.tender',
     'v1.utility',
     'v1.tenant',
+    'v1.work_order',
 ]
 
 MIDDLEWARE = [
@@ -112,10 +112,9 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'Latest_Data',
-        'NAME': 'smart360_new',
+        'NAME': 'Latest_Data',
         'USER': 'postgres',
-        'PASSWORD': 'chinmay123',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -87,7 +87,6 @@ class Premise(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     premise_obj = serializer.create(serializer.validated_data, user)
                     subarea = get_sub_area_by_id(premise_obj.subarea_id)
-                    print("Hello",subarea)
                     area = get_area_by_id(subarea.area_id)
                     zone = get_zone_by_id(area.zone_id)
                     city = get_city_by_id(zone.city_id)
