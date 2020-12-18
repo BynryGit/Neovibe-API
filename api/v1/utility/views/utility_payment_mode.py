@@ -26,6 +26,7 @@ from v1.utility.models.utility_payment_mode import UtilityPaymentMode as Utility
 from api.messages import *
 from api.constants import *
 
+
 # API Header
 # API end Point: api/v1/utility/:id_string/payment/mode/list
 # API verb: GET
@@ -37,11 +38,15 @@ from api.constants import *
 # Tables used: Utility Payment Mode
 # Author: Chinmay
 # Created on: 3/12/2020
-
 class UtilityPaymentModeList(generics.ListAPIView):
     try:
         serializer_class = UtilityPaymentModeListSerializer
         pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant',)
+        ordering = ('name',)  # always give by default alphabetical order
+        search_fields = ('name', 'tenant__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])

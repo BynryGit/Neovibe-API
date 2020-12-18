@@ -6,7 +6,8 @@ from v1.payment.serializer.payment_type import PaymentTypeListSerializer
 
 
 class UtilityPaymentModeListSerializer(serializers.ModelSerializer):
-    
+    key = serializers.ReadOnlyField(source='get_payment_mode_key')
+
     class Meta:
         model = UtilityPaymentModeTbl
-        fields = ('name', 'id_string','is_active','created_by','created_date')
+        fields = ('name', 'id_string', 'key', 'is_active', 'created_by', 'created_date')

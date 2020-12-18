@@ -1,3 +1,15 @@
+from rest_framework import generics, status
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.logger import logger
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.utility.models.utility_master import get_utility_by_id_string
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.utility.models.utility_service import UtilityService
+from v1.utility.serializers.utility_service import UtilityServiceListSerializer
+
+
 # API Header
 # API end Point: api/v1/utility/:id_string/service/list
 # API verb: GET
@@ -9,20 +21,15 @@
 # Tables used: Utility service
 # Author: Rohan
 # Created on: 03/12/2020
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, status
-
-from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
-from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.models.utility_service import UtilityService
-from v1.utility.serializers.utility_service import UtilityServiceListSerializer
-
-
 class UtilityServiceList(generics.ListAPIView):
     try:
         serializer_class = UtilityServiceListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant',)
+        search_fields = ('tenant__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])

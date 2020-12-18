@@ -11,6 +11,8 @@
 
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
+
+from v1.meter_data_management.models.meter import get_meter_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -23,8 +25,9 @@ class ConsumerMeter(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    consumer = models.BigIntegerField(null=True, blank=True)
+    consumer_id = models.BigIntegerField(null=True, blank=True)
     meter_id = models.BigIntegerField(null=True, blank=True)
+    service_contract_id = models.BigIntegerField(null=True, blank=True)
     assign_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     initial_reading = models.BigIntegerField(null=True, blank=True)
     address_line_1 = models.CharField(max_length=200, blank=True, null=True)
@@ -47,6 +50,11 @@ class ConsumerMeter(models.Model):
 
     def __unicode__(self):
         return self.utility.name
+
+    @property
+    def get_meter(self):
+        meter = get_meter_by_id(self.meter_id)
+        return meter
 
 
 def get_consumer_meter_by_id(id):

@@ -26,6 +26,7 @@ from v1.utility.models.utility_payment_subtype import UtilityPaymentSubtype as U
 from api.messages import *
 from api.constants import *
 
+
 # API Header
 # API end Point: api/v1/utility/:id_string/payment/subtype/list
 # API verb: GET

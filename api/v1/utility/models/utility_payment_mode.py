@@ -1,5 +1,7 @@
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
+
+from v1.payment.models.payment_mode import get_payment_mode_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -33,7 +35,11 @@ class UtilityPaymentMode(models.Model):
     def get_payment_type(self):
         payment_subtype = get_payment_type_by_id(self.payment_type_id)
         return payment_subtype
-    
+
+    @property
+    def get_payment_mode_key(self):
+        mode = get_payment_mode_by_id(self.payment_mode_id)
+        return mode.key
     
    
 

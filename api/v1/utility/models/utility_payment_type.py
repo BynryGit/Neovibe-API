@@ -1,5 +1,7 @@
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
+
+from v1.payment.models.payment_type import get_payment_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
@@ -28,10 +30,10 @@ class UtilityPaymentType(models.Model):
     def __unicode__(self):
         return self.name
 
-    # @property
-    # def get_currency(self):
-    #     currency = get_region_by_id()(self.currency_id)
-    #     return currency
+    @property
+    def get_payment_type(self):
+        payment_type = get_payment_type_by_id(self.payment_type_id)
+        return payment_type
 
 
 def get_utility_payment_type_by_id(id):

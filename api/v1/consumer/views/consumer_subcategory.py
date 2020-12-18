@@ -7,8 +7,12 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.consumer.models.consumer_sub_category import ConsumerSubCategory as ConsumerSubCategoryModel,get_consumer_sub_category_by_id_string
-from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer,ConsumerSubCategoryViewSerializer,ConsumerSubCategorySerializer
+
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
+from v1.consumer.models.consumer_sub_category import ConsumerSubCategory as ConsumerSubCategoryModel, \
+    get_consumer_sub_category_by_id_string
+from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer, \
+    ConsumerSubCategoryViewSerializer, ConsumerSubCategorySerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from rest_framework.response import Response
@@ -20,6 +24,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/consumer/utility/:id_string/subcategory/list
@@ -50,6 +55,9 @@ class ConsumerSubCategoryList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerSubCategoryModel.objects.filter(utility=utility, is_active=True)
+                    if 'category_id' in self.request.query_params:
+                        category = get_consumer_category_by_id_string(self.request.query_params['category_id'])
+                        queryset = queryset.filter(category_id=category.id)
                     if queryset:
                         return queryset
                     else:
@@ -60,6 +68,7 @@ class ConsumerSubCategoryList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
 
 # API Header
 # API end Point: api/v1/consumer/subcategory
@@ -83,7 +92,8 @@ class ConsumerSubCategory(GenericAPIView):
             serializer = ConsumerSubCategorySerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 consumer_subcategory_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ConsumerSubCategoryViewSerializer(instance=consumer_subcategory_obj, context={'request': request})
+                view_serializer = ConsumerSubCategoryViewSerializer(instance=consumer_subcategory_obj,
+                                                                    context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
@@ -116,7 +126,6 @@ class ConsumerSubCategory(GenericAPIView):
 
 
 class ConsumerSubCategoryDetail(GenericAPIView):
-    
 
     @is_token_validate
     @role_required(ADMIN, UTILITY, EDIT)
@@ -124,7 +133,8 @@ class ConsumerSubCategoryDetail(GenericAPIView):
         try:
             consumer_subcategory = get_consumer_sub_category_by_id_string(id_string)
             if consumer_subcategory:
-                serializer = ConsumerSubCategoryViewSerializer(instance=consumer_subcategory, context={'request': request})
+                serializer = ConsumerSubCategoryViewSerializer(instance=consumer_subcategory,
+                                                               context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: serializer.data,
@@ -153,9 +163,10 @@ class ConsumerSubCategoryDetail(GenericAPIView):
             if consumer_subcategory_obj:
                 serializer = ConsumerSubCategorySerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    consumer_subcategory_obj = serializer.update(consumer_subcategory_obj, serializer.validated_data, user)
+                    consumer_subcategory_obj = serializer.update(consumer_subcategory_obj, serializer.validated_data,
+                                                                 user)
                     view_serializer = ConsumerSubCategoryViewSerializer(instance=consumer_subcategory_obj,
-                                                          context={'request': request})
+                                                                        context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

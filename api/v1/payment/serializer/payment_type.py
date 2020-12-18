@@ -12,7 +12,7 @@ class PaymentTypeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentTypeTbl
-        fields = ('name', 'id_string','is_active','created_by','created_date')
+        fields = ('name', 'key', 'id_string', 'is_active', 'created_by', 'created_date')
 
 
 class PaymentTypeViewSerializer(serializers.ModelSerializer):
