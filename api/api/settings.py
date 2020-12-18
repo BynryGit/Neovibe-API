@@ -64,9 +64,9 @@ INSTALLED_APPS = [
     'v1.survey',
     'v1.userapp',
     'v1.tender',
+    'v1.work_order',
     'v1.utility',
     'v1.tenant',
-    'v1.work_order',
 ]
 
 MIDDLEWARE = [
@@ -112,7 +112,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart3605',
+        'NAME': 'smart360',
         'USER': 'postgres',
         'PASSWORD': 'root',
         'HOST': 'localhost',
