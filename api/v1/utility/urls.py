@@ -19,7 +19,7 @@ from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySub
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
 from v1.utility.views.utility_region import UtilityRegionList
 from v1.utility.views.numformat import UtilityNumFormatList,UtilityNumformatDetail, UtilityNumFormat
-from v1.utility.views.utility_channel import UtilityChannelList
+from v1.utility.views.utility_payment_channel import UtilityPaymentChannelList
 # from v1.userapp.views.role_type import RoleTypeListByUtility
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
 from v1.utility.views.utility_payment_type import UtilityPaymentTypeList
@@ -68,7 +68,7 @@ urlpatterns = [
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view(), name='utility_region__list'),
-    path('<uuid:id_string>/channel/list', UtilityChannelList.as_view(), name='utility_channel_list'),
+    path('<uuid:id_string>/payment/channel/list', UtilityPaymentChannelList.as_view(), name='utility_payment_channel_list'),
     path('<uuid:id_string>/payment/type/list', UtilityPaymentTypeList.as_view(), name='utility_payment_type_list'),
     path('<uuid:id_string>/payment/subtype/list', UtilityPaymentSubTypeList.as_view(), name='utility_payment_subtype_list'),
     path('<uuid:id_string>/payment/mode/list', UtilityPaymentModeList.as_view(), name='utility_payment_mode_list'),

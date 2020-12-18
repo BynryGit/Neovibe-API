@@ -16,6 +16,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
+from v1.commonapp.models.service_type import get_service_type_by_id
 
 
 # Create Service Type table start
@@ -26,8 +27,8 @@ class ServiceSubTypes(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     service_type_id = models.BigIntegerField(null=False, blank=False)
     name = models.CharField(max_length=200, blank=False, null=False)
-    created_by = models.BigIntegerField(null=False, blank=False)
-    updated_by = models.BigIntegerField(null=False, blank=False)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
@@ -37,24 +38,29 @@ class ServiceSubTypes(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    @property
+    def service_type(self):
+        service_type = get_service_type_by_id(self.service_type_id)
+        return service_type
 
 # Create Service Type table end
 
 
 def get_service_sub_type_by_id_string(id_string):
     try:
-        return ServiceSubType.objects.get(id_string=id_string)
+        return ServiceSubTypes.objects.get(id_string=id_string)
     except:
         return False
 
 
 def get_service_sub_type_by_id(id):
-    return ServiceSubType.objects.filter(id=id).last()
+    return ServiceSubTypes.objects.filter(id=id).last()
 
 
 def get_service_sub_type_by_name(name):
     try:
-        return ServiceSubType.objects.get(name=name)
+        return ServiceSubTypes.objects.get(name=name)
     except:
         return False
 # End the Code

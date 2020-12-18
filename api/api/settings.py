@@ -64,9 +64,9 @@ INSTALLED_APPS = [
     'v1.survey',
     'v1.userapp',
     'v1.tender',
+    'v1.work_order',
     'v1.utility',
     'v1.tenant',
-    'v1.work_order',
 ]
 
 MIDDLEWARE = [

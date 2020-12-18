@@ -17,6 +17,9 @@ from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.models.user_token import UserToken
 from v1.userapp.models.user_type import UserType
 from v1.userapp.models.user_utility import UserUtility
+from v1.userapp.models.user_leaves import UserLeaves
+from v1.userapp.models.user_detail import UserDetail
+from v1.userapp.models.field_agent_live_location import FieldAgentLiveLocation
 
 admin.site.register(UserToken)
 admin.site.register(LoginTrail)
@@ -28,10 +31,13 @@ admin.site.register(UserUtility)
 admin.site.register(UserSkill)
 admin.site.register(UserArea)
 admin.site.register(UserBank)
-admin.site.register(UserDetails)
+# admin.site.register(UserDetails)
 admin.site.register(UserRole)
 admin.site.register(UserType)
 admin.site.register(UserSubType)
 admin.site.register(RoleSubType)
 admin.site.register(RoleType)
 admin.site.register(UserStatus)
+admin.site.register(UserLeaves)
+admin.site.register(UserDetail)
+admin.site.register(FieldAgentLiveLocation)

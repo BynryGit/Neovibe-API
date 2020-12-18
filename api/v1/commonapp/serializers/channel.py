@@ -7,7 +7,7 @@ from datetime import datetime
 from django.db import transaction
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.common_functions import set_channel_validated_data
-from v1.utility.models.utility_channel import UtilityChannel as UtilityChannelTbl
+from v1.utility.models.utility_payment_channel import UtilityPaymentChannel as UtilityPaymentChannelTbl
 class ChannelListSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -23,7 +23,7 @@ class ChannelViewSerializer(serializers.ModelSerializer):
    
 
     class Meta:
-        model = UtilityChannelTbl
+        model = UtilityPaymentChannelTbl
         fields = '__all__'
 
 class ChannelSerializer(serializers.ModelSerializer):
@@ -35,13 +35,13 @@ class ChannelSerializer(serializers.ModelSerializer):
     
 
     class Meta:
-        model = UtilityChannelTbl
+        model = UtilityPaymentChannelTbl
         fields = '__all__'
 
     def create(self, validated_data, user):
         with transaction.atomic():
             validated_data = set_channel_validated_data(validated_data)
-            if UtilityChannelTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+            if UtilityPaymentChannelTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
                                       utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(CHANNEL_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
