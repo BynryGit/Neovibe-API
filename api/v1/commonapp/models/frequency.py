@@ -19,7 +19,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.campaign.models.campaign_type import get_campaign_type_by_id
 from v1.commonapp.models.channel import get_channel_by_id
-from v1.utility.models.utility_channel import get_utility_channel_by_id
+from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id
 
 # Create Frequency table start
 class Frequency(models.Model):

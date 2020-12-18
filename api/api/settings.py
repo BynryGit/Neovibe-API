@@ -114,7 +114,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
         'USER': 'postgres',
-        'PASSWORD': 'root',
+        'PASSWORD': 'chinmay123',
         'HOST': 'localhost',
         'PORT': '5432',
     }

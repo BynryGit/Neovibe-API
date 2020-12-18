@@ -12,7 +12,8 @@ from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail, SubArea
 from v1.commonapp.views.module import ModuleList
 from v1.commonapp.views.sub_modules import SubModule, SubModuleList
 from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
-from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail
+from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail,ServiceType
+from v1.commonapp.views.service_subtype import ServiceSubTypeList,ServiceSubTypeDetail,ServiceSubType
 from v1.commonapp.views.products import ProductList
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 from v1.userapp.views.role_type import RoleTypeList
@@ -70,8 +71,12 @@ urlpatterns = [
     path('utility/<uuid:id_string>/subarea/list', SubAreaList.as_view(), name='subarea_list'),
     path('utility/<uuid:id_string>/premise/list', PremiseList.as_view(), name='premise_list'),
     # This api used for utility dropdown end
-    path('service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
-    path('service_type/<uuid:id_string>', ServiceTypeDetail.as_view(), name="service_type_detail"),
+    path('utility/<uuid:id_string>/service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
+    path('utility/service_type/<uuid:id_string>', ServiceTypeDetail.as_view(), name="service_type_detail"),
+    path('utility/service_type', ServiceType.as_view(), name="service_type"),
+    path('utility/<uuid:id_string>/service_subtype/list', ServiceSubTypeList.as_view(), name="service_subtype_list"),
+    path('utility/service_subtype/<uuid:id_string>', ServiceSubTypeDetail.as_view(), name="service_subtype_detail"),
+    path('utility/service_subtype', ServiceSubType.as_view(), name="service_subtype"),
     path('<uuid:id_string>/areas', AreaList.as_view()),
     path('<uuid:id_string>/sub-areas', SubAreaList.as_view()),
     # path('<uuid:id_string>/cities', CityList.as_view()),
