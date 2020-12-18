@@ -18,3 +18,18 @@ class UtilityServiceContractMasterListSerializer(serializers.ModelSerializer):
         model = UtilityServiceContractMaster
         fields = ('id_string', 'tenant', 'tenant_id_string', 'tenant_id_string', 'utility_id_string', 'utility_service',
                   'category', 'sub_category')
+
+
+class UtilityServiceContractMasterDetailSerializer(serializers.ModelSerializer):
+    tenant = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+    tenant_id_string = serializers.ReadOnlyField(source='utility.name')
+    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    utility_service = UtilityServiceListSerializer(source='get_service')
+    category = ConsumerCategoryViewSerializer(many=False, source='get_consumer_category')
+    sub_category = ConsumerSubCategoryViewSerializer(many=False, source='get_consumer_sub_category')
+
+    class Meta:
+        model = UtilityServiceContractMaster
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'tenant_id_string', 'utility_id_string', 'utility_service',
+                  'category', 'sub_category', 'deposite_amount')

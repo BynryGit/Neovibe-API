@@ -96,6 +96,7 @@ PRODUCT_SUBCATEGORY_NOT_FOUND = "Product SubCategory not found"
 CONTRACT_NOT_FOUND = "Contract not found"
 STORE_TYPE_NOT_FOUND = "Store type not found"
 STORE_LOCATION_NOT_FOUND = "Store location not found"
+UTILITY_SERVICE_CONTRACT_NOT_FOUND = "Utility service contract not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

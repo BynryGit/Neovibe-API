@@ -12,7 +12,8 @@ from v1.utility.views.utility_currency import UtilityCurrencyList
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
 from v1.utility.views.utility_module_submodule import UtilityModuleSubmoduleList
 from v1.utility.views.utility_service import UtilityServiceList
-from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList
+from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList, \
+    UtilityServiceContractMasterDetail
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule,UtilitySubModuleListByUtility, api_delete_submodule
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
@@ -82,4 +83,5 @@ urlpatterns = [
     path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
          name='utility_service_contract_master_list'),
+    path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
 ]
