@@ -39,10 +39,10 @@ class UtilityModule(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return str(self.utility)
+        return str(self.label)
 
     def __unicode__(self):
-        return str(self.utility)
+        return str(self.label)
 
     @property
     def get_module(self):

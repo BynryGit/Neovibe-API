@@ -253,7 +253,6 @@ class UserRoleByUtilityModules(GenericAPIView):
                         data['name'] = utility['module_id']['name']
                         data['id_string'] = utility['id_string']                                        
                         new_list.append(data)
-            
             return Response({
                 STATE: SUCCESS,
                 DATA: new_list,
