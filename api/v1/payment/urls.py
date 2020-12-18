@@ -2,10 +2,9 @@ from django.urls import path
 from v1.payment.views.payment import *
 from v1.payment.views.payment_channel import PaymentChannelList
 from v1.payment.views.payment_mode import PaymentModeList
-from v1.payment.views.payment_sub_type import PaymentSubTypeList,PaymentSubType,PaymentSubTypeDetail
-from v1.payment.views.payment_type import PaymentTypeList,PaymentTypeDetail,PaymentType
-from v1.payment.views.payment_mode import PaymentModeList,PaymentModeDetail,PaymentMode
-
+from v1.payment.views.payment_sub_type import PaymentSubTypeList, PaymentSubType, PaymentSubTypeDetail
+from v1.payment.views.payment_type import PaymentTypeList, PaymentTypeDetail, PaymentType
+from v1.payment.views.payment_mode import PaymentModeList, PaymentModeDetail, PaymentMode
 
 urlpatterns = [
     path('<uuid:id_string>/approve', PaymentApprove.as_view()),
