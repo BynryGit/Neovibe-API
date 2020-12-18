@@ -661,6 +661,296 @@
         }
       },
       {
+        "pk": "31",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 6,
+          "key" : "DISPATCHER",
+          "name": "Dispatcher",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "32",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 4,
+          "key" : "CONTRACTS",
+          "name": "Contracts",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "33",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 4,
+          "key" : "SUPPLIER",
+          "name": "Supplier",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "34",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 4,
+          "key" : "REPORTS",
+          "name": "Reports",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "35",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 4,
+          "key" : "USER",
+          "name": "User",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "36",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 4,
+          "key" : "SETTINGS",
+          "name": "Settings",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "37",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 4,
+          "key" : "DASHBOARD",
+          "name": "Dashboard",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "38",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 6,
+          "key" : "DASHBOARD",
+          "name": "Dashboard",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "39",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 6,
+          "key" : "ASSET",
+          "name": "Asset",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "40",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 6,
+          "key" : "REPORTS",
+          "name": "Reports",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "41",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 6,
+          "key" : "USER",
+          "name": "User",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "42",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 6,
+          "key" : "SETTINGS",
+          "name": "Settings",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "43",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "DASHBOARD",
+          "name": "Dashboard",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "44",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "REQUEST",
+          "name": "Request",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "45",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "STORE",
+          "name": "Store",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "46",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "TENDERS",
+          "name": "Tenders",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "47",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "PRODUCT",
+          "name": "Product",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "48",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "SERVICES",
+          "name": "Services",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "49",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "ORDER",
+          "name": "Order",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "50",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "CONTRACTS",
+          "name": "Contracts",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "51",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "SUPPLIERS",
+          "name": "Suppliers",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "52",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "REPORTS",
+          "name": "Reports",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "53",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "USER",
+          "name": "User",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "54",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 7,
+          "key" : "SETTINGS",
+          "name": "Settings",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "55",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 8,
+          "key" : "DASHBOARD",
+          "name": "Dashboard",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "56",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 8,
+          "key" : "REPORTS",
+          "name": "Reports",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "57",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 8,
+          "key" : "USER",
+          "name": "User",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "58",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 8,
+          "key" : "SETTINGS",
+          "name": "Settings",
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "59",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 9,
+          "key" : "DASHBOARD",
+          "name": "Dashboard",
+          "is_active": "True"
+        }
+      },
+      {
         "pk": "1",
         "model": "userapp.Privilege",
         "fields": {
@@ -923,6 +1213,21 @@
           "department_id":1,
           "role_ID":"Role_8",
           "role": "Utility Admin",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "9",
+        "model": "userapp.Role",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "type_id":1,
+          "sub_type_id":4,
+          "form_factor_id":1,
+          "department_id":1,
+          "role_ID":"Super_Admin",
+          "role": "Super Admin",
           "is_active": "True"
         }
       },
@@ -2309,7 +2614,788 @@
           "is_active": "True"
         }
       },
-     
+
+       {
+        "pk": "106",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 1,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "107",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 2,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "108",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 3,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "109",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 4,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "110",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 5,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "111",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 6,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "112",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 7,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "113",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 1,
+          "sub_module_id": 8,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "114",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 9,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "115",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 10,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "116",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 11,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "117",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 12,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "118",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 13,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "119",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 14,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "120",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 15,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "121",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 16,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "122",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 17,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "123",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 18,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "124",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 19,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "125",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 20,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "126",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 21,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "127",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 22,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "128",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 23,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "129",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 24,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "130",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 3,
+          "sub_module_id": 25,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "131",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 10,
+          "sub_module_id": 26,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "132",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 10,
+          "sub_module_id": 27,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "133",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 10,
+          "sub_module_id": 28,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "134",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 5,
+          "sub_module_id": 30,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "135",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 5,
+          "sub_module_id": 31,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "136",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 2,
+          "sub_module_id": 1,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "137",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 4,
+          "sub_module_id": 32,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "138",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 4,
+          "sub_module_id": 33,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "139",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 4,
+          "sub_module_id": 34,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "140",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 4,
+          "sub_module_id": 35,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "141",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 4,
+          "sub_module_id": 36,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "142",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 4,
+          "sub_module_id": 37,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "143",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 6,
+          "sub_module_id": 38,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "144",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 6,
+          "sub_module_id": 39,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "145",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 6,
+          "sub_module_id": 40,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "146",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 6,
+          "sub_module_id": 41,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "147",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 6,
+          "sub_module_id": 42,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+
+  {
+        "pk": "148",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 43,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "149",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 44,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+{
+        "pk": "150",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 45,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "151",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 46,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "152",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 47,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "153",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 48,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "154",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 49,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "155",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 50,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "156",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 51,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "157",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 52,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "158",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 53,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "159",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 7,
+          "sub_module_id": 54,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+
+  {
+        "pk": "160",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 8,
+          "sub_module_id": 55,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "161",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 8,
+          "sub_module_id": 56,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "162",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 8,
+          "sub_module_id": 57,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "163",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 8,
+          "sub_module_id": 58,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "164",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 9,
+          "sub_module_id": 59,
+          "privilege_id": 1,
+          "is_active": "True"
+        }
+      },
+     {
+        "pk": "1",
+        "model": "master.User",
+        "fields": {
+          "tenant": 1,
+          "email": "admin@bynry.com",
+          "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+          "is_staff": "True",
+          "is_active": "True",
+          "is_superuser": "True"
+        }
+      },
       {
         "pk": "1",
         "model": "userapp.UserRole",
@@ -2317,7 +3403,7 @@
           "tenant": 1,
           "utility": 1,
           "user_id": 1,
-          "role_id": 1,
+          "role_id": 9,
           "is_active": "True"
         }
       },
@@ -2328,7 +3414,7 @@
           "tenant": 1,
           "utility": 1,
           "user_id": 2,
-          "role_id": 2,
+          "role_id": 1,
           "is_active": "True"
         }
       },
@@ -2418,6 +3504,73 @@
           "is_active": "True"
         }
       },
+  {
+        "pk": "6",
+        "model": "utility.UtilityModule",
+        "fields": {
+          "tenant": 2,
+          "utility": 1,
+          "label":"Work Order",
+          "module_id": 5,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "7",
+        "model": "utility.UtilityModule",
+        "fields": {
+          "tenant": 2,
+          "utility": 1,
+          "label":"Gas Management",
+          "module_id": 4,
+          "is_active": "True"
+        }
+      },
+    {
+        "pk": "8",
+        "model": "utility.UtilityModule",
+        "fields": {
+          "tenant": 2,
+          "utility": 1,
+          "label":"Network",
+          "module_id": 6,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "9",
+        "model": "utility.UtilityModule",
+        "fields": {
+          "tenant": 2,
+          "utility": 1,
+          "label":"Spend",
+          "module_id": 7,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "10",
+        "model": "utility.UtilityModule",
+        "fields": {
+          "tenant": 2,
+          "utility": 1,
+          "label":"Human Capital",
+          "module_id": 8,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "11",
+        "model": "utility.UtilityModule",
+        "fields": {
+          "tenant": 2,
+          "utility": 1,
+          "label":"Finance",
+          "module_id": 9,
+          "is_active": "True"
+        }
+      },
+
       {
         "pk": "1",
         "model": "utility.UtilitySubModule",
@@ -2751,6 +3904,367 @@
           "label":"Utility Configuration",
           "module_id": 5,
           "submodule_id": 28,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "29",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Asset",
+          "module_id": 6,
+          "submodule_id": 30,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "30",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Dispatcher",
+          "module_id": 6,
+          "submodule_id": 31,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "31",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Contracts",
+          "module_id": 7,
+          "submodule_id": 32,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "32",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Supplier",
+          "module_id": 7,
+          "submodule_id": 33,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "33",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Reports",
+          "module_id": 7,
+          "submodule_id": 34,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "34",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"User",
+          "module_id": 7,
+          "submodule_id": 35,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "35",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Settings",
+          "module_id": 7,
+          "submodule_id": 36,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "36",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Dashboard",
+          "module_id": 7,
+          "submodule_id": 37,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "37",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Dashboard",
+          "module_id": 8,
+          "submodule_id": 38,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "38",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Asset",
+          "module_id": 8,
+          "submodule_id": 37,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "39",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Reports",
+          "module_id": 8,
+          "submodule_id": 34,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "40",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"User",
+          "module_id": 8,
+          "submodule_id": 35,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "41",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Settings",
+          "module_id": 8,
+          "submodule_id": 36,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "42",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Dashboard",
+          "module_id": 9,
+          "submodule_id": 43,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "43",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Request",
+          "module_id": 9,
+          "submodule_id": 44,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "44",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Store",
+          "module_id": 9,
+          "submodule_id": 45,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "45",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Tenders",
+          "module_id": 9,
+          "submodule_id": 46,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "46",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Product",
+          "module_id": 9,
+          "submodule_id": 47,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "47",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Services",
+          "module_id": 9,
+          "submodule_id": 48,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "48",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Order",
+          "module_id": 9,
+          "submodule_id": 49,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "49",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Contracts",
+          "module_id": 9,
+          "submodule_id": 50,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "50",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Suppliers",
+          "module_id": 9,
+          "submodule_id": 51,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "51",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Reports",
+          "module_id": 9,
+          "submodule_id": 52,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "52",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"User",
+          "module_id": 9,
+          "submodule_id": 53,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "53",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Settings",
+          "module_id": 9,
+          "submodule_id": 54,
+          "is_active": "True"
+        }
+      },
+
+  {
+        "pk": "54",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Dashboard",
+          "module_id": 10,
+          "submodule_id": 55,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "55",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Reports",
+          "module_id": 10,
+          "submodule_id": 56,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "56",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"User",
+          "module_id": 10,
+          "submodule_id": 57,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "57",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Settings",
+          "module_id": 10,
+          "submodule_id": 58,
+          "is_active": "True"
+        }
+      },
+  {
+        "pk": "58",
+        "model": "utility.UtilitySubModule",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "label":"Dashboard",
+          "module_id": 11,
+          "submodule_id": 59,
           "is_active": "True"
         }
       },
