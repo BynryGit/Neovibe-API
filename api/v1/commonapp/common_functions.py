@@ -25,7 +25,7 @@ from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.utility.models.utility_region import get_utility_region_by_id_string
 from v1.commonapp.models.channel import get_channel_by_id_string
 from v1.campaign.models.campaign_type import get_campaign_type_by_id_string
-from v1.utility.models.utility_channel import get_utility_channel_by_id_string
+from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id_string
 from v1.utility.models.utility_payment_subtype import get_utility_payment_subtype_by_id_string
 from v1.utility.models.utility_payment_type import get_utility_payment_type_by_id_string
 from v1.utility.models.utility_payment_mode import get_utility_payment_mode_by_id_string
@@ -346,6 +346,43 @@ def set_channel_validated_data(validated_data):
             validated_data["channel_id"] = channel.id
         else:
             raise CustomAPIException("Channel not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_service_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_service_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "service_type_id" in validated_data:
+        service_type = get_service_type_by_id_string(validated_data["service_type_id"])
+        if service_type:
+            validated_data["service_type_id"] = service_type.id
+        else:
+            raise CustomAPIException("service type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
     
 

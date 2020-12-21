@@ -12,13 +12,14 @@ from v1.utility.views.utility_currency import UtilityCurrencyList
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
 from v1.utility.views.utility_module_submodule import UtilityModuleSubmoduleList
 from v1.utility.views.utility_service import UtilityServiceList
-from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList
+from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList, \
+    UtilityServiceContractMasterDetail
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule,UtilitySubModuleListByUtility, api_delete_submodule
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
 from v1.utility.views.utility_region import UtilityRegionList
 from v1.utility.views.numformat import UtilityNumFormatList,UtilityNumformatDetail, UtilityNumFormat
-from v1.utility.views.utility_channel import UtilityChannelList
+from v1.utility.views.utility_payment_channel import UtilityPaymentChannelList
 # from v1.userapp.views.role_type import RoleTypeListByUtility
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
 from v1.utility.views.utility_payment_type import UtilityPaymentTypeList
@@ -67,19 +68,19 @@ urlpatterns = [
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view(), name='utility_region__list'),
-    path('<uuid:id_string>/channel/list', UtilityChannelList.as_view(), name='utility_channel_list'),
+    path('<uuid:id_string>/payment/channel/list', UtilityPaymentChannelList.as_view(), name='utility_payment_channel_list'),
     path('<uuid:id_string>/payment/type/list', UtilityPaymentTypeList.as_view(), name='utility_payment_type_list'),
     path('<uuid:id_string>/payment/subtype/list', UtilityPaymentSubTypeList.as_view(), name='utility_payment_subtype_list'),
     path('<uuid:id_string>/payment/mode/list', UtilityPaymentModeList.as_view(), name='utility_payment_mode_list'),
     path('<uuid:id_string>/numformat/list', UtilityNumFormatList.as_view(), name='utility_num_format_list'),
-    path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(),name='numformat'),
-    path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(),name='numformat'),
-    path('numformat',UtilityNumFormat.as_view(),name='numformat'),
+    path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(), name='numformat'),
+    path('numformat', UtilityNumFormat.as_view(), name='numformat'),
     path('<uuid:id_string>/sub_module/list', UtilitySubModuleListByUtility.as_view()),
-    path('<uuid:id_string>/sub_module/delete',api_delete_submodule, name="delete" ),
+    path('<uuid:id_string>/sub_module/delete',api_delete_submodule, name="delete"),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(), name='role_subtype_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
     path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
          name='utility_service_contract_master_list'),
+    path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
 ]

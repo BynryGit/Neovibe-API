@@ -16,7 +16,7 @@ from v1.utility.models.utility_status import UtilityStatus
 from v1.utility.models.utility_sub_module import UtilitySubModule
 from v1.utility.models.utility_usage_summary import UtilityUsageSummary
 from v1.utility.models.utility_region import UtilityRegion
-from v1.utility.models.utility_channel import UtilityChannel
+from v1.utility.models.utility_payment_channel import UtilityPaymentChannel
 from v1.utility.models.utility_payment_type import UtilityPaymentType
 from v1.utility.models.utility_payment_subtype import UtilityPaymentSubtype
 from v1.utility.models.utility_payment_mode import UtilityPaymentMode
@@ -32,7 +32,7 @@ admin.site.register(UtilityStatus)
 admin.site.register(UtilityUsageSummary)
 admin.site.register(UtilityCurrency)
 admin.site.register(UtilityRegion)
-admin.site.register(UtilityChannel)
+admin.site.register(UtilityPaymentChannel)
 admin.site.register(UtilityPaymentType)
 admin.site.register(UtilityPaymentSubtype)
 admin.site.register(UtilityPaymentMode)

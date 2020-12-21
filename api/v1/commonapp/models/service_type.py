@@ -25,8 +25,8 @@ class ServiceType(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
-    created_by = models.BigIntegerField(null=False, blank=False)
-    updated_by = models.BigIntegerField(null=False, blank=False)
+    created_by = models.BigIntegerField(null=True, blank=True)
+    updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=False)
@@ -48,7 +48,7 @@ def get_service_type_by_id_string(id_string):
 
 
 def get_service_type_by_id(id):
-    return ServiceType.objects.filter(id=id).last()
+    return ServiceType.objects.get(id=id)
 
 
 def get_service_type_by_name(name):

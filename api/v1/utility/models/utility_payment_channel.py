@@ -10,7 +10,7 @@ from rest_framework import status
 # Create Channel table start
 
 
-class UtilityChannel(models.Model):
+class UtilityPaymentChannel(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -34,16 +34,16 @@ class UtilityChannel(models.Model):
     #     return currency
 
 
-def get_utility_channel_by_id(id):
+def get_utility_payment_channel_by_id(id):
     try:
-        return UtilityChannel.objects.filter(id=id)
+        return UtilityPaymentChannel.objects.filter(id=id)
     except Exception as e:
-        raise CustomAPIException("Channel does not exists.", status_code=status.HTTP_404_NOT_FOUND)
+        raise CustomAPIException("Payment Channel does not exists.", status_code=status.HTTP_404_NOT_FOUND)
 
 
-def get_utility_channel_by_id_string(id_string):
+def get_utility_payment_channel_by_id_string(id_string):
     try:
-        return UtilityChannel.objects.get(id_string=id_string)
+        return UtilityPaymentChannel.objects.get(id_string=id_string)
     except:
         return False
 # Create Channel table end.
