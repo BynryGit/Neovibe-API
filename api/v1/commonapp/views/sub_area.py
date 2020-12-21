@@ -13,6 +13,7 @@ from api.constants import *
 from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from django.db import transaction
 
@@ -40,6 +41,29 @@ class SubAreaList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = SubAreaModel.objects.filter(utility=utility, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("SubArea not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
+
+class SubAreaListByArea(generics.ListAPIView):
+    try:
+        serializer_class = SubAreaListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    area = get_area_by_id_string(self.kwargs['id_string'])
+                    queryset = SubAreaModel.objects.filter(area_id=area.id, is_active=True)
                     if queryset:
                         return queryset
                     else:

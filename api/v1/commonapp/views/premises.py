@@ -24,7 +24,7 @@ from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.zone import get_zone_by_id
 from v1.commonapp.models.area import get_area_by_id
-from v1.commonapp.models.sub_area import get_sub_area_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id,get_sub_area_by_id_string
 
 
 # API Header
@@ -51,6 +51,9 @@ class PremiseList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = PremiseModel.objects.filter(utility=utility, is_active=True)
+                    if 'subarea_id' in self.request.query_params:
+                        sub_area = get_sub_area_by_id_string(self.request.query_params['subarea_id'])
+                        queryset = queryset.filter(subarea_id=sub_area.id)
                     if queryset:
                         return queryset
                     else:
