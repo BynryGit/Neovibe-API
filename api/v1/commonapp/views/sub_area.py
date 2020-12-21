@@ -16,6 +16,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from django.db import transaction
 
+
 # API Header
 # API end Point: api/v1/utility/:id_string/subarea/list
 # API verb: GET
@@ -27,8 +28,6 @@ from django.db import transaction
 # Tables used: SubArea
 # Author: Chinmay
 # Created on: 11/11/2020
-
-
 class SubAreaList(generics.ListAPIView):
     try:
         serializer_class = SubAreaListSerializer
