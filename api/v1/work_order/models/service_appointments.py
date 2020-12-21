@@ -27,7 +27,7 @@ class ServiceAppointment(models.Model):
     alternative_address = models.CharField(max_length=200, blank=True, null=True)
     actual_start_time = models.TimeField()
     actual_end_time = models.TimeField()
-    actual_duration = models.BigIntegerField(max_length=200, blank=True, null=True)
+    actual_duration = models.BigIntegerField(blank=True, null=True)
     sa_area = models.CharField(max_length=200, blank=True, null=True)
     sa_sub_area = models.CharField(max_length=200, blank=True, null=True)
     sa_premises = models.CharField(max_length=200, blank=True, null=True)
