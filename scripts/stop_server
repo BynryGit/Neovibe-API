@@ -1,0 +1,5 @@
+#!/bin/bash
+
+systemctl stop gunicorn.socket gunicorn.service
+systemctl stop gunicorn
+systemctl stop nginx

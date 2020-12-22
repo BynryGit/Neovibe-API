@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source  /home/ubuntu/smart360/smart360venv/bin/activate
+pip install django gunicorn psycopg2-binary
+pip install -r /home/ubuntu/smart360/api/requirement.txt
+sudo chown ubuntu:ubuntu -R /home/ubuntu/smart360
+cd /home/ubuntu/smart360/api && python3 manage.py migrate
