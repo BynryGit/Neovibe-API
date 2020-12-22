@@ -86,7 +86,13 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
 # dev setting file
 /api/api/settings_dev.py
+
+# vscode and venv
+.vscode
+/api/venv
+
 
 
