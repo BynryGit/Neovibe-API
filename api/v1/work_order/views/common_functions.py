@@ -1,18 +1,15 @@
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.commonapp.views.logger import logger
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
-import jwt  # jwt token library
+import os
 from rest_framework import status
-if os.environ['smart360_env']=='dev':
+
+if os.environ['smart360_env'] == 'dev':
     from api.settings_dev import SECRET_KEY
 else:
     from api.settings import SECRET_KEY
-
-
-
 
 
 def set_work_order_validated_data(validated_data):
