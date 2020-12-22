@@ -47,8 +47,9 @@ class AssetList(generics.ListAPIView):
         search_fields = ('name','asset_no')
 
         def get_queryset(self):
-            if is_token_valid(0):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     queryset = AssetTbl.objects.filter(is_active=True)
                     return queryset
                 else:
@@ -74,9 +75,7 @@ class AssetList(generics.ListAPIView):
 # Created on: 20/05/2020
 
 class Asset(GenericAPIView):
-
     def post(self, request):
-
         try:
             if is_token_valid(1):
                 if is_authorized():

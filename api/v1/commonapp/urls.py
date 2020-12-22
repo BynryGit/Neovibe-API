@@ -8,7 +8,7 @@ from v1.commonapp.views.state import StateList, State, StateDetail
 from v1.commonapp.views.zone import ZoneList, Zone, ZoneDetail
 from v1.commonapp.views.area import AreaList, AreaDetail, Area
 from v1.commonapp.views.form_factor import FormFactor, FormFactorList
-from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail, SubArea
+from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail, SubArea, SubAreaListByArea
 from v1.commonapp.views.module import ModuleList
 from v1.commonapp.views.sub_modules import SubModule, SubModuleList
 from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
@@ -20,7 +20,7 @@ from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.user_type import UserTypeList
 from v1.commonapp.views.skills import SkillsList,SkillDetail,Skill
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
-from v1.commonapp.views.premises import PremiseList,Premise
+from v1.commonapp.views.premises import PremiseList,Premise,PremiseList
 from v1.commonapp.views.channel import ChannelList,Channel
 from v1.commonapp.views.frequency import FrequencyDetail,FrequencyList,Frequency
 
@@ -79,6 +79,8 @@ urlpatterns = [
     path('utility/service_subtype', ServiceSubType.as_view(), name="service_subtype"),
     path('<uuid:id_string>/areas', AreaList.as_view()),
     path('<uuid:id_string>/sub-areas', SubAreaList.as_view()),
+    path('area/<uuid:id_string>/sub-areas',SubAreaListByArea.as_view()),
+    path('sub-area/<uuid:id_string>/premises',PremiseList.as_view()),
     # path('<uuid:id_string>/cities', CityList.as_view()),
     path('<uuid:id_string>/states', StateList.as_view()),
     path('role-type/list', RoleTypeList.as_view()),

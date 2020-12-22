@@ -1,7 +1,12 @@
 __author__ = "Rohan"
 
+import os
 from django.core.mail.backends.smtp import EmailBackend
-from api.settings import EMAIL_HOST_PASSWORD
+if os.environ['smart360_env']=='dev':
+    from api.settings_dev import EMAIL_HOST_PASSWORD
+else:
+    from api.settings import EMAIL_HOST_PASSWORD
+
 from v1.commonapp.models.email_configurations import EmailConfiguration
 from v1.commonapp.models.notification_template import get_notification_template_by_id
 from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
