@@ -4,5 +4,5 @@ source  /home/ubuntu/smart360/smart360venv/bin/activate
 pip install django gunicorn psycopg2-binary
 pip install -r /home/ubuntu/smart360/api/requirement.txt
 sudo chown ubuntu:ubuntu -R /home/ubuntu/smart360
-sed -i "s/smart360_env = ''/smart360_env = \'$smart360_env\'/g" /home/ubuntu/smart360/api/api/settings.py
+sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
 cd /home/ubuntu/smart360/api && python3 manage.py migrate
