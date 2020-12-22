@@ -5,7 +5,7 @@ from botocore.exceptions import ClientError
 import json
 
 class SecretManager():
-    region_name="us-east-2"                  #store region name
+    region_name="us-east-1"                  #store region name
     session=boto3.session.Session()          #creating session
     client=session.client(                   #Create a Secrets Manager client
         service_name="secretsmanager",  
