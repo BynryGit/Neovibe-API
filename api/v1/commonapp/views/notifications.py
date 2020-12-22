@@ -1,18 +1,21 @@
 import logging
+import os
 from celery.task import task
 from twilio.rest import Client
-from api.settings import *
+
+if os.environ['smart360_env'] == 'dev':
+    from api.settings_dev import *
+else:
+    from api.settings import *
 from v1.commonapp.views.logger import logger
 from django.core.mail import EmailMultiAlternatives
-
-
 
 # Local logging
 local_logger = logging.getLogger('django')
 
 
-@task(name = 'send_mail')
-def send_mail(subject, body, from_email, to, connection = None, attachments = None, cc = None, html = None):
+@task(name='send_mail')
+def send_mail(subject, body, from_email, to, connection=None, attachments=None, cc=None, html=None):
     try:
         msg = EmailMultiAlternatives(subject=subject, body=body, from_email=from_email, to=to, connection=connection,
                                      attachments=attachments)
@@ -20,11 +23,11 @@ def send_mail(subject, body, from_email, to, connection = None, attachments = No
             msg.attach_alternative(html, "text/html")
         msg.send(fail_silently=False)
     except Exception as e:
-        local_logger.info("In send mail "+str(e))
+        local_logger.info("In send mail " + str(e))
         logger().log(e, 'LOW')
 
 
-@task(name = 'send_sms')
+@task(name='send_sms')
 def send_sms():
     try:
         account_sid = TWILIO_ACCOUNT_SID
@@ -38,6 +41,4 @@ def send_sms():
         )
         print(message.sid)
     except Exception as e:
-        logger().log(e, 'LOW', message = str(e))
-
-
+        logger().log(e, 'LOW', message=str(e))
