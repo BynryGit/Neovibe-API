@@ -33,6 +33,7 @@ from v1.complaint import urls as complaint_urls
 from v1.payment import urls as payment_urls
 from v1.store import urls as store_urls
 from v1.service import urls as service_urls
+from v1.work_order import urls as work_order_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -55,6 +56,6 @@ urlpatterns = [
     path('api/v1/complaint/', include(complaint_urls)),
     path('api/v1/payment/', include(payment_urls)),
     path('api/v1/store/', include(store_urls)),
-
+    path('api/v1/work_order/', include(work_order_urls)),
     path('api/v1/service/', include(service_urls)),
 ]
