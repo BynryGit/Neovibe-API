@@ -5,6 +5,17 @@ from v1.consumer.models.consumer_master import ConsumerMaster
 from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
 
 
+class ConsumerListSerializer(serializers.ModelSerializer):
+    tenant = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+    utility = serializers.ReadOnlyField(source='utility.name')
+    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+
+    class Meta:
+        model = ConsumerMaster
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'email_id', 'phone_mobile')
+
+
 class ConsumerViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
