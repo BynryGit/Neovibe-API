@@ -6,7 +6,10 @@ from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
 import jwt  # jwt token library
 from rest_framework import status
-from api.settings import SECRET_KEY
+if os.environ['smart360_env']=='dev':
+    from api.settings_dev import SECRET_KEY
+else:
+    from api.settings import SECRET_KEY
 
 
 
