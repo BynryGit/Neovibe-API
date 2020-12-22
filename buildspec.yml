@@ -5,11 +5,11 @@ phases:
 
   install:
     runtime-versions:
-      nodejs: 12
+      python: 3.7
     commands:      
       - "apt-get update"
 
-  build:
+  pre_build:
     commands:
       - pip install -r api/requirement.txt
       
