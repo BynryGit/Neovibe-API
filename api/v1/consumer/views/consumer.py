@@ -15,11 +15,11 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.complaint.models.complaint import *
 from v1.consumer.models.consumer_category import ConsumerCategory, get_consumer_category_by_id_string
-from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.consumer.models.consumer_master import get_consumer_by_id_string, ConsumerMaster
 from v1.consumer.models.consumer_ownership import ConsumerOwnership
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
-from v1.consumer.serializers.consumer_master import ConsumerSerializer, ConsumerViewSerializer
+from v1.consumer.serializers.consumer_master import ConsumerSerializer, ConsumerViewSerializer, ConsumerListSerializer
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
@@ -32,6 +32,42 @@ from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_service import get_utility_service_by_id_string
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/list
+# API verb: GET
+# Interaction: Consumer list
+# Usage: API will fetch all Consumer List
+# Tables used: Consumer master
+# Author: Rohan
+# Created on: 22/12/2020
+class ConsumerList(generics.ListAPIView):
+    try:
+        serializer_class = ConsumerListSerializer
+        pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('consumer_no', 'tenant__id_string',)
+        ordering_fields = ('consumer_no', 'tenant',)
+        ordering = ('consumer_no',)  # always give by default alphabetical order
+        search_fields = ('consumer_no', 'tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ConsumerMaster.objects.filter(utility=utility, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Consumers not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer ops', sub_module='Consumer')
 
 
 # API Header
@@ -65,7 +101,7 @@ class Consumer(GenericAPIView):
                             consumer_service_contract_serializer = ConsumerServiceContractDetailSerializer(data=service)
                             consumer_service_contract_serializer.is_valid()
                             contract_detail_obj = consumer_service_contract_serializer.create(
-                                                  consumer_service_contract_serializer.validated_data, consumer_obj, user)
+                                consumer_service_contract_serializer.validated_data, consumer_obj, user)
                             contract_detail_obj.tenant = consumer_obj.tenant
                             contract_detail_obj.utility = consumer_obj.utility
                             contract_detail_obj.consumer_no = consumer_obj.consumer_no

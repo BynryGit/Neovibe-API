@@ -20,7 +20,12 @@ __pycache__
 *__pycache__
 *__pycache__*
 MANIFEST
-
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
 
 migrations/
 0001_initial.py
@@ -86,6 +91,13 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+# dev setting file
+/api/api/settings_dev.py
+
+# vscode and venv
+.vscode
+/api/venv
 
 
 

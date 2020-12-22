@@ -12,6 +12,7 @@ class UtilityServiceContractMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=200, null=True, blank=True)
     service_id = models.BigIntegerField(null=True, blank=True)
     deposite_amount = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
     consumer_category_id = models.BigIntegerField(null=True, blank=True)

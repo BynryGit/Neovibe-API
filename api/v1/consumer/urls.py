@@ -14,6 +14,7 @@ from v1.consumer.views.service_sub_type import ServiceSubType,ServiceSubTypeDeta
 from v1.consumer.views.consumer import ConsumerDetail,Consumer,ConsumerBillList,ConsumerBillDetail,ConsumerPayment,ConsumerPaymentDetail,ConsumerPaymentList,ConsumerComplaintList,ConsumerComplaintDetail,ConsumerScheme,ConsumerSchemeDetail,ConsumerComplaint
 
 urlpatterns = [
+    path('<uuid:id_string>/list', ConsumerList.as_view()),
     path('<uuid:id_string>', ConsumerDetail.as_view()),
     path('', Consumer.as_view()),
     path('<uuid:id_string>/bill/list', ConsumerBillList.as_view()),

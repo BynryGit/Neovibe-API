@@ -1,0 +1,9 @@
+#!/bin/bash
+
+systemctl start gunicorn.socket gunicorn.service
+systemctl enable gunicorn.socket
+systemctl status gunicorn.socket
+journalctl -u gunicorn.socket
+systemctl daemon-reload
+systemctl restart gunicorn
+systemctl restart nginx

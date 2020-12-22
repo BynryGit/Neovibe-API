@@ -1,0 +1,23 @@
+  
+version: 0.2
+
+phases:
+
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:      
+      - "apt-get update"
+
+  pre_build:
+    commands:
+      - pip install -r api/requirement.txt
+      
+  post_build:
+    commands:
+      - echo "Build completed on `date`"
+
+artifacts:
+    files:
+        - '**/*'
+    discard-paths: no
