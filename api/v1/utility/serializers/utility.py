@@ -4,9 +4,6 @@ from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
 import os
-# if os.environ['smart360_env'] == 'dev':
-#     from api.settings_dev import *
-# else:
 from api.settings import *
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl
