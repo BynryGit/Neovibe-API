@@ -7,12 +7,12 @@ hooks:
   ApplicationStop:
     - location: scripts/stop_server
       timeout: 300
-      runas: root
-    - location: scripts/remove_files
-      timeout: 300
-      runas: root
+      runas: root    
   BeforeInstall:
     - location: scripts/install_application
+      timeout: 300
+      runas: root
+    - location: scripts/remove_files
       timeout: 300
       runas: root
   AfterInstall:
