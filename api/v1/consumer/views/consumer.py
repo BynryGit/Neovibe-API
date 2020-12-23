@@ -19,6 +19,7 @@ from v1.consumer.models.consumer_master import get_consumer_by_id_string, Consum
 from v1.consumer.models.consumer_ownership import ConsumerOwnership
 from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.consumer.models.consumer_sub_category import ConsumerSubCategory
+from v1.consumer.serializers.consumer_down_payment import ConsumerDownPaymentSerializer
 from v1.consumer.serializers.consumer_master import ConsumerSerializer, ConsumerViewSerializer, ConsumerListSerializer
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSerializer
@@ -27,6 +28,7 @@ from v1.consumer.serializers.consumer_service_contract_details import ConsumerSe
 from v1.meter_data_management.models.meter import get_meter_by_id_string
 from v1.payment.models.payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
+from v1.payment.serializer.payment_transactions import PaymentTransactionSerializer
 from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
@@ -89,13 +91,23 @@ class Consumer(GenericAPIView):
         try:
             with transaction.atomic():
                 services = []
+                transactions = []
+                payment = {}
+                account_holders = []
                 if 'services' in request.data:
                     services = request.data.pop('services')
+                if 'transactions' in request.data:
+                    transactions = request.data.pop('transactions')
+                if 'account_holders' in request.data:
+                    account_holders = request.data.pop('account_holders')
+                if 'payment' in request.data:
+                    payment = request.data.pop('payment')
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
                 consumer_serializer = ConsumerSerializer(data=request.data)
-                if consumer_serializer.is_valid(raise_exception=False):
+                if consumer_serializer.is_valid(raise_exception=True):
                     consumer_obj = consumer_serializer.create(consumer_serializer.validated_data, user)
+                    # Consumer service contract details save start
                     if services:
                         for service in services:
                             consumer_service_contract_serializer = ConsumerServiceContractDetailSerializer(data=service)
@@ -110,6 +122,43 @@ class Consumer(GenericAPIView):
                                 meter = get_meter_by_id_string(service['existing_meter_id'])
                                 contract_detail_obj.meter_id = meter.id
                             contract_detail_obj.save()
+                            # Consumer service contract details save end
+                            # payment and transaction save code start
+                            if payment and transactions:
+                                payment_serializer = PaymentSerializer(data=payment)
+                                if payment_serializer.is_valid(raise_exception=True):
+                                    payment_obj = payment_serializer.create(payment_serializer.validated_data, user)
+                                    payment_obj.identification_id = consumer_obj.id
+                                    payment_obj.tenant = consumer_obj.tenant
+                                    payment_obj.utility = consumer_obj.utility
+                                    payment_obj.receipt_no = generate_receipt_no(payment_obj)
+                                    payment_obj.consumer_no = consumer_obj.consumer_no
+                                    payment_obj.save()
+                                    for item in transactions:
+                                        transaction_serializer = PaymentTransactionSerializer(data=item)
+                                        if transaction_serializer.is_valid(raise_exception=True):
+                                            transaction_obj = transaction_serializer.create(
+                                                transaction_serializer.validated_data, user)
+                                            transaction_obj.utility = consumer_obj.utility
+                                            transaction_obj.tenant = consumer_obj.tenant
+                                            transaction_obj.payment_id = payment_obj.id
+                                            transaction_obj.identification_id = consumer_obj.id
+                                            transaction_obj.save()
+                                            # payment and transaction save code end
+                            # upfront payment save code start
+                            if 'upfPayment' in request.data:
+                                request.data['upfPayment'] = request.data['upfPayment'].strip()
+                                if request.data['upfPayment'] != '':
+                                    consumer_down_payment_serializer = ConsumerDownPaymentSerializer(data=request.data)
+                                    consumer_down_payment_serializer.is_valid()
+                                    consumer_down_payment_obj = consumer_down_payment_serializer.create(
+                                        consumer_down_payment_serializer.validated_data, user)
+                                    consumer_down_payment_obj.tenant = consumer_obj.tenant
+                                    consumer_down_payment_obj.utility = consumer_obj.utility
+                                    consumer_down_payment_obj.collected_amount = request.data['upfPayment']
+                                    consumer_down_payment_obj.consumer_id = consumer_obj.id
+                                    consumer_down_payment_obj.save()
+                                    # upfront payment save code start
                     view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,

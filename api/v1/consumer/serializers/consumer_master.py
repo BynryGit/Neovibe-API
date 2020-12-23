@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -41,7 +43,9 @@ class ConsumerSerializer(serializers.ModelSerializer):
     billing_city_id = serializers.CharField(required=False, max_length=200)
     billing_area_id = serializers.CharField(required=False, max_length=200)
     billing_sub_area_id = serializers.CharField(required=False, max_length=200)
+    ownership_id = serializers.CharField(required=False, max_length=200)
     premise_id = serializers.CharField(required=False, max_length=200)
+    credit_rating_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ConsumerMaster
@@ -54,8 +58,10 @@ class ConsumerSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             consumer_obj = super(ConsumerSerializer, self).create(validated_data)
             consumer_obj.tenant = user.tenant
-            consumer_obj.consumer_no = 111111
-            # consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
+            consumer_obj.created_by = user.id
+            consumer_obj.created_date = datetime.now()
+            consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
+            consumer_obj.is_active = True
             consumer_obj.save()
             return consumer_obj
 

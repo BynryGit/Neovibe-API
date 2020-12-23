@@ -4,6 +4,7 @@ from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_credit_rating import get_consumer_credit_rating_by_id_string
@@ -24,6 +25,7 @@ from v1.consumer.models.service_type import get_service_type_by_id_string
 
 # Function for converting id_strings to id's
 def set_consumer_validated_data(validated_data):
+    print("########", validated_data)
     if "utility" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility"])
         if utility:
@@ -117,7 +119,7 @@ def set_validated_data(validated_data):
 def generate_consumer_no(consumer):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
-                                                            item=UTILITY_SERVICE_NUMBER_ITEM_DICT['CONSUMER'])
+                                                            sub_module_id=get_sub_module_by_key("CONSUMER").id)
         if format_obj.is_prefix:
             consumer_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

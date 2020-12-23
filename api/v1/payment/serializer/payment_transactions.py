@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import transaction
 from rest_framework import serializers
 from v1.payment.models.payment_transactions import PaymentTransaction
@@ -28,10 +30,14 @@ class PaymentTransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentTransaction
-        fields = ('__all__')
+        fields = '__all__'
 
     def create(self, validated_data, user):
         validated_data = set_payment_transaction_validated_data(validated_data)
         with transaction.atomic():
             payment_transaction = super(PaymentTransactionSerializer, self).create(validated_data)
+            payment_transaction.created_by = user.id
+            payment_transaction.created_date = datetime.utcnow()
+            payment_transaction.is_active = True
+            payment_transaction.save()
             return payment_transaction
