@@ -4,9 +4,8 @@ source  /home/ubuntu/smart360/smart360venv/bin/activate
 pip install django gunicorn psycopg2-binary
 pip install -r /home/ubuntu/smart360/api/requirement.txt
 sudo chown ubuntu:ubuntu -R /home/ubuntu/smart360
-# sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
-export smart360_env="$DEPLOYMENT_GROUP_NAME"
-cd /home/ubuntu/smart360/api && python3 manage.py makemigrations master
+sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
+# export smart360_env="$DEPLOYMENT_GROUP_NAME"
 cd /home/ubuntu/smart360/api && python3 manage.py makemigrations master
 cd /home/ubuntu/smart360/api && python3 manage.py makemigrations asset
 cd /home/ubuntu/smart360/api && python3 manage.py makemigrations billing
@@ -30,4 +29,35 @@ cd /home/ubuntu/smart360/api && python3 manage.py makemigrations tender
 cd /home/ubuntu/smart360/api && python3 manage.py makemigrations work_order
 cd /home/ubuntu/smart360/api && python3 manage.py makemigrations utility
 cd /home/ubuntu/smart360/api && python3 manage.py makemigrations tenant
-cd /home/ubuntu/smart360/api && python3 manage.py migrate
+
+
+cd /home/ubuntu/smart360/api && python3 manage.py migrate master
+cd /home/ubuntu/smart360/api && python3 manage.py migrate asset
+cd /home/ubuntu/smart360/api && python3 manage.py migrate billing
+cd /home/ubuntu/smart360/api && python3 manage.py migrate campaign
+cd /home/ubuntu/smart360/api && python3 manage.py migrate commonapp
+cd /home/ubuntu/smart360/api && python3 manage.py migrate consumer
+cd /home/ubuntu/smart360/api && python3 manage.py migrate complaint
+cd /home/ubuntu/smart360/api && python3 manage.py migrate service
+cd /home/ubuntu/smart360/api && python3 manage.py migrate contract
+cd /home/ubuntu/smart360/api && python3 manage.py migrate employee
+cd /home/ubuntu/smart360/api && python3 manage.py migrate meter_data_management
+cd /home/ubuntu/smart360/api && python3 manage.py migrate payment
+cd /home/ubuntu/smart360/api && python3 manage.py migrate payroll
+cd /home/ubuntu/smart360/api && python3 manage.py migrate registration
+cd /home/ubuntu/smart360/api && python3 manage.py migrate request
+cd /home/ubuntu/smart360/api && python3 manage.py migrate store
+cd /home/ubuntu/smart360/api && python3 manage.py migrate supplier
+cd /home/ubuntu/smart360/api && python3 manage.py migrate survey
+cd /home/ubuntu/smart360/api && python3 manage.py migrate userapp
+cd /home/ubuntu/smart360/api && python3 manage.py migrate tender
+cd /home/ubuntu/smart360/api && python3 manage.py migrate work_order
+cd /home/ubuntu/smart360/api && python3 manage.py migrate utility
+cd /home/ubuntu/smart360/api && python3 manage.py migrate tenant
+
+cd /home/ubuntu/smart360/api && python3 manage.py makemigrations 
+cd /home/ubuntu/smart360/api && python3 manage.py migrate 
+
+cd /home/ubuntu/smart360/api && python3 manage.py loaddata data.json
+
+cd /home/ubuntu/smart360/api && python3 manage.py collectstatic

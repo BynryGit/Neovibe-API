@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from v1.commonapp.views.secretcache import SecretManager
 
-#smart360_env = '' 
+smart360_env = '' 
 
 secret = SecretManager()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,10 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret.get_secret(os.environ['smart360_env'] + "_secret_key")
+SECRET_KEY = secret.get_secret(smart360_env + "_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -114,9 +114,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
-        'USER': secret.get_secret(os.environ['smart360_env'] + "_database_user"),
-        'PASSWORD': secret.get_secret(os.environ['smart360_env'] + "_database_password"),
-        'HOST': secret.get_secret(os.environ['smart360_env'] + "_database_host"),
+        'USER': secret.get_secret(smart360_env + "_database_user"),
+        'PASSWORD': secret.get_secret(smart360_env + "_database_password"),
+        'HOST': secret.get_secret(smart360_env + "_database_host"),
         'PORT': '5432',
     }
 }
@@ -163,7 +163,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # LOGGING = {
 #     'version': 1,
@@ -217,9 +219,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = secret.get_secret(os.environ['smart360_env'] + "_email_host_user")
-EMAIL_HOST_PASSWORD = secret.get_secret(os.environ['smart360_env'] + "_email_host_password")
+EMAIL_HOST_USER = secret.get_secret(smart360_env + "_email_host_user")
+EMAIL_HOST_PASSWORD = secret.get_secret(smart360_env + "_email_host_password")
 
 # SMS configuration
-TWILIO_ACCOUNT_SID = secret.get_secret(os.environ['smart360_env'] + "_twilio_account_id")
-TWILIO_AUTH_TOKEN = secret.get_secret(os.environ['smart360_env'] + "_twilio_auth_token")
+TWILIO_ACCOUNT_SID = secret.get_secret(smart360_env + "_twilio_account_id")
+TWILIO_AUTH_TOKEN = secret.get_secret(smart360_env + "_twilio_auth_token")

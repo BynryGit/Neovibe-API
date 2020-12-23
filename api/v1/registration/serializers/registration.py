@@ -2,10 +2,10 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
 import os
-if os.environ['smart360_env'] == 'dev':
-    from api.settings_dev import *
-else:
-    from api.settings import *
+# if os.environ['smart360_env'] == 'dev':
+#     from api.settings_dev import *
+# else:
+from api.settings import *
 from api.messages import MOBILE_ALREADY_EXISTS
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
