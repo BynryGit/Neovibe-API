@@ -77,6 +77,11 @@ def get_privilege_by_id_string(id_string):
 def get_user_role_by_user_id(id):
     return UserRole.objects.filter(user_id=id, is_active=True)
 
+def get_user_role_by_user_id_string(id_string):
+    try:
+        return UserRole.objects.filter(id_string=id_string, is_active=True)
+    except:
+        return False
 
 def get_user_role_by_role_id(id):
     return UserRole.objects.filter(role_id=id, is_active=True)

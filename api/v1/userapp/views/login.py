@@ -11,10 +11,10 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from api.messages import *
-if os.environ['smart360_env']=='dev':
-    from api.settings_dev import SECRET_KEY
-else:
-    from api.settings import SECRET_KEY
+# if os.environ['smart360_env']=='dev':
+#     from api.settings_dev import SECRET_KEY
+# else:
+from api.settings import SECRET_KEY
 from master.models import get_user_by_email, get_user_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id
 from v1.commonapp.views.logger import logger

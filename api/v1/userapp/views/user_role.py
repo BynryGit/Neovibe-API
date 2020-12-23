@@ -16,6 +16,11 @@ from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl,g
 from v1.utility.serializers.utility_module import UtilityModuleViewSerializer
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer
 from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl,get_utility_submodule_by_id
+from v1.commonapp.models.module import get_module_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_id_string
+from v1.userapp.models.role_privilege import RolePrivilege
+from v1.userapp.models.role import get_role_by_id_string
+
 # API Header
 # API end Point: api/v1/user/:id_string/role
 # API verb: GET, POST, PUT
@@ -29,6 +34,7 @@ from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubM
 # Created on: 14/05/2020
 # Updated on: 21/05/2020
 from v1.userapp.serializers.role import RoleDetailViewSerializer
+from v1.userapp.serializers.role_privilege import RolePrivilegeViewSerializer
 from v1.userapp.serializers.user import GetUserSerializer
 from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSerializer
 
@@ -220,6 +226,7 @@ class UserRoleByUtilityModules(GenericAPIView):
                     for a in role_list:
                         for d in a['modules']['module']:
                             module_data ={}
+                            module_data['role_id_string'] = a['id_string']
                             module_data['name'] = d['name'] 
                             module_data['id_string'] = d['id_string']
                             module_obj_list.append(module_data)
@@ -251,7 +258,8 @@ class UserRoleByUtilityModules(GenericAPIView):
                     data={}
                     if roleprivilege['name'] == utility['module_id']['name']:
                         data['name'] = utility['module_id']['name']
-                        data['id_string'] = utility['id_string']                                        
+                        data['id_string'] = utility['id_string']   
+                        data['role_id_string'] = roleprivilege['role_id_string']                                     
                         new_list.append(data)
             return Response({
                 STATE: SUCCESS,
@@ -301,6 +309,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
                         for d in a['modules']['module']:
                             for submodule in d['sub_module']:
                                 module_data ={}
+                                module_data['role_id_string'] = a['id_string']
                                 module_data['modulename'] = d['name']
                                 module_data['name'] = submodule['name'] 
                                 module_data['id_string'] = submodule['id_string']
@@ -330,15 +339,47 @@ class UserRoleByUtilitySubModule(GenericAPIView):
                 for utility in utility_submodule_list:
                     data={}
                     if (roleprivilege['name'] == utility['label']) &(roleprivilege['modulename'] == utility['utility_module_id']['module_id']['name']) :
+                        data['module_id_string'] = utility['utility_module_id']['module_id']['id_string']
                         data['module_name'] = utility['utility_module_id']['module_id']['name']
                         data['name'] = utility['submodule_id']['name']
-                        data['id_string'] = utility['id_string']
+                        data['id_string'] = roleprivilege['id_string']
+                        data['role_id_string'] = roleprivilege['role_id_string']
                         new_list.append(data)
             return Response({
                 STATE: SUCCESS,
                 DATA: new_list,
             }, status=status.HTTP_200_OK)
                 
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Role')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class ModulePrivilegesList(GenericAPIView):
+    @is_token_validate
+    @role_required(ADMIN, USER, VIEW)
+    def get(self, request,role_id_string, module_id_string,sub_module_id_string):
+        try:
+            privilege_list = []
+            role_obj = get_role_by_id_string(role_id_string)
+            module_obj = get_module_by_id_string(module_id_string)
+            sub_module_obj = get_sub_module_by_id_string(sub_module_id_string)
+            privileageLists = RolePrivilege.objects.filter(role_id=role_obj.id,module_id=module_obj.id,sub_module_id=sub_module_obj.id, is_active=True)
+            for privileageList in privileageLists:
+                print('********privileageList**********',privileageList.id)
+                view_serializer = RolePrivilegeViewSerializer(instance=privileageList,context={'request': request})
+                privilege_list.append(view_serializer.data)
+            # print('*******privilege_list**********',privilege_list)
+            return Response({
+                STATE: SUCCESS,
+                DATA: privilege_list,
+            }, status=status.HTTP_200_OK)
+            
         except Exception as e:
             logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Role')
             return Response({
