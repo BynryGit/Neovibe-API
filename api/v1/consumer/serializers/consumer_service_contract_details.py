@@ -32,6 +32,10 @@ class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):
         else:
             with transaction.atomic():
                 consumer_service_contract_detail_obj = super(ConsumerServiceContractDetailSerializer, self).create(validated_data)
+                consumer_service_contract_detail_obj.tenant = consumer.tenant
+                consumer_service_contract_detail_obj.utility = consumer.utility
+                consumer_service_contract_detail_obj.consumer_no = consumer.consumer_no
+                consumer_service_contract_detail_obj.consumer_id = consumer.id
                 consumer_service_contract_detail_obj.is_active = True
                 consumer_service_contract_detail_obj.created_by = user.id
                 consumer_service_contract_detail_obj.created_date = datetime.now()

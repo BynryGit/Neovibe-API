@@ -9,9 +9,12 @@ class ConsumerDownPaymentSerializer(serializers.ModelSerializer):
         model = ConsumerDownPayment
         fields = '__all__'
 
-    def create(self, validated_data, user):
+    def create(self, validated_data, consumer_obj, user):
         with transaction.atomic():
             consumer_down_payment = super(ConsumerDownPaymentSerializer, self).create(validated_data=validated_data)
+            consumer_down_payment.tenant = consumer_obj.tenant
+            consumer_down_payment.utility = consumer_obj.utility
+            consumer_down_payment.consumer_id = consumer_obj.id
             consumer_down_payment.created_by = user.id
             consumer_down_payment.created_date = datetime.now()
             return consumer_down_payment

@@ -51,10 +51,14 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = '__all__'
 
-    def create(self, validated_data, user):
+    def create(self, validated_data, obj, user):
         validated_data = set_payment_validated_data(validated_data)
         with transaction.atomic():
             payment = super(PaymentSerializer, self).create(validated_data)
+            payment.identification_id = obj.id
+            payment.tenant = obj.tenant
+            payment.utility = obj.utility
+            payment.receipt_no = generate_receipt_no(payment)
             payment.created_by = user.id
             payment.created_date = datetime.utcnow()
             payment.is_active = True

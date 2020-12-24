@@ -8,6 +8,7 @@ from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_credit_rating import get_consumer_credit_rating_by_id_string
+from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
@@ -25,7 +26,6 @@ from v1.consumer.models.service_type import get_service_type_by_id_string
 
 # Function for converting id_strings to id's
 def set_consumer_validated_data(validated_data):
-    print("########", validated_data)
     if "utility" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility"])
         if utility:
@@ -74,6 +74,17 @@ def set_consumer_validated_data(validated_data):
             validated_data["credit_rating_id"] = rating.id
         else:
             raise CustomAPIException("Credit rating not found.", status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+# Function for converting id_strings to id's
+def set_consumer_offer_detail_validated_data(validated_data):
+    if "offer_id" in validated_data:
+        offer = get_consumer_offer_master_by_id_string(validated_data["offer_id"])
+        if offer:
+            validated_data["offer_id"] = offer.id
+        else:
+            raise CustomAPIException("Consumer offer not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
