@@ -60,4 +60,4 @@ cd /home/ubuntu/smart360/api && python3 manage.py migrate
 
 cd /home/ubuntu/smart360/api && python3 manage.py loaddata data.json
 
-cd /home/ubuntu/smart360/api && python3 manage.py collectstatic
+cd /home/ubuntu/smart360/api && cat <(echo "yes") - | python3 manage.py collectstatic
