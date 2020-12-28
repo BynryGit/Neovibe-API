@@ -11,22 +11,20 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from v1.commonapp.views.secretcache import SecretManager
-secret = SecretManager()
+# from v1.commonapp.views.secretcache import SecretManager
+# secret = SecretManager()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-smart360_env = '' 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret.get_secret(smart360_env + "_secret_key")
+SECRET_KEY = '4urz*1-p45#e2nnlg$fjqb*rhv^w_l35n4#^l%m^8$*2t5slpg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -114,10 +112,10 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart360',
-        'USER': secret.get_secret(smart360_env + "_database_user"),
-        'PASSWORD': secret.get_secret(smart360_env + "_database_password"),
-        'HOST': secret.get_secret(smart360_env + "_database_host"),
+        'NAME': 'testing',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -167,9 +165,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+
 
 # LOGGING = {
 #     'version': 1,
@@ -222,8 +220,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = secret.get_secret(smart360_env + "_email_host_user")
-EMAIL_HOST_PASSWORD = secret.get_secret(smart360_env + "_email_host_password")
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+
 # SMS configuration
-TWILIO_ACCOUNT_SID = secret.get_secret(smart360_env + "_twilio_account_id")
-TWILIO_AUTH_TOKEN = secret.get_secret(smart360_env + "_twilio_auth_token")
+TWILIO_ACCOUNT_SID = 'ACf8545f63b2bf3513b90b2ac626b53d8b'
+TWILIO_AUTH_TOKEN = '413b55d88e459cc05c713b4510808dec'
