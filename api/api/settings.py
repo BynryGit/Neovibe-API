@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = secret.get_secret(os.environ['smart360_env'] + "_secret_key")
+# SECRET_KEY = secret.get_secret(os.environ['smart360_env'] + "_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -112,9 +112,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
-        'USER': secret.get_secret(os.environ['smart360_env'] + "_database_user"),
-        'PASSWORD': secret.get_secret(os.environ['smart360_env'] + "_database_password"),
-        'HOST': secret.get_secret(os.environ['smart360_env'] + "_database_host"),
+        # 'USER': secret.get_secret(os.environ['smart360_env'] + "_database_user"),
+        # 'PASSWORD': secret.get_secret(os.environ['smart360_env'] + "_database_password"),
+        # 'HOST': secret.get_secret(os.environ['smart360_env'] + "_database_host"),
         'PORT': '5432',
     }
 }
@@ -215,9 +215,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = secret.get_secret(os.environ['smart360_env'] + "_email_host_user")
-EMAIL_HOST_PASSWORD = secret.get_secret(os.environ['smart360_env'] + "_email_host_password")
-
-# SMS configuration
-TWILIO_ACCOUNT_SID = secret.get_secret(os.environ['smart360_env'] + "_twilio_account_id")
-TWILIO_AUTH_TOKEN = secret.get_secret(os.environ['smart360_env'] + "_twilio_auth_token")
+# EMAIL_HOST_USER = secret.get_secret(os.environ['smart360_env'] + "_email_host_user")
+# EMAIL_HOST_PASSWORD = secret.get_secret(os.environ['smart360_env'] + "_email_host_password")
+#
+# # SMS configuration
+# TWILIO_ACCOUNT_SID = secret.get_secret(os.environ['smart360_env'] + "_twilio_account_id")
+# TWILIO_AUTH_TOKEN = secret.get_secret(os.environ['smart360_env'] + "_twilio_auth_token")

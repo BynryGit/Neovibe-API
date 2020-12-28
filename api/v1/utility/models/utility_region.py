@@ -36,7 +36,9 @@ class UtilityRegion(models.Model):
 
 def get_utility_region_by_id(id):
     try:
-        return UtilityRegion.objects.get(id=id)
+        region=UtilityRegion.objects.get(id=id)
+        print("Heeeelo",region)
+        return region
     except Exception as e:
         raise CustomAPIException("Region does not exists.", status_code=status.HTTP_404_NOT_FOUND)
 
