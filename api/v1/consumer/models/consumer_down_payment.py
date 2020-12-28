@@ -20,7 +20,7 @@ class ConsumerDownPayment(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.utility.name
+        return str(self.collected_amount)
 
     def __unicode__(self):
-        return self.utility.name
+        return self.collected_amount
