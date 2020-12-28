@@ -30,7 +30,7 @@ from v1.userapp.views.common_functions import set_user_area_validated_data
 class UserArea(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             area_list = []
@@ -68,7 +68,7 @@ class UserArea(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             data = {}
@@ -108,7 +108,7 @@ class UserArea(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, USER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             data = {}

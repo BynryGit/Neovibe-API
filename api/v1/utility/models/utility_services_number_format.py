@@ -26,7 +26,9 @@ UTILITY_SERVICE_NUMBER_ITEM_DICT = {
     "REGISTRATION"  : 0,
     "PAYMENT"       : 1,
     'CONSUMER'      : 2,
-    "USER"          : 3,
+    "S_AND_M_USER"  : 3,
+    "DISPATCHER"    : 4,
+
 }
 
 class UtilityServiceNumberFormat(models.Model):

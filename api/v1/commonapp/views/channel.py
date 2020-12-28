@@ -99,7 +99,7 @@ class ChannelList(generics.ListAPIView):
 class Channel(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

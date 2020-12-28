@@ -80,7 +80,7 @@ class PremiseList(generics.ListAPIView):
 class Premise(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():

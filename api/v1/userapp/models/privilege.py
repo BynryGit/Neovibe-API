@@ -24,6 +24,7 @@ from django.db import models  # importing package for database
 
 class Privilege(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    key = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=500, null=False, blank=False) #View,Edit
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -61,6 +62,11 @@ def get_privilege_by_id(id):
 # For getting privilege by name
 def get_privilege_by_name(name):
     privilege = Privilege.objects.get(name=name)
+    return privilege.id
+
+# For getting privilege by name
+def get_privilege_by_key(key):
+    privilege = Privilege.objects.get(key=key)
     return privilege.id
 
 

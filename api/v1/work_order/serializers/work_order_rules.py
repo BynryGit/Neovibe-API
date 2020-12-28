@@ -7,4 +7,4 @@ class WorkOrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkOrderRuleTbl
-        fields = ('utility','rule', 'id_string', 'is_active', 'created_by', 'created_date')
+        fields = ('rule', 'id_string')

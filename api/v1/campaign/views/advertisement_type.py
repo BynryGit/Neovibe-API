@@ -86,7 +86,7 @@ class AdvertisementTypeList(generics.ListAPIView):
 class AdvertisementTypeDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             advertisement_type = get_advert_type_by_id_string(id_string)
@@ -109,7 +109,7 @@ class AdvertisementTypeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -159,7 +159,7 @@ class AdvertisementTypeDetail(GenericAPIView):
 class AdvertisementType(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

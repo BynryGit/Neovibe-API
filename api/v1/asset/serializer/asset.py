@@ -15,6 +15,13 @@ from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.serializers.sub_area import SubAreaListSerializer
 
+
+class AssetShortListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssetTbl
+        fields = ('name','id_string')
+
+
 class AssetListSerializer(serializers.ModelSerializer):
 
     tenant_name = serializers.ReadOnlyField(source='tenant.name')

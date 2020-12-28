@@ -125,7 +125,7 @@ class UtilitySubModuleListByModule(generics.ListAPIView):
 
 class UtilitySubModuleDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY, VIEW)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_submodule_obj = get_utility_submodule_by_id_string(id_string)
@@ -147,7 +147,7 @@ class UtilitySubModuleDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
