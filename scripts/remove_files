@@ -1,8 +1,8 @@
 #!/bin/bash
 
-rm -rf /home/ubuntu/smart360/api
-rm /home/ubuntu/smart360/.gitignore
-rm /home/ubuntu/smart360/README.md
-rm /home/ubuntu/smart360/__init__.py
-rm /home/ubuntu/smart360/buildspec.yml
-rm /home/ubuntu/smart360/appspec.yml
+sudo rm -rf /home/ubuntu/smart360/api
+sudo rm -f /home/ubuntu/smart360/.gitignore
+sudo rm -f /home/ubuntu/smart360/README.md
+sudo rm -f /home/ubuntu/smart360/__init__.py
+sudo rm -f /home/ubuntu/smart360/buildspec.yml
+sudo rm -f /home/ubuntu/smart360/appspec.yml

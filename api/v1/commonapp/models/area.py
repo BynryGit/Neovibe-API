@@ -76,6 +76,8 @@ def get_areas_by_utility_id_string(id_string):
 
 def get_area_by_id(id):
     try:
+        uecyb=Area.objects.get(id=id)
+        print("Hello:",uecyb)
         return Area.objects.get(id=id)
     except:
         return False

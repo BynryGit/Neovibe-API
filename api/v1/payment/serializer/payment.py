@@ -42,23 +42,26 @@ class PaymentViewSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    utility_id = serializers.CharField(required=False, max_length=200)
+    utility = serializers.CharField(required=False, max_length=200)
     payment_type_id = serializers.CharField(required=False, max_length=200)
     payment_mode_id = serializers.CharField(required=False, max_length=200)
     payment_channel_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = Payment
-        fields = ('__all__')
+        fields = '__all__'
 
-    def create(self, validated_data, user):
-        validated_data =  set_payment_validated_data(validated_data)
+    def create(self, validated_data, obj, user):
+        validated_data = set_payment_validated_data(validated_data)
         with transaction.atomic():
             payment = super(PaymentSerializer, self).create(validated_data)
+            payment.identification_id = obj.id
+            payment.tenant = obj.tenant
+            payment.utility = obj.utility
+            payment.receipt_no = generate_receipt_no(payment)
             payment.created_by = user.id
             payment.created_date = datetime.utcnow()
-            payment.tenant = user.tenant
-            payment.receipt_no = generate_receipt_no(payment)
+            payment.is_active = True
             payment.save()
             return payment
 

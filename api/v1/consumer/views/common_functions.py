@@ -4,9 +4,11 @@ from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_credit_rating import get_consumer_credit_rating_by_id_string
+from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
@@ -76,6 +78,17 @@ def set_consumer_validated_data(validated_data):
 
 
 # Function for converting id_strings to id's
+def set_consumer_offer_detail_validated_data(validated_data):
+    if "offer_id" in validated_data:
+        offer = get_consumer_offer_master_by_id_string(validated_data["offer_id"])
+        if offer:
+            validated_data["offer_id"] = offer.id
+        else:
+            raise CustomAPIException("Consumer offer not found.", status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+# Function for converting id_strings to id's
 def set_consumer_service_contract_detail_validated_data(validated_data):
     if "service_contract_id" in validated_data:
         utility_service_contract_master = get_utility_service_contract_master_by_id_string(validated_data["service_contract_id"])
@@ -117,7 +130,7 @@ def set_validated_data(validated_data):
 def generate_consumer_no(consumer):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
-                                                            item=UTILITY_SERVICE_NUMBER_ITEM_DICT['CONSUMER'])
+                                                            sub_module_id=get_sub_module_by_key("CONSUMER").id)
         if format_obj.is_prefix:
             consumer_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

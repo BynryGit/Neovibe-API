@@ -15,6 +15,7 @@ if os.environ['smart360_env'] == 'dev':
     from api.settings_dev import SECRET_KEY
 else:
     from api.settings import SECRET_KEY
+from api.settings import SECRET_KEY
 
 
 def set_work_order_validated_data(validated_data):

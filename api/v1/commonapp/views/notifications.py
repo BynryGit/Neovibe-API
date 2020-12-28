@@ -2,11 +2,7 @@ import logging
 import os
 from celery.task import task
 from twilio.rest import Client
-
-if os.environ['smart360_env'] == 'dev':
-    from api.settings_dev import *
-else:
-    from api.settings import *
+from api.settings import *
 from v1.commonapp.views.logger import logger
 from django.core.mail import EmailMultiAlternatives
 

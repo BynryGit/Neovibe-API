@@ -1,5 +1,5 @@
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 import fsm
 from rest_framework import status
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -14,16 +14,17 @@ from v1.utility.models.utility_master import UtilityMaster
 
 # *********** PAYMENT CONSTANTS **************
 PAYMENT_DICT = {
-    "CREATED"  : 0,
-    "APPROVED" : 1,
-    "REJECTED" : 2,
-    "PENDING"  : 3,
+    "CREATED": 0,
+    "APPROVED": 1,
+    "REJECTED": 2,
+    "PENDING": 3,
 }
 PAYMENT_TYPE_DICT = {
-    "REGISTRATION"  : 0,
-    "BILL"          : 1,
-    "SERVICE"       : 2,
+    "REGISTRATION": 0,
+    "BILL": 1,
+    "SERVICE": 2,
 }
+
 
 # Table Header
 # Module: Consumer Care | Sub-Module : Billing
@@ -33,7 +34,7 @@ PAYMENT_TYPE_DICT = {
 # Frequency of data changes : High
 # Sample table : "Payment Details"
 # Reference Table : None
-# Author : Jayshree Kumbhare
+# Author : Rohan Wagh
 # Creation Date : 23/04/2020
 # Create Consumer Payments Table Start.
 class Payment(models.Model, fsm.FiniteStateMachineMixin):
@@ -50,10 +51,10 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     )
 
     state_machine = {
-        PAYMENT_DICT['CREATED']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
-        PAYMENT_DICT['APPROVED']  : (PAYMENT_DICT['APPROVED'],),
-        PAYMENT_DICT['REJECTED']  : (PAYMENT_DICT['REJECTED'],),
-        PAYMENT_DICT['PENDING']   : (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
+        PAYMENT_DICT['CREATED']: (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
+        PAYMENT_DICT['APPROVED']: (PAYMENT_DICT['APPROVED'],),
+        PAYMENT_DICT['REJECTED']: (PAYMENT_DICT['REJECTED'],),
+        PAYMENT_DICT['PENDING']: (PAYMENT_DICT['APPROVED'], PAYMENT_DICT['REJECTED'],),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -61,9 +62,8 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL, related_name='utility')
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     state = models.BigIntegerField(choices=CHOICES, default=0)
-    payment_type_id = models.BigIntegerField(null=True, blank=True) # Registration, Bill Payment, services Charges
-    # payment_sub_type_id = models.BigIntegerField(null=True, blank=True) # Registration - Deposit, Rental, Processing Fees
-    identification_id = models.BigIntegerField(null=True, blank=True) # registration No, Invoice #, service request no
+    payment_type_id = models.BigIntegerField(null=True, blank=True)  # Registration, Bill Payment, services Charges
+    identification_id = models.BigIntegerField(null=True, blank=True)  # registration No, Invoice #, service request no
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
     transaction_charges = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
@@ -122,15 +122,14 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
 
 def get_payment_by_id_string(id_string):
     try:
-        return Payment.objects.get(id_string = id_string)
+        return Payment.objects.get(id_string=id_string)
     except:
         return False
 
 
-
 def get_payments_by_consumer_no(consumer_no):
     try:
-        return Payment.objects.filter(consumer_no = consumer_no)
+        return Payment.objects.filter(consumer_no=consumer_no)
     except:
         return False
 
