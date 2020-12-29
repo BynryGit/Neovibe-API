@@ -11,10 +11,10 @@ import os
 from rest_framework import status
 from v1.commonapp.models.sub_module import get_sub_module_by_key
 
-if os.environ['smart360_env'] == 'dev':
-    from api.settings_dev import SECRET_KEY
-else:
-    from api.settings import SECRET_KEY
+# if os.environ['smart360_env'] == 'dev':
+#     from api.settings_dev import SECRET_KEY
+# else:
+#     from api.settings import SECRET_KEY
 from api.settings import SECRET_KEY
 
 
