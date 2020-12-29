@@ -9,6 +9,7 @@ from v1.utility.models.utility_master import get_utility_by_name
 
 
 # *********** MODULE CONSTANTS **************
+
 S_AND_M = get_module_by_key('S&M')
 CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
 CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
