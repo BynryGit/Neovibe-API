@@ -2,11 +2,10 @@ __author__ = "aki"
 
 import uuid
 import os
-from v1.commonapp.models.module import get_module_by_name,get_module_by_key
+from v1.commonapp.models.module import get_module_by_name, get_module_by_key
 from v1.commonapp.models.sub_module import get_sub_module_by_name, get_sub_module_by_key, get_sub_module_id_by_key
-from v1.userapp.models.privilege import get_privilege_by_name,get_privilege_by_key
+from v1.userapp.models.privilege import get_privilege_by_name, get_privilege_by_key
 from v1.utility.models.utility_master import get_utility_by_name
-
 
 # *********** MODULE CONSTANTS **************
 
@@ -22,7 +21,6 @@ FINANCE = get_module_by_key('FINANCE')
 ADMIN = get_module_by_key('ADMIN')
 DEMOM = get_module_by_key('DEMOM')
 
-
 # *********** SUB MODULE CONSTANTS **************
 # S_AND_M_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
 # CONSUMER_CARE_DASHBOARD = get_sub_module_by_key('CONSUMER_CARE_DASHBOARD')
@@ -36,29 +34,31 @@ DEMOM = get_module_by_key('DEMOM')
 
 
 # DASHBOARD = ""
-BILLING = get_sub_module_by_key('BILLING')
-# BILLING = ""
-CAMPAIGN = get_sub_module_by_key('CAMPAIGN')
-# CAMPAIGN = ""
+BILLING = ''
+# BILLING = get_sub_module_by_key('BILLING')
+# CAMPAIGN = get_sub_module_by_key('CAMPAIGN')
+CAMPAIGN = ''
 # CONSUMER = get_sub_module_by_key('CONSUMER')
 CONSUMER = ''
 # CONTRACT = get_sub_module_by_key('CONTRACT')
-# CONTRACT = ""
+CONTRACT = ""
 # DISPATCHER = get_sub_module_by_key('DISPATCHER')
-# DISPATCHER = ""
+DISPATCHER = ""
 # EMPLOYEE = get_sub_module_by_key('EMPLOYEE')
-# EMPLOYEE = ""
+EMPLOYEE = ""
 # METER_READING = get_sub_module_by_key('METER_READING')
-# METER_READING = ""
+METER_READING = ""
 # PAYMENT = get_sub_module_by_key('PAYMENT')
 PAYMENT = ""
 # PAYROLL = get_sub_module_by_key('PAYROLL')
 PAYROLL = ""
-S_AND_M_REGISTRATION = get_sub_module_by_key('S_AND_M_REGISTRATION')
-CONSUMER_CARE_REGISTRATION = get_sub_module_by_key('CONSUMER_CARE_REGISTRATION')
-CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
-# CONSUMER_OPS_REGISTRATION = ''
-# REGISTRATION = ""
+# S_AND_M_REGISTRATION = get_sub_module_by_key('S_AND_M_REGISTRATION')
+S_AND_M_REGISTRATION = ''
+# CONSUMER_CARE_REGISTRATION = get_sub_module_by_key('CONSUMER_CARE_REGISTRATION')
+CONSUMER_CARE_REGISTRATION = ''
+# CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
+CONSUMER_OPS_REGISTRATION = ''
+REGISTRATION = ""
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
 # SETTING = get_sub_module_by_name('Settings')
@@ -70,23 +70,32 @@ CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
 # COMPLAINT = get_sub_module_by_name('Complaint')
 COMPLAINT = ''
 TENANT = ''
-DEMOSM = get_sub_module_by_key('DEMOSM')
+# DEMOSM = get_sub_module_by_key('DEMOSM')
+DEMOSM = ''
 
 # TENDER = get_sub_module_by_key('TENDER')
-S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
-# S_AND_M_USER = ''
+# S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
+S_AND_M_USER = ''
 # CONSUMER_CARE_USER = get_sub_module_by_key('CONSUMER_CARE_USER')
+CONSUMER_CARE_USER = ''
 # CONSUMER_OPS_USER = get_sub_module_by_key('CONSUMER_OPS_USER')
+CONSUMER_OPS_USER = ''
 # GAS_MANAGEMENT_USER = get_sub_module_by_key('GAS_MANAGEMENT_USER')
+GAS_MANAGEMENT_USER = ''
 # NETWORK_USER = get_sub_module_by_key('NETWORK_USER')
+NETWORK_USER = ''
 # SPEND_USER = get_sub_module_by_key('SPEND_USER')
+SPEND_USER = ''
 # HUMAN_CAPITAL_USER = get_sub_module_by_key('HUMAN_CAPITAL_USER')
-UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
-DISPATCHER = get_sub_module_by_key('UTILITY_MASTER')
+HUMAN_CAPITAL_USER = ''
+# UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
+UTILITY_MASTER = ''
 
 # *********** PRIVILEGE CONSTANTS **************
-VIEW = get_privilege_by_key('VIEW')
-EDIT = get_privilege_by_key('EDIT')
+VIEW = ''
+# VIEW = get_privilege_by_key('VIEW')
+EDIT = ''
+# EDIT = get_privilege_by_key('EDIT')
 # DELETE = get_privilege_by_key('Delete')
 
 # *********** UTILITY CONSTANTS **************
@@ -107,10 +116,10 @@ EDIT = get_privilege_by_key('EDIT')
 METER_PICTURE = 'media/meter'
 
 
-def get_file_name(upload_folder,filename):
+def get_file_name(upload_folder, filename):
     try:
-        filename = filename.rsplit('.',1)
-        filename = "%s_%s.%s" % (filename[0],uuid.uuid4(),filename[1])
+        filename = filename.rsplit('.', 1)
+        filename = "%s_%s.%s" % (filename[0], uuid.uuid4(), filename[1])
         return os.path.join(upload_folder, filename)
     except:
         ext = filename.split('.')[-1]

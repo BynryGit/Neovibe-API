@@ -23,9 +23,8 @@ class UtilityHolidayCalendar(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    from_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    to_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    holiday_type = models.CharField(max_length=200, blank=False, null=False)
+    date = models.DateTimeField(null=False, blank=False, default=datetime.now())
+    holiday_type_id = models.BigIntegerField(null=False, blank=False)
     description = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -35,10 +34,10 @@ class UtilityHolidayCalendar(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name
+        return self.description
 
     def __unicode__(self):
-        return self.name
+        return self.description
 
 
 # Create work_order_master table end
