@@ -9,17 +9,29 @@ from v1.utility.models.utility_master import get_utility_by_name
 
 # *********** MODULE CONSTANTS **************
 
-S_AND_M = get_module_by_key('S&M')
-CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
-CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
-GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
-WORK_ORDER = get_module_by_key('WORK_ORDER')
-NETWORK = get_module_by_key('NETWORK')
-SPEND = get_module_by_key('SPEND')
-HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
-FINANCE = get_module_by_key('FINANCE')
-ADMIN = get_module_by_key('ADMIN')
-DEMOM = get_module_by_key('DEMOM')
+S_AND_M = ''
+CONSUMER_CARE = ''
+CONSUMER_OPS = ''
+GAS_MANAGEMENT = ''
+WORK_ORDER = ''
+NETWORK = ''
+SPEND = ''
+HUMAN_CAPITAL = ''
+FINANCE = ''
+ADMIN = ''
+DEMOM = ''
+
+# S_AND_M = get_module_by_key('S&M')
+# CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
+# CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
+# GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
+# WORK_ORDER = get_module_by_key('WORK_ORDER')
+# NETWORK = get_module_by_key('NETWORK')
+# SPEND = get_module_by_key('SPEND')
+# HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
+# FINANCE = get_module_by_key('FINANCE')
+# ADMIN = get_module_by_key('ADMIN')
+# DEMOM = get_module_by_key('DEMOM')
 
 # *********** SUB MODULE CONSTANTS **************
 # S_AND_M_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
