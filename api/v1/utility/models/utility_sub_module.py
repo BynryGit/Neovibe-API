@@ -50,6 +50,11 @@ class UtilitySubModule(models.Model):
     def get_module(self):
         module = get_utility_module_by_id(self.module_id)
         return module
+    
+    @property
+    def get_modules(self):
+        module = get_module_by_id(self.module_id)
+        return module
 
     @property
     def get_submodule(self):

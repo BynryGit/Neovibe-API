@@ -96,8 +96,8 @@
         "pk": "1",
         "model": "commonapp.Region",
         "fields": {
-            "key":"AMERICA",
-          "name": "America",
+            "key":"NORTHAMERICA",
+          "name": "North America",
           "is_active": "True"
         }
       },
@@ -129,143 +129,29 @@
         }
       },
       {
-        "pk": "1",
-        "model": "commonapp.Country",
+        "pk": "5",
+        "model": "commonapp.Region",
         "fields": {
-          "name": "United States",
-          "region_id": 1,
+            "key":"ANTARTICA",
+          "name": "Antartica",
           "is_active": "True"
         }
       },
-      {
-        "pk": "2",
-        "model": "commonapp.Country",
+       {
+        "pk": "6",
+        "model": "commonapp.Region",
         "fields": {
-          "name": "Russia",
-          "region_id": 2,
+            "key":"AUSTRALIA",
+          "name": "Australia",
           "is_active": "True"
         }
       },
-      {
-        "pk": "3",
-        "model": "commonapp.Country",
+       {
+        "pk": "7",
+        "model": "commonapp.Region",
         "fields": {
-          "name": "India",
-          "region_id": 3,
-          "is_active": "True"
-        }
-      },
-      
-      {
-        "pk": "1",
-        "model": "commonapp.Area",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "name": "Kothrud",
-          "zone_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.Area",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "name": "Shivaji Nagar",
-          "zone_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.SubArea",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "area_id": 1,
-          "name": "Bhusari colony",
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.SubArea",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "area_id": 2,
-          "name": "MG Road",
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "Maharashtra",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "West Bengal",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "3",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "Telangana",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "4",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "Andhra Pradesh",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.City",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Pune",
-          "state_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.City",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "name": "Nashik",
-          "state_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "3",
-        "model": "commonapp.City",
-        "fields": {
-          "tenant": 2,
-          "utility": 2,
-          "name": "Kolkata",
-          "state_id": 1,
+            "key":"SOUTHAMERICA",
+          "name": "South America",
           "is_active": "True"
         }
       },
@@ -282,7 +168,7 @@
         "pk": "2",
         "model": "commonapp.Module",
         "fields": {
-            "key" : "CONSUMER CARE",
+            "key" : "CONSUMER_CARE",
           "name": "Consumer Care",
           "is_active": "True"
         }
@@ -291,7 +177,7 @@
         "pk": "3",
         "model": "commonapp.Module",
         "fields": {
-            "key" : "CONSUMER OPS",
+            "key" : "CONSUMER_OPS",
           "name": "Consumer Ops",
           "is_active": "True"
         }
@@ -300,7 +186,7 @@
         "pk": "4",
         "model": "commonapp.Module",
         "fields": {
-            "key" : "GAS MANAGEMENT",
+            "key" : "GAS_MANAGEMENT",
           "name": "Gas Management",
           "is_active": "True"
         }
@@ -309,7 +195,7 @@
         "pk": "5",
         "model": "commonapp.Module",
         "fields": {
-            "key" : "WORK ORDER",
+            "key" : "WORK_ORDER",
           "name": "Work Order",
           "is_active": "True"
         }
@@ -336,7 +222,7 @@
         "pk": "8",
         "model": "commonapp.Module",
         "fields": {
-          "key" : "HUMAN CAPITAL",
+          "key" : "HUMAN_CAPITAL",
           "name": "Human Capital",
           "is_active": "True"
         }
@@ -360,11 +246,20 @@
         }
       },
       {
+        "pk": "11",
+        "model": "commonapp.Module",
+        "fields": {
+            "key" : "DEMOM",
+          "name": "DemoM",
+          "is_active": "True"
+        }
+      },
+      {
         "pk": "1",
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 1,
-          "key" : "DASHBOARD",
+          "key" : "S_AND_M_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -394,7 +289,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 1,
-          "key" : "REGISTRATIONS",
+          "key" : "S_AND_M_REGISTRATION",
           "name": "Registrations",
           "is_active": "True"
         }
@@ -424,7 +319,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 1,
-          "key" : "USERS",
+          "key" : "S_AND_M_USER",
           "name": "Users",
           "is_active": "True"
         }
@@ -444,7 +339,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 2,
-          "key" : "DASHBOARD",
+          "key" : "CONSUMER_CARE_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -454,7 +349,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 2,
-          "key" : "REGISTRATIONS",
+          "key" : "CONSUMER_CARE_REGISTRATION",
           "name": "Registrations",
           "is_active": "True"
         }
@@ -484,7 +379,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 2,
-          "key" : "USERS",
+          "key" : "CONSUMER_CARE_USER",
           "name": "Users",
           "is_active": "True"
         }
@@ -504,7 +399,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 3,
-          "key" : "DASHBOARD",
+          "key" : "CONSUMER_OPS_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -514,7 +409,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 3,
-          "key" : "REGISTRATIONS",
+          "key" : "CONSUMER_OPS_REGISTRATION",
           "name": "Registrations",
           "is_active": "True"
         }
@@ -594,7 +489,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 3,
-          "key" : "USERS",
+          "key" : "CONSUMER_OPS_USER",
           "name": "Users",
           "is_active": "True"
         }
@@ -615,7 +510,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 10,
-          "key" : "UTILITY MASTER",
+          "key" : "UTILITY_MASTER",
           "name": "Utility Master",
           "is_active": "True"
         }
@@ -625,7 +520,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 10,
-          "key" : "SYSTEM CONFIGURATION",
+          "key" : "SYSTEM_CONFIGURATION",
           "name": "System Configuration",
           "is_active": "True"
         }
@@ -635,7 +530,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 10,
-          "key" : "UTILITY CONFIGURATION",
+          "key" : "UTILITY_CONFIGURATION",
           "name": "Utility Configuration",
           "is_active": "True"
         }
@@ -645,7 +540,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 6,
-          "key" : "DASHBOARD",
+          "key" : "NETWORK_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -705,7 +600,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 4,
-          "key" : "USER",
+          "key" : "GAS_MANAGEMENT_USER",
           "name": "User",
           "is_active": "True"
         }
@@ -725,7 +620,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 4,
-          "key" : "DASHBOARD",
+          "key" : "GAS_MANAGEMENT_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -735,7 +630,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 6,
-          "key" : "DASHBOARD",
+          "key" : "NETWORK_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -765,7 +660,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 6,
-          "key" : "USER",
+          "key" : "NETWORK_USER",
           "name": "User",
           "is_active": "True"
         }
@@ -785,7 +680,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 7,
-          "key" : "DASHBOARD",
+          "key" : "SPEND_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -885,7 +780,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 7,
-          "key" : "USER",
+          "key" : "SPEND_USER",
           "name": "User",
           "is_active": "True"
         }
@@ -905,7 +800,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 8,
-          "key" : "DASHBOARD",
+          "key" : "HUMAN_CAPITAL_DASHBOARD",
           "name": "Dashboard",
           "is_active": "True"
         }
@@ -925,7 +820,7 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 8,
-          "key" : "USER",
+          "key" : "HUMAN_CAPITAL_USER",
           "name": "User",
           "is_active": "True"
         }
@@ -945,8 +840,18 @@
         "model": "commonapp.SubModule",
         "fields": {
           "module_id": 9,
-          "key" : "DASHBOARD",
+          "key" : "FINANCE_DASHBOARD",
           "name": "Dashboard",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "60",
+        "model": "commonapp.SubModule",
+        "fields": {
+          "module_id": 11,
+          "key" : "DEMOSM",
+          "name": "DemoSM",
           "is_active": "True"
         }
       },
@@ -954,6 +859,7 @@
         "pk": "1",
         "model": "userapp.Privilege",
         "fields": {
+          "key":"VIEW",
           "name": "View",
           "is_active": "True"
         }
@@ -962,6 +868,7 @@
         "pk": "2",
         "model": "userapp.Privilege",
         "fields": {
+          "key":"EDIT",
           "name": "Edit",
           "is_active": "True"
         }
@@ -3384,6 +3291,20 @@
           "is_active": "True"
         }
       },
+
+      {
+        "pk": "165",
+        "model": "userapp.RolePrivilege",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "role_id": 9,
+          "module_id": 11,
+          "sub_module_id": 60,
+          "privilege_id": 2,
+          "is_active": "True"
+        }
+      },
      {
         "pk": "1",
         "model": "master.User",
@@ -3393,6 +3314,7 @@
           "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
           "is_staff": "True",
           "is_active": "True",
+          "status_id":1,
           "is_superuser": "True"
         }
       },
@@ -3407,17 +3329,7 @@
           "is_active": "True"
         }
       },
-      {
-        "pk": "2",
-        "model": "userapp.UserRole",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 2,
-          "role_id": 1,
-          "is_active": "True"
-        }
-      },
+      
       {
         "pk": "1",
         "model": "userapp.UserUtility",
@@ -3439,16 +3351,7 @@
           "is_active": "True"
         }
       },
-      {
-        "pk": "3",
-        "model": "userapp.UserUtility",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "user_id": 2,
-          "is_active": "True"
-        }
-      },
+      
       {
         "pk": "1",
         "model": "utility.UtilityModule",
@@ -3878,7 +3781,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Utility Master",
-          "module_id": 5,
+          "module_id": 10,
           "submodule_id": 26,
           "is_active": "True"
         }
@@ -3890,7 +3793,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"System Configuration",
-          "module_id": 5,
+          "module_id": 10,
           "submodule_id": 27,
           "is_active": "True"
         }
@@ -3902,7 +3805,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Utility Configuration",
-          "module_id": 5,
+          "module_id": 10,
           "submodule_id": 28,
           "is_active": "True"
         }
@@ -3914,7 +3817,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Asset",
-          "module_id": 6,
+          "module_id": 5,
           "submodule_id": 30,
           "is_active": "True"
         }
@@ -3926,7 +3829,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Dispatcher",
-          "module_id": 6,
+          "module_id": 5,
           "submodule_id": 31,
           "is_active": "True"
         }
@@ -3938,7 +3841,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Contracts",
-          "module_id": 7,
+          "module_id": 4,
           "submodule_id": 32,
           "is_active": "True"
         }
@@ -3950,7 +3853,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Supplier",
-          "module_id": 7,
+          "module_id": 4,
           "submodule_id": 33,
           "is_active": "True"
         }
@@ -3962,7 +3865,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Reports",
-          "module_id": 7,
+          "module_id": 4,
           "submodule_id": 34,
           "is_active": "True"
         }
@@ -3974,7 +3877,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"User",
-          "module_id": 7,
+          "module_id": 4,
           "submodule_id": 35,
           "is_active": "True"
         }
@@ -3986,7 +3889,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Settings",
-          "module_id": 7,
+          "module_id": 4,
           "submodule_id": 36,
           "is_active": "True"
         }
@@ -3998,7 +3901,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Dashboard",
-          "module_id": 7,
+          "module_id": 4,
           "submodule_id": 37,
           "is_active": "True"
         }
@@ -4010,7 +3913,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Dashboard",
-          "module_id": 8,
+          "module_id": 6,
           "submodule_id": 38,
           "is_active": "True"
         }
@@ -4022,7 +3925,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Asset",
-          "module_id": 8,
+          "module_id": 6,
           "submodule_id": 37,
           "is_active": "True"
         }
@@ -4034,7 +3937,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Reports",
-          "module_id": 8,
+          "module_id": 6,
           "submodule_id": 34,
           "is_active": "True"
         }
@@ -4046,7 +3949,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"User",
-          "module_id": 8,
+          "module_id": 6,
           "submodule_id": 35,
           "is_active": "True"
         }
@@ -4058,7 +3961,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Settings",
-          "module_id": 8,
+          "module_id": 6,
           "submodule_id": 36,
           "is_active": "True"
         }
@@ -4070,7 +3973,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Dashboard",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 43,
           "is_active": "True"
         }
@@ -4082,7 +3985,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Request",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 44,
           "is_active": "True"
         }
@@ -4094,7 +3997,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Store",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 45,
           "is_active": "True"
         }
@@ -4106,7 +4009,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Tenders",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 46,
           "is_active": "True"
         }
@@ -4118,7 +4021,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Product",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 47,
           "is_active": "True"
         }
@@ -4130,7 +4033,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Services",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 48,
           "is_active": "True"
         }
@@ -4142,7 +4045,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Order",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 49,
           "is_active": "True"
         }
@@ -4154,7 +4057,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Contracts",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 50,
           "is_active": "True"
         }
@@ -4166,7 +4069,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Suppliers",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 51,
           "is_active": "True"
         }
@@ -4178,7 +4081,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Reports",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 52,
           "is_active": "True"
         }
@@ -4190,7 +4093,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"User",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 53,
           "is_active": "True"
         }
@@ -4202,7 +4105,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Settings",
-          "module_id": 9,
+          "module_id": 7,
           "submodule_id": 54,
           "is_active": "True"
         }
@@ -4227,7 +4130,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Reports",
-          "module_id": 10,
+          "module_id": 8,
           "submodule_id": 56,
           "is_active": "True"
         }
@@ -4239,7 +4142,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"User",
-          "module_id": 10,
+          "module_id": 8,
           "submodule_id": 57,
           "is_active": "True"
         }
@@ -4251,7 +4154,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Settings",
-          "module_id": 10,
+          "module_id": 8,
           "submodule_id": 58,
           "is_active": "True"
         }
@@ -4263,7 +4166,7 @@
           "tenant": 1,
           "utility": 1,
           "label":"Dashboard",
-          "module_id": 11,
+          "module_id": 9,
           "submodule_id": 59,
           "is_active": "True"
         }
@@ -4317,28 +4220,6 @@
           "phone_no":1111111111,
           "email_id":"vendor2@gmail.com",
           "address_line_1":"pune",
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.Area",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Kothrud",
-          "zone_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.SubArea",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "area_id": 1,
-          "name": "Bhusari colony",
           "is_active": "True"
         }
       },

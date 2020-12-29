@@ -2,6 +2,7 @@ __author__ = "Arpita"
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
+import random
 
 from api.settings import DISPLAY_DATE_TIME_FORMAT
 from master.models import User
@@ -119,7 +120,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id_string', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date',
+        fields = ('id_string', 'user_id','first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date',
                   'role', 'tenant', 'department',  'status','user_type','user_department')
 
 

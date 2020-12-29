@@ -18,7 +18,7 @@ from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from django.db import transaction
 from v1.contract.models.contract_subtype import get_contract_subtype_by_id_string
-from api.constants import ADMIN, UTILITY, EDIT
+from api.constants import ADMIN, UTILITY_MASTER, EDIT
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
@@ -77,7 +77,7 @@ class ContractSubTypeList(generics.ListAPIView):
 
 class ContractSubTypeDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             contract_subtype = get_contract_subtype_by_id_string(id_string)
@@ -100,7 +100,7 @@ class ContractSubTypeDetail(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -149,7 +149,7 @@ class ContractSubTypeDetail(GenericAPIView):
 
 class ContractSubType(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

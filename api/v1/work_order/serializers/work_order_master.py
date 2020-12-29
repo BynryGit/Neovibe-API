@@ -9,6 +9,10 @@ from v1.work_order.views.common_functions import set_work_order_validated_data
 from rest_framework import status
 import json
 
+class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkOrderMasterTbl
+        fields = ('name','id_string')
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):
     class Meta:

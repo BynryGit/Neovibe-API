@@ -16,14 +16,17 @@ from v1.userapp.serializers.role_sub_type import RoleSubTypeSerializer, GetRoleS
 from v1.userapp.serializers.role_type import RoleTypeSerializer, GetRoleTypeSerializer
 from v1.userapp.views.common_functions import set_role_validated_data
 from v1.utility.serializers.utility import UtilitySerializer
-
+from v1.userapp.models.role_privilege import RolePrivilege
+from v1.commonapp.models.sub_module import get_sub_module_by_key
+from v1.commonapp.models.module import get_module_by_key
+from v1.userapp.models.privilege import get_privilege_by_key
 
 class RoleSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     type_id = serializers.CharField(required=False, max_length=200)
     sub_type_id = serializers.CharField(required=False, max_length=200)
-    form_factor_id = serializers.CharField(required=False, max_length=200)
-    department_id = serializers.CharField(required=False, max_length=200)
+    # form_factor_id = serializers.CharField(required=False, max_length=200)
+    # department_id = serializers.CharField(required=False, max_length=200)
     role_ID = serializers.CharField(required=False, max_length=200)
     role = serializers.CharField(required=False, max_length=200)
 
@@ -33,7 +36,8 @@ class RoleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_role_validated_data(validated_data)
-        if Role.objects.filter(role=validated_data['role'], type_id=validated_data['type_id'], sub_type_id=validated_data['sub_type_id'], form_factor_id=validated_data['form_factor_id'], department_id=validated_data['department_id'], tenant=user.tenant, is_active=True).exists():
+        # if Role.objects.filter(role=validated_data['role'], type_id=validated_data['type_id'], sub_type_id=validated_data['sub_type_id'], form_factor_id=validated_data['form_factor_id'], department_id=validated_data['department_id'], tenant=user.tenant, is_active=True).exists():
+        if Role.objects.filter(role=validated_data['role'], type_id=validated_data['type_id'], sub_type_id=validated_data['sub_type_id'],tenant=user.tenant, is_active=True).exists():
             raise CustomAPIException("Role already exists!", status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
@@ -47,6 +51,16 @@ class RoleSerializer(serializers.ModelSerializer):
                 role_obj.save()
                 role_obj.role_ID = str(role_obj.role) + str(role_obj.tenant) + str(role_obj.utility)
                 role_obj.save()
+                try:
+                    role_privilege = RolePrivilege()
+                    role_privilege.role_id = role_obj.id
+                    role_privilege.module_id = get_module_by_key('DEMOM')
+                    role_privilege.sub_module_id = get_sub_module_by_key("DEMOSM")
+                    role_privilege.privilege_id = get_privilege_by_key('EDIT')
+                    role_privilege.is_active = True
+                    role_privilege.save()
+                except e:
+                    print('***********',e)
                 return role_obj
 
     def update(self, instance, validated_data, user):

@@ -17,7 +17,7 @@ from v1.commonapp.models.sub_module import SubModule as SubModuleTbl
 class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
-    utility_module_id = UtilityModuleShortViewSerializer(many=False, source='get_module')
+    utility_module_id = ModuleShortViewSerializer(many=False, source='get_modules')
     submodule_id = SubModuleShortViewSerializer(many=False, source='get_submodule')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)

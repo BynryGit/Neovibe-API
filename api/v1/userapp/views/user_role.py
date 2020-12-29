@@ -11,7 +11,6 @@ from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values, get_record_values_by_id
-from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl,get_utility_modules_by_utility_id_string,get_utility_module_by_id
 from v1.utility.serializers.utility_module import UtilityModuleViewSerializer
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer
@@ -42,7 +41,7 @@ from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSer
 class UserRole(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             data = {}
@@ -81,7 +80,7 @@ class UserRole(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, USER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def post(self, request, id_string):
         try:
             role_list = []
@@ -124,7 +123,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, USER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             data = {}
@@ -169,7 +168,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def delete(self, request, id_string):
         try:
             user_obj = get_user_by_id_string(id_string)
@@ -207,7 +206,7 @@ class UserRole(GenericAPIView):
 
 class UserRoleByUtilityModules(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string,utility_id_string):
         try:
             data = {}
@@ -258,7 +257,7 @@ class UserRoleByUtilityModules(GenericAPIView):
                     data={}
                     if roleprivilege['name'] == utility['module_id']['name']:
                         data['name'] = utility['module_id']['name']
-                        data['id_string'] = utility['id_string']   
+                        data['id_string'] = roleprivilege['id_string']   
                         data['role_id_string'] = roleprivilege['role_id_string']                                     
                         new_list.append(data)
             return Response({
@@ -283,14 +282,14 @@ class UserRoleByUtilityModules(GenericAPIView):
 
 class UserRoleByUtilitySubModule(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string,module_id_string):
         try:
             data = {}
             role_list = []
             user = get_user_by_id_string(user_id_string)
-
-            utility_module_obj = get_utility_module_by_id_string(module_id_string)
+            module_id = get_module_by_id_string(module_id_string)
+            utility_module_obj = get_utility_module_by_id(module_id.id)
             sub_module_list = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.id, is_active=True)
 
             module_obj_data=[]
@@ -338,9 +337,9 @@ class UserRoleByUtilitySubModule(GenericAPIView):
             for roleprivilege in module_obj_list:
                 for utility in utility_submodule_list:
                     data={}
-                    if (roleprivilege['name'] == utility['label']) &(roleprivilege['modulename'] == utility['utility_module_id']['module_id']['name']) :
-                        data['module_id_string'] = utility['utility_module_id']['module_id']['id_string']
-                        data['module_name'] = utility['utility_module_id']['module_id']['name']
+                    if (roleprivilege['name'] == utility['label']) &(roleprivilege['modulename'] == utility['utility_module_id']['name']) :
+                        data['module_id_string'] = utility['utility_module_id']['id_string']
+                        data['module_name'] = utility['utility_module_id']['name']
                         data['name'] = utility['submodule_id']['name']
                         data['id_string'] = roleprivilege['id_string']
                         data['role_id_string'] = roleprivilege['role_id_string']
@@ -362,7 +361,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
 
 class ModulePrivilegesList(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request,role_id_string, module_id_string,sub_module_id_string):
         try:
             privilege_list = []
@@ -371,10 +370,8 @@ class ModulePrivilegesList(GenericAPIView):
             sub_module_obj = get_sub_module_by_id_string(sub_module_id_string)
             privileageLists = RolePrivilege.objects.filter(role_id=role_obj.id,module_id=module_obj.id,sub_module_id=sub_module_obj.id, is_active=True)
             for privileageList in privileageLists:
-                print('********privileageList**********',privileageList.id)
                 view_serializer = RolePrivilegeViewSerializer(instance=privileageList,context={'request': request})
                 privilege_list.append(view_serializer.data)
-            # print('*******privilege_list**********',privilege_list)
             return Response({
                 STATE: SUCCESS,
                 DATA: privilege_list,

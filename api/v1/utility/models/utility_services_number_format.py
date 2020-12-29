@@ -23,10 +23,11 @@ from v1.commonapp.models.sub_module import get_sub_module_by_id
 
 # *********** UTILITY CONSTANTS **************
 UTILITY_SERVICE_NUMBER_ITEM_DICT = {
-    "REGISTRATION": 0,
-    "PAYMENT": 1,
-    'CONSUMER': 2,
-    "USER": 3,
+    "REGISTRATION"  : 0,
+    "PAYMENT"       : 1,
+    'CONSUMER'      : 2,
+    "S_AND_M_USER"  : 3,
+    "DISPATCHER"    : 4,
 }
 
 

@@ -51,7 +51,7 @@ class UtilityServiceContractMasterList(generics.ListAPIView):
 class UtilityServiceContractMasterDetail(GenericAPIView):
 
         # @is_token_validate
-        # @role_required(ADMIN, UTILITY, VIEW)
+        # @role_required(ADMIN, UTILITY_MASTER, EDIT)
         def get(self, request, id_string):
             try:
                 contract = get_utility_service_contract_master_by_id_string(id_string)

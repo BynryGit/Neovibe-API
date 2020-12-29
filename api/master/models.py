@@ -174,7 +174,6 @@ def is_contact_exists(phone_mobile, tenant_id):
 
 def get_user_by_id_string(id_string):
     try:
-        print("User ID String",id_string)
         return User.objects.get(id_string=id_string, is_active=True)
     except:
         return False

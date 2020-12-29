@@ -32,7 +32,7 @@ from v1.userapp.serializers.document import DocumentViewSerializer, DocumentSeri
 class UserDocument(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, USER, VIEW)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             data = {}
@@ -78,7 +78,7 @@ class UserDocument(GenericAPIView):
 
     @is_token_validate
     # @utility_required
-    @role_required(ADMIN, USER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def post(self, request, id_string):
         try:
             data = {}
@@ -122,7 +122,7 @@ class UserDocument(GenericAPIView):
 
     @is_token_validate
     # @utility_required
-    @role_required(ADMIN, USER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             data = {}

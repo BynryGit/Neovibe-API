@@ -32,10 +32,10 @@ class SubModule(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.key
 
     def __unicode__(self):
-        return self.name
+        return self.key
 
     @property
     def get_module(self):
@@ -81,7 +81,7 @@ def get_sub_module_by_name(name):
 
 def get_sub_module_by_key(key):
     sub_module = SubModule.objects.get(key=key, is_active=True)
-    return sub_module
+    return sub_module.id
 
 
 def get_sub_module_id_by_key(key):

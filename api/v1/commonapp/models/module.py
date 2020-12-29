@@ -52,7 +52,7 @@ def get_module_by_id(id):
 
 def get_module_by_key(key):
     try:
-        return Module.objects.get(key=key, is_active=True)
+        return Module.objects.get(key=key, is_active=True).id
     except:
         return False
 
