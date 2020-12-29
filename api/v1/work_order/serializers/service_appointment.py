@@ -16,6 +16,24 @@ from v1.work_order.views.common_functions import generate_service_appointment_no
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import WORK_ORDER_ALREADY_EXIST
 
+class ServiceAppointmentListSerializer(serializers.ModelSerializer):
+    tenant = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+    utility = serializers.ReadOnlyField(source='utility.name')
+    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    consumer_id = ConsumerListSerializer(many=False, required=True, source='get_consumer')
+    asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
+    status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
+    service_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
+    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+
+    class Meta:
+        model = ServiceAppointment
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id', 'service_id',
+                    'sa_number','sa_name','sa_date','sa_description','sa_rule','created_date','updated_date','status_id')
+
+
 class ServiceAppointmentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     consumer_id = serializers.CharField(required=False, max_length=200)
@@ -23,10 +41,12 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     service_id = serializers.CharField(required=False, max_length=200)
     sa_name = serializers.CharField(required=True, max_length=200)
     sa_description = serializers.CharField(required=True, max_length=200)
-    sa_date = serializers.CharField(required=False, max_length=200)
+    sa_date = serializers.CharField(required=True, max_length=200)
     sa_time = serializers.CharField(required=False, max_length=200)
     sa_estimated_effort = serializers.CharField(required=False, max_length=200)
     alternative_contact = serializers.CharField(required=False, max_length=200)
+    sa_area = serializers.CharField(required=False, max_length=200)
+    sa_sub_area = serializers.CharField(required=False, max_length=200)
     alternative_address = serializers.CharField(required=False, max_length=200)
     actual_start_time = serializers.CharField(required=False, max_length=200)
     actual_end_time = serializers.CharField(required=False, max_length=200)
@@ -48,6 +68,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
             appointment_obj.created_by = user.id
             appointment_obj.created_date = datetime.utcnow()
             appointment_obj.tenant = user.tenant
+            appointment_obj.status_id = 1
             appointment_obj.save()
             appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
             appointment_obj.save()

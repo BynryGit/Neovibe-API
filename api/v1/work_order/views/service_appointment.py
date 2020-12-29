@@ -9,9 +9,50 @@ from api.constants import *
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer,ServiceAppointmentViewSerializer
+from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer,ServiceAppointmentViewSerializer,ServiceAppointmentListSerializer
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
+from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.commonapp.views.logger import logger
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+
+
+# API Header
+# API end Point: api/v1/service-appointment/:id_string/list
+# API verb: GET
+# Interaction: Service Appointment list
+# Usage: API will fetch all Service Appointment List
+# Tables used: ServiceAppointment
+# Author: Priyanka
+# Created on: 29/12/2020
+
+class ServiceAppointmentList(generics.ListAPIView):
+    try:
+        serializer_class = ServiceAppointmentListSerializer
+        pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('sa_number','sa_name', 'tenant__id_string',)
+        ordering_fields = ('sa_number', 'sa_name','tenant',)
+        ordering = ('sa_number',)  # always give by default alphabetical order
+        search_fields = ('sa_number','sa_name', 'tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ServiceAppointmentTbl.objects.filter(utility=utility, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Consumers not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer ops', sub_module='Consumer')
 
 
 # API Header
