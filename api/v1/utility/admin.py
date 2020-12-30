@@ -20,6 +20,8 @@ from v1.utility.models.utility_payment_channel import UtilityPaymentChannel
 from v1.utility.models.utility_payment_type import UtilityPaymentType
 from v1.utility.models.utility_payment_subtype import UtilityPaymentSubtype
 from v1.utility.models.utility_payment_mode import UtilityPaymentMode
+from v1.utility.models.utility_holiday_calendar import UtilityHolidayCalendar
+from v1.utility.models.utility_leave_type import UtilityLeaveType
 
 admin.site.register(UtilityModule)
 admin.site.register(UtilitySubModule)
@@ -40,3 +42,5 @@ admin.site.register(UtilityService)
 admin.site.register(UtilityServiceContractMaster)
 admin.site.register(UtilityServiceContractTemplate)
 admin.site.register(UtilityServiceMaster)
+admin.site.register(UtilityHolidayCalendar)
+admin.site.register(UtilityLeaveType)

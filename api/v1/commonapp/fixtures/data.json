@@ -96,8 +96,8 @@
         "pk": "1",
         "model": "commonapp.Region",
         "fields": {
-            "key":"AMERICA",
-          "name": "America",
+            "key":"NORTHAMERICA",
+          "name": "North America",
           "is_active": "True"
         }
       },
@@ -129,143 +129,29 @@
         }
       },
       {
-        "pk": "1",
-        "model": "commonapp.Country",
+        "pk": "5",
+        "model": "commonapp.Region",
         "fields": {
-          "name": "United States",
-          "region_id": 1,
+            "key":"ANTARTICA",
+          "name": "Antartica",
           "is_active": "True"
         }
       },
-      {
-        "pk": "2",
-        "model": "commonapp.Country",
+       {
+        "pk": "6",
+        "model": "commonapp.Region",
         "fields": {
-          "name": "Russia",
-          "region_id": 2,
+            "key":"AUSTRALIA",
+          "name": "Australia",
           "is_active": "True"
         }
       },
-      {
-        "pk": "3",
-        "model": "commonapp.Country",
+       {
+        "pk": "7",
+        "model": "commonapp.Region",
         "fields": {
-          "name": "India",
-          "region_id": 3,
-          "is_active": "True"
-        }
-      },
-      
-      {
-        "pk": "1",
-        "model": "commonapp.Area",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "name": "Kothrud",
-          "zone_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.Area",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "name": "Shivaji Nagar",
-          "zone_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.SubArea",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "area_id": 1,
-          "name": "Bhusari colony",
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.SubArea",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "area_id": 2,
-          "name": "MG Road",
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "Maharashtra",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "West Bengal",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "3",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "Telangana",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "4",
-        "model": "commonapp.State",
-        "fields": {
-          "name": "Andhra Pradesh",
-          "country_id": 3,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.City",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Pune",
-          "state_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "2",
-        "model": "commonapp.City",
-        "fields": {
-          "tenant": 1,
-          "utility": 2,
-          "name": "Nashik",
-          "state_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "3",
-        "model": "commonapp.City",
-        "fields": {
-          "tenant": 2,
-          "utility": 2,
-          "name": "Kolkata",
-          "state_id": 1,
+            "key":"SOUTHAMERICA",
+          "name": "South America",
           "is_active": "True"
         }
       },
@@ -4287,6 +4173,119 @@
       },
       {
         "pk": "1",
+        "model": "tenant.TenantModule",
+        "fields": {
+          "tenant": 1,
+          "module_id": 1,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "tenant.TenantModule",
+        "fields": {
+          "tenant": 1,
+          "module_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "tenant.TenantModule",
+        "fields": {
+          "tenant": 2,
+          "module_id": 3,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "4",
+        "model": "tenant.TenantModule",
+        "fields": {
+          "tenant": 2,
+          "module_id": 4,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
+        "model": "tenant.TenantSubModule",
+        "fields": {
+          "tenant": 1,
+          "module_id": 1,
+          "sub_module_id": 1,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "tenant.TenantSubModule",
+        "fields": {
+          "tenant": 1,
+          "module_id": 1,
+          "sub_module_id": 2,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "tenant.TenantSubModule",
+        "fields": {
+          "tenant": 2,
+          "module_id": 3,
+          "sub_module_id": 16,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "4",
+        "model": "tenant.TenantSubModule",
+        "fields": {
+          "tenant": 2,
+          "module_id": 3,
+          "sub_module_id": 17,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "5",
+        "model": "tenant.TenantSubModule",
+        "fields": {
+          "tenant": 1,
+          "module_id": 2,
+          "sub_module_id": 11,
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "6",
+        "model": "tenant.TenantSubModule",
+        "fields": {
+          "tenant": 2,
+          "module_id": 4,
+          "sub_module_id": 37,
+          "is_active": "True"
+        }
+      },
+
+      {
+        "pk": "1",
+        "model": "commonapp.Product",
+        "fields": {
+          "name": "GAS",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "commonapp.Product",
+        "fields": {
+          "name": "POWER",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
         "model": "userapp.UserStatus",
         "fields": {
           "tenant": 1,
@@ -4334,28 +4333,6 @@
           "phone_no":1111111111,
           "email_id":"vendor2@gmail.com",
           "address_line_1":"pune",
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.Area",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "name": "Kothrud",
-          "zone_id": 1,
-          "is_active": "True"
-        }
-      },
-      {
-        "pk": "1",
-        "model": "commonapp.SubArea",
-        "fields": {
-          "tenant": 1,
-          "utility": 1,
-          "area_id": 1,
-          "name": "Bhusari colony",
           "is_active": "True"
         }
       },

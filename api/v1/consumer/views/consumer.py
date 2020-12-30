@@ -63,6 +63,12 @@ class ConsumerList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerMaster.objects.filter(utility=utility, is_active=True)
+                    if "consumer_no" in self.request.query_params:
+                        queryset = queryset.filter(consumer_no=self.request.query_params['consumer_no'])
+                    if "email_id" in self.request.query_params:
+                        queryset = queryset.filter(email_id=self.request.query_params['email_id'])
+                    if "phone_mobile" in self.request.query_params:
+                        queryset = queryset.filter(phone_mobile=self.request.query_params['phone_mobile'])
                     if queryset:
                         return queryset
                     else:
@@ -190,12 +196,12 @@ class Consumer(GenericAPIView):
 # Interaction: Get, Update
 # Usage: Add
 # Tables used: ConsumerMaster
-# Auther: Rohan
+# Author: Rohan
 # Created on: 19/05/2020
 class ConsumerDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    # @role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             consumer = get_consumer_by_id_string(id_string)

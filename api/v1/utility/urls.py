@@ -25,6 +25,7 @@ from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
 from v1.utility.views.utility_payment_type import UtilityPaymentTypeList
 from v1.utility.views.utility_payment_subtype import UtilityPaymentSubTypeList
 from v1.utility.views.utility_payment_mode import UtilityPaymentModeList
+from v1.utility.views.utility_leave_type import UtilityLeaveTypeList
 from v1.userapp.views.role_type import RoleTypeList, RoleTypeListByUtility
 
 # from v1.userapp.views.role_type import RoleTypeListByUtility
@@ -79,6 +80,7 @@ urlpatterns = [
     path('<uuid:id_string>/sub_module/delete',api_delete_submodule, name="delete"),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(), name='role_subtype_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
+    path('<uuid:id_string>/leave_type/list', UtilityLeaveTypeList.as_view()),
     path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
          name='utility_service_contract_master_list'),

@@ -1,3 +1,4 @@
+
 """
 Django settings for api project.
 
@@ -13,15 +14,20 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 # from v1.commonapp.views.secretcache import SecretManager
 # secret = SecretManager()
+# from v1.commonapp.views.secretcache import SecretManager
+# secret = SecretManager()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+smart360_env = ''
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '4urz*1-p45#e2nnlg$fjqb*rhv^w_l35n4#^l%m^8$*2t5slpg'
+# SECRET_KEY = secret.get_secret(smart360_env + "_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -215,6 +221,7 @@ CRONJOBS = [
 # MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 
 
+
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
@@ -223,6 +230,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 
+
 # SMS configuration
-TWILIO_ACCOUNT_SID = 'ACf8545f63b2bf3513b90b2ac626b53d8b'
-TWILIO_AUTH_TOKEN = '413b55d88e459cc05c713b4510808dec'
+# TWILIO_ACCOUNT_SID = secret.get_secret(smart360_env + "_twilio_account_id")
+# TWILIO_AUTH_TOKEN = secret.get_secret(smart360_env + "_twilio_auth_token")
