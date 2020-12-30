@@ -1,4 +1,3 @@
-
 """
 Django settings for api project.
 

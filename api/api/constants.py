@@ -44,7 +44,6 @@ DEMOM = get_module_by_key('DEMOM')
 # HUMAN_CAPITAL_DASHBOARD = get_sub_module_by_key('HUMAN_CAPITAL_DASHBOARD')
 # FINANCE_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
 
-
 # DASHBOARD = ""
 BILLING = ''
 # BILLING = get_sub_module_by_key('BILLING')
@@ -84,6 +83,7 @@ COMPLAINT = ''
 TENANT = ''
 DEMOSM = get_sub_module_by_key('DEMOSM')
 # DEMOSM = ''
+#DEMOSM = ''
 
 # TENDER = get_sub_module_by_key('TENDER')
 S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
@@ -104,17 +104,15 @@ UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
 # UTILITY_MASTER = ''
 
 # *********** PRIVILEGE CONSTANTS **************
-# VIEW = ''
 VIEW = get_privilege_by_key('VIEW')
-# EDIT = ''
+#VIEW = ''
+#EDIT = ''
 EDIT = get_privilege_by_key('EDIT')
 # DELETE = get_privilege_by_key('Delete')
-
 # *********** UTILITY CONSTANTS **************
 # MNGL_PUNE = get_utility_by_name('MNGL Pune')
 # MNGL_MUMBAI = get_utility_by_name('MNGL Mumbai')
 # BGCL_KOLKATA = get_utility_by_name('BGCL Kolkata')
-
 # ADMIN = 2
 # # USER = 1
 # UTILITY = 1
@@ -126,7 +124,6 @@ EDIT = get_privilege_by_key('EDIT')
 # DEMOM = 11
 # DEMOSM = 60
 METER_PICTURE = 'media/meter'
-
 
 def get_file_name(upload_folder, filename):
     try:
