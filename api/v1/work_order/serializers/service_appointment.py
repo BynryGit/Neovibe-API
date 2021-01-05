@@ -39,18 +39,18 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     consumer_id = serializers.CharField(required=False, max_length=200)
     asset_id = serializers.CharField(required=False, max_length=200)
     service_id = serializers.CharField(required=False, max_length=200)
-    sa_name = serializers.CharField(required=True, max_length=200)
-    sa_description = serializers.CharField(required=True, max_length=200)
+    # sa_name = serializers.CharField(required=True, max_length=200)
+    # sa_description = serializers.CharField(required=True, max_length=200)
     sa_date = serializers.CharField(required=True, max_length=200)
-    sa_time = serializers.CharField(required=False, max_length=200)
-    sa_estimated_effort = serializers.CharField(required=False, max_length=200)
-    alternative_contact = serializers.CharField(required=False, max_length=200)
-    sa_area = serializers.CharField(required=False, max_length=200)
-    sa_sub_area = serializers.CharField(required=False, max_length=200)
-    alternative_address = serializers.CharField(required=False, max_length=200)
-    actual_start_time = serializers.CharField(required=False, max_length=200)
-    actual_end_time = serializers.CharField(required=False, max_length=200)
-    actual_duration = serializers.CharField(required=False, max_length=200)
+    # sa_time = serializers.CharField(required=False, max_length=200)
+    # sa_estimated_effort = serializers.CharField(required=False, max_length=200)
+    # alternative_contact = serializers.CharField(required=False, max_length=200)
+    # sa_area = serializers.CharField(required=False, max_length=200)
+    # sa_sub_area = serializers.CharField(required=False, max_length=200)
+    # alternative_address = serializers.CharField(required=False, max_length=200)
+    # actual_start_time = serializers.CharField(required=False, max_length=200)
+    # actual_end_time = serializers.CharField(required=False, max_length=200)
+    # actual_duration = serializers.CharField(required=False, max_length=200)
     status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
@@ -59,9 +59,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
-        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],service_id=validated_data['service_id'],
-                                             asset_id=validated_data['asset_id'], tenant=user.tenant,
-                                             utility_id=validated_data['utility_id']).exists():
+        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],service_id=validated_data['service_id']).exists():
             raise CustomAPIException(WORK_ORDER_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)            

@@ -43,10 +43,10 @@ class ServiceAppointment(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.sa_name
+        return self.sa_number
 
     def __unicode__(self):
-        return self.sa_name
+        return self.sa_number
 
     @property
     def get_tenant(self):

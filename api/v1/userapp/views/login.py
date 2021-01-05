@@ -3,7 +3,7 @@ import traceback
 import uuid
 
 import jwt
-
+from datetime import datetime
 from django.contrib.auth import authenticate
 
 from rest_framework.views import APIView
@@ -56,6 +56,7 @@ def login(request, user):
             token=encoded_jwt,
             ip_address=ip,
             created_by=user.id,
+            created_date = datetime.utcnow(),
             is_active=True
         )
         token_obj.save()
