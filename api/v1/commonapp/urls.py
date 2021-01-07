@@ -14,7 +14,7 @@ from v1.commonapp.views.sub_modules import SubModule, SubModuleList
 from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
 from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail,ServiceType
 from v1.commonapp.views.service_subtype import ServiceSubTypeList,ServiceSubTypeDetail,ServiceSubType
-from v1.commonapp.views.products import ProductList
+from v1.commonapp.views.products import ProductList, ProductDetail, Product
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.user_type import UserTypeList
@@ -47,6 +47,8 @@ urlpatterns = [
     path('utility/frequency/<uuid:id_string>', FrequencyDetail.as_view()),
     path('utility/frequency', Frequency.as_view()),
     path('product/list', ProductList.as_view()),
+    path('utility/product', Product.as_view()),
+    path('utility/product/<uuid:id_string>', ProductDetail.as_view()),
     # path('role_type/<uuid:id_string>', RoleType.as_view()),
     # path('role_type/list', RoleTypeList.as_view()),
     # path('role_subtype/<uuid:id_string>', RoleSubType.as_view()),

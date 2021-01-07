@@ -7,6 +7,8 @@ from django.contrib.postgres.fields import JSONField
 # Create work_order Master table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.commonapp.models.service_type import get_service_type_by_id
+from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
 
 # table header
 # module: Work Order | sub-module -
@@ -40,6 +42,16 @@ class WorkOrderMaster(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_service_type(self):
+        service_type = get_service_type_by_id(self.service_type_id)
+        return service_type
+
+    @property
+    def get_service_subtype(self):
+        service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
+        return service_subtype
 
 # Create work_order_master table end
 
