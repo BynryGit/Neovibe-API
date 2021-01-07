@@ -200,7 +200,7 @@ class Consumer(GenericAPIView):
 # Created on: 19/05/2020
 class ConsumerDetail(GenericAPIView):
 
-    @is_token_validate
+    # @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
