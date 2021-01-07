@@ -9,6 +9,12 @@ from v1.commonapp.common_functions import set_zone_validated_data
 from api.messages import ZONE_ALREADY_EXIST
 
 
+class ZoneShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ZoneTbl
+        fields = ('id_string', 'name')
+
+
 class ZoneViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

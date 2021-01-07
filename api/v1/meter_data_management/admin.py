@@ -28,8 +28,11 @@ from v1.meter_data_management.models.smart_meter_data import SmartMeterData
 from v1.meter_data_management.models.unit import Unit
 from v1.meter_data_management.models.validation import Validation
 from v1.meter_data_management.models.validation_type import ValidationType
+from v1.meter_data_management.models.read_cycle import ReadCycle
 
 
+admin.site.register(Schedule)
+admin.site.register(ReadCycle)
 admin.site.register(ActivityType)
 admin.site.register(BillCycle)
 admin.site.register(BillCycleReadingAllocation)
@@ -47,7 +50,6 @@ admin.site.register(RouteAssignment)
 admin.site.register(RouteAssignmentStatus)
 admin.site.register(RouteUpload)
 admin.site.register(RouteUploadStatus)
-admin.site.register(Schedule)
 admin.site.register(ScheduleStatus)
 admin.site.register(ScheduleType)
 admin.site.register(SmartMeterData)
