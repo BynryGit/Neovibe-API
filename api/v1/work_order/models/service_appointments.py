@@ -24,7 +24,7 @@ class ServiceAppointment(models.Model):
     sa_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     sa_time = models.TimeField(null=True, blank=True,default='20:00')
     sa_estimated_effort = models.BigIntegerField(null=True, blank=True)
-    json_obj = JSONField(default=[])
+    sa_rule = JSONField(default=[])
     sa_user_remark = models.CharField(max_length=200, blank=True, null=True)
     alternative_contact = models.CharField(max_length=200, blank=True, null=True)
     alternative_address = models.CharField(max_length=200, blank=True, null=True)
@@ -34,7 +34,6 @@ class ServiceAppointment(models.Model):
     sa_area = models.CharField(max_length=200, blank=True, null=True)
     sa_sub_area = models.CharField(max_length=200, blank=True, null=True)
     sa_premises = models.CharField(max_length=200, blank=True, null=True)
-    sa_rule = JSONField(default=[])
     sa_GIS_id = models.BigIntegerField(blank=True, null=True)
     status_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -44,10 +43,10 @@ class ServiceAppointment(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.sa_name
+        return self.sa_number
 
     def __unicode__(self):
-        return self.sa_name
+        return self.sa_number
 
     @property
     def get_tenant(self):
