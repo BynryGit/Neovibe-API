@@ -1,28 +1,20 @@
-# table header
-# module:  
-# table type : Master
-# table name : Mandatory Fields
-# table description :  It will contain details for Product
-# frequency of data changes : Low
-# sample table data : "Activate", "Deactive"
-# reference tables :
-# author : Priyanka
-# created on : 12/10/2020
-
-
+import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-import uuid  # importing package for GUID
+from django.db import models  # importing package for database
 from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
-from django.db import models  # importing package for database
 
 
-# Create Product table start
+# Create UtilityProduct table start
 
-class Product(models.Model):
+
+class UtilityProduct(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -37,17 +29,18 @@ class Product(models.Model):
         return self.name
 
 
-def get_product_by_id(id):
+def get_utility_product_by_id(id):
     try:
-        return Product.objects.get(id=id)
+        product = UtilityProduct.objects.get(id=id)
+        print("Hello", product)
+        return product
     except Exception as e:
         raise CustomAPIException("Product does not exists.", status_code=status.HTTP_404_NOT_FOUND)
 
 
-def get_product_by_id_string(id_string):
+def get_utility_product_by_id_string(id_string):
     try:
-        return Product.objects.get(id_string=id_string)
+        return UtilityProduct.objects.get(id_string=id_string)
     except:
         return False
-
-# Create Product table end
+# Create UtilityProduct table end.

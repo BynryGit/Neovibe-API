@@ -140,6 +140,7 @@ COMPLAINT_SUBTYPE_ALREADY_EXIST = "Complaint Subtype Already Exist"
 SERVICE_TYPE_ALREADY_EXIST = "Service Type Already Exist"
 SERVICE_SUBTYPE_ALREADY_EXIST = "Service Subtype Already Exist"
 ZONE_ALREADY_EXIST = "Zone Already Exist"
+PRODUCT_ALREADY_EXIST = "Product Already Exist"
 
 
 

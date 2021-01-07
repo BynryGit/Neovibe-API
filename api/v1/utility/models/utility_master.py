@@ -3,7 +3,7 @@ __author__ = "aki"
 # table header
 # module: Utility | sub-module - All
 # table type : Master
-# table name : 2.1  Utility Master
+# table name : 2.1  Utility Master  `  
 # table description : It is Utility Master table. It will contain details for Utility details
 # frequency of data changes : Low
 # sample tale data : "BGCL1","BGCL2","BGCL3",
@@ -30,10 +30,12 @@ class UtilityMaster(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     phone_no = models.CharField(max_length=200, blank=True, null=True)
     email_id = models.CharField(max_length=200, blank=True, null=True)
-    region_id = models.BigIntegerField(null=True, blank=True)
-    country_id = models.BigIntegerField(null=True, blank=True)
-    state_id = models.BigIntegerField(null=True, blank=True)
-    city_id = models.BigIntegerField(null=True, blank=True)
+    company_id = models.CharField(max_length=200, blank=True, null=True)
+    pan_no = models.CharField(max_length=200, blank=True, null=True)
+    tax_id = models.CharField(max_length=200, blank=True, null=True)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    short_logo = models.CharField(max_length=200, blank=True, null=True)
+    long_logo = models.CharField(max_length=200, blank=True, null=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)

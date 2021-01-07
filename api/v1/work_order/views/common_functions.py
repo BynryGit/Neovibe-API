@@ -10,6 +10,8 @@ from v1.utility.models.utility_services_number_format import UtilityServiceNumbe
 import os
 from rest_framework import status
 from v1.commonapp.models.sub_module import get_sub_module_by_key
+from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
 
 # if os.environ['smart360_env'] == 'dev':
 #     from api.settings_dev import SECRET_KEY

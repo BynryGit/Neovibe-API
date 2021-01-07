@@ -55,7 +55,7 @@ def get_service_sub_type_by_id_string(id_string):
 
 
 def get_service_sub_type_by_id(id):
-    return ServiceSubTypes.objects.filter(id=id).last()
+    return ServiceSubTypes.objects.get(id=id)
 
 
 def get_service_sub_type_by_name(name):
