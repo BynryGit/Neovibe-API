@@ -10,17 +10,19 @@ from v1.utility.models.utility_master import get_utility_by_name
 
 # *********** MODULE CONSTANTS **************
 
-S_AND_M = get_module_by_key('S&M')
-CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
+# S_AND_M = get_module_by_key('S&M')
+# CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
 CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
-GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
-WORK_ORDER = get_module_by_key('WORK_ORDER')
-NETWORK = get_module_by_key('NETWORK')
-SPEND = get_module_by_key('SPEND')
-HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
-FINANCE = get_module_by_key('FINANCE')
-ADMIN = get_module_by_key('ADMIN')
-DEMOM = get_module_by_key('DEMOM')
+# GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
+# WORK_ORDER = get_module_by_key('WORK_ORDER')
+WORK_ORDER = ""
+# NETWORK = get_module_by_key('NETWORK')
+# SPEND = get_module_by_key('SPEND')
+# HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
+# FINANCE = get_module_by_key('FINANCE')
+# ADMIN = get_module_by_key('ADMIN')
+ADMIN = ""
+# DEMOM = get_module_by_key('DEMOM')
 
 
 # *********** SUB MODULE CONSTANTS **************
@@ -36,16 +38,16 @@ DEMOM = get_module_by_key('DEMOM')
 
 
 # DASHBOARD = ""
-BILLING = get_sub_module_by_key('BILLING')
+# BILLING = get_sub_module_by_key('BILLING')
 # BILLING = ""
-CAMPAIGN = get_sub_module_by_key('CAMPAIGN')
+# CAMPAIGN = get_sub_module_by_key('CAMPAIGN')
 # CAMPAIGN = ""
 # CONSUMER = get_sub_module_by_key('CONSUMER')
 CONSUMER = ''
 # CONTRACT = get_sub_module_by_key('CONTRACT')
 # CONTRACT = ""
 # DISPATCHER = get_sub_module_by_key('DISPATCHER')
-# DISPATCHER = ""
+DISPATCHER = ""
 # EMPLOYEE = get_sub_module_by_key('EMPLOYEE')
 # EMPLOYEE = ""
 # METER_READING = get_sub_module_by_key('METER_READING')
@@ -54,10 +56,10 @@ CONSUMER = ''
 PAYMENT = ""
 # PAYROLL = get_sub_module_by_key('PAYROLL')
 PAYROLL = ""
-S_AND_M_REGISTRATION = get_sub_module_by_key('S_AND_M_REGISTRATION')
-CONSUMER_CARE_REGISTRATION = get_sub_module_by_key('CONSUMER_CARE_REGISTRATION')
-CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
-# CONSUMER_OPS_REGISTRATION = ''
+# S_AND_M_REGISTRATION = get_sub_module_by_key('S_AND_M_REGISTRATION')
+# CONSUMER_CARE_REGISTRATION = get_sub_module_by_key('CONSUMER_CARE_REGISTRATION')
+# CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
+CONSUMER_OPS_REGISTRATION = ''
 # REGISTRATION = ""
 # REPORTS = get_sub_module_by_name('Reports')
 # REQUEST = get_sub_module_by_name('Request')
@@ -70,10 +72,10 @@ CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
 # COMPLAINT = get_sub_module_by_name('Complaint')
 COMPLAINT = ''
 TENANT = ''
-DEMOSM = get_sub_module_by_key('DEMOSM')
-
+# DEMOSM = get_sub_module_by_key('DEMOSM')
+DEMOSM = ""
 # TENDER = get_sub_module_by_key('TENDER')
-S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
+# S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
 # S_AND_M_USER = ''
 # CONSUMER_CARE_USER = get_sub_module_by_key('CONSUMER_CARE_USER')
 # CONSUMER_OPS_USER = get_sub_module_by_key('CONSUMER_OPS_USER')
@@ -81,12 +83,15 @@ S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
 # NETWORK_USER = get_sub_module_by_key('NETWORK_USER')
 # SPEND_USER = get_sub_module_by_key('SPEND_USER')
 # HUMAN_CAPITAL_USER = get_sub_module_by_key('HUMAN_CAPITAL_USER')
-UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
-DISPATCHER = get_sub_module_by_key('UTILITY_MASTER')
+# UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
+UTILITY_MASTER = ""
+# DISPATCHER = get_sub_module_by_key('UTILITY_MASTER')
 
 # *********** PRIVILEGE CONSTANTS **************
-VIEW = get_privilege_by_key('VIEW')
-EDIT = get_privilege_by_key('EDIT')
+# VIEW = get_privilege_by_key('VIEW')
+VIEW = ""
+# EDIT = get_privilege_by_key('EDIT')
+EDIT = ""
 # DELETE = get_privilege_by_key('Delete')
 
 # *********** UTILITY CONSTANTS **************
@@ -102,7 +107,7 @@ EDIT = get_privilege_by_key('EDIT')
 # USER = 1
 # # VIEW = 1
 # # EDIT = 2
-# DEMOM = 11
+DEMOM = 11
 # DEMOSM = 60
 METER_PICTURE = 'media/meter'
 
