@@ -9,6 +9,12 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.common_functions import set_city_validated_data
 
 
+class CityShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CityTbl
+        fields = ('id_string', 'name')
+
+
 class CityViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

@@ -13,7 +13,7 @@ from v1.utility.models.utility_master import get_utility_by_name
 # CONSUMER_CARE = ''
 CONSUMER_OPS = ''
 GAS_MANAGEMENT = ''
-WORK_ORDER = ''
+# WORK_ORDER = ''
 NETWORK = ''
 SPEND = ''
 HUMAN_CAPITAL = ''
@@ -25,7 +25,7 @@ S_AND_M = get_module_by_key('S&M')
 CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
 # CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
 # GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
-# WORK_ORDER = get_module_by_key('WORK_ORDER')
+WORK_ORDER = get_module_by_key('WORK_ORDER')
 # NETWORK = get_module_by_key('NETWORK')
 # SPEND = get_module_by_key('SPEND')
 # HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
@@ -58,7 +58,7 @@ DISPATCHER = get_sub_module_by_key('DISPATCHER')
 # EMPLOYEE = get_sub_module_by_key('EMPLOYEE')
 EMPLOYEE = ""
 # METER_READING = get_sub_module_by_key('METER_READING')
-METER_READING = ""
+METER_DATA = ""
 # PAYMENT = get_sub_module_by_key('PAYMENT')
 PAYMENT = ""
 # PAYROLL = get_sub_module_by_key('PAYROLL')
@@ -82,6 +82,7 @@ REGISTRATION = ""
 COMPLAINT = ''
 TENANT = ''
 DEMOSM = get_sub_module_by_key('DEMOSM')
+# DEMOSM = ''
 #DEMOSM = ''
 
 # TENDER = get_sub_module_by_key('TENDER')
@@ -101,9 +102,10 @@ SPEND_USER = ''
 HUMAN_CAPITAL_USER = ''
 UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
 # UTILITY_MASTER = ''
+
 # *********** PRIVILEGE CONSTANTS **************
-#VIEW = ''
 VIEW = get_privilege_by_key('VIEW')
+#VIEW = ''
 #EDIT = ''
 EDIT = get_privilege_by_key('EDIT')
 # DELETE = get_privilege_by_key('Delete')

@@ -29,6 +29,7 @@ from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.transition_configuration import TransitionConfiguration
 from v1.commonapp.models.frequency import Frequency
 from v1.commonapp.models.channel import Channel
+from v1.commonapp.models.global_lookup import Global_Lookup
 
 admin.site.register(Region)
 admin.site.register(Country)
@@ -60,3 +61,4 @@ admin.site.register(Currency)
 admin.site.register(Premise)
 admin.site.register(Frequency)
 admin.site.register(Channel)
+admin.site.register(Global_Lookup)

@@ -19,6 +19,12 @@ from v1.commonapp.serializers.sub_area import SubAreaListSerializer
 from v1.commonapp.models.area import get_area_by_id
 
 
+class PremisesShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PremiseTbl
+        fields = ('id_string', 'name')
+
+
 class PremiseViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

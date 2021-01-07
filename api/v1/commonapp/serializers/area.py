@@ -11,6 +11,12 @@ from v1.commonapp.common_functions import set_area_validated_data
 from api.messages import AREA_ALREADY_EXIST
 
 
+class AreaShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AreaTbl
+        fields = ('id_string', 'name')
+
+
 class AreaViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
