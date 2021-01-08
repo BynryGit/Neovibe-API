@@ -13,17 +13,13 @@ __author__ = "aki"
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
 
-# Create Read Cycle table start
+# Create Global Lookup table start
 
 class Global_Lookup(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    module = models.CharField(max_length=200, blank=False, null=False)
-    sub_module = models.CharField(max_length=200, blank=False, null=False)
     category = models.CharField(max_length=200, blank=False, null=False)
     key = models.CharField(max_length=200, blank=False, null=False) # Always small case
     value = models.CharField(max_length=200, blank=False, null=False) # Camel case
@@ -33,13 +29,17 @@ class Global_Lookup(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
+    # Used to create unique combination
+    class Meta:
+        unique_together = ('category', 'key',)
+
     def __str__(self):
         return self.category
 
     def __unicode__(self):
         return self.category
 
-# Create Read Cycle table end
+# Create Global Lookup table end
 
 
 def get_global_lookup_by_id(id):
