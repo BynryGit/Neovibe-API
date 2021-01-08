@@ -6,6 +6,7 @@ from v1.commonapp.models.zone import Zone
 from v1.commonapp.models.country import Country
 from v1.commonapp.models.currency import Currency
 from v1.commonapp.models.department import Department
+from v1.commonapp.models.department_subtype import DepartmentSubtype
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.document_sub_type import DocumentSubType
 from v1.commonapp.models.document_type import DocumentType
@@ -30,6 +31,7 @@ from v1.commonapp.models.transition_configuration import TransitionConfiguration
 from v1.commonapp.models.frequency import Frequency
 from v1.commonapp.models.channel import Channel
 from v1.commonapp.models.global_lookup import Global_Lookup
+from v1.commonapp.models.division import Division
 
 admin.site.register(Region)
 admin.site.register(Country)
@@ -62,3 +64,5 @@ admin.site.register(Premise)
 admin.site.register(Frequency)
 admin.site.register(Channel)
 admin.site.register(Global_Lookup)
+admin.site.register(DepartmentSubtype)
+admin.site.register(Division)
