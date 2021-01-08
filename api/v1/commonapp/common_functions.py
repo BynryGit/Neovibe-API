@@ -1,6 +1,6 @@
 import os
 import jwt  # jwt token library
-from rest_framework import status
+from rest_framework import status, serializers
 from api.settings import SECRET_KEY
 from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.models.module import get_module_by_id_string
@@ -409,3 +409,7 @@ def set_product_validated_data(validated_data):
     return validated_data
     
 
+class ChoiceField(serializers.ChoiceField):
+
+    def to_representation(self, obj):
+        return self._choices[obj]
