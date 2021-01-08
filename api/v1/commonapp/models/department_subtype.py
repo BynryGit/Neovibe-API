@@ -13,7 +13,7 @@
 # <ddmmyyyy><changes><author>
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 
 from django.db import models  # importing package for database
 
@@ -22,7 +22,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 
-class Department(models.Model):
+class DepartmentSubtype(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
@@ -44,22 +44,21 @@ class Department(models.Model):
     @property
     def get_utility(self):
         return self.utility
+
+
 # Create Department table end
 
 
-def get_all_departments():
-    return Department.objects.filter(is_active=True)
+def get_department_subtype_by_tenant_id_string(id_string):
+    return DepartmentSubtype.objects.filter(tenant__id_string=id_string)
 
 
-def get_department_by_tenant_id_string(id_string):
-    return Department.objects.filter(tenant__id_string=id_string)
-
-
-def get_department_by_id_string(id_string):
+def get_department_subtype_by_id_string(id_string):
     try:
-        return Department.objects.get(id_string=id_string)
+        return DepartmentSubtype.objects.get(id_string=id_string)
     except:
         return False
 
-def get_department_by_id(id):
-    return Department.objects.filter(id=id).last()
+
+def get_department_subtype_by_id(id):
+    return DepartmentSubtype.objects.get(id=id)

@@ -16,15 +16,16 @@ from v1.payment.serializer.payment import *
 from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.utility.serializers.utility_region import UtilityRegionListSerializer
-from v1.utility.models.utility_region import UtilityRegion as UtilityRegionModel
+from v1.utility.serializers.utility_department_subtype import UtilityDepartmentSubTypeListSerializer
+from v1.utility.models.utility_department_subtype import UtilityDepartmentSubType as UtilityDepartmentSubTypeModel
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.models.region import get_region_by_id_string
 from api.messages import *
 from api.constants import *
 
+
 # API Header
-# API end Point: api/v1/:id_string/region/list
+# API end Point: api/v1/:id_string/dept_subtype/list
 # API verb: GET
 # Package: Basic
 # Modules: Admin
@@ -35,20 +36,21 @@ from api.constants import *
 # Author: Chinmay
 # Created on: 19/11/2020
 
-class UtilityRegionList(generics.ListAPIView):
+class UtilityDepartmentSubTypeList(generics.ListAPIView):
     try:
-        serializer_class = UtilityRegionListSerializer
+        serializer_class = UtilityDepartmentSubTypeListSerializer
+        pagination_class = StandardResultsSetPagination
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = UtilityRegionModel.objects.filter(utility=utility, is_active=True)
+                    queryset = UtilityDepartmentSubTypeModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Region not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException("Department Subtype not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

@@ -66,7 +66,9 @@ SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
 MOBILE_ALREADY_EXISTS = "Mobile number already exists!"
 CONTRACT_ALREADY_EXISTS = "Contract already exists"
 WORK_ORDER_ALREADY_EXIST = "Work Order already Exist"
-
+DEPARTMENT_TYPE_ALREADY_EXIST = "Department Type already Exist"
+DEPARTMENT_SUBTYPE_ALREADY_EXIST = "Department SubType already Exist"
+DIVISION_ALREADY_EXIST = "Division Already Exist"
 
 # *********** NOT FOUND CONSTANTS **************
 COUNTRY_NOT_FOUND = "Country Not Found"

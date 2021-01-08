@@ -7,14 +7,14 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
 
 
-# Create Region table start
+# Create Utility Department Subtype table start
 
 
-class UtilityRegion(models.Model):
+class UtilityDepartmentSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    region_id = models.BigIntegerField(null=True, blank=True)
+    department_subtype_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -34,18 +34,17 @@ class UtilityRegion(models.Model):
     #     return currency
 
 
-def get_utility_region_by_id(id):
+def get_utility_department_subtype_by_id(id):
     try:
-        region = UtilityRegion.objects.get(id=id)
-        print("Heeeelo", region)
-        return region
+        department_subtype = UtilityDepartmentSubType.objects.get(id=id)
+        return department_subtype
     except Exception as e:
-        raise CustomAPIException("Region does not exists.", status_code=status.HTTP_404_NOT_FOUND)
+        raise CustomAPIException("Department SubType not exists.", status_code=status.HTTP_404_NOT_FOUND)
 
 
-def get_utility_region_by_id_string(id_string):
+def get_utility_department_subtype_by_id_string(id_string):
     try:
-        return UtilityRegion.objects.get(id_string=id_string)
+        return UtilityDepartmentSubType.objects.get(id_string=id_string)
     except:
         return False
-# Create Region table end.
+# Create Utility Department Sub table end.

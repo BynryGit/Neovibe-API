@@ -22,8 +22,9 @@ def is_token_validate(function):
             user_obj = get_user_by_id_string(decoded_token['user_id_string'])
             if check_token_exists_for_user(token, user_obj.id):
                 token_obj = get_token_by_token(token)
-                secs = (datetime.now(timezone.utc) - token_obj.created_date).seconds
-                hrs = divmod(secs, 3600)[0]
+                if (token_obj.created_date + timedelta(hours=4)).replace(tzinfo=None) < datetime.now():
+                    secs = (datetime.now(timezone.utc) - token_obj.created_date).seconds
+                    hrs = divmod(secs, 3600)[0]
                 if hrs > 4:
                     token_obj.delete()
                     return Response({
