@@ -15,8 +15,8 @@ from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.commonapp.serializers.zone import ZoneShortViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl
-from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
-from v1.meter_data_management.views.common_functions import set_schedule_validated_data
+# from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
+# from v1.meter_data_management.views.common_functions import set_schedule_validated_data
 
 
 class ScheduleViewSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     area_id = AreaShortViewSerializer(many=False, source='get_area_name')
     sub_area_id = SubAreaShortViewSerializer(many=False, source='get_sub_area_name')
     # premises_id = PremisesShortViewSerializer(many=False, source='get_premises_name')
-    read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
+    # read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
     consumer_type_id = GlobalLookupShortViewSerializer(many=False, source='get_consumer_type_name')
     schedule_type_id = GlobalLookupShortViewSerializer(many=False, source='get_schedule_type_id_name')
     activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type_id_name')
