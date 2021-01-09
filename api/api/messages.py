@@ -102,6 +102,7 @@ STORE_LOCATION_NOT_FOUND = "Store location not found"
 UTILITY_SERVICE_CONTRACT_NOT_FOUND = "Utility service contract not found"
 READ_CYCLE_NOT_FOUND = "Read Cycle not found"
 FREQUENCY_NOT_FOUND = "Frequency not found"
+SCHEDULE_NOT_FOUND = "Schedule not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

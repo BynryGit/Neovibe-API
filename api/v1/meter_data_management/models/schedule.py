@@ -16,6 +16,7 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 from datetime import datetime # importing package for datetime
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
+from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -45,10 +46,10 @@ class Schedule(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
-    # @property
-    # def get_read_cycle_name(self):
-    #     read_cycle = get_read_cycle_by_id(self.read_cycle_id)
-    #     return read_cycle
+    @property
+    def get_read_cycle_name(self):
+        read_cycle = get_read_cycle_by_id(self.read_cycle_id)
+        return read_cycle
 
     @property
     def get_frequency_name(self):

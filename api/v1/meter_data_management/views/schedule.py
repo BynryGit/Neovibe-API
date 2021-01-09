@@ -1,6 +1,5 @@
 __author__ = "aki"
 
-import traceback
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -13,7 +12,7 @@ from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, SCHEDULE_NOT_FOUND
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.meter_data_management.serializers.schedule import ScheduleViewSerializer, ScheduleSerializer
 from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl, get_schedule_by_id_string
@@ -76,24 +75,24 @@ class Schedule(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ScheduleSerializer(data=request.data)
-            if serializer.is_valid():
-                schedule_obj = serializer.create(serializer.validated_data, user)
-                serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+            schedule_serializer = ScheduleSerializer(data=request.data)
+            if schedule_serializer.is_valid():
+                schedule_obj = schedule_serializer.create(schedule_serializer.validated_data, user)
+                schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: serializer.data,
+                    RESULT: schedule_view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: serializer.errors,
+                    RESULT: schedule_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -124,12 +123,13 @@ class ScheduleDetail(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
@@ -140,26 +140,27 @@ class ScheduleDetail(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             schedule_obj = get_schedule_by_id_string(id_string)
             if schedule_obj:
-                serializer = ScheduleSerializer(data=request.data)
-                if serializer.is_valid():
-                    schedule_obj = serializer.update(schedule_obj, serializer.validated_data, user)
-                    serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+                schedule_serializer = ScheduleSerializer(data=request.data)
+                if schedule_serializer.is_valid():
+                    schedule_obj = schedule_serializer.update(schedule_obj, schedule_serializer.validated_data, user)
+                    schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
-                        RESULT: serializer.data,
+                        RESULT: schedule_view_serializer.data,
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,
-                        RESULT: serializer.errors,
+                        RESULT: schedule_serializer.errors,
                     }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
+                    RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
