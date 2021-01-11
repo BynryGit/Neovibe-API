@@ -7,14 +7,14 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
 
 
-# Create Region table start
+# Create UtilityProduct table start
 
 
-class UtilityRegion(models.Model):
+class UtilityProduct(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    region_id = models.BigIntegerField(null=True, blank=True)
+    product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -28,24 +28,19 @@ class UtilityRegion(models.Model):
     def __unicode__(self):
         return self.name
 
-    # @property
-    # def get_currency(self):
-    #     currency = get_region_by_id()(self.currency_id)
-    #     return currency
 
-
-def get_utility_region_by_id(id):
+def get_utility_product_by_id(id):
     try:
-        region = UtilityRegion.objects.get(id=id)
-        print("Heeeelo", region)
-        return region
+        product = UtilityProduct.objects.get(id=id)
+        print("Hello", product)
+        return product
     except Exception as e:
-        raise CustomAPIException("Region does not exists.", status_code=status.HTTP_404_NOT_FOUND)
+        raise CustomAPIException("Product does not exists.", status_code=status.HTTP_404_NOT_FOUND)
 
 
-def get_utility_region_by_id_string(id_string):
+def get_utility_product_by_id_string(id_string):
     try:
-        return UtilityRegion.objects.get(id_string=id_string)
+        return UtilityProduct.objects.get(id_string=id_string)
     except:
         return False
-# Create Region table end.
+# Create UtilityProduct table end.

@@ -1,10 +1,15 @@
 from datetime import datetime
-
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from v1.consumer.models.consumer_master import ConsumerMaster
 from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
+
+
+class ChoiceField(serializers.ChoiceField):
+
+    def to_representation(self, obj):
+        return self._choices[obj]
 
 
 class ConsumerListSerializer(serializers.ModelSerializer):
@@ -15,7 +20,8 @@ class ConsumerListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerMaster
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'email_id', 'phone_mobile')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'email_id',
+                  'phone_mobile')
 
 
 class ConsumerViewSerializer(serializers.ModelSerializer):
@@ -28,12 +34,14 @@ class ConsumerViewSerializer(serializers.ModelSerializer):
     billing_area = serializers.ReadOnlyField(source='get_area')
     billing_sub_area = serializers.ReadOnlyField(source='get_sub_area')
     premise = serializers.ReadOnlyField(source='get_premise')
+    account_type = ChoiceField(choices=ConsumerMaster.ACCOUNT_TYPE)
 
     class Meta:
         model = ConsumerMaster
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no',
                   'master_consumer_no', 'email_id', 'phone_mobile', 'billing_address_line_1', 'billing_street',
-                  'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise')
+                  'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise',
+                  'account_type')
 
 
 class ConsumerSerializer(serializers.ModelSerializer):

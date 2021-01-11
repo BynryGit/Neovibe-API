@@ -1,85 +1,63 @@
-__author__ = "priyanka"
-
-from rest_framework.exceptions import APIException
-from rest_framework import generics
-from rest_framework.filters import OrderingFilter, SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
-from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, is_authorized
-from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.commonapp.models.products import Product as ProductTbl
-from v1.commonapp.serializers.products import ProductViewSerializer, ProductSerializer, ProductListSerializer
 import traceback
-from api.constants import *
-from django.db import transaction
-from rest_framework.exceptions import APIException
+
+from rest_framework import status, generics
 from rest_framework.response import Response
-from rest_framework import generics, status
-from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from django_filters.rest_framework import DjangoFilterBackend
-from master.models import get_user_by_id_string
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DUPLICATE, DATA_ALREADY_EXISTS, RESULTS
-from v1.commonapp.models.module import get_module_by_id
-from v1.commonapp.models.products import get_product_by_id_string
-from v1.userapp.decorators import is_token_validate, role_required
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from master.models import get_user_by_id_string
+from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.logger import logger
+from rest_framework.exceptions import APIException
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.userapp.decorators import is_token_validate, role_required
+from api.messages import *
+from api.constants import *
+from api.messages import *
+from v1.commonapp.models.department_subtype import DepartmentSubtype as DepartmentSubtypeTbl, get_department_subtype_by_id_string
+from v1.commonapp.serializers.department_subtype import DepartmentSubTypeViewSerializer, DepartmentSubTypeSerializer, DepartmentSubTypeListSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 
-# API Header
-# API end Point: api/v1/product/list
-# API verb: GET
-# Package: Basic
-# Modules: All
-# Sub Module: All
-# Interaction:  Product list
-# Usage: API will fetch required data for ProductTbl list 
-# Tables used: product
-# Author: priyanka
-# Created on: 16/10/2020
-
-class ProductList(generics.ListAPIView):
+class DepartmentSubTypeList(generics.ListAPIView):
     try:
-        serializer_class = ProductListSerializer
+        serializer_class = DepartmentSubTypeListSerializer
         pagination_class = StandardResultsSetPagination
-
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('name',)
-        ordering_fields = ('name',)
-        ordering = ('name',) # always give by default alphabetical order
-        search_fields = ('name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
-                if is_authorized(1,1,1,user_obj):
-                    queryset = ProductTbl.objects.filter(is_active=True)
-                    return queryset
+                if is_authorized(1, 1, 1, user_obj):
+                    # utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = DepartmentSubtypeTbl.objects.all()
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Department SubType not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
-    except Exception as ex:
-        logger().log(ex, 'ERROR')
-        raise APIException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Admin')
 
 
 # API Header
-# API end Point: api/v1/product
+# API end Point: api/v1/dept_subtype
 # API verb: POST
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: Product Post
-# Usage: API will POST products into database
-# Tables used: Product
+# Interaction: Department SubType Post
+# Usage: API will POST Department SubType into database
+# Tables used: Department SubType
 # Author: Chinmay
-# Created on: 6/1/2021
-class Product(GenericAPIView):
+# Created on: 09/11/2020
+class DepartmentSubType(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
@@ -87,10 +65,10 @@ class Product(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ProductSerializer(data=request.data)
+            serializer = DepartmentSubTypeSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                product_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ProductViewSerializer(instance=product_obj, context={'request': request})
+                dept_subtype_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = DepartmentSubTypeViewSerializer(instance=dept_subtype_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
@@ -108,28 +86,29 @@ class Product(GenericAPIView):
                 RESULTS: str(e),
             }, status=res.status_code)
 
+
 # API Header
-# API end Point: api/v1/:id_string/product
+# API end Point: api/v1/:id_string/dept_subtype
 # API verb: GET,PUT
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: products corresponding to the id
-# Usage: API will fetch and update product for a given id
-# Tables used: Product
+# Interaction: dept_subtypes corresponding to the id
+# Usage: API will fetch and update dept types for a given id
+# Tables used: Department SubTypes
 # Author: Chinmay
-# Created on: 06/1/2020
+# Created on: 09/11/2020
 
 
-class ProductDetail(GenericAPIView):
+class DepartmentSubTypeDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
-            product = get_product_by_id_string(id_string)
-            if product:
-                serializer = ProductViewSerializer(instance=product, context={'request': request})
+            department = get_department_subtype_by_id_string(id_string)
+            if department:
+                serializer = DepartmentSubTypeViewSerializer(instance=department, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: serializer.data,
@@ -152,15 +131,15 @@ class ProductDetail(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            product_obj = get_product_by_id_string(id_string)
+            subtype_obj = get_department_subtype_by_id_string(id_string)
             if "name" not in request.data:
-                request.data['name'] = product_obj.name
-            if product_obj:
-                serializer = ProductSerializer(data=request.data)
+                request.data['name'] = subtype_obj.name
+            if subtype_obj:
+                serializer = DepartmentSubTypeSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    product_obj = serializer.update(product_obj, serializer.validated_data, user)
-                    view_serializer = ProductViewSerializer(instance=product_obj,
-                                                            context={'request': request})
+                    subtype_obj = serializer.update(subtype_obj, serializer.validated_data, user)
+                    view_serializer = DepartmentSubTypeViewSerializer(instance=subtype_obj,
+                                                               context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

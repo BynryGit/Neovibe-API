@@ -55,10 +55,6 @@
         "name": "MNGL Mumbai",
         "phone_no": 1111111111,
         "email_id": "gas@gmail.com",
-        "region_id": 3,
-        "country_id": 3,
-        "state_id": 1,
-        "city_id": 1,
         "is_active": "True"
       }
     },
@@ -70,10 +66,6 @@
         "name": "MNGL Pune",
         "phone_no": 2222222222,
         "email_id": "power@gmail.com",
-        "region_id": 3,
-        "country_id": 3,
-        "state_id": 1,
-        "city_id": 1,
         "is_active": "True"
       }
     },
@@ -85,10 +77,6 @@
         "name": "BGCL Kolkata",
         "phone_no": 333333333,
         "email_id": "power@gmail.com",
-        "region_id": 3,
-        "country_id": 3,
-        "state_id": 2,
-        "city_id": 3,
         "is_active": "True"
       }
     },
@@ -947,8 +935,6 @@
         "pk": "1",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 1,
-          "utility": 1,
           "name": "S&M",
           "is_active": "True"
         }
@@ -957,8 +943,6 @@
         "pk": "2",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 1,
-          "utility": 1,
           "name": "Consumer care",
           "is_active": "True"
         }
@@ -967,8 +951,6 @@
         "pk": "3",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 1,
-          "utility": 2,
           "name": "Consumer Ops",
           "is_active": "True"
         }
@@ -977,8 +959,6 @@
         "pk": "4",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 2,
-          "utility": 2,
           "name": "HR",
           "is_active": "True"
         }

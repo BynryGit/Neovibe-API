@@ -24,7 +24,7 @@ class UtilityMasterViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityMasterTbl
-        fields = ('id_string', 'short_name', 'name', 'phone_no', 'email_id',  'created_date', 'updated_date', 'tenant')
+        fields = ('id_string', 'short_name', 'name', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',  'created_date', 'updated_date', 'tenant')
 
 
 class UtilityMasterSerializer(serializers.ModelSerializer):
@@ -33,6 +33,10 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, max_length=200)
     phone_no = serializers.CharField(required=False, max_length=200)
     email_id = serializers.CharField(required=False, max_length=200)
+    company_id = serializers.CharField(required=False, max_length=200)
+    pan_no = serializers.CharField(required=False, max_length=200)
+    tax_id = serializers.CharField(required=False, max_length=200)
+    address = serializers.CharField(required=False, max_length=200)
     region_id = serializers.IntegerField(required=False)
     country_id = serializers.IntegerField(required=False)
     state_id = serializers.IntegerField(required=False)
@@ -41,8 +45,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityMasterTbl
-        fields = ('tenant', 'short_name', 'name', 'phone_no', 'email_id', 'region_id', 'country_id', 'state_id',
-                  'city_id', 'status_id')
+        fields = '__all__'
 
     def create(self, validated_data, user):
         validated_data = set_utility_validated_data(validated_data)

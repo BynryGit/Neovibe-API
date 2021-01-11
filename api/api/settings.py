@@ -12,13 +12,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from v1.commonapp.views.secretcache import SecretManager
-
-smart360_env = '' 
-
 secret = SecretManager()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+smart360_env = ''
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -30,6 +29,7 @@ SECRET_KEY = secret.get_secret(smart360_env + "_secret_key")
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 
@@ -110,6 +110,7 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -120,6 +121,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -138,6 +140,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -159,6 +162,7 @@ DISPLAY_DATE_TIME_FORMAT = "%d/%m/%Y %H:%M:%S"
 INPUT_DATE_FORMAT = "%d-%b-%Y"
 
 CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -195,10 +199,8 @@ CELERY_TIMEZONE = 'Asia/Kolkata'
 
 # Cronjob configuration
 CRONJOBS = [
-    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
-    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
+    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation', '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
+    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data', '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
 ]
 
 # Amazon s3 Configuration
@@ -214,6 +216,7 @@ AWS_LOCATION = ''
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 
+
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
@@ -221,7 +224,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = secret.get_secret(smart360_env + "_email_host_user")
 EMAIL_HOST_PASSWORD = secret.get_secret(smart360_env + "_email_host_password")
-
 # SMS configuration
 TWILIO_ACCOUNT_SID = secret.get_secret(smart360_env + "_twilio_account_id")
 TWILIO_AUTH_TOKEN = secret.get_secret(smart360_env + "_twilio_auth_token")

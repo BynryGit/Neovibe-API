@@ -21,6 +21,9 @@ from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, 
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
 from v1.utility.serializers.utility_module import UtilityModuleSerializer
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleSerializer
+from api.messages import *
+from api.constants import *
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 
 
 # API Header
@@ -118,69 +121,28 @@ class Utility(GenericAPIView):
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
-            with transaction.atomic():
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
-                if 'utility_module_submodule' in request.data:
-                    utility_module_submodule = request.data.pop('utility_module_submodule')
-                serializer = UtilityMasterSerializer(data=request.data)
-                if serializer.is_valid():
-                    utility_obj = serializer.create(serializer.validated_data, user)
-                    if utility_obj:
-                        if utility_module_submodule:
-                            for utility_mod_sub in utility_module_submodule:
-                                utility_module = utility_mod_sub['utility_module']
-                                utility_module['tenant'] = utility_obj.tenant.id_string
-                                utility_module['utility'] = utility_obj.id_string
-                                utility_module_serializer = UtilityModuleSerializer(data=utility_module)
-                                if utility_module_serializer.is_valid():
-                                    utility_module_obj = utility_module_serializer.create(utility_module_serializer.validated_data, user)
-                                    if utility_module_obj:
-                                        for submodule in utility_mod_sub['utility_submodule']:
-                                            utility_submodule = submodule
-                                            utility_submodule['tenant'] = utility_obj.tenant.id_string
-                                            utility_submodule['utility'] = utility_obj.id_string
-                                            module_obj = get_module_by_id(utility_module_obj.module_id)
-                                            utility_submodule['module_id'] = module_obj.id_string
-                                            utility_submodule_serializer = UtilitySubModuleSerializer(data=utility_submodule)
-                                            if utility_submodule_serializer.is_valid():
-                                                utility_submodule_obj = utility_submodule_serializer.create(utility_submodule_serializer.validated_data, user)
-                                            else:
-                                                return Response({
-                                                    STATE: ERROR,
-                                                    RESULT: utility_submodule_serializer.errors,
-                                                }, status=status.HTTP_400_BAD_REQUEST)
-                                    else:
-                                        return Response({
-                                            STATE: DUPLICATE,
-                                            RESULT: DATA_ALREADY_EXISTS,
-                                        }, status=status.HTTP_409_CONFLICT)
-                                else:
-                                    return Response({
-                                        STATE: ERROR,
-                                        RESULT: utility_module_serializer.errors,
-                                    }, status=status.HTTP_400_BAD_REQUEST)
-                        serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULT: serializer.data,
-                        }, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response({
-                            STATE: DUPLICATE,
-                            RESULT: DATA_ALREADY_EXISTS,
-                        }, status=status.HTTP_409_CONFLICT)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULT: serializer.errors,
-                    }, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY')
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            serializer = UtilityMasterSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                area_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = UtilityMasterViewSerializer(instance=area_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULTS: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                RESULTS: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -243,6 +205,76 @@ class UtilityDetail(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(traceback.print_exc(ex))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UtilityModule(GenericAPIView):
+    @is_token_validate
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                if 'utility_module_submodule' in request.data:
+                    utility_module_submodule = request.data.pop('utility_module_submodule')
+                serializer = UtilityMasterSerializer(data=request.data)
+                if serializer.is_valid():
+                    utility_obj = serializer.create(serializer.validated_data, user)
+                    if utility_obj:
+                        if utility_module_submodule:
+                            for utility_mod_sub in utility_module_submodule:
+                                utility_module = utility_mod_sub['utility_module']
+                                utility_module['tenant'] = utility_obj.tenant.id_string
+                                utility_module['utility'] = utility_obj.id_string
+                                utility_module_serializer = UtilityModuleSerializer(data=utility_module)
+                                if utility_module_serializer.is_valid():
+                                    utility_module_obj = utility_module_serializer.create(utility_module_serializer.validated_data, user)
+                                    if utility_module_obj:
+                                        for submodule in utility_mod_sub['utility_submodule']:
+                                            utility_submodule = submodule
+                                            utility_submodule['tenant'] = utility_obj.tenant.id_string
+                                            utility_submodule['utility'] = utility_obj.id_string
+                                            module_obj = get_module_by_id(utility_module_obj.module_id)
+                                            utility_submodule['module_id'] = module_obj.id_string
+                                            utility_submodule_serializer = UtilitySubModuleSerializer(data=utility_submodule)
+                                            if utility_submodule_serializer.is_valid():
+                                                utility_submodule_obj = utility_submodule_serializer.create(utility_submodule_serializer.validated_data, user)
+                                            else:
+                                                return Response({
+                                                    STATE: ERROR,
+                                                    RESULT: utility_submodule_serializer.errors,
+                                                }, status=status.HTTP_400_BAD_REQUEST)
+                                    else:
+                                        return Response({
+                                            STATE: DUPLICATE,
+                                            RESULT: DATA_ALREADY_EXISTS,
+                                        }, status=status.HTTP_409_CONFLICT)
+                                else:
+                                    return Response({
+                                        STATE: ERROR,
+                                        RESULT: utility_module_serializer.errors,
+                                    }, status=status.HTTP_400_BAD_REQUEST)
+                        serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_201_CREATED)
+                    else:
+                        return Response({
+                            STATE: DUPLICATE,
+                            RESULT: DATA_ALREADY_EXISTS,
+                        }, status=status.HTTP_409_CONFLICT)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='UTILITY')
             return Response({

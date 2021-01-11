@@ -2,10 +2,12 @@ from django.urls import path
 from v1.commonapp.views.city import CityList, City, CityDetail
 from v1.commonapp.views.country import CountryList, Country, CountryDetail
 from v1.commonapp.views.currency import CurrencyList
-from v1.commonapp.views.department import Department, DepartmentListByTenant,DepartmentListByUtility
+from v1.commonapp.views.department import Department, DepartmentListByTenant,DepartmentListByUtility, DepartmentTypeDetail, DepartmentTypeList, DepartmentType
+from v1.commonapp.views.department_subtype import DepartmentSubType, DepartmentSubTypeDetail, DepartmentSubTypeList
 from v1.commonapp.views.region import RegionList, Region, RegionDetail
 from v1.commonapp.views.state import StateList, State, StateDetail
 from v1.commonapp.views.zone import ZoneList, Zone, ZoneDetail
+from v1.commonapp.views.division import DivisionList, Division, DivisionDetail
 from v1.commonapp.views.area import AreaList, AreaDetail, Area
 from v1.commonapp.views.form_factor import FormFactor, FormFactorList
 from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail, SubArea, SubAreaListByArea
@@ -14,7 +16,7 @@ from v1.commonapp.views.sub_modules import SubModule, SubModuleList
 from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
 from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail,ServiceType
 from v1.commonapp.views.service_subtype import ServiceSubTypeList,ServiceSubTypeDetail,ServiceSubType
-from v1.commonapp.views.products import ProductList
+from v1.commonapp.views.products import ProductList, ProductDetail, Product
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.user_type import UserTypeList
@@ -34,6 +36,8 @@ urlpatterns = [
     path('utility/city', City.as_view()),
     path('utility/city/<uuid:id_string>', CityDetail.as_view()),
     path('utility/zone', Zone.as_view()),
+    path('utility/division/<uuid:id_string>', DivisionDetail.as_view()),
+    path('utility/division', Division.as_view()),
     path('utility/zone/<uuid:id_string>', ZoneDetail.as_view()),
     path('utility/area', Area.as_view()),
     path('utility/area/<uuid:id_string>', AreaDetail.as_view()),
@@ -47,6 +51,14 @@ urlpatterns = [
     path('utility/frequency/<uuid:id_string>', FrequencyDetail.as_view()),
     path('utility/frequency', Frequency.as_view()),
     path('product/list', ProductList.as_view()),
+    path('utility/product', Product.as_view()),
+    path('utility/product/<uuid:id_string>', ProductDetail.as_view()),
+    path('dept_type/list', DepartmentTypeList.as_view()),
+    path('utility/dept_type', DepartmentType.as_view()),
+    path('utility/dept_type/<uuid:id_string>', DepartmentTypeDetail.as_view()),
+    path('dept_subtype/list', DepartmentSubTypeList.as_view()),
+    path('utility/dept_subtype', DepartmentSubType.as_view()),
+    path('utility/dept_subtype/<uuid:id_string>', DepartmentSubTypeDetail.as_view()),
     # path('role_type/<uuid:id_string>', RoleType.as_view()),
     # path('role_type/list', RoleTypeList.as_view()),
     # path('role_subtype/<uuid:id_string>', RoleSubType.as_view()),
@@ -67,6 +79,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
     path('utility/<uuid:id_string>/city/list', CityList.as_view(), name='city_list'),
     path('utility/<uuid:id_string>/zone/list', ZoneList.as_view(), name='zone_list'),
+    path('utility/<uuid:id_string>/division/list', DivisionList.as_view(), name='zone_list'),
     path('utility/<uuid:id_string>/area/list', AreaList.as_view(), name='area_list'),
     path('utility/<uuid:id_string>/subarea/list', SubAreaList.as_view(), name='subarea_list'),
     path('utility/<uuid:id_string>/premise/list', PremiseList.as_view(), name='premise_list'),

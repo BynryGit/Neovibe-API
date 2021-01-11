@@ -66,7 +66,9 @@ SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
 MOBILE_ALREADY_EXISTS = "Mobile number already exists!"
 CONTRACT_ALREADY_EXISTS = "Contract already exists"
 WORK_ORDER_ALREADY_EXIST = "Work Order already Exist"
-
+DEPARTMENT_TYPE_ALREADY_EXIST = "Department Type already Exist"
+DEPARTMENT_SUBTYPE_ALREADY_EXIST = "Department SubType already Exist"
+DIVISION_ALREADY_EXIST = "Division Already Exist"
 
 # *********** NOT FOUND CONSTANTS **************
 COUNTRY_NOT_FOUND = "Country Not Found"
@@ -98,6 +100,9 @@ CONTRACT_NOT_FOUND = "Contract not found"
 STORE_TYPE_NOT_FOUND = "Store type not found"
 STORE_LOCATION_NOT_FOUND = "Store location not found"
 UTILITY_SERVICE_CONTRACT_NOT_FOUND = "Utility service contract not found"
+READ_CYCLE_NOT_FOUND = "Read Cycle not found"
+FREQUENCY_NOT_FOUND = "Frequency not found"
+SCHEDULE_NOT_FOUND = "Schedule not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"
@@ -140,6 +145,7 @@ COMPLAINT_SUBTYPE_ALREADY_EXIST = "Complaint Subtype Already Exist"
 SERVICE_TYPE_ALREADY_EXIST = "Service Type Already Exist"
 SERVICE_SUBTYPE_ALREADY_EXIST = "Service Subtype Already Exist"
 ZONE_ALREADY_EXIST = "Zone Already Exist"
+PRODUCT_ALREADY_EXIST = "Product Already Exist"
 
 
 

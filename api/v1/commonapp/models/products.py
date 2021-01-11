@@ -10,11 +10,12 @@
 # created on : 12/10/2020
 
 
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
-
+from v1.commonapp.views.custom_exception import CustomAPIException
+from rest_framework import status
 from django.db import models  # importing package for database
 
 
@@ -35,4 +36,18 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
 
- # Create Product table end
+
+def get_product_by_id(id):
+    try:
+        return Product.objects.get(id=id)
+    except Exception as e:
+        raise CustomAPIException("Product does not exists.", status_code=status.HTTP_404_NOT_FOUND)
+
+
+def get_product_by_id_string(id_string):
+    try:
+        return Product.objects.get(id_string=id_string)
+    except:
+        return False
+
+# Create Product table end
