@@ -64,7 +64,6 @@ SUBAREA_NOT_FOUND = "Subarea not Found."
 DIVISION_NOT_FOUND = "Division not Found."
 CITY_NOT_FOUND = "City not Found."
 ZONE_NOT_FOUND = "Zone not Found."
-READ_CYCLE_NOT_FOUND = "Read Cycle not Found."
 DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
 SERVICE_TYPE_NOT_FOUND="No record found for user service type"
 UTILITY_NOT_FOUND = "Utility not found"
@@ -113,6 +112,7 @@ FREQUENCY_NOT_FOUND = "Frequency not found"
 UTILITY_HOLIDAY_NOT_FOUND = "Utility Holiday Not found."
 UTILITY_WORKING_HOURS_NOT_FOUND = "Utility Working Hours Not found."
 SCHEDULE_NOT_FOUND = "Schedule not found"
+ACTIVITY_TYPE_NOT_FOUND = "ACtivity type not found"
 
 
 # *********** ALREADY EXIST CONSTANTS **************
