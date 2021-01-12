@@ -25,6 +25,7 @@ from v1.utility.models.utility_leave_type import UtilityLeaveType
 from v1.utility.models.utility_product import UtilityProduct
 from v1.utility.models.utility_department_type import UtilityDepartmentType
 from v1.utility.models.utility_department_subtype import UtilityDepartmentSubType
+from v1.utility.models.utility_working_hours import UtilityWorkingHours
 
 admin.site.register(UtilityModule)
 admin.site.register(UtilitySubModule)
@@ -50,3 +51,4 @@ admin.site.register(UtilityLeaveType)
 admin.site.register(UtilityProduct)
 admin.site.register(UtilityDepartmentType)
 admin.site.register(UtilityDepartmentSubType)
+admin.site.register(UtilityWorkingHours)

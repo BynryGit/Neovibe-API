@@ -58,6 +58,13 @@ NO_DOCUMENT_NOT_FOUND = 'No Documents found for user.'
 DOCUMENT_NOT_FOUND = 'Document not found.'
 UTILITY_NOT_FOUND="Utility not found"
 TENANT_NOT_FOUND="Tenant not found."
+REGION_NOT_FOUND = "Region not found."
+AREA_NOT_FOUND = "Area not Found."
+SUBAREA_NOT_FOUND = "Subarea not Found."
+DIVISION_NOT_FOUND = "Division not Found."
+CITY_NOT_FOUND = "City not Found."
+ZONE_NOT_FOUND = "Zone not Found."
+READ_CYCLE_NOT_FOUND = "Read Cycle not Found."
 DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
 SERVICE_TYPE_NOT_FOUND="No record found for user service type"
 UTILITY_NOT_FOUND = "Utility not found"
@@ -69,6 +76,7 @@ WORK_ORDER_ALREADY_EXIST = "Work Order already Exist"
 DEPARTMENT_TYPE_ALREADY_EXIST = "Department Type already Exist"
 DEPARTMENT_SUBTYPE_ALREADY_EXIST = "Department SubType already Exist"
 DIVISION_ALREADY_EXIST = "Division Already Exist"
+HOLIDAY_ALREADY_EXIST = "Holiday Already Exist"
 
 # *********** NOT FOUND CONSTANTS **************
 COUNTRY_NOT_FOUND = "Country Not Found"
@@ -102,7 +110,10 @@ STORE_LOCATION_NOT_FOUND = "Store location not found"
 UTILITY_SERVICE_CONTRACT_NOT_FOUND = "Utility service contract not found"
 READ_CYCLE_NOT_FOUND = "Read Cycle not found"
 FREQUENCY_NOT_FOUND = "Frequency not found"
+UTILITY_HOLIDAY_NOT_FOUND = "Utility Holiday Not found."
+UTILITY_WORKING_HOURS_NOT_FOUND = "Utility Working Hours Not found."
 SCHEDULE_NOT_FOUND = "Schedule not found"
+
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

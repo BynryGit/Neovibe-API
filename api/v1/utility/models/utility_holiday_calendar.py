@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 # Create work_order Master table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-
+from v1.utility.models.utility_leave_type import get_utility_leave_by_id
 
 # table header
 # module: Work Order | sub-module -
@@ -19,11 +19,15 @@ from v1.utility.models.utility_master import UtilityMaster
 # Author : Chinmay Pathak
 # Creation Date : 29/12/2020
 
+
 class UtilityHolidayCalendar(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateTimeField(null=False, blank=False, default=datetime.now())
+    start_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
+    end_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     holiday_type_id = models.BigIntegerField(null=False, blank=False)
     description = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=200, blank=True, null=True)
@@ -34,10 +38,15 @@ class UtilityHolidayCalendar(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.description
+        return self.name
 
     def __unicode__(self):
-        return self.description
+        return self.name
+
+    @property
+    def get_holiday_type(self):
+        holiday_type = get_utility_leave_by_id(self.holiday_type_id)
+        return holiday_type
 
 
 # Create work_order_master table end
