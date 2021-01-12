@@ -15,7 +15,6 @@ __author__ = "chinmay"
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 from datetime import datetime # importing package for datetime
-from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.zone import get_zone_by_id
 from v1.commonapp.models.division import get_division_by_id
@@ -23,6 +22,7 @@ from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from django.contrib.postgres.fields import JSONField
 
 
 # Create ReadCycle Table Start
@@ -36,7 +36,7 @@ class ReadCycle(models.Model):
     division_id = models.BigIntegerField(null=False, blank=False)
     area_id = models.BigIntegerField(null=False, blank=False)
     subarea_id = models.BigIntegerField(null=False, blank=False)
-    route_group = models.CharField(max_length=200, blank=True, null=True)
+    route_group = JSONField()
     label = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)

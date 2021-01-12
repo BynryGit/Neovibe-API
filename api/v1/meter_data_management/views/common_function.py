@@ -4,6 +4,7 @@ from rest_framework import status
 from api.messages import CITY_NOT_FOUND, TENANT_NOT_FOUND, UTILITY_NOT_FOUND, FREQUENCY_NOT_FOUND, DIVISION_NOT_FOUND, AREA_NOT_FOUND, SUBAREA_NOT_FOUND, ZONE_NOT_FOUND
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
@@ -20,12 +21,12 @@ def set_schedule_validated_data(validated_data):
             validated_data["utility_id"] = utility.id
         else:
             raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
-    # if "read_cycle_id" in validated_data:
-    #     read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
-    #     if read_cycle:
-    #         validated_data["read_cycle_id"] = read_cycle.id
-    #     else:
-    #         raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "read_cycle_id" in validated_data:
+        read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
+        if read_cycle:
+            validated_data["read_cycle_id"] = read_cycle.id
+        else:
+            raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     if "frequency_id" in validated_data:
         frequency = get_global_lookup_by_id_string(validated_data["frequency_id"])
         if frequency:

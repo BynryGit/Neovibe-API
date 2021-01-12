@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from rest_framework import serializers, status
 from django.db import transaction
 from v1.meter_data_management.views.common_function import set_read_cycle_validated_data
@@ -69,3 +70,16 @@ class ReadCycleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReadCycleTbl
         fields = ('name', 'id_string', 'city', 'zone', 'division','area', 'subarea', 'created_date', 'is_active', 'created_by')
+=======
+__author__ = "aki"
+
+from rest_framework import serializers, status
+from v1.meter_data_management.models.read_cycle import ReadCycle as ReadCycleTbl
+
+
+class ReadCycleShortViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ReadCycleTbl
+        fields = ('id_string','label')
+>>>>>>> 4540cf6d2cde97aad5f56375dea574d1906a2737

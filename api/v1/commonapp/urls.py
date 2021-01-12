@@ -4,6 +4,7 @@ from v1.commonapp.views.country import CountryList, Country, CountryDetail
 from v1.commonapp.views.currency import CurrencyList
 from v1.commonapp.views.department import Department, DepartmentListByTenant,DepartmentListByUtility, DepartmentTypeDetail, DepartmentTypeList, DepartmentType
 from v1.commonapp.views.department_subtype import DepartmentSubType, DepartmentSubTypeDetail, DepartmentSubTypeList
+from v1.commonapp.views.global_lookup import Global_LookupList
 from v1.commonapp.views.region import RegionList, Region, RegionDetail
 from v1.commonapp.views.state import StateList, State, StateDetail
 from v1.commonapp.views.zone import ZoneList, Zone, ZoneDetail
@@ -102,8 +103,7 @@ urlpatterns = [
     path('<uuid:id_string>/skill/list', SkillsList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
     path('<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
-
-
     path('currency/list', CurrencyList.as_view()),
+    path('global-lookup/list', Global_LookupList.as_view()),
 
 ]

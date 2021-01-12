@@ -112,6 +112,8 @@ READ_CYCLE_NOT_FOUND = "Read Cycle not found"
 FREQUENCY_NOT_FOUND = "Frequency not found"
 UTILITY_HOLIDAY_NOT_FOUND = "Utility Holiday Not found."
 UTILITY_WORKING_HOURS_NOT_FOUND = "Utility Working Hours Not found."
+SCHEDULE_NOT_FOUND = "Schedule not found"
+
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"
