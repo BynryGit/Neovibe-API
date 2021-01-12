@@ -15,6 +15,7 @@ from v1.utility.models.utility_services_number_format import get_item_by_id
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string,get_utility_submodule_by_id
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
+from v1.utility.models.utility_leave_type import get_utility_leave_by_id_string
 
 def set_utility_validated_data(validated_data):
     if "tenant" in validated_data:
@@ -91,6 +92,44 @@ def set_numformat_validated_data(validated_data):
         else:
             raise CustomAPIException("SubModule Not Found", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+
+def set_holiday_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "holiday_type_id" in validated_data:
+        holiday_type = get_utility_leave_by_id_string(validated_data["holiday_type_id"])
+        if holiday_type:
+            validated_data["holiday_type_id"] = holiday_type.id
+        else:
+            raise CustomAPIException("Holiday Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_working_hours_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
 
 def generate_current_no(user):
     try:
