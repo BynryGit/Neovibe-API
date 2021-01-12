@@ -19,6 +19,7 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()
     read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
+    activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type')
     frequency_id = GlobalLookupShortViewSerializer(many=False, source='get_frequency_name')
     start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
@@ -29,12 +30,14 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleTbl
         fields = ('id_string','name', 'description', 'schedule_status', 'start_date', 'end_date', 'created_date',
-                  'updated_date', 'created_by', 'updated_by', 'read_cycle_id', 'frequency_id', 'tenant', 'utility')
+                  'updated_date', 'created_by', 'updated_by', 'read_cycle_id', 'activity_type_id', 'frequency_id',
+                  'tenant', 'utility')
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
     utility_id = serializers.UUIDField(required=True)
     read_cycle_id = serializers.UUIDField(required=True)
+    activity_type_id = serializers.UUIDField(required=True)
     frequency_id = serializers.UUIDField(required=True)
 
     class Meta:

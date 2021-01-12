@@ -47,35 +47,35 @@ class ReadCycle(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     @property
-    def get_city_id(self):
+    def get_city(self):
         city = get_city_by_id(self.city_id)
         return city
 
     @property
-    def get_zone_id(self):
+    def get_zone(self):
         zone = get_zone_by_id(self.zone_id)
         return zone
 
     @property
-    def get_division_id(self):
+    def get_division(self):
         division = get_division_by_id(self.division_id)
         return division
 
     @property
-    def get_area_id(self):
+    def get_area(self):
         area = get_area_by_id(self.area_id)
         return area
 
     @property
-    def get_subarea_id(self):
+    def get_subarea(self):
         subarea = get_sub_area_by_id(self.subarea_id)
         return subarea
 
     def __str__(self):
-        return str(self.id_string)
+        return str(self.name)
 
     def __unicode__(self):
-        return str(self.id_string)
+        return str(self.name)
 
 # Create ReadCycle Table end
 

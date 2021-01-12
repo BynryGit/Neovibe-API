@@ -6,3 +6,9 @@ class GlobalLookupShortViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Global_LookupTbl
         fields = ('id_string', 'value')
+
+
+class GlobalLookupViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Global_LookupTbl
+        fields = ('__all__')
