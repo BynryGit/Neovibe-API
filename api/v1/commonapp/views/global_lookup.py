@@ -30,10 +30,10 @@ class Global_LookupList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('category',)
-        ordering_fields = ('category',)
+        filter_fields = ('category', 'key', 'value',)
+        ordering_fields = ('category', 'key', 'value',)
         ordering = ('category',) # always give by default alphabetical order
-        search_fields = ('category',)
+        search_fields = ('category', 'key', 'value',)
 
         def get_queryset(self):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])

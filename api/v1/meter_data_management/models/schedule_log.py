@@ -15,6 +15,7 @@ __author__ = "aki"
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 from datetime import datetime # importing package for datetime
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.schedule import get_schedule_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -35,6 +36,7 @@ class ScheduleLog(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     schedule_id = models.BigIntegerField(null=False, blank=False)
     read_cycle_id = models.BigIntegerField(null=False, blank=False)
+    activity_type_id = models.BigIntegerField(null=False, blank=False)
     schedule_log_status = models.IntegerField(choices=SCHEDULE_LOG_STATUS, default=0)
     date_and_time = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -52,6 +54,11 @@ class ScheduleLog(models.Model):
     def get_read_cycle_name(self):
         read_cycle = get_read_cycle_by_id(self.read_cycle_id)
         return read_cycle
+
+    @property
+    def get_activity_type(self):
+        activity_type = get_global_lookup_by_id(self.activity_type_id)
+        return activity_type
 
     def __str__(self):
         return str(self.id_string)

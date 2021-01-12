@@ -21,6 +21,12 @@ def set_schedule_validated_data(validated_data):
             validated_data["read_cycle_id"] = read_cycle.id
         else:
             raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "activity_type_id" in validated_data:
+        activity = get_global_lookup_by_id_string(validated_data["activity_type_id"])
+        if activity:
+            validated_data["activity_type_id"] = activity.id
+        else:
+            raise CustomAPIException(FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     if "frequency_id" in validated_data:
         frequency = get_global_lookup_by_id_string(validated_data["frequency_id"])
         if frequency:

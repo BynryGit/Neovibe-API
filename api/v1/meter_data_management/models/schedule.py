@@ -34,6 +34,7 @@ class Schedule(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     read_cycle_id = models.BigIntegerField(null=False, blank=False)
+    activity_type_id = models.BigIntegerField(null=False, blank=False)
     frequency_id = models.BigIntegerField(null=False, blank=False)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
@@ -50,6 +51,11 @@ class Schedule(models.Model):
     def get_read_cycle_name(self):
         read_cycle = get_read_cycle_by_id(self.read_cycle_id)
         return read_cycle
+
+    @property
+    def get_activity_type(self):
+        activity_type = get_global_lookup_by_id(self.activity_type_id)
+        return activity_type
 
     @property
     def get_frequency_name(self):
