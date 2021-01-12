@@ -14,7 +14,6 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from master.models import get_user_by_id_string
 from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl,get_service_appointment_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 
@@ -112,8 +111,8 @@ class ServiceAppointment(GenericAPIView):
 
 class ServiceAppointmentDetail(GenericAPIView):
 
-    # @is_token_validate
-    # @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    @is_token_validate
+    @role_required(WORK_ORDER, DISPATCHER, EDIT)
     def get(self, request, id_string):
         try:
             service_appointment = get_service_appointment_by_id_string(id_string)

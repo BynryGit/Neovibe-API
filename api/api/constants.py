@@ -13,7 +13,7 @@ from v1.utility.models.utility_master import get_utility_by_name
 # CONSUMER_CARE = ''
 CONSUMER_OPS = ''
 GAS_MANAGEMENT = ''
-WORK_ORDER = ''
+# WORK_ORDER = ''
 NETWORK = ''
 SPEND = ''
 HUMAN_CAPITAL = ''
@@ -25,7 +25,7 @@ S_AND_M = get_module_by_key('S&M')
 CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
 # CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
 # GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
-# WORK_ORDER = get_module_by_key('WORK_ORDER')
+WORK_ORDER = get_module_by_key('WORK_ORDER')
 # NETWORK = get_module_by_key('NETWORK')
 # SPEND = get_module_by_key('SPEND')
 # HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
