@@ -15,6 +15,12 @@ from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSe
 from v1.meter_data_management.views.common_function import set_schedule_validated_data
 
 
+class ScheduleShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScheduleTbl
+        fields = ('id_string','name')
+
+
 class ScheduleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()
