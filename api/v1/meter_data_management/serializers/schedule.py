@@ -39,6 +39,8 @@ class ScheduleSerializer(serializers.ModelSerializer):
     read_cycle_id = serializers.UUIDField(required=True)
     activity_type_id = serializers.UUIDField(required=True)
     frequency_id = serializers.UUIDField(required=True)
+    start_date = serializers.DateField(required=False)
+    end_date = serializers.DateField(required=False)
 
     class Meta:
         model = ScheduleTbl
