@@ -12,6 +12,8 @@ from rest_framework import status
 from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
+from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
+from master.models import get_user_by_id_string
 
 # if os.environ['smart360_env'] == 'dev':
 #     from api.settings_dev import SECRET_KEY
@@ -118,3 +120,37 @@ def generate_service_appointment_no(service_appointment):
         return sa_number
     except Exception as e:
         raise CustomAPIException("sa_number no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+def set_service_assignment_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "sa_id" in validated_data:
+        service_appointment = get_service_appointment_by_id_string(validated_data["sa_id"])
+        if service_appointment:
+            validated_data["sa_id"] = service_appointment.id
+        else:
+            raise CustomAPIException("Service Appointment not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        if user:
+            validated_data["user_id"] = user.id
+        else:
+            raise CustomAPIException("User not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "status_id" in validated_data:
+        status = get_service_appointment_status_by_id_string(validated_data["status_id"])
+        if status:
+            validated_data["status_id"] = status.id
+        else:
+            raise CustomAPIException("status not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    return validated_data
