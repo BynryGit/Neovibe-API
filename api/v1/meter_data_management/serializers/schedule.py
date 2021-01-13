@@ -39,8 +39,6 @@ class ScheduleSerializer(serializers.ModelSerializer):
     read_cycle_id = serializers.UUIDField(required=True)
     activity_type_id = serializers.UUIDField(required=True)
     frequency_id = serializers.UUIDField(required=True)
-    start_date = serializers.DateField(required=False)
-    end_date = serializers.DateField(required=False)
 
     class Meta:
         model = ScheduleTbl
@@ -49,7 +47,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_schedule_validated_data(validated_data)
         if ScheduleTbl.objects.filter(tenant=user.tenant, utility_id=validated_data['utility_id'],
-                                      read_cycle_id=validated_data["read_cycle_id"]).exists():
+                                      read_cycle_id=validated_data["read_cycle_id"], is_active=True).exists():
             raise CustomAPIException(DATA_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
@@ -62,7 +60,8 @@ class ScheduleSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_schedule_validated_data(validated_data)
         if ScheduleTbl.objects.exclude(id_string=instance.id_string).filter(tenant=user.tenant, utility=instance.utility,
-                                                                            read_cycle_id=validated_data["read_cycle_id"]).exists():
+                                                                            read_cycle_id=validated_data["read_cycle_id"],
+                                                                            is_active=True).exists():
             raise CustomAPIException(DATA_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
