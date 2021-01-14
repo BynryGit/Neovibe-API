@@ -1,28 +1,51 @@
 __author__ = "aki"
 
-from rest_framework import serializers
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
-from v1.commonapp.common_functions import ChoiceField
-from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
-from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
-from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from rest_framework.exceptions import APIException
+from rest_framework import generics
+from rest_framework.filters import OrderingFilter, SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
-from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
-from v1.meter_data_management.serializers.schedule import ScheduleShortViewSerializer
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
+from v1.meter_data_management.serializers.schedule_log import ScheduleLogViewSerializer
 
 
-class ScheduleLogViewSerializer(serializers.ModelSerializer):
-    tenant = TenantMasterViewSerializer()
-    utility = UtilityMasterViewSerializer()
-    schedule_id = ScheduleShortViewSerializer(many=False, source='get_schedule_name')
-    read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
-    activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type')
-    date_and_time = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    schedule_log_status = ChoiceField(choices=ScheduleLogTbl.SCHEDULE_LOG_STATUS)
+# API Header
+# API end Point: api/v1/meter-data/schedule-log/list
+# API verb: GET
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: schedule log list
+# Usage: API will fetch required data for schedule log list against filter and search
+# Tables used: Schedule Log
+# Author: Akshay
+# Created on: 13/01/2021
 
-    class Meta:
-        model = ScheduleLogTbl
-        fields = ('id_string', 'schedule_log_status', 'date_and_time', 'created_date', 'updated_date', 'created_by',
-                  'updated_by', 'schedule_id', 'read_cycle_id', 'activity_type_id', 'tenant', 'utility')
+
+class ScheduleLogList(generics.ListAPIView):
+    try:
+        serializer_class = ScheduleLogViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('utility__id_string',)
+        ordering_fields = ('utility__id_string',)
+        ordering = ('utility__id_string',) # always give by default alphabetical order
+        search_fields = ('utility__name',)
+
+        def get_queryset(self):
+            token, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if token:
+                if is_authorized(1,1,1,user_obj):
+                    queryset = ScheduleLogTbl.objects.filter(is_active=True)
+                    return queryset
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as ex:
+        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        raise APIException
