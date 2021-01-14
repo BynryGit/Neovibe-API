@@ -5,6 +5,7 @@ from api.messages import CONTRACT_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
+from v1.utility.serializers.utility_service_contract_master import UtilityServiceContractMasterListSerializer
 
 
 class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
@@ -12,10 +13,11 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    contract = UtilityServiceContractMasterListSerializer(source='get_contract')
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract')
 
 
 class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):

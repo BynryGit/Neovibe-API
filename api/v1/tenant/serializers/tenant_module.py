@@ -4,7 +4,7 @@ from rest_framework import serializers, status
 from django.db import transaction
 from django.utils import timezone
 from api.messages import MODULE_ALREADY_EXIST
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException

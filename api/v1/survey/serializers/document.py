@@ -6,7 +6,7 @@ from v1.commonapp.serializers.document_sub_type import DocumentSubTypeSerializer
 from v1.commonapp.serializers.document_type import DocumentTypeSerializer
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.utility.serializers.utility import UtilitySerializer
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class DocumentSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):

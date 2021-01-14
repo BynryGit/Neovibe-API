@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role_type import RoleType
 from v1.utility.serializers.utility import UtilitySerializer

@@ -3,7 +3,7 @@ from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.userapp.models.user_role import UserRole
 from v1.userapp.serializers.role import RoleViewSerializer

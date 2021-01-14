@@ -7,18 +7,10 @@ from v1.work_order.models.work_order_master import get_work_order_master_by_id_s
 from v1.work_order.models.work_order_rules import get_work_order_rule_by_id_string
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
-import os
 from rest_framework import status
 from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
-
-# if os.environ['smart360_env'] == 'dev':
-#     from api.settings_dev import SECRET_KEY
-# else:
-#     from api.settings import SECRET_KEY
-
-from api.settings import SECRET_KEY
 
 
 def set_work_order_validated_data(validated_data):
@@ -47,7 +39,6 @@ def set_work_order_validated_data(validated_data):
         else:
             raise CustomAPIException("Service Subtype not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
-
 
 
 def set_service_appointment_validated_data(validated_data):
@@ -87,9 +78,9 @@ def set_service_appointment_validated_data(validated_data):
             raise CustomAPIException("Service not found.", status_code=status.HTTP_404_NOT_FOUND)
 
     if "status_id" in validated_data:
-        status = get_service_appointment_status_by_id_string(validated_data["status_id"])
+        status_obj = get_service_appointment_status_by_id_string(validated_data["status_id"])
         if status:
-            validated_data["status_id"] = status.id
+            validated_data["status_id"] = status_obj.id
         else:
             raise CustomAPIException("status not found.", status_code=status.HTTP_404_NOT_FOUND)
 
@@ -105,8 +96,9 @@ def set_service_appointment_validated_data(validated_data):
 # Function for generating service appointment number according to utility
 def generate_service_appointment_no(service_appointment):
     try:
-        format_obj = UtilityServiceNumberFormat.objects.get(tenant=service_appointment.tenant, utility=service_appointment.utility,
-                                                          sub_module_id=get_sub_module_by_key("DISPATCHER"))
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=service_appointment.tenant,
+                                                            utility=service_appointment.utility,
+                                                            sub_module_id=get_sub_module_by_key("DISPATCHER"))
         if format_obj.is_prefix:
             sa_number = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

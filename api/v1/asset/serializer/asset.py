@@ -1,6 +1,6 @@
 __author__ = "Priyanka"
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from rest_framework import serializers
 from datetime import datetime
 from django.db import transaction

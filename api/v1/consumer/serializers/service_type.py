@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.consumer.models.service_type import ServiceType as ServiceTypeTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException

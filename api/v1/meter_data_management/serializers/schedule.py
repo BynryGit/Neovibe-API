@@ -4,7 +4,7 @@ from django.db import transaction
 from django.utils import timezone
 from api.messages import DATA_ALREADY_EXISTS
 from rest_framework import serializers, status
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.area import AreaShortViewSerializer
 from v1.commonapp.serializers.city import CityShortViewSerializer
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer

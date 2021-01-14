@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id
 
 
 class ConsumerServiceContractDetail(models.Model):
@@ -24,3 +25,11 @@ class ConsumerServiceContractDetail(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
+    @property
+    def get_contract(self):
+        try:
+            contract = get_utility_service_contract_master_by_id(self.service_contract_id)
+            return contract
+        except:
+            return False

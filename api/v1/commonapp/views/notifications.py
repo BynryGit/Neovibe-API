@@ -1,13 +1,13 @@
 import logging
-import os
 from celery.task import task
 from twilio.rest import Client
-from api.settings import *
 from v1.commonapp.views.logger import logger
 from django.core.mail import EmailMultiAlternatives
+from v1.commonapp.views.settings_reader import SettingsReader
 
 # Local logging
 local_logger = logging.getLogger('django')
+settings_reader = SettingsReader()
 
 
 @task(name='send_mail')
@@ -26,8 +26,8 @@ def send_mail(subject, body, from_email, to, connection=None, attachments=None, 
 @task(name='send_sms')
 def send_sms():
     try:
-        account_sid = TWILIO_ACCOUNT_SID
-        auth_token = TWILIO_AUTH_TOKEN
+        account_sid = settings_reader.get_twilio_sid()
+        auth_token = settings_reader.get_twilio_token()
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
