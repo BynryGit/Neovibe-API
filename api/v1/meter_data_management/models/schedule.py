@@ -35,7 +35,7 @@ class Schedule(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     read_cycle_id = models.BigIntegerField(null=False, blank=False)
     activity_type_id = models.BigIntegerField(null=False, blank=False)
-    frequency_id = models.BigIntegerField(null=False, blank=False)
+    frequency_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
