@@ -78,7 +78,8 @@ DEPARTMENT_TYPE_ALREADY_EXIST = "Department Type already Exist"
 DEPARTMENT_SUBTYPE_ALREADY_EXIST = "Department SubType already Exist"
 DIVISION_ALREADY_EXIST = "Division Already Exist"
 HOLIDAY_ALREADY_EXIST = "Holiday Already Exist"
-
+SERVICE_DEASSIGNMENT = "Service Deassign Successfully"
+SERVICE_ASSIGNMENT_NOT_FOUND = "Service Assignment Not Found"
 # *********** NOT FOUND CONSTANTS **************
 COUNTRY_NOT_FOUND = "Country Not Found"
 STATE_NOT_FOUND = "State Not Found"

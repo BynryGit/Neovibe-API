@@ -80,26 +80,32 @@ class ServiceAssignment(models.Model):
             "id_string":status_val.id_string
         }
 
-# Create work_order_master table end
+# Create service master table end
 
-def get_work_order_assignment_by_tenant_id_string(id_string):
+def get_service_assignment_by_tenant_id_string(id_string):
     return ServiceAssignment.objects.filter(tenant__id_string=id_string)
 
 
-def get_work_order_assignment_by_utility_id_string(id_string):
+def get_service_assignment_by_utility_id_string(id_string):
     return ServiceAssignment.objects.filter(utility__id_string=id_string)
 
 
-def get_work_order_assignment_by_id(id):
+def get_service_assignment_by_id(id):
     try:
         return ServiceAssignment.objects.get(id=id)
     except:
         return False
 
 
-def get_work_order_assignment_by_id_string(id_string):
+def get_service_assignment_by_id_string(id_string):
     try:
         return ServiceAssignment.objects.get(id_string=id_string)
+    except:
+        return False
+
+def get_service_assignment_by_appointment_id(id):
+    try:
+        return ServiceAssignment.objects.filter(sa_id=id,is_active=True)
     except:
         return False
 

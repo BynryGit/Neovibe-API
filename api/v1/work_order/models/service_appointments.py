@@ -44,8 +44,8 @@ class ServiceAppointment(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
-    def __str__(self):
-        return self.id_string
+    # def __str__(self):
+    #     return self.id_string
 
     def __unicode__(self):
         return self.id_string
