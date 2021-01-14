@@ -1,6 +1,6 @@
 import os
 import jwt  # jwt token library
-from rest_framework import status
+from rest_framework import status, serializers
 from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
@@ -25,14 +25,17 @@ from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.utility.models.utility_region import get_utility_region_by_id_string
 from v1.commonapp.models.channel import get_channel_by_id_string
+from v1.commonapp.models.department import get_department_by_id_string
+from v1.commonapp.models.department_subtype import get_department_subtype_by_id_string
 from v1.campaign.models.campaign_type import get_campaign_type_by_id_string
+from v1.commonapp.models.division import get_division_by_id_string
 from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id_string
 from v1.utility.models.utility_payment_subtype import get_utility_payment_subtype_by_id_string
 from v1.utility.models.utility_payment_type import get_utility_payment_type_by_id_string
 from v1.utility.models.utility_payment_mode import get_utility_payment_mode_by_id_string
 
-
 settings_reader = SettingsReader()
+
 
 def get_payload(token):
     try:
@@ -222,7 +225,7 @@ def set_zone_validated_data(validated_data):
     return validated_data
 
 
-def set_area_validated_data(validated_data):
+def set_division_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
         if utility:
@@ -241,6 +244,28 @@ def set_area_validated_data(validated_data):
             validated_data["zone_id"] = zone.id
         else:
             raise CustomAPIException("Zone not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_area_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "division_id" in validated_data:
+        division = get_division_by_id_string(validated_data["division_id"])
+        if division:
+            validated_data["division_id"] = division.id
+        else:
+            raise CustomAPIException("Division not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
@@ -412,4 +437,54 @@ def set_product_validated_data(validated_data):
             validated_data["product_id"] = product.id
         else:
             raise CustomAPIException("Product not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+class ChoiceField(serializers.ChoiceField):
+
+    def to_representation(self, obj):
+        return self._choices[obj]
+
+
+def set_department_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "department_type_id" in validated_data:
+        department_type = get_department_by_id_string(validated_data["department_type_id"])
+        if department_type:
+            validated_data["department_type_id"] = department_type.id
+        else:
+            raise CustomAPIException("Department Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_department_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "department_subtype_id" in validated_data:
+        department_subtype = get_department_subtype_by_id_string(validated_data["department_subtype_id"])
+        if department_subtype:
+            validated_data["department_subtype_id"] = department_subtype.id
+        else:
+            raise CustomAPIException("Department SubType not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data

@@ -14,7 +14,7 @@ from v1.work_order.serializers.work_order_master import WorkOrderMasterShortList
 from v1.work_order.serializers.service_appointment_status import ServiceAppointmentStatusListSerializer
 from v1.work_order.views.common_functions import generate_service_appointment_no
 from v1.commonapp.views.custom_exception import CustomAPIException
-from api.messages import WORK_ORDER_ALREADY_EXIST
+from api.messages import SERVICE_APPOINTMENT_ALREADY_EXIST
 
 class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
@@ -60,7 +60,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
         if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],service_id=validated_data['service_id']).exists():
-            raise CustomAPIException(WORK_ORDER_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+            raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)            
             appointment_obj.created_by = user.id

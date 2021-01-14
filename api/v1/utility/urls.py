@@ -28,10 +28,13 @@ from v1.utility.views.utility_payment_mode import UtilityPaymentModeList
 from v1.utility.views.utility_leave_type import UtilityLeaveTypeList
 from v1.utility.views.utility_product import UtilityProductList
 from v1.userapp.views.role_type import RoleTypeList, RoleTypeListByUtility
-
-# from v1.userapp.views.role_type import RoleTypeListByUtility
+from v1.utility.views.utility_department_type import UtilityDepartmentTypeList
+from v1.utility.views.utility_department_subtype import UtilityDepartmentSubTypeList
+from v1.userapp.views.role_type import RoleTypeListByUtility
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType, RoleSubTypeListByUtility
 from v1.utility.views.utility_region import UtilityRegionList
+from v1.utility.views.utility_holiday_calendar import HolidayList, Holiday, HolidayDetail
+from v1.utility.views.utility_working_hours import WorkingHourList, WorkingHour, WorkingHourDetail
 # from v1.utility.views.utility_country import UtilityCountryList
 # from v1.utility.views.utility_state import UtilityStateList
 
@@ -66,7 +69,8 @@ urlpatterns = [
 
     path('<uuid:id_string>/role-type/list', RoleTypeListByUtility.as_view()),
     path('<uuid:id_string>/role-subtype/list', RoleSubTypeListByUtility.as_view()),
-
+    path('<uuid:id_string>/dept_type/list', UtilityDepartmentTypeList.as_view()),
+    path('<uuid:id_string>/dept_subtype/list', UtilityDepartmentSubTypeList.as_view()),
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view(), name='utility_region_list'),
@@ -82,6 +86,12 @@ urlpatterns = [
     path('<uuid:id_string>/sub_module/delete',api_delete_submodule, name="delete"),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(), name='role_subtype_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view()),
+    path('<uuid:id_string>/holiday/list', HolidayList.as_view()),
+    path('holiday', Holiday.as_view()),
+    path('holiday/<uuid:id_string>', HolidayDetail.as_view()),
+    path('<uuid:id_string>/working_hour/list', WorkingHourList.as_view()),
+    path('working_hour', WorkingHour.as_view()),
+    path('working_hour/<uuid:id_string>', WorkingHourDetail.as_view()),
     path('<uuid:id_string>/leave_type/list', UtilityLeaveTypeList.as_view()),
     path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),

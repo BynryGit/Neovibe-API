@@ -12,9 +12,8 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer,ServiceAppointmentViewSerializer,ServiceAppointmentListSerializer
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
-from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
+from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl,get_service_appointment_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 
@@ -95,3 +94,44 @@ class ServiceAppointment(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/service-appointment
+# API verb: GET, PUT
+# Package: Basic
+# Modules: User
+# Sub Module: Service Appointment
+# Interaction: View Service Appointment, Edit Service Appointment
+# Usage: View, Edit Service Appointment
+# Tables used: ServiceAppointment
+# Author: Priyanka
+# Created on: 05/01/2021
+
+
+class ServiceAppointmentDetail(GenericAPIView):
+
+    @is_token_validate
+    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    def get(self, request, id_string):
+        try:
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            if service_appointment:
+                serializer = ServiceAppointmentViewSerializer(instance=service_appointment, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    RESULTS: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User')
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

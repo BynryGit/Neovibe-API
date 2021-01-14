@@ -3,7 +3,7 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id_str
 from v1.consumer.models.consumer_master import ConsumerMaster, get_consumer_by_consumer_no
 from v1.consumer.models.consumer_scheme_master import ConsumerSchemeMaster
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
-from v1.meter_data_management.models.meter_reading import get_consumer_meter_reading_by_bill_month, MeterReading
+# from v1.meter_data_management.models.meter_reading import get_consumer_meter_reading_by_bill_month, MeterReading
 # from v1.meter_data_management.models.temp_consumer_master import TempConsumerMaster
 from v1.payment.models.payment import Payment
 from v1.utility.models.utility_service_plan import get_utility_service_plans_by_dates, UtilityServicePlan

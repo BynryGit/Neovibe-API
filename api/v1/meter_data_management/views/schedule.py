@@ -1,19 +1,18 @@
 __author__ = "aki"
 
-import traceback
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from master.models import User, get_user_by_id_string
+from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
-from api.constants import CONSUMER_OPS, EDIT, METER_DATA
+from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, SCHEDULE_NOT_FOUND
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.meter_data_management.serializers.schedule import ScheduleViewSerializer, ScheduleSerializer
 from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl, get_schedule_by_id_string
@@ -53,7 +52,7 @@ class ScheduleList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'ERROR')
+        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
         raise APIException
 
 
@@ -67,35 +66,33 @@ class ScheduleList(generics.ListAPIView):
 # Usage: API will create schedule object based on valid data
 # Tables used: Schedule
 # Author: Akshay
-# Created on: 06/01/2021
+# Created on: 08/01/2021
 
 class Schedule(GenericAPIView):
-    serializer_class = ScheduleSerializer
-
     @is_token_validate
     @role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ScheduleSerializer(data=request.data)
-            if serializer.is_valid():
-                schedule_obj = serializer.create(serializer.validated_data, user)
-                serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+            schedule_serializer = ScheduleSerializer(data=request.data)
+            if schedule_serializer.is_valid():
+                schedule_obj = schedule_serializer.create(schedule_serializer.validated_data, user)
+                schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: serializer.data,
+                    RESULT: schedule_view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: serializer.errors,
+                    RESULT: schedule_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -107,96 +104,63 @@ class Schedule(GenericAPIView):
 # Sub Module: All
 # Interaction: View schedule object
 # Usage: API will fetch and edit required data for schedule using id_string
-# Tables used: 2.3.8.1 Schedule
+# Tables used: Schedule
 # Author: Akshay
-# Created on: 12/06/2020
+# Created on: 08/01/2021
 
 class ScheduleDetail(GenericAPIView):
-    serializer_class = ScheduleSerializer
-
+    @is_token_validate
+    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-
-                    schedule_obj = get_schedule_by_id_string(id_string)
-                    if schedule_obj:
-                        serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULT: serializer.data,
-                        }, status=status.HTTP_200_OK)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+            schedule_obj = get_schedule_by_id_string(id_string)
+            if schedule_obj:
+                serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: SCHEDULE_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @is_token_validate
+    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def put(self, request, id_string):
         try:
-            # Checking authentication start
-            if is_token_valid(request.headers['token']):
-                # payload = get_payload(request.headers['token'])
-                # user = get_user(payload['id_string'])
-                # Checking authentication end
-
-                # Checking authorization start
-                if is_authorized():
-                # Checking authorization end
-                    # Todo fetch user from request start
-                    user = User.objects.get(id=2)
-                    # Todo fetch user from request end
-
-                    schedule_obj = get_schedule_by_id_string(id_string)
-                    if schedule_obj:
-                        serializer = ScheduleSerializer(data=request.data)
-                        if serializer.is_valid():
-                            schedule_obj = serializer.update(schedule_obj, serializer.validated_data, user)
-                            serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
-                            return Response({
-                                STATE: SUCCESS,
-                                RESULT: serializer.data,
-                            }, status=status.HTTP_200_OK)
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: serializer.errors,
-                            }, status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        return Response({
-                            STATE: ERROR,
-                        }, status=status.HTTP_404_NOT_FOUND)
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            schedule_obj = get_schedule_by_id_string(id_string)
+            if schedule_obj:
+                schedule_serializer = ScheduleSerializer(data=request.data)
+                if schedule_serializer.is_valid():
+                    schedule_obj = schedule_serializer.update(schedule_obj, schedule_serializer.validated_data, user)
+                    schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: schedule_view_serializer.data,
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({
                         STATE: ERROR,
-                    }, status=status.HTTP_403_FORBIDDEN)
+                        RESULT: schedule_serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
-                }, status=status.HTTP_401_UNAUTHORIZED)
+                    RESULT: SCHEDULE_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'ERROR', user=request.user, name=request.user.username)
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
-                ERROR: str(traceback.print_exc(ex))
+                ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

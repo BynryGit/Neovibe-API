@@ -10,6 +10,8 @@ from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.asset.models.asset_master import get_asset_by_id
 from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id
+from v1.commonapp.models.service_type import get_service_type_by_id
+from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
 
 class ServiceAppointment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -43,10 +45,10 @@ class ServiceAppointment(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.sa_number
+        return self.id_string
 
     def __unicode__(self):
-        return self.sa_number
+        return self.id_string
 
     @property
     def get_tenant(self):
@@ -75,10 +77,8 @@ class ServiceAppointment(models.Model):
     @property
     def get_service(self):
         work_order_template = get_work_order_master_by_id(self.service_id)
-        return {
-            "name":work_order_template.name,
-            "id_string":work_order_template.id_string
-        }
+        return work_order_template
+       
     
     @property
     def get_status(self):

@@ -1,42 +1,36 @@
-# table header
-# module: S&M, Consumer Care & Ops | sub-module - Meter Reading
-# table type: lookup (local)
-# table name: 2.12.50 Route Details
-# table description: A lookup tables to be used for meter reading routes
-# frequency of data changes: Medium
-# sample table data:R1, R2, R3, R4
-# reference tables: 2.3.8.2 Reading Consumer Master, 2.3.8.3 Jobcard, 2.3.8.4 Meter Reading, 2.3.9 Invoice/Bill
-# Author: Gauri Deshmukh
-# creation date: 22/4/2020
+__author__ = "chinmay"
 
-# change history
-# <ddmmyyyy>-<changes>-<Author>
+# Table Header
+# Module: Consumer Care & Ops | Sub-Module : Meter Reading, billing, Bill Distribution
+# Table Type : Master
+# Table Name : Schedule
+# Description : It is Route table. This table will save all the Routes.
+# Frequency of data changes : High
+# Sample table :
+# Reference Table : None
+# Author : Chinmay Pathak
+# Creation Date : 08/01/2021
 
-from datetime import datetime # importing package for datetime
 
-from v1.meter_data_management.models.bill_cycle import get_bill_cycle_by_id
-from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
+from datetime import datetime # importing package for datetime
+from django.contrib.postgres.fields import JSONField
+from v1.tenant.models.tenant_master import TenantMaster
+from v1.utility.models.utility_master import UtilityMaster
 
-# Create Route Details table start
 
+# Create Route Table Start
 
 class Route(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    code = models.CharField(max_length=200, null=False, blank=False)
-    token = models.CharField(max_length=200, null=False, blank=False)
-    bill_cycle_id = models.BigIntegerField(null=True, blank=True)
-    month = models.CharField(max_length=20, null=False, blank=False)
-    name = models.CharField(max_length=200, null=False, blank=False)
-    city_id = models.BigIntegerField(null=True, blank=True)
-    area_id = models.BigIntegerField(null=True, blank=True)
-    subarea_id = models.BigIntegerField(null=True, blank=True)
-    is_meter_reading = models.BooleanField(default=False)
-    is_bill_distribution = models.BooleanField(default=False)
+    label = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
+    premises_json = JSONField()
+    filter_json = JSONField()
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -44,28 +38,27 @@ class Route(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.code
+        return str(self.id_string)
 
     def __unicode__(self):
-        return self.code
+        return str(self.id_string)
 
-    @property
-    def get_bill_cycle(self):
-        bill_cycle = get_bill_cycle_by_id(self.bill_cycle_id)
-        return bill_cycle
-
-# Create RouteDetails table end
+# Create Route Table end
 
 
 def get_route_by_id(id):
     try:
-        return Route.objects.get(id=id)
+        return Route.objects.get(id=id, is_active=True)
     except:
         return False
 
 
 def get_route_by_id_string(id_string):
     try:
-        return Route.objects.get(id_string=id_string)
+        return Route.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+
+def get_all_routes():
+    return Route.objects.all(is_active=True)

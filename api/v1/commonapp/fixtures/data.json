@@ -935,8 +935,6 @@
         "pk": "1",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 1,
-          "utility": 1,
           "name": "S&M",
           "is_active": "True"
         }
@@ -945,8 +943,6 @@
         "pk": "2",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 1,
-          "utility": 1,
           "name": "Consumer care",
           "is_active": "True"
         }
@@ -955,8 +951,6 @@
         "pk": "3",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 1,
-          "utility": 2,
           "name": "Consumer Ops",
           "is_active": "True"
         }
@@ -965,8 +959,6 @@
         "pk": "4",
         "model": "commonapp.Department",
         "fields": {
-          "tenant": 2,
-          "utility": 2,
           "name": "HR",
           "is_active": "True"
         }

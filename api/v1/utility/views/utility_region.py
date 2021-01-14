@@ -1,22 +1,4 @@
-import traceback
-from v1.commonapp.serializers.region import TenantRegionSerializer
-from v1.tenant.models.tenant_region import TenantRegion as TenantRegionTbl
-from rest_framework import generics
-from rest_framework import status
-from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from v1.commonapp.views.logger import logger
-from v1.userapp.decorators import is_token_validate, role_required
-from master.models import get_user_by_id_string
-from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
-from v1.commonapp.serializers.region import TenantRegionSerializer
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
-from rest_framework.exceptions import APIException
-from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-# from api.constants import *
 from api.messages import *
 from master.models import get_user_by_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no, get_invoice_bill_by_id_string

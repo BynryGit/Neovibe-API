@@ -11,7 +11,7 @@ from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
 from v1.userapp.models.role import get_role_by_id
 from v1.userapp.models.user_role import get_user_role_by_user_id, get_record_by_values, get_record_values_by_id
-from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl,get_utility_modules_by_utility_id_string,get_utility_module_by_id
+from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl,get_utility_modules_by_utility_id_string,get_utility_module_by_id,get_utility_module_by_module_id
 from v1.utility.serializers.utility_module import UtilityModuleViewSerializer
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleViewSerializer
 from v1.utility.models.utility_sub_module import UtilitySubModule as UtilitySubModuleTbl,get_utility_submodule_by_id
@@ -289,8 +289,9 @@ class UserRoleByUtilitySubModule(GenericAPIView):
             role_list = []
             user = get_user_by_id_string(user_id_string)
             module_id = get_module_by_id_string(module_id_string)
-            utility_module_obj = get_utility_module_by_id(module_id.id)
-            sub_module_list = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.id, is_active=True)
+            # utility_module_obj = get_utility_module_by_id(module_id.id)
+            utility_module_obj = get_utility_module_by_module_id(module_id.id)
+            sub_module_list = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.module_id, is_active=True)
 
             module_obj_data=[]
             if user:
