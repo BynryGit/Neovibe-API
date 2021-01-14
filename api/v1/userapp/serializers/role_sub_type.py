@@ -5,7 +5,7 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.role_sub_type import RoleSubType
 from v1.userapp.serializers.role_type import GetRoleTypeSerializer

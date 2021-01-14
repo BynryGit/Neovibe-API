@@ -553,7 +553,7 @@ class RegistrationNoteList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
-                    queryset = Notes.objects.filter(registration_id=registration.id, is_active=True)
+                    queryset = Notes.objects.filter(identification_id=registration.id, is_active=True)
                     if queryset:
                         return queryset
                     else:

@@ -4,7 +4,7 @@ from datetime import datetime
 from rest_framework import serializers, status
 import random
 from rest_framework.validators import UniqueTogetherValidator
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.work_order.models.service_appointments import ServiceAppointment
 from v1.work_order.views.common_functions import set_service_appointment_validated_data
 from v1.tenant.serializers.tenant import TenantStatusViewSerializer

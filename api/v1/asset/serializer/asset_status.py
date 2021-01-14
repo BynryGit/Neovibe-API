@@ -2,7 +2,7 @@ __author__ = "Priyanka"
 
 from rest_framework import serializers
 from v1.asset.models.asset_status import AssetStatus as AssetStatusTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class AssetStatusListSerializer(serializers.ModelSerializer):
     class Meta:

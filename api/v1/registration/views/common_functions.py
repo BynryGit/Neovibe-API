@@ -4,7 +4,6 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
-from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.transition_configuration import TransitionConfiguration, TRANSITION_CHANNEL_DICT, \
     is_transition_configuration_exists
 from v1.commonapp.views.custom_exception import CustomAPIException

@@ -1,7 +1,7 @@
 __author__ = "aki"
 
 from rest_framework import serializers
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.models.tenant_summary_on_monthly_basis import TenantSummaryOnMonthlyBasis as \
     TenantSummaryOnMonthlyBasisTbl

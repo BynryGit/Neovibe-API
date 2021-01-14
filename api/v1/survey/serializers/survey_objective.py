@@ -1,6 +1,6 @@
 from rest_framework import serializers, status
 from v1.survey.models.survey_objective import SurveyObjective as SurveyObjectiveTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SURVEY_OBJECTIVE_ALREADY_EXIST
 from v1.survey.serializers.survey_type import SurveyTypeListSerializer

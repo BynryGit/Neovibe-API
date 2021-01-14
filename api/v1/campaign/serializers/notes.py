@@ -4,7 +4,7 @@ from rest_framework import serializers
 from v1.commonapp.models.notes import Notes as NotesTbl
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.utility.serializers.utility import UtilitySerializer
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class NoteSerializer(serializers.ModelSerializer):
 

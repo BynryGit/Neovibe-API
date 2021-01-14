@@ -9,29 +9,29 @@ from v1.utility.models.utility_master import get_utility_by_name
 
 # *********** MODULE CONSTANTS **************
 
-# S_AND_M = ''
-# CONSUMER_CARE = ''
+S_AND_M = ''
+CONSUMER_CARE = ''
 CONSUMER_OPS = ''
 GAS_MANAGEMENT = ''
-# WORK_ORDER = ''
+WORK_ORDER = ''
 NETWORK = ''
 SPEND = ''
 HUMAN_CAPITAL = ''
 FINANCE = ''
-# ADMIN = ''
-# DEMOM = ''
+ADMIN = ''
+DEMOM = ''
 
-S_AND_M = get_module_by_key('S&M')
-CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
+# S_AND_M = get_module_by_key('S&M')
+# CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
 # CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
 # GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
-WORK_ORDER = get_module_by_key('WORK_ORDER')
+# WORK_ORDER = get_module_by_key('WORK_ORDER')
 # NETWORK = get_module_by_key('NETWORK')
 # SPEND = get_module_by_key('SPEND')
 # HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
 # FINANCE = get_module_by_key('FINANCE')
-ADMIN = get_module_by_key('ADMIN')
-DEMOM = get_module_by_key('DEMOM')
+# ADMIN = get_module_by_key('ADMIN')
+# DEMOM = get_module_by_key('DEMOM')
 
 # *********** SUB MODULE CONSTANTS **************
 # S_AND_M_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
@@ -45,16 +45,16 @@ DEMOM = get_module_by_key('DEMOM')
 # FINANCE_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
 
 # DASHBOARD = ""
-BILLING = ''
+# BILLING = ''
 # BILLING = get_sub_module_by_key('BILLING')
 # CAMPAIGN = get_sub_module_by_key('CAMPAIGN')
-CAMPAIGN = ''
+# CAMPAIGN = ''
 # CONSUMER = get_sub_module_by_key('CONSUMER')
 CONSUMER = ''
 # CONTRACT = get_sub_module_by_key('CONTRACT')
 CONTRACT = ""
-DISPATCHER = get_sub_module_by_key('DISPATCHER')
-# DISPATCHER = ""
+# DISPATCHER = get_sub_module_by_key('DISPATCHER')
+DISPATCHER = ""
 # EMPLOYEE = get_sub_module_by_key('EMPLOYEE')
 EMPLOYEE = ""
 # METER_READING = get_sub_module_by_key('METER_READING')
@@ -63,8 +63,8 @@ METER_DATA = ""
 PAYMENT = ""
 # PAYROLL = get_sub_module_by_key('PAYROLL')
 PAYROLL = ""
-S_AND_M_REGISTRATION = get_sub_module_by_key('S_AND_M_REGISTRATION')
-# S_AND_M_REGISTRATION = ''
+# S_AND_M_REGISTRATION = get_sub_module_by_key('S_AND_M_REGISTRATION')
+S_AND_M_REGISTRATION = ''
 # CONSUMER_CARE_REGISTRATION = get_sub_module_by_key('CONSUMER_CARE_REGISTRATION')
 CONSUMER_CARE_REGISTRATION = ''
 # CONSUMER_OPS_REGISTRATION = get_sub_module_by_key('CONSUMER_OPS_REGISTRATION')
@@ -81,12 +81,12 @@ REGISTRATION = ""
 # COMPLAINT = get_sub_module_by_name('Complaint')
 COMPLAINT = ''
 TENANT = ''
-DEMOSM = get_sub_module_by_key('DEMOSM')
-#DEMOSM = ''
+# DEMOSM = get_sub_module_by_key('DEMOSM')
+DEMOSM = ''
 
 # TENDER = get_sub_module_by_key('TENDER')
-S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
-# S_AND_M_USER = ''
+# S_AND_M_USER = get_sub_module_by_key('S_AND_M_USER')
+S_AND_M_USER = ''
 # CONSUMER_CARE_USER = get_sub_module_by_key('CONSUMER_CARE_USER')
 CONSUMER_CARE_USER = ''
 # CONSUMER_OPS_USER = get_sub_module_by_key('CONSUMER_OPS_USER')
@@ -99,13 +99,14 @@ NETWORK_USER = ''
 SPEND_USER = ''
 # HUMAN_CAPITAL_USER = get_sub_module_by_key('HUMAN_CAPITAL_USER')
 HUMAN_CAPITAL_USER = ''
-UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
-# UTILITY_MASTER = ''
+# UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
+UTILITY_MASTER = ''
+
 # *********** PRIVILEGE CONSTANTS **************
-#VIEW = ''
-VIEW = get_privilege_by_key('VIEW')
-#EDIT = ''
-EDIT = get_privilege_by_key('EDIT')
+# VIEW = get_privilege_by_key('VIEW')
+VIEW = ''
+EDIT = ''
+# EDIT = get_privilege_by_key('EDIT')
 # DELETE = get_privilege_by_key('Delete')
 # *********** UTILITY CONSTANTS **************
 # MNGL_PUNE = get_utility_by_name('MNGL Pune')
@@ -122,6 +123,7 @@ EDIT = get_privilege_by_key('EDIT')
 # DEMOM = 11
 # DEMOSM = 60
 METER_PICTURE = 'media/meter'
+
 
 def get_file_name(upload_folder, filename):
     try:

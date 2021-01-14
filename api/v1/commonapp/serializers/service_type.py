@@ -1,7 +1,7 @@
 __author__ = "Arpita"
 
 from rest_framework import serializers, status
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.service_type import ServiceType
 from django.db import transaction
 from datetime import datetime

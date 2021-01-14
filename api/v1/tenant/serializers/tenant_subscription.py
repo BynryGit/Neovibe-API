@@ -5,7 +5,7 @@ from django.utils import timezone
 from rest_framework import serializers, status
 
 from api.messages import SUBSCRIPTION_ALREADY_EXIST
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_subscription import TenantSubscription as TenantSubscriptionTbl

@@ -1,9 +1,11 @@
 from django.urls import path
 from v1.consumer.views.consumer import *
+from v1.consumer.views.consumer_audit_log import ConsumerAuditLogList
 from v1.consumer.views.consumer_credit_rating import ConsumerCreditRatingList
 from v1.consumer.views.consumer_meter import ConsumerMeterList
 from v1.consumer.views.consumer_category import ConsumerCategoryList,ConsumerCategory,ConsumerCategoryDetail
 from v1.consumer.views.consumer_offer_master import ConsumerOfferMasterList
+from v1.consumer.views.consumer_service_contract_details import ConsumerServiceContractDetailList
 from v1.consumer.views.consumer_subcategory import ConsumerSubCategoryDetail,ConsumerSubCategoryList,ConsumerSubCategory
 from v1.consumer.views.consumer_ownership import ConsumerOwnership,ConsumerOwnershipDetail,ConsumerOwnershipList
 from v1.consumer.views.consumer_consent import ConsumerConsentList,ConsumerConsentDetail,ConsumerConsent
@@ -17,6 +19,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/list', ConsumerList.as_view()),
     path('<uuid:id_string>', ConsumerDetail.as_view()),
     path('', Consumer.as_view()),
+    path('<uuid:id_string>/audit-log/list', ConsumerAuditLogList.as_view()),
     path('<uuid:id_string>/bill/list', ConsumerBillList.as_view()),
     path('<uuid:id_string>/credit-rating/list', ConsumerCreditRatingList.as_view()),
     path('bill/<uuid:id_string>', ConsumerBillDetail.as_view()),
@@ -63,9 +66,11 @@ urlpatterns = [
     path('service/type/<uuid:id_string>',ServiceTypeDetail.as_view()),
     path('service/type',ServiceType.as_view()),
     path('utility/<uuid:id_string>/service/subtype/list',ServiceSubTypeList.as_view()),
-    path('service/subtype/<uuid:id_string>',ServiceSubTypeDetail.as_view()),
-    path('service/subtype',ServiceSubType.as_view())
-
+    path('service/subtype/<uuid:id_string>', ServiceSubTypeDetail.as_view()),
+    path('service/subtype', ServiceSubType.as_view()),
+    path('<uuid:id_string>/service-contract-detail/list', ConsumerServiceContractDetailList.as_view()),
+    path('<uuid:id_string>/note', ConsumerNote.as_view()),
+    path('<uuid:id_string>/note/list', ConsumerNoteList.as_view())
 
     # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),
 ]

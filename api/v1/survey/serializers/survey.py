@@ -11,7 +11,7 @@ from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.serializers.sub_area import SubAreaListSerializer
 from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class SurveyObjectiveSerializer(serializers.ModelSerializer):
 

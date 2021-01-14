@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.registration.models.registration_subtype import RegistrationSubType as RegistrationSubTypeTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException

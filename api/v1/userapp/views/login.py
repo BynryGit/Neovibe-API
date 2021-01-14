@@ -1,21 +1,20 @@
-import os
 import traceback
 import uuid
-
 import jwt
 from datetime import datetime
 from django.contrib.auth import authenticate
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
 from api.messages import *
-from api.settings import SECRET_KEY
 from master.models import get_user_by_email, get_user_by_id_string
 from v1.commonapp.views.logger import logger
+from v1.commonapp.views.settings_reader import SettingsReader
 from v1.userapp.models.login_trail import LoginTrail
 from v1.userapp.models.user_token import UserToken, get_token_by_token, check_token_exists_for_user
+
+# settings reader
+settings_reader = SettingsReader()
 
 
 def validate_login_data(request):
@@ -43,7 +42,7 @@ def login(request, user):
     try:
         user_obj = get_user_by_email(user.email)
         payload = {'user_id_string': str(user_obj.id_string), 'string': str(uuid.uuid4().hex[:6].upper())}
-        encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+        encoded_jwt = jwt.encode(payload, settings_reader.get_secret(), algorithm='HS256').decode('utf-8')
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
@@ -62,6 +61,7 @@ def login(request, user):
         token_obj.save()
         return token_obj.token
     except Exception as e:
+        print("############",e)
         print(traceback.print_exc())
         logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Login')
         return False
@@ -175,7 +175,7 @@ class LogoutApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Logout')
+            logger().log(ex, 'HIGH', module = 'Admin', sub_module = 'User Logout')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),

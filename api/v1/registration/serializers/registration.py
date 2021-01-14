@@ -1,9 +1,8 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
-import os
-from api.settings import *
 from api.messages import MOBILE_ALREADY_EXISTS
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer

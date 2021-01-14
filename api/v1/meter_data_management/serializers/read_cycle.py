@@ -70,7 +70,8 @@ class ReadCycleListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReadCycleTbl
-        fields = ('name', 'id_string', 'city', 'zone', 'division','area', 'subarea', 'created_date', 'is_active', 'created_by')
+        fields = ('name', 'id_string', 'city', 'zone', 'division','area', 'subarea', 'created_date', 'is_active',
+                  'label', 'created_by')
 
 
 class ReadCycleShortViewSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@ __author__ = "priyanka"
 
 from rest_framework import serializers
 from v1.commonapp.models.frequency import Frequency as FrequecyTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.campaign.serializers.campaign_type import CampaignTypeListSerializer
 from v1.commonapp.serializers.channel import ChannelListSerializer
 from v1.commonapp.common_functions import set_frequency_validated_data

@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 
 from datetime import datetime
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException

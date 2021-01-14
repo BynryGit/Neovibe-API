@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.campaign.models.campaign_objective import CampaignObjective
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class ObjectiveListSerializer(serializers.ModelSerializer):
     class Meta:
