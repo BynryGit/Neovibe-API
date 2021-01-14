@@ -11,6 +11,7 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl
+from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.views.common_function import set_schedule_validated_data
 
@@ -44,6 +45,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
     utility_id = serializers.UUIDField(required=True)
     read_cycle_id = serializers.UUIDField(required=True)
     activity_type_id = serializers.UUIDField(required=True)
+    frequency_id = serializers.UUIDField(required=False)
 
     class Meta:
         model = ScheduleTbl
@@ -60,6 +62,16 @@ class ScheduleSerializer(serializers.ModelSerializer):
                 schedule_obj.tenant = user.tenant
                 schedule_obj.created_by = user.id
                 schedule_obj.save()
+                if schedule_obj.is_recurring == False:
+                    ScheduleLogTbl(
+                        tenant=schedule_obj.tenant,
+                        utility=schedule_obj.utility,
+                        schedule_id=schedule_obj.id,
+                        read_cycle_id=schedule_obj.read_cycle_id,
+                        activity_type_id=schedule_obj.activity_type_id,
+                        date_and_time=timezone.now(),
+                        is_recurring=schedule_obj.is_recurring,
+                    ).save()
                 return schedule_obj
 
     def update(self, instance, validated_data, user):
