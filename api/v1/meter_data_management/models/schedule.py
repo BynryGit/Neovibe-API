@@ -41,6 +41,7 @@ class Schedule(models.Model):
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
+    is_recurring = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

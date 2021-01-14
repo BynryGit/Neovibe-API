@@ -39,6 +39,7 @@ class ScheduleLog(models.Model):
     activity_type_id = models.BigIntegerField(null=False, blank=False)
     schedule_log_status = models.IntegerField(choices=SCHEDULE_LOG_STATUS, default=0)
     date_and_time = models.DateTimeField(null=True, blank=True)
+    is_recurring = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
