@@ -4,14 +4,8 @@ from django.db import transaction
 from django.utils import timezone
 from api.messages import DATA_ALREADY_EXISTS
 from rest_framework import serializers, status
-<<<<<<< HEAD
 from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
-from v1.commonapp.serializers.area import AreaShortViewSerializer
-from v1.commonapp.serializers.city import CityShortViewSerializer
-=======
-from api.settings import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.common_functions import ChoiceField
->>>>>>> 82cd1fee2b8ca6dfb5d85e668076bef14fe5c0ea
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer

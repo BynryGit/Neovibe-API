@@ -1,7 +1,7 @@
 __author__ = "aki"
 
 from rest_framework import serializers
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer

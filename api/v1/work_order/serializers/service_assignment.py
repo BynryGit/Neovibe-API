@@ -4,7 +4,7 @@ from datetime import datetime
 from rest_framework import serializers, status
 import random
 from rest_framework.validators import UniqueTogetherValidator
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.work_order.models.service_assignment import ServiceAssignment
 from v1.work_order.views.common_functions import set_service_assignment_validated_data
 from api.messages import SERVICE_ASSIGNMENT_ALREADY_EXIST

@@ -112,10 +112,6 @@ def generate_service_appointment_no(service_appointment):
         return sa_number
     except Exception as e:
         raise CustomAPIException("sa_number no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-<<<<<<< HEAD
-=======
-
-
 
 
 def set_service_assignment_validated_data(validated_data):
@@ -141,11 +137,10 @@ def set_service_assignment_validated_data(validated_data):
             raise CustomAPIException("User not found.", status_code=status.HTTP_404_NOT_FOUND)
 
     if "status_id" in validated_data:
-        status = get_service_appointment_status_by_id_string(validated_data["status_id"])
+        status_obj = get_service_appointment_status_by_id_string(validated_data["status_id"])
         if status:
-            validated_data["status_id"] = status.id
+            validated_data["status_id"] = status_obj.id
         else:
             raise CustomAPIException("status not found.", status_code=status.HTTP_404_NOT_FOUND)
 
     return validated_data
->>>>>>> 82cd1fee2b8ca6dfb5d85e668076bef14fe5c0ea
