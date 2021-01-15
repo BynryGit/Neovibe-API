@@ -2,6 +2,7 @@ from datetime import datetime # importing package for datetime
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
+import fsm
 
 # Create Service Master table start
 from v1.tenant.models.tenant_master import TenantMaster
@@ -10,7 +11,16 @@ from v1.work_order.models.service_appointment_status import get_service_appointm
 from master.models import get_user_by_id
 from v1.work_order.models.service_appointments import get_service_appointment_by_id
 
-
+# *********** SERVICE ASSIGNMENT CONSTANTS **************
+SERVICE_ASSIGNMENT_DICT = {
+    "CREATED": 0,
+    "NOT ASSIGNED": 1,
+    "ASSIGNED": 2,
+    "COMPLETED": 3,
+    "HOLD": 4,
+    "CLOSED": 5,
+    "ARCHIVED": 6,
+}
 
 
 # table header
@@ -24,12 +34,34 @@ from v1.work_order.models.service_appointments import get_service_appointment_by
 # Author : Priyanka Kachare
 # Creation Date : 16/12/2020
 
-class ServiceAssignment(models.Model):
+# Create Service Assignment table start.
+class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'NOT ASSIGNED'),
+        (2, 'ASSIGNED'),
+        (3, 'COMPLETED'),
+        (4, 'HOLD'),
+        (5, 'CLOSED'),
+        (6, 'ARCHIVED'),
+    )
+
+    state_machine = {
+        SERVICE_ASSIGNMENT_DICT['CREATED']: (SERVICE_ASSIGNMENT_DICT['NOT ASSIGNED'],),
+        SERVICE_ASSIGNMENT_DICT['NOT ASSIGNED']: (SERVICE_ASSIGNMENT_DICT['ASSIGNED'],),
+        SERVICE_ASSIGNMENT_DICT['ASSIGNED']: (SERVICE_ASSIGNMENT_DICT['COMPLETED'],SERVICE_ASSIGNMENT_DICT['NOT ASSIGNED']),
+        SERVICE_ASSIGNMENT_DICT['COMPLETED']: (SERVICE_ASSIGNMENT_DICT['HOLD'], SERVICE_ASSIGNMENT_DICT['CLOSED'],),
+        SERVICE_ASSIGNMENT_DICT['HOLD']: (SERVICE_ASSIGNMENT_DICT['ASSIGNED'], SERVICE_ASSIGNMENT_DICT['CLOSED'],),
+        SERVICE_ASSIGNMENT_DICT['CLOSED']: (SERVICE_ASSIGNMENT_DICT['ARCHIVED'],),
+    }
+
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     sa_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
+    state = models.BigIntegerField(choices=CHOICES, default=1)
     assignment_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     assignment_time = models.TimeField(null=True, blank=True)
     completion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -79,6 +111,12 @@ class ServiceAssignment(models.Model):
             "status":status_val.status,
             "id_string":status_val.id_string
         }
+
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Service Assignment transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 # Create service master table end
 

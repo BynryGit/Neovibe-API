@@ -31,7 +31,7 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceAppointment
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id', 'service_id',
-                    'sa_number','sa_name','sa_date','sa_description','sa_rule','created_date','updated_date','status_id')
+                    'sa_number','sa_name','sa_date','sa_description','sa_rule','created_date','updated_date','status_id','state')
 
 
 class ServiceAppointmentSerializer(serializers.ModelSerializer):

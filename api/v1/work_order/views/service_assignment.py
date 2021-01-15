@@ -4,6 +4,7 @@ from rest_framework import status, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from django.db import transaction
 from api.messages import *
 from api.constants import *
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -12,8 +13,8 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.work_order.serializers.service_assignment import ServiceAssignmentSerializer,ServiceAssignmentViewSerializer
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
-from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
-from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id
+from v1.work_order.models.service_appointments import get_service_appointment_by_id_string, SERVICE_APPOINTMENT_DICT
+from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id, SERVICE_ASSIGNMENT_DICT
 
 
 # API Header
@@ -38,7 +39,19 @@ class ServiceAssignment(GenericAPIView):
             if assignment_serializer.is_valid(raise_exception=True):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
-                assignment_obj = assignment_serializer.create(assignment_serializer.validated_data, user)
+                service_appoint_obj = get_service_appointment_by_id_string(request.data['sa_id'])
+                with transaction.atomic():                    
+
+                    assignment_obj = assignment_serializer.create(assignment_serializer.validated_data, user)
+
+                    # State change for service assignment start
+                    assignment_obj.change_state(SERVICE_ASSIGNMENT_DICT["ASSIGNED"])
+                    # State change for service assignment end
+
+                    # State change for service appointment start
+                    service_appoint_obj.change_state(SERVICE_APPOINTMENT_DICT["ASSIGNED"])
+                    # State change for service appointment end
+
                 view_serializer = ServiceAssignmentViewSerializer(instance=assignment_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
@@ -86,11 +99,17 @@ class ServiceDessignmentDetail(GenericAPIView):
                 if appointmentObj:
                     assignmentObj = get_service_assignment_by_appointment_id(appointmentObj.id).first()
                     if assignmentObj:
-                        dessignment_obj = deassignment_serializer.update(assignmentObj, deassignment_serializer.validated_data, user)
-                        return Response({
-                            STATE: SUCCESS,
-                            RESULTS: SERVICE_DEASSIGNMENT,
-                        }, status=status.HTTP_201_CREATED) 
+                        with transaction.atomic():   
+                            dessignment_obj = deassignment_serializer.update(assignmentObj, deassignment_serializer.validated_data, user)
+
+                            # State change for service appointment start
+                            appointmentObj.change_state(SERVICE_APPOINTMENT_DICT["NOT ASSIGNED"])
+                            # State change for service appointment end
+
+                            return Response({
+                                STATE: SUCCESS,
+                                RESULTS: SERVICE_DEASSIGNMENT,
+                            }, status=status.HTTP_201_CREATED) 
                     else:
                         return Response({
                         STATE: ERROR,
@@ -112,3 +131,5 @@ class ServiceDessignmentDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
