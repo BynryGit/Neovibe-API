@@ -36,9 +36,9 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ScheduleTbl
-        fields = ('id_string','name', 'description', 'schedule_status', 'is_recurring', 'start_date', 'end_date',
-                  'created_date', 'updated_date', 'created_by', 'updated_by', 'read_cycle_id', 'activity_type_id',
-                  'frequency_id', 'tenant', 'utility')
+        fields = ('id_string', 'name', 'description', 'repeat_every', 'occurs_on', 'schedule_status', 'is_recurring',
+                  'start_date', 'end_date', 'created_date', 'updated_date', 'created_by', 'updated_by', 'read_cycle_id',
+                  'activity_type_id', 'frequency_id', 'tenant', 'utility')
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -46,6 +46,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
     read_cycle_id = serializers.UUIDField(required=True)
     activity_type_id = serializers.UUIDField(required=True)
     frequency_id = serializers.UUIDField(required=False)
+    occurs_on = serializers.JSONField(required=False)
 
     class Meta:
         model = ScheduleTbl
