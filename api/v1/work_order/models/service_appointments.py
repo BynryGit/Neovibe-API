@@ -2,6 +2,7 @@ from datetime import datetime # importing package for datetime
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
+import fsm
 
 # Create Service Master table start
 from v1.tenant.models.tenant_master import TenantMaster
@@ -13,13 +14,68 @@ from v1.work_order.models.service_appointment_status import get_service_appointm
 from v1.commonapp.models.service_type import get_service_type_by_id
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
 
-class ServiceAppointment(models.Model):
+
+# *********** SERVICE APPOINTMENT CONSTANTS **************
+SERVICE_APPOINTMENT_DICT = {
+    "CREATED": 0,
+    "NOT ASSIGNED": 1,
+    "ASSIGNED": 2,
+    "IN PROGRESS": 3,
+    "FAILED": 4,
+    "ACCEPTED": 5,
+    "REJECTED": 6,
+    "COMPLETED": 7,
+    "HOLD": 8,
+    "CLOSED": 9,
+    "ARCHIVED": 10,
+}
+
+
+# table header
+# module: Work Order
+# table type : Master
+# table name : Service Appointment
+# table description : A master table to store new ServiceAppointment
+# frequency of data changes : High
+# sample table data : 
+# reference tables : None
+# author : Priyanka
+# created on : 13/01/2021
+
+# Create Service Appointment table start.
+class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'NOT ASSIGNED'),
+        (2, 'ASSIGNED'),
+        (3, 'IN PROGRESS'),
+        (4, 'FAILED'),
+        (5, 'ACCEPTED'),
+        (6, 'REJECTED'),
+        (7, 'COMPLETED'),
+        (8, 'HOLD'),
+        (9, 'CLOSED'),
+        (10, 'ARCHIVED'),
+    )
+
+    state_machine = {
+        SERVICE_APPOINTMENT_DICT['CREATED']: (SERVICE_APPOINTMENT_DICT['NOT ASSIGNED'],),
+        SERVICE_APPOINTMENT_DICT['NOT ASSIGNED']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'],SERVICE_APPOINTMENT_DICT['FAILED'],SERVICE_APPOINTMENT_DICT['IN PROGRESS'],),
+        SERVICE_APPOINTMENT_DICT['ASSIGNED']: (SERVICE_APPOINTMENT_DICT['ACCEPTED'],SERVICE_APPOINTMENT_DICT['REJECTED'],SERVICE_APPOINTMENT_DICT['NOT ASSIGNED'],),
+        SERVICE_APPOINTMENT_DICT['REJECTED']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'],),
+        SERVICE_APPOINTMENT_DICT['ACCEPTED']: (SERVICE_APPOINTMENT_DICT['COMPLETED'],),
+        SERVICE_APPOINTMENT_DICT['COMPLETED']: (SERVICE_APPOINTMENT_DICT['HOLD'], SERVICE_APPOINTMENT_DICT['CLOSED'],),
+        SERVICE_APPOINTMENT_DICT['HOLD']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'], SERVICE_APPOINTMENT_DICT['CLOSED'],),
+        SERVICE_APPOINTMENT_DICT['CLOSED']: (SERVICE_APPOINTMENT_DICT['ARCHIVED'],),
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
     service_id = models.BigIntegerField(blank=True, null=True)
+    state = models.BigIntegerField(choices=CHOICES, default=1)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
     sa_description = models.CharField(max_length=200, blank=True, null=True)
@@ -87,7 +143,15 @@ class ServiceAppointment(models.Model):
             "status":status_val.status,
             "id_string":status_val.id_string
         }
-        
+    
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            # perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT["REGISTRATION"])
+            # perform_signals(next_state, self)
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Service Appointment transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
+
 # Create ServiceMaster table end
 
 
