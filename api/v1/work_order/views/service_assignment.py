@@ -14,7 +14,7 @@ from v1.work_order.serializers.service_assignment import ServiceAssignmentSerial
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string, SERVICE_APPOINTMENT_DICT
-from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id, SERVICE_ASSIGNMENT_DICT
+from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id, SERVICE_ASSIGNMENT_DICT, get_service_assignment_by_id_string
 
 
 # API Header
@@ -131,5 +131,32 @@ class ServiceDessignmentDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+class ServiceAssignmentDetail(GenericAPIView):
+    
+    @is_token_validate
+    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    def get(self, request, id_string):
+        try:
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            service_assignment = get_service_assignment_by_appointment_id(service_appointment.id).first()
+            if service_assignment:
+                serializer = ServiceAssignmentViewSerializer(instance=service_assignment, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    RESULTS: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User')
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

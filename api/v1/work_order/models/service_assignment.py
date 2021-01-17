@@ -89,20 +89,18 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
     def get_user(self):
         user_val = get_user_by_id(self.user_id)
         return {
-            "name":user_val.first_name,
+            "first_name":user_val.first_name,
+            "last_name":user_val.last_name,
             "id_string":user_val.id_string,
-            "email":user_val.email
+            "email":user_val.email,
+            "phone_mobile":user_val.phone_mobile
         }
 
     @property
     def get_service_appointment(self):
         sa_val = get_service_appointment_by_id(self.sa_id)
         return sa_val
-        # {
-        #     "name":sa_val.sa_name,
-        #     "number":sa_val.sa_number,
-        #     "id_string":sa_val.id_string
-        # }
+       
 
     @property
     def get_status(self):

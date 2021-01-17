@@ -24,7 +24,7 @@ class ConsumerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConsumerMaster
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'email_id',
-                  'phone_mobile')
+                  'phone_mobile','billing_address_line_1')
 
 
 class ConsumerViewSerializer(serializers.ModelSerializer):

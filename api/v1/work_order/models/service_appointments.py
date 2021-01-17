@@ -119,7 +119,10 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
         consumer = get_consumer_by_id(self.consumer_id)
         return {
             "email_id":consumer.email_id,
-            "id_string":consumer.id_string
+            "id_string":consumer.id_string,
+            "consumer_no":consumer.consumer_no,
+            "phone_mobile":consumer.phone_mobile,
+            "billing_address_line_1":consumer.billing_address_line_1
         }
 
     @property

@@ -20,7 +20,7 @@ class ServiceAssignmentSerializer(serializers.ModelSerializer):
     sa_id = serializers.CharField(required=False, max_length=200)
     user_id = serializers.CharField(required=False, max_length=200)
     assignment_date = serializers.CharField(required=False, max_length=200)
-    # assignment_time = serializers.CharField(required=False, max_length=200)
+    assignment_time = serializers.CharField(required=False, max_length=200)
     # completion_date = serializers.CharField(required=False, max_length=200)
     # completion_time = serializers.CharField(required=False, max_length=200)
     # remark = serializers.CharField(required=False, max_length=200)
