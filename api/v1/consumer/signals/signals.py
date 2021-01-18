@@ -1,6 +1,7 @@
 from django.dispatch import receiver
 from rest_framework import status
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.consumer.views.common_functions import create_consumer_after_registration
 from v1.registration.signals.signals import registration_approved
 
 

@@ -71,7 +71,7 @@ class ServiceDetails(models.Model, fsm.FiniteStateMachineMixin):
     service_request_no = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    service_request_id = models.BigIntegerField(null=True, blank=True)
+    consumer_service_master_id = models.BigIntegerField(null=True, blank=True)
     service_type_id = models.BigIntegerField(null=True, blank=True)
     service_sub_type_id = models.BigIntegerField(null=True, blank=True)
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)

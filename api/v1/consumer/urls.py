@@ -14,6 +14,7 @@ from v1.consumer.views.consumer_faq import ConsumerFaq,ConsumerFaqDetail,Consume
 from v1.consumer.views.service_type import ServiceType,ServiceTypeList,ServiceTypeDetail
 from v1.consumer.views.service_sub_type import ServiceSubType,ServiceSubTypeDetail,ServiceSubTypeList
 from v1.consumer.views.consumer import ConsumerDetail,Consumer,ConsumerBillList,ConsumerBillDetail,ConsumerPayment,ConsumerPaymentDetail,ConsumerPaymentList,ConsumerComplaintList,ConsumerComplaintDetail,ConsumerScheme,ConsumerSchemeDetail,ConsumerComplaint
+from v1.service.views.consumer_service_details import ConsumerServiceDetail
 
 urlpatterns = [
     path('utility/<uuid:id_string>/list', ConsumerList.as_view()),
@@ -70,7 +71,8 @@ urlpatterns = [
     path('service/subtype', ServiceSubType.as_view()),
     path('<uuid:id_string>/service-contract-detail/list', ConsumerServiceContractDetailList.as_view()),
     path('<uuid:id_string>/note', ConsumerNote.as_view()),
-    path('<uuid:id_string>/note/list', ConsumerNoteList.as_view())
+    path('<uuid:id_string>/note/list', ConsumerNoteList.as_view()),
+    path('service-details', ConsumerServiceDetail.as_view()),
 
     # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),
 ]
