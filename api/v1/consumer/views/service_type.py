@@ -1,16 +1,11 @@
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from rest_framework.exceptions import APIException
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.consumer.models.service_type import ServiceType as ServiceTypeModel,get_service_type_by_id_string
-from v1.consumer.serializers.service_type import ServiceTypeListSerializer,ServiceTypeViewSerializer,ServiceTypeSerializer
-from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
+from v1.consumer.models.service_type import ServiceType as ServiceTypeModel, get_service_type_by_id_string
+from v1.consumer.serializers.service_type import ServiceTypeListSerializer, ServiceTypeViewSerializer, \
+    ServiceTypeSerializer
 from rest_framework.response import Response
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
@@ -20,6 +15,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/Complaint/utility/:id_string/service_type/list
@@ -60,6 +56,7 @@ class ServiceTypeList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
 
 # API Header
 # API end Point: api/v1/service/service_type
@@ -155,7 +152,7 @@ class ServiceTypeDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     service_type_obj = serializer.update(service_type_obj, serializer.validated_data, user)
                     view_serializer = ServiceTypeViewSerializer(instance=service_type_obj,
-                                                          context={'request': request})
+                                                                context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,
@@ -176,4 +173,3 @@ class ServiceTypeDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
-        

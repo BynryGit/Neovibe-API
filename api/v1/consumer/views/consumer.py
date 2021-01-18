@@ -35,7 +35,7 @@ from v1.meter_data_management.models.meter import get_meter_by_id_string
 from v1.payment.models.payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
 from v1.payment.serializer.payment_transactions import PaymentTransactionSerializer
-from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
+from v1.service.models.consumer_service_details import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string

@@ -1,4 +1,3 @@
-
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 from django.db import models  # importing package for database
@@ -10,13 +9,14 @@ from v1.utility.models.utility_master import UtilityMaster
 from v1.commonapp.models.service_type import get_service_type_by_id
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
 
+
 # table header
 # module: Work Order | sub-module -
 # table type: Master
 # table name: WorkOrder Master
 # table description: It contains the list of work_order
 # #frequency of data changes: high
-# sample table data:"Meter Installtion","meter repair"
+# sample table data:"Meter Installation","meter repair"
 # reference tables:
 # Author : Priyanka Kachare
 # Creation Date : 16/12/2020
@@ -52,6 +52,7 @@ class WorkOrderMaster(models.Model):
     def get_service_subtype(self):
         service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
         return service_subtype
+
 
 # Create work_order_master table end
 

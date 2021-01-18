@@ -29,7 +29,7 @@ from v1.complaint.models.complaint import *
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.payment.serializer.payment import *
-from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
+from v1.service.models.consumer_service_details import get_consumer_services_by_consumer_no
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.serializers.utility_product import UtilityProductListSerializer

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
-from v1.service.models.consumer_services import ServiceDetails
+from v1.service.models.consumer_service_details import ServiceDetails
 from v1.service.views.common_functions import generate_service_no, set_service_validated_data
 
 
