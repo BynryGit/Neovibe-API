@@ -16,11 +16,11 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 
 
 class ServiceAssignmentSerializer(serializers.ModelSerializer):
-    # utility_id = serializers.CharField(required=False, max_length=200)
+    utility_id = serializers.CharField(required=False, max_length=200)
     sa_id = serializers.CharField(required=False, max_length=200)
     user_id = serializers.CharField(required=False, max_length=200)
-    assignment_date = serializers.CharField(required=True, max_length=200)
-    # assignment_time = serializers.CharField(required=False, max_length=200)
+    assignment_date = serializers.CharField(required=False, max_length=200)
+    assignment_time = serializers.CharField(required=False, max_length=200)
     # completion_date = serializers.CharField(required=False, max_length=200)
     # completion_time = serializers.CharField(required=False, max_length=200)
     # remark = serializers.CharField(required=False, max_length=200)
@@ -32,7 +32,7 @@ class ServiceAssignmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_service_assignment_validated_data(validated_data)
-        if ServiceAssignment.objects.filter(sa_id=validated_data['sa_id'],user_id=validated_data['user_id']).exists():
+        if ServiceAssignment.objects.filter(sa_id=validated_data['sa_id'], is_active=True).exists():
             raise CustomAPIException(SERVICE_ASSIGNMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             assignment_obj = super(ServiceAssignmentSerializer, self).create(validated_data)            
@@ -50,7 +50,7 @@ class ServiceAssignmentSerializer(serializers.ModelSerializer):
             assignment_obj = super(ServiceAssignmentSerializer, self).update(instance, validated_data)
             assignment_obj.updated_by = user.id
             assignment_obj.updated_date = datetime.utcnow()
-            assignment_obj.is_active = True
+            assignment_obj.is_active = False
             assignment_obj.save()
             return assignment_obj
 

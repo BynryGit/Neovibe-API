@@ -19,6 +19,7 @@ from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from django.contrib.postgres.fields import JSONField
 
 
 # Create Schedule Table Start
@@ -35,12 +36,15 @@ class Schedule(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     read_cycle_id = models.BigIntegerField(null=False, blank=False)
     activity_type_id = models.BigIntegerField(null=False, blank=False)
-    frequency_id = models.BigIntegerField(null=False, blank=False)
+    frequency_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
+    repeat_every = models.CharField(max_length=200, blank=True, null=True)
+    occurs_on = JSONField(default=[])
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
+    is_recurring = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
