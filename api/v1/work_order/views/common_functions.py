@@ -72,10 +72,10 @@ def set_service_appointment_validated_data(validated_data):
         else:
             raise CustomAPIException("Asset not found.", status_code=status.HTTP_404_NOT_FOUND)
 
-    if "service_id" in validated_data:
-        service = get_work_order_master_by_id_string(validated_data["service_id"])
+    if "work_order_master_id" in validated_data:
+        service = get_work_order_master_by_id_string(validated_data["work_order_master_id"])
         if service:
-            validated_data["service_id"] = service.id
+            validated_data["work_order_master_id"] = service.id
         else:
             raise CustomAPIException("Service not found.", status_code=status.HTTP_404_NOT_FOUND)
 

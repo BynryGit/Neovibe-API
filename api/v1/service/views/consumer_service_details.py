@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -7,8 +8,11 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.service.models.consumer_services import ServiceDetails as ServiceDetailsModel
-from v1.service.serializers.service import ServiceDetailListSerializer
+
+from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.service.models.consumer_service_details import ServiceDetails as ServiceDetailsModel
+from v1.service.serializers.consumer_service_details import ServiceDetailListSerializer, ServiceSerializer, \
+    ServiceDetailViewSerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from rest_framework.response import Response
@@ -20,6 +24,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/service/utility/:id_string/list
@@ -60,3 +65,32 @@ class ServiceList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
+
+class ConsumerServiceDetail(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(request.data['consumer_id_string'])
+                serializer = ServiceSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=True):
+                    obj = serializer.create(serializer.validated_data, user)
+                    obj.consumer_no = consumer.consumer_no
+                    obj.save()
+                    view_serializer = ServiceDetailViewSerializer(instance=obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print("#############",e)

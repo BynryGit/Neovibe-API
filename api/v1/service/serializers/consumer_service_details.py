@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
-from v1.service.models.consumer_services import ServiceDetails
+from v1.service.models.consumer_service_details import ServiceDetails
 from v1.service.views.common_functions import generate_service_no, set_service_validated_data
 
 
@@ -20,27 +20,26 @@ class ServiceDetailViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceDetails
-        fields = ('__all__')
+        fields = '__all__'
 
 
 class ServiceSerializer(serializers.ModelSerializer):
+    consumer_service_master_id = serializers.CharField(required=False, max_length=200)
     service_type_id = serializers.CharField(required=False, max_length=200)
     service_sub_type_id = serializers.CharField(required=False, max_length=200)
     service_status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ServiceDetails
-        fields = ('__all__')
+        fields = '__all__'
 
     def create(self, validated_data, user):
         validated_data = set_service_validated_data(validated_data)
         with transaction.atomic():
             service = super(ServiceSerializer, self).create(validated_data)
-            service.service_no = generate_service_no(service)
+            # service.service_no = generate_service_no(service)
             service.created_by = user.id
             service.created_date = datetime.utcnow()
-            service.tenant = user.tenant
-            service.utility = user.utility
             service.save()
         return service
 

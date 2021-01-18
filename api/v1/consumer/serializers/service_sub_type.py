@@ -11,7 +11,7 @@ from v1.consumer.views.common_functions import set_service_subtype_validated_dat
 
 
 class ServiceSubTypeListSerializer(serializers.ModelSerializer):
-    service_type = ServiceTypeListSerializer(many="False", source="get_service_type")
+    service_type = ServiceTypeListSerializer(source="get_service_type")
 
     class Meta:
         model = ServiceSubTypeTbl
