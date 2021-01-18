@@ -7,7 +7,7 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.service.models.consumer_services import ServiceDetails as ServiceDetailsModel
+from v1.service.models.consumer_service_details import ServiceDetails as ServiceDetailsModel
 from v1.service.serializers.service import ServiceDetailListSerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
@@ -20,6 +20,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/service/utility/:id_string/list
