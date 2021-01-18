@@ -74,7 +74,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
-    service_id = models.BigIntegerField(blank=True, null=True)
+    work_order_master_id = models.BigIntegerField(blank=True, null=True)
     state = models.BigIntegerField(choices=CHOICES, default=1)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
@@ -135,7 +135,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
 
     @property
     def get_service(self):
-        work_order_template = get_work_order_master_by_id(self.service_id)
+        work_order_template = get_work_order_master_by_id(self.work_order_master_id)
         return work_order_template
        
     

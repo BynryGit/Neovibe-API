@@ -24,13 +24,13 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     consumer_id = ConsumerListSerializer(many=False, required=True, source='get_consumer')
     asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
     status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
-    service_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
+    work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = ServiceAppointment
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id', 'service_id',
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id', 'work_order_master_id',
                     'sa_number','sa_name','sa_date','sa_description','sa_rule','created_date','updated_date','status_id','state')
 
 
@@ -38,7 +38,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     consumer_id = serializers.CharField(required=False, max_length=200)
     asset_id = serializers.CharField(required=False, max_length=200)
-    service_id = serializers.CharField(required=False, max_length=200)
+    work_order_master_id = serializers.CharField(required=False, max_length=200)
     # sa_name = serializers.CharField(required=True, max_length=200)
     # sa_description = serializers.CharField(required=True, max_length=200)
     sa_date = serializers.CharField(required=True, max_length=200)
@@ -59,7 +59,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
-        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],service_id=validated_data['service_id']).exists():
+        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],work_order_master_id=validated_data['work_order_master_id']).exists():
             raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)            
@@ -86,7 +86,7 @@ class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     consumer_id = ConsumerListSerializer(many=False, required=True, source='get_consumer')
     asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
-    service_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
+    work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
     status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
