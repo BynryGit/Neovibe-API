@@ -37,8 +37,8 @@ def get_service_sub_type_by_id_string(id_string):
         return False
 
 
-def get_service_sub_type_by_id(id):
+def get_service_sub_type_by_id(i_d):
     try:
-        return ServiceSubType.objects.filter(id = id)
+        return ServiceSubType.objects.get(id=i_d)
     except:
         return False

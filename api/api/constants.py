@@ -21,17 +21,19 @@ FINANCE = ''
 # ADMIN = ''
 # DEMOM = ''
 
+
 # S_AND_M = get_module_by_key('S&M')
 # CONSUMER_CARE = get_module_by_key('CONSUMER_CARE')
 # CONSUMER_OPS = get_module_by_key('CONSUMER_OPS')
 # GAS_MANAGEMENT = get_module_by_key('GAS_MANAGEMENT')
-WORK_ORDER = get_module_by_key('WORK_ORDER')
+# WORK_ORDER = get_module_by_key('WORK_ORDER')
 # NETWORK = get_module_by_key('NETWORK')
 # SPEND = get_module_by_key('SPEND')
 # HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
 # FINANCE = get_module_by_key('FINANCE')
 ADMIN = get_module_by_key('ADMIN')
 DEMOM = get_module_by_key('DEMOM')
+
 
 # *********** SUB MODULE CONSTANTS **************
 # S_AND_M_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
@@ -44,11 +46,11 @@ DEMOM = get_module_by_key('DEMOM')
 # HUMAN_CAPITAL_DASHBOARD = get_sub_module_by_key('HUMAN_CAPITAL_DASHBOARD')
 # FINANCE_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD')
 
-# DASHBOARD = ""
-# BILLING = ''
+DASHBOARD = ""
+BILLING = ''
 # BILLING = get_sub_module_by_key('BILLING')
 # CAMPAIGN = get_sub_module_by_key('CAMPAIGN')
-# CAMPAIGN = ''
+CAMPAIGN = ''
 # CONSUMER = get_sub_module_by_key('CONSUMER')
 CONSUMER = ''
 # CONTRACT = get_sub_module_by_key('CONTRACT')
@@ -104,8 +106,6 @@ UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
 
 # *********** PRIVILEGE CONSTANTS **************
 VIEW = get_privilege_by_key('VIEW')
-# VIEW = ''
-# EDIT = ''
 EDIT = get_privilege_by_key('EDIT')
 # DELETE = get_privilege_by_key('Delete')
 # *********** UTILITY CONSTANTS **************

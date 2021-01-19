@@ -75,10 +75,8 @@ class Schedule(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            print(request.data)
             schedule_serializer = ScheduleSerializer(data=request.data)
             if schedule_serializer.is_valid():
-                print(schedule_serializer.validated_data)
                 schedule_obj = schedule_serializer.create(schedule_serializer.validated_data, user)
                 schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
                 return Response({
