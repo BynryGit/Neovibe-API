@@ -18,7 +18,7 @@ NETWORK = ''
 SPEND = ''
 HUMAN_CAPITAL = ''
 FINANCE = ''
-ADMIN = ''
+# ADMIN = ''
 # DEMOM = ''
 
 # S_AND_M = get_module_by_key('S&M')
@@ -30,7 +30,7 @@ WORK_ORDER = get_module_by_key('WORK_ORDER')
 # SPEND = get_module_by_key('SPEND')
 # HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL')
 # FINANCE = get_module_by_key('FINANCE')
-# ADMIN = get_module_by_key('ADMIN')
+ADMIN = get_module_by_key('ADMIN')
 DEMOM = get_module_by_key('DEMOM')
 
 # *********** SUB MODULE CONSTANTS **************
@@ -99,8 +99,8 @@ NETWORK_USER = ''
 SPEND_USER = ''
 # HUMAN_CAPITAL_USER = get_sub_module_by_key('HUMAN_CAPITAL_USER')
 HUMAN_CAPITAL_USER = ''
-# UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
-UTILITY_MASTER = ''
+UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER')
+# UTILITY_MASTER = ''
 
 # *********** PRIVILEGE CONSTANTS **************
 VIEW = get_privilege_by_key('VIEW')

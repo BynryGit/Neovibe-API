@@ -6,15 +6,23 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
 from api.constants import *
-from master.models import get_all_users, get_user_by_id_string, is_email_exists
-from v1.commonapp.common_functions import get_user_from_token
+from master.models import get_all_users, get_user_by_id_string, is_email_exists,User as UserTbl
+from v1.userapp.models.user_utility import UserUtility
+from v1.commonapp.common_functions import get_user_from_token,is_token_valid,is_authorized
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
 from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserSerializer
-
-
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.userapp.serializers.user_utility import UserUtilityViewSerializer
+from v1.userapp.models.user_skill import UserSkill
+from v1.userapp.models.user_leaves import UserLeaves
+import datetime
+from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
+from v1.work_order.models.work_order_master import get_work_order_master_by_id
+from v1.commonapp.models.skills import get_skill_by_id_string
+from v1.userapp.serializers.user_skill import UserSkillViewSerializer
 # API Header
 # API end Point: api/v1/user/list
 # API verb: GET
@@ -45,6 +53,78 @@ class UserList(generics.ListAPIView):
     def get_queryset(self):
         queryset = get_all_users()
         return queryset
+
+
+
+# API Header
+# API end Point: api/v1/available-resource/list
+# API verb: GET
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: View resource list
+# Usage: Used for user list. Get all the records in pagination mode. It also have input params to filter/ search and
+# sort in addition to pagination.
+# Tables used: 2.5.3. User Details
+# Author: Priyanka
+# Created on: 18/01/2021
+
+
+class ResourceList(generics.ListAPIView):
+    try:
+        serializer_class = UserSkillViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant__id_string',)
+        search_fields = ('tenant__id_string',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['utility_id_string'])
+                    appointment_obj = get_service_appointment_by_id_string(self.kwargs['appointment_id_string'])
+
+                    skill_id_list = []
+                    user_list = []
+                    user_skill_list = []
+                    uesr_leaves_list = []
+
+                    if appointment_obj:
+                        work_order_obj = get_work_order_master_by_id(appointment_obj.work_order_master_id)
+                        for skill_obj in work_order_obj.json_obj['skill_details']:  
+                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])  
+                            skill_id_list.append(skill_id.id)                    
+
+                    user_utility_objs = UserUtility.objects.filter(utility=utility, is_active=True)
+                    if user_utility_objs:
+                        for user_utility_obj in user_utility_objs:
+                            user_obj = UserTbl.objects.filter(id = user_utility_obj.user_id, form_factor_id=2, is_active=True).last()
+                            if user_obj:
+                                user_list.append(user_obj)  
+
+                        user_skills = UserSkill.objects.filter(user_id__in = [user.id for user in user_list],skill_id__in=skill_id_list, is_active=True).distinct('user_id')                    
+                        for user_skill in user_skills:
+                            user_skill_list.append(user_skill.user_id)
+
+                        
+                        user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list, date__date=(appointment_obj.sa_date).date())
+                        for user_leaves in user_leaves_obj:
+                            uesr_leaves_list.append(user_leaves.user_id)
+
+                        queryset = user_skills.filter().exclude(user_id__in=uesr_leaves_list)
+
+                        return queryset
+                    else:
+                        raise CustomAPIException("User Utility not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
 # API Header
