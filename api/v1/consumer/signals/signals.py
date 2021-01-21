@@ -1,8 +1,11 @@
-from django.dispatch import receiver
+from django.dispatch import receiver, Signal
 from rest_framework import status
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.views.common_functions import create_consumer_after_registration
 from v1.registration.signals.signals import registration_approved
+
+# Signals for work order service appointment
+consumer_service_request_created = Signal()
 
 
 # Signal receiver for consumer
@@ -11,4 +14,4 @@ def after_registration_approved(sender, **kwargs):
     try:
         create_consumer_after_registration(sender.id)
     except Exception as e:
-        raise CustomAPIException(str(e),status_code=status.HTTP_412_PRECONDITION_FAILED)
+        raise CustomAPIException(str(e), status_code=status.HTTP_412_PRECONDITION_FAILED)

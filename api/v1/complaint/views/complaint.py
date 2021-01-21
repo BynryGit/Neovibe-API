@@ -9,7 +9,6 @@ from api.constants import *
 from api.messages import *
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.complaint.models.complaint import get_consumer_complaint_by_id_string, COMPLAINT_DICT,Complaint as ComplaintTbl

@@ -1,10 +1,11 @@
+import collections
+
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.asset.models.asset_master import get_asset_by_id_string
 from v1.work_order.models.work_order_master import get_work_order_master_by_id_string
-from v1.work_order.models.work_order_rules import get_work_order_rule_by_id_string
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from rest_framework import status
@@ -142,5 +143,18 @@ def set_service_assignment_validated_data(validated_data):
             validated_data["status_id"] = status_obj.id
         else:
             raise CustomAPIException("status not found.", status_code=status.HTTP_404_NOT_FOUND)
-
     return validated_data
+
+
+def set_service_appointment_data(work_order, consumer):
+    try:
+        od = collections.OrderedDict()
+        od['work_order_master_id'] = work_order.id
+        od['tenant_id'] = consumer.tenant.id
+        od['utility_id'] = consumer.utility.id
+        od['consumer_id'] = consumer.id
+        return od
+    except Exception as e:
+        raise CustomAPIException("Error in setting service_appointment_data",
+                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
