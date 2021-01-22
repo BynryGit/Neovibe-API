@@ -72,6 +72,7 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     complaint_name = models.CharField(max_length=500, null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    consumer_complaint_master_id = models.BigIntegerField(null=True, blank=True)
     complaint_type_id = models.BigIntegerField(null=True, blank=True)
     complaint_sub_type_id = models.BigIntegerField(null=True, blank=True)
     complaint_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -89,10 +90,10 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.complaint_no
+        return self.consumer_no
 
     def __unicode__(self):
-        return self.complaint_no
+        return self.consumer_no
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:

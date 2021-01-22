@@ -625,26 +625,26 @@ class ConsumerPaymentDetail(GenericAPIView):
 # Sub Module: Consumer
 # Interaction: Add consumer complaint
 # Usage: Add
-# Tables used: CosumerComlaint
-# Auther: Rohan
+# Tables used: Consumer Complaint
+# Author: Rohan
 # Created on: 22/05/2020
 class ConsumerComplaint(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
-    def post(self, request, id_string):
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            consumer_obj = get_consumer_by_id_string(id_string)
+            consumer_obj = get_consumer_by_id_string(request.data['consumer_id_string'])
             request.data['consumer_no'] = consumer_obj.consumer_no
             serializer = ComplaintSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                complaint = serializer.create(serializer.validated_data, user)
+                complaint = serializer.create(serializer.validated_data, consumer_obj, user)
                 view_serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
+                    RESULT: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
