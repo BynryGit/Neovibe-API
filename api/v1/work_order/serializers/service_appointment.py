@@ -1,4 +1,5 @@
 __author__ = "Priyanka"
+
 from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
@@ -16,6 +17,7 @@ from v1.work_order.views.common_functions import generate_service_appointment_no
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SERVICE_APPOINTMENT_ALREADY_EXIST
 
+
 class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
@@ -30,8 +32,10 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceAppointment
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id', 'work_order_master_id',
-                    'sa_number','sa_name','sa_date','sa_description','sa_rule','created_date','updated_date','status_id','state')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id',
+                  'work_order_master_id',
+                  'sa_number', 'sa_name', 'sa_date', 'sa_description', 'sa_rule', 'created_date', 'updated_date',
+                  'status_id', 'state')
 
 
 class ServiceAppointmentSerializer(serializers.ModelSerializer):
@@ -55,14 +59,15 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceAppointment
-        fields = ('__all__')
+        fields = '__all__'
 
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
-        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],work_order_master_id=validated_data['work_order_master_id']).exists():
+        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],
+                                             work_order_master_id=validated_data['work_order_master_id']).exists():
             raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
-            appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)            
+            appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)
             appointment_obj.created_by = user.id
             appointment_obj.created_date = datetime.utcnow()
             appointment_obj.tenant = user.tenant
@@ -82,6 +87,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
             appointment_obj.save()
             return appointment_obj
 
+
 class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     consumer_id = ConsumerListSerializer(many=False, required=True, source='get_consumer')
@@ -94,5 +100,3 @@ class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceAppointment
         fields = ('__all__')
-
-

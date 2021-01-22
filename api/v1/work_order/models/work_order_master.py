@@ -26,6 +26,7 @@ class WorkOrderMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     work_order_number = models.BigIntegerField(null=True, blank=True)
+    consumer_service_master_id = models.BigIntegerField(null=True, blank=True)
     service_type_id = models.BigIntegerField(blank=False, null=False)
     service_subtype_id = models.BigIntegerField(blank=False, null=False)
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -74,5 +75,12 @@ def get_work_order_master_by_id(id):
 def get_work_order_master_by_id_string(id_string):
     try:
         return WorkOrderMaster.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_work_order_master_by_consumer_service_master_id(id):
+    try:
+        return WorkOrderMaster.objects.get(consumer_service_master_id=id)
     except:
         return False
