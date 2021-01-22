@@ -116,6 +116,7 @@ UTILITY_HOLIDAY_NOT_FOUND = "Utility Holiday Not found."
 UTILITY_WORKING_HOURS_NOT_FOUND = "Utility Working Hours Not found."
 SCHEDULE_NOT_FOUND = "Schedule not found"
 ACTIVITY_TYPE_NOT_FOUND = "ACtivity type not found"
+REPEAT_FREQUENCY_NOT_FOUND = "Repeat Frequency not found"
 
 
 # *********** ALREADY EXIST CONSTANTS **************

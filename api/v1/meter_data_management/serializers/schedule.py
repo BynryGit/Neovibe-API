@@ -28,17 +28,27 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
     activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type')
     frequency_id = GlobalLookupShortViewSerializer(many=False, source='get_frequency_name')
+    repeat_every_id = GlobalLookupShortViewSerializer(many=False, source='get_repeat_every_name')
     start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
     schedule_status = ChoiceField(choices=ScheduleTbl.SCHEDULE_STATUS)
+    is_recurring = serializers.SerializerMethodField()
+
+    def get_is_recurring(self, schedule_tbl):
+        if schedule_tbl.is_recurring == True:
+            is_recurring = 'Yes'
+            return is_recurring
+        else:
+            is_recurring = 'No'
+            return is_recurring
 
     class Meta:
         model = ScheduleTbl
-        fields = ('id_string', 'name', 'description', 'repeat_every', 'occurs_on', 'schedule_status', 'is_recurring',
-                  'start_date', 'end_date', 'created_date', 'updated_date', 'created_by', 'updated_by', 'read_cycle_id',
-                  'activity_type_id', 'frequency_id', 'tenant', 'utility')
+        fields = ('id_string', 'name', 'description', 'occurs_on', 'schedule_status', 'is_recurring', 'start_date',
+                  'end_date', 'created_date', 'updated_date', 'created_by', 'updated_by', 'repeat_every_id',
+                  'read_cycle_id', 'activity_type_id', 'frequency_id', 'tenant', 'utility')
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -46,6 +56,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
     read_cycle_id = serializers.UUIDField(required=True)
     activity_type_id = serializers.UUIDField(required=True)
     frequency_id = serializers.UUIDField(required=False)
+    repeat_every_id = serializers.UUIDField(required=False)
     occurs_on = serializers.JSONField(required=False)
 
     class Meta:

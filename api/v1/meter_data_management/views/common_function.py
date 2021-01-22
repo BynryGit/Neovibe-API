@@ -39,6 +39,12 @@ def set_schedule_validated_data(validated_data):
             validated_data["frequency_id"] = frequency.id
         else:
             raise CustomAPIException(FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "repeat_every_id" in validated_data:
+        repeat_every = get_global_lookup_by_id_string(validated_data["repeat_every_id"])
+        if repeat_every:
+            validated_data["repeat_every_id"] = repeat_every.id
+        else:
+            raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
