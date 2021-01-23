@@ -40,6 +40,9 @@ class SubAreaList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = SubAreaModel.objects.filter(utility=utility, is_active=True)
+                    if 'area_id' in self.request.query_params:
+                        area = get_area_by_id_string(self.request.query_params['area_id'])
+                        queryset = queryset.filter(area_id=area.id)
                     if queryset:
                         return queryset
                     else:

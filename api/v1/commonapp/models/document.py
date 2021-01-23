@@ -17,7 +17,7 @@ import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 
 from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id
-from v1.commonapp.models.document_type import get_document_type_by_id
+from v1.utility.models.utility_document_type import get_utility_document_type_by_id
 from v1.commonapp.models.module import get_module_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -45,7 +45,8 @@ class Document(models.Model):
     document_generated_name = models.CharField(max_length=1000, blank=True, null=True)
     document_name = models.CharField(max_length=1000, blank=True, null=True)
     file_type = models.CharField(max_length=1000, blank=True, null=True)
-    is_active = models.BooleanField(default=False)
+    document_size = models.CharField(max_length=1000, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -74,8 +75,8 @@ class Document(models.Model):
         return get_sub_module_by_id(self.sub_module_id)
 
     @property
-    def get_type(self):
-        return get_document_type_by_id(self.document_type_id)
+    def get_utility_document_type(self):
+        return get_utility_document_type_by_id(self.document_type_id)
 
     @property
     def get_sub_type(self):

@@ -29,10 +29,14 @@ from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.department_subtype import get_department_subtype_by_id_string
 from v1.campaign.models.campaign_type import get_campaign_type_by_id_string
 from v1.commonapp.models.division import get_division_by_id_string
+from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id_string
 from v1.utility.models.utility_payment_subtype import get_utility_payment_subtype_by_id_string
 from v1.utility.models.utility_payment_type import get_utility_payment_type_by_id_string
 from v1.utility.models.utility_payment_mode import get_utility_payment_mode_by_id_string
+from v1.utility.models.utility_document_type import get_utility_document_type_by_id_string
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 
 
 def get_payload(token):
@@ -132,6 +136,72 @@ def set_region_validated_data(validated_data):
             validated_data["region_id"] = region.id
         else:
             raise CustomAPIException("Region not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_document_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "document_type_id" in validated_data:
+        document_type = get_document_type_by_id_string(validated_data["document_type_id"])
+        if document_type:
+            validated_data["document_type_id"] = document_type.id
+        else:
+            raise CustomAPIException("Document Type Not Found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_document_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "document_type_id" in validated_data:
+        document_type = get_utility_document_type_by_id_string(validated_data["document_type_id"])
+        if document_type:
+            validated_data["document_type_id"] = document_type.id
+        else:
+            raise CustomAPIException("Document Type Not Found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_document_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "document_type_id" in validated_data:
+        document_type = get_utility_document_type_by_id_string(validated_data["document_type_id"])
+        if document_type:
+            validated_data["document_type_id"] = document_type.id
+        else:
+            raise CustomAPIException("Document Type Not Found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
@@ -302,6 +372,18 @@ def set_premise_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "category_id" in validated_data:
+        category = get_consumer_category_by_id_string(validated_data["category_id"])
+        if category:
+            validated_data["category_id"] = category.id
+        else:
+            raise CustomAPIException("Consumer Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "meter_id" in validated_data:
+        meter = get_global_lookup_by_id_string(validated_data["meter_id"])
+        if meter:
+            validated_data["meter_id"] = meter.id
+        else:
+            raise CustomAPIException("Meter Not Found", status_code=status.HTTP_404_NOT_FOUND)
     if "subarea_id" in validated_data:
         subarea = get_sub_area_by_id_string(validated_data["subarea_id"])
         if subarea:

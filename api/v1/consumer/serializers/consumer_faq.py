@@ -12,14 +12,11 @@ from v1.consumer.views.common_functions import set_consumer_faq_validated_data
 
 
 class ConsumerFaqListSerializer(serializers.ModelSerializer):
-    consumer_category = ConsumerCategoryListSerializer(many="False", source='get_category_type')
-    consumer_subcategory = ConsumerSubCategoryListSerializer(many="False", source='get_category_subtype')
-
-    class Meta:
-        model = ConsumerFaqTbl
-        fields = (
-            'question', 'id_string', 'consumer_category', 'consumer_subcategory', 'created_date', 'is_active',
-            'created_by')
+        class Meta:
+            model = ConsumerFaqTbl
+            fields = (
+                'question', 'answer', 'id_string', 'created_date', 'is_active',
+                'created_by')
 
 
 class ConsumerFaqViewSerializer(serializers.ModelSerializer):
@@ -30,7 +27,7 @@ class ConsumerFaqViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerFaqTbl
-        fields = ('id_string', 'question', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date')
+        fields = ('id_string', 'question','answer', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date')
 
 
 class ConsumerFaqSerializer(serializers.ModelSerializer):
@@ -38,8 +35,7 @@ class ConsumerFaqSerializer(serializers.ModelSerializer):
                                      error_messages={"required": "The field question is required."})
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
-    category_id = serializers.CharField(required=True, max_length=200)
-    subcategory_id = serializers.CharField(required=True, max_length=200)
+
 
     class Meta:
         model = ConsumerFaqTbl

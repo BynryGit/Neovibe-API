@@ -1,60 +1,49 @@
-from rest_framework import generics, status
+from v1.commonapp.models.document import Document as DocumentModel
+from v1.commonapp.serializers.document import DocumentListSerializer, DocumentSerializer, DocumentViewSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.logger import logger
+from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from rest_framework.exceptions import APIException
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
-from v1.commonapp.views.pagination import StandardResultsSetPagination
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.consumer.models.consumer_faq import ConsumerFaq as ConsumerFaqModel,get_consumer_faq_by_id_string
-from v1.consumer.serializers.consumer_faq import ConsumerFaqListSerializer,ConsumerFaqViewSerializer,ConsumerFaqSerializer
-from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
-from rest_framework.response import Response
-from v1.userapp.decorators import is_token_validate, role_required
-from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
-from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
-from v1.commonapp.views.logger import logger
+from api.messages import *
 from master.models import get_user_by_id_string
+from v1.userapp.decorators import is_token_validate, role_required
+from v1.commonapp.models.document import get_document_by_id_string
 from api.messages import *
 from api.constants import *
 
+
 # API Header
-# API end Point: api/v1/consumer/utility/:id_string/faq/list
+# API end Point: api/v1/utility/:id_string/document/list
 # API verb: GET
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: Consumer FAQ list
-# Usage: API will fetch all Consumer FAQ List
-# Tables used: Consumer FAQ
+# Interaction: Documents list
+# Usage: API will fetch all Documents list
+# Tables used: Document
 # Author: Chinmay
-# Created on: 2/12/2020
+# Created on: 22/1/2021
 
-
-class ConsumerFaqList(generics.ListAPIView):
+class DocumentList(generics.ListAPIView):
     try:
-        serializer_class = ConsumerFaqListSerializer
+        serializer_class = DocumentListSerializer
         pagination_class = StandardResultsSetPagination
-
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('question', 'tenant__id_string',)
-        ordering_fields = ('question', 'tenant',)
-        ordering = ('question',)  # always give by default alphabetical order
-        search_fields = ('question', 'tenant__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerFaqModel.objects.filter(utility=utility, is_active=True)
+                    queryset = DocumentModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException(CONSUMER_FAQ_NOT_FOUND, status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException("Document not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -62,18 +51,19 @@ class ConsumerFaqList(generics.ListAPIView):
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
+
 # API Header
-# API end Point: api/v1/consumer/faq
+# API end Point: api/v1/utility/document
 # API verb: POST
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: Sub Faq Post
-# Usage: API will Post the faq
-# Tables used: Consumer FAq
+# Interaction: Document post
+# Usage: API will Post the Document
+# Tables used: Document
 # Author: Chinmay
-# Created on: 28/11/2020
-class ConsumerFaq(GenericAPIView):
+# Created on: 22/1/2021
+class Document(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
@@ -81,10 +71,10 @@ class ConsumerFaq(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ConsumerFaqSerializer(data=request.data)
+            serializer = DocumentSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                consumer_faq_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ConsumerFaqViewSerializer(instance=consumer_faq_obj, context={'request': request})
+                document_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = DocumentViewSerializer(instance=document_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
@@ -104,28 +94,27 @@ class ConsumerFaq(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/consumer/faq/:id_string
+# API end Point: api/v1/utility/document/:id_string
 # API verb: GET,PUT
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: Consumer FAQ corresponding to the id
-# Usage: API will fetch and update Consumer FAQ for a given id
-# Tables used: Consumer FAQ
+# Interaction: Document corresponding to the id
+# Usage: API will fetch and update documents for a given id
+# Tables used: Document
 # Author: Chinmay
-# Created on: 1/11/2020
+# Created on: 22/1/2020
 
 
-class ConsumerFaqDetail(GenericAPIView):
-    
+class DocumentDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
-            consumer_faq = get_consumer_faq_by_id_string(id_string)
-            if consumer_faq:
-                serializer = ConsumerFaqViewSerializer(instance=consumer_faq, context={'request': request})
+            document = get_document_by_id_string(id_string)
+            if document:
+                serializer = DocumentViewSerializer(instance=document, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: serializer.data,
@@ -148,16 +137,15 @@ class ConsumerFaqDetail(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            
-            consumer_faq_obj = get_consumer_faq_by_id_string(id_string)
-            if "question" not in request.data:
-                request.data['question'] = consumer_faq_obj.question
-            if consumer_faq_obj:
-                serializer = ConsumerFaqSerializer(data=request.data)
+            document_obj = get_document_by_id_string(id_string)
+            if "document_name" not in request.data:
+                request.data['document_name'] = document_obj.document_name
+            if document_obj:
+                serializer = DocumentSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    consumer_faq_obj = serializer.update(consumer_faq_obj, serializer.validated_data, user)
-                    view_serializer = ConsumerFaqViewSerializer(instance=consumer_faq_obj,
-                                                          context={'request': request})
+                    document_obj = serializer.update(document_obj, serializer.validated_data, user)
+                    view_serializer = DocumentViewSerializer(instance=document_obj,
+                                                             context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,
