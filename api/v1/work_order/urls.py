@@ -5,7 +5,7 @@ from v1.work_order.views.service_appointment import ServiceAppointment,ServiceAp
 from v1.work_order.views.material_type import MaterialTypeList
 from v1.work_order.views.material_subtype import MaterialSubTypeList
 from v1.work_order.views.material_name import MaterialNameList
-
+from v1.work_order.views.service_assignment import ServiceAssignment,ServiceDessignmentDetail,ServiceAssignmentDetail
 
 
 urlpatterns = [
@@ -18,5 +18,8 @@ urlpatterns = [
     path('utility/<uuid:id_string>/material_type/list', MaterialTypeList.as_view(), name='material_type_list'),
     path('utility/<uuid:id_string>/material_subtype/list', MaterialSubTypeList.as_view(), name='material_subtype_list'),
     path('utility/<uuid:id_string>/material_name/list', MaterialNameList.as_view(), name='material_name_list'),
-    path('service-appointment/<uuid:id_string>',ServiceAppointmentDetail.as_view(),name="service_appointment_detail")
+    path('service-appointment/<uuid:id_string>',ServiceAppointmentDetail.as_view(),name="service_appointment_detail"),
+    path('service-assignment',ServiceAssignment.as_view(),name="service_assignment"),
+    path('service-deassignment/<uuid:id_string>',ServiceDessignmentDetail.as_view(),name="service_deassignment"),
+    path('service-assignment/<uuid:id_string>',ServiceAssignmentDetail.as_view(),name="service_assignment_detail")
 ]

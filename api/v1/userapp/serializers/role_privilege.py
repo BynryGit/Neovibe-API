@@ -4,7 +4,7 @@ from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException

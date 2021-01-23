@@ -1,803 +1,832 @@
 [
 	{
 		"pk": "1",
-		"model": "meter_reading.BillCycle",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "15",
+			"category": "Activity_Type",
+			"key": "reading",
+			"value": "Reading",
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "2",
-		"model": "meter_reading.BillCycle",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "16",
+			"category": "Activity_Type",
+			"key": "bill-distribution",
+			"value": "Bill-Distribution",
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "3",
-		"model": "meter_reading.BillCycle",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "21",
+			"category": "Activity_Type",
+			"key": "notice",
+			"value": "Notice",
 			"is_active": "True"
 		}
 	},
 	{
 		"pk": "4",
-		"model": "meter_reading.BillCycle",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "22",
+			"category": "Frequency",
+			"key": "hourly",
+			"value": "Hourly",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.Route",
+		"pk": "5",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "15135",
-			"token": "654",
-			"bill_cycle_id": 1,
-			"month": "202007",
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"is_meter_reading": "True"
+			"category": "Frequency",
+			"key": "daily",
+			"value": "Daily",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.Route",
+		"pk": "6",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "15154",
-			"token": "65413",
-			"bill_cycle_id": 2,
-			"month": "202007",
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"is_meter_reading": "True"
+			"category": "Frequency",
+			"key": "weekly",
+			"value": "Weekly",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "3",
-		"model": "meter_reading.Route",
+		"pk": "7",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "1515454",
-			"token": "6541354",
-			"bill_cycle_id": 1,
-			"month": "202007",
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"is_bill_distribution": "True"
+			"category": "Frequency",
+			"key": "monthly",
+			"value": "Monthly",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "4",
-		"model": "meter_reading.Route",
+		"pk": "8",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"code": "151543",
-			"token": "6541334",
-			"bill_cycle_id": 2,
-			"month": "202007",
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"is_bill_distribution": "True"
+			"category": "Frequency",
+			"key": "yearly",
+			"value": "Yearly",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ActivityType",
+		"pk": "9",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Manual"
+			"category": "Recurrence",
+			"key": "1",
+			"value": "Yes",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ActivityType",
+		"pk": "10",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Photo"
+			"category": "Recurrence",
+			"key": "0",
+			"value": "No",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.BillCycleReadingAllocation",
+		"pk": "11",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 1,
-			"validator_one_id": 2,
-			"validator_two": 2
+			"category": "Repeat Day",
+			"key": "1 day",
+			"value": "1 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.BillCycleReadingAllocation",
+		"pk": "12",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 2,
-			"validator_one_id": 2,
-			"validator_two": 2
+			"category": "Repeat Day",
+			"key": "2 day",
+			"value": "2 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.JobCardStatus",
+		"pk": "13",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Job card status 1"
+			"category": "Repeat Day",
+			"key": "3 day",
+			"value": "3 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.JobCardStatus",
+		"pk": "14",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Job card status 2"
+			"category": "Repeat Day",
+			"key": "4 day",
+			"value": "4 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.MeterImageType",
+		"pk": "15",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Type 1"
+			"category": "Repeat Day",
+			"key": "5 day",
+			"value": "5 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.MeterImageType",
+		"pk": "16",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Type 2"
+			"category": "Repeat Day",
+			"key": "6 day",
+			"value": "6 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.MeterStatus",
+		"pk": "17",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Meter Status 1"
+			"category": "Repeat Day",
+			"key": "7 day",
+			"value": "7 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.MeterStatus",
+		"pk": "18",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Meter Status 2"
+			"category": "Repeat Day",
+			"key": "8 day",
+			"value": "8 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ReaderStatus",
+		"pk": "19",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Reader Status 1",
-			"meter_status_id": 1
+			"category": "Repeat Day",
+			"key": "9 day",
+			"value": "9 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ReaderStatus",
+		"pk": "20",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Reader Status 2",
-			"meter_status_id": 2
+			"category": "Repeat Day",
+			"key": "10 day",
+			"value": "10 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ReadingStatus",
+		"pk": "21",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Reading Status 1"
+			"category": "Repeat Day",
+			"key": "11 day",
+			"value": "11 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ReadingStatus",
+		"pk": "22",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Reading Status 2"
+			"category": "Repeat Day",
+			"key": "12 day",
+			"value": "12 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ReadingTakenBy",
+		"pk": "23",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Aman",
-			"meter_reader_id": 1
+			"category": "Repeat Day",
+			"key": "13 day",
+			"value": "13 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ReadingTakenBy",
+		"pk": "24",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Niraj",
-			"meter_reader_id": 2
+			"category": "Repeat Day",
+			"key": "14 day",
+			"value": "14 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.RouteAssignmentStatus",
+		"pk": "25",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Confirm"
+			"category": "Repeat Day",
+			"key": "15 day",
+			"value": "15 Day",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.RouteAssignmentStatus",
+		"pk": "26",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Reject"
+			"category": "Repeat Hour",
+			"key": "1 hour",
+			"value": "1 Hour",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.RouteAssignment",
+		"pk": "27",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"meter_reader_id": 1,
-			"month": "202007",
-			"status_id": 1,
-			"is_meter_reading": "True"
+			"category": "Repeat Hour",
+			"key": "2 hour",
+			"value": "2 Hour",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.RouteAssignment",
+		"pk": "28",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 2,
-			"route_id": 2,
-			"meter_reader_id": 1,
-			"month": "202007",
-			"status_id": 2,
-			"is_meter_reading": "True"
+			"category": "Repeat Hour",
+			"key": "3 hour",
+			"value": "3 Hour",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "3",
-		"model": "meter_reading.RouteAssignment",
+		"pk": "29",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"meter_reader_id": 1,
-			"month": "202007",
-			"status_id": 1,
-			"is_bill_distribution": "True"
+			"category": "Repeat Hour",
+			"key": "4 hour",
+			"value": "4 Hour",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "4",
-		"model": "meter_reading.RouteAssignment",
+		"pk": "30",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 2,
-			"route_id": 2,
-			"meter_reader_id": 1,
-			"month": "202007",
-			"status_id": 2,
-			"is_bill_distribution": "True"
+			"category": "Repeat Hour",
+			"key": "5 hour",
+			"value": "5 Hour",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.RouteUploadStatus",
+		"pk": "31",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Route upload Status 1"
+			"category": "Repeat Month",
+			"key": "1 month",
+			"value": "1 Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.RouteUploadStatus",
+		"pk": "32",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Route upload status 2"
+			"category": "Repeat Month",
+			"key": "2 month",
+			"value": "2 Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "3",
-		"model": "meter_reading.RouteUpload",
+		"pk": "33",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"token": "2531",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"month": "202007",
-			"route_upload_status_id": 1,
-			"remark": "remark 1"
+			"category": "Repeat Week",
+			"key": "1 week",
+			"value": "1 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "4",
-		"model": "meter_reading.RouteUpload",
+		"pk": "34",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"token": "265531",
-			"bill_cycle_id": 2,
-			"route_id": 2,
-			"month": "202007",
-			"route_upload_status_id": 2,
-			"remark": "remark 2"
+			"category": "Repeat Week",
+			"key": "2 week",
+			"value": "2 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ScheduleStatus",
+		"pk": "35",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Schedule Status 1"
+			"category": "Repeat Week",
+			"key": "3 week",
+			"value": "3 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ScheduleStatus",
+		"pk": "36",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Schedule status 2"
+			"category": "Repeat Week",
+			"key": "4 week",
+			"value": "4 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ScheduleType",
+		"pk": "37",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Meter Reading"
+			"category": "Repeat Week",
+			"key": "5 week",
+			"value": "5 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ScheduleType",
+		"pk": "38",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Bill Distribution"
+			"category": "Repeat Week",
+			"key": "6 week",
+			"value": "6 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "3",
-		"model": "meter_reading.ScheduleType",
+		"pk": "39",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "Notices"
+			"category": "Repeat Week",
+			"key": "7 week",
+			"value": "7 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.Schedule",
+		"pk": "40",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"schedule_type_id": 1,
-			"activity_type_id": 1,
-			"area_id": 1,
-			"sub_area_id": 1,
-			"bill_cycle_id": 1,
-			"schedule_status_id": 1,
-			"bill_month": "202007"
+			"category": "Repeat Week",
+			"key": "8 week",
+			"value": "8 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.Schedule",
+		"pk": "41",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"schedule_type_id": 2,
-			"activity_type_id": 2,
-			"area_id": 1,
-			"sub_area_id": 1,
-			"bill_cycle_id": 2,
-			"schedule_status_id": 2,
-			"bill_month": "202007"
+			"category": "Repeat Week",
+			"key": "9 week",
+			"value": "9 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.Consumer",
+		"pk": "42",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "215454",
-			"first_name": "Amir",
-			"middle_name": "bhai",
-			"last_name": "Siddiki",
-			"email_id": "amir@gmail.com",
-			"phone_mobile": "5465453513",
-			"address_line_1": "kalam street",
-			"country_id": 1,
-			"state_id": 1,
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"bill_cycle_id": 1,
-			"bill_month": "202007",
-			"route_id": 1,
-			"meter_no": "3543543",
-			"meter_status_id": 1,
-			"current_reading": "5435",
-			"reading_status_id": 1,
-			"reader_status_id": 1,
-			"scheme_id": 1,
-			"month": "202007",
-			"is_meter_reading": "True"
+			"category": "Repeat Week",
+			"key": "10 week",
+			"value": "10 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.Consumer",
+		"pk": "43",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "24515454",
-			"first_name": "vijay",
-			"middle_name": "s",
-			"last_name": "Bhaduria",
-			"email_id": "vijay@gmail.com",
-			"phone_mobile": "5453513",
-			"address_line_1": "gandhi street",
-			"country_id": 1,
-			"state_id": 1,
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"bill_cycle_id": 1,
-			"bill_month": "202007",
-			"route_id": 1,
-			"meter_no": "3543543",
-			"meter_status_id": 1,
-			"current_reading": "5435",
-			"reading_status_id": 1,
-			"reader_status_id": 1,
-			"scheme_id": 1,
-			"month": "202007",
-			"is_meter_reading": "True"
+			"category": "Repeat Week",
+			"key": "11 week",
+			"value": "11 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "3",
-		"model": "meter_reading.Consumer",
+		"pk": "44",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "215454",
-			"first_name": "Amir",
-			"middle_name": "bhai",
-			"last_name": "Siddiki",
-			"email_id": "amir@gmail.com",
-			"phone_mobile": "5465453513",
-			"address_line_1": "kalam street",
-			"country_id": 1,
-			"state_id": 1,
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"bill_cycle_id": 1,
-			"bill_month": "202007",
-			"route_id": 1,
-			"meter_no": "3543543",
-			"meter_status_id": 1,
-			"current_reading": "5435",
-			"reading_status_id": 1,
-			"reader_status_id": 1,
-			"scheme_id": 1,
-			"month": "202007",
-			"is_bill_distribution": "True"
+			"category": "Repeat Week",
+			"key": "12 week",
+			"value": "12 Week",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "4",
-		"model": "meter_reading.Consumer",
+		"pk": "45",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "24515454",
-			"first_name": "vijay",
-			"middle_name": "s",
-			"last_name": "Bhaduria",
-			"email_id": "vijay@gmail.com",
-			"phone_mobile": "5453513",
-			"address_line_1": "gandhi street",
-			"country_id": 1,
-			"state_id": 1,
-			"city_id": 1,
-			"area_id": 1,
-			"subarea_id": 1,
-			"bill_cycle_id": 1,
-			"bill_month": "202007",
-			"route_id": 1,
-			"meter_no": "3543543",
-			"meter_status_id": 1,
-			"current_reading": "5435",
-			"reading_status_id": 1,
-			"reader_status_id": 1,
-			"scheme_id": 1,
-			"month": "202007",
-			"is_bill_distribution": "True"
+			"category": "Repeat Year",
+			"key": "1 year",
+			"value": "1 Year",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.Jobcard",
+		"pk": "46",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "215454",
-			"consumer_id": 1,
-			"meter_reader_id": 1,
-			"month": "202007",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"route_assigned_id": 1,
-			"status_id": 1,
-			"is_meter_reading": "True"
+			"category": "Repeat Year",
+			"key": "2 year",
+			"value": "2 Year",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.Jobcard",
+		"pk": "47",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "21545454",
-			"consumer_id": 2,
-			"meter_reader_id": 1,
-			"month": "202007",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"route_assigned_id": 1,
-			"status_id": 1,
-			"is_meter_reading": "True"
+			"category": "Occur Month",
+			"key": "day 1 of the month",
+			"value": "Day 1 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "3",
-		"model": "meter_reading.Jobcard",
+		"pk": "48",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "215454",
-			"consumer_id": 1,
-			"meter_reader_id": 2,
-			"month": "202007",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"route_assigned_id": 1,
-			"status_id": 1,
-			"is_bill_distribution": "True"
+			"category": "Occur Month",
+			"key": "day 2 of the month",
+			"value": "Day 2 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "4",
-		"model": "meter_reading.Jobcard",
+		"pk": "49",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "2155454",
-			"consumer_id": 2,
-			"meter_reader_id": 2,
-			"month": "202007",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"route_assigned_id": 1,
-			"status_id": 1,
-			"is_bill_distribution": "True"
+			"category": "Occur Month",
+			"key": "day 3 of the month",
+			"value": "Day 3 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.MeterReading",
+		"pk": "50",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"reading_type_id": 1,
-			"reading_type_status_id": 1,
-			"month": "202007",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"consumer_no": "21545454",
-			"consumer_id": 1,
-			"meter_no": "26532",
-			"meter_image_type_id": 1,
-			"jobcard_id": 1,
-			"current_reading": 123.23,
-			"consumption": 12,
-			"reading_status_id": 1,
-			"meter_status_id": 1,
-			"reader_status_id": 1,
-			"reading_taken_by_id": 1
+			"category": "Occur Month",
+			"key": "day 4 of the month",
+			"value": "Day 4 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.MeterReading",
+		"pk": "51",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"reading_type_id": 1,
-			"reading_type_status_id": 1,
-			"month": "202007",
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"consumer_no": "545454",
-			"consumer_id": 2,
-			"meter_no": "2654532",
-			"meter_image_type_id": 1,
-			"jobcard_id": 1,
-			"current_reading": 1123.23,
-			"consumption": 182,
-			"reading_status_id": 1,
-			"meter_status_id": 1,
-			"reader_status_id": 1,
-			"reading_taken_by_id": 1
+			"category": "Occur Month",
+			"key": "day 5 of the month",
+			"value": "Day 5 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ReadingAdditionalParameters",
+		"pk": "52",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "545454",
-			"meter_reading_id": 1,
-			"lat": "1351",
-			"long": "15351",
-			"new_sequence": "4515351",
-			"prev_sequence": "1545351",
-			"location_guidance": "shbb",
-			"time_taken": "53"
+			"category": "Occur Month",
+			"key": "day 6 of the month",
+			"value": "Day 6 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ReadingAdditionalParameters",
+		"pk": "53",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"consumer_no": "545454",
-			"meter_reading_id": 2,
-			"lat": "13551",
-			"long": "155351",
-			"new_sequence": "44515351",
-			"prev_sequence": "41545351",
-			"location_guidance": "sjhhbb",
-			"time_taken": "553"
+			"category": "Occur Month",
+			"key": "day 7 of the month",
+			"value": "Day 7 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.Unit",
+		"pk": "54",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 1,
-			"name": "Unit 1"
+			"category": "Occur Month",
+			"key": "day 8 of the month",
+			"value": "Day 8 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.Unit",
+		"pk": "55",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"name": "Unit 2"
+			"category": "Occur Month",
+			"key": "day 9 of the month",
+			"value": "Day 9 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.ValidationType",
+		"pk": "56",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "V1"
+			"category": "Occur Month",
+			"key": "day 10 of the month",
+			"value": "Day 10 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.ValidationType",
+		"pk": "57",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"name": "V2"
+			"category": "Occur Month",
+			"key": "day 11 of the month",
+			"value": "Day 11 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "1",
-		"model": "meter_reading.Validation",
+		"pk": "58",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"consumer_no": "21545454",
-			"meter_reading_id": 1,
-			"month": "202007",
-			"validation_type_id": 1,
-			"validator_id": 1,
-			"validator_meter_status_id": 1,
-			"validator_reader_status_id": 1,
-			"validator_reading": "26532",
-			"validator_comment": "comment 1",
-			"validator_image_remark": "clear",
-			"is_meter_matching": "True",
-			"is_reading_matching": "True"
+			"category": "Occur Month",
+			"key": "day 12 of the month",
+			"value": "Day 12 Of The Month",
+			"is_active": "True"
 		}
 	},
 	{
-		"pk": "2",
-		"model": "meter_reading.Validation",
+		"pk": "59",
+		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"tenant": 4,
-			"utility": 2,
-			"bill_cycle_id": 1,
-			"route_id": 1,
-			"consumer_no": "545454",
-			"meter_reading_id": 2,
-			"month": "202007",
-			"validation_type_id": 1,
-			"validator_id": 1,
-			"validator_meter_status_id": 1,
-			"validator_reader_status_id": 1,
-			"validator_reading": "426532",
-			"validator_comment": "comment 2",
-			"validator_image_remark": "clear",
-			"is_meter_matching": "True",
-			"is_reading_matching": "True"
+			"category": "Occur Month",
+			"key": "day 14 of the month",
+			"value": "Day 14 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "60",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 15 of the month",
+			"value": "Day 15 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "61",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 16 of the month",
+			"value": "Day 16 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "62",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 17 of the month",
+			"value": "Day 17 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "63",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 18 of the month",
+			"value": "Day 18 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "64",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 19 of the month",
+			"value": "Day 19 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "65",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 20 of the month",
+			"value": "Day 20 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "66",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 21 of the month",
+			"value": "Day 21 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "67",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 22 of the month",
+			"value": "Day 22 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "68",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 23 of the month",
+			"value": "Day 23 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "69",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 24 of the month",
+			"value": "Day 24 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "70",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 25 of the month",
+			"value": "Day 25 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "71",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 26 of the month",
+			"value": "Day 26 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "72",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 27 of the month",
+			"value": "Day 27 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "73",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 28 of the month",
+			"value": "Day 28 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "74",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 29 of the month",
+			"value": "Day 29 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "75",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 30 of the month",
+			"value": "Day 30 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "76",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Month",
+			"key": "day 31 of the month",
+			"value": "Day 31 Of The Month",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "77",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "sun",
+			"value": "Sun",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "78",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "mon",
+			"value": "Mon",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "79",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "tue",
+			"value": "Tue",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "80",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "wed",
+			"value": "Wed",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "81",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "thu",
+			"value": "Thu",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "82",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "fri",
+			"value": "Fri",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "83",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Occur Week",
+			"key": "sat",
+			"value": "Sat",
+			"is_active": "True"
 		}
 	}
 ]

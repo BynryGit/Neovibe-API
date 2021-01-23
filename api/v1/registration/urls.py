@@ -16,7 +16,7 @@ urlpatterns = [
     path('<uuid:id_string>/reject', RegistrationReject.as_view()),
     path('<uuid:id_string>/hold', RegistrationHold.as_view()),
     path('<uuid:id_string>/approve', RegistrationApprove.as_view()),
-    path('<uuid:id_string>/notes', RegistrationNoteList.as_view()),
+    path('<uuid:id_string>/note/list', RegistrationNoteList.as_view()),
     path('<uuid:id_string>/note', RegistrationNote.as_view()),
     path('<uuid:id_string>/life-cycles', RegistrationLifeCycleList.as_view()),
     path('payment/<uuid:id_string>/transactions', RegistrationPaymentTransactionList.as_view()),

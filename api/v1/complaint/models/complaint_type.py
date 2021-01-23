@@ -32,6 +32,6 @@ def get_complaint_type_by_id_string(id_string):
 
 def get_complaint_type_by_id(id):
     try:
-        return ComplaintType.objects.filter(id = id)
+        return ComplaintType.objects.get(id=id)
     except:
         return False

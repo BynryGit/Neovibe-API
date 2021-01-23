@@ -60,3 +60,10 @@ class ServiceSubTypeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceSubTypeTbl
         fields = ('name', 'id_string','is_active','created_by','created_date','service')
+
+
+class ServiceSubTypeShortListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ServiceSubTypeTbl
+        fields = ('name', 'id_string')

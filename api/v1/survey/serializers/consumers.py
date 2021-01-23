@@ -7,7 +7,7 @@ from v1.survey.models.survey_consumer import SurveyConsumer
 from v1.survey.models.survey import Survey
 from v1.supplier.models.supplier import Supplier
 from v1.survey.views.common_functions import set_survey_validate_data
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class SurveSerializers(serializers.ModelSerializer):
     class Meta:

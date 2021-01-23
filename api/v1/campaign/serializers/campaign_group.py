@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 from v1.campaign.models.campaign_group import CampaignGroup
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class CampaignGroupListSerializer(serializers.ModelSerializer):
 

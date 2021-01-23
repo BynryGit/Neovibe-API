@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.consumer.models.service_sub_type import ServiceSubType as ServiceSubTypeTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -11,7 +11,7 @@ from v1.consumer.views.common_functions import set_service_subtype_validated_dat
 
 
 class ServiceSubTypeListSerializer(serializers.ModelSerializer):
-    service_type = ServiceTypeListSerializer(many="False", source="get_service_type")
+    service_type = ServiceTypeListSerializer(source="get_service_type")
 
     class Meta:
         model = ServiceSubTypeTbl

@@ -32,6 +32,6 @@ def get_service_type_by_id_string(id_string):
 
 def get_service_type_by_id(id):
     try:
-        return ServiceType.objects.filter(id = id)
+        return ServiceType.objects.get(id = id)
     except:
         return False

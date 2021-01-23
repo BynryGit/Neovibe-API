@@ -1,4 +1,3 @@
-
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 from django.db import models  # importing package for database
@@ -10,13 +9,14 @@ from v1.utility.models.utility_master import UtilityMaster
 from v1.commonapp.models.service_type import get_service_type_by_id
 from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
 
+
 # table header
 # module: Work Order | sub-module -
 # table type: Master
 # table name: WorkOrder Master
 # table description: It contains the list of work_order
 # #frequency of data changes: high
-# sample table data:"Meter Installtion","meter repair"
+# sample table data:"Meter Installation","meter repair"
 # reference tables:
 # Author : Priyanka Kachare
 # Creation Date : 16/12/2020
@@ -26,6 +26,7 @@ class WorkOrderMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     work_order_number = models.BigIntegerField(null=True, blank=True)
+    consumer_service_master_id = models.BigIntegerField(null=True, blank=True)
     service_type_id = models.BigIntegerField(blank=False, null=False)
     service_subtype_id = models.BigIntegerField(blank=False, null=False)
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -53,6 +54,7 @@ class WorkOrderMaster(models.Model):
         service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
         return service_subtype
 
+
 # Create work_order_master table end
 
 def get_work_order_master_by_tenant_id_string(id_string):
@@ -73,5 +75,12 @@ def get_work_order_master_by_id(id):
 def get_work_order_master_by_id_string(id_string):
     try:
         return WorkOrderMaster.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_work_order_master_by_consumer_service_master_id(id):
+    try:
+        return WorkOrderMaster.objects.get(consumer_service_master_id=id)
     except:
         return False

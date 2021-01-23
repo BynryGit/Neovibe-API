@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.campaign.models.advert_status import AdvertStatus
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class AdvertisementStatusListSerializer(serializers.ModelSerializer):
     class Meta:

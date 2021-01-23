@@ -9,7 +9,7 @@ from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.advertisement_type import AdvertisementType
 from v1.campaign.models.advert_status import AdvertStatus
 from v1.campaign.views.common_functions import set_validated_data
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class AdvertisementTypeSerializer(serializers.ModelSerializer):
 

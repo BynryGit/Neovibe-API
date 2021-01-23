@@ -8,7 +8,6 @@ from django.core.paginator import Paginator
 from v1.survey.models.survey import Survey
 from v1.survey.models.survey_consumer import SurveyConsumer
 from django.db import transaction
-from api.settings import DISPLAY_DATE_FORMAT
 from v1.consumer.models.consumer_category import get_consumer_category_by_id,get_consumer_category_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.supplier.models.supplier import get_supplier_by_id_string

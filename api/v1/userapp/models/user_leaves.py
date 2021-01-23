@@ -33,10 +33,10 @@ class UserLeaves(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.user_id
+        return str(self.date )+" "+str(self.user_id)
 
     def __unicode__(self):
-        return self.user_id
+        return self.date
 
     def get_tenant(self):
         return self.tenant

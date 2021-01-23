@@ -1,7 +1,10 @@
 from datetime import datetime
 from django.db import transaction
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.validators import UniqueTogetherValidator
+
+from api.messages import MOBILE_ALREADY_EXISTS
+from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_master import ConsumerMaster
 from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
 
@@ -21,7 +24,7 @@ class ConsumerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConsumerMaster
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'email_id',
-                  'phone_mobile')
+                  'phone_mobile','billing_address_line_1')
 
 
 class ConsumerViewSerializer(serializers.ModelSerializer):
@@ -57,24 +60,30 @@ class ConsumerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerMaster
-        validators = [UniqueTogetherValidator(queryset=ConsumerMaster.objects.all(), fields=('phone_mobile',),
-                                              message='Consumer already exists!')]
         fields = '__all__'
 
     def create(self, validated_data, user):
         validated_data = set_consumer_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_obj = super(ConsumerSerializer, self).create(validated_data)
-            consumer_obj.tenant = user.tenant
-            consumer_obj.created_by = user.id
-            consumer_obj.created_date = datetime.now()
-            consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
-            consumer_obj.is_active = True
-            consumer_obj.save()
-            return consumer_obj
+        if ConsumerMaster.objects.filter(phone_mobile=validated_data['phone_mobile'],
+                                         utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_obj = super(ConsumerSerializer, self).create(validated_data)
+                consumer_obj.tenant = user.tenant
+                consumer_obj.created_by = user.id
+                consumer_obj.created_date = datetime.now()
+                consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
+                consumer_obj.is_active = True
+                consumer_obj.save()
+                return consumer_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_consumer_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_obj = super(ConsumerSerializer, self).update(instance, validated_data)
-            return consumer_obj
+        if ConsumerMaster.objects.exclude(id_string=instance.id_string).filter(
+                phone_mobile=validated_data['phone_mobile'], utility=instance.utility).exists():
+            raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_obj = super(ConsumerSerializer, self).update(instance, validated_data)
+                return consumer_obj

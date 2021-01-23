@@ -3,7 +3,7 @@ from datetime import datetime
 
 from rest_framework import serializers, status
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.userapp.models.user_utility import UserUtility
 from v1.userapp.views.common_functions import set_user_utility_validated_data

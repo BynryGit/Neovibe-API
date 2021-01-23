@@ -4,7 +4,7 @@ from datetime import datetime
 from rest_framework import serializers, status
 import random
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from master.models import User
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
@@ -77,7 +77,7 @@ class GetUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'id_string')
+        fields = ('email', 'id_string','user_id','first_name', 'last_name', 'phone_mobile')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):

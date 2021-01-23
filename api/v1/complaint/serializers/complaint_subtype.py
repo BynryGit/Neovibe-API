@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.complaint.models.complaint_sub_type import ComplaintSubType as ComplaintSubTypeTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -9,24 +9,25 @@ from v1.complaint.views.common_functions import set_complaint_subtype_validated_
 from rest_framework import status
 from v1.complaint.serializers.complaint_type import ComplaintTypeListSerializer
 
+
 class ComplaintSubTypeListSerializer(serializers.ModelSerializer):
-    complaint_type = ComplaintTypeListSerializer(many="False",source="get_complaint_type")
+    complaint_type = ComplaintTypeListSerializer(source="get_complaint_type")
+
     class Meta:
         model = ComplaintSubTypeTbl
-        fields = ('name', 'id_string','complaint_type','created_date','is_active','created_by')
+        fields = ('name', 'id_string', 'complaint_type', 'created_date', 'is_active', 'created_by')
+
 
 class ComplaintSubTypeViewSerializer(serializers.ModelSerializer):
-    
-
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    
 
     class Meta:
         model = ComplaintSubTypeTbl
-        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string','created_date')
+        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date')
+
 
 class ComplaintSubTypeSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True, max_length=200,
@@ -34,7 +35,6 @@ class ComplaintSubTypeSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
     complaint_type_id = serializers.CharField(required=True, max_length=200)
-    
 
     class Meta:
         model = ComplaintSubTypeTbl
@@ -44,7 +44,7 @@ class ComplaintSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_complaint_subtype_validated_data(validated_data)
             if ComplaintSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                       utility_id=validated_data['utility_id']).exists():
+                                                  utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(COMPLAINT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 complaint_subtype_obj = super(ComplaintSubTypeSerializer, self).create(validated_data)

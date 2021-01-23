@@ -1,20 +1,23 @@
 from rest_framework import serializers
 from v1.work_order.models.work_order_master import WorkOrderMaster as WorkOrderMasterTbl
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import WORK_ORDER_ALREADY_EXIST
 from v1.work_order.views.common_functions import set_work_order_validated_data
-from v1.commonapp.serializers.service_subtype import ServiceSubTypeListSerializer
+from v1.commonapp.serializers.service_type import GetServiceTypeSerializer
+from v1.commonapp.serializers.service_subtype import ServiceSubTypeListSerializer,ServiceSubTypeShortListSerializer
 from rest_framework import status
 import json
 
 
 class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
+    service_type_id = GetServiceTypeSerializer(source='get_service_type')
+    service_subtype_id = ServiceSubTypeShortListSerializer(source='get_service_subtype')
     class Meta:
         model = WorkOrderMasterTbl
-        fields = ('name', 'id_string')
+        fields = ('name', 'id_string','service_type_id','service_subtype_id','description','json_obj')
 
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):

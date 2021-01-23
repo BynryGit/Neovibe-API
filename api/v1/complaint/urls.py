@@ -1,7 +1,8 @@
 from django.urls import path
 from v1.complaint.views.complaint import *
-from v1.complaint.views.complaint_type import ComplaintTypeList,ComplaintTypeDetail,ComplaintType
-from v1.complaint.views.complaint_subtype import ComplaintSubType,ComplaintSubTypeDetail,ComplaintSubTypeList
+from v1.complaint.views.complaint_type import ComplaintTypeList, ComplaintTypeDetail, ComplaintType
+from v1.complaint.views.complaint_subtype import ComplaintSubType, ComplaintSubTypeDetail, ComplaintSubTypeList
+from v1.complaint.views.consumer_complaint_master import ConsumerComplaintMasterList
 
 urlpatterns = [
     path('assignment/list', ComplaintAssignmentList.as_view()),
@@ -16,4 +17,5 @@ urlpatterns = [
     path('subtype/<uuid:id_string>', ComplaintSubTypeDetail.as_view()),
     path('subtype', ComplaintSubType.as_view()),
     path('utility/<uuid:id_string>/list', ComplaintList.as_view()),
+    path('<uuid:id_string>/list', ConsumerComplaintMasterList.as_view())
 ]

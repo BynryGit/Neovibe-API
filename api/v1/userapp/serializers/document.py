@@ -5,7 +5,7 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.document import Document
 from v1.commonapp.serializers.document_sub_type import DocumentSubTypeSerializer
 from v1.commonapp.serializers.document_type import DocumentTypeSerializer

@@ -2,22 +2,22 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
 
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.skill import SkillViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.userapp.models.user_skill import UserSkill
 from v1.userapp.views.common_functions import set_user_skill_validated_data
-
+from v1.userapp.serializers.user import GetUserSerializer
 
 class UserSkillViewSerializer(serializers.ModelSerializer):
-
-    skill = SkillViewSerializer(many=False, required=True, source='get_skill')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    user = GetUserSerializer(many=False, source='get_user')
+    # skill = SkillViewSerializer(many=False, required=True, source='get_skill')
+    # created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    # updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
 
     class Meta:
         model = UserSkill
-        fields = ('id_string', 'created_date', 'updated_date', 'skill')
+        fields = ('id','id_string','user')
 
 
 class UserSkillSerializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class UserSkillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserSkill
-        fields = '__all__'
+        fields = ('__all__')
 
     def create(self, validate_data, user):
         validated_data = set_user_skill_validated_data(validate_data)

@@ -1,5 +1,5 @@
 from rest_framework import serializers, status
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.models.skills import Skills as SkillTbl
 from v1.commonapp.serializers.service_type import GetServiceTypeSerializer
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer

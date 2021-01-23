@@ -1,13 +1,13 @@
 import os
 import jwt  # jwt token library
 from rest_framework import status, serializers
-from api.settings import SECRET_KEY
 from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.service_type import get_service_type_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
+from v1.commonapp.views.settings_reader import SettingsReader
 from v1.userapp.models.user_privilege import check_user_privilege_exists
 from v1.userapp.models.user_token import check_token_exists, check_token_exists_for_user
 from v1.userapp.models.user_utility import check_user_utility_exists
@@ -38,10 +38,12 @@ from v1.utility.models.utility_document_type import get_utility_document_type_by
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 
+settings_reader = SettingsReader()
+
 
 def get_payload(token):
     try:
-        return jwt.decode(token, SECRET_KEY, algorithms='HS256')
+        return jwt.decode(token, settings_reader.get_secret(), algorithms='HS256')
     except:
         return False
 
@@ -519,10 +521,12 @@ def set_product_validated_data(validated_data):
             raise CustomAPIException("Product not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
+
 class ChoiceField(serializers.ChoiceField):
 
     def to_representation(self, obj):
         return self._choices[obj]
+
 
 def set_department_type_validated_data(validated_data):
     if "utility_id" in validated_data:

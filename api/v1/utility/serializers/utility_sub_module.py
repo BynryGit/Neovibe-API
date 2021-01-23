@@ -3,7 +3,7 @@ __author__ = "aki"
 from rest_framework import serializers
 from django.db import transaction
 from django.utils import timezone
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 from v1.commonapp.serializers.module import ModuleShortViewSerializer
 from v1.commonapp.serializers.sub_module import SubModuleShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer

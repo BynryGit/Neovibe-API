@@ -11,8 +11,19 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-# from v1.commonapp.views.secretcache import SecretManager
-# secret = SecretManager()
+from v1.commonapp.views.secretcache import SecretManager
+
+smart360_env = ''
+secret = ""
+if os.environ["smart360_env"] != 'dev':
+    secret = SecretManager()
+
+
+def get_secret_manager(key):
+    if os.environ["smart360_env"] != 'dev':
+        return secret.get_secret(key)
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4urz*1-p45#e2nnlg$fjqb*rhv^w_l35n4#^l%m^8$*2t5slpg'
+SECRET_KEY = get_secret_manager(smart360_env + "_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -112,10 +123,10 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smart360_8',
-        'USER': 'postgres',
-        'PASSWORD': 'chinmay123',
-        'HOST': 'localhost',
+        'NAME': 'smart360',
+        'USER': get_secret_manager(smart360_env + "_database_user"),
+        'PASSWORD': get_secret_manager(smart360_env + "_database_password"),
+        'HOST': get_secret_manager(smart360_env + "_database_host"),
         'PORT': '5432',
     }
 }
@@ -220,12 +231,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_USER = get_secret_manager(smart360_env + "_email_host_user")
+EMAIL_HOST_PASSWORD = get_secret_manager(smart360_env + "_email_host_password")
 
 # SMS configuration
-
-TWILIO_ACCOUNT_SID = 'ACf8545f63b2bf3513b90b2ac626b53d8b'
-TWILIO_AUTH_TOKEN = '413b55d88e459cc05c713b4510808dec'
-
-
+TWILIO_ACCOUNT_SID = get_secret_manager(smart360_env + "_twilio_account_id")
+TWILIO_AUTH_TOKEN = get_secret_manager(smart360_env + "_twilio_auth_token")

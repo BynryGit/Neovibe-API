@@ -10,6 +10,8 @@ from master.models import get_user_by_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no, get_invoice_bill_by_id_string
 from v1.billing.serializers.invoice_bill import *
 from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
+from v1.commonapp.models.notes import Notes
+from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -28,12 +30,13 @@ from v1.consumer.serializers.consumer_ownership import ConsumerOwnershipListSeri
 from v1.consumer.serializers.consumer_personal_detail import ConsumerPersonalDetailSerializer
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailSerializer
+from v1.consumer.views.tasks import save_consumer_audit_log
 from v1.meter_data_management.models.meter import get_meter_by_id_string
 from v1.payment.models.payment import get_payments_by_consumer_no, get_payment_by_id_string
 from v1.payment.serializer.payment import *
 from v1.payment.serializer.payment_transactions import PaymentTransactionSerializer
-from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
-from v1.service.serializers.service import ServiceDetailListSerializer
+from v1.service.models.consumer_service_details import get_consumer_services_by_consumer_no
+from v1.service.serializers.consumer_service_details import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_service import get_utility_service_by_id_string
@@ -132,7 +135,8 @@ class Consumer(GenericAPIView):
                     if payment and transactions:
                         payment_serializer = PaymentSerializer(data=payment)
                         if payment_serializer.is_valid(raise_exception=True):
-                            payment_obj = payment_serializer.create(payment_serializer.validated_data, consumer_obj, user)
+                            payment_obj = payment_serializer.create(payment_serializer.validated_data, consumer_obj,
+                                                                    user)
                             payment_obj.consumer_no = consumer_obj.consumer_no
                             payment_obj.save()
                             for item in transactions:
@@ -159,7 +163,8 @@ class Consumer(GenericAPIView):
                         consumer_offer_detail_serializer.is_valid()
                         consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
                             consumer_offer_detail_serializer.validated_data, consumer_obj, user)
-                        consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(request.data['offer_id']).id
+                        consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
+                            request.data['offer_id']).id
                         consumer_offer_detail_obj.save()
                         # Consumer offer detail save code end
                     if account_holders:
@@ -225,27 +230,47 @@ class ConsumerDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
-            user = get_user_by_id_string(user_id_string)
-            consumer = get_consumer_by_id_string(id_string)
-            if consumer:
-                serializer = ConsumerSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=False):
-                    consumer_obj = serializer.update(consumer, serializer.validated_data, user)
-                    view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
+            with transaction.atomic():
+                remark = request.data['remark'] if 'remark' in request.data else ""
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(id_string)
+                if consumer:
+                    if "phone_mobile" not in request.data:
+                        request.data["phone_mobile"] = consumer.phone_mobile
+                    serializer = ConsumerSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=True):
+                        if 'email_id' in request.data:
+                            # Audit log code start
+                            save_consumer_audit_log(consumer, "email_id", consumer.email_id, request.data['email_id'],
+                                                    remark, user)
+                            # Audit log code end
+                        if 'billing_address_line_1' in request.data:
+                            # Audit log code start
+                            save_consumer_audit_log(consumer, "billing_address_line_1", consumer.billing_address_line_1,
+                                                    request.data['billing_address_line_1'], remark, user)
+                            # Audit log code end
+                        if 'mobile_change' in request.data:
+                            # Audit log code start
+                            save_consumer_audit_log(consumer, "phone_mobile", consumer.phone_mobile,
+                                                    request.data['phone_mobile'], remark, user)
+                            # Audit log code end
+                        consumer_obj = serializer.update(consumer, serializer.validated_data, user)
+                        view_serializer = ConsumerViewSerializer(instance=consumer_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: view_serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
                     return Response({
-                        STATE: SUCCESS,
-                        RESULT: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULT: CONSUMER_NOT_FOUND,
-                }, status=status.HTTP_404_NOT_FOUND)
+                        STATE: ERROR,
+                        RESULT: CONSUMER_NOT_FOUND,
+                    }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            print("############", e)
             logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer')
             res = self.handle_exception(e)
             return Response({
@@ -600,26 +625,26 @@ class ConsumerPaymentDetail(GenericAPIView):
 # Sub Module: Consumer
 # Interaction: Add consumer complaint
 # Usage: Add
-# Tables used: CosumerComlaint
-# Auther: Rohan
+# Tables used: Consumer Complaint
+# Author: Rohan
 # Created on: 22/05/2020
 class ConsumerComplaint(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
-    def post(self, request, id_string):
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            consumer_obj = get_consumer_by_id_string(id_string)
+            consumer_obj = get_consumer_by_id_string(request.data['consumer_id_string'])
             request.data['consumer_no'] = consumer_obj.consumer_no
             serializer = ComplaintSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                complaint = serializer.create(serializer.validated_data, user)
+                complaint = serializer.create(serializer.validated_data, consumer_obj, user)
                 view_serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
+                    RESULT: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
@@ -915,6 +940,95 @@ class ConsumerOwnershipList(generics.ListAPIView):
                         return queryset
                     else:
                         raise CustomAPIException("Consumer ownership not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Consumer')
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/note
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Add consumer note
+# Usage: Add
+# Tables used: Note
+# Author: Rohan
+# Created on: 11/01/2021
+class ConsumerNote(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
+    def post(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            consumer = get_consumer_by_id_string(id_string)
+            module = get_module_by_key("CONSUMEROPS")
+            sub_module = get_sub_module_by_key("CONSUMER")
+            serializer = NoteSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                note_obj = serializer.create(serializer.validated_data, user)
+                note_obj.identification_id = consumer.id
+                note_obj.tenant = consumer.tenant
+                note_obj.utility = consumer.utility
+                note_obj.module_id = module
+                note_obj.sub_module_id = sub_module
+                note_obj.save()
+                view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/note/list
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Add Consumer note
+# Usage: Add
+# Tables used: Note
+# Author: Rohan
+# Created on: 11/01/2021
+class ConsumerNoteList(generics.ListAPIView):
+    try:
+        serializer_class = NoteListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant',)
+        search_fields = ('tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    queryset = Notes.objects.filter(identification_id=consumer.id, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Notes not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

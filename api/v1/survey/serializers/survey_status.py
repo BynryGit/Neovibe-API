@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from v1.survey.models.survey_status import SurveyStatus
-from api.settings import DISPLAY_DATE_TIME_FORMAT
+from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
 
 class SurveyStatusListSerializer(serializers.ModelSerializer):
     class Meta:
