@@ -32,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret_manager(smart360_env + "_secret_key")
+SECRET_KEY = get_secret_manager(os.environ['smart360_env']+"_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -124,9 +124,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
-        'USER': get_secret_manager(smart360_env + "_database_user"),
-        'PASSWORD': get_secret_manager(smart360_env + "_database_password"),
-        'HOST': get_secret_manager(smart360_env + "_database_host"),
+        'USER': get_secret_manager(os.environ['smart360_env']+"_database_user"),
+        'PASSWORD': get_secret_manager(os.environ['smart360_env']+"_database_password"),
+        'HOST': get_secret_manager(os.environ['smart360_env']+"_database_host"),
         'PORT': '5432',
     }
 }
@@ -205,7 +205,7 @@ CELERY_ACCEPT_CONTENT = ['application/json', 'application/x-python-serialize']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
-
+    
 # Cronjob configuration
 CRONJOBS = [
     ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation', '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
@@ -213,17 +213,17 @@ CRONJOBS = [
 ]
 
 # Amazon s3 Configuration
-# AWS_ACCESS_KEY_ID = ''
-# AWS_SECRET_ACCESS_KEY = ''
-# AWS_STORAGE_BUCKET_NAME = ''
-# AWS_S3_ENDPOINT_URL = ''
-# AWS_DEFAULT_ACL = None
-# AWS_S3_OBJECT_PARAMETERS = {
-#     'CacheControl': 'max-age=86400',
-# }
-# AWS_LOCATION = ''
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+AWS_STORAGE_BUCKET_NAME = ''
+AWS_S3_ENDPOINT_URL = ''
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = ''
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 
 
 # Email configuration
@@ -231,9 +231,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = get_secret_manager(smart360_env + "_email_host_user")
-EMAIL_HOST_PASSWORD = get_secret_manager(smart360_env + "_email_host_password")
+EMAIL_HOST_USER = get_secret_manager(os.environ['smart360_env']+"_email_host_user")
+EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env']+"_email_host_password")
 
 # SMS configuration
-TWILIO_ACCOUNT_SID = get_secret_manager(smart360_env + "_twilio_account_id")
-TWILIO_AUTH_TOKEN = get_secret_manager(smart360_env + "_twilio_auth_token")
+TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env']+"_twilio_account_id")
+TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env']+"_twilio_auth_token")
