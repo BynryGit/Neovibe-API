@@ -6,14 +6,9 @@ from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAutho
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.complaint.models.complaint import *
-from v1.consumer.models.consumer_master import get_consumer_by_id_string
-from v1.consumer.models.consumer_scheme_master import get_scheme_by_id_string
 from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.payment.serializer.payment import *
-from v1.service.models.consumer_services import get_consumer_services_by_consumer_no
-from v1.service.serializers.service import ServiceDetailListSerializer
-from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.serializers.utility_document_type import UtilityDocumentTypeListSerializer
 from v1.utility.models.utility_document_type import UtilityDocumentType as UtilityDocumentTypeModel
 from v1.utility.models.utility_master import get_utility_by_id_string

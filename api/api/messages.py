@@ -123,6 +123,7 @@ CONSUMER_FAQ_NOT_FOUND = "Consumer Faq not found."
 CONSUMER_SUPPORT_NOT_FOUND = "Consumer support not found."
 ACTIVITY_TYPE_NOT_FOUND = "ACtivity type not found"
 REPEAT_FREQUENCY_NOT_FOUND = "Repeat Frequency not found"
+SERVICE_CONTRACT_TEMPLATE_NOT_FOUND = "Service Contract Template Not Found."
 
 
 
@@ -172,6 +173,9 @@ ROUTE_ALREADY_EXIST = "Route Already Exist"
 DOCUMENT_TYPE_ALREADY_EXIST="Document Type already Exist"
 DOCUMENT_ALREADY_EXIST = "Document Already Exist."
 DOCUMENT_SUBTYPE_ALREADY_EXIST = "Document Subtype already Exist"
+SERVICE_ALREADY_EXIST = "Service Already Exist"
+CONTRACT_ALREADY_EXIST = "Contract Already Exist"
+CONTRACT_TEMPLATE_ALREADY_EXIST = "Contract Template Already Exist"
 
 
 

@@ -12,7 +12,7 @@ from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDeta
 from v1.utility.views.utility_module_submodule import UtilityModuleSubmoduleList
 from v1.utility.views.utility_service import UtilityServiceList
 from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList, \
-    UtilityServiceContractMasterDetail
+    UtilityServiceContractMasterDetail, UtilityServiceContractMaster
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule,UtilitySubModuleListByUtility, api_delete_submodule
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
@@ -35,6 +35,7 @@ from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType, RoleSubTypeLis
 from v1.utility.views.utility_region import UtilityRegionList
 from v1.utility.views.utility_holiday_calendar import HolidayList, Holiday, HolidayDetail
 from v1.utility.views.utility_working_hours import WorkingHourList, WorkingHour, WorkingHourDetail
+from v1.utility.views.utility_service_contract_template import UtilityServiceContractTemplateList
 # from v1.utility.views.utility_country import UtilityCountryList
 # from v1.utility.views.utility_state import UtilityStateList
 
@@ -94,7 +95,10 @@ urlpatterns = [
     path('working_hour/<uuid:id_string>', WorkingHourDetail.as_view()),
     path('<uuid:id_string>/leave_type/list', UtilityLeaveTypeList.as_view()),
     path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
+    path('<uuid:id_string>/service-contract-template/list', UtilityServiceContractTemplateList.as_view()),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
          name='utility_service_contract_master_list'),
+    path('service-contract', UtilityServiceContractMaster.as_view(),
+         name='utility_service_contract_master_post'),
     path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
 ]
