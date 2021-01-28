@@ -8,6 +8,8 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.consumer.models.consumer_credit_rating import ConsumerCreditRating
 from v1.consumer.models.consumer_offer_master import ConsumerOfferMaster
 from v1.consumer.serializers.consumer_credit_rating import ConsumerCreditRatingListSerializer
+from v1.consumer.serializers.consumer_offer_master import ConsumerOfferMasterListSerializer
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 # API Header
@@ -18,10 +20,6 @@ from v1.consumer.serializers.consumer_credit_rating import ConsumerCreditRatingL
 # Tables used: Consumer credit rating
 # Author: Rohan
 # Created on: 17-12-2020
-from v1.consumer.serializers.consumer_offer_master import ConsumerOfferMasterListSerializer
-from v1.utility.models.utility_master import get_utility_by_id_string
-
-
 class ConsumerOfferMasterList(generics.ListAPIView):
     try:
         serializer_class = ConsumerOfferMasterListSerializer

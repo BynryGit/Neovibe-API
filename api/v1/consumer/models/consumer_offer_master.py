@@ -1,11 +1,16 @@
 import uuid
 from datetime import datetime
 from django.db import models
+from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 
 class ConsumerOfferMaster(models.Model):
+    CHOICES = (
+        (0, 'CREDIT'),
+        (1, 'DEBIT'),
+    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -19,6 +24,7 @@ class ConsumerOfferMaster(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     effective_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     expiry_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    category = models.BigIntegerField(choices=CHOICES, default=0)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -30,6 +36,10 @@ class ConsumerOfferMaster(models.Model):
 
     def __unicode__(self):
         return self.offer_code
+
+    @property
+    def get_offer_sub_type(self):
+        return get_offer_sub_type_by_id(self.offer_sub_type_id)
 
 
 def get_consumer_offer_master_by_id_string(id_string):

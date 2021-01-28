@@ -10,6 +10,8 @@ from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail
 from v1.consumer.models.consumer_offer_master import ConsumerOfferMaster
 from v1.consumer.models.consumer_personal_detail import ConsumerPersonalDetail
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
+from v1.consumer.models.offer_sub_type import OfferSubType
+from v1.consumer.models.offer_type import OfferType
 from v1.service.models.consumer_service_details import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_master import ConsumerMaster
@@ -58,3 +60,5 @@ admin.site.register(ConsumerOfferMaster)
 admin.site.register(ConsumerPersonalDetail)
 admin.site.register(ConsumerCreditRating)
 admin.site.register(ConsumerServiceContractDetail)
+admin.site.register(OfferType)
+admin.site.register(OfferSubType)

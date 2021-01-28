@@ -65,5 +65,8 @@ def get_module_by_id_string(id_string):
 
 
 def get_module_by_name(name):
-    module = Module.objects.get(name=name)
-    return module.id
+    try:
+        module = Module.objects.get(name=name)
+        return module.id
+    except:
+        return False

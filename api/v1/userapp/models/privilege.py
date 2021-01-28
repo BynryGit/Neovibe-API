@@ -12,7 +12,7 @@
 # change history
 # <ddmmyyyy>-<changes>-<Author>
 
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 import uuid  # importing package for GUID
@@ -25,7 +25,7 @@ from django.db import models  # importing package for database
 class Privilege(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     key = models.CharField(max_length=200, blank=True, null=True)
-    name = models.CharField(max_length=500, null=False, blank=False) #View,Edit
+    name = models.CharField(max_length=500, null=False, blank=False)  # View,Edit
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -46,6 +46,7 @@ class Privilege(models.Model):
     def get_utility(self):
         return get_utility_by_id(self.utility_id)
 
+
 # Create Privilege table end
 
 
@@ -64,10 +65,14 @@ def get_privilege_by_name(name):
     privilege = Privilege.objects.get(name=name)
     return privilege.id
 
+
 # For getting privilege by name
 def get_privilege_by_key(key):
-    privilege = Privilege.objects.get(key=key)
-    return privilege.id
+    try:
+        privilege = Privilege.objects.get(key=key)
+        return privilege.id
+    except:
+        False
 
 
 # for getting privilege by id_string
