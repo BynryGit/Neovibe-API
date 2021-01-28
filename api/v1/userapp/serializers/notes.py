@@ -5,7 +5,8 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.notes import Notes
 from v1.commonapp.serializers.module import ModuleSerializer
@@ -25,8 +26,8 @@ class NoteViewSerializer(serializers.ModelSerializer):
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Notes
@@ -88,8 +89,8 @@ class NoteListSerializer(serializers.ModelSerializer):
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Document

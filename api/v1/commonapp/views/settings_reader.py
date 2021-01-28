@@ -1,31 +1,18 @@
 import os
-from api.settings import prod, settings_dev
+from api.settings import prod, dev
 settings = None
 if os.environ["smart360_env"] == 'dev':
-    settings = settings_dev
+    settings = dev
 if os.environ["smart360_env"] == 'prod':
     settings = prod
 
 
-class SettingsReader:
+class SettingReader:
 
     @staticmethod
-    def get_secret():
+    def get_display_date_format():
         try:
-            return settings.SECRET_KEY
+            return settings.DISPLAY_DATE_FORMAT
         except:
             pass
 
-    @staticmethod
-    def get_twilio_sid():
-        try:
-            return settings.TWILIO_ACCOUNT_SID
-        except:
-            pass
-
-    @staticmethod
-    def get_twilio_token():
-        try:
-            return settings.TWILIO_AUTH_TOKEN
-        except:
-            pass

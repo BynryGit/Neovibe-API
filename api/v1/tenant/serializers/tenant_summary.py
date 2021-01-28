@@ -1,7 +1,8 @@
 __author__ = "aki"
 
 from rest_framework import serializers
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.tenant.models.tenant_summary_on_monthly_basis import TenantSummaryOnMonthlyBasis as \
     TenantSummaryOnMonthlyBasisTbl
@@ -9,8 +10,8 @@ from v1.tenant.models.tenant_summary_on_monthly_basis import TenantSummaryOnMont
 
 class TenantSummaryOnMonthlyBasisViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = TenantSummaryOnMonthlyBasisTbl

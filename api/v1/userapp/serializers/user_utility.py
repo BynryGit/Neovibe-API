@@ -3,7 +3,8 @@ from datetime import datetime
 
 from rest_framework import serializers, status
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.userapp.models.user_utility import UserUtility
 from v1.userapp.views.common_functions import set_user_utility_validated_data
@@ -13,8 +14,8 @@ from v1.utility.serializers.utility import UtilityMasterViewSerializer
 class UserUtilityViewSerializer(serializers.ModelSerializer):
 
     utility = UtilityMasterViewSerializer(many=False, required=True, source='get_utility')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserUtility

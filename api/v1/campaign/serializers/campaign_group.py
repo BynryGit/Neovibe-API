@@ -1,7 +1,8 @@
 
 from rest_framework import serializers
 from v1.campaign.models.campaign_group import CampaignGroup
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class CampaignGroupListSerializer(serializers.ModelSerializer):
 
@@ -15,7 +16,7 @@ class CampaignGroupViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = CampaignGroup

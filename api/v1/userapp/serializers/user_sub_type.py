@@ -5,7 +5,8 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.userapp.models.user_sub_type import UserSubType
 from v1.userapp.serializers.user_type import GetUserTypeSerializer
@@ -24,8 +25,8 @@ class UserSubTypeListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserSubType
@@ -36,8 +37,8 @@ class UserSubTypeViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     user_type = GetUserTypeSerializer(many=False, required=True, source='get_role_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserSubType

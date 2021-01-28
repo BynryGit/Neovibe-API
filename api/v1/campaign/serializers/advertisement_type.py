@@ -1,6 +1,7 @@
 from rest_framework import serializers, status
 from v1.campaign.models.advertisement_type import AdvertisementType as AdvertisementTypeTbl
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from django.db import transaction
 from datetime import datetime
 from api.messages import ADVERTISEMENT_TYPE_ALREADY_EXIST

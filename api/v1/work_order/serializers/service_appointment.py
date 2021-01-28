@@ -5,7 +5,8 @@ from datetime import datetime
 from rest_framework import serializers, status
 import random
 from rest_framework.validators import UniqueTogetherValidator
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.work_order.models.service_appointments import ServiceAppointment
 from v1.work_order.views.common_functions import set_service_appointment_validated_data
 from v1.tenant.serializers.tenant import TenantStatusViewSerializer
@@ -27,8 +28,8 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
     status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
     work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = ServiceAppointment
@@ -94,8 +95,8 @@ class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
     work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
     status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = ServiceAppointment

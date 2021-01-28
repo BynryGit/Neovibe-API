@@ -4,7 +4,8 @@ from rest_framework import serializers, status
 from django.db import transaction
 from django.utils import timezone
 from api.messages import MODULE_ALREADY_EXIST
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -23,8 +24,8 @@ class TenantModuleListSerializer(serializers.ModelSerializer):
 class TenantModuleViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     module_id = ModuleSerializer(many=False, required=False, source='get_module')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = TenantModuleTbl

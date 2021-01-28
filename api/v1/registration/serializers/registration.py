@@ -2,7 +2,8 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
 from api.messages import MOBILE_ALREADY_EXISTS
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer
@@ -40,7 +41,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(RegistrationViewSerializer, self).to_representation(instance)
-        data['registration_date'] = instance.registration_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        data['registration_date'] = instance.registration_date.strftime(setting_reader.get_display_date_format())
         return data
 
     class Meta:

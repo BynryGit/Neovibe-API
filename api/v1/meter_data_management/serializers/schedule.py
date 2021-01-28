@@ -4,7 +4,8 @@ from django.db import transaction
 from django.utils import timezone
 from api.messages import DATA_ALREADY_EXISTS
 from rest_framework import serializers, status
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
@@ -29,10 +30,10 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type')
     frequency_id = GlobalLookupShortViewSerializer(many=False, source='get_frequency_name')
     repeat_every_id = GlobalLookupShortViewSerializer(many=False, source='get_repeat_every_name')
-    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    start_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    end_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     schedule_status = ChoiceField(choices=ScheduleTbl.SCHEDULE_STATUS)
     is_recurring = serializers.SerializerMethodField()
 

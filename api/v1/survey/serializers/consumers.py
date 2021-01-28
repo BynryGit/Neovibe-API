@@ -7,7 +7,8 @@ from v1.survey.models.survey_consumer import SurveyConsumer
 from v1.survey.models.survey import Survey
 from v1.supplier.models.supplier import Supplier
 from v1.survey.views.common_functions import set_survey_validate_data
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class SurveSerializers(serializers.ModelSerializer):
     class Meta:
@@ -23,7 +24,7 @@ class vendorSerializers(serializers.ModelSerializer):
 
 class ConsumerViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
     survey_id = SurveSerializers(many=False, required=True,source='get_survey')

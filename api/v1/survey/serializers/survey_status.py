@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from v1.survey.models.survey_status import SurveyStatus
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class SurveyStatusListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,7 +10,7 @@ class SurveyStatusListSerializer(serializers.ModelSerializer):
 
 class SurveyStatusViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

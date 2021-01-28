@@ -93,8 +93,7 @@ fabric.properties
 .idea/httpRequests
 
 # dev setting file
-/api/api/settings_dev.py
-/api/api/settings.py
+/api/api/settings/dev.py
 
 # vscode and venv
 .vscode

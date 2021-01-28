@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from v1.work_order.models.work_order_master import WorkOrderMaster as WorkOrderMasterTbl
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException

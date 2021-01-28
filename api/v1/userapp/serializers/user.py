@@ -4,7 +4,8 @@ from datetime import datetime
 from rest_framework import serializers, status
 import random
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from master.models import User
 from v1.commonapp.serializers.city import CitySerializer
 from v1.commonapp.serializers.department import DepartmentSerializer
@@ -111,8 +112,8 @@ class UserListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     status = UserStatusSerializer(many=False, required=True, source='get_user_status')
     department = DepartmentSerializer(many=False, required=True, source='get_department')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     role = serializers.SerializerMethodField('get_role')
     user_type = serializers.CharField(required=False, max_length=200, source='get_user_type')
     user_department = serializers.CharField(required=False, max_length=200, source='get_department')
@@ -144,8 +145,8 @@ class UserViewSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     supplier = SupplierViewSerializer(many=False, required=True, source='get_supplier')
     # roles = serializers.SerializerMethodField('get_role')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = User
