@@ -10,6 +10,7 @@ from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.zone import get_zone_by_id
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
+from v1.commonapp.models.division import get_division_by_id
 
 
 # Create Premises table start
@@ -29,6 +30,9 @@ class Premise(models.Model):
     city_id = models.BigIntegerField(blank=True, null=True)
     zone_id = models.BigIntegerField(blank=True, null=True)
     area_id = models.BigIntegerField(blank=True, null=True)
+    category_id = models.BigIntegerField(blank=True, null=True)
+    meter_id = models.BigIntegerField(blank=True, null=True)
+    division_id = models.BigIntegerField(blank=True, null=True)
     subarea_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -68,6 +72,11 @@ class Premise(models.Model):
         return zone
 
     @property
+    def get_division(self):
+        division = get_division_by_id(self.division_id)
+        return division
+
+    @property
     def get_area(self):
         area = get_area_by_id(self.area_id)
         return area
@@ -89,6 +98,6 @@ def get_premise_by_id_string(id_string):
 
 
 def get_premise_by_id(id):
-    return Premise.objects.filter(id=id)
+    return Premise.objects.get(id=id)
 
 # End the Code

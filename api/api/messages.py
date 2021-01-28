@@ -69,6 +69,7 @@ SERVICE_TYPE_NOT_FOUND="No record found for user service type"
 UTILITY_NOT_FOUND = "Utility not found"
 DOCUMENT_TYPE_NOT_FOUND = "No record found for user document type"
 SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
+ROUTE_NOT_FOUND = "Route Not Found."
 MOBILE_ALREADY_EXISTS = "Mobile number already exists!"
 CONTRACT_ALREADY_EXISTS = "Contract already exists"
 WORK_ORDER_ALREADY_EXIST = "Work Order already Exist"
@@ -78,6 +79,7 @@ DEPARTMENT_TYPE_ALREADY_EXIST = "Department Type already Exist"
 DEPARTMENT_SUBTYPE_ALREADY_EXIST = "Department SubType already Exist"
 DIVISION_ALREADY_EXIST = "Division Already Exist"
 HOLIDAY_ALREADY_EXIST = "Holiday Already Exist"
+READ_CYCLE_ALREADY_EXIST = "Read Cycle Already Exist"
 SERVICE_DEASSIGNMENT = "Service Deassign Successfully"
 CONSUMER_COMPLAINT_ALREADY_EXISTS = "Consumer complaint already exists!"
 CONSUMER_SERVICE_ALREADY_EXISTS = "Consumer service already exists!"
@@ -117,8 +119,11 @@ FREQUENCY_NOT_FOUND = "Frequency not found"
 UTILITY_HOLIDAY_NOT_FOUND = "Utility Holiday Not found."
 UTILITY_WORKING_HOURS_NOT_FOUND = "Utility Working Hours Not found."
 SCHEDULE_NOT_FOUND = "Schedule not found"
+CONSUMER_FAQ_NOT_FOUND = "Consumer Faq not found."
+CONSUMER_SUPPORT_NOT_FOUND = "Consumer support not found."
 ACTIVITY_TYPE_NOT_FOUND = "ACtivity type not found"
 REPEAT_FREQUENCY_NOT_FOUND = "Repeat Frequency not found"
+
 
 
 # *********** ALREADY EXIST CONSTANTS **************
@@ -163,6 +168,11 @@ SERVICE_TYPE_ALREADY_EXIST = "Service Type Already Exist"
 SERVICE_SUBTYPE_ALREADY_EXIST = "Service Subtype Already Exist"
 ZONE_ALREADY_EXIST = "Zone Already Exist"
 PRODUCT_ALREADY_EXIST = "Product Already Exist"
+ROUTE_ALREADY_EXIST = "Route Already Exist"
+DOCUMENT_TYPE_ALREADY_EXIST="Document Type already Exist"
+DOCUMENT_ALREADY_EXIST = "Document Already Exist."
+DOCUMENT_SUBTYPE_ALREADY_EXIST = "Document Subtype already Exist"
+
 
 
 

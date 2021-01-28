@@ -3,7 +3,6 @@ __author__ = "aki"
 from django.urls import path
 from v1.utility.views.document import UtilityDocumentList, UtilityDocumentDetail
 from v1.utility.views.document_sub_type import UtilityDocumentSubTypeList
-from v1.utility.views.document_type import UtilityDocumentTypeList
 from v1.utility.views.notes import UtilityNoteList, UtilityNoteDetail
 from v1.utility.views.status import UtilityStatusList
 from v1.utility.views.utility import UtilityList, UtilityDetail, Utility, UtilityModule
@@ -30,6 +29,7 @@ from v1.utility.views.utility_product import UtilityProductList
 from v1.userapp.views.role_type import RoleTypeList, RoleTypeListByUtility
 from v1.utility.views.utility_department_type import UtilityDepartmentTypeList
 from v1.utility.views.utility_department_subtype import UtilityDepartmentSubTypeList
+from v1.utility.views.utility_document_type import UtilityDocumentTypeList
 from v1.userapp.views.role_type import RoleTypeListByUtility
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType, RoleSubTypeListByUtility
 from v1.utility.views.utility_region import UtilityRegionList
@@ -63,7 +63,7 @@ urlpatterns = [
     path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(), name='numformat'),
 
     path('<uuid:id_string>/status/list', UtilityStatusList.as_view(), name='utility_status_list'),
-    path('<uuid:id_string>/document-type/list', UtilityDocumentTypeList.as_view(), name='utility_document_type_list'),
+    path('<uuid:id_string>/document_type/list', UtilityDocumentTypeList.as_view(), name='utility_document_type_list'),
     path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(),
          name='utility_document_sub_type_list'),
 

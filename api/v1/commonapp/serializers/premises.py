@@ -43,7 +43,9 @@ class PremiseSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
-    subarea_id = serializers.CharField(required=True, max_length=200)
+    category_id = serializers.CharField(required=False, max_length=200)
+    meter_id = serializers.CharField(required=False, max_length=200)
+    subarea_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = PremiseTbl
@@ -62,18 +64,14 @@ class PremiseSerializer(serializers.ModelSerializer):
                 premise_obj.save()
                 return premise_obj
 
-    def update(self, validated_data, user):
+    def update(self, instance, validated_data, user):
+        validated_data = set_premise_validated_data(validated_data)
         with transaction.atomic():
-            validated_data = set_premise_validated_data(validated_data)
-            if PremiseTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                         utility_id=validated_data['utility_id'],subarea_id=validated_data['subarea_id']).exists():
-                raise CustomAPIException(PREMISE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
-            else:
-                premise_obj = super(PremiseSerializer, self).update(validated_data)
-                premise_obj.created_by = user.id
-                premise_obj.updated_by = user.id
-                premise_obj.save()
-                return premise_obj
+            premise_obj = super(PremiseSerializer, self).update(instance, validated_data)
+            premise_obj.updated_by = user.id
+            premise_obj.updated_date = datetime.utcnow()
+            premise_obj.save()
+            return premise_obj
 
 
 

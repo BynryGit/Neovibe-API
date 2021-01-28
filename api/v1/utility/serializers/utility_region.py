@@ -1,9 +1,4 @@
-from rest_framework import serializers, status
-from django.db import transaction
-from v1.commonapp.common_functions import set_region_validated_data
-from datetime import datetime
-from api.messages import REGION_ALREADY_EXIST
-from v1.commonapp.views.custom_exception import CustomAPIException
+from rest_framework import serializers
 from v1.utility.models.utility_region import UtilityRegion as UtilityRegionTbl
 
 

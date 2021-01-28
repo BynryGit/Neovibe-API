@@ -23,12 +23,21 @@ from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.user_type import UserTypeList
 from v1.commonapp.views.skills import SkillsList,SkillDetail,Skill
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
-from v1.commonapp.views.premises import PremiseList,Premise,PremiseList
+from v1.commonapp.views.premises import PremiseList,Premise,PremiseList, PremiseShortList, PremiseDetail
 from v1.commonapp.views.channel import ChannelList,Channel
 from v1.commonapp.views.frequency import FrequencyDetail,FrequencyList,Frequency
+from v1.commonapp.views.document_type import DocumentTypeList, DocumentTypeDetail, DocumentType
+from v1.commonapp.views.document_subtype import DocumentSubTypeList, DocumentSubTypeDetail, DocumentSubType
+from v1.commonapp.views.document import Document, DocumentList, DocumentDetail
 
 urlpatterns = [
     path('utility/region', Region.as_view()),
+    path('utility/document_type/<uuid:id_string>', DocumentTypeDetail.as_view()),
+    path('utility/document_type', DocumentType.as_view()),
+    path('utility/document_subtype/<uuid:id_string>', DocumentSubTypeDetail.as_view()),
+    path('utility/document_subtype', DocumentSubType.as_view()),
+    path('utility/document/<uuid:id_string>', DocumentDetail.as_view()),
+    path('utility/document', Document.as_view()),
     path('utility/region/<uuid:id_string>', RegionDetail.as_view()),
     path('utility/country', Country.as_view()),
     path('utility/country/<uuid:id_string>', CountryDetail.as_view()),
@@ -45,6 +54,8 @@ urlpatterns = [
     path('utility/subarea', SubArea.as_view()),
     path('utility/subarea/<uuid:id_string>', SubAreaDetail.as_view()),
     path('utility/premise', Premise.as_view()),
+    path('utility/<uuid:id_string>/premise/short_list', PremiseShortList.as_view()),
+    path('utility/premise/<uuid:id_string>', PremiseDetail.as_view()),
     path('utility/skill/<uuid:id_string>', SkillDetail.as_view()),
     path('utility/skill', Skill.as_view()),
     path('sub_area/list', SubAreaList.as_view()),
@@ -74,10 +85,13 @@ urlpatterns = [
     path('submodule/list', SubModuleList.as_view()),
     # This api used for utility dropdown start
     path('region/list', RegionList.as_view(), name='regions_list'),
+    path('document_type/list', DocumentTypeList.as_view(), name='document_type_list'),
     path('channel/list', ChannelList.as_view(), name='channel_list'),
     path('utility/channel', Channel.as_view(), name='channel_add'),
     path('utility/<uuid:id_string>/country/list', CountryList.as_view(), name='country_list'),
     path('utility/<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
+    path('utility/<uuid:id_string>/document/list', DocumentList.as_view(), name='document_list'),
+    path('utility/<uuid:id_string>/document_subtype/list', DocumentSubTypeList.as_view(), name='document_subtype_list'),
     path('utility/<uuid:id_string>/city/list', CityList.as_view(), name='city_list'),
     path('utility/<uuid:id_string>/zone/list', ZoneList.as_view(), name='zone_list'),
     path('utility/<uuid:id_string>/division/list', DivisionList.as_view(), name='zone_list'),

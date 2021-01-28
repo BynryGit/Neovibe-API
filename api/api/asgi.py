@@ -11,6 +11,13 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
+if os.environ["smart360_env"] == 'dev':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.settings_dev')
+
+if os.environ["smart360_env"] == 'qa':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
+
+if os.environ["smart360_env"] == 'uat':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
 
 application = get_asgi_application()

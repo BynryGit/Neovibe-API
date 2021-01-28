@@ -304,18 +304,6 @@ def set_consumer_faq_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "category_id" in validated_data:
-        category_id = get_consumer_category_by_id_string(validated_data["category_id"])
-        if category_id:
-            validated_data["category_id"] = category_id.id
-        else:
-            raise CustomAPIException("Category not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "subcategory_id" in validated_data:
-        subcategory_id = get_consumer_sub_category_by_id_string(validated_data["subcategory_id"])
-        if subcategory_id:
-            validated_data["subcategory_id"] = subcategory_id.id
-        else:
-            raise CustomAPIException("SubCategory not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

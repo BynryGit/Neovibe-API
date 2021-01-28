@@ -54,7 +54,7 @@ class ConsumerSupportList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Consumer Support not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(CONSUMER_SUPPORT_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

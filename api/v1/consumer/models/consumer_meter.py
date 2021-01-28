@@ -13,6 +13,7 @@ import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 
 from v1.meter_data_management.models.meter import get_meter_by_id
+from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -55,6 +56,11 @@ class ConsumerMeter(models.Model):
     def get_meter(self):
         meter = get_meter_by_id(self.meter_id)
         return meter
+    
+    @property
+    def get_consumer(self):
+        consumer = get_consumer_by_id(self.consumer_id)
+        return consumer
 
 
 def get_consumer_meter_by_id(id):
