@@ -1,14 +1,21 @@
 #!/bin/bash
 
+echo "################################################## Installing dependencies############################################"
 source  /home/ubuntu/smart360/smart360venv/bin/activate
 pip install django gunicorn psycopg2-binary
 pip install -r /home/ubuntu/smart360/api/requirement.txt
 sudo -H pip install django gunicorn psycopg2-binary
 sudo -H pip install -r /home/ubuntu/smart360/api/requirement.txt
+echo "################################################## Setting permission ############################################"
 sudo chown ubuntu:ubuntu -R /home/ubuntu/smart360
-sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
+echo "################################################## Setting environment file ############################################"
+sudo touch /home/ubuntu/smart360/api/.env
+sudo chown 777 /home/ubuntu/smart360/api/.env
+sudo echo "smart360_env=$DEPLOYMENT_GROUP_NAME" > /home/ubuntu/smart360/api/.env
+# sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
 
-# export smart360_env="$DEPLOYMENT_GROUP_NAME"
+echo "################################################## Running makemigrations ############################################"
+export smart360_env="$DEPLOYMENT_GROUP_NAME"
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations master
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations billing
@@ -33,7 +40,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations work_order
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations utility
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations tenant
 
-
+echo "################################################## Running migrate command ############################################" 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate master
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate billing
@@ -60,6 +67,8 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate tenant
 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 
+
+echo "################################################## Loading data ############################################"
 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
 

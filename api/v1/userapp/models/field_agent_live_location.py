@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from django.db import models
-
+from master.models import get_user_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
@@ -31,14 +31,29 @@ class FieldAgentLiveLocation(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.user_id
+        return self.latitude
 
     def __unicode__(self):
-        return self.user_id
+        return self.latitude
 
+    @property
     def get_tenant(self):
         return self.tenant
 
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
+    def get_user(self):
+        user_val = get_user_by_id(self.user_id)
+        return {
+            "first_name":user_val.first_name,
+            "last_name":user_val.last_name,
+            "id_string":user_val.id_string,
+            "email":user_val.email,
+            "phone_mobile":user_val.phone_mobile
+        }
 
 def get_field_agent_live_location_by_user_id(user_id):
     try:
