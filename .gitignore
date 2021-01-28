@@ -95,6 +95,9 @@ fabric.properties
 # dev setting file
 /api/api/settings/dev.py
 
+# env file
+/api/.env
+
 # vscode and venv
 .vscode
 /api/venv
