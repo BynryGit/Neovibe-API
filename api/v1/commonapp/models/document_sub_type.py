@@ -17,6 +17,7 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from django.db import models  # importing package for database
+from v1.utility.models.utility_document_type import get_utility_document_type_by_id
 
 # Create Document Type table start
 from v1.utility.models.utility_master import UtilityMaster
@@ -27,6 +28,7 @@ class DocumentSubType(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
+    document_type_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -38,6 +40,10 @@ class DocumentSubType(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def get_utility_document_type(self):
+        return get_utility_document_type_by_id(self.document_type_id)
 
 # Create Document Type table end
 

@@ -5,7 +5,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, ZONE_NOT_FOUND
 from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -13,6 +13,7 @@ from api.constants import ADMIN,UTILITY_MASTER,EDIT
 from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.models.zone import get_zone_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
 
 
 # API Header
@@ -39,10 +40,13 @@ class ZoneList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ZoneModel.objects.filter(utility=utility, is_active=True)
+                    if 'city_id' in self.request.query_params:
+                        city = get_city_by_id_string(self.request.query_params['city_id'])
+                        queryset = queryset.filter(city_id=city.id)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Zone not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(ZONE_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

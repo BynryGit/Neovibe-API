@@ -13,14 +13,11 @@ from v1.consumer.views.common_functions import set_consumer_support_validated_da
 
 
 class ConsumerSupportListSerializer(serializers.ModelSerializer):
-    consumer_category = ConsumerCategoryListSerializer(many="False", source='get_category_type')
-    consumer_subcategory = ConsumerSubCategoryListSerializer(many="False", source='get_category_subtype')
-    city = CityListSerializer(many="False", source='get_city')
+    city = CityListSerializer(source='get_city')
 
     class Meta:
         model = ConsumerSupportTbl
-        fields = ('name', 'id_string', 'consumer_category', 'consumer_subcategory', 'city', 'created_date', 'is_active',
-                  'created_by')
+        fields = ('name', 'id_string', 'email_id', 'phone_no', 'description', 'city', 'created_date', 'is_active', 'created_by')
 
 
 class ConsumerSupportViewSerializer(serializers.ModelSerializer):
@@ -39,8 +36,6 @@ class ConsumerSupportSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
-    category_id = serializers.CharField(required=True, max_length=200)
-    subcategory_id = serializers.CharField(required=True, max_length=200)
     city_id = serializers.CharField(required=True, max_length=200)
 
     class Meta:

@@ -81,7 +81,6 @@ def get_sub_module_by_name(name):
 
 def get_sub_module_id_by_key(key):
     try:
-        sub_module = SubModule.objects.get(key=key, is_active=True)
-        return sub_module.id
+        return SubModule.objects.get(key=key, is_active=True).id
     except:
-        return False
+        False

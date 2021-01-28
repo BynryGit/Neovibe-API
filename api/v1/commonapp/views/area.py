@@ -13,7 +13,8 @@ from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import *
 from api.constants import *
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, AREA_NOT_FOUND
+from v1.commonapp.models.division import get_division_by_id_string
 # API Header
 # API end Point: api/v1/utility/:id_string/area/list
 # API verb: GET
@@ -38,10 +39,13 @@ class AreaList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = AreaModel.objects.filter(utility=utility, is_active=True)
+                    if 'division_id' in self.request.query_params:
+                        division = get_division_by_id_string(self.request.query_params['division_id'])
+                        queryset = queryset.filter(division_id=division.id)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Area not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(AREA_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -71,6 +75,7 @@ class Area(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             serializer = AreaSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
+
                 area_obj = serializer.create(serializer.validated_data, user)
                 view_serializer = AreaViewSerializer(instance=area_obj, context={'request': request})
                 return Response({
@@ -141,6 +146,7 @@ class AreaDetail(GenericAPIView):
             if area_obj:
                 serializer = AreaSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
+                    print("Area Obj", area_obj)
                     area_obj = serializer.update(area_obj, serializer.validated_data, user)
                     view_serializer = AreaViewSerializer(instance=area_obj,
                                                          context={'request': request})

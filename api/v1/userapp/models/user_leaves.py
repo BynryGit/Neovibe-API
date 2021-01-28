@@ -32,11 +32,11 @@ class UserLeaves(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
-    # def __str__(self):
-    #     return self.utility
+    def __str__(self):
+        return str(self.date )+" "+str(self.user_id)
 
     def __unicode__(self):
-        return self.utility
+        return self.date
 
     def get_tenant(self):
         return self.tenant

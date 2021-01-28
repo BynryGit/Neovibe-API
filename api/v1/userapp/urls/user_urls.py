@@ -11,6 +11,7 @@ from v1.userapp.views.user_skill import UserSkill
 from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
 from v1.userapp.views.user_sub_type import UserSubTypeByUserType
 from v1.userapp.views.user_role import UserRoleByUtilityModules,UserRoleByUtilitySubModule,ModulePrivilegesList
+from v1.userapp.views.field_agent_live_location import FieldAgentLiveLocationList
 
 urlpatterns = [
     path('', User.as_view(), name='create-user'),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('<uuid:user_id_string>/utility/<uuid:utility_id_string>', UserRoleByUtilityModules.as_view()),
     path('<uuid:user_id_string>/module/<uuid:module_id_string>', UserRoleByUtilitySubModule.as_view()),
     path('role/<uuid:role_id_string>/module/<uuid:module_id_string>/sub-module/<uuid:sub_module_id_string>',ModulePrivilegesList.as_view()),
-    path('utility/<uuid:utility_id_string>/appointment/<uuid:appointment_id_string>/resource/list',ResourceList.as_view(),name="fitered_resource_list")
+    path('utility/<uuid:utility_id_string>/appointment/<uuid:appointment_id_string>/resource/list',ResourceList.as_view(),name="fitered_resource_list"),
+    path('utility/<uuid:id_string>/live-location',FieldAgentLiveLocationList.as_view(),name="field_agent_live_location")
 
 ]

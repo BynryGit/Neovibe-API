@@ -32,6 +32,7 @@ from v1.consumer.models.consumer_consent import ConsumerConsent
 from v1.consumer.models.consumer_support import ConsumerSupport
 from v1.consumer.models.consumer_faq import ConsumerFaq
 from v1.consumer.models.service_type import ServiceType
+
 admin.site.register(SourceType)
 admin.site.register(ComplaintStatus)
 admin.site.register(ConsumerOwnership)
@@ -62,3 +63,5 @@ admin.site.register(ConsumerCreditRating)
 admin.site.register(ConsumerServiceContractDetail)
 admin.site.register(OfferType)
 admin.site.register(OfferSubType)
+admin.site.register(ConsumerFaq)
+admin.site.register(ConsumerSupport)

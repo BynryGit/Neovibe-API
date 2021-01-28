@@ -69,10 +69,9 @@ def get_privilege_by_name(name):
 # For getting privilege by name
 def get_privilege_by_key(key):
     try:
-        privilege = Privilege.objects.get(key=key)
-        return privilege.id
+        return Privilege.objects.get(key=key,is_active=True).id
     except:
-        False
+        return False
 
 
 # for getting privilege by id_string

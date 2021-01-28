@@ -21,8 +21,10 @@ from v1.utility.models.utility_service_contract_master import get_utility_servic
 # Interaction: Consumer meters
 # Usage: API will fetch required data for Consumer meters
 # Tables used: ConsumerMeter
-# Author: Rohan
-# Created on: 07/12/2020
+# Author: Priyanka
+# Created on: 23/01/2021
+
+
 class ConsumerMeterList(generics.ListAPIView):
     try:
         serializer_class = ConsumerMeterListSerializer
