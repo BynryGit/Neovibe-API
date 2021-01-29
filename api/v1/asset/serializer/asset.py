@@ -1,6 +1,7 @@
 __author__ = "Priyanka"
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from rest_framework import serializers
 from datetime import datetime
 from django.db import transaction
@@ -31,10 +32,10 @@ class AssetListSerializer(serializers.ModelSerializer):
     city_id = CitySerializer(many=False, required=True, source='get_city')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
-    manufacturing_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    installation_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    expiry_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    manufacturing_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    installation_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    expiry_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = AssetTbl
@@ -48,10 +49,10 @@ class AssetListSerializer(serializers.ModelSerializer):
 class AssetViewSerializer(serializers.ModelSerializer):
 
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    manufacturing_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
-    installation_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
-    expiry_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT,read_only=True)
+    manufacturing_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
+    installation_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
+    expiry_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(),read_only=True)
     category_id = AssetCategoryListSerializer(many=False, required=True, source='get_category')
     sub_category_id = AssetSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     status_id = AssetStatusListSerializer(many=False, required=True, source='get_status')

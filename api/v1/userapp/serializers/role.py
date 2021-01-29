@@ -5,7 +5,8 @@ from rest_framework.validators import UniqueTogetherValidator
 
 from datetime import datetime
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.department import DepartmentSerializer
 from v1.commonapp.serializers.form_factor import FormFactorSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -82,8 +83,8 @@ class RoleListSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer(many=False, required=True, source='get_department')
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Role
@@ -102,8 +103,8 @@ class RoleDetailViewSerializer(serializers.ModelSerializer):
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     modules = serializers.SerializerMethodField('get_privileges')
 
     class Meta:
@@ -120,8 +121,8 @@ class RoleViewSerializer(serializers.ModelSerializer):
     form_factor = FormFactorSerializer(many=False, required=True, source='get_form_factor')
     role_type = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
     role_sub_type = GetRoleSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Role

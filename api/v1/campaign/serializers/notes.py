@@ -4,13 +4,14 @@ from rest_framework import serializers
 from v1.commonapp.models.notes import Notes as NotesTbl
 from v1.tenant.serializers.tenant import TenantSerializer
 from v1.utility.serializers.utility import UtilitySerializer
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class NoteSerializer(serializers.ModelSerializer):
 
     tenant = TenantSerializer(many=False, required=True, source='get_tenant')
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = NotesTbl

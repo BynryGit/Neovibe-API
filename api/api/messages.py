@@ -83,6 +83,7 @@ READ_CYCLE_ALREADY_EXIST = "Read Cycle Already Exist"
 SERVICE_DEASSIGNMENT = "Service Deassign Successfully"
 CONSUMER_COMPLAINT_ALREADY_EXISTS = "Consumer complaint already exists!"
 CONSUMER_SERVICE_ALREADY_EXISTS = "Consumer service already exists!"
+CONSUMER_OFFER_ALREADY_EXISTS = "Consumer offer already exists!"
 # *********** NOT FOUND CONSTANTS **************
 SERVICE_ASSIGNMENT_NOT_FOUND = "Service Assignment Not Found"
 COUNTRY_NOT_FOUND = "Country Not Found"

@@ -4,7 +4,8 @@ from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers, status
 from api.messages import NAME_ALREADY_EXIST
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.serializers.tenant_city import TenantCitySerializer
@@ -19,8 +20,8 @@ class TenantMasterViewSerializer(serializers.ModelSerializer):
     # tenant_state_id = TenantStateSerializer(many=False, required=False, source='get_tenant_state')
     # tenant_city_id = TenantCitySerializer(many=False, required=False, source='get_tenant_city')
     # status_id = TenantStatusViewSerializer(many=False, required=False, source='get_tenant_status')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = TenantMaster

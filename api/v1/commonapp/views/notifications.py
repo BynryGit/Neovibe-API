@@ -3,11 +3,11 @@ from celery.task import task
 from twilio.rest import Client
 from v1.commonapp.views.logger import logger
 from django.core.mail import EmailMultiAlternatives
-from v1.commonapp.views.settings_reader import SettingsReader
+from v1.commonapp.views.secret_reader import SecretReader
 
 # Local logging
 local_logger = logging.getLogger('django')
-settings_reader = SettingsReader()
+secret_reader = SecretReader()
 
 
 @task(name='send_mail')
@@ -26,8 +26,8 @@ def send_mail(subject, body, from_email, to, connection=None, attachments=None, 
 @task(name='send_sms')
 def send_sms():
     try:
-        account_sid = settings_reader.get_twilio_sid()
-        auth_token = settings_reader.get_twilio_token()
+        account_sid = secret_reader.get_twilio_sid()
+        auth_token = secret_reader.get_twilio_token()
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(

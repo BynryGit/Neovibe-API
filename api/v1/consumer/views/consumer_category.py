@@ -1,5 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
+
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -46,9 +48,7 @@ class ConsumerCategoryList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerCategoryModel.objects.filter(utility=utility, is_active=True)
-                    if 'service_id' in self.request.query_params:
-                        service = get_utility_service_by_id_string(self.request.query_params['service_id'])
-                        queryset = queryset.filter(service_id=service.id)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

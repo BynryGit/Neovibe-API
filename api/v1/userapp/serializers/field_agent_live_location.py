@@ -3,7 +3,8 @@ from datetime import datetime
 from v1.userapp.serializers.user import GetUserSerializer
 from rest_framework import serializers, status
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.userapp.models.user_utility import UserUtility
 from v1.userapp.views.common_functions import set_user_utility_validated_data

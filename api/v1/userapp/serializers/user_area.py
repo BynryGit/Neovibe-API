@@ -3,7 +3,8 @@ from datetime import datetime
 
 from rest_framework import serializers, status
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 from v1.commonapp.serializers.area import AreaViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -14,8 +15,8 @@ from v1.userapp.views.common_functions import set_user_area_validated_data
 class UserAreaViewSerializer(serializers.ModelSerializer):
 
     area = AreaViewSerializer(many=False, required=True, source='get_area')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserArea

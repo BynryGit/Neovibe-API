@@ -12,13 +12,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+from v1.commonapp.views.secretcache import SecretManager
+
 env = environ.Env()
 # reading .env file
 environ.Env.read_env()
-from v1.commonapp.views.secretcache import SecretManager
-
 smart360_env = ''
 secret = ""
+
 if os.environ["smart360_env"] != 'dev':
     secret = SecretManager()
 
@@ -36,13 +37,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret_manager(os.environ['smart360_env']+"_secret_key")
+SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -123,18 +123,16 @@ REST_FRAMEWORK = {
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smart360',
-        'USER': get_secret_manager(os.environ['smart360_env']+"_database_user"),
-        'PASSWORD': get_secret_manager(os.environ['smart360_env']+"_database_password"),
-        'HOST': get_secret_manager(os.environ['smart360_env']+"_database_host"),
+        'USER': get_secret_manager(os.environ['smart360_env'] + "_database_user"),
+        'PASSWORD': get_secret_manager(os.environ['smart360_env'] + "_database_password"),
+        'HOST': get_secret_manager(os.environ['smart360_env'] + "_database_host"),
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -153,7 +151,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -182,8 +179,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 STATIC_URL = '/static/'
 
-
-
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -209,11 +204,13 @@ CELERY_ACCEPT_CONTENT = ['application/json', 'application/x-python-serialize']
 CELERY_TASK_SERIALIZER = 'pickle'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
-    
+
 # Cronjob configuration
 CRONJOBS = [
-    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation', '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
-    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data', '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
+    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
+    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
 ]
 
 # Amazon s3 Configuration
@@ -229,15 +226,14 @@ AWS_LOCATION = ''
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 
-
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = get_secret_manager(os.environ['smart360_env']+"_email_host_user")
-EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env']+"_email_host_password")
+EMAIL_HOST_USER = get_secret_manager(os.environ['smart360_env'] + "_email_host_user")
+EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env'] + "_email_host_password")
 
 # SMS configuration
-TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env']+"_twilio_account_id")
-TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env']+"_twilio_auth_token")
+TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env'] + "_twilio_account_id")
+TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env'] + "_twilio_auth_token")

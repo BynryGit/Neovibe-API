@@ -3,6 +3,7 @@
 import os
 import sys
 import environ
+
 env = environ.Env()
 # reading .env file
 environ.Env.read_env()
@@ -10,7 +11,7 @@ environ.Env.read_env()
 
 def main():
     if env("smart360_env") == 'dev':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.settings_dev')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.dev')
 
     if env("smart360_env") == 'qa':
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
@@ -30,10 +31,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+
+
 if __name__ == '__main__':
     main()
-
-
-
-
-

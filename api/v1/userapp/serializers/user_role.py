@@ -3,7 +3,8 @@ from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.userapp.models.user_role import UserRole
 from v1.userapp.serializers.role import RoleViewSerializer
@@ -49,8 +50,8 @@ class UserRoleSerializer(serializers.ModelSerializer):
 class UserRoleViewSerializer(serializers.ModelSerializer):
 
     role = RoleViewSerializer(many=False, required=True, source='get_role')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserRole

@@ -2,7 +2,8 @@ __author__ = "Priyanka"
 
 from rest_framework import serializers
 from v1.asset.models.asset_status import AssetStatus as AssetStatusTbl
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class AssetStatusListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +12,7 @@ class AssetStatusListSerializer(serializers.ModelSerializer):
 
 class AssetStatusViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

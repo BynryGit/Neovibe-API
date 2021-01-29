@@ -1,6 +1,7 @@
 from rest_framework import serializers, status
 from v1.survey.models.survey_objective import SurveyObjective as SurveyObjectiveTbl
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SURVEY_OBJECTIVE_ALREADY_EXIST
 from v1.survey.serializers.survey_type import SurveyTypeListSerializer
@@ -19,7 +20,7 @@ class SurveyObjectiveListSerializer(serializers.ModelSerializer):
 
 class SurveyObjectiveViewSerializer(serializers.ModelSerializer):
     # def get_created_date(self, obj):
-    #     return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+    #     return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')

@@ -11,7 +11,8 @@ from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.serializers.sub_area import SubAreaListSerializer
 from v1.consumer.serializers.consumer_category import ConsumerCategoryListSerializer
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryListSerializer
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class SurveyObjectiveSerializer(serializers.ModelSerializer):
 
@@ -33,13 +34,13 @@ class SurveyStatusSerializer(serializers.ModelSerializer):
 
 class SurveyListSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.start_date.strftime(setting_reader.get_display_date_format())
 
     def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.end_date.strftime(setting_reader.get_display_date_format())
 
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
     objective_id = SurveyObjectiveSerializer(many=False,required=True,source='get_objective')
@@ -61,13 +62,13 @@ class SurveyListSerializer(serializers.ModelSerializer):
 
 class SurveyViewSerializer(serializers.ModelSerializer):
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.start_date.strftime(setting_reader.get_display_date_format())
 
     def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.end_date.strftime(setting_reader.get_display_date_format())
 
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
     objective_id = SurveyObjectiveSerializer(many=False, required=True, source='get_objective')

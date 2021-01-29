@@ -4,7 +4,8 @@ from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers, status
 from api.messages import INVOICE_ALREADY_EXIST
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_invoice_payment import TenantInvoicePayment as TenantInvoicePaymentTbl
@@ -15,8 +16,8 @@ from v1.tenant.views.common_functions import set_tenant_invoice_payment_validate
 class TenantInvoicePaymentViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     invoice_id = TenantInvoiceShortViewSerializer(many=False, required=False, source='get_invoice_id')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = TenantInvoicePaymentTbl

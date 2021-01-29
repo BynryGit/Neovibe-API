@@ -4,6 +4,7 @@ from v1.consumer.views.consumer_audit_log import ConsumerAuditLogList
 from v1.consumer.views.consumer_credit_rating import ConsumerCreditRatingList
 from v1.consumer.views.consumer_meter import ConsumerMeterList
 from v1.consumer.views.consumer_category import ConsumerCategoryList,ConsumerCategory,ConsumerCategoryDetail
+from v1.consumer.views.consumer_offer_detail import ConsumerOfferDetail
 from v1.consumer.views.consumer_offer_master import ConsumerOfferMasterList
 from v1.consumer.views.consumer_service_contract_details import ConsumerServiceContractDetailList
 from v1.consumer.views.consumer_subcategory import ConsumerSubCategoryDetail,ConsumerSubCategoryList,ConsumerSubCategory
@@ -72,6 +73,6 @@ urlpatterns = [
     path('<uuid:id_string>/note', ConsumerNote.as_view()),
     path('<uuid:id_string>/note/list', ConsumerNoteList.as_view()),
     path('service-details', ConsumerServiceDetail.as_view()),
-
+    path('<uuid:id_string>/offer-detail', ConsumerOfferDetail.as_view()),
     # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),
 ]

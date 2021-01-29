@@ -1,5 +1,6 @@
 from rest_framework import serializers, status
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.models.premises import Premise as PremiseTbl
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.utility.serializers.utility import UtilitySerializer

@@ -1,6 +1,7 @@
 __author__ = "Priyanka"
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from rest_framework import serializers
 from v1.campaign.models.campaign import Campaign as CampaignTbl
 from v1.campaign.models.campaign_status import CampaignStatus
@@ -37,13 +38,13 @@ class CampaignStatusSerializer(serializers.ModelSerializer):
 class CampaignListSerializer(serializers.ModelSerializer):
 
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.start_date.strftime(setting_reader.get_display_date_format())
 
     def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.end_date.strftime(setting_reader.get_display_date_format())
 
 
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
@@ -71,11 +72,11 @@ class CampaignListSerializer(serializers.ModelSerializer):
 class CampaignViewSerializer(serializers.ModelSerializer):
 
     # def get_start_date(self, obj):
-    #     start_date = datetime.strptime(obj.start_date , DISPLAY_DATE_TIME_FORMAT)
+    #     start_date = datetime.strptime(obj.start_date , setting_reader.get_display_date_format())
     #     return start_date
     #
     # def get_end_date(self, obj):
-    #     end_date = datetime.strptime(obj.end_date, DISPLAY_DATE_TIME_FORMAT)
+    #     end_date = datetime.strptime(obj.end_date, setting_reader.get_display_date_format())
     #     return end_date
 
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
@@ -87,9 +88,9 @@ class CampaignViewSerializer(serializers.ModelSerializer):
     sub_category_id = ConsumerSubCategoryListSerializer(many=False, required=True, source='get_sub_category')
     area_id = AreaListSerializer(many=False, required=True, source='get_area')
     sub_area_id = SubAreaListSerializer(many=False, required=True, source='get_sub_area')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
-    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    start_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
+    end_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
 
     class Meta:
         model = CampaignTbl

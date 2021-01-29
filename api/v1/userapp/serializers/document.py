@@ -5,7 +5,8 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.models.document import Document
 from v1.commonapp.serializers.document_sub_type import DocumentSubTypeSerializer
 from v1.commonapp.serializers.document_type import DocumentTypeSerializer
@@ -25,8 +26,8 @@ class DocumentViewSerializer(serializers.ModelSerializer):
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     document_type = DocumentTypeSerializer(many=False, required=True, source='get_type')
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Document
@@ -81,8 +82,8 @@ class DocumentListSerializer(serializers.ModelSerializer):
     document_type = DocumentTypeSerializer(many=False, required=True, source='get_type')
     document_sub_type = DocumentSubTypeSerializer(many=False, required=True, source='get_sub_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Document

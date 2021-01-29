@@ -9,7 +9,8 @@ from v1.campaign.models.advertisement import Advertisements
 from v1.campaign.models.advertisement_type import AdvertisementType
 from v1.campaign.models.advert_status import AdvertStatus
 from v1.campaign.views.common_functions import set_validated_data
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
 class AdvertisementTypeSerializer(serializers.ModelSerializer):
 
@@ -31,13 +32,13 @@ class CampaignSerializer(serializers.ModelSerializer):
 class AdvertismentViewSerializer(serializers.ModelSerializer):
 
     def get_created_date(self, obj):
-        return obj.created_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.created_date.strftime(setting_reader.get_display_date_format())
 
     def get_start_date(self, obj):
-        return obj.start_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.start_date.strftime(setting_reader.get_display_date_format())
 
     def get_end_date(self, obj):
-        return obj.end_date.strftime(DISPLAY_DATE_TIME_FORMAT)
+        return obj.end_date.strftime(setting_reader.get_display_date_format())
 
     campaign_id = CampaignSerializer(many=False, required=True, source='get_campaign')
     group_id = CampaignGroupSerializer(many=False, required=True, source='get_group')
@@ -64,9 +65,9 @@ class AdvertismentListSerializer(serializers.ModelSerializer):
     advert_type = AdvertisementTypeSerializer(many=False, required=True, source='get_advert_type')
     status = AdvertStatusSerializer(many=False, required=True, source='get_advert_status')
     tenant_name = serializers.ReadOnlyField(source='tenant.name')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    start_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
-    end_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    start_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
+    end_date = serializers.DateTimeField(format=setting_reader.get_display_date_format())
 
     class Meta:
         model = Advertisements

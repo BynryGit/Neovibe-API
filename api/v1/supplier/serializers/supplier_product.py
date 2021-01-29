@@ -3,7 +3,8 @@ __author__ = "aki"
 from django.db import transaction
 from rest_framework import serializers
 from django.utils import timezone
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.supplier.models.supplier_product import SupplierProduct as SupplierProductTbl
@@ -19,8 +20,8 @@ class SupplierProductViewSerializer(serializers.ModelSerializer):
     supplier = SupplierShortViewSerializer(many=False, required=False, source='get_supplier')
     product_category = ProductCategoryListSerializer(many=False, required=False, source='get_product_category')
     product_subcategory = ProductSubCategoryListSerializer(many=False, required=False, source='get_product_subcategory')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = SupplierProductTbl

@@ -4,7 +4,8 @@ from datetime import datetime
 from rest_framework import serializers, status
 import random
 from rest_framework.validators import UniqueTogetherValidator
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.work_order.models.service_assignment import ServiceAssignment
 from v1.work_order.views.common_functions import set_service_assignment_validated_data
 from api.messages import SERVICE_ASSIGNMENT_ALREADY_EXIST
@@ -60,8 +61,8 @@ class ServiceAssignmentViewSerializer(serializers.ModelSerializer):
     sa_id = ServiceAppointmentViewSerializer(many=False, required=True, source='get_service_appointment')
     user_id = GetUserSerializer(many=False, required=True, source='get_user')
     status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = ServiceAssignment

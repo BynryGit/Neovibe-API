@@ -3,7 +3,8 @@ __author__ = "aki"
 from django.db import transaction
 from rest_framework import serializers
 from django.utils import timezone
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.tender.models.tender_quotation import TenderQuotation as TenderQuotationTbl
@@ -17,9 +18,9 @@ class TenderQuotationViewSerializer(serializers.ModelSerializer):
     utility = UtilityMasterViewSerializer(read_only=True)
     tender_id = TenderShortViewSerializer(many=False, required=False, source='get_tender')
     vendor_id = TenderVendorShortViewSerializer(many=False, required=False, source='get_vendor')
-    submission_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    submission_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = TenderQuotationTbl

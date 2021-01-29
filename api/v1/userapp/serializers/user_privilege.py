@@ -4,7 +4,8 @@ from django.db import transaction
 from datetime import datetime
 from rest_framework import serializers, status
 
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.module import ModuleSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer, SubModuleViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -65,8 +66,8 @@ class UserPrivilegeViewSerializer(serializers.ModelSerializer):
     # module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
     # privilege = GetPrivilegeSerializer(many=False, required=True, source='get_privilege')
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserPrivilege

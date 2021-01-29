@@ -3,7 +3,8 @@ __author__ = "aki"
 from django.db import transaction
 from rest_framework import serializers
 from django.utils import timezone
-from api.settings.prod import DISPLAY_DATE_TIME_FORMAT
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.contract.models.contract_demand import ContractDemand as ContractDemandTbl
@@ -15,10 +16,10 @@ class ContractDemandViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer(read_only=True)
     utility = UtilityMasterViewSerializer(read_only=True)
     contract = ContractListSerializer(many=False, required=False, source='get_contract')
-    due_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    demand_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    created_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
-    updated_date = serializers.DateTimeField(format=DISPLAY_DATE_TIME_FORMAT, read_only=True)
+    due_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    demand_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = ContractDemandTbl
