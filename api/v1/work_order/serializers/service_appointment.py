@@ -46,13 +46,15 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     work_order_master_id = serializers.CharField(required=False, max_length=200)
     # sa_name = serializers.CharField(required=True, max_length=200)
     # sa_description = serializers.CharField(required=True, max_length=200)
-    sa_date = serializers.CharField(required=True, max_length=200)
+    sa_date = serializers.CharField(required=False, max_length=200)
     # sa_time = serializers.CharField(required=False, max_length=200)
     # sa_estimated_effort = serializers.CharField(required=False, max_length=200)
-    # alternative_contact = serializers.CharField(required=False, max_length=200)
-    # sa_area = serializers.CharField(required=False, max_length=200)
-    # sa_sub_area = serializers.CharField(required=False, max_length=200)
-    # alternative_address = serializers.CharField(required=False, max_length=200)
+    state_id = serializers.CharField(required=False, max_length=200)
+    city_id = serializers.CharField(required=False, max_length=200)
+    area_id = serializers.CharField(required=False, max_length=200)
+    sub_area_id = serializers.CharField(required=False, max_length=200)
+    ownership_id = serializers.CharField(required=False, max_length=200)
+    premise_id = serializers.CharField(required=False, max_length=200)
     # actual_start_time = serializers.CharField(required=False, max_length=200)
     # actual_end_time = serializers.CharField(required=False, max_length=200)
     # actual_duration = serializers.CharField(required=False, max_length=200)
@@ -74,7 +76,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
             appointment_obj.tenant = user.tenant
             appointment_obj.status_id = 1
             appointment_obj.save()
-            appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+            # appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
             appointment_obj.save()
             return appointment_obj
 

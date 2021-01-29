@@ -27,7 +27,7 @@ from django.db import models
 # *********** CONSUMER CONSTANTS **************
 CONSUMER_DICT = {
     "CREATED": 0,
-    "REGISTERED": 1,
+    "APPROVED": 1,
     "INSTALLED": 2,
     "CONNECTED": 3,
     "TEMPORARY DISCONNECTED": 4,
@@ -40,7 +40,7 @@ CONSUMER_DICT = {
 class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
         (0, 'CREATED'),
-        (1, 'REGISTERED'),
+        (1, 'APPROVED'),
         (2, 'INSTALLED'),
         (3, 'CONNECTED'),
         (4, 'TEMPORARY DISCONNECTED'),
@@ -55,8 +55,8 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     )
 
     state_machine = {
-        CONSUMER_DICT['CREATED']: (CONSUMER_DICT['REGISTERED'], CONSUMER_DICT['CREATED'],),
-        CONSUMER_DICT['REGISTERED']: (CONSUMER_DICT['INSTALLED'],),
+        CONSUMER_DICT['CREATED']: (CONSUMER_DICT['APPROVED'], CONSUMER_DICT['CREATED'],),
+        CONSUMER_DICT['APPROVED']: (CONSUMER_DICT['INSTALLED'],),
         CONSUMER_DICT['INSTALLED']: (CONSUMER_DICT['CONNECTED'],),
         CONSUMER_DICT['CONNECTED']: (
             CONSUMER_DICT['TEMPORARY DISCONNECTED'], CONSUMER_DICT['PERMANENTLY DISCONNECTED']),
@@ -68,6 +68,7 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     master_consumer_no = models.CharField(max_length=200, null=True, blank=True)
     email_id = models.CharField(max_length=200, null=True, blank=True)
