@@ -5,7 +5,6 @@ from django.utils import timezone
 from api.messages import DATA_ALREADY_EXISTS
 from rest_framework import serializers, status
 from v1.commonapp.views.settings_reader import SettingReader
-setting_reader = SettingReader()
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
@@ -15,6 +14,7 @@ from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl
 from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.views.common_function import set_schedule_validated_data
+setting_reader = SettingReader()
 
 
 class ScheduleShortViewSerializer(serializers.ModelSerializer):
