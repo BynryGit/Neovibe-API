@@ -80,5 +80,5 @@ class ReadCycleShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReadCycleTbl
-        fields = ('id_string','name')
+        fields = ('id_string','name', 'label')
 
