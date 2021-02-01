@@ -41,7 +41,6 @@ class ServiceAssignment(GenericAPIView):
                 user = get_user_by_id_string(user_id_string)
                 service_appoint_obj = get_service_appointment_by_id_string(request.data['sa_id'])
                 with transaction.atomic():                    
-
                     assignment_obj = assignment_serializer.create(assignment_serializer.validated_data, user)
 
                     # State change for service assignment start
