@@ -32,6 +32,8 @@ from v1.commonapp.models.frequency import Frequency
 from v1.commonapp.models.channel import Channel
 from v1.commonapp.models.global_lookup import Global_Lookup
 from v1.commonapp.models.division import Division
+from v1.commonapp.models.notification_type import NotificationType
+from v1.commonapp.models.notification_subtype import NotificationSubType
 
 admin.site.register(Region)
 admin.site.register(Country)
@@ -66,3 +68,5 @@ admin.site.register(Channel)
 admin.site.register(Global_Lookup)
 admin.site.register(DepartmentSubtype)
 admin.site.register(Division)
+admin.site.register(NotificationType)
+admin.site.register(NotificationSubType)

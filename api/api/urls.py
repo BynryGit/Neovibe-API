@@ -56,6 +56,6 @@ urlpatterns = [
     path('api/v1/complaint/', include(complaint_urls)),
     path('api/v1/payment/', include(payment_urls)),
     path('api/v1/store/', include(store_urls)),
-    path('api/v1/work_order/', include(work_order_urls)),
+    path('api/v1/work-order/', include(work_order_urls)),
     path('api/v1/service/', include(service_urls)),
 ]

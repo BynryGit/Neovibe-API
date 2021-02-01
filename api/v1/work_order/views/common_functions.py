@@ -1,5 +1,10 @@
 import collections
 
+from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.premises import get_premise_by_id_string
+from v1.commonapp.models.state import get_state_by_id_string
+from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
@@ -58,6 +63,41 @@ def set_service_appointment_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "area_id" in validated_data:
+        area = get_area_by_id_string(validated_data["area_id"])
+        if area:
+            validated_data["area_id"] = area.id
+        else:
+            raise CustomAPIException("Area not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "state_id" in validated_data:
+        state = get_state_by_id_string(validated_data["state_id"])
+        if state:
+            validated_data["state_id"] = state.id
+        else:
+            raise CustomAPIException("State not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "city_id" in validated_data:
+        city = get_city_by_id_string(validated_data["city_id"])
+        if city:
+            validated_data["city_id"] = city.id
+        else:
+            raise CustomAPIException("City not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "sub_area_id" in validated_data:
+        sub_area = get_sub_area_by_id_string(validated_data["sub_area_id"])
+        if sub_area:
+            validated_data["sub_area_id"] = sub_area.id
+        else:
+            raise CustomAPIException("Sub area not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "premise_id" in validated_data:
+        premise = get_premise_by_id_string(validated_data["premise_id"])
+        if premise:
+            validated_data["premise_id"] = premise.id
+        else:
+            raise CustomAPIException("Premise not found.", status_code=status.HTTP_404_NOT_FOUND)
 
     if "consumer_id" in validated_data:
         consumers = get_consumer_by_id_string(validated_data["consumer_id"])

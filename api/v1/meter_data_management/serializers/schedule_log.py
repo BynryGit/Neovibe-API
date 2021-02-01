@@ -2,7 +2,6 @@ __author__ = "aki"
 
 from rest_framework import serializers
 from v1.commonapp.views.settings_reader import SettingReader
-setting_reader = SettingReader()
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
@@ -10,6 +9,7 @@ from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.serializers.schedule import ScheduleShortViewSerializer
+setting_reader = SettingReader()
 
 
 class ScheduleLogViewSerializer(serializers.ModelSerializer):
