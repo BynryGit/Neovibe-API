@@ -86,6 +86,7 @@ CONSUMER_SERVICE_ALREADY_EXISTS = "Consumer service already exists!"
 CONSUMER_OFFER_ALREADY_EXISTS = "Consumer offer already exists!"
 # *********** NOT FOUND CONSTANTS **************
 SERVICE_ASSIGNMENT_NOT_FOUND = "Service Assignment Not Found"
+SERVICE_APPOINTMENT_NOT_FOUND = "Service Appointment Not Found"
 COUNTRY_NOT_FOUND = "Country Not Found"
 STATE_NOT_FOUND = "State Not Found"
 CITY_NOT_FOUND = "City Not Found"

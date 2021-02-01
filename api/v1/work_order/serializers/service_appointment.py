@@ -84,6 +84,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
         validated_data = set_service_appointment_validated_data(validated_data)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).update(instance, validated_data)
+            appointment_obj.state = 5
             appointment_obj.updated_by = user.id
             appointment_obj.updated_date = datetime.utcnow()
             appointment_obj.is_active = True

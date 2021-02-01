@@ -5,7 +5,7 @@ from v1.work_order.views.service_appointment import ServiceAppointment,ServiceAp
 from v1.work_order.views.material_type import MaterialTypeList
 from v1.work_order.views.material_subtype import MaterialSubTypeList
 from v1.work_order.views.material_name import MaterialNameList
-from v1.work_order.views.service_assignment import ServiceAssignment,ServiceDessignmentDetail,ServiceAssignmentDetail
+from v1.work_order.views.service_assignment import ServiceAssignment,ServiceDessignmentDetail,ServiceAssignmentDetail,ServiceAssignmentList
 
 
 urlpatterns = [
@@ -21,5 +21,6 @@ urlpatterns = [
     path('service-appointment/<uuid:id_string>',ServiceAppointmentDetail.as_view(),name="service_appointment_detail"),
     path('service-assignment',ServiceAssignment.as_view(),name="service_assignment"),
     path('service-deassignment/<uuid:id_string>',ServiceDessignmentDetail.as_view(),name="service_deassignment"),
-    path('service-assignment/<uuid:id_string>',ServiceAssignmentDetail.as_view(),name="service_assignment_detail")
+    path('service-assignment/<uuid:id_string>',ServiceAssignmentDetail.as_view(),name="service_assignment_detail"),
+    path('utility/<uuid:utility_id_string>/user/<uuid:user_id_string>/service-assignment/list',ServiceAssignmentList.as_view(),name="service_assignment_list")
 ]

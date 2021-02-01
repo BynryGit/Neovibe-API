@@ -96,6 +96,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     actual_start_time = models.TimeField(null=True, blank=True, default='20:00')
     actual_end_time = models.TimeField(null=True, blank=True, default='20:00')
     actual_duration = models.BigIntegerField(blank=True, null=True)
+    completed_task_details = JSONField(default=[])
     sa_GIS_id = models.BigIntegerField(blank=True, null=True)
     status_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
