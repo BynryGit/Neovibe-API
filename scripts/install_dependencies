@@ -11,7 +11,7 @@ sudo chown ubuntu:ubuntu -R /home/ubuntu/smart360
 echo "################################################## Setting environment file ############################################"
 sudo touch /home/ubuntu/smart360/api/.env
 sudo chmod 777 /home/ubuntu/smart360/api/.env
-echo "smart360_env=$DEPLOYMENT_GROUP_NAME" > /home/ubuntu/smart360/api/.env
+echo "smart360_env=$DEPLOYMENT_GROUP_NAME" >> /home/ubuntu/smart360/api/.env
 # sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
 
 echo "################################################## Running makemigrations ############################################"
