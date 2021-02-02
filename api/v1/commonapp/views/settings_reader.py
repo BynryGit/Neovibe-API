@@ -6,6 +6,8 @@ if os.environ["smart360_env"] == 'dev':
     settings = dev
 if os.environ["smart360_env"] == 'prod':
     settings = prod
+if os.environ["smart360_env"] == 'qa':
+    settings = prod
 
 
 class SettingReader:
