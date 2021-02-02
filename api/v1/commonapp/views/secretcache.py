@@ -15,6 +15,7 @@ class SecretManager():
     cache = SecretCache(SecretCacheConfig(), client)  # Create a cache
 
     def get_secret(self, secret_name):
+        print("....Inside secret cache file.....",secret_name)
         try:
             get_secret_value_response = self.cache.get_secret_string(secret_name)  # Get secret string from the cache
 
