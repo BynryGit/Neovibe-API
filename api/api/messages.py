@@ -126,6 +126,7 @@ CONSUMER_SUPPORT_NOT_FOUND = "Consumer support not found."
 ACTIVITY_TYPE_NOT_FOUND = "ACtivity type not found"
 REPEAT_FREQUENCY_NOT_FOUND = "Repeat Frequency not found"
 SERVICE_CONTRACT_TEMPLATE_NOT_FOUND = "Service Contract Template Not Found."
+IS_RECCURING_NOT_FOUND = 'Reccuring Id Not Found'
 
 
 
