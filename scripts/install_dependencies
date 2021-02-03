@@ -10,12 +10,12 @@ echo "################################################## Setting permission ####
 sudo chown ubuntu:ubuntu -R /home/ubuntu/smart360
 echo "################################################## Setting environment file ############################################"
 sudo touch /home/ubuntu/smart360/api/.env
-sudo chown 777 /home/ubuntu/smart360/api/.env
-sudo echo "smart360_env=$DEPLOYMENT_GROUP_NAME" > /home/ubuntu/smart360/api/.env
+sudo chmod 777 /home/ubuntu/smart360/api/.env
+echo "smart360_env=$DEPLOYMENT_GROUP_NAME" >> /home/ubuntu/smart360/api/.env
 # sed -i "s/smart360_env = ''/smart360_env = \'$DEPLOYMENT_GROUP_NAME\'/g" /home/ubuntu/smart360/api/api/settings.py
 
 echo "################################################## Running makemigrations ############################################"
-export smart360_env="$DEPLOYMENT_GROUP_NAME"
+# export smart360_env="$DEPLOYMENT_GROUP_NAME"
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations master
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations billing

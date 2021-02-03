@@ -15,6 +15,51 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from master.models import get_user_by_id_string
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string, SERVICE_APPOINTMENT_DICT
 from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id, SERVICE_ASSIGNMENT_DICT, get_service_assignment_by_id_string
+from v1.work_order.serializers.service_assignment import ServiceAssignmentListSerializer
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.work_order.models.service_assignment import ServiceAssignment as ServiceAssignmentTbl
+from v1.utility.models.utility_master import get_utility_by_id_string
+
+
+# API Header
+# API end Point: api/v1/utility/:id_string/user/:id_string/service-assignment/list
+# API verb: GET
+# Interaction: Service Assignment list
+# Usage: API will fetch all Service Assignment List
+# Tables used: ServiceAssignment
+# Author: Priyanka
+# Created on: 01/02/2020
+
+class ServiceAssignmentList(generics.ListAPIView):
+    try:
+        serializer_class = ServiceAssignmentListSerializer
+        pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('user_id','sa_id', 'tenant__id_string',)
+        ordering_fields = ('user_id', 'sa_id','tenant',)
+        ordering = ('user_id',)  # always give by default alphabetical order
+        search_fields = ('user_id','sa_id', 'tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['utility_id_string'])
+                    user = get_user_by_id_string(self.kwargs['user_id_string'])
+                    if user:
+                        queryset = ServiceAssignmentTbl.objects.filter(utility=utility,user_id=user.id,is_active=True)
+                        if queryset:
+                            return queryset
+                        else:
+                            raise CustomAPIException("Service Appointment not found.", status.HTTP_404_NOT_FOUND)
+                    else:
+                        raise CustomAPIException("User not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer ops', sub_module='Consumer')
 
 
 # API Header
@@ -41,7 +86,6 @@ class ServiceAssignment(GenericAPIView):
                 user = get_user_by_id_string(user_id_string)
                 service_appoint_obj = get_service_appointment_by_id_string(request.data['sa_id'])
                 with transaction.atomic():                    
-
                     assignment_obj = assignment_serializer.create(assignment_serializer.validated_data, user)
 
                     # State change for service assignment start

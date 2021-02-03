@@ -38,13 +38,13 @@ class Schedule(models.Model):
     activity_type_id = models.BigIntegerField(null=False, blank=False)
     frequency_id = models.BigIntegerField(null=True, blank=True)
     repeat_every_id = models.BigIntegerField(null=True, blank=True)
+    recurring_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     occurs_on = JSONField(default=[])
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    is_recurring = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -70,6 +70,11 @@ class Schedule(models.Model):
     def get_repeat_every_name(self):
         repeat_every = get_global_lookup_by_id(self.repeat_every_id)
         return repeat_every
+
+    @property
+    def get_recurring_name(self):
+        recurring = get_global_lookup_by_id(self.recurring_id)
+        return recurring
 
     def __str__(self):
         return str(self.id_string)
