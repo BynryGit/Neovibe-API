@@ -6,8 +6,7 @@ phases:
   install:
     runtime-versions:
       python: 3.7
-    commands:      
-      - "sudo cat /etc/apt/sources.list.d/google-chrome.list"
+    commands:
       - "apt-get update"
 
   pre_build:
