@@ -6,7 +6,7 @@
 # Frequency of data changes : High
 # Sample table :
 # Reference Table : None
-# Author : Jayshree Kumbhare
+# Author : Rohan Wagh
 # Creation Date : 23/04/2020
 
 import uuid  # importing package for guid

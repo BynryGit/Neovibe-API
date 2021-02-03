@@ -115,7 +115,7 @@ class UtilityServiceContractMasterDetail(GenericAPIView):
     serializer_class = UtilityServiceContractMasterDetailSerializer
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
 
@@ -125,19 +125,19 @@ class UtilityServiceContractMasterDetail(GenericAPIView):
                                                                           context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULTS: serializer.data,
+                    RESULT: serializer.data,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULTS: UTILITY_SERVICE_CONTRACT_NOT_FOUND,
+                    RESULT: UTILITY_SERVICE_CONTRACT_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             logger().log(e, 'MEDIUM', module='Utility', sub_module='Utility')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
-                RESULTS: str(e),
+                RESULT: str(e),
             }, status=res.status_code)
 
     @is_token_validate

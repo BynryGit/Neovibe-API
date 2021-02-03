@@ -67,7 +67,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
         if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],
-                                             work_order_master_id=validated_data['work_order_master_id']).exists():
+                                             work_order_master_id=validated_data['work_order_master_id'], is_active=True).exists():
             raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)

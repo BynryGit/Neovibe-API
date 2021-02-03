@@ -1097,3 +1097,84 @@ class ConsumerApprove(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
+
+# API Header
+# API end Point: api/v1/consumer/connect
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Connect
+# Usage: Connect
+# Tables used: ConsumerMaster
+# Author: Rohan
+# Created on: 01-02-2021
+class ConsumerConnect(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer.utility
+                    appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+                    appointment_obj.save()
+                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/disconnect
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: disconnect
+# Usage: disconnect
+# Tables used: ConsumerMaster
+# Author: Rohan
+# Created on: 01-02-2021
+class ConsumerDisconnect(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer.utility
+                    appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+                    appointment_obj.save()
+                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
