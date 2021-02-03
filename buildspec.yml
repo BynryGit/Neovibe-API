@@ -7,7 +7,7 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
-      - "yum update"
+      - "yum update -y"
 
   pre_build:
     commands:
