@@ -19,7 +19,7 @@ from v1.userapp.serializers.user_utility import UserUtilityViewSerializer
 from v1.userapp.models.user_skill import UserSkill
 from v1.userapp.models.user_leaves import UserLeaves
 import datetime
-from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
+from v1.work_order.models.service_appointments import get_service_appointment_by_id_string, ServiceAppointment
 from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.userapp.serializers.user_skill import UserSkillViewSerializer
@@ -127,6 +127,84 @@ class ResourceList(generics.ListAPIView):
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
+
+# API Header
+# API end Point: api/v1/bulk-assign/resource/list
+# API verb: POST
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: Add users
+# Usage: Get User
+# Tables used: User 
+# Author: Priyanka
+# Created on: 05/02/2020
+
+class BulkAssignResourceList(generics.ListAPIView):
+
+    try:
+        serializer_class = UserSkillViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant__id_string',)
+        search_fields = ('tenant__id_string',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['utility_id_string'])
+                    a = self.request.query_params.get('selectedRow')
+                    a = a.split(',')
+
+                    appointment_obj = ServiceAppointment.objects.filter(id_string__in = a)
+                    workOrderList = []
+                    skill_id_list = []
+                    user_list = []
+                    user_skill_list = []
+                    uesr_leaves_list = []
+                    appointment_date = []
+                    for a in appointment_obj:
+                        appointment_date.append((a.sa_date).date())
+                        workOrderList.append(get_work_order_master_by_id(a.work_order_master_id))
+
+                    for work_order in  workOrderList:
+                        for skill_obj in work_order.json_obj['skill_details']:  
+                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])  
+                            skill_id_list.append(skill_id.id)   
+
+                    user_utility_objs = UserUtility.objects.filter(utility=utility, is_active=True)
+
+                    if user_utility_objs:
+                        for user_utility_obj in user_utility_objs:
+                            user_obj = UserTbl.objects.filter(id = user_utility_obj.user_id, form_factor_id=2, is_active=True).last()
+                            if user_obj:
+                                user_list.append(user_obj)  
+
+                        user_skills = UserSkill.objects.filter(user_id__in = [user.id for user in user_list],skill_id__in=skill_id_list, is_active=True).distinct('user_id')                    
+                        for user_skill in user_skills:
+                            user_skill_list.append(user_skill.user_id)
+
+                        
+                        user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list, date__date__in=appointment_date)
+                        for user_leaves in user_leaves_obj:
+                            uesr_leaves_list.append(user_leaves.user_id)
+
+                        queryset = user_skills.filter().exclude(user_id__in=uesr_leaves_list)
+                        
+                        return queryset
+                    else:
+                        raise CustomAPIException("User Utility not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
+       
 # API Header
 # API end Point: api/v1/user
 # API verb: POST

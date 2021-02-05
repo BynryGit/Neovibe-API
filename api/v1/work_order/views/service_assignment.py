@@ -25,7 +25,7 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 # API end Point: api/v1/utility/:id_string/user/:id_string/service-assignment/list
 # API verb: GET
 # Interaction: Service Assignment list
-# Usage: API will fetch all Service Assignment List
+# Usage: API will fetch all Service Assignment List & send data to mobile side
 # Tables used: ServiceAssignment
 # Author: Priyanka
 # Created on: 01/02/2020
