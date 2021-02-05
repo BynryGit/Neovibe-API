@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer
 from v1.work_order.models.work_order_master import WorkOrderMaster as WorkOrderMasterTbl
 from v1.commonapp.views.settings_reader import SettingReader
 setting_reader = SettingReader()
@@ -7,14 +9,13 @@ from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import WORK_ORDER_ALREADY_EXIST
 from v1.work_order.views.common_functions import set_work_order_validated_data
-from v1.commonapp.serializers.service_type import GetServiceTypeSerializer
-from v1.commonapp.serializers.service_subtype import ServiceSubTypeListSerializer,ServiceSubTypeShortListSerializer
+from v1.commonapp.serializers.service_request_sub_type import ServiceSubTypeListSerializer,ServiceSubTypeShortListSerializer
 from rest_framework import status
 import json
 
 
 class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
-    service_type_id = GetServiceTypeSerializer(source='get_service_type')
+    service_type_id = ServiceTypeListSerializer(source='get_service_type')
     service_subtype_id = ServiceSubTypeShortListSerializer(source='get_service_subtype')
     class Meta:
         model = WorkOrderMasterTbl

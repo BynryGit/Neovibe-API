@@ -68,17 +68,23 @@ def set_consumer_validated_data(validated_data):
             validated_data["ownership_id"] = ownership.id
         else:
             raise CustomAPIException("Ownership not found.", status.HTTP_404_NOT_FOUND)
-    if "credit_rating_id" in validated_data:
-        rating = get_consumer_credit_rating_by_id_string(validated_data["credit_rating_id"])
-        if rating:
-            validated_data["credit_rating_id"] = rating.id
-        else:
-            raise CustomAPIException("Credit rating not found.", status.HTTP_404_NOT_FOUND)
+    # if "credit_rating_id" in validated_data:
+    #     rating = get_consumer_credit_rating_by_id_string(validated_data["credit_rating_id"])
+    #     if rating:
+    #         validated_data["credit_rating_id"] = rating.id
+    #     else:
+    #         raise CustomAPIException("Credit rating not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
 # Function for converting id_strings to id's
 def set_consumer_offer_detail_validated_data(validated_data):
+    if "utility" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility"])
+        if utility:
+            validated_data["utility"] = utility
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "offer_id" in validated_data:
         offer = get_consumer_offer_master_by_id_string(validated_data["offer_id"])
         if offer:
@@ -90,6 +96,12 @@ def set_consumer_offer_detail_validated_data(validated_data):
 
 # Function for converting id_strings to id's
 def set_consumer_service_contract_detail_validated_data(validated_data):
+    if "premise_id" in validated_data:
+        premise = get_premise_by_id_string(validated_data["premise_id"])
+        if premise:
+            validated_data["premise_id"] = premise.id
+        else:
+            raise CustomAPIException("Premise not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "service_contract_id" in validated_data:
         utility_service_contract_master = get_utility_service_contract_master_by_id_string(validated_data["service_contract_id"])
         if utility_service_contract_master:
@@ -130,7 +142,7 @@ def set_validated_data(validated_data):
 def generate_consumer_no(consumer):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
-                                                            sub_module_id=get_sub_module_by_key("CONSUMER").id)
+                                                            sub_module_id=get_sub_module_by_key("CONSUMER"))
         if format_obj.is_prefix:
             consumer_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

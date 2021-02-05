@@ -3,7 +3,7 @@ import jwt  # jwt token library
 from rest_framework import status, serializers
 from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.models.module import get_module_by_id_string
-from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.service_request_type import get_service_type_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger

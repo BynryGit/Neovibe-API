@@ -1,7 +1,7 @@
 __author__ = "Priyank"
 
-from v1.commonapp.serializers.service_type import ServiceTypeListSerializer,ServiceTypeViewSerializer,ServiceTypeSerializer
-from v1.commonapp.models.service_type import ServiceType as ServiceTypeModel
+from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer,ServiceTypeViewSerializer,ServiceTypeSerializer
+from v1.commonapp.models.service_request_type import ServiceType as ServiceTypeModel
 from v1.commonapp.common_functions import is_token_valid,  is_authorized
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 from v1.commonapp.serializers.region import TenantRegionSerializer
@@ -22,7 +22,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.service_request_type import get_service_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from api.messages import *
 from api.constants import *

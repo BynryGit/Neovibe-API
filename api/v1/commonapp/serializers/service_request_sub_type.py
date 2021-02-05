@@ -1,12 +1,12 @@
 from rest_framework import serializers, status
 from v1.tenant.models.tenant_region import TenantRegion as TenantRegionTbl
-from v1.commonapp.models.service_sub_type import ServiceSubTypes as ServiceSubTypeTbl
+from v1.commonapp.models.service_request_sub_type import ServiceSubTypes as ServiceSubTypeTbl
 from django.db import transaction
 from datetime import datetime
 from api.messages import SERVICE_SUBTYPE_ALREADY_EXIST
 from v1.commonapp.common_functions import set_service_subtype_validated_data
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
+from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer
 
 class ServiceSubTypeViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')

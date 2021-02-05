@@ -6,8 +6,8 @@ from django.contrib.postgres.fields import JSONField
 # Create work_order Master table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.commonapp.models.service_type import get_service_type_by_id
-from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
+from v1.commonapp.models.service_request_type import get_service_type_by_id
+from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id
 
 
 # table header

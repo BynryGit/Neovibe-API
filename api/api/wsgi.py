@@ -13,7 +13,6 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
 
-print("------------INSIDE WSGI--------------")
 # if os.environ["smart360_env"] == 'dev':
 #     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.dev')
 

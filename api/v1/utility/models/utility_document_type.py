@@ -41,7 +41,7 @@ def get_utility_document_type_by_id(id):
         document_type = UtilityDocumentType.objects.get(id=id)
         return document_type
     except Exception as e:
-        raise CustomAPIException(DOCUMENT_TYPE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+        return False
 
 
 def get_utility_document_type_by_id_string(id_string):

@@ -15,8 +15,8 @@ from v1.work_order.models.service_appointment_status import get_service_appointm
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from rest_framework import status
 from v1.commonapp.models.sub_module import get_sub_module_by_key
-from v1.commonapp.models.service_type import get_service_type_by_id_string
-from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
+from v1.commonapp.models.service_request_type import get_service_type_by_id_string
+from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id_string
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
 from master.models import get_user_by_id_string
 

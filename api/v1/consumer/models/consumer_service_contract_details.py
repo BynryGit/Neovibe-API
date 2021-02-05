@@ -13,6 +13,7 @@ class ConsumerServiceContractDetail(models.Model):
     consumer_id = models.BigIntegerField(null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     service_contract_id = models.BigIntegerField(null=True, blank=True)
+    premise_id = models.BigIntegerField(null=True, blank=True)
     meter_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)

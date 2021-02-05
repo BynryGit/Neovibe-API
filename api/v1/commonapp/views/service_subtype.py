@@ -1,5 +1,5 @@
-from v1.commonapp.serializers.service_subtype import ServiceSubTypeListSerializer,ServiceSubTypeViewSerializer,ServiceSubTypeSerializer
-from v1.commonapp.models.service_sub_type import ServiceSubTypes as ServiceSubTypeModel
+from v1.commonapp.serializers.service_request_sub_type import ServiceSubTypeListSerializer,ServiceSubTypeViewSerializer,ServiceSubTypeSerializer
+from v1.commonapp.models.service_request_sub_type import ServiceSubTypes as ServiceSubTypeModel
 from v1.commonapp.common_functions import is_token_valid,  is_authorized
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
 from v1.commonapp.serializers.region import TenantRegionSerializer
@@ -20,7 +20,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id_string
+from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from api.messages import *
 from api.constants import *
