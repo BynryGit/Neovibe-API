@@ -12,10 +12,11 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer,ServiceAppointmentViewSerializer,ServiceAppointmentListSerializer
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
-from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl,get_service_appointment_by_id_string
+from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl,get_service_appointment_by_id_string,SERVICE_APPOINTMENT_DICT
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-
+from django.db import transaction
+from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -45,7 +46,7 @@ class ServiceAppointmentList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Consumers not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException("Service Appointment not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -134,4 +135,51 @@ class ServiceAppointmentDetail(GenericAPIView):
                 RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @is_token_validate
+    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            if service_appointment:
+                service_assignment_obj = get_service_assignment_by_appointment_id(service_appointment.id).last()
+
+                serializer = ServiceAppointmentSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    with transaction.atomic():      
+                        service_appointment_obj = serializer.update(service_appointment, serializer.validated_data, user)
+
+                        # State change for service assignment start
+                        service_appointment_obj.change_state(SERVICE_APPOINTMENT_DICT["COMPLETED"])
+                        # State change for service assignment end
+                        
+                        # Soft Delete entry from Service Assignment start
+                        service_assignment_obj.is_active = False
+                        service_assignment_obj.save()
+                        # Soft Delete entry from Service Assignment end
+
+                    view_serializer = ServiceAppointmentViewSerializer(instance=service_appointment_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: SERVICE_APPOINTMENT_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Work Order', Sub_module='service_appointment')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
 

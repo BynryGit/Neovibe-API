@@ -64,7 +64,7 @@ urlpatterns = [
     path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(), name='numformat'),
 
     path('<uuid:id_string>/status/list', UtilityStatusList.as_view(), name='utility_status_list'),
-    path('<uuid:id_string>/document_type/list', UtilityDocumentTypeList.as_view(), name='utility_document_type_list'),
+    path('<uuid:id_string>/document-type/list', UtilityDocumentTypeList.as_view(), name='utility_document_type_list'),
     path('<uuid:id_string>/document-sub-type/list', UtilityDocumentSubTypeList.as_view(),
          name='utility_document_sub_type_list'),
 
@@ -101,4 +101,5 @@ urlpatterns = [
     path('service-contract', UtilityServiceContractMaster.as_view(),
          name='utility_service_contract_master_post'),
     path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
+
 ]

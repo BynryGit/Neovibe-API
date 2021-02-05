@@ -1,7 +1,6 @@
 import uuid
 from datetime import datetime
 from django.db import models
-
 from v1.consumer.models.service_sub_type import get_service_sub_type_by_id
 from v1.consumer.models.service_type import get_service_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster

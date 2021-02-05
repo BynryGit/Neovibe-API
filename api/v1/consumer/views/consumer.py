@@ -50,6 +50,10 @@ from v1.utility.models.utility_service import get_utility_service_by_id_string
 # Tables used: Consumer master
 # Author: Rohan
 # Created on: 22/12/2020
+from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer
+from v1.work_order.views.common_functions import generate_service_appointment_no
+
+
 class ConsumerList(generics.ListAPIView):
     try:
         serializer_class = ConsumerListSerializer
@@ -1035,3 +1039,142 @@ class ConsumerNoteList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Consumer')
+
+
+from django.db import transaction
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+from api.messages import *
+from master.models import get_user_by_id_string
+from v1.commonapp.common_functions import get_user_from_token
+from v1.commonapp.views.logger import logger
+from v1.consumer.models.consumer_master import get_consumer_by_id_string, CONSUMER_DICT
+from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
+from v1.userapp.decorators import is_token_validate
+
+
+# API Header
+# API end Point: api/v1/consumer/approve
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Approve
+# Usage: Approve
+# Tables used: ConsumerMaster
+# Author: Rohan
+# Created on: 29-01-2021
+class ConsumerApprove(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                # State change for consumer start
+                consumer.change_state(CONSUMER_DICT["APPROVED"])
+                # State change for consumer end
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer.utility
+                    appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+                    appointment_obj.save()
+                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/connect
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Connect
+# Usage: Connect
+# Tables used: ConsumerMaster
+# Author: Rohan
+# Created on: 01-02-2021
+class ConsumerConnect(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer.utility
+                    appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+                    appointment_obj.save()
+                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/disconnect
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: disconnect
+# Usage: disconnect
+# Tables used: ConsumerMaster
+# Author: Rohan
+# Created on: 01-02-2021
+class ConsumerDisconnect(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer.utility
+                    appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+                    appointment_obj.save()
+                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)

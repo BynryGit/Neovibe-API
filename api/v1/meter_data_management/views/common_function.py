@@ -1,9 +1,7 @@
 __author__ = "aki"
 
-from rest_framework import status
-from api.messages import CITY_NOT_FOUND, TENANT_NOT_FOUND, UTILITY_NOT_FOUND, FREQUENCY_NOT_FOUND, DIVISION_NOT_FOUND, \
-    AREA_NOT_FOUND, SUBAREA_NOT_FOUND, ZONE_NOT_FOUND
 from api.messages import *
+from rest_framework import status
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
@@ -23,6 +21,12 @@ def set_schedule_validated_data(validated_data):
             validated_data["utility_id"] = utility.id
         else:
             raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "recurring_id" in validated_data:
+        recurring = get_global_lookup_by_id_string(validated_data["recurring_id"])
+        if recurring:
+            validated_data["recurring_id"] = recurring.id
+        else:
+            raise CustomAPIException(IS_RECCURING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     if "read_cycle_id" in validated_data:
         read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
         if read_cycle:
@@ -41,12 +45,24 @@ def set_schedule_validated_data(validated_data):
             validated_data["frequency_id"] = frequency.id
         else:
             raise CustomAPIException(FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["frequency_id"] = None
     if "repeat_every_id" in validated_data:
         repeat_every = get_global_lookup_by_id_string(validated_data["repeat_every_id"])
         if repeat_every:
             validated_data["repeat_every_id"] = repeat_every.id
         else:
             raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["repeat_every_id"] = None
+    if "occurs_on" in validated_data:
+        pass
+    else:
+        validated_data["occurs_on"] = []
+    if "end_date" in validated_data:
+        pass
+    else:
+        validated_data["end_date"] = None
     return validated_data
 
 

@@ -46,13 +46,15 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     work_order_master_id = serializers.CharField(required=False, max_length=200)
     # sa_name = serializers.CharField(required=True, max_length=200)
     # sa_description = serializers.CharField(required=True, max_length=200)
-    sa_date = serializers.CharField(required=True, max_length=200)
+    sa_date = serializers.CharField(required=False, max_length=200)
     # sa_time = serializers.CharField(required=False, max_length=200)
     # sa_estimated_effort = serializers.CharField(required=False, max_length=200)
-    # alternative_contact = serializers.CharField(required=False, max_length=200)
-    # sa_area = serializers.CharField(required=False, max_length=200)
-    # sa_sub_area = serializers.CharField(required=False, max_length=200)
-    # alternative_address = serializers.CharField(required=False, max_length=200)
+    state_id = serializers.CharField(required=False, max_length=200)
+    city_id = serializers.CharField(required=False, max_length=200)
+    area_id = serializers.CharField(required=False, max_length=200)
+    sub_area_id = serializers.CharField(required=False, max_length=200)
+    ownership_id = serializers.CharField(required=False, max_length=200)
+    premise_id = serializers.CharField(required=False, max_length=200)
     # actual_start_time = serializers.CharField(required=False, max_length=200)
     # actual_end_time = serializers.CharField(required=False, max_length=200)
     # actual_duration = serializers.CharField(required=False, max_length=200)
@@ -65,7 +67,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
         if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],
-                                             work_order_master_id=validated_data['work_order_master_id']).exists():
+                                             work_order_master_id=validated_data['work_order_master_id'], is_active=True).exists():
             raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)
@@ -74,7 +76,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
             appointment_obj.tenant = user.tenant
             appointment_obj.status_id = 1
             appointment_obj.save()
-            appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+            # appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
             appointment_obj.save()
             return appointment_obj
 
@@ -82,6 +84,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
         validated_data = set_service_appointment_validated_data(validated_data)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).update(instance, validated_data)
+            appointment_obj.state = 5
             appointment_obj.updated_by = user.id
             appointment_obj.updated_date = datetime.utcnow()
             appointment_obj.is_active = True

@@ -16,6 +16,21 @@ from v1.work_order.serializers.service_appointment_status import ServiceAppointm
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
+class ServiceAssignmentListSerializer(serializers.ModelSerializer):
+    tenant = serializers.ReadOnlyField(source='tenant.name')
+    tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+    utility = serializers.ReadOnlyField(source='utility.name')
+    utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    sa_id = ServiceAppointmentViewSerializer(many=False, required=True, source='get_service_appointment')
+    user_id = GetUserSerializer(many=False, required=True, source='get_user')
+    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+
+    class Meta:
+        model = ServiceAssignment
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'sa_id', 'user_id',
+                  'created_date', 'updated_date')
+
 class ServiceAssignmentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     sa_id = serializers.CharField(required=False, max_length=200)
