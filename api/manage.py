@@ -11,16 +11,16 @@ environ.Env.read_env()
 
 def main():
     if env("smart360_env") == 'dev':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.dev')
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.settings_dev'
 
     if env("smart360_env") == 'qa':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.prod'
 
     if env("smart360_env") == 'uat':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.prod'
 
     if env("smart360_env") == 'prod':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.prod'
 
     try:
         from django.core.management import execute_from_command_line

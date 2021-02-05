@@ -4,6 +4,8 @@ from django.db import models
 from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_module import get_utility_module_by_id
+from v1.utility.models.utility_sub_module import get_utility_submodule_by_id
 
 
 class ConsumerOfferMaster(models.Model):
@@ -14,6 +16,8 @@ class ConsumerOfferMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    module_id = models.BigIntegerField(null=True, blank=True)
+    submodule_id = models.BigIntegerField(null=True, blank=True)
     offer_name = models.CharField(max_length=200, null=True, blank=True)
     offer_type_id = models.BigIntegerField(null=True, blank=True)
     offer_sub_type_id = models.BigIntegerField(null=True, blank=True)
@@ -40,6 +44,14 @@ class ConsumerOfferMaster(models.Model):
     @property
     def get_offer_sub_type(self):
         return get_offer_sub_type_by_id(self.offer_sub_type_id)
+
+    @property
+    def get_sub_module(self):
+        return get_utility_submodule_by_id(self.submodule_id)
+
+    @property
+    def get_module(self):
+        return get_utility_module_by_id(self.module_id)
 
 
 def get_consumer_offer_master_by_id_string(id_string):
