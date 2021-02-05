@@ -1,7 +1,6 @@
 import uuid
 from datetime import datetime
 from django.db import models
-
 from v1.consumer.models.service_sub_type import get_service_sub_type_by_id
 from v1.consumer.models.service_type import get_service_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -43,3 +42,9 @@ def get_consumer_service_master_by_id_string(id_string):
     except:
         return False
 
+
+def get_consumer_service_master_by_id(id):
+    try:
+        return ConsumerServiceMaster.objects.get(id=id)
+    except:
+        return False

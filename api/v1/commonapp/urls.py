@@ -29,6 +29,8 @@ from v1.commonapp.views.frequency import FrequencyDetail,FrequencyList,Frequency
 from v1.commonapp.views.document_type import DocumentTypeList, DocumentTypeDetail, DocumentType
 from v1.commonapp.views.document_subtype import DocumentSubTypeList, DocumentSubTypeDetail, DocumentSubType
 from v1.commonapp.views.document import Document, DocumentList, DocumentDetail
+from v1.commonapp.views.notification_type import NotificationTypeList, NotificationTypeDetail, NotificationType
+from v1.commonapp.views.notification_subtype import NotificationSubTypeList, NotificationSubTypeDetail, NotificationSubType
 
 urlpatterns = [
     path('utility/region', Region.as_view()),
@@ -65,9 +67,13 @@ urlpatterns = [
     path('product/list', ProductList.as_view()),
     path('utility/product', Product.as_view()),
     path('utility/product/<uuid:id_string>', ProductDetail.as_view()),
-    path('dept_type/list', DepartmentTypeList.as_view()),
-    path('utility/dept_type', DepartmentType.as_view()),
-    path('utility/dept_type/<uuid:id_string>', DepartmentTypeDetail.as_view()),
+    path('dept-type/list', DepartmentTypeList.as_view()),
+    path('utility/dept-type', DepartmentType.as_view()),
+    path('utility/dept-type/<uuid:id_string>', DepartmentTypeDetail.as_view()),
+    path('utility/notification_type', NotificationType.as_view()),
+    path('utility/notification_type/<uuid:id_string>', NotificationTypeDetail.as_view()),
+    path('utility/notification_subtype', NotificationSubType.as_view()),
+    path('utility/notification_subtype/<uuid:id_string>', NotificationSubTypeDetail.as_view()),
     path('dept_subtype/list', DepartmentSubTypeList.as_view()),
     path('utility/dept_subtype', DepartmentSubType.as_view()),
     path('utility/dept_subtype/<uuid:id_string>', DepartmentSubTypeDetail.as_view()),
@@ -98,6 +104,8 @@ urlpatterns = [
     path('utility/<uuid:id_string>/area/list', AreaList.as_view(), name='area_list'),
     path('utility/<uuid:id_string>/subarea/list', SubAreaList.as_view(), name='subarea_list'),
     path('utility/<uuid:id_string>/premise/list', PremiseList.as_view(), name='premise_list'),
+    path('utility/<uuid:id_string>/notification_type/list', NotificationTypeList.as_view(), name='notification_type_list'),
+    path('utility/<uuid:id_string>/notification_subtype/list', NotificationSubTypeList.as_view(), name='notification_subtype_list'),
     # This api used for utility dropdown end
     path('utility/<uuid:id_string>/service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
     path('utility/service_type/<uuid:id_string>', ServiceTypeDetail.as_view(), name="service_type_detail"),

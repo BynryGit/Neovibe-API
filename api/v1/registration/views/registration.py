@@ -14,6 +14,11 @@ from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, No
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id_string
+from v1.consumer.serializers.consumer_down_payment import ConsumerDownPaymentSerializer
+from v1.consumer.serializers.consumer_master import ConsumerSerializer
+from v1.consumer.serializers.consumer_offer_detail import ConsumerOfferDetailSerializer
+from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailSerializer
 from v1.payment.models.payment import get_payment_by_id_string, PAYMENT_DICT
 from v1.payment.models.payment_transactions import PaymentTransaction
 from v1.payment.serializer.payment import *
@@ -80,50 +85,111 @@ class RegistrationList(generics.ListAPIView):
 class Registration(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
+                services = []
                 transactions = []
                 payment = {}
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
+                if 'services' in request.data:
+                    services = request.data.pop('services')
+                    print("@@@@@@@@@@2",services)
                 if 'transactions' in request.data:
                     transactions = request.data.pop('transactions')
+                if 'account_holders' in request.data:
+                    account_holders = request.data.pop('account_holders')
                 if 'payment' in request.data:
                     payment = request.data.pop('payment')
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
                 registration_serializer = RegistrationSerializer(data=request.data)
                 if registration_serializer.is_valid(raise_exception=False):
                     registration_obj = registration_serializer.create(registration_serializer.validated_data, user)
+                    registration_obj.registration_no = generate_registration_no(registration_obj)
+                    registration_obj.save()
                     # Timeline code start
-                    transaction.on_commit(
-                        lambda: save_registration_timeline.delay(registration_obj, "Registration", "Text", "CREATED",
-                                                                 user))
+                    # transaction.on_commit(
+                    #     lambda: save_registration_timeline.delay(registration_obj, "Registration", "Text", "CREATED",
+                    #                                              user))
                     # Timeline code end
-                    # payment and transaction save code start
-                    if payment and transactions:
-                        payment_serializer = PaymentSerializer(data=payment)
-                        if payment_serializer.is_valid(raise_exception=True):
-                            payment_obj = payment_serializer.create(payment_serializer.validated_data, user)
-                            payment_obj.identification_id = registration_obj.id
-                            payment_obj.save()
-                            # Timeline code start
-                            transaction.on_commit(
-                                lambda: save_registration_timeline.delay(registration_obj, "Payment", "Text",
-                                                                         "CREATED",
-                                                                         user))
-                            # Timeline code end
-                            for item in transactions:
-                                transaction_serializer = PaymentTransactionSerializer(data=item)
-                                if transaction_serializer.is_valid(raise_exception=True):
-                                    transaction_obj = transaction_serializer.create(
-                                        transaction_serializer.validated_data, user)
-                                    transaction_obj.utility = registration_obj.utility
-                                    transaction_obj.tenant = registration_obj.tenant
-                                    transaction_obj.payment_id = payment_obj.id
-                                    transaction_obj.identification_id = registration_obj.id
-                                    transaction_obj.save()
-                                    # payment and transaction save code end
+                    consumer_serializer = ConsumerSerializer(data=request.data)
+                    if consumer_serializer.is_valid(raise_exception=False):
+                        consumer_obj = consumer_serializer.create(consumer_serializer.validated_data, user)
+                        consumer_obj.registration_id = registration_obj.id
+                        consumer_obj.save()
+                        # Consumer service contract details save start
+                        if services:
+                            for service in services:
+                                consumer_service_contract_serializer = ConsumerServiceContractDetailSerializer(
+                                    data=service)
+                                consumer_service_contract_serializer.is_valid(raise_exception=False)
+                                contract_detail_obj = consumer_service_contract_serializer.create(
+                                    consumer_service_contract_serializer.validated_data, consumer_obj, user)
+                                contract_detail_obj.save()
+                                # Consumer service contract details save end
+                                # payment and transaction save code start
+                                if payment and transactions:
+                                    payment_serializer = PaymentSerializer(data=payment)
+                                    if payment_serializer.is_valid(raise_exception=False):
+                                        payment_obj = payment_serializer.create(payment_serializer.validated_data,
+                                                                                consumer_obj,
+                                                                                user)
+                                        payment_obj.consumer_no = consumer_obj.consumer_no
+                                        payment_obj.save()
+                                        for item in transactions:
+                                            transaction_serializer = PaymentTransactionSerializer(data=item)
+                                            if transaction_serializer.is_valid(raise_exception=True):
+                                                transaction_obj = transaction_serializer.create(
+                                                    transaction_serializer.validated_data, payment_obj, user)
+                                                # payment and transaction save code end
+                                # upfront payment save code start
+                                if 'upfPayment' in request.data:
+                                    request.data['upfPayment'] = request.data['upfPayment'].strip()
+                                    if request.data['upfPayment'] != '':
+                                        consumer_down_payment_serializer = ConsumerDownPaymentSerializer(
+                                            data=request.data)
+                                        consumer_down_payment_serializer.is_valid()
+                                        consumer_down_payment_obj = consumer_down_payment_serializer.create(
+                                            consumer_down_payment_serializer.validated_data, consumer_obj, user)
+                                        consumer_down_payment_obj.collected_amount = request.data['upfPayment']
+                                        consumer_obj.is_upfront_amount = True
+                                        consumer_down_payment_obj.save()
+                                        # upfront payment save code start
+                                # Consumer offer detail save code start
+                                if 'offer_id' in request.data:
+                                    consumer_offer_detail_serializer = ConsumerOfferDetailSerializer(data=request.data)
+                                    consumer_offer_detail_serializer.is_valid(raise_exception=True)
+                                    consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
+                                        consumer_offer_detail_serializer.validated_data, consumer_obj, user)
+                                    consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
+                                        request.data['offer_id']).id
+                                    consumer_offer_detail_obj.save()
+                                    # Consumer offer detail save code end
+                    # # payment and transaction save code start
+                    # if payment and transactions:
+                    #     payment_serializer = PaymentSerializer(data=payment)
+                    #     if payment_serializer.is_valid(raise_exception=True):
+                    #         payment_obj = payment_serializer.create(payment_serializer.validated_data, user)
+                    #         payment_obj.identification_id = registration_obj.id
+                    #         payment_obj.save()
+                    #         # Timeline code start
+                    #         transaction.on_commit(
+                    #             lambda: save_registration_timeline.delay(registration_obj, "Payment", "Text",
+                    #                                                      "CREATED",
+                    #                                                      user))
+                    #         # Timeline code end
+                    #         for item in transactions:
+                    #             transaction_serializer = PaymentTransactionSerializer(data=item)
+                    #             if transaction_serializer.is_valid(raise_exception=True):
+                    #                 transaction_obj = transaction_serializer.create(
+                    #                     transaction_serializer.validated_data, user)
+                    #                 transaction_obj.utility = registration_obj.utility
+                    #                 transaction_obj.tenant = registration_obj.tenant
+                    #                 transaction_obj.payment_id = payment_obj.id
+                    #                 transaction_obj.identification_id = registration_obj.id
+                    #                 transaction_obj.save()
+                    #                 # payment and transaction save code end
                     view_serializer = RegistrationViewSerializer(instance=registration_obj,
                                                                  context={'request': request})
                     return Response({

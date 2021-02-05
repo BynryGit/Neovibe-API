@@ -58,7 +58,7 @@ def set_payment_validated_data(validated_data):
 def generate_receipt_no(payment):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=payment.tenant, utility=payment.utility,
-                                                            sub_module_id=get_sub_module_by_key("PAYMENT").id)
+                                                            sub_module_id=get_sub_module_by_key("PAYMENT"))
         if format_obj.is_prefix:
             receipt_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

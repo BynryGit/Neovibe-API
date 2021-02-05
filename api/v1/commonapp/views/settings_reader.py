@@ -1,9 +1,12 @@
 import os
-from api.settings import prod, dev
+from api.settings import prod
 settings = None
 if os.environ["smart360_env"] == 'dev':
+    from api.settings import dev
     settings = dev
 if os.environ["smart360_env"] == 'prod':
+    settings = prod
+if os.environ["smart360_env"] == 'qa':
     settings = prod
 
 

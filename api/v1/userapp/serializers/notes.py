@@ -10,7 +10,7 @@ setting_reader = SettingReader()
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.notes import Notes
 from v1.commonapp.serializers.module import ModuleSerializer
-from v1.commonapp.serializers.service_type import ServiceTypeListSerializer
+from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer

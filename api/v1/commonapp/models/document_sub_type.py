@@ -43,7 +43,10 @@ class DocumentSubType(models.Model):
 
     @property
     def get_utility_document_type(self):
-        return get_utility_document_type_by_id(self.document_type_id)
+        try:
+            return get_utility_document_type_by_id(self.document_type_id)
+        except:
+            return False
 
 # Create Document Type table end
 
@@ -56,4 +59,7 @@ def get_document_sub_type_by_id_string(id_string):
 
 
 def get_document_sub_type_by_id(id):
-    return DocumentSubType.objects.filter(id=id).last()
+    try:
+        return DocumentSubType.objects.get(id=id)
+    except:
+        return False

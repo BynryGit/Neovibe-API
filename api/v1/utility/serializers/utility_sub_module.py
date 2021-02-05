@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.db import transaction
 from django.utils import timezone
 from v1.commonapp.views.settings_reader import SettingReader
+
 setting_reader = SettingReader()
 from v1.commonapp.serializers.module import ModuleShortViewSerializer
 from v1.commonapp.serializers.sub_module import SubModuleShortViewSerializer
@@ -25,8 +26,9 @@ class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('id_string', 'label', 'created_date', 'updated_date', 'is_active', 'utility_module_id', 'submodule_id',
-                  'tenant', 'utility')
+        fields = (
+            'id_string', 'label', 'created_date', 'updated_date', 'is_active', 'utility_module_id', 'submodule_id',
+            'tenant', 'utility')
 
 
 class UtilitySubModuleSerializer(serializers.ModelSerializer):
@@ -66,17 +68,11 @@ class UtilitySubModuleSerializer(serializers.ModelSerializer):
             utility_submodule.updated_date = timezone.now()
             utility_submodule.save()
             return utility_submodule
-    
-    
-   
 
 
 class UtilitySubModuleListSerializer(serializers.ModelSerializer):
-    
+    module = UtilityModuleShortViewSerializer(source='get_module')
 
     class Meta:
         model = UtilitySubModuleTbl
-        fields = ('id_string','label')
-
-
-
+        fields = ('id_string', 'module', 'label')

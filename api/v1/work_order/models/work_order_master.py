@@ -2,12 +2,11 @@ import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
-
-# Create work_order Master table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.commonapp.models.service_type import get_service_type_by_id
-from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
+from v1.commonapp.models.service_request_type import get_service_type_by_id
+from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id
+from v1.service.models.consumer_service_master import get_consumer_service_master_by_id
 
 
 # table header
@@ -27,8 +26,6 @@ class WorkOrderMaster(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     work_order_number = models.BigIntegerField(null=True, blank=True)
     consumer_service_master_id = models.BigIntegerField(null=True, blank=True)
-    service_type_id = models.BigIntegerField(blank=False, null=False)
-    service_subtype_id = models.BigIntegerField(blank=False, null=False)
     name = models.CharField(max_length=200, blank=True, null=True)
     json_obj = JSONField()
     description = models.CharField(max_length=200, blank=True, null=True)
@@ -53,6 +50,11 @@ class WorkOrderMaster(models.Model):
     def get_service_subtype(self):
         service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
         return service_subtype
+
+    @property
+    def get_consumer_service_master(self):
+        work_order_master = get_consumer_service_master_by_id(self.consumer_service_master_id)
+        return work_order_master
 
 
 # Create work_order_master table end

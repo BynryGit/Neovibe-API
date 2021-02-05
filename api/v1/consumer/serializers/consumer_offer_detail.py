@@ -9,6 +9,7 @@ from v1.consumer.views.common_functions import set_consumer_offer_detail_validat
 
 class ConsumerOfferDetailSerializer(serializers.ModelSerializer):
     offer_id = serializers.CharField(required=False, max_length=200)
+    utility = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ConsumerOfferDetail

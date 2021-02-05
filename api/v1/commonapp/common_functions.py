@@ -3,7 +3,7 @@ import jwt  # jwt token library
 from rest_framework import status, serializers
 from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.models.module import get_module_by_id_string
-from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.service_request_type import get_service_type_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
@@ -37,6 +37,8 @@ from v1.utility.models.utility_payment_mode import get_utility_payment_mode_by_i
 from v1.utility.models.utility_document_type import get_utility_document_type_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
+from v1.commonapp.models.notification_type import get_notification_type_by_id_string
+from v1.commonapp.models.notification_subtype import get_notification_subtype_by_id_string
 
 secret_reader = SecretReader()
 
@@ -569,4 +571,42 @@ def set_department_subtype_validated_data(validated_data):
             validated_data["department_subtype_id"] = department_subtype.id
         else:
             raise CustomAPIException("Department SubType not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_notification_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_notification_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "notification_type_id" in validated_data:
+        notification_type = get_notification_type_by_id_string(validated_data["notification_type_id"])
+        if notification_type:
+            validated_data["notification_type_id"] = notification_type.id
+        else:
+            raise CustomAPIException("Notification Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
