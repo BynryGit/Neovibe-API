@@ -70,8 +70,8 @@ urlpatterns = [
 
     path('<uuid:id_string>/role-type/list', RoleTypeListByUtility.as_view()),
     path('<uuid:id_string>/role-subtype/list', RoleSubTypeListByUtility.as_view()),
-    path('<uuid:id_string>/dept_type/list', UtilityDepartmentTypeList.as_view()),
-    path('<uuid:id_string>/dept_subtype/list', UtilityDepartmentSubTypeList.as_view()),
+    path('<uuid:id_string>/dept-type/list', UtilityDepartmentTypeList.as_view()),
+    path('<uuid:id_string>/dept-subtype/list', UtilityDepartmentSubTypeList.as_view()),
     path('<uuid:id_string>/currency/list', UtilityCurrencyList.as_view()),
     path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
     path('<uuid:id_string>/region/list', UtilityRegionList.as_view(), name='utility_region_list'),

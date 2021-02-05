@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from v1.consumer.models.consumer_category import ConsumerCategory as ConsumerCategoryTbl
 from v1.commonapp.views.settings_reader import SettingReader
+
 setting_reader = SettingReader()
 from django.db import transaction
 from datetime import datetime
@@ -12,9 +13,17 @@ from v1.consumer.views.common_functions import set_consumer_category_validated_d
 
 
 class ConsumerCategoryListSerializer(serializers.ModelSerializer):
+    is_active = serializers.SerializerMethodField(method_name='conversion_bool')
+
     class Meta:
         model = ConsumerCategoryTbl
         fields = ('name', 'id_string', 'created_date', 'is_active', 'created_by')
+
+    def conversion_bool(self, instance):
+        if instance.is_active == True:
+            return "Yes"
+        else:
+            return "No"
 
 
 class ConsumerCategoryViewSerializer(serializers.ModelSerializer):

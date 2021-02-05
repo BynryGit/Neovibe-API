@@ -43,3 +43,9 @@ def get_consumer_service_master_by_id_string(id_string):
     except:
         return False
 
+
+def get_consumer_service_master_by_id(id):
+    try:
+        return ConsumerServiceMaster.objects.get(id=id)
+    except:
+        return False

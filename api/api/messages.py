@@ -84,6 +84,8 @@ SERVICE_DEASSIGNMENT = "Service Deassign Successfully"
 CONSUMER_COMPLAINT_ALREADY_EXISTS = "Consumer complaint already exists!"
 CONSUMER_SERVICE_ALREADY_EXISTS = "Consumer service already exists!"
 CONSUMER_OFFER_ALREADY_EXISTS = "Consumer offer already exists!"
+OFFER_TYPE_ALREADY_EXISTS = "Offer Type Already Exist!"
+OFFER_SUB_TYPE_ALREADY_EXISTS = "Offer SubType Already Exist!"
 # *********** NOT FOUND CONSTANTS **************
 SERVICE_ASSIGNMENT_NOT_FOUND = "Service Assignment Not Found"
 COUNTRY_NOT_FOUND = "Country Not Found"
@@ -176,7 +178,10 @@ DOCUMENT_ALREADY_EXIST = "Document Already Exist."
 DOCUMENT_SUBTYPE_ALREADY_EXIST = "Document Subtype already Exist"
 SERVICE_ALREADY_EXIST = "Service Already Exist"
 CONTRACT_ALREADY_EXIST = "Contract Already Exist"
-CONTRACT_TEMPLATE_ALREADY_EXIST = "Contract Template Already Exist"
+CONTRACT_TEMPLATE_ALREADY_EXIST = "Contract Template Already Exist."
+NOTIFICATION_TYPE_ALREADY_EXIST = "Notification Type Already Exist."
+NOTIFICATION_SUBTYPE_ALREADY_EXIST = "Notification SubType Already Exist."
+
 
 
 

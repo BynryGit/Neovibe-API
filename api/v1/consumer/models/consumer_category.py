@@ -61,4 +61,8 @@ def get_consumer_category_by_id(id):
     except:
         return False
 
+
+def get_item(self, obj):
+    return obj.get_item_display()
+
 # End The Code

@@ -22,6 +22,11 @@ from v1.registration.models.registration_type import get_registration_type_by_id
 from v1.registration.models.registration_subtype import get_registration_subtype_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
 from v1.consumer.models.service_type import get_service_type_by_id_string
+from v1.consumer.models.offer_type import get_offer_type_by_id_string
+from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
+from v1.utility.models.utility_module import get_utility_module_by_id_string
+from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
+from v1.consumer.models.offer_type import get_offer_type_by_id
 
 
 # Function for converting id_strings to id's
@@ -91,7 +96,8 @@ def set_consumer_offer_detail_validated_data(validated_data):
 # Function for converting id_strings to id's
 def set_consumer_service_contract_detail_validated_data(validated_data):
     if "service_contract_id" in validated_data:
-        utility_service_contract_master = get_utility_service_contract_master_by_id_string(validated_data["service_contract_id"])
+        utility_service_contract_master = get_utility_service_contract_master_by_id_string(
+            validated_data["service_contract_id"])
         if utility_service_contract_master:
             validated_data["service_contract_id"] = utility_service_contract_master.id
         else:
@@ -123,6 +129,84 @@ def set_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_consumer_offer_master_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "offer_type_id" in validated_data:
+        offer_type = get_offer_type_by_id_string(validated_data["offer_type_id"])
+        if offer_type:
+            validated_data["offer_type_id"] = offer_type.id
+        else:
+            raise CustomAPIException("Offer Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "offer_sub_type_id" in validated_data:
+        offer_sub_type = get_offer_sub_type_by_id_string(validated_data["offer_sub_type_id"])
+        if offer_sub_type:
+            validated_data["offer_sub_type_id"] = offer_sub_type.id
+        else:
+            raise CustomAPIException("Offer Subtype not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "module_id" in validated_data:
+        module = get_utility_module_by_id_string(validated_data["module_id"])
+        if module:
+            validated_data["module_id"] = module.id
+        else:
+            raise CustomAPIException("Module not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "submodule_id" in validated_data:
+        submodule = get_utility_submodule_by_id_string(validated_data["submodule_id"])
+        if submodule:
+            validated_data["submodule_id"] = submodule.id
+        else:
+            raise CustomAPIException("Submodule not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_offer_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_offer_subtype_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "offer_type_id" in validated_data:
+        offer_type = get_offer_type_by_id_string(validated_data["offer_type_id"])
+        if offer_type:
+            validated_data["offer_type_id"] = offer_type.id
+        else:
+            raise CustomAPIException("Offer Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

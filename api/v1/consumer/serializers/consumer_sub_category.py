@@ -14,10 +14,17 @@ from v1.consumer.views.common_functions import set_consumer_subcategory_validate
 
 class ConsumerSubCategoryListSerializer(serializers.ModelSerializer):
     consumer_category = ConsumerCategoryListSerializer(source='get_category_type')
+    is_active = serializers.SerializerMethodField(method_name='conversion_bool')
 
     class Meta:
         model = ConsumerSubCategoryTbl
         fields = ('name', 'id_string', 'consumer_category', 'created_date', 'is_active', 'created_by')
+
+    def conversion_bool(self, instance):
+        if instance.is_active == True:
+            return "Yes"
+        else:
+            return "No"
 
 
 class ConsumerSubCategoryViewSerializer(serializers.ModelSerializer):
