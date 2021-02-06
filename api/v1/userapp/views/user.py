@@ -23,6 +23,9 @@ from v1.work_order.models.service_appointments import get_service_appointment_by
 from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.userapp.serializers.user_skill import UserSkillViewSerializer
+from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
+from v1.commonapp.models.notes import Notes
+
 # API Header
 # API end Point: api/v1/user/list
 # API verb: GET
@@ -321,3 +324,96 @@ class UserDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
+
+# API Header
+# API end Point: api/v1/user/:id_string/note
+# API verb: POST
+# Package: Basic
+# Modules: S&M
+# Sub Module: User
+# Interaction: Add User note
+# Usage: Add
+# Tables used: Note
+# Author: Priyanka
+# Created on: 06/02/2021
+class UserNote(GenericAPIView):
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
+    def post(self, request, user_id_string, utility_id_string):
+        try:
+            id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(id_string)
+            user_obj = get_user_by_id_string(user_id_string)
+            utility_obj = get_utility_by_id_string(utility_id_string)
+            module = get_module_by_key("S&M")
+            sub_module = get_sub_module_by_key("S_AND_M_USER")
+            serializer = NoteSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                note_obj = serializer.create(serializer.validated_data, user)
+                note_obj.identification_id = user_obj.id
+                note_obj.tenant = user_obj.tenant
+                note_obj.utility = utility_obj
+                note_obj.module_id = module
+                note_obj.sub_module_id = sub_module
+                note_obj.save()
+                view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+
+
+# API Header
+# API end Point: api/v1/user/:id_string/note/list
+# API verb: POST
+# Package: Basic
+# Modules: S&M
+# Sub Module: User
+# Interaction: Add User note
+# Usage: Add
+# Tables used: Note
+# Author: Priyanka
+# Created on: 06/02/2021
+class UserNoteList(generics.ListAPIView):
+    try:
+        serializer_class = NoteListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant',)
+        search_fields = ('tenant__name',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    user = get_user_by_id_string(self.kwargs['id_string'])
+                    queryset = Notes.objects.filter(identification_id=user.id, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Notes not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='S&M', sub_module='User')

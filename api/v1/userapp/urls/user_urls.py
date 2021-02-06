@@ -2,7 +2,7 @@ from django.urls import path
 from v1.userapp.views.document import UserDocument
 from v1.userapp.views.login import LoginApiView, LogoutApiView
 from v1.userapp.views.notes import UserNote
-from v1.userapp.views.user import User, UserList, UserDetail, ResourceList,BulkAssignResourceList
+from v1.userapp.views.user import User, UserList, UserDetail, ResourceList,BulkAssignResourceList,UserNoteList,UserNote
 from v1.userapp.views.user_area import UserArea
 from v1.userapp.views.user_bank import UserBankDetail
 from v1.userapp.views.user_privilege import UserPrivilegeDetail
@@ -45,6 +45,7 @@ urlpatterns = [
     path('<uuid:user_id_string>/module/<uuid:module_id_string>', UserRoleByUtilitySubModule.as_view()),
     path('role/<uuid:role_id_string>/module/<uuid:module_id_string>/sub-module/<uuid:sub_module_id_string>',ModulePrivilegesList.as_view()),
     path('utility/<uuid:utility_id_string>/appointment/<uuid:appointment_id_string>/resource/list',ResourceList.as_view(),name="fitered_resource_list"),
-    path('utility/<uuid:utility_id_string>/bulk-assign/resource/list',BulkAssignResourceList.as_view(),name="bulk_assign_resource_list")
-
+    path('utility/<uuid:utility_id_string>/bulk-assign/resource/list',BulkAssignResourceList.as_view(),name="bulk_assign_resource_list"),
+    path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/note', UserNote.as_view(), name="add_user_notes_list"),
+    path('<uuid:id_string>/note/list', UserNoteList.as_view(), name="user_notes_list"),
 ]

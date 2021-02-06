@@ -16,11 +16,11 @@ import json
 
 
 class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
-    service_type_id = ServiceTypeListSerializer(source='get_service_type')
-    service_subtype_id = ServiceSubTypeShortListSerializer(source='get_service_subtype')
+    # service_type_id = ServiceTypeListSerializer(source='get_service_type')
+    # service_subtype_id = ServiceSubTypeShortListSerializer(source='get_service_subtype')
     class Meta:
         model = WorkOrderMasterTbl
-        fields = ('name', 'id_string','service_type_id','service_subtype_id','description','json_obj')
+        fields = ('name', 'id_string','description','json_obj')
 
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):

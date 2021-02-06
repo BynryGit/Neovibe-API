@@ -151,6 +151,6 @@ class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id_string', 'first_name', 'middle_name', 'last_name', 'email', 'phone_mobile', 'phone_landline',
-                  'created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city',
+                  'user_id','created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city',
                   'department', 'status', 'supplier')
 

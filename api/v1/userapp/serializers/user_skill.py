@@ -12,13 +12,13 @@ from v1.userapp.serializers.user import GetUserSerializer
 
 class UserSkillViewSerializer(serializers.ModelSerializer):
     user = GetUserSerializer(many=False, source='get_user')
-    # skill = SkillViewSerializer(many=False, required=True, source='get_skill')
+    skill = SkillViewSerializer(many=False, required=True, source='get_skill')
     # created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     # updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = UserSkill
-        fields = ('id','id_string','user')
+        fields = ('id','id_string','user','skill')
 
 
 class UserSkillSerializer(serializers.ModelSerializer):
