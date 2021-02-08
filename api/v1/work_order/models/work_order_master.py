@@ -2,12 +2,10 @@ import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
-
-# Create work_order Master table start
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.commonapp.models.service_type import get_service_type_by_id
-from v1.commonapp.models.service_sub_type import get_service_sub_type_by_id
+from v1.commonapp.models.service_request_type import get_service_type_by_id
+from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id
 from v1.service.models.consumer_service_master import get_consumer_service_master_by_id
 
 
@@ -43,15 +41,15 @@ class WorkOrderMaster(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
-    def get_service_type(self):
-        service_type = get_service_type_by_id(self.service_type_id)
-        return service_type
+    # @property
+    # def get_service_type(self):
+    #     service_type = get_service_type_by_id(self.service_type_id)
+    #     return service_type
 
-    @property
-    def get_service_subtype(self):
-        service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
-        return service_subtype
+    # @property
+    # def get_service_subtype(self):
+    #     service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
+    #     return service_subtype
 
     @property
     def get_consumer_service_master(self):

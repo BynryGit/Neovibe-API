@@ -17,7 +17,7 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 
 from v1.commonapp.models.module import get_module_by_id
-from v1.commonapp.models.service_type import get_service_type_by_id
+from v1.commonapp.models.service_request_type import get_service_type_by_id
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster

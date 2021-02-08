@@ -56,7 +56,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
     billing_sub_area_id = serializers.CharField(required=False, max_length=200)
     ownership_id = serializers.CharField(required=False, max_length=200)
     premise_id = serializers.CharField(required=False, max_length=200)
-    credit_rating_id = serializers.CharField(required=False, max_length=200)
+    # credit_rating_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ConsumerMaster
@@ -65,7 +65,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_consumer_validated_data(validated_data)
         if ConsumerMaster.objects.filter(phone_mobile=validated_data['phone_mobile'],
-                                         utility_id=validated_data['utility_id']).exists():
+                                         utility_id=validated_data['utility']).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

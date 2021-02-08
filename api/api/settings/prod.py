@@ -19,8 +19,6 @@ env = environ.Env()
 environ.Env.read_env()
 smart360_env = ''
 secret = ""
-print("---------OS-----------",os.environ["smart360_env"])
-print("///////// ENV ////////",env("smart360_env"))
 
 if os.environ["smart360_env"] != 'dev':
     secret = SecretManager()
@@ -39,8 +37,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 print("=====Secret Key=====", SECRET_KEY)
+# SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 

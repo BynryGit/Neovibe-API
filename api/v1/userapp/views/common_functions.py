@@ -9,7 +9,7 @@ from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.notes import get_note_by_id_string
-from v1.commonapp.models.service_type import get_service_type_by_id_string
+from v1.commonapp.models.service_request_type import get_service_type_by_id_string
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException

@@ -22,6 +22,7 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 
 class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):
     service_contract_id = serializers.CharField(required=False, max_length=200)
+    premise_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ConsumerServiceContractDetail
@@ -29,11 +30,14 @@ class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, consumer, user):
         validated_data = set_consumer_service_contract_detail_validated_data(validated_data)
-        if ConsumerServiceContractDetail.objects.filter().exists():
+        if ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id,
+                                                        service_contract_id=validated_data['service_contract_id'],
+                                                        premise_id=validated_data['premise_id']).exists():
             raise CustomAPIException(CONTRACT_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
-                consumer_service_contract_detail_obj = super(ConsumerServiceContractDetailSerializer, self).create(validated_data)
+                consumer_service_contract_detail_obj = super(ConsumerServiceContractDetailSerializer, self).create(
+                    validated_data)
                 consumer_service_contract_detail_obj.tenant = consumer.tenant
                 consumer_service_contract_detail_obj.utility = consumer.utility
                 consumer_service_contract_detail_obj.consumer_no = consumer.consumer_no

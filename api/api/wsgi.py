@@ -12,7 +12,6 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 
-print("------------INSIDE WSGI--------------")
 if os.environ["smart360_env"] == 'dev':
     os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.dev'
 

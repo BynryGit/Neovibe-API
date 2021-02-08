@@ -11,6 +11,8 @@ from v1.utility.models.utility_service_contract_template import UtilityServiceCo
 from v1.utility.models.utility_service_master import UtilityServiceMaster
 from v1.utility.models.utility_service_plan import UtilityServicePlan
 from v1.utility.models.utility_service_plan_rate import UtilityServicePlanRate
+from v1.utility.models.utility_service_request_sub_type import UtilityServiceRequestSubType
+from v1.utility.models.utility_service_request_type import UtilityServiceRequestType
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.utility.models.utility_status import UtilityStatus
 from v1.utility.models.utility_sub_module import UtilitySubModule
@@ -54,3 +56,5 @@ admin.site.register(UtilityDepartmentType)
 admin.site.register(UtilityDepartmentSubType)
 admin.site.register(UtilityWorkingHours)
 admin.site.register(UtilityDocumentType)
+admin.site.register(UtilityServiceRequestType)
+admin.site.register(UtilityServiceRequestSubType)

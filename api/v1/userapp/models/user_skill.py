@@ -20,7 +20,7 @@ class UserSkill(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.tenant.name
+        return str(self.user_id)+ "-" + str(self.skill_id)
 
     def __unicode__(self):
         return self.tenant.name
