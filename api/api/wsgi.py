@@ -14,7 +14,7 @@ from django.core.wsgi import get_wsgi_application
 
 print("------------INSIDE WSGI--------------")
 if os.environ["smart360_env"] == 'dev':
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.settings_dev'
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.dev'
 
 if os.environ["smart360_env"] == 'qa':
     os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.prod'
