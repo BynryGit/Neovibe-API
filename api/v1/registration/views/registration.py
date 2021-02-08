@@ -576,12 +576,19 @@ class RegistrationApprove(GenericAPIView):
     # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
             registration = get_registration_by_id_string(id_string)
             if registration:
                 with transaction.atomic():
                     # State change for registration start
                     registration.change_state(REGISTRATION_DICT["APPROVED"])
                     # State change for registration end
+                    # Timeline code start
+                    transaction.on_commit(
+                        lambda: save_registration_timeline.delay(registration, "Registration", "Text", "Approved",
+                                                                 user))
+                    # Timeline code end
                 serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
