@@ -4543,7 +4543,8 @@
         "pk": "1",
         "model": "payment.PaymentChannel",
         "fields": {
-          "key": "BACKOFFICE",
+          "tenant": 1,
+          "utility": 1,
           "name": "Back Office",
           "is_active": "True"
         }
@@ -4552,7 +4553,8 @@
         "pk": "2",
         "model": "payment.PaymentChannel",
         "fields": {
-          "key": "PAYU",
+          "tenant": 1,
+          "utility": 1,
           "name": "Pay U",
           "is_active": "True"
         }
@@ -4561,7 +4563,8 @@
         "pk": "3",
         "model": "payment.PaymentChannel",
         "fields": {
-          "key": "PHONEPAY",
+          "tenant": 1,
+          "utility": 1,
           "name": "Phone Pay",
           "is_active": "True"
         }
