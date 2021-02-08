@@ -1,12 +1,13 @@
 import uuid  # importing package for guid
-from datetime import datetime  # importing package for datetime
+from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
+# Create Integration Sub Type table start
+from v1.utility.models.utility_master import UtilityMaster
 
-# Create Payment Mode table start
-class PaymentChannel(models.Model):
+
+class IntegrationSubType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     key = models.CharField(max_length=200, blank=True, null=True)
@@ -17,24 +18,27 @@ class PaymentChannel(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.name + " " + str(self.id_string)
+        return self.name
 
     def __unicode__(self):
         return self.name
 
+# Create Integration Sub Type table end
 
-# Create Payment Mode table end
 
-
-def get_payment_channel_by_id_string(id_string):
+def get_integration_sub_type_by_id_string(id_string):
     try:
-        return PaymentChannel.objects.get(id_string=id_string)
+        return IntegrationSubType.objects.get(id_string=id_string)
     except:
         return False
 
 
-def get_payment_channel_by_id(id):
+def get_integration_sub_type_by_id(id):
+    return IntegrationSubType.objects.get(id=id)
+
+
+def get_integration_sub_type_by_name(name):
     try:
-        return PaymentChannel.objects.get(id=id)
+        return IntegrationSubType.objects.get(name=name)
     except:
         return False

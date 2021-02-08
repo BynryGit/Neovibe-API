@@ -46,7 +46,7 @@ class OfferSubTypeList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = OfferSubTypeModel.objects.filter(utility=utility, is_active=True)
-                    queryset = CustomFilter.get_offer_filtered_queryset(queryset, self.request)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:
