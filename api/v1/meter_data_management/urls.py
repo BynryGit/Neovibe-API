@@ -1,8 +1,7 @@
 __author__ = "aki"
 
 from django.urls import path
-from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail
-from v1.meter_data_management.views.read_cycle import ReadCycleList,ReadCycle,ReadCycleShortList,ReadCycleDetail
+from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortList,ReadCycleDetail
 from v1.meter_data_management.views.route import RouteList, RouteDetail, Route, RouteShortList
 from v1.meter_data_management.views.read_cycle import ReadCycleList
 from v1.meter_data_management.views.schedule_log import ScheduleLogList
