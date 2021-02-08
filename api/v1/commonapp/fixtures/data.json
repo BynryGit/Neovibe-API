@@ -4346,5 +4346,224 @@
           "currentno":1000,
           "is_active": "True"
         }
+      },
+      {
+        "pk": "1",
+        "model": "utility.UtilityLeaveType",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "leave_type": "National Holiday",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "utility.UtilityLeaveType",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "leave_type": "Birthday Leave",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "utility.UtilityLeaveType",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "leave_type": "Paid Leave",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "4",
+        "model": "utility.UtilityLeaveType",
+        "fields": {
+          "tenant": 1,
+          "utility": 1,
+          "leave_type": "Utility Holiday",
+          "is_active": "True"
+        }
+      },
+
+      {
+        "pk": "1",
+        "model": "commonapp.Department",
+        "fields": {
+          "name": "Admin",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "commonapp.Department",
+        "fields": {
+          "name": "HR",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "commonapp.Department",
+        "fields": {
+          "name": "Technical",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
+        "model": "commonapp.Global_Lookup",
+        "fields": {
+          "category": "Meter Type",
+          "key": "DIGITAL",
+          "value": "Digital",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "commonapp.Global_Lookup",
+        "fields": {
+          "category": "Meter Type",
+          "key": "ANALOG",
+          "value": "Analog",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "commonapp.Global_Lookup",
+        "fields": {
+          "category": "Meter Type",
+          "key": "SMARTMETER",
+          "value": "Smart Meter",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
+        "model": "payment.PaymentType",
+        "fields": {
+          "tenant": "1",
+          "key": "REGISTRATION",
+          "name": "Registration",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "payment.PaymentType",
+        "fields": {
+          "tenant": "1",
+          "key": "CONTRACT",
+          "name": "Contract",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "payment.PaymentType",
+        "fields": {
+          "tenant": "1",
+          "key": "BILLING",
+          "name": "Billing",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
+        "model": "payment.PaymentSubType",
+        "fields": {
+          "payment_type_id": "1",
+          "key": "REGISTRATIONFEE",
+          "name": "Registration Fee",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "payment.PaymentSubType",
+        "fields": {
+          "payment_type_id": "2",
+          "key": "CONTRACTFEE",
+          "name": "Contract Fee",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "payment.PaymentSubType",
+        "fields": {
+          "payment_type_id": "3",
+          "key": "BILLINGFEE",
+          "name": "Billing Fee",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
+        "model": "payment.PaymentMode",
+        "fields": {
+          "key": "CHEQUE",
+          "name": "Cheque",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "payment.PaymentMode",
+        "fields": {
+
+          "key": "DD",
+          "name": "DD",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "payment.PaymentMode",
+        "fields": {
+          "key": "CARD",
+          "name": "Card",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "4",
+        "model": "payment.PaymentMode",
+        "fields": {
+          "key": "UPI",
+          "name": "UPI",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "1",
+        "model": "payment.PaymentChannel",
+        "fields": {
+          "key": "BACKOFFICE",
+          "name": "Back Office",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "2",
+        "model": "payment.PaymentChannel",
+        "fields": {
+          "key": "PAYU",
+          "name": "Pay U",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "3",
+        "model": "payment.PaymentChannel",
+        "fields": {
+          "key": "PHONEPAY",
+          "name": "Phone Pay",
+          "is_active": "True"
+        }
       }
 ]
