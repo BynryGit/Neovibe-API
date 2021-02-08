@@ -41,15 +41,15 @@ class WorkOrderMaster(models.Model):
     def __unicode__(self):
         return self.name
 
-    @property
-    def get_service_type(self):
-        service_type = get_service_type_by_id(self.service_type_id)
-        return service_type
+    # @property
+    # def get_service_type(self):
+    #     service_type = get_service_type_by_id(self.service_type_id)
+    #     return service_type
 
-    @property
-    def get_service_subtype(self):
-        service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
-        return service_subtype
+    # @property
+    # def get_service_subtype(self):
+    #     service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
+    #     return service_subtype
 
     @property
     def get_consumer_service_master(self):

@@ -77,8 +77,8 @@ class PremiseSerializer(serializers.ModelSerializer):
 
 
 class PremiseListSerializer(serializers.ModelSerializer):
-    # subarea = SubAreaListSerializer(source="get_sub_area")
+    subarea = SubAreaListSerializer(source="get_sub_area")
 
     class Meta:
         model = PremiseTbl
-        fields = ('name', 'id_string','GIS','MRU')
+        fields = ('name', 'subarea','id_string','GIS','MRU')

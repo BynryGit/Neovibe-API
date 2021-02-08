@@ -8,5 +8,9 @@ class CustomFilter:
         if 'product_id' in request.query_params:
             product = get_utility_product_by_id_string(request.query_params['product_id'])
             queryset = queryset.filter(service_id=product.id)
-        return queryset
 
+        if 'utility_product_id' in request.query_params:
+            utility_service_type_obj = get_utility_product_by_id_string(request.query_params['utility_product_id'])
+            queryset = queryset.filter(utility_product_id=utility_service_type_obj.id)
+
+        return queryset

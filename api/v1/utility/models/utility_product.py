@@ -31,11 +31,9 @@ class UtilityProduct(models.Model):
 
 def get_utility_product_by_id(id):
     try:
-        product = UtilityProduct.objects.get(id=id)
-        print("Hello", product)
-        return product
-    except Exception as e:
-        raise CustomAPIException("Product does not exists.", status_code=status.HTTP_404_NOT_FOUND)
+        return UtilityProduct.objects.get(id=id)
+    except:
+        return False
 
 
 def get_utility_product_by_id_string(id_string):

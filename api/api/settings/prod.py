@@ -37,8 +37,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
+SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
+print("=====Secret Key=====", SECRET_KEY)
 # SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
-SECRET_KEY = '4urz*1-p45#e2nnlg$fjqb*rhv^w_l35n4#^l%m^8$*2t5slpg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 

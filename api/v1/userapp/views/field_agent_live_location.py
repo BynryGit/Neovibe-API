@@ -31,26 +31,7 @@ from v1.userapp.serializers.field_agent_live_location import FieldAgentLiveLocat
 
 class FieldAgentLiveLocationList(generics.ListAPIView):
     try:
-        serializer_class = FieldAgentLiveLocationViewSerializer
-        pagination_class = StandardResultsSetPagination
-
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ( 'utility__id_string',)
-        ordering_fields = ( 'utility__id_string',)
-        ordering = ('user_id') # always give by default alphabetical order
-        search_fields = ( 'utility__name',)
-
-        def get_queryset(self):
-            response, user_obj = is_token_valid(self.request.headers['Authorization'])
-
-            if response:
-                if is_authorized(1,1,1,user_obj):
-                    queryset = FieldAgentLiveLocationTbl.objects.filter(utility__id_string=self.kwargs['id_string'],is_active=True)
-                    return queryset
-                else:
-                    raise InvalidAuthorizationException
-            else:
-                raise InvalidTokenException
+        student_name = request.POST.getlist('student_list')
     except Exception as ex:
         logger().log(ex, 'ERROR')
         # raise APIException
