@@ -8,6 +8,7 @@ from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.tenant.models.tenant_region import get_tenant_region_by_id_string
 from v1.tenant.models.tenant_state import get_tenant_state_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 from v1.utility.models.utility_status import get_utility_status_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from rest_framework import generics, status
@@ -19,7 +20,6 @@ from v1.utility.models.utility_leave_type import get_utility_leave_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.utility.models.utility_service_contract_template import get_utility_service_contract_template_by_id_string
-from v1.utility.models.utility_service import get_utility_service_by_id_string
 
 
 def set_utility_validated_data(validated_data):
@@ -77,12 +77,12 @@ def set_utility_contract_validated_data(validated_data):
             validated_data["service_contract_template_id"] = service_contract_template.id
         else:
             raise CustomAPIException("Contract Template not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "service_id" in validated_data:
-        service = get_utility_service_by_id_string(validated_data["service_id"])
-        if service:
-            validated_data["service_id"] = service.id
+    if "product_id" in validated_data:
+        product = get_utility_product_by_id_string(validated_data["product_id"])
+        if product:
+            validated_data["product_id"] = product.id
         else:
-            raise CustomAPIException("Service Not found.", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Product Not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

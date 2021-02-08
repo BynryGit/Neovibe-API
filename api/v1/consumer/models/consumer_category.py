@@ -28,7 +28,7 @@ class ConsumerCategory(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    service_id = models.BigIntegerField(null=True, blank=True)
+    product_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
