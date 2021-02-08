@@ -3,12 +3,9 @@ from django.db import transaction
 from rest_framework import serializers, status
 from api.messages import MOBILE_ALREADY_EXISTS
 from v1.commonapp.views.settings_reader import SettingReader
-
 setting_reader = SettingReader()
 from v1.commonapp.serializers.area import AreaListSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
-from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer
-from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryViewSerializer
 from v1.registration.models.registrations import Registration
 from v1.registration.views.common_functions import generate_registration_no, \
     set_registration_validated_data
@@ -40,6 +37,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
     billing_area = serializers.ReadOnlyField(source='get_area')
     billing_sub_area = serializers.ReadOnlyField(source='get_sub_area')
     premise = serializers.ReadOnlyField(source='get_premise')
+    state = ChoiceField(choices=Registration.CHOICES)
 
     # def to_representation(self, instance):
     #     data = super(RegistrationViewSerializer, self).to_representation(instance)
@@ -51,7 +49,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no',
                   'email_id', 'phone_mobile', 'billing_address_line_1', 'billing_street',
                   'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise',
-                  )
+                  'state')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

@@ -11,7 +11,7 @@ environ.Env.read_env()
 
 def main():
     if env("smart360_env") == 'dev':
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.settings_dev'
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.dev'
 
     if env("smart360_env") == 'qa':
         os.environ['DJANGO_SETTINGS_MODULE'] = 'api.settings.prod'

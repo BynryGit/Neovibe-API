@@ -39,7 +39,6 @@ from v1.service.models.consumer_service_details import get_consumer_services_by_
 from v1.service.serializers.consumer_service_details import ServiceDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.utility.models.utility_service import get_utility_service_by_id_string
 
 
 # API Header
@@ -50,6 +49,7 @@ from v1.utility.models.utility_service import get_utility_service_by_id_string
 # Tables used: Consumer master
 # Author: Rohan
 # Created on: 22/12/2020
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer
 from v1.work_order.views.common_functions import generate_service_appointment_no
 
@@ -868,9 +868,9 @@ class ConsumerCategoryList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerCategory.objects.filter(utility=utility, is_active=True)
-                    if "service_id" in self.request.query_params:
-                        service = get_utility_service_by_id_string(self.request.query_params['service_id'])
-                        queryset = queryset.filter(service_id=service.id)
+                    if "product_id" in self.request.query_params:
+                        product = get_utility_product_by_id_string(self.request.query_params['product_id'])
+                        queryset = queryset.filter(product_id=product.id)
                     if queryset:
                         return queryset
                     else:
