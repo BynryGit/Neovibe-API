@@ -12,6 +12,7 @@ from v1.commonapp.models.zone import get_zone_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.commonapp.models.division import get_division_by_id_string
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 
 def set_schedule_validated_data(validated_data):
@@ -53,6 +54,12 @@ def set_schedule_validated_data(validated_data):
             validated_data["repeat_every_id"] = repeat_every.id
         else:
             raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     else:
         validated_data["repeat_every_id"] = None
     if "occurs_on" in validated_data:

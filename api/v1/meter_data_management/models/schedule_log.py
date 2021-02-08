@@ -38,6 +38,7 @@ class ScheduleLog(models.Model):
     read_cycle_id = models.BigIntegerField(null=False, blank=False)
     activity_type_id = models.BigIntegerField(null=False, blank=False)
     recurring_id = models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     schedule_log_status = models.IntegerField(choices=SCHEDULE_LOG_STATUS, default=0)
     date_and_time = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
