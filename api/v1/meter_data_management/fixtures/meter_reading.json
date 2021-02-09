@@ -84,7 +84,7 @@
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Recurrence",
-			"key": "1",
+			"key": "yes",
 			"value": "Yes",
 			"is_active": "True"
 		}
@@ -94,7 +94,7 @@
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Recurrence",
-			"key": "0",
+			"key": "no",
 			"value": "No",
 			"is_active": "True"
 		}
