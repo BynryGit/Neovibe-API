@@ -828,5 +828,35 @@
 			"value": "Sat",
 			"is_active": "True"
 		}
-	}
+	},
+	{
+        "pk": "84",
+        "model": "commonapp.Global_Lookup",
+        "fields": {
+          "category": "Meter Type",
+          "key": "DIGITAL",
+          "value": "Digital",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "85",
+        "model": "commonapp.Global_Lookup",
+        "fields": {
+          "category": "Meter Type",
+          "key": "ANALOG",
+          "value": "Analog",
+          "is_active": "True"
+        }
+      },
+      {
+        "pk": "86",
+        "model": "commonapp.Global_Lookup",
+        "fields": {
+          "category": "Meter Type",
+          "key": "SMARTMETER",
+          "value": "Smart Meter",
+          "is_active": "True"
+        }
+      }
 ]

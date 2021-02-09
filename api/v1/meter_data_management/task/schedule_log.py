@@ -7,6 +7,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.meter_data_management.models.schedule_log import ScheduleLog
 from v1.meter_data_management.models.schedule import Schedule
+from v1.meter_data_management.task.consumer_detail import create_consumer
 
 
 def schedule_log(request):
@@ -33,14 +34,15 @@ def schedule_log(request):
                                                       is_active=True).exists():
                             print("Schedule For Current Date Is Already Exist")
                         else:
-                            schedule_log(schedule)
+                            create_schedule_log(schedule)
                     elif repeat_every_obj.key == "2 day":
-                        if ScheduleLog.objects.filter(tenant=schedule.tenant, utility=schedule.utility,
-                                                      schedule_id=schedule.id, date_and_time__date=current_date.date(),
-                                                      is_active=True).exists():
-                            print("Schedule For Current Date Is Already Exist")
-                        else:
-                            schedule_log(schedule)
+                        pass
+                    elif repeat_every_obj.key == "3 day":
+                        pass
+                    elif repeat_every_obj.key == "4 day":
+                        pass
+                    elif repeat_every_obj.key == "5 day":
+                        pass
     except Exception as ex:
         logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
 
@@ -51,13 +53,9 @@ def schedule_log(request):
 def create_schedule_log(schedule):
     current_date = timezone.now()
     with transaction.atomic():
-        ScheduleLog(
-            tenant=schedule.tenant,
-            utility=schedule.utility,
-            schedule_id=schedule.id,
-            read_cycle_id=schedule.read_cycle_id,
-            activity_type_id=schedule.activity_type_id,
-            recurring_id=schedule.recurring_id,
-            utility_product_id=schedule.utility_product_id,
-            date_and_time=current_date,
-        ).save()
+        schedule_log_obj = ScheduleLog(tenant=schedule.tenant, utility=schedule.utility, schedule_id=schedule.id,
+                                       read_cycle_id=schedule.read_cycle_id, activity_type_id=schedule.activity_type_id,
+                                       recurring_id=schedule.recurring_id,
+                                       utility_product_id=schedule.utility_product_id, date_and_time=current_date)
+        schedule_log_obj.save()
+        create_consumer.delay(schedule_log_obj)

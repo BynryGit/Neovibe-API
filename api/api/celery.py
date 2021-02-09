@@ -5,7 +5,15 @@ from celery import Celery
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
+if os.environ["smart360_env"] == 'dev':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.dev')
+
+if os.environ["smart360_env"] == 'qa':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
+
+if os.environ["smart360_env"] == 'uat':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.prod')
+
 app = Celery('api')
 
 # Using a string here means the worker will not have to
