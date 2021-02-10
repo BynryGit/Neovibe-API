@@ -18,7 +18,6 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
-from v1.utility.models.utility_service import get_utility_service_by_id_string
 
 
 # API Header

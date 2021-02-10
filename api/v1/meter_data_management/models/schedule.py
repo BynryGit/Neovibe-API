@@ -20,9 +20,10 @@ from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
-
+from v1.utility.models.utility_product import get_utility_product_by_id
 
 # Create Schedule Table Start
+
 
 class Schedule(models.Model):
     SCHEDULE_STATUS = (
@@ -39,6 +40,7 @@ class Schedule(models.Model):
     frequency_id = models.BigIntegerField(null=True, blank=True)
     repeat_every_id = models.BigIntegerField(null=True, blank=True)
     recurring_id = models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     occurs_on = JSONField(default=[])
@@ -75,6 +77,11 @@ class Schedule(models.Model):
     def get_recurring_name(self):
         recurring = get_global_lookup_by_id(self.recurring_id)
         return recurring
+
+    @property
+    def get_utility_product_type_name(self):
+        utility_product_type = get_utility_product_by_id(self.utility_product_id)
+        return utility_product_type
 
     def __str__(self):
         return str(self.id_string)

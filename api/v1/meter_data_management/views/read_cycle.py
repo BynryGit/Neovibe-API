@@ -20,6 +20,7 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from api.messages import READ_CYCLE_NOT_FOUND, SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from api.constants import *
 
@@ -52,6 +53,7 @@ class ReadCycleList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ReadCycleModel.objects.filter(utility=utility, is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

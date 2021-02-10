@@ -36,6 +36,7 @@ class ReadCycle(models.Model):
     division_id = models.BigIntegerField(null=False, blank=False)
     area_id = models.BigIntegerField(null=False, blank=False)
     subarea_id = models.BigIntegerField(null=False, blank=False)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     route_json = JSONField(default='')
     label = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)

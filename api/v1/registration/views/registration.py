@@ -14,6 +14,7 @@ from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, No
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.consumer.models.consumer_master import get_consumer_by_registration_id
 from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id_string
 from v1.consumer.serializers.consumer_down_payment import ConsumerDownPaymentSerializer
 from v1.consumer.serializers.consumer_master import ConsumerSerializer
@@ -94,7 +95,6 @@ class Registration(GenericAPIView):
                 payment = {}
                 if 'services' in request.data:
                     services = request.data.pop('services')
-                    print("@@@@@@@@@@2",services)
                 if 'transactions' in request.data:
                     transactions = request.data.pop('transactions')
                 if 'account_holders' in request.data:
@@ -117,6 +117,7 @@ class Registration(GenericAPIView):
                     if consumer_serializer.is_valid(raise_exception=False):
                         consumer_obj = consumer_serializer.create(consumer_serializer.validated_data, user)
                         consumer_obj.registration_id = registration_obj.id
+                        consumer_obj.is_active = False
                         consumer_obj.save()
                         # Consumer service contract details save start
                         if services:
@@ -225,7 +226,7 @@ class Registration(GenericAPIView):
 class RegistrationDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, VIEW)
+    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, VIEW)
     def get(self, request, id_string):
         try:
             registration = get_registration_by_id_string(id_string)
@@ -568,19 +569,26 @@ class RegistrationHold(GenericAPIView):
 # Interaction: Approve registration
 # Usage: View
 # Tables used: Registration
-# Auther: Rohan
+# Author: Rohan
 # Created on: 30/09/2020
 class RegistrationApprove(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
             registration = get_registration_by_id_string(id_string)
             if registration:
                 with transaction.atomic():
                     # State change for registration start
                     registration.change_state(REGISTRATION_DICT["APPROVED"])
                     # State change for registration end
+                    # Timeline code start
+                    transaction.on_commit(
+                        lambda: save_registration_timeline.delay(registration, "Registration", "Text", "Approved",
+                                                                 user))
+                    # Timeline code end
                 serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
@@ -646,7 +654,7 @@ class RegistrationNoteList(generics.ListAPIView):
 class RegistrationNote(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -657,11 +665,11 @@ class RegistrationNote(GenericAPIView):
             serializer = NoteSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 note_obj = serializer.create(serializer.validated_data, user)
-                note_obj.registration_id = registration.id
+                note_obj.identification_id = registration.id
                 note_obj.tenant = registration.tenant
                 note_obj.utility = registration.utility
-                note_obj.module_id = module.id
-                note_obj.sub_module_id = sub_module.id
+                note_obj.module_id = module
+                note_obj.sub_module_id = sub_module
                 note_obj.save()
                 view_serializer = NoteViewSerializer(instance=note_obj, context={'request': request})
                 return Response({
@@ -702,7 +710,8 @@ class RegistrationPaymentList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
-                    queryset = Payment.objects.all()
+                    consumer = get_consumer_by_registration_id(registration.id)
+                    queryset = Payment.objects.filter(consumer_no = consumer.consumer_no)
                     if queryset:
                         return queryset
                     else:
@@ -737,7 +746,7 @@ class RegistrationLifeCycleList(generics.ListAPIView):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
                     module = get_module_by_key("CONSUMEROPS")
                     sub_module = get_sub_module_by_key("REGISTRATION")
-                    queryset = LifeCycle.objects.filter(object_id=registration.id, module_id=module.id, sub_module_id=sub_module.id, is_active=True)
+                    queryset = LifeCycle.objects.filter(object_id=registration.id, module_id=module, sub_module_id=sub_module, is_active=True)
                     if queryset:
                         return queryset
                     else:
