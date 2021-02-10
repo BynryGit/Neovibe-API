@@ -122,14 +122,24 @@ def set_service_appointment_validated_data(validated_data):
         else:
             raise CustomAPIException("status not found.", status_code=status.HTTP_404_NOT_FOUND)
 
-    # if "rule_id" in validated_data:
-    #     rule = get_work_order_rule_by_id_string(validated_data["rule_id"])
-    #     if rule:
-    #         validated_data["rule_id"] = rule.id
-    #     else:
-    #         raise CustomAPIException("Service Rule not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
+def set_schedule_appointment_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        if user:
+            validated_data["user_id"] = user.id
+        else:
+            raise CustomAPIException("User not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    return validated_data
 
 # Function for generating service appointment number according to utility
 def generate_service_appointment_no(service_appointment):
