@@ -3168,8 +3168,8 @@
       "model": "master.User",
       "fields": {
         "tenant": 1,
-        "email": "admin@bynry.com",
-        "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+        "email": "testing@bynry.com",
+        "password": "pbkdf2_sha256$180000$O8FbDLHCJRyh$KYCxDFgT3sgmZK21V1i/6YZ7L63pYnVwdJrhivJizmA=",
         "is_staff": "True",
         "is_active": "True",
         "status_id":1,
