@@ -10,6 +10,7 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.meter_data_management.serializers.schedule_log import ScheduleLogViewSerializer
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 
 # API Header
@@ -41,6 +42,7 @@ class ScheduleLogList(generics.ListAPIView):
             if token:
                 if is_authorized(1,1,1,user_obj):
                     queryset = ScheduleLogTbl.objects.filter(is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
