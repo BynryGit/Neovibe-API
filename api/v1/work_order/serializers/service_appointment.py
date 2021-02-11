@@ -76,7 +76,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
             appointment_obj.tenant = user.tenant
             appointment_obj.status_id = 1
             appointment_obj.save()
-            # appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+            appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
             appointment_obj.save()
             return appointment_obj
 

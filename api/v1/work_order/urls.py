@@ -1,12 +1,12 @@
 from django.urls import path
 from v1.work_order.views.work_order_rules import WorkOrderRuleList
 from v1.work_order.views.work_order_master import WorkOrderMasterList,WorkOrderService,WorkOrderDetail
-from v1.work_order.views.service_appointment import ServiceAppointment,ServiceAppointmentList,ServiceAppointmentDetail
+from v1.work_order.views.service_appointment import ServiceAppointment,ServiceAppointmentList,ServiceAppointmentDetail, ServiceAppointmentLifeCycleList
 from v1.work_order.views.material_type import MaterialTypeList
 from v1.work_order.views.material_subtype import MaterialSubTypeList
 from v1.work_order.views.material_name import MaterialNameList
 from v1.work_order.views.service_assignment import ServiceAssignment,ServiceDessignmentDetail,ServiceAssignmentDetail,ServiceAssignmentList
-from v1.work_order.views.scheduled_appointment import ScheduledAppointment, schedule_appointment_assign
+from v1.work_order.views.scheduled_appointment import ScheduledAppointment
 
 urlpatterns = [
     path('utility/<uuid:id_string>/rules/list', WorkOrderRuleList.as_view(), name='work_order_rules_list'),
@@ -24,5 +24,5 @@ urlpatterns = [
     path('service-assignment/<uuid:id_string>',ServiceAssignmentDetail.as_view(),name="service_assignment_detail"),
     path('utility/<uuid:utility_id_string>/user/<uuid:user_id_string>/service-assignment/list',ServiceAssignmentList.as_view(),name="service_assignment_list"),
     path('scheduled-appointment',ScheduledAppointment.as_view(), name="add_scheduled_appointment"),
-    path('assign',schedule_appointment_assign)
+    path('service-appointment/<uuid:id_string>/life-cycle',ServiceAppointmentLifeCycleList.as_view(),name="service_life_cycle")
 ]

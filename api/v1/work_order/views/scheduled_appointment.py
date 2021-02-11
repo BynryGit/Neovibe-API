@@ -14,7 +14,6 @@ from v1.work_order.serializers.scheduled_appointment import ScheduledAppointment
 from master.models import get_user_by_id_string,get_user_by_id
 from datetime import date, datetime
 from v1.work_order.models.scheduled_appointment import ScheduledAppointment as ScheduledAppointmentTbl
-from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
 from v1.work_order.serializers.service_assignment import ServiceAssignmentSerializer,ServiceAssignmentViewSerializer
 from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id, SERVICE_ASSIGNMENT_DICT, get_service_assignment_by_id_string
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string, SERVICE_APPOINTMENT_DICT
@@ -60,42 +59,3 @@ class ScheduledAppointment(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
-
-
-def schedule_appointment_assign(request):
-    try:
-        schedule_objs = ScheduledAppointmentTbl.objects.filter(assignment_date__date = date.today(),is_active=True)
-        if schedule_objs:
-            data = {}
-            for schedule_obj in schedule_objs:
-                for appointments in schedule_obj.appointments:
-                    service_appoint_obj = get_service_appointment_by_id_string(appointments)
-                    data['utility_id'] = str(schedule_obj.utility.id_string)
-                    data['sa_id'] = str(service_appoint_obj.id_string)
-                    data['user_id'] = str(get_user_by_id(schedule_obj.user_id).id_string)
-                    data['assignment_date'] = str(schedule_obj.assignment_date)
-                    data['assignment_time'] = str(datetime.now().time())
-                    assignment_serializer = ServiceAssignmentSerializer(data=data)
-                    user = get_user_by_id(schedule_obj.created_by)
-                    if assignment_serializer.is_valid(raise_exception=True):
-                        with transaction.atomic():                    
-                            assignment_obj = assignment_serializer.create(assignment_serializer.validated_data, user)
-                            
-                            print('******assignment_obj*',assignment_obj)
-                            # State change for service assignment start
-                            assignment_obj.change_state(SERVICE_ASSIGNMENT_DICT["ASSIGNED"])
-                            # State change for service assignment end
-
-                            # State change for service appointment start
-                            service_appoint_obj.change_state(SERVICE_APPOINTMENT_DICT["ASSIGNED"])
-                            # State change for service appointment end             
-        else:
-            pass       
-        
-    except Exception as e:        
-        return Response({
-            STATE: EXCEPTION,
-            RESULT: str(e),
-        }, status=res.status_code)
-
