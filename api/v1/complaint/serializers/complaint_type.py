@@ -1,19 +1,23 @@
 from rest_framework import serializers
 from v1.complaint.models.complaint_type import ComplaintType as ComplaintTypeTbl
 from v1.commonapp.views.settings_reader import SettingReader
+
 setting_reader = SettingReader()
 from django.db import transaction
 from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import COMPLAINT_TYPE_ALREADY_EXIST
 from v1.complaint.views.common_functions import set_complaint_type_validated_data
+from v1.utility.serializers.utility_product import UtilityProductListSerializer
 from rest_framework import status
 
 
 class ComplaintTypeListSerializer(serializers.ModelSerializer):
+    utility_product = UtilityProductListSerializer(source='get_utility_product')
+
     class Meta:
         model = ComplaintTypeTbl
-        fields = ('name', 'id_string', 'created_date', 'is_active', 'created_by')
+        fields = ('name', 'id_string', 'utility_product', 'created_date', 'is_active', 'created_by')
 
 
 class ComplaintTypeViewSerializer(serializers.ModelSerializer):
@@ -32,6 +36,7 @@ class ComplaintTypeSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
+    utility_product_id = serializers.CharField(required=True, max_length=200)
 
     class Meta:
         model = ComplaintTypeTbl

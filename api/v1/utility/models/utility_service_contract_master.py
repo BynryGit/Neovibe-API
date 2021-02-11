@@ -6,6 +6,7 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_service import get_utility_service_by_id
+from django.contrib.postgres.fields import JSONField
 
 
 class UtilityServiceContractMaster(models.Model):
@@ -13,7 +14,7 @@ class UtilityServiceContractMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, null=True, blank=True)
-    service_id = models.BigIntegerField(null=True, blank=True)
+    service_obj = JSONField(default='')
     start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     deposite_amount = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
@@ -33,10 +34,6 @@ class UtilityServiceContractMaster(models.Model):
     def __unicode__(self):
         return self.utility.name
 
-    @property
-    def get_service(self):
-        service = get_utility_service_by_id(self.service_id)
-        return service
 
     @property
     def get_consumer_category(self):

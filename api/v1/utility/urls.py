@@ -45,7 +45,7 @@ urlpatterns = [
     path('', Utility.as_view(), name='utility'),
     path('list', UtilityList.as_view(), name='utility_list'),
     path('<uuid:id_string>', UtilityDetail.as_view(), name='utility_detail'),
-    path('module', UtilityModule.as_view(), name='utility_detail'),
+    path('module', UtilityModule.as_view(), name='utility_module_post'),
     path('<uuid:id_string>/summary', UtilitySummaryDetail.as_view(), name='utility_summary'),
 
     path('<uuid:id_string>/module/list', UtilityModuleList.as_view(), name='utility_module_list'),

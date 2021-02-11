@@ -32,7 +32,7 @@ class SkillViewSerializer(serializers.ModelSerializer):
 class SkillListSerializer(serializers.ModelSerializer):
     class Meta:
         model = SkillTbl
-        fields = ('id_string', 'skill')
+        fields = ('id_string', 'skill', 'created_by', 'created_date')
 
 
 class SkillSerializer(serializers.ModelSerializer):

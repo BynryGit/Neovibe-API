@@ -73,7 +73,8 @@ class ChannelList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    queryset = ChannelModel.objects.all()
+                    # utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = ChannelModel.objects.filter(is_active=True)
                     if queryset:
                         return queryset
                     else:

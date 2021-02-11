@@ -24,6 +24,7 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_services_number_format import *
 from v1.registration.models import registrations
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 
 def is_data_verified(request):
@@ -134,13 +135,18 @@ def set_registration_type_validated_data(validated_data):
             validated_data["utility_id"] = utility.id
         else:
             raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
-    
     if "tenant_id" in validated_data:
         tenant = get_tenant_by_id_string(validated_data["tenant_id"])
         if tenant:
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 def set_registration_subtype_validated_data(validated_data):

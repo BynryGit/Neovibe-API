@@ -27,6 +27,7 @@ from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
 from v1.consumer.models.offer_type import get_offer_type_by_id
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 
 # Function for converting id_strings to id's
@@ -284,6 +285,12 @@ def set_consumer_category_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
@@ -416,6 +423,13 @@ def set_service_type_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
+
     return validated_data
 
 
