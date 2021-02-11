@@ -4,7 +4,6 @@ from django.db import transaction
 from django.utils import timezone
 from api.messages import DATA_ALREADY_EXISTS
 from rest_framework import serializers, status
-from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.commonapp.views.settings_reader import SettingReader
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
@@ -12,7 +11,6 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl
-from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.views.common_function import set_schedule_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
@@ -73,17 +71,6 @@ class ScheduleSerializer(serializers.ModelSerializer):
                 schedule_obj.tenant = user.tenant
                 schedule_obj.created_by = user.id
                 schedule_obj.save()
-                reccuring_obj = get_global_lookup_by_id(schedule_obj.recurring_id)
-                if reccuring_obj.key == 'no':
-                    ScheduleLogTbl(
-                        tenant=schedule_obj.tenant,
-                        utility=schedule_obj.utility,
-                        schedule_id=schedule_obj.id,
-                        read_cycle_id=schedule_obj.read_cycle_id,
-                        activity_type_id=schedule_obj.activity_type_id,
-                        date_and_time=timezone.now(),
-                        recurring_id=schedule_obj.recurring_id,
-                    ).save()
                 return schedule_obj
 
     def update(self, instance, validated_data, user):
@@ -94,18 +81,4 @@ class ScheduleSerializer(serializers.ModelSerializer):
             schedule_obj.updated_by = user.id
             schedule_obj.updated_date = timezone.now()
             schedule_obj.save()
-            reccuring_obj = get_global_lookup_by_id(schedule_obj.recurring_id)
-            if reccuring_obj.key == 'no':
-                ScheduleLogTbl.objects.filter(schedule_id=schedule_obj.id, is_active=True).update(is_active=False)
-                ScheduleLogTbl(
-                    tenant=schedule_obj.tenant,
-                    utility=schedule_obj.utility,
-                    schedule_id=schedule_obj.id,
-                    read_cycle_id=schedule_obj.read_cycle_id,
-                    activity_type_id=schedule_obj.activity_type_id,
-                    date_and_time=timezone.now(),
-                    recurring_id=schedule_obj.recurring_id,
-                ).save()
-            else:
-                ScheduleLogTbl.objects.filter(schedule_id=schedule_obj.id, is_active=True).update(is_active=False)
             return schedule_obj

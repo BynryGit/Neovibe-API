@@ -2,7 +2,7 @@ from rest_framework import serializers, status
 from v1.consumer.serializers.consumer_category import ConsumerCategoryViewSerializer
 from v1.consumer.serializers.consumer_sub_category import ConsumerSubCategoryViewSerializer
 from v1.utility.models.utility_service_contract_master import UtilityServiceContractMaster
-from v1.utility.serializers.utility_service import UtilityServiceListSerializer
+from v1.utility.serializers.utility_product import UtilityProductListSerializer
 from datetime import datetime
 from django.db import transaction
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -13,30 +13,35 @@ from api.messages import CONTRACT_ALREADY_EXIST
 class UtilityServiceContractMasterListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
-    tenant_id_string = serializers.ReadOnlyField(source='utility.name')
+    utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+
     category = ConsumerCategoryViewSerializer(many=False, source='get_consumer_category')
     sub_category = ConsumerSubCategoryViewSerializer(many=False, source='get_consumer_sub_category')
 
     class Meta:
         model = UtilityServiceContractMaster
         fields = (
+
             'id_string', 'deposite_amount', 'name', 'tenant', 'tenant_id_string', 'tenant_id_string',
             'utility_id_string', 'service_obj', 'category', 'sub_category','start_date', 'end_date')
+
 
 
 class UtilityServiceContractMasterDetailSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
-    tenant_id_string = serializers.ReadOnlyField(source='utility.name')
+    utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     category = ConsumerCategoryViewSerializer(many=False, source='get_consumer_category')
     sub_category = ConsumerSubCategoryViewSerializer(many=False, source='get_consumer_sub_category')
 
     class Meta:
         model = UtilityServiceContractMaster
+
         fields = ('name', 'id_string', 'tenant', 'tenant_id_string', 'tenant_id_string', 'utility_id_string',
                   'category', 'sub_category','terms','service_obj', 'deposite_amount','start_date', 'end_date')
+
 
 
 class UtilityServiceContractMasterViewSerializer(serializers.ModelSerializer):

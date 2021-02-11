@@ -21,7 +21,7 @@ class ConsumerCategoryListSerializer(serializers.ModelSerializer):
         fields = ('name', 'id_string', 'utility_product', 'created_date', 'is_active', 'created_by')
 
     def conversion_bool(self, instance):
-        if instance.is_active == True:
+        if instance.is_active:
             return "Yes"
         else:
             return "No"

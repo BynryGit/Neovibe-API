@@ -21,7 +21,6 @@ from django.db import models  # importing package for database
 from v1.utility.models.utility_product import get_utility_product_by_id
 
 
-
 # Create Consumer Category table start
 
 

@@ -10,7 +10,6 @@ from v1.utility.views.summary import UtilitySummaryDetail
 from v1.utility.views.utility_currency import UtilityCurrencyList
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
 from v1.utility.views.utility_module_submodule import UtilityModuleSubmoduleList
-from v1.utility.views.utility_service import UtilityServiceList
 from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList, \
     UtilityServiceContractMasterDetail, UtilityServiceContractMaster
 from v1.utility.views.utility_service_request_sub_type import UtilityServiceRequestSubTypeList
@@ -93,7 +92,6 @@ urlpatterns = [
     path('working_hour', WorkingHour.as_view()),
     path('working_hour/<uuid:id_string>', WorkingHourDetail.as_view()),
     path('<uuid:id_string>/leave_type/list', UtilityLeaveTypeList.as_view()),
-    path('<uuid:id_string>/service/list', UtilityServiceList.as_view(), name='utility_service_list'),
     path('<uuid:id_string>/service-contract-template/list', UtilityServiceContractTemplateList.as_view()),
     path('<uuid:id_string>/service-contract/list', UtilityServiceContractMasterList.as_view(),
          name='utility_service_contract_master_list'),

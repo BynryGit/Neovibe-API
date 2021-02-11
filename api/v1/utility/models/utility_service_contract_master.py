@@ -5,8 +5,9 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.utility.models.utility_service import get_utility_service_by_id
 from django.contrib.postgres.fields import JSONField
+from v1.utility.models.utility_product import get_utility_product_by_id
+
 
 
 class UtilityServiceContractMaster(models.Model):

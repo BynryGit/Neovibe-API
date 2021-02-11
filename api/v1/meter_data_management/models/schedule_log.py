@@ -20,9 +20,11 @@ from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.schedule import get_schedule_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_product import get_utility_product_by_id
 
 
 # Create Schedule Table Start
+
 
 class ScheduleLog(models.Model):
     SCHEDULE_LOG_STATUS = (
@@ -66,6 +68,11 @@ class ScheduleLog(models.Model):
     def get_recurring_name(self):
         recurring = get_global_lookup_by_id(self.recurring_id)
         return recurring
+
+    @property
+    def get_utility_product_type_name(self):
+        utility_product_type = get_utility_product_by_id(self.utility_product_id)
+        return utility_product_type
 
     def __str__(self):
         return str(self.id_string)

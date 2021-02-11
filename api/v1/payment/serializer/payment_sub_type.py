@@ -12,7 +12,8 @@ class PaymentSubTypeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentSubTypeTbl
-        fields = ('name', 'id_string','is_active','created_by','created_date')
+        fields = ('name', 'id_string', 'is_active', 'created_by', 'created_date')
+
 
 
 class PaymentSubTypeViewSerializer(serializers.ModelSerializer):

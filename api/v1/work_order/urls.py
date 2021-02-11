@@ -6,7 +6,7 @@ from v1.work_order.views.material_type import MaterialTypeList
 from v1.work_order.views.material_subtype import MaterialSubTypeList
 from v1.work_order.views.material_name import MaterialNameList
 from v1.work_order.views.service_assignment import ServiceAssignment,ServiceDessignmentDetail,ServiceAssignmentDetail,ServiceAssignmentList
-
+from v1.work_order.views.scheduled_appointment import ScheduledAppointment, schedule_appointment_assign
 
 urlpatterns = [
     path('utility/<uuid:id_string>/rules/list', WorkOrderRuleList.as_view(), name='work_order_rules_list'),
@@ -22,5 +22,7 @@ urlpatterns = [
     path('service-assignment',ServiceAssignment.as_view(),name="service_assignment"),
     path('service-deassignment/<uuid:id_string>',ServiceDessignmentDetail.as_view(),name="service_deassignment"),
     path('service-assignment/<uuid:id_string>',ServiceAssignmentDetail.as_view(),name="service_assignment_detail"),
-    path('utility/<uuid:utility_id_string>/user/<uuid:user_id_string>/service-assignment/list',ServiceAssignmentList.as_view(),name="service_assignment_list")
+    path('utility/<uuid:utility_id_string>/user/<uuid:user_id_string>/service-assignment/list',ServiceAssignmentList.as_view(),name="service_assignment_list"),
+    path('scheduled-appointment',ScheduledAppointment.as_view(), name="add_scheduled_appointment"),
+    path('assign',schedule_appointment_assign)
 ]
