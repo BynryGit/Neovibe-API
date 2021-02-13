@@ -27,20 +27,6 @@
       "is_active": "True"
     }
   },
-  {
-    "pk": "2",
-    "model": "utility.UtilityMaster",
-    "fields": {
-      "tenant": 1,
-      "name": "MNGL pune",
-      "phone_no": 2222222222,
-      "email_id": "punegas@gmail.com",
-      "pan_no":"YHUJI8900H",
-      "tax_id":2345,
-      "address":"FLAT NO:410, MORNING GLORY, NAGARJUNA DREAM LAND pune",
-      "is_active": "True"
-    }
-  },
 
   {
       "pk": "1",
@@ -3210,18 +3196,7 @@
         "user_id": 1,
         "is_active": "True"
       }
-    },
-{
-      "pk": "2",
-      "model": "userapp.UserUtility",
-      "fields": {
-        "tenant": 1,
-        "utility": 2,
-        "user_id": 1,
-        "is_active": "True"
-      }
-    },
-    
+    },    
     {
       "pk": "1",
       "model": "utility.UtilityModule",

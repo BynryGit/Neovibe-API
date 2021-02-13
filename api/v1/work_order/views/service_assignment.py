@@ -19,6 +19,7 @@ from v1.work_order.serializers.service_assignment import ServiceAssignmentListSe
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.work_order.models.service_assignment import ServiceAssignment as ServiceAssignmentTbl
 from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.work_order.views.tasks import save_service_appointment_timeline
 
 
 # API Header
@@ -95,6 +96,11 @@ class ServiceAssignment(GenericAPIView):
                     # State change for service appointment start
                     service_appoint_obj.change_state(SERVICE_APPOINTMENT_DICT["ASSIGNED"])
                     # State change for service appointment end
+
+                    # Timeline code start
+                    # transaction.on_commit(
+                    #     lambda: save_service_appointment_timeline.delay(service_appoint_obj, "Service Appointment", "Service Appointment Created", "ASSIGNED",user))
+                    # Timeline code end
 
                 view_serializer = ServiceAssignmentViewSerializer(instance=assignment_obj, context={'request': request})
                 return Response({

@@ -17,6 +17,10 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django.db import transaction
 from v1.work_order.models.service_assignment import get_service_assignment_by_appointment_id
+from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
+from v1.commonapp.models.lifecycle import LifeCycle
+from v1.commonapp.models.module import get_module_by_key
+from v1.commonapp.models.notes import Notes
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -77,12 +81,17 @@ class ServiceAppointment(GenericAPIView):
             if appointment_serializer.is_valid(raise_exception=False):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
-                appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
-                view_serializer = ServiceAppointmentViewSerializer(instance=appointment_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
-                }, status=status.HTTP_201_CREATED)                
+                with transaction.atomic():
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    # # Timeline code start
+                    # transaction.on_commit(
+                    #     lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
+                        # Timeline code end
+                    view_serializer = ServiceAppointmentViewSerializer(instance=appointment_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)                
             else:
                 return Response({
                     STATE: ERROR,
@@ -183,3 +192,38 @@ class ServiceAppointmentDetail(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
+
+
+# API Header
+# API end Point: api/v1/work-order/appointment/:id_string/life-cycles
+# API verb: GET
+# Package: Basic
+# Modules:Work Order
+# Sub Module: Dispatcher
+# Interaction: Service Appointment lifecycles
+# Usage: API will fetch required data for Service Appointment lifecycles
+# Tables used: LifeCycles
+# Author: Priyanka
+# Created on: 11/02/2021
+class ServiceAppointmentLifeCycleList(generics.ListAPIView):
+    try:
+        serializer_class = LifeCycleListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    service_appointment = get_service_appointment_by_id_string(self.kwargs['id_string'])
+                    module = get_module_by_key("WORK_ORDER")
+                    sub_module = get_sub_module_by_key("DISPATCHER")
+                    queryset = LifeCycle.objects.filter(object_id=service_appointment.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Work Order', sub_module='DISPATCHER')
