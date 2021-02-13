@@ -4945,7 +4945,7 @@
         "subscription_name": "Standard",
         "short_name": "STD",
         "description": "CX,BX,MX",
-        "max_storage": 5,
+        "max_storage": "5",
         "status": "0",
         "module_obj":[
           {"module_name": "Registration"},
@@ -4968,7 +4968,7 @@
       "subscription_name": "Professional",
       "short_name": "PRO",
       "description": "CX,BX,MX,WX",
-      "max_storage": 5,
+      "max_storage": "5",
       "status": "1",
       "module_obj": [
         {"module_name": "Registration"},
@@ -4991,7 +4991,7 @@
         "subscription_name": "Business",
         "short_name": "BUS",
         "description": "CX,BX,MX,WX,SX,PX",
-        "max_storage": 5,
+        "max_storage": "5",
         "status": "2",
         "module_obj":[
           {"module_name": "Registration"},

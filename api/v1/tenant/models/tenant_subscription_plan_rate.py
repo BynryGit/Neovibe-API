@@ -26,6 +26,7 @@ class TenantSubscriptionPlanRate(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     subscription_plan_id = models.BigIntegerField(null=True, blank=True)
     subscription_name = models.CharField(max_length=200, blank=True, null=True)
+    tenant_subscription_id = models.BigIntegerField(null=True, blank=True)
     base_rate = models.FloatField(null=True, blank=True)
     currency_id = models.BigIntegerField(null=True, blank=True)
     region_id = models.BigIntegerField(null=True, blank=True)
