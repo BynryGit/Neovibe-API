@@ -32,11 +32,7 @@ class UtilityPaymentMode(models.Model):
 
     def __unicode__(self):
         return self.name
-    
-    @property
-    def get_payment_type(self):
-        payment_subtype = get_payment_type_by_id(self.payment_type_id)
-        return payment_subtype
+
 
     @property
     def get_payment_mode_key(self):
