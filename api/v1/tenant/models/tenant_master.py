@@ -33,7 +33,6 @@ class TenantMaster(models.Model):
     tenant_country_id = models.BigIntegerField(null=True, blank=True)
     tenant_currency_id = models.BigIntegerField(null=True, blank=True)
     tenant_state_id = models.BigIntegerField(null=True, blank=True)
-    tenant_currency_id = models.BigIntegerField(null=True, blank=True)
     tenant_region_id = models.BigIntegerField(null=True, blank=True)
     pan_no = models.CharField(max_length=200, blank=True, null=True)
     tax_id = models.CharField(max_length=200, blank=True, null=True)
