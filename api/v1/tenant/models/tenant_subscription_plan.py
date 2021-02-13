@@ -40,7 +40,7 @@ class TenantSubscriptionPlan(models.Model, fsm.FiniteStateMachineMixin):
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     subscription_name = models.CharField(max_length=200, blank=True, null=True)
-    short_name = models.BigIntegerField(null=True, blank=True)
+    short_name = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     max_storage = models.BigIntegerField(null=True, blank=True)
     status = models.BigIntegerField(choices=CHOICES, default=0)
