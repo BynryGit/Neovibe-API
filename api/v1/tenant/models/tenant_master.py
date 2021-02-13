@@ -25,7 +25,7 @@ from v1.tenant.models.tenant_status import get_tenant_status_by_id
 
 class TenantMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    short_name = models.BigIntegerField(null=True, blank=True)
+    short_name = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
     email_id = models.CharField(max_length=200, null=True, blank=True)
     mobile_no = models.CharField(max_length=200, blank=True, null=True)
