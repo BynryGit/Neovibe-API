@@ -67,4 +67,4 @@ class ConsumerServiceMasterListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerServiceMasterTbl
-        fields = ('id_string', 'name', 'service_sub_type', 'created_by', 'created_date')
+        fields = ('id_string', 'name', 'service_obj', 'service_sub_type', 'created_by', 'created_date')

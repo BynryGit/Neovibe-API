@@ -42,7 +42,7 @@ def get_channel_by_id_string(id_string):
     return Channel.objects.get(id_string = id_string)
 
 def get_channel_by_id(id):
-    return Channel.objects.filter(id = id)
+    return Channel.objects.get(id = id)
 
 # Create Channel table end
 

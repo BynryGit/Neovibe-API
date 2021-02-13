@@ -49,6 +49,7 @@ class UtilityModule(models.Model):
         module = get_module_by_id(self.module_id)
         return module
 
+
 # Create Utility Module table end.
 
 def get_utility_module_by_module_id(module_id):
@@ -56,6 +57,7 @@ def get_utility_module_by_module_id(module_id):
         return UtilityModule.objects.get(module_id=module_id)
     except:
         return False
+
 
 def get_utility_module_by_id(id):
     try:
@@ -77,4 +79,3 @@ def get_utility_modules_by_tenant_id_string(id_string):
 
 def get_utility_modules_by_utility_id_string(id_string):
     return UtilityModule.objects.filter(utility__id_string=id_string)
-

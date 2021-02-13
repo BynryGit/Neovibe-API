@@ -7,6 +7,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
+from v1.utility.models.utility_product import get_utility_product_by_id
 
 
 # Create Payment Type table start
@@ -18,6 +19,7 @@ class UtilityPaymentType(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     payment_type_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -34,6 +36,11 @@ class UtilityPaymentType(models.Model):
     def get_payment_type(self):
         payment_type = get_payment_type_by_id(self.payment_type_id)
         return payment_type
+
+    @property
+    def get_utility_product(self):
+        utility_product = get_utility_product_by_id(self.utility_product_id)
+        return utility_product
 
 
 def get_utility_payment_type_by_id(id):

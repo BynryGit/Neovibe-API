@@ -87,6 +87,7 @@ CONSUMER_SERVICE_ALREADY_EXISTS = "Consumer service already exists!"
 CONSUMER_OFFER_ALREADY_EXISTS = "Consumer offer already exists!"
 OFFER_TYPE_ALREADY_EXISTS = "Offer Type Already Exist!"
 OFFER_SUB_TYPE_ALREADY_EXISTS = "Offer SubType Already Exist!"
+INTEGRATION_MASTER_ALREADY_EXIST = "Integration Already Exist"
 # *********** NOT FOUND CONSTANTS **************
 SERVICE_ASSIGNMENT_NOT_FOUND = "Service Assignment Not Found"
 SERVICE_APPOINTMENT_NOT_FOUND = "Service Appointment Not Found"
@@ -185,6 +186,8 @@ CONTRACT_ALREADY_EXIST = "Contract Already Exist"
 CONTRACT_TEMPLATE_ALREADY_EXIST = "Contract Template Already Exist."
 NOTIFICATION_TYPE_ALREADY_EXIST = "Notification Type Already Exist."
 NOTIFICATION_SUBTYPE_ALREADY_EXIST = "Notification SubType Already Exist."
+UTILITY_MODULE_ALREADY_EXIST = "Utility Module Already Exist"
+COMPLAINT_MASTER_ALREADY_EXIST = "Complaint Master Already Exist"
 
 
 

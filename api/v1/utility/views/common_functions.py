@@ -77,12 +77,6 @@ def set_utility_contract_validated_data(validated_data):
             validated_data["service_contract_template_id"] = service_contract_template.id
         else:
             raise CustomAPIException("Contract Template not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "product_id" in validated_data:
-        product = get_utility_product_by_id_string(validated_data["product_id"])
-        if product:
-            validated_data["product_id"] = product.id
-        else:
-            raise CustomAPIException("Product Not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

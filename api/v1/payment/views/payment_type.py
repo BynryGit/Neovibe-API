@@ -11,7 +11,8 @@ from v1.commonapp.common_functions import is_authorized, is_token_valid, get_use
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.payment.models.payment_type import PaymentType as PaymentTypeModel, get_payment_type_by_id_string
-from v1.payment.serializer.payment_type import PaymentTypeListSerializer,PaymentTypeViewSerializer,PaymentTypeSerializer
+from v1.payment.serializer.payment_type import PaymentTypeListSerializer, PaymentTypeViewSerializer, \
+    PaymentTypeSerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
@@ -76,22 +77,31 @@ class PaymentType(GenericAPIView):
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
+        global payment_type_total
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = PaymentTypeSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=False):
-                PaymentType_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = PaymentTypeViewSerializer(instance=PaymentType_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
+            if "payment_details" in request.data:
+                payment_type_total = request.data.pop('payment_details')
+            for payment in payment_type_total:
+                a = get_payment_type_by_id_string(id_string=payment['id_string'])
+                serializer = PaymentTypeSerializer(data=request.data)
+                request.data['payment_type_id'] = a.id
+                request.data['name'] = a.name
+                if serializer.is_valid(raise_exception=False):
+                    print("INSIDE IFFF",serializer.validated_data)
+                    payment_type_obj = serializer.create(serializer.validated_data, user)
+                    print("Payment Type Obj",payment_type_obj)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            view_serializer = PaymentTypeViewSerializer(instance=payment_type_obj, context={'request': request})
+            return Response({
+                STATE: SUCCESS,
+                RESULTS: view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
             res = self.handle_exception(e)
@@ -99,6 +109,7 @@ class PaymentType(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
+
 
 # API Header
 # API end Point: api/v1/payment/type/:id_string
@@ -144,15 +155,15 @@ class PaymentTypeDetail(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            PaymentType_obj = get_payment_type_by_id_string(id_string)
+            payment_type_obj = get_payment_type_by_id_string(id_string)
             if "name" not in request.data:
-                request.data['name'] = PaymentType_obj.name
-            if PaymentType_obj:
+                request.data['name'] = payment_type_obj.name
+            if payment_type_obj:
                 serializer = PaymentTypeSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    PaymentType_obj = serializer.update(PaymentType_obj, serializer.validated_data, user)
-                    view_serializer = PaymentTypeViewSerializer(instance=PaymentType_obj,
-                                                           context={'request': request})
+                    payment_type_obj = serializer.update(payment_type_obj, serializer.validated_data, user)
+                    view_serializer = PaymentTypeViewSerializer(instance=payment_type_obj,
+                                                                context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

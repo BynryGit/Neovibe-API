@@ -1,63 +1,73 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.complaint.models.consumer_complaint_master import ConsumerComplaintMaster as ConsumerComplaintMasterModel, get_consumer_complaint_master_by_id_string
-from v1.complaint.serializers.consumer_complaint_master import ConsumerComplaintMasterListSerializer, \
-    ConsumerComplaintMasterViewSerializer, ConsumerComplaintMasterSerializer
+from rest_framework import status, generics
+from api.messages import *
+from v1.billing.serializers.invoice_bill import *
+from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
-from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
-from rest_framework import status, generics
+from v1.complaint.models.complaint import *
+from v1.complaint.serializers.complaint import *
+from v1.consumer.serializers.consumer_scheme_master import *
+from v1.payment.serializer.payment import *
+from v1.commonapp.serializers.integration_master import IntegrationMasterListSerializer, IntegrationMasterSerializer, \
+    IntegrationMasterViewSerializer
+from v1.commonapp.models.integration_master import IntegrationMaster as IntegrationMasterModel, get_integration_master_by_id_string
+from v1.utility.models.utility_master import get_utility_by_id_string
+from api.constants import *
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from api.messages import *
-from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import *
-from api.constants import *
+from master.models import get_user_by_id_string
 
 
-class ConsumerComplaintMasterList(generics.ListAPIView):
+# API Header
+# API end Point: api/v1/:id_string/integration-master/list
+# API verb: GET
+# Package: Basic
+# Modules: Admin
+# Sub Module: Admin
+# Interaction: Integration Master list
+# Usage: API will fetch all Integration Master list
+# Tables used: Integration Master
+# Author: Chinmay
+# Created on: 8/2/2020
+
+class IntegrationMasterList(generics.ListAPIView):
     try:
-        serializer_class = ConsumerComplaintMasterListSerializer
+        serializer_class = IntegrationMasterListSerializer
         pagination_class = StandardResultsSetPagination
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('name', 'tenant__id_string',)
-        ordering_fields = ('name', 'tenant',)
-        search_fields = ('name', 'tenant__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerComplaintMasterModel.objects.filter(utility=utility, is_active=True)
+                    queryset = IntegrationMasterModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Consumer Complaint master not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException("Integration Details not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module='Complaint', sub_module='Complaint')
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Admin')
 
 
 # API Header
-# API end Point: api/v1/utility/complaint-master
+# API end Point: api/v1/utility/integration_master
 # API verb: POST
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: Complaint Master post
-# Usage: API will Post the Complaint Master
-# Tables used: Complaint Master
+# Interaction: Integration Details post
+# Usage: API will Post the Integration Details
+# Tables used: IntegrationMaster
 # Author: Chinmay
-# Created on: 11/2/2021
-class ConsumerComplaintMaster(GenericAPIView):
+# Created on: 9/2/2021
+class IntegrationMaster(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
@@ -65,10 +75,10 @@ class ConsumerComplaintMaster(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ConsumerComplaintMasterSerializer(data=request.data)
+            serializer = IntegrationMasterSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                consumer_master_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ConsumerComplaintMasterViewSerializer(instance=consumer_master_obj, context={'request': request})
+                integration_obj = serializer.create(serializer.validated_data, user)
+                view_serializer = IntegrationMasterViewSerializer(instance=integration_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
@@ -88,27 +98,27 @@ class ConsumerComplaintMaster(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/utility/state/:id_string
+# API end Point: api/v1/utility/integration_master/:id_string
 # API verb: GET,PUT
 # Package: Basic
 # Modules: Admin
 # Sub Module: Admin
-# Interaction: City corresponding to the id
-# Usage: API will fetch and update Cities for a given id
-# Tables used: City
+# Interaction: Integration Details corresponding to the id
+# Usage: API will fetch and update Integration Details for a given id
+# Tables used: IntegrationMaster
 # Author: Chinmay
-# Created on: 10/11/2020
+# Created on: 2/9/2021
 
 
-class ConsumerComplaintMasterDetail(GenericAPIView):
+class IntegrationMasterDetail(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
-            city = get_consumer_complaint_master_by_id_string(id_string)
-            if city:
-                serializer = ConsumerComplaintMasterViewSerializer(instance=city, context={'request': request})
+            integration_master = get_integration_master_by_id_string(id_string)
+            if integration_master:
+                serializer = IntegrationMasterViewSerializer(instance=integration_master, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: serializer.data,
@@ -131,15 +141,15 @@ class ConsumerComplaintMasterDetail(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            consumer_master_obj = get_consumer_complaint_master_by_id_string(id_string)
+            integration_obj = get_integration_master_by_id_string(id_string)
             if "name" not in request.data:
-                request.data['name'] = consumer_master_obj.name
-            if consumer_master_obj:
-                serializer = ConsumerComplaintMasterSerializer(data=request.data)
+                request.data['name'] = integration_obj.name
+            if integration_obj:
+                serializer = IntegrationMasterSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    consumer_master_obj = serializer.update(consumer_master_obj, serializer.validated_data, user)
-                    view_serializer = ConsumerComplaintMasterViewSerializer(instance=consumer_master_obj,
-                                                                            context={'request': request})
+                    integration_obj = serializer.update(integration_obj, serializer.validated_data, user)
+                    view_serializer = IntegrationMasterViewSerializer(instance=integration_obj,
+                                                            context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

@@ -20,7 +20,6 @@ class CityViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    
 
     class Meta:
         model = CityTbl
@@ -67,4 +66,4 @@ class CityListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CityTbl
-        fields = ('name', 'id_string', 'state','is_active','created_by','created_date')
+        fields = ('name', 'id_string', 'state', 'is_active', 'created_by', 'created_date')

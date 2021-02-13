@@ -30,15 +30,12 @@ from v1.commonapp.models.department_subtype import get_department_subtype_by_id_
 from v1.campaign.models.campaign_type import get_campaign_type_by_id_string
 from v1.commonapp.models.division import get_division_by_id_string
 from v1.commonapp.models.document_type import get_document_type_by_id_string
-from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id_string
-from v1.utility.models.utility_payment_subtype import get_utility_payment_subtype_by_id_string
-from v1.utility.models.utility_payment_type import get_utility_payment_type_by_id_string
-from v1.utility.models.utility_payment_mode import get_utility_payment_mode_by_id_string
 from v1.utility.models.utility_document_type import get_utility_document_type_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 from v1.commonapp.models.notification_type import get_notification_type_by_id_string
-from v1.commonapp.models.notification_subtype import get_notification_subtype_by_id_string
+from v1.commonapp.models.integration_type import get_integration_type_by_id_string
+from v1.commonapp.models.integration_subtype import get_integration_sub_type_by_id_string
 
 secret_reader = SecretReader()
 
@@ -610,3 +607,38 @@ def set_notification_subtype_validated_data(validated_data):
         else:
             raise CustomAPIException("Notification Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+
+def set_integration_master_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "integration_type_id" in validated_data:
+        integration_type = get_integration_type_by_id_string(validated_data["integration_type_id"])
+        if integration_type:
+            validated_data["integration_type_id"] = integration_type.id
+        else:
+            raise CustomAPIException("Integration Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "integration_sub_type_id" in validated_data:
+        integration_sub_type = get_integration_sub_type_by_id_string(validated_data["integration_sub_type_id"])
+        if integration_sub_type:
+            validated_data["integration_sub_type_id"] = integration_sub_type.id
+        else:
+            raise CustomAPIException("Integration Sub Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "module_id" in validated_data:
+        module = get_utility_module_by_id_string(validated_data["module_id"])
+        if module:
+            validated_data["module_id"] = module.id
+        else:
+            raise CustomAPIException("Module not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+

@@ -7,14 +7,15 @@ from datetime import datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SERVICE_TYPE_ALREADY_EXIST
 from rest_framework import status
-
+from v1.utility.serializers.utility_product import UtilityProductListSerializer
 from v1.consumer.views.common_functions import set_service_type_validated_data
 
 
 class ServiceTypeListSerializer(serializers.ModelSerializer):
+    utility_product = UtilityProductListSerializer(source='get_utility_product')
     class Meta:
         model = ServiceTypeTbl
-        fields = ('name', 'id_string', 'created_date', 'is_active', 'created_by')
+        fields = ('name', 'id_string','utility_product', 'created_date', 'is_active', 'created_by')
 
 
 class ServiceTypeViewSerializer(serializers.ModelSerializer):
@@ -33,6 +34,7 @@ class ServiceTypeSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
+    utility_product_id = serializers.CharField(required=True, max_length=200)
 
     class Meta:
         model = ServiceTypeTbl

@@ -15,6 +15,7 @@ class PaymentSubTypeListSerializer(serializers.ModelSerializer):
         fields = ('name', 'id_string', 'is_active', 'created_by', 'created_date')
 
 
+
 class PaymentSubTypeViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
