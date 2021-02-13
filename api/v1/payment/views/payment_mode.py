@@ -79,19 +79,25 @@ class PaymentMode(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = PaymentModeSerializer(data=request.data)
+            if "mode_details" in request.data:
+                mode_total = request.data.pop('mode_details')
+            for modes in mode_total:
+                a = get_payment_mode_by_id_string(id_string=modes['id_string'])
+                serializer = PaymentModeSerializer(data=request.data)
+                request.data['payment_mode_id'] = a.id
+                request.data['name'] = a.name
             if serializer.is_valid(raise_exception=False):
-                PaymentMode_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = PaymentModeViewSerializer(instance=PaymentMode_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
-                }, status=status.HTTP_201_CREATED)
+                payment_mode_obj = serializer.create(serializer.validated_data, user)
             else:
                 return Response({
                     STATE: ERROR,
                     RESULTS: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
+            view_serializer = PaymentModeViewSerializer(instance=payment_mode_obj, context={'request': request})
+            return Response({
+                STATE: SUCCESS,
+                RESULTS: view_serializer.data,
+            }, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
             res = self.handle_exception(e)

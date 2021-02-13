@@ -3177,6 +3177,19 @@
       }
     },
     {
+      "pk": "2",
+      "model": "master.User",
+      "fields": {
+        "tenant": 1,
+        "email": "tenant@bynry.com",
+        "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+        "is_staff": "True",
+        "is_active": "True",
+        "status_id":1,
+        "is_superuser": "True"
+      }
+    },
+    {
       "pk": "1",
       "model": "userapp.UserRole",
       "fields": {
@@ -4846,6 +4859,33 @@
         "is_active": "True"
       }
     },
+  {
+      "pk": "1",
+      "model": "commonapp.Currency",
+      "fields": {
+        "name": "Rupee",
+        "key": "RUPEE",
+        "is_active": "True"
+      }
+    },
+  {
+      "pk": "2",
+      "model": "commonapp.Currency",
+      "fields": {
+        "name": "Dollar",
+        "key": "DOLLAR",
+        "is_active": "True"
+      }
+    },
+  {
+      "pk": "3",
+      "model": "commonapp.Currency",
+      "fields": {
+        "name": "Yen",
+        "key": "YEN",
+        "is_active": "True"
+      }
+    },
     {
       "pk": "1",
       "model": "userapp.UserStatus",
@@ -4865,5 +4905,216 @@
         "status":"Active",
         "is_active": "True"
       }
+    },
+  {
+    "pk": "1",
+    "model": "tenant.TenantMaster",
+    "fields": {
+      "short_name": "MNGL",
+      "name": "Maharashtra Natural Gas Limited",
+      "mobile_no": 7865433289,
+      "email_id": "mngl@gmail.com",
+      "tenant_city_id": "1",
+      "tenant_country_id": "1",
+      "tenant_state_id": "1",
+      "tenant_currency_id": "1",
+      "tenant_region_id": "1",
+      "pan_no": "ASDFG5671H",
+      "tax_id": 1234,
+      "address": "P. NO.19 , LOTUS ENCLAVE Nashik",
+      "is_active": "True"
     }
+  },
+  {
+      "pk": "2",
+      "model": "tenant.TenantMaster",
+      "fields": {
+        "name": "BhagyaNagar Gas Limited",
+        "short_name": "BGL",
+        "mobile_no": 2222222222,
+        "email_id": "bgl@gmail.com",
+        "tenant_city_id": "1",
+        "tenant_country_id": "1",
+        "tenant_state_id":"1",
+        "tenant_currency_id":"1",
+        "tenant_region_id":"1",
+        "pan_no":"YHUJI8900H",
+        "tax_id":2345,
+        "address":"FLAT NO:410, MORNING GLORY, NAGARJUNA DREAM LAND Hydrabad",
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "3",
+      "model": "tenant.TenantMaster",
+      "fields": {
+        "name": "Calcutta Electric Supply Corporation",
+        "short_name": "CESC",
+        "mobile_no": 3333333333,
+        "email_id": "cesc@gmail.com",
+        "tenant_city_id": "1",
+        "tenant_country_id": "1",
+        "tenant_state_id":"1",
+        "tenant_currency_id":"1",
+        "tenant_region_id":"1",
+        "pan_no":"YHUJI8988U",
+        "tax_id":8907,
+        "address":"FLAT NO:410, MORNING GLORY, NAGARJUNA DREAM LAND Calcutta",
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "1",
+      "model": "tenant.TenantSubscriptionPlan",
+      "fields": {
+        "subscription_name": "Standard",
+        "short_name": "STD",
+        "description": "CX,BX,MX",
+        "max_storage": 5,
+        "status": "0",
+        "module_obj":[
+          {"module_name": "Registration"},
+          {"module_name": "Admin"},
+          {"module_name": "Dashboard"},
+          {"module_name": "Consumer Care"},
+          {"module_name": "Services"},
+          {"module_name": "Complaints"},
+          {"module_name": "Payments"},
+          {"module_name": "Survey"},
+          {"module_name": "Reports"}
+        ],
+        "is_active": "True"
+      }
+    },
+  {
+    "pk": "2",
+    "model": "tenant.TenantSubscriptionPlan",
+    "fields": {
+      "subscription_name": "Professional",
+      "short_name": "PRO",
+      "description": "CX,BX,MX,WX",
+      "max_storage": 5,
+      "status": "1",
+      "module_obj": [
+        {"module_name": "Registration"},
+          {"module_name": "Admin"},
+          {"module_name": "Dashboard"},
+          {"module_name": "Consumer Care"},
+          {"module_name": "Services"},
+          {"module_name": "Complaints"},
+          {"module_name": "Payments"},
+          {"module_name": "Survey"},
+          {"module_name": "Reports"}
+      ],
+      "is_active": "True"
+    }
+  },
+  {
+      "pk": "3",
+      "model": "tenant.TenantSubscriptionPlan",
+      "fields": {
+        "subscription_name": "Business",
+        "short_name": "BUS",
+        "description": "CX,BX,MX,WX,SX,PX",
+        "max_storage": 5,
+        "status": "2",
+        "module_obj":[
+          {"module_name": "Registration"},
+          {"module_name": "Admin"},
+          {"module_name": "Consumer Ops"},
+          {"module_name": "Work Order"}
+        ],
+        "is_active": "True"
+      }
+    },
+  {
+      "pk": "1",
+      "model": "tenant.TenantSubscription",
+      "fields": {
+        "tenant": "1",
+        "subscription_plan_id": "1",
+        "subscription_rate_id": "1",
+        "max_utility": "5",
+        "max_consumer": "10000",
+        "status": "0",
+        "is_active": "True"
+      }
+  },
+  {
+      "pk": "2",
+      "model": "tenant.TenantSubscription",
+      "fields": {
+        "tenant": "2",
+        "subscription_plan_id": "2",
+        "subscription_rate_id": "2",
+        "max_utility": "5",
+        "max_consumer": "25000",
+        "status": "0",
+        "is_active": "True"
+      }
+  },
+  {
+      "pk": "3",
+      "model": "tenant.TenantSubscription",
+      "fields": {
+        "tenant": "3",
+        "subscription_plan_id": "3",
+        "subscription_rate_id": "3",
+        "max_utility": "5",
+        "max_consumer": "50000",
+        "status": "0",
+        "is_active": "True"
+      }
+  },
+  {
+      "pk": "1",
+      "model": "tenant.TenantSubscriptionPlanRate",
+      "fields": {
+        "tenant": "1",
+        "subscription_plan_id": "1",
+        "subscription_name": "Standard",
+        "tenant_subscription_id": "1",
+        "base_rate": 5.99,
+        "currency_id": "1",
+        "region_id": "1",
+        "country_id": "1",
+        "is_taxable": "True",
+        "tax": 5.25,
+        "is_active": "True"
+      }
+  },
+  {
+      "pk": "2",
+      "model": "tenant.TenantSubscriptionPlanRate",
+      "fields": {
+        "tenant": "2",
+        "subscription_plan_id": "2",
+        "subscription_name": "Professional",
+        "tenant_subscription_id": "2",
+        "base_rate": 4.99,
+        "currency_id": "1",
+        "region_id": "1",
+        "country_id": "1",
+        "is_taxable": "True",
+        "tax": 5.25,
+        "is_active": "True"
+      }
+  },
+  {
+      "pk": "3",
+      "model": "tenant.TenantSubscriptionPlanRate",
+      "fields": {
+       "tenant": "3",
+        "subscription_plan_id": "3",
+        "subscription_name": "Business",
+        "tenant_subscription_id": "3",
+        "base_rate": 3.99,
+        "currency_id": "1",
+        "region_id": "1",
+        "country_id": "1",
+        "is_taxable": "True",
+        "tax": 5.25,
+        "is_active": "True"
+      }
+  }
 ]

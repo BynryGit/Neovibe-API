@@ -24,13 +24,19 @@ from v1.tenant.models.tenant_subscription_plan_rate import get_tenant_subscripti
 
 
 class TenantSubscription(models.Model):
+    CHOICES = (
+        (0, 'ACTIVE'),
+        (1, 'INACTIVE'),
+    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     subscription_plan_id = models.BigIntegerField(null=True, blank=True)
     subscription_rate_id = models.BigIntegerField(null=True, blank=True)
+    max_utility = models.BigIntegerField(null=True, blank=True)
+    max_consumer = models.BigIntegerField(null=True, blank=True)
+    status = models.BigIntegerField(choices=CHOICES, default=0)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    validity_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

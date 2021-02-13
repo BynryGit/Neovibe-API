@@ -17,6 +17,7 @@ from v1.utility.models.utility_services_number_format import UtilityServiceNumbe
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.utility.models.utility_payment_subtype import get_utility_payment_subtype_by_id_string
 from v1.utility.models.utility_payment_type import get_utility_payment_type_by_id_string
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 
 # Function for converting request data id strings to id's
@@ -51,6 +52,7 @@ def set_payment_validated_data(validated_data):
             validated_data["payment_channel_id"] = payment_channel.id
         else:
             raise CustomAPIException("Payment channel not found.", status.HTTP_404_NOT_FOUND)
+
     return validated_data
 
 
@@ -102,12 +104,19 @@ def set_payment_type_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "payment_type_id" in validated_data:
-        payment_type = get_payment_type_by_id_string(validated_data["payment_type_id"])
-        if payment_type:
-            validated_data["payment_type_id"] = payment_type.id
+    # if "payment_type_id" in validated_data:
+    #     payment_type = get_payment_type_by_id_string(validated_data["payment_type_id"])
+    #     if payment_type:
+    #         validated_data["payment_type_id"] = payment_type.id
+    #     else:
+    #         raise CustomAPIException("Payment Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
         else:
-            raise CustomAPIException("Payment Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
+
     return validated_data
 
 
@@ -155,10 +164,10 @@ def set_payment_mode_validated_data(validated_data):
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
 
-    if "payment_mode_id" in validated_data:
-        payment_mode = get_payment_mode_by_id_string(validated_data["payment_mode_id"])
-        if payment_mode:
-            validated_data["payment_mode_id"] = payment_mode.id
-        else:
-            raise CustomAPIException("Payment Mode not found.", status_code=status.HTTP_404_NOT_FOUND)
+    # if "payment_mode_id" in validated_data:
+    #     payment_mode = get_payment_mode_by_id_string(validated_data["payment_mode_id"])
+    #     if payment_mode:
+    #         validated_data["payment_mode_id"] = payment_mode.id
+    #     else:
+    #         raise CustomAPIException("Payment Mode not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
