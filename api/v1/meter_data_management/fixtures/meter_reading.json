@@ -834,29 +834,39 @@
         "model": "commonapp.Global_Lookup",
         "fields": {
           "category": "Meter Type",
-          "key": "DIGITAL",
-          "value": "Digital",
+          "key": "smart",
+          "value": "Smart",
           "is_active": "True"
         }
-      },
-      {
+	},
+	{
         "pk": "85",
         "model": "commonapp.Global_Lookup",
         "fields": {
           "category": "Meter Type",
-          "key": "ANALOG",
-          "value": "Analog",
+          "key": "photo",
+          "value": "Photo",
           "is_active": "True"
         }
-      },
-      {
-        "pk": "86",
-        "model": "commonapp.Global_Lookup",
-        "fields": {
-          "category": "Meter Type",
-          "key": "SMARTMETER",
-          "value": "Smart Meter",
-          "is_active": "True"
-        }
-      }
+    },
+	{
+		"pk": "86",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+		  "category": "Consumer Category",
+		  "key": "domestic",
+		  "value": "Domestic",
+		  "is_active": "True"
+		}
+	},
+	{
+		"pk": "87",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+		  "category": "Consumer Category",
+		  "key": "industrial",
+		  "value": "Industrial",
+		  "is_active": "True"
+		}
+	}
 ]
