@@ -81,18 +81,20 @@ class PaymentMode(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             if "mode_details" in request.data:
                 mode_total = request.data.pop('mode_details')
+                print(mode_total)
             for modes in mode_total:
                 a = get_payment_mode_by_id_string(id_string=modes['id_string'])
+                print("AAAA",a)
                 serializer = PaymentModeSerializer(data=request.data)
                 request.data['payment_mode_id'] = a.id
                 request.data['name'] = a.name
-            if serializer.is_valid(raise_exception=False):
-                payment_mode_obj = serializer.create(serializer.validated_data, user)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
+                if serializer.is_valid(raise_exception=False):
+                    payment_mode_obj = serializer.create(serializer.validated_data, user)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             view_serializer = PaymentModeViewSerializer(instance=payment_mode_obj, context={'request': request})
             return Response({
                 STATE: SUCCESS,

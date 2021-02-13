@@ -31,6 +31,7 @@ class TenantMaster(models.Model):
     mobile_no = models.CharField(max_length=200, blank=True, null=True)
     tenant_city_id = models.BigIntegerField(null=True, blank=True)
     tenant_country_id = models.BigIntegerField(null=True, blank=True)
+    tenant_currency_id = models.BigIntegerField(null=True, blank=True)
     tenant_state_id = models.BigIntegerField(null=True, blank=True)
     tenant_currency_id = models.BigIntegerField(null=True, blank=True)
     tenant_region_id = models.BigIntegerField(null=True, blank=True)

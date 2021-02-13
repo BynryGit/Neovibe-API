@@ -31,7 +31,8 @@ class PaymentModeSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
-    payment_mode_id = serializers.CharField(required=True, max_length=200)
+    payment_mode_id = serializers.CharField(required=False, max_length=200)
+    utility_product_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = UtilityPaymentModeTbl
