@@ -25,7 +25,7 @@ class Meter(models.Model):
     premise_id = models.BigIntegerField(null=True, blank=True)
     category_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
-    meter_type = models.BigIntegerField(null=True, blank=True)
+    meter_type_id = models.BigIntegerField(null=True, blank=True)
     meter_no = models.CharField(max_length=200, blank=False, null=False)
     meter_make = models.CharField(max_length=200, blank=True, null=True)
     meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
@@ -57,7 +57,7 @@ class Meter(models.Model):
 
     @property
     def get_meter_type_name(self):
-        meter_type = get_global_lookup_by_id(self.meter_type)
+        meter_type = get_global_lookup_by_id(self.meter_type_id)
         return meter_type
 
     @property

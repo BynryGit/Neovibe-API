@@ -5,18 +5,17 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from xlrd import open_workbook
 from django_filters.rest_framework import DjangoFilterBackend
-from api.messages import STATE, ERROR, EXCEPTION
-from api.constants import CONSUMER_OPS, EDIT, METER_DATA
+from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND
+from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.meter_data_management.models.meter import Meter as MeterTbl
-from v1.meter_data_management.serializers.meter import MeterViewSerializer
+from v1.meter_data_management.models.meter import Meter as MeterTbl, get_meter_by_id_string
+from v1.meter_data_management.serializers.meter import MeterViewSerializer, MeterSerializer
 
 
 # API Header
@@ -78,6 +77,77 @@ class Meter(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
         except Exception as ex:
             print('exxx',ex)
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/meter/id_string
+# API verb: GET,PUT
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: View Edit Meter object
+# Usage: API will fetch and edit required data for meter using id_string
+# Tables used: Meter
+# Author: Akshay
+# Created on: 13/02/2021
+
+class MeterDetail(GenericAPIView):
+    @is_token_validate
+    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    def get(self, request, id_string):
+        try:
+            meter_obj = get_meter_by_id_string(id_string)
+            if meter_obj:
+                serializer = MeterViewSerializer(instance=meter_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: METER_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @is_token_validate
+    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            meter_obj = get_meter_by_id_string(id_string)
+            if meter_obj:
+                meter_serializer = MeterSerializer(data=request.data)
+                if meter_serializer.is_valid():
+                    meter_obj = meter_serializer.update(meter_obj, meter_serializer.validated_data, user)
+                    meter_view_serializer = MeterViewSerializer(instance=meter_obj,
+                                                                      context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: meter_view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: meter_serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: METER_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
             logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
                 STATE: EXCEPTION,
