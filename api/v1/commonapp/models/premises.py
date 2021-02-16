@@ -89,15 +89,24 @@ class Premise(models.Model):
 
 # Create Zone table end
 
-
-def get_premise_by_id_string(id_string):
+def get_premise_by_id(id):
     try:
-        return Premise.objects.get(id_string=id_string)
+        return Premise.objects.get(id=id, is_active=True)
     except:
         return False
 
 
-def get_premise_by_id(id):
-    return Premise.objects.get(id=id)
+def get_premise_by_id_string(id_string):
+    try:
+        return Premise.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
+
+
+def get_premise_by_name(name):
+    try:
+        return Premise.objects.get(name=name, is_active=True)
+    except:
+        return False
 
 # End the Code
