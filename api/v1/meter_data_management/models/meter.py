@@ -18,6 +18,18 @@ def get_file_path(instance, filename):
 
 
 class Meter(models.Model):
+    METER_STATUS = (
+        (0, 'OK'),
+        (1, 'NO-DISPLAY'),
+        (2, 'METER-MISSING'),
+        (3, 'PERMANENT-DISCONNECTION'),
+        (4, 'DISCONNECTION'),
+        (5, 'METER-STOLEN'),
+        (6, 'DISPLAY-OUT'),
+        (7, 'METER-CHANGED'),
+        (8, 'GLASS-BROKEN'),
+        (9, 'METER-BRUNT'),
+    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -26,6 +38,8 @@ class Meter(models.Model):
     category_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     meter_type_id = models.BigIntegerField(null=True, blank=True)
+    smart_meter_source_id = models.BigIntegerField(null=True, blank=True)
+    meter_status = models.IntegerField(choices=METER_STATUS, default=0)
     meter_no = models.CharField(max_length=200, blank=False, null=False)
     meter_make = models.CharField(max_length=200, blank=True, null=True)
     meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
@@ -74,13 +88,13 @@ class Meter(models.Model):
 
 def get_meter_by_id_string(id_string):
     try:
-        return Meter.objects.get(id_string=id_string)
+        return Meter.objects.get(id_string=id_string, is_active=True)
     except:
         return False
 
 
 def get_meter_by_id(id):
     try:
-        return Meter.objects.get(id=id)
+        return Meter.objects.get(id=id, is_active=True)
     except:
         return False

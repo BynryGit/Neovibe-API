@@ -2,7 +2,7 @@ __author__ = "aki"
 
 from django.urls import path
 from v1.meter_data_management.task.schedule_log import schedule_log
-from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail
+from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, MeterLifeCycleList
 from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortList,ReadCycleDetail
 from v1.meter_data_management.views.route import RouteList, RouteDetail, Route, RouteShortList
 from v1.meter_data_management.views.read_cycle import ReadCycleList
@@ -26,5 +26,6 @@ urlpatterns = [
     path('meter', Meter.as_view(), name='meter'),
     path('meter/list', MeterList.as_view(), name='meter_list'),
     path('meter/<uuid:id_string>', MeterDetail.as_view(), name='meter_detail'),
+    path('meter/life-cycle/list',MeterLifeCycleList.as_view(),name="service_life_cycle"),
     path('log', schedule_log, name='route_add')
 ]
