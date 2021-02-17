@@ -3,6 +3,7 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
+from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.premises import PremisesShortViewSerializer
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
@@ -28,12 +29,14 @@ class MeterViewSerializer(serializers.ModelSerializer):
     category_id = GlobalLookupShortViewSerializer(many=False, source='get_category_name')
     meter_type_id = GlobalLookupShortViewSerializer(many=False, source='get_meter_type_name')
     utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
+    meter_status = ChoiceField(choices=MeterTbl.METER_STATUS)
 
     class Meta:
         model = MeterTbl
         fields = ('id_string', 'meter_no', 'meter_make', 'meter_image', 'initial_reading', 'latitude', 'longitude',
-                  'install_date', 'created_date', 'updated_date', 'created_by', 'updated_by', 'meter_detail',
-                  'route_id', 'premise_id', 'category_id', 'meter_type_id', 'utility_product_id', 'tenant', 'utility')
+                  'meter_status', 'install_date', 'created_date', 'updated_date', 'created_by', 'updated_by',
+                  'meter_detail', 'route_id', 'premise_id', 'category_id', 'meter_type_id', 'utility_product_id',
+                  'tenant', 'utility')
 
 
 class MeterSerializer(serializers.ModelSerializer):
