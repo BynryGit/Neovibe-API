@@ -2,7 +2,8 @@ from django.urls import path
 from v1.commonapp.views.city import CityList, City, CityDetail
 from v1.commonapp.views.country import CountryList, Country, CountryDetail
 from v1.commonapp.views.currency import CurrencyList
-from v1.commonapp.views.department import Department, DepartmentListByTenant,DepartmentListByUtility, DepartmentTypeDetail, DepartmentTypeList, DepartmentType
+from v1.commonapp.views.department import Department, DepartmentListByTenant, DepartmentListByUtility, \
+    DepartmentTypeDetail, DepartmentTypeList, DepartmentType
 from v1.commonapp.views.department_subtype import DepartmentSubType, DepartmentSubTypeDetail, DepartmentSubTypeList
 from v1.commonapp.views.global_lookup import Global_LookupList
 from v1.commonapp.views.region import RegionList, Region, RegionDetail
@@ -14,23 +15,27 @@ from v1.commonapp.views.form_factor import FormFactor, FormFactorList
 from v1.commonapp.views.sub_area import SubAreaList, SubAreaDetail, SubArea, SubAreaListByArea
 from v1.commonapp.views.module import ModuleList
 from v1.commonapp.views.sub_modules import SubModule, SubModuleList
-from v1.commonapp.views.frequency import FrequencyList,FrequencyDetail
-from v1.commonapp.views.service_type import ServiceTypeList,ServiceTypeDetail,ServiceType
-from v1.commonapp.views.service_subtype import ServiceSubTypeList,ServiceSubTypeDetail,ServiceSubType
+from v1.commonapp.views.frequency import FrequencyList, FrequencyDetail
+from v1.commonapp.views.service_type import ServiceTypeList, ServiceTypeDetail, ServiceType
+from v1.commonapp.views.service_subtype import ServiceSubTypeList, ServiceSubTypeDetail, ServiceSubType
 from v1.commonapp.views.products import ProductList, ProductDetail, Product
 # from v1.userapp.views.role_sub_type import RoleSubType, RoleSubTypeList
 from v1.userapp.views.role_type import RoleTypeList
 from v1.userapp.views.user_type import UserTypeList
-from v1.commonapp.views.skills import SkillsList,SkillDetail,Skill
+from v1.commonapp.views.skills import SkillsList, SkillDetail, Skill
 from v1.userapp.views.role_sub_type import RoleSubTypeByRoleType
-from v1.commonapp.views.premises import PremiseList,Premise,PremiseList, PremiseShortList, PremiseDetail
-from v1.commonapp.views.channel import ChannelList,Channel
-from v1.commonapp.views.frequency import FrequencyDetail,FrequencyList,Frequency
+from v1.commonapp.views.premises import PremiseList, Premise, PremiseList, PremiseShortList, PremiseDetail
+from v1.commonapp.views.channel import ChannelList, Channel
+from v1.commonapp.views.frequency import FrequencyDetail, FrequencyList, Frequency
 from v1.commonapp.views.document_type import DocumentTypeList, DocumentTypeDetail, DocumentType
 from v1.commonapp.views.document_subtype import DocumentSubTypeList, DocumentSubTypeDetail, DocumentSubType
 from v1.commonapp.views.document import Document, DocumentList, DocumentDetail
 from v1.commonapp.views.notification_type import NotificationTypeList, NotificationTypeDetail, NotificationType
-from v1.commonapp.views.notification_subtype import NotificationSubTypeList, NotificationSubTypeDetail, NotificationSubType
+from v1.commonapp.views.notification_subtype import NotificationSubTypeList, NotificationSubTypeDetail, \
+    NotificationSubType
+from v1.commonapp.views.integration_type import IntegrationTypeList
+from v1.commonapp.views.integration_subtype import IntegrationSubTypeList
+from v1.commonapp.views.integration_master import IntegrationMasterList, IntegrationMasterDetail, IntegrationMaster
 
 urlpatterns = [
     path('utility/region', Region.as_view()),
@@ -75,6 +80,11 @@ urlpatterns = [
     path('utility/notification_subtype', NotificationSubType.as_view()),
     path('utility/notification_subtype/<uuid:id_string>', NotificationSubTypeDetail.as_view()),
     path('dept_subtype/list', DepartmentSubTypeList.as_view()),
+    path('integration-type/list', IntegrationTypeList.as_view()),
+    path('integration-subtype/list', IntegrationSubTypeList.as_view()),
+    path('utility/<uuid:id_string>/integration-master/list', IntegrationMasterList.as_view()),
+    path('utility/integration-master/<uuid:id_string>', IntegrationMasterDetail.as_view()),
+    path('utility/integration-master', IntegrationMaster.as_view()),
     path('utility/dept_subtype', DepartmentSubType.as_view()),
     path('utility/dept_subtype/<uuid:id_string>', DepartmentSubTypeDetail.as_view()),
     # path('role_type/<uuid:id_string>', RoleType.as_view()),
@@ -104,8 +114,10 @@ urlpatterns = [
     path('utility/<uuid:id_string>/area/list', AreaList.as_view(), name='area_list'),
     path('utility/<uuid:id_string>/subarea/list', SubAreaList.as_view(), name='subarea_list'),
     path('utility/<uuid:id_string>/premise/list', PremiseList.as_view(), name='premise_list'),
-    path('utility/<uuid:id_string>/notification_type/list', NotificationTypeList.as_view(), name='notification_type_list'),
-    path('utility/<uuid:id_string>/notification_subtype/list', NotificationSubTypeList.as_view(), name='notification_subtype_list'),
+    path('utility/<uuid:id_string>/notification_type/list', NotificationTypeList.as_view(),
+         name='notification_type_list'),
+    path('utility/<uuid:id_string>/notification_subtype/list', NotificationSubTypeList.as_view(),
+         name='notification_subtype_list'),
     # This api used for utility dropdown end
     path('utility/<uuid:id_string>/service_type/list', ServiceTypeList.as_view(), name="service_type_list"),
     path('utility/service_type/<uuid:id_string>', ServiceTypeDetail.as_view(), name="service_type_detail"),
@@ -115,15 +127,15 @@ urlpatterns = [
     path('utility/service_subtype', ServiceSubType.as_view(), name="service_subtype"),
     path('<uuid:id_string>/areas', AreaList.as_view()),
     path('<uuid:id_string>/sub-areas', SubAreaList.as_view()),
-    path('area/<uuid:id_string>/sub-areas',SubAreaListByArea.as_view()),
-    path('sub-area/<uuid:id_string>/premises',PremiseList.as_view()),
+    path('area/<uuid:id_string>/sub-areas', SubAreaListByArea.as_view()),
+    path('sub-area/<uuid:id_string>/premises', PremiseList.as_view()),
     # path('<uuid:id_string>/cities', CityList.as_view()),
     path('<uuid:id_string>/states', StateList.as_view()),
     path('role-type/list', RoleTypeList.as_view()),
     path('utility/<uuid:id_string>/skill/list', SkillsList.as_view()),
     path('user-type/list', UserTypeList.as_view()),
     path('<uuid:id_string>/skill/list', SkillsList.as_view()),
-    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(),name='utility_status_list'),
+    path('role-type/<uuid:id_string>/role-subtype/list', RoleSubTypeByRoleType.as_view(), name='utility_status_list'),
     path('<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
     path('currency/list', CurrencyList.as_view()),
     path('global-lookup/list', Global_LookupList.as_view()),

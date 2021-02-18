@@ -16,18 +16,21 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
+from v1.tenant.models.tenant_master import TenantMaster
 
 
 # Create Tenant Subscription Plan Rate table start.
 
 class TenantSubscriptionPlanRate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    subscription_plan_id = models.BigIntegerField(null=True, blank=True)
     subscription_name = models.CharField(max_length=200, blank=True, null=True)
-    subscription_type = models.CharField(max_length=200, blank=True, null=True)
+    tenant_subscription_id = models.BigIntegerField(null=True, blank=True)
     base_rate = models.FloatField(null=True, blank=True)
-    currency = models.CharField(max_length=200, blank=True, null=True)
-    region = models.CharField(max_length=200, blank=True, null=True)
-    country = models.CharField(max_length=200, blank=True, null=True)
+    currency_id = models.BigIntegerField(null=True, blank=True)
+    region_id = models.BigIntegerField(null=True, blank=True)
+    country_id = models.BigIntegerField(null=True, blank=True)
     is_taxable = models.BooleanField(default=False)
     tax = models.FloatField(null=True, blank=True)
     effective_date = models.DateTimeField(null=True, blank=True, default=datetime.now())

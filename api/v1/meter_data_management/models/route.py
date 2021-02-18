@@ -60,5 +60,12 @@ def get_route_by_id_string(id_string):
         return False
 
 
+def get_route_by_name(name):
+    try:
+        return Route.objects.get(name=name, is_active=True)
+    except:
+        return False
+
+
 def get_all_routes():
     return Route.objects.all(is_active=True)

@@ -3,8 +3,10 @@ __author__ = "aki"
 from api.messages import *
 from rest_framework import status
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
+from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
+from v1.meter_data_management.models.route import get_route_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
@@ -54,14 +56,14 @@ def set_schedule_validated_data(validated_data):
             validated_data["repeat_every_id"] = repeat_every.id
         else:
             raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["repeat_every_id"] = None
     if "utility_product_id" in validated_data:
         utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
         if utility_product:
             validated_data["utility_product_id"] = utility_product.id
         else:
             raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
-    else:
-        validated_data["repeat_every_id"] = None
     if "occurs_on" in validated_data:
         pass
     else:
@@ -132,4 +134,46 @@ def set_route_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException(TENANT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_meter_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "route_id" in validated_data:
+        route = get_route_by_id_string(validated_data["route_id"])
+        if route:
+            validated_data["route_id"] = route.id
+        else:
+            raise CustomAPIException(ROUTE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "premise_id" in validated_data:
+        premise = get_premise_by_id_string(validated_data["premise_id"])
+        if premise:
+            validated_data["premise_id"] = premise.id
+        else:
+            raise CustomAPIException(PREMISE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "meter_type_id" in validated_data:
+        meter_type = get_global_lookup_by_id_string(validated_data["meter_type_id"])
+        if meter_type:
+            validated_data["meter_type_id"] = meter_type.id
+        else:
+            raise CustomAPIException(METER_TYPE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "meter_detail" in validated_data:
+        pass
+    else:
+        validated_data["meter_detail"] = []
+    if "install_date" in validated_data:
+        pass
+    else:
+        validated_data["install_date"] = None
     return validated_data

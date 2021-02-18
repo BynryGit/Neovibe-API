@@ -1,4 +1,4 @@
-from rest_framework import serializers,status
+from rest_framework import serializers, status
 from v1.payment.models.payment_type import PaymentType as PaymentTypeTbl
 from django.db import transaction
 from v1.payment.views.common_functions import set_payment_type_validated_data
@@ -9,7 +9,6 @@ from v1.utility.models.utility_payment_type import UtilityPaymentType as Utility
 
 
 class PaymentTypeListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = PaymentTypeTbl
         fields = ('name', 'key', 'id_string', 'is_active', 'created_by', 'created_date')
@@ -31,7 +30,9 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
-    payment_type_id = serializers.CharField(required=True, max_length=200)
+
+    payment_type_id = serializers.CharField(required=False, max_length=200)
+    utility_product_id = serializers.CharField(required=True, max_length=200)
 
     class Meta:
         model = UtilityPaymentTypeTbl
@@ -40,11 +41,11 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         with transaction.atomic():
             validated_data = set_payment_type_validated_data(validated_data)
-            if UtilityPaymentTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                        utility_id=validated_data['utility_id']).exists():
+            if UtilityPaymentTypeTbl.objects.filter(tenant_id=validated_data['tenant_id'],
+                                                    utility_id=validated_data['utility_id'],name=validated_data['name']).exists():
                 raise CustomAPIException(PAYMENT_TYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
-                
+
                 payment_type_obj = super(PaymentTypeSerializer, self).create(validated_data)
                 payment_type_obj.created_by = user.id
                 payment_type_obj.updated_by = user.id

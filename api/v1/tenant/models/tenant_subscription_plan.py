@@ -16,20 +16,35 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
+import fsm
+from django.contrib.postgres.fields import JSONField
+
+# *********** TENANT PLAN STATUS CONSTANTS **************
+TENANT_PLAN_STATUS_DICT = {
+    "TRIAL": 0,
+    "SUBSCRIPTION": 1,
+    "EXPIRED":2,
+    "CANCELLED":3
+}
 
 
 # Create Tenant Subscription Plan table start.
 
-class TenantSubscriptionPlan(models.Model):
+class TenantSubscriptionPlan(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'TRIAL'),
+        (1, 'SUBSCRIPTION'),
+        (2, 'EXPIRED'),
+        (3, 'CANCELLED')
+    )
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    subscription_type = models.CharField(max_length=200, blank=True, null=True)
     subscription_name = models.CharField(max_length=200, blank=True, null=True)
-    short_name = models.BigIntegerField(null=True, blank=True)
+    short_name = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    max_utility  = models.BigIntegerField(null=True, blank=True)
-    max_user = models.BigIntegerField(null=True, blank=True)
-    max_consumer = models.BigIntegerField(null=True, blank=True)
     max_storage = models.BigIntegerField(null=True, blank=True)
+    status = models.BigIntegerField(choices=CHOICES, default=0)
+    module_obj = JSONField(default='')
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

@@ -15,7 +15,7 @@ class ConsumerFaqListSerializer(serializers.ModelSerializer):
         class Meta:
             model = ConsumerFaqTbl
             fields = (
-                'question', 'answer', 'id_string', 'created_date', 'is_active',
+                'question', 'answer', 'service_obj', 'id_string', 'created_date', 'is_active',
                 'created_by')
 
 

@@ -54,3 +54,10 @@ def get_global_lookup_by_id_string(id_string):
         return Global_Lookup.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+
+def get_global_lookup_by_value(value):
+    try:
+        return Global_Lookup.objects.get(value=value, is_active=True)
+    except:
+        return False
