@@ -2,7 +2,6 @@ from django.urls import path
 from v1.consumer.views.consumer import *
 from v1.consumer.views.consumer_audit_log import ConsumerAuditLogList
 from v1.consumer.views.consumer_credit_rating import ConsumerCreditRatingList
-from v1.consumer.views.consumer_meter import ConsumerMeterList
 from v1.consumer.views.consumer_category import ConsumerCategoryList, ConsumerCategory, ConsumerCategoryDetail
 from v1.consumer.views.consumer_offer_detail import ConsumerOfferDetail
 from v1.consumer.views.consumer_offer_master import ConsumerOfferMasterList, ConsumerOfferMasterDetail, ConsumerOfferMaster
@@ -50,7 +49,6 @@ urlpatterns = [
     path('<uuid:id_string>/offer_subtype/list', OfferSubTypeList.as_view()),
     path('offer_subtype/<uuid:id_string>', OfferSubTypeDetail.as_view()),
     path('offer_subtype', OfferSubType.as_view()),
-    path('<uuid:id_string>/meter/list', ConsumerMeterList.as_view()),
     path('<uuid:id_string>/payment', ConsumerPayment.as_view()),
     path('payment/<uuid:id_string>', ConsumerPaymentDetail.as_view()),
     path('<uuid:id_string>/payment/list', ConsumerPaymentList.as_view()),

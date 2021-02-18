@@ -2,6 +2,7 @@ __author__ = "aki"
 
 
 from django.contrib import admin
+from v1.meter_data_management.models.consumer_meter import ConsumerMeter
 from v1.meter_data_management.models.meter import Meter
 from v1.meter_data_management.models.schedule import Schedule
 from v1.meter_data_management.models.schedule_log import ScheduleLog
@@ -11,6 +12,7 @@ from v1.meter_data_management.models.consumer_detail import ConsumerDetail
 
 
 admin.site.register(Meter)
+admin.site.register(ConsumerMeter)
 admin.site.register(Schedule)
 admin.site.register(ScheduleLog)
 admin.site.register(ReadCycle)

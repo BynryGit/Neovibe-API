@@ -1,5 +1,17 @@
 __author__ = "aki"
 
+# Table Header
+# Module: Consumer Care & Ops | Sub-Module : Meter Reading, billing, Bill Distribution
+# Table Type : Master
+# Table Name : Meter
+# Description : It is meter table. This table will save all the meter details.
+# Frequency of data changes : High
+# Sample table :
+# Reference Table : None
+# Author : Akshay Nibrad
+# Creation Date : 15/02/2021
+
+
 import uuid
 from datetime import datetime
 from django.db import models
@@ -19,16 +31,9 @@ def get_file_path(instance, filename):
 
 class Meter(models.Model):
     METER_STATUS = (
-        (0, 'OK'),
-        (1, 'NO-DISPLAY'),
-        (2, 'METER-MISSING'),
-        (3, 'PERMANENT-DISCONNECTION'),
-        (4, 'DISCONNECTION'),
-        (5, 'METER-STOLEN'),
-        (6, 'DISPLAY-OUT'),
-        (7, 'METER-CHANGED'),
-        (8, 'GLASS-BROKEN'),
-        (9, 'METER-BRUNT'),
+        (0, 'NORMAL'),
+        (1, 'FAULTY'),
+        (2, 'RCNT'),
     )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)

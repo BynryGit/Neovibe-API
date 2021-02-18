@@ -9,15 +9,15 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from v1.commonapp.views.logger import logger
-from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND
+from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND, SUCCESSFULLY_DATA_SAVE
 from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_value
-from v1.commonapp.models.lifecycle import LifeCycle
-from v1.commonapp.models.module import get_module_by_key, Module
+from v1.commonapp.models.lifecycle import LifeCycle as LifeCycleTbl
+from v1.commonapp.models.module import get_module_by_key
 from v1.commonapp.models.notes import Notes as NoteTbl
 from v1.commonapp.models.premises import get_premise_by_name
-from v1.commonapp.models.sub_module import get_sub_module_by_key, SubModule
+from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, NoteViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -131,6 +131,10 @@ class Meter(GenericAPIView):
                             longitude=value[9],
                             install_date=value[10]
                         ).save()
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: SUCCESSFULLY_DATA_SAVE,
+                }, status=status.HTTP_201_CREATED)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
             return Response({
@@ -243,7 +247,7 @@ class MeterLifeCycleList(generics.ListAPIView):
                     if 'object_id' in self.request.query_params:
                         self.request.query_params['object_id'] = get_meter_by_id_string(self.request.query_params['object_id']).id
                     self.request.query_params._mutable = False
-                    queryset = LifeCycle.objects.filter(module_id=module, sub_module_id=sub_module, is_active=True)
+                    queryset = LifeCycleTbl.objects.filter(module_id=module, sub_module_id=sub_module, is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
