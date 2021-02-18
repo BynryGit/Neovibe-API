@@ -73,5 +73,7 @@ def save_service_appointment_timeline(obj, title, text, state, user):
             created_date=datetime.now(),
             updated_date=datetime.now()
         ).save()
+        print('////////save/////////',LifeCycle)
     except Exception as e:
+        print('............',e)
         raise CustomAPIException("Service Appointment timeline save failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

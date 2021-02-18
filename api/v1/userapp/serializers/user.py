@@ -22,7 +22,7 @@ from v1.userapp.views.common_functions import set_user_validated_data,generate_u
 from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.serializers.user_role import UserRoleViewSerializer
 from v1.userapp.views.common_functions import set_user_validated_data
-
+from v1.commonapp.views.custom_exception import CustomAPIException
 
 class UserSerializer(serializers.ModelSerializer):
     city_id = serializers.CharField(required=False, max_length=200)
@@ -46,6 +46,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_user_validated_data(validated_data)
+        if User.objects.filter(email=validated_data['email'], is_active=True).exists():
+            raise CustomAPIException("User already exists ! ", status_code=status.HTTP_409_CONFLICT)
+
         with transaction.atomic():
             user_obj = super(UserSerializer, self).create(validated_data)
             user_obj.set_password(validated_data['password'])
