@@ -368,7 +368,7 @@ class UserDetail(GenericAPIView):
 class UserNote(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
+    # @role_required(S&M, S_AND_M_USER, EDIT)
     def post(self, request, user_id_string, utility_id_string):
         try:
             id_string = get_user_from_token(request.headers['Authorization'])
