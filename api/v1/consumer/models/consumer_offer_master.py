@@ -6,6 +6,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_module import get_utility_module_by_id
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id
+from django.contrib.postgres.fields import JSONField
 
 
 class ConsumerOfferMaster(models.Model):
@@ -29,6 +30,7 @@ class ConsumerOfferMaster(models.Model):
     effective_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     expiry_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     category = models.BigIntegerField(choices=CHOICES, default=0)
+    service_obj = JSONField(default='')
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

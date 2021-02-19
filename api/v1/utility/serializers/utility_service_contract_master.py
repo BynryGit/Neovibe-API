@@ -39,7 +39,7 @@ class UtilityServiceContractMasterDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UtilityServiceContractMaster
 
-        fields = ('name', 'id_string', 'tenant', 'tenant_id_string', 'tenant_id_string', 'utility_id_string',
+        fields = ('name', 'id_string', 'tenant', 'utility', 'tenant_id_string', 'tenant_id_string', 'utility_id_string',
                   'category', 'sub_category','terms','service_obj', 'deposite_amount','start_date', 'end_date')
 
 

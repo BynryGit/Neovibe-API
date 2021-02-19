@@ -132,6 +132,7 @@ REPEAT_FREQUENCY_NOT_FOUND = "Repeat Frequency not found"
 SERVICE_CONTRACT_TEMPLATE_NOT_FOUND = "Service Contract Template Not Found."
 IS_RECCURING_NOT_FOUND = 'Reccuring Id Not Found'
 UTILITY_PRODUCT_NOT_FOUND = 'Utility Product not found'
+UTILITY_WITH_GIVEN_DETAILS_ALREADY_EXIST = "Utility with given details already exist"
 
 
 

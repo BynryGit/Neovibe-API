@@ -44,7 +44,7 @@ class UtilityServiceNumberFormat(models.Model):
     sub_module_id = models.BigIntegerField(null=True,
                                            blank=True)  # Survey, Campaign, Registration, Consumer, Receipt, Contract
     is_prefix = models.BooleanField(default=True)
-    prefix = models.CharField(max_length=5, blank=True, null=True)  # Emp, TEC
+    prefix = models.CharField(max_length=500, blank=True, null=True)  # Emp, TEC
     startingno = models.BigIntegerField(null=True, blank=True)  # Range as in =0,00001,100001
     currentno = models.BigIntegerField(null=True, blank=True)  # Range as in =0,00001,100001
     is_active = models.BooleanField(default=True)

@@ -28,6 +28,7 @@ class WorkOrderMaster(models.Model):
     consumer_service_master_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     json_obj = JSONField()
+    service_obj = JSONField(default='')
     description = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)

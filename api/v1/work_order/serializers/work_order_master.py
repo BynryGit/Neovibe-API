@@ -29,7 +29,7 @@ class WorkOrderMasterListSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkOrderMasterTbl
         fields = (
-            'name', 'json_obj', 'id_string', 'description', 'work_order_master', 'created_date', 'is_active',
+            'name', 'json_obj', 'id_string', 'description', 'service_obj', 'work_order_master', 'created_date', 'is_active',
             'created_by')
 
 

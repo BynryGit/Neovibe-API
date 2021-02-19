@@ -12,6 +12,7 @@ from v1.utility.models.utility_product import get_utility_product_by_id_string
 from v1.utility.models.utility_status import get_utility_status_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from rest_framework import generics, status
+from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.utility.models.utility_services_number_format import get_item_by_id
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, get_utility_submodule_by_id
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
@@ -188,3 +189,22 @@ def generate_current_no(user):
         return currentno
     except Exception:
         raise CustomAPIException("Current No generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# Function for generating userID according to utility
+def generate_company_id(user):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=user.tenant,
+                                                            sub_module_id=get_sub_module_by_key("UTILITY_MASTER"))
+        if format_obj.is_prefix == True:
+            user_id = format_obj.prefix + str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        else:
+            user_id = str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        return user_id
+    except Exception as e:
+        raise CustomAPIException("Company ID generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

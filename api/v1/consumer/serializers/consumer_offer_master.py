@@ -15,7 +15,7 @@ class ConsumerOfferMasterListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerOfferMasterTbl
-        fields = ('offer_name', 'id_string','sub_module', 'offer_code', 'offer_sub_type')
+        fields = ('offer_name', 'id_string', 'service_obj' , 'sub_module', 'offer_code', 'offer_sub_type')
 
 
 class ConsumerOfferMasterViewSerializer(serializers.ModelSerializer):
