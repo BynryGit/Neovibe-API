@@ -2,10 +2,13 @@ from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
 from api.messages import CONTRACT_ALREADY_EXISTS
+from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
 from v1.utility.serializers.utility_service_contract_master import UtilityServiceContractMasterListSerializer
+from v1.meter_data_management.serializers.meter import MeterViewSerializer
+from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
 
 
 class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
@@ -14,10 +17,14 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     contract = UtilityServiceContractMasterListSerializer(source='get_contract')
+    consumer_id = ConsumerViewSerializer(many=False, source='get_consumer_number')
+    meter_id = MeterViewSerializer(many=False, source='get_meter_number')
+    status = ChoiceField(choices=ConsumerServiceContractDetail.STATUS)
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract'
+                  'consumer_id', 'meter_id', 'status')
 
 
 class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):
