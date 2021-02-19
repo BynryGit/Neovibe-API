@@ -17,8 +17,6 @@ from v1.commonapp.models.notes import Notes
 from v1.commonapp.models.notification import Notification
 from v1.commonapp.models.notification_template import NotificationTemplate
 from v1.commonapp.models.region import Region
-from v1.commonapp.models.service_request_type import ServiceType
-from v1.commonapp.models.service_request_sub_type import ServiceSubTypes
 from v1.commonapp.models.skills import Skills
 from v1.commonapp.models.state import State
 from v1.commonapp.models.premises import Premise
@@ -37,6 +35,8 @@ from v1.commonapp.models.notification_subtype import NotificationSubType
 from v1.commonapp.models.integration_type import IntegrationType
 from v1.commonapp.models.integration_subtype import IntegrationSubType
 from v1.commonapp.models.integration_master import IntegrationMaster
+from v1.commonapp.models.work_order_type import WorkOrderType
+from v1.commonapp.models.work_order_sub_type import WorkOrderSubType
 
 admin.site.register(Region)
 admin.site.register(Country)
@@ -51,8 +51,6 @@ admin.site.register(Department)
 admin.site.register(FormFactor)
 admin.site.register(Notes)
 admin.site.register(Document)
-admin.site.register(ServiceType)
-admin.site.register(ServiceSubTypes)
 admin.site.register(DocumentType)
 admin.site.register(DocumentSubType)
 admin.site.register(Skills)
@@ -76,3 +74,5 @@ admin.site.register(NotificationSubType)
 admin.site.register(IntegrationType)
 admin.site.register(IntegrationSubType)
 admin.site.register(IntegrationMaster)
+admin.site.register(WorkOrderType)
+admin.site.register(WorkOrderSubType)

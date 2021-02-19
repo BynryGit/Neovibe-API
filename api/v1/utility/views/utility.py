@@ -24,6 +24,8 @@ from v1.utility.serializers.utility_sub_module import UtilitySubModuleSerializer
 from api.messages import *
 from api.constants import *
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from v1.commonapp.models.module import get_module_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 
 
 # API Header
@@ -222,47 +224,46 @@ class UtilityModule(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             if 'utility_module_submodule' in request.data:
                 utility_module_submodule = request.data.pop('utility_module_submodule')
-            serializer = UtilityModuleSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=False):
-                utility_obj = serializer.create(serializer.validated_data, user)
-                print(utility_obj)
-                if utility_obj:
-                    if utility_module_submodule:
-                        for utility_mod_sub in utility_module_submodule:
-                            utility_module = utility_mod_sub['utility_module']
-                            utility_module['tenant'] = utility_obj.tenant.id_string
-                            utility_module['utility'] = utility_obj.id_string
-                            utility_module_serializer = UtilityModuleSerializer(data=utility_module)
-                            if utility_module_serializer.is_valid():
-                                utility_module_obj = utility_module_serializer.create(utility_module_serializer.validated_data, user)
-                                print(utility_module_obj)
-                                if utility_module_obj:
-                                    for submodule in utility_mod_sub['utility_submodule']:
-                                        utility_submodule = submodule
-                                        utility_submodule['tenant'] = utility_obj.tenant.id_string
-                                        utility_submodule['utility'] = utility_obj.id_string
-                                        module_obj = get_module_by_id(utility_module_obj.module_id)
-                                        utility_submodule['module_id'] = module_obj.id_string
-                                        utility_submodule_serializer = UtilitySubModuleSerializer(
-                                            data=utility_submodule)
-                                        if utility_submodule_serializer.is_valid():
-                                            utility_submodule_obj = utility_submodule_serializer.create(utility_submodule_serializer.validated_data, user)
-                                            print(utility_submodule_obj)
-                                        else:
-                                            return Response({
-                                                STATE: ERROR,
-                                                RESULT: utility_submodule_serializer.errors,
-                                                }, status=status.HTTP_400_BAD_REQUEST)
-                view_serializer = UtilityModuleViewSerializer(instance=utility_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
+                print(utility_module_submodule)
+            for utility_mod_sub in utility_module_submodule:
+                utility_module = utility_mod_sub['utility_module']
+                print("Utility Module",utility_module)
+                a = get_module_by_id_string(id_string=utility_module['module_id'])
+                print("AAAA", a)
+                serializer = UtilityModuleSerializer(data=request.data)
+                request.data['module_id'] = a.id
+                print("AAAAAAAID",a.id)
+                request.data['label'] = a.name
+                print("AAANAME",a.name)
+                if serializer.is_valid(raise_exception=False):
+                    print("validated", serializer.validated_data)
+                    utility_module_obj = serializer.create(serializer.validated_data, user)
+                    if utility_module_obj:
+                        for submodule in utility_mod_sub['utility_submodule']:
+                            utility_submodule = submodule
+                            print("UUUUUU SSSSS",utility_submodule)
+                            b = get_sub_module_by_id_string(id_string=utility_submodule['submodule_id'])
+                            print("BBBBBBBBBBBBBB",b)
+                            serializer = UtilitySubModuleSerializer(data = request.data)
+                            print("Serializer",serializer)
+                            request.data['submodule_id'] = b.id
+                            print("BBBID",b.id)
+                            request.data['label'] = b.name
+                            print("bBBNAME",b.name)
+                            request.data['module_id'] = a.id
+                            if serializer.is_valid(raise_exception=False):
+                                utility_submodule_obj = serializer.create(serializer.validated_data, user)
+                                print("VVVDSA",serializer.validated_data)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            view_serializer = UtilityModuleViewSerializer(instance=utility_module_obj, context={'request': request})
+            return Response({
+                STATE: SUCCESS,
+                RESULTS: view_serializer.data,
+            }, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
             res = self.handle_exception(e)
@@ -270,3 +271,4 @@ class UtilityModule(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
+

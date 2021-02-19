@@ -47,6 +47,7 @@ from v1.commonapp.serializers.channel import ChannelListSerializer,ChannelViewSe
 from v1.commonapp.models.channel import Channel as ChannelModel
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.models.country import get_country_by_id_string
+from v1.commonapp.models.channel import get_channel_by_id_string
 from api.messages import *
 from api.constants import *
 
@@ -105,19 +106,27 @@ class Channel(GenericAPIView):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            serializer = ChannelSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=False):
-                channel_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = ChannelViewSerializer(instance=channel_obj, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: view_serializer.data,
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
+            if "channel_details" in request.data:
+                channel_total = request.data.pop('channel_details')
+                print(channel_total)
+            for channels in channel_total:
+                a = get_channel_by_id_string(id_string=channels['id_string'])
+                print("AAAA", a)
+                serializer = ChannelSerializer(data=request.data)
+                request.data['channel_id'] = a.id
+                request.data['name'] = a.name
+                if serializer.is_valid(raise_exception=False):
+                    channel_obj = serializer.create(serializer.validated_data, user)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            view_serializer = ChannelViewSerializer(instance=channel_obj, context={'request': request})
+            return Response({
+                STATE: SUCCESS,
+                RESULTS: view_serializer.data,
+            }, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
             res = self.handle_exception(e)

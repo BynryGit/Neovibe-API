@@ -34,8 +34,8 @@ class UtilitySubModuleViewSerializer(serializers.ModelSerializer):
 class UtilitySubModuleSerializer(serializers.ModelSerializer):
     tenant = serializers.UUIDField(required=False, source='tenant.id_string')
     utility = serializers.UUIDField(required=False, source='utility.id_string')
-    module_id = serializers.UUIDField(required=True)
-    submodule_id = serializers.UUIDField(required=True)
+    module_id = serializers.UUIDField(required=False)
+    submodule_id = serializers.UUIDField(required=False)
 
     class Meta:
         model = UtilitySubModuleTbl

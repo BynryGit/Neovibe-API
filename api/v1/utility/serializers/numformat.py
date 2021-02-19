@@ -27,7 +27,7 @@ class UtilityServiceNumberFormatSerializer(serializers.ModelSerializer):
             validated_data = set_numformat_validated_data(validated_data)
             if UtilityServiceNumberFormatTbl.objects.filter(tenant_id=validated_data['tenant_id'],
                                                             utility_id=validated_data['utility_id'],
-                                                            prefix=validated_data['prefix'],
+                                                            
                                                             startingno=validated_data['startingno'],
                                                             currentno=validated_data['currentno']).exists():
                 raise CustomAPIException(NUMFORMAT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)

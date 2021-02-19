@@ -9,7 +9,7 @@ from v1.commonapp.models.document_type import get_document_type_by_id_string
 from v1.commonapp.models.form_factor import get_form_factor_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.notes import get_note_by_id_string
-from v1.commonapp.models.service_request_type import get_service_type_by_id_string
+
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
@@ -308,12 +308,6 @@ def set_note_validated_data(validated_data):
             validated_data["sub_module_id"] = sub_module.id
         else:
             raise CustomAPIException("Sub module not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "service_type_id" in validated_data:
-        service_type = get_service_type_by_id_string(validated_data["service_type_id"])
-        if service_type:
-            validated_data["service_type_id"] = service_type.id
-        else:
-            raise CustomAPIException("Service type not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "identification_id" in validated_data:
         identification = get_user_by_id_string(validated_data["identification_id"])
         if identification:

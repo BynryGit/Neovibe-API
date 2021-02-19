@@ -42,7 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
                 product_obj = super(ProductSerializer, self).create(validated_data)
                 product_obj.created_by = user.id
-                product_obj.updated_by = user.id
+                product_obj.created_date = datetime.utcnow()
                 product_obj.save()
                 return product_obj
 

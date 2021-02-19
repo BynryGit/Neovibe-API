@@ -3,7 +3,6 @@ import jwt  # jwt token library
 from rest_framework import status, serializers
 from master.models import get_user_by_id_string, check_user_id_string_exists
 from v1.commonapp.models.module import get_module_by_id_string
-from v1.commonapp.models.service_request_type import get_service_type_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
@@ -24,6 +23,7 @@ from v1.commonapp.models.zone import get_zone_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.utility.models.utility_region import get_utility_region_by_id_string
+
 from v1.commonapp.models.channel import get_channel_by_id_string
 from v1.commonapp.models.department import get_department_by_id_string
 from v1.commonapp.models.department_subtype import get_department_subtype_by_id_string
@@ -36,6 +36,7 @@ from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 from v1.commonapp.models.notification_type import get_notification_type_by_id_string
 from v1.commonapp.models.integration_type import get_integration_type_by_id_string
 from v1.commonapp.models.integration_subtype import get_integration_sub_type_by_id_string
+from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 secret_reader = SecretReader()
 
@@ -109,12 +110,6 @@ def set_note_validated_data(validated_data):
             validated_data["sub_module_id"] = sub_module.id
         else:
             raise CustomAPIException("Sub module not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "service_type_id" in validated_data:
-        service_type = get_service_type_by_id_string(validated_data["service_type_id"])
-        if service_type:
-            validated_data["service_type_id"] = service_type.id
-        else:
-            raise CustomAPIException("Service type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
@@ -451,13 +446,19 @@ def set_channel_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-
-    if "channel_id" in validated_data:
-        channel = get_channel_by_id_string(validated_data["channel_id"])
-        if channel:
-            validated_data["channel_id"] = channel.id
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
         else:
-            raise CustomAPIException("Channel not found.", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    # if "channel_id" in validated_data:
+    #     channel = get_channel_by_id_string(validated_data["channel_id"])
+    #     if channel:
+    #         validated_data["channel_id"] = channel.id
+    #     else:
+    #         raise CustomAPIException("Channel not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
@@ -490,12 +491,6 @@ def set_service_subtype_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "service_type_id" in validated_data:
-        service_type = get_service_type_by_id_string(validated_data["service_type_id"])
-        if service_type:
-            validated_data["service_type_id"] = service_type.id
-        else:
-            raise CustomAPIException("service type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

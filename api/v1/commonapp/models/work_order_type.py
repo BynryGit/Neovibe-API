@@ -7,20 +7,18 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
 
 
-# Create UtilityProduct table start
+# Create WorkOrderType table start
 
 
-class UtilityProduct(models.Model):
+class WorkOrderType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
+    key = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True)
+    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
         return self.name
@@ -28,24 +26,29 @@ class UtilityProduct(models.Model):
     def __unicode__(self):
         return self.name
 
+    # @property
+    # def get_currency(self):
+    #     currency = get_work_order_type_by_id()(self.currency_id)
+    #     return currency
 
-def get_utility_product_by_id(id):
+
+def get_work_order_type_by_id(id):
     try:
-        return UtilityProduct.objects.get(id=id)
+        return WorkOrderType.objects.get(id=id)
+    except Exception as e:
+        raise CustomAPIException("Work Order Type does not exists.", status_code=status.HTTP_404_NOT_FOUND)
+
+
+def get_work_order_type_by_id_string(id_string):
+    try:
+        return WorkOrderType.objects.get(id_string=id_string)
     except:
         return False
 
 
-def get_utility_product_by_id_string(id_string):
+def get_work_order_type_by_key(key):
     try:
-        return UtilityProduct.objects.get(id_string=id_string)
+        return WorkOrderType.objects.get(key=key)
     except:
         return False
-
-
-def get_utility_product_by_name(name):
-    try:
-        return UtilityProduct.objects.get(name=name)
-    except:
-        return False
-# Create UtilityProduct table end.
+# Create WorkOrderType table end.

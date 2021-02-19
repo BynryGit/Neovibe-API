@@ -31,7 +31,7 @@ class UtilityModule(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     subscription_id = models.BigIntegerField(null=True, blank=True)
     module_id = models.BigIntegerField(null=True, blank=True)
-    label = models.CharField(max_length=200, null=True, blank=True)
+    label = models.CharField(max_length=200, null=False, blank=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

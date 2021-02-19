@@ -25,12 +25,12 @@ from v1.consumer.models.scheme_type import SchemeType
 from v1.consumer.models.service_request_priority import ServiceRequestPriority
 from v1.consumer.models.service_request_status import ServiceRequestStatus
 from v1.consumer.models.service_status import ServiceStatus
-from v1.consumer.models.service_sub_type import ServiceSubType
+
 from v1.consumer.models.source_type import SourceType
 from v1.consumer.models.consumer_consent import ConsumerConsent
 from v1.consumer.models.consumer_support import ConsumerSupport
 from v1.consumer.models.consumer_faq import ConsumerFaq
-from v1.consumer.models.service_type import ServiceType
+
 
 admin.site.register(SourceType)
 admin.site.register(ComplaintStatus)
@@ -48,8 +48,6 @@ admin.site.register(ConsumerCategory)
 admin.site.register(ConsumerSubCategory)
 admin.site.register(ComplaintType)
 admin.site.register(ComplaintSubType)
-admin.site.register(ServiceSubType)
-admin.site.register(ServiceType)
 admin.site.register(SchemeType)
 admin.site.register(ConsumerNotification)
 admin.site.register(ConsumerDownPayment)

@@ -21,7 +21,7 @@ from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.registration.models.registration_subtype import get_registration_subtype_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
-from v1.consumer.models.service_type import get_service_type_by_id_string
+
 from v1.consumer.models.offer_type import get_offer_type_by_id_string
 from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
