@@ -30,13 +30,11 @@ class MeterViewSerializer(serializers.ModelSerializer):
     meter_type_id = GlobalLookupShortViewSerializer(many=False, source='get_meter_type_name')
     utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
     meter_status = ChoiceField(choices=MeterTbl.METER_STATUS)
+    reader_status = ChoiceField(choices=MeterTbl.READER_STATUS)
 
     class Meta:
         model = MeterTbl
-        fields = ('id_string', 'meter_no', 'meter_make', 'meter_image', 'initial_reading', 'latitude', 'longitude',
-                  'meter_status', 'install_date', 'created_date', 'updated_date', 'created_by', 'updated_by',
-                  'meter_detail', 'route_id', 'premise_id', 'category_id', 'meter_type_id', 'utility_product_id',
-                  'tenant', 'utility')
+        fields = ('__all__')
 
 
 class MeterSerializer(serializers.ModelSerializer):
