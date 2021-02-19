@@ -1,9 +1,10 @@
 __author__ = "Priyank"
 
-from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer,ServiceTypeViewSerializer,ServiceTypeSerializer
+from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer, ServiceTypeViewSerializer, \
+    ServiceTypeSerializer
 from v1.commonapp.models.service_request_type import ServiceType as ServiceTypeModel
-from v1.commonapp.common_functions import is_token_valid,  is_authorized
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS,DUPLICATE,DATA_ALREADY_EXISTS
+from v1.commonapp.common_functions import is_token_valid, is_authorized
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, DATA, RESULTS, DUPLICATE, DATA_ALREADY_EXISTS
 from v1.commonapp.serializers.region import TenantRegionSerializer
 from v1.tenant.models.tenant_region import TenantRegion as TenantRegionTbl
 from rest_framework import generics
@@ -71,8 +72,6 @@ class ServiceTypeList(generics.ListAPIView):
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Work Order')
 
-   
-
 
 # API Header
 # API end Point: api/v1/service_type/:id_string
@@ -94,8 +93,8 @@ class ServiceTypeDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             service_type = get_service_type_by_id_string(id_string)
-            if  service_type:
-                serializer = ServiceTypeViewSerializer(instance= service_type, context={'request': request})
+            if service_type:
+                serializer = ServiceTypeViewSerializer(instance=service_type, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: serializer.data,
@@ -126,7 +125,7 @@ class ServiceTypeDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     service_type_obj = serializer.update(service_type_obj, serializer.validated_data, user)
                     view_serializer = ServiceTypeViewSerializer(instance=service_type_obj,
-                                                           context={'request': request})
+                                                                context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,
@@ -147,6 +146,7 @@ class ServiceTypeDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
+
 
 # API Header
 # API end Point: api/v1/service_type
@@ -187,4 +187,3 @@ class ServiceType(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
-

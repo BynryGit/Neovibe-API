@@ -56,16 +56,16 @@ NO_NOTES_NOT_FOUND = 'No notes found for user.'
 NOTES_NOT_FOUND = 'Note not found.'
 NO_DOCUMENT_NOT_FOUND = 'No Documents found for user.'
 DOCUMENT_NOT_FOUND = 'Document not found.'
-UTILITY_NOT_FOUND="Utility not found"
-TENANT_NOT_FOUND="Tenant not found."
+UTILITY_NOT_FOUND = "Utility not found"
+TENANT_NOT_FOUND = "Tenant not found."
 REGION_NOT_FOUND = "Region not found."
 AREA_NOT_FOUND = "Area not Found."
 SUBAREA_NOT_FOUND = "Subarea not Found."
 DIVISION_NOT_FOUND = "Division not Found."
 CITY_NOT_FOUND = "City not Found."
 ZONE_NOT_FOUND = "Zone not Found."
-DOCUMENT_TYPE_NOT_FOUND="No record found for user document type"
-SERVICE_TYPE_NOT_FOUND="No record found for user service type"
+DOCUMENT_TYPE_NOT_FOUND = "No record found for user document type"
+SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
 UTILITY_NOT_FOUND = "Utility not found"
 DOCUMENT_TYPE_NOT_FOUND = "No record found for user document type"
 SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
@@ -137,8 +137,6 @@ METER_NOT_FOUND = 'Meter not found'
 METER_TYPE_NOT_FOUND = 'Meter type not found'
 PREMISE_NOT_FOUND = "Premise not found"
 
-
-
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"
 ACCOUNT_NO_ALREADY_EXIST = "Account Number Already Exist"
@@ -182,7 +180,7 @@ SERVICE_SUBTYPE_ALREADY_EXIST = "Service Subtype Already Exist"
 ZONE_ALREADY_EXIST = "Zone Already Exist"
 PRODUCT_ALREADY_EXIST = "Product Already Exist"
 ROUTE_ALREADY_EXIST = "Route Already Exist"
-DOCUMENT_TYPE_ALREADY_EXIST="Document Type already Exist"
+DOCUMENT_TYPE_ALREADY_EXIST = "Document Type already Exist"
 DOCUMENT_ALREADY_EXIST = "Document Already Exist."
 DOCUMENT_SUBTYPE_ALREADY_EXIST = "Document Subtype already Exist"
 SERVICE_ALREADY_EXIST = "Service Already Exist"
@@ -192,8 +190,3 @@ NOTIFICATION_TYPE_ALREADY_EXIST = "Notification Type Already Exist."
 NOTIFICATION_SUBTYPE_ALREADY_EXIST = "Notification SubType Already Exist."
 UTILITY_MODULE_ALREADY_EXIST = "Utility Module Already Exist"
 COMPLAINT_MASTER_ALREADY_EXIST = "Complaint Master Already Exist"
-
-
-
-
-
