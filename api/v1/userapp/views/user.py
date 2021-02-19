@@ -25,6 +25,11 @@ from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.userapp.serializers.user_skill import UserSkillViewSerializer
 from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
 from v1.commonapp.models.notes import Notes
+from master.models import USER_DICT
+from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
+from v1.commonapp.models.lifecycle import LifeCycle
+from v1.userapp.views.task import save_user_timeline
+from django.db import transaction
 
 # API Header
 # API end Point: api/v1/user/list
@@ -42,21 +47,31 @@ from v1.commonapp.models.notes import Notes
 
 
 class UserList(generics.ListAPIView):
-    serializer_class = UserListSerializer
-    pagination_class = StandardResultsSetPagination
+    try:
+        serializer_class = UserListSerializer
+        pagination_class = StandardResultsSetPagination
 
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    filter_fields = ('first_name', 'last_name', 'tenant__id_string')
-    ordering_fields = ('first_name', 'last_name',)
-    ordering = ('created_date',)  # always give by default alphabetical order
-    search_fields = ('first_name', 'email',)
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('first_name', 'last_name', 'tenant__id_string')
+        ordering_fields = ('first_name', 'last_name',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('first_name', 'email',)
 
-    # @is_token_validate
-    # @role_required(ADMIN, UTILITY_MASTER, EDIT)
-    def get_queryset(self):
-        queryset = get_all_users()
-        return queryset
-
+        def get_queryset(self):
+                response, user_obj = is_token_valid(self.request.headers['Authorization'])
+                if response:
+                    if is_authorized(1, 1, 1, user_obj):
+                        queryset = UserTbl.objects.filter(form_factor_id=1, is_active=True)
+                        if queryset:
+                            return queryset
+                        else:
+                            raise CustomAPIException("User not found.", status.HTTP_404_NOT_FOUND)
+                    else:
+                        raise InvalidAuthorizationException
+                else:
+                    raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
 
 
 # API Header
@@ -232,7 +247,19 @@ class User(GenericAPIView):
                 if not is_email_exists(request.data['email']):
                     user_id_string = get_user_from_token(request.headers['Authorization'])
                     user = get_user_by_id_string(user_id_string)
-                    user_obj = serializer.create(serializer.validated_data, user)
+                    with transaction.atomic():  
+                        user_obj = serializer.create(serializer.validated_data, user)
+
+                        # State change for user start
+                        user_obj.change_state(USER_DICT["ACTIVE"])
+                        # State change for user end
+
+                        # Timeline code start
+                        # transaction.on_commit(
+                        #     lambda: save_user_timeline.delay(user_obj, "User", "User Created", "ACTIVE",user))
+                        # Timeline code end
+
+                    user_obj.save()
                     view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
@@ -417,3 +444,40 @@ class UserNoteList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
+
+
+
+# API Header
+# API end Point: api/v1/user/:id_string/life-cycles
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: User
+# Interaction: User lifecycles
+# Usage: API will fetch required data for User lifecycles
+# Tables used: LifeCycles
+# Author: Priyanka
+# Created on: 16/02/2021
+class UserLifeCycleList(generics.ListAPIView):
+    try:
+        serializer_class = LifeCycleListSerializer
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    user_obj = get_user_by_id_string(self.kwargs['id_string'])
+                    module = get_module_by_key("S&M")
+                    sub_module = get_sub_module_by_key("S_AND_M_USER")
+                    queryset = LifeCycle.objects.filter(object_id=user_obj.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
+

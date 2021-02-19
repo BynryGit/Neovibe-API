@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
 
+import fsm
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.department import get_department_by_id
 from v1.commonapp.models.document import get_documents_by_user_id
@@ -56,8 +57,32 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+# *********** USER CONSTANTS **************
+USER_DICT = {
+    "CREATED": 0,
+    "ACTIVE": 1,
+    "INACTIVE": 2,
+    "ARCHIVED": 3,
+}
 
-class User(AbstractBaseUser, PermissionsMixin):
+
+# Create USER Master table start.
+class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
+
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'ACTIVE'),
+        (2, 'INACTIVE'),
+        (3, 'ARCHIVED'),
+    )
+
+    state_machine = {
+        USER_DICT['CREATED']: (USER_DICT['ACTIVE'],),
+        USER_DICT['ACTIVE']: (USER_DICT['INACTIVE'],),
+        USER_DICT['INACTIVE']: (USER_DICT['ACTIVE'],),
+        USER_DICT['INACTIVE']: (USER_DICT['ARCHIVED'],),
+    }
+
     username = None
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -68,6 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     form_factor_id = models.BigIntegerField(null=True, blank=True)  # Web, Mobile
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     password = models.CharField(max_length=200, verbose_name='password')
     first_name = models.CharField(max_length=200, blank=True)
     middle_name = models.CharField(max_length=200, blank=True)

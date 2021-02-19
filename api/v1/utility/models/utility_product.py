@@ -41,4 +41,11 @@ def get_utility_product_by_id_string(id_string):
         return UtilityProduct.objects.get(id_string=id_string)
     except:
         return False
+
+
+def get_utility_product_by_name(name):
+    try:
+        return UtilityProduct.objects.get(name=name)
+    except:
+        return False
 # Create UtilityProduct table end.

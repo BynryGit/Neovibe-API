@@ -15,7 +15,6 @@ from v1.consumer.models.offer_type import OfferType
 from v1.service.models.consumer_service_details import ServiceDetails
 from v1.consumer.models.consumer_category import ConsumerCategory
 from v1.consumer.models.consumer_master import ConsumerMaster
-from v1.consumer.models.consumer_meter import ConsumerMeter
 from v1.consumer.models.consumer_ownership import ConsumerOwnership
 from v1.consumer.models.consumer_scheme_master import ConsumerSchemeMaster
 from v1.consumer.models.consumer_status import ConsumerStatus
@@ -38,7 +37,6 @@ admin.site.register(ComplaintStatus)
 admin.site.register(ConsumerOwnership)
 admin.site.register(ServiceDetails)
 admin.site.register(ConsumerMaster)
-admin.site.register(ConsumerMeter)
 admin.site.register(ConsumerSchemeMaster)
 admin.site.register(ConsumerStatus)
 admin.site.register(ConsumerToken)

@@ -11,8 +11,6 @@ from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.asset.models.asset_master import get_asset_by_id
 from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id
-from v1.commonapp.models.service_request_type import get_service_type_by_id
-from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id
 
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************

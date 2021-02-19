@@ -6,7 +6,7 @@ from v1.utility.serializers.utility import UtilitySerializer
 
 class LifeCycleListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    utility = UtilitySerializer(many=False, required=True, source='get_tenant')
+    utility = UtilitySerializer(many=False, required=True, source='get_utility')
 
     class Meta:
         model = LifeCycle
