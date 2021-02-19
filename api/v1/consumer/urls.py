@@ -12,8 +12,8 @@ from v1.consumer.views.consumer_ownership import ConsumerOwnership, ConsumerOwne
 from v1.consumer.views.consumer_consent import ConsumerConsentList, ConsumerConsentDetail, ConsumerConsent
 from v1.consumer.views.consumer_support import ConsumerSupportList, ConsumerSupportDetail, ConsumerSupport
 from v1.consumer.views.consumer_faq import ConsumerFaq, ConsumerFaqDetail, ConsumerFaqList
-from v1.consumer.views.service_type import ServiceType, ServiceTypeList, ServiceTypeDetail
-from v1.consumer.views.service_sub_type import ServiceSubType, ServiceSubTypeDetail, ServiceSubTypeList
+# from v1.consumer.views.service_type import ServiceType, ServiceTypeList, ServiceTypeDetail
+# from v1.consumer.views.service_sub_type import ServiceSubType, ServiceSubTypeDetail, ServiceSubTypeList
 from v1.consumer.views.consumer import ConsumerDetail, Consumer, ConsumerBillList, ConsumerBillDetail, ConsumerPayment, \
     ConsumerPaymentDetail, ConsumerPaymentList, ConsumerComplaintList, ConsumerComplaintDetail, ConsumerScheme, \
     ConsumerSchemeDetail, ConsumerComplaint
@@ -74,15 +74,12 @@ urlpatterns = [
     path('utility/<uuid:id_string>/faq/list', ConsumerFaqList.as_view()),
     path('faq/<uuid:id_string>', ConsumerFaqDetail.as_view()),
     path('faq', ConsumerFaq.as_view()),
-    path('utility/<uuid:id_string>/service/type/list', ServiceTypeList.as_view()),
-    path('service/type/<uuid:id_string>', ServiceTypeDetail.as_view()),
-    path('service/type', ServiceType.as_view()),
-    path('utility/<uuid:id_string>/service/subtype/list', ServiceSubTypeList.as_view()),
-    path('service/subtype/<uuid:id_string>', ServiceSubTypeDetail.as_view()),
-    path('service/subtype', ServiceSubType.as_view()),
+    # path('utility/<uuid:id_string>/service/subtype/list', ServiceSubTypeList.as_view()),
+    # path('service/subtype/<uuid:id_string>', ServiceSubTypeDetail.as_view()),
+    # path('service/subtype', ServiceSubType.as_view()),
     path('<uuid:id_string>/service-contract-detail/list', ConsumerServiceContractDetailList.as_view()),
-    path('<uuid:id_string>/note', ConsumerNote.as_view()),
-    path('<uuid:id_string>/note/list', ConsumerNoteList.as_view()),
+    # path('<uuid:id_string>/note', ConsumerNote.as_view()),
+    # path('<uuid:id_string>/note/list', ConsumerNoteList.as_view()),
     path('service-details', ConsumerServiceDetail.as_view()),
     path('<uuid:id_string>/offer-detail', ConsumerOfferDetail.as_view()),
     path('approve', ConsumerApprove.as_view()),

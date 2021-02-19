@@ -4,9 +4,7 @@ from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from v1.commonapp.models.service_request_type import get_service_type_by_id
-from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id
-from v1.service.models.consumer_service_master import get_consumer_service_master_by_id
+
 
 
 # table header
@@ -25,7 +23,8 @@ class WorkOrderMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     work_order_number = models.BigIntegerField(null=True, blank=True)
-    consumer_service_master_id = models.BigIntegerField(null=True, blank=True)
+    utility_work_order_type_id = models.BigIntegerField(null=True, blank=True)
+    utility_work_order_sub_type_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     json_obj = JSONField()
     service_obj = JSONField(default='')

@@ -10,7 +10,7 @@ setting_reader = SettingReader()
 from v1.commonapp.models.document import Document
 from v1.commonapp.models.notes import Notes
 from v1.commonapp.serializers.module import ModuleSerializer
-from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer
+# from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer
 from v1.commonapp.serializers.sub_module import SubModuleSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
@@ -25,21 +25,21 @@ class NoteViewSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
-    service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
+    # service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Notes
         fields = ('id_string', 'note_name', 'note_color', 'note', 'created_date', 'updated_date', 'tenant', 'utility',
-                  'module', 'sub_module', 'service_type')
+                  'module', 'sub_module')
 
 
 class NoteSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField( required=True, max_length=200)
     module_id = serializers.CharField( required=True, max_length=200)
     sub_module_id = serializers.CharField(required=True, max_length=200)
-    service_type_id = serializers.CharField(required=True, max_length=200)
+    # service_type_id = serializers.CharField(required=True, max_length=200)
     identification_id = serializers.CharField(required=True, max_length=200)
     note_name = serializers.CharField(required=True, max_length=200)
     note_color = serializers.CharField(required=False, max_length=200)
@@ -87,12 +87,12 @@ class NoteListSerializer(serializers.ModelSerializer):
     utility = UtilitySerializer(many=False, required=True, source='get_utility')
     module = ModuleSerializer(many=False, required=True, source='get_module')
     sub_module = SubModuleSerializer(many=False, required=True, source='get_sub_module')
-    service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
+    # service_type = ServiceTypeListSerializer(many=False, required=True, source='get_service_type')
     identification = UserSerializer(many=False, required=True, source='get_user_identification')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = Document
-        fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'service_type', 'identification',
+        fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'identification',
                   'note_name', 'note_color', 'note', 'status', 'created_date', 'updated_date')
