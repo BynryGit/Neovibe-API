@@ -2,14 +2,18 @@ __author__ = "aki"
 
 from rest_framework import serializers, status
 from v1.commonapp.models.state import State as StateTbl
-from v1.commonapp.serializers.country import CountryListSerializer, CountryViewSerializer
-from v1.commonapp.serializers.region import RegionListSerializer
+from v1.commonapp.serializers.country import CountryListSerializer
 from v1.commonapp.common_functions import set_state_validated_data
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import STATE_ALREADY_EXIST
 from datetime import datetime
-
 from django.db import transaction
+
+
+class StateShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StateTbl
+        fields = ('id_string', 'name')
 
 
 class StateViewSerializer(serializers.ModelSerializer):
@@ -17,8 +21,6 @@ class StateViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    
-
 
     class Meta:
         model = StateTbl
