@@ -1,27 +1,27 @@
 # Table Header
 # Table Type : Lookup (Local)
-# Table Name : Utility Service Request Type
-# Description : Utility Service Request Types
-# Author : Rohan
-# Date : 04-02-2021
+# Table Name : Utility Work Order Type
+# Description : Utility Work Order Types
+# Author : Chetan Dhongade
+# Date : 18/02/21
 
 
 from datetime import datetime # importing package for datetime
 
-from v1.commonapp.models.service_request_type import get_service_type_by_id
+from v1.commonapp.models.work_order_type import get_work_order_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 
 
-# Create Service Type table start
+# Create Utility work order Type table start
 
-class UtilityServiceRequestType(models.Model):
+class UtilityWorkOrderType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    service_request_type_id = models.BigIntegerField(null=True, blank=True)
+    work_order_type_id = models.BigIntegerField(null=True, blank=True)
     label = models.CharField(max_length=200, blank=True, null=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -36,26 +36,26 @@ class UtilityServiceRequestType(models.Model):
         return self.label
 
     @property
-    def get_service_request_type(self):
+    def get_work_order_type(self):
         try:
-            type = get_service_type_by_id(self.service_request_type_id)
+            type = get_work_order_type_by_id(self.work_order_type_id)
             return type
         except:
             return False
 
-# Create Service Type table end
+# Create Utility work_order Type table end
 
 
-def get_utility_service_request_type_by_id_string(id_string):
+def get_utility_work_order_type_by_id_string(id_string):
     try:
-        return UtilityServiceRequestType.objects.get(id_string=id_string)
+        return UtilityWorkOrderType.objects.get(id_string=id_string)
     except:
         return False
 
 
-def get_utility_service_request_type_by_id(id):
+def get_utility_work_order_type_by_id(id):
     try:
-        return UtilityServiceRequestType.objects.get(id=id)
+        return UtilityWorkOrderType.objects.get(id=id)
     except:
         return False
 

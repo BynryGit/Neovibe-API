@@ -12,8 +12,6 @@
 # <ddmmyyyy>-<changes>-<Author>
 
 from datetime import datetime # importing package for datetime
-
-from v1.commonapp.models.service_request_type import get_service_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
@@ -29,7 +27,6 @@ class Skills(models.Model):
     skill = models.CharField(max_length=200, blank=False, null=False)
     image_url = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    service_type_id = models.BigIntegerField(blank=True, null=True)
     created_by = models.BigIntegerField(blank=True, null=True)
     updated_by = models.BigIntegerField(blank=True, null=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -37,7 +34,7 @@ class Skills(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.id_string
+        return self.skill
 
     def __unicode__(self):
         return self.skill

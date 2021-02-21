@@ -17,7 +17,7 @@ import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 
 from v1.commonapp.models.module import get_module_by_id
-from v1.commonapp.models.service_request_type import get_service_type_by_id
+
 from v1.commonapp.models.sub_module import get_sub_module_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
@@ -31,7 +31,6 @@ class Notes(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     module_id = models.BigIntegerField(null=True, blank=True)
     sub_module_id = models.BigIntegerField(null=True, blank=True)
-    service_type_id = models.BigIntegerField(null=True, blank=True)
     identification_id = models.BigIntegerField(null=True, blank=True)
     note_name = models.CharField(max_length=200, blank=True, null=True)
     note_color = models.CharField(max_length=200, blank=True, null=True)

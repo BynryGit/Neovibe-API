@@ -12,8 +12,8 @@ from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDeta
 from v1.utility.views.utility_module_submodule import UtilityModuleSubmoduleList
 from v1.utility.views.utility_service_contract_master import UtilityServiceContractMasterList, \
     UtilityServiceContractMasterDetail, UtilityServiceContractMaster
-from v1.utility.views.utility_service_request_sub_type import UtilityServiceRequestSubTypeList
-from v1.utility.views.utility_service_request_type import UtilityServiceRequestTypeList
+# from v1.utility.views.utility_service_request_sub_type import UtilityServiceRequestSubTypeList
+# from v1.utility.views.utility_service_request_type import UtilityServiceRequestTypeList
 from v1.utility.views.utility_sub_module import UtilitySubModuleList, UtilitySubModuleDetail, \
     UtilitySubModuleListByModule,UtilitySubModuleListByUtility, api_delete_submodule
 from v1.userapp.views.role_type import RoleTypeList,RoleTypeListByUtility
@@ -98,7 +98,7 @@ urlpatterns = [
     path('service-contract', UtilityServiceContractMaster.as_view(),
          name='utility_service_contract_master_post'),
     path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
-    path('<uuid:id_string>/service-request-type/list', UtilityServiceRequestTypeList.as_view()),
-    path('<uuid:id_string>/service-request-sub-type/list', UtilityServiceRequestSubTypeList.as_view()),
+    # path('<uuid:id_string>/service-request-type/list', UtilityServiceRequestTypeList.as_view()),
+    # path('<uuid:id_string>/service-request-sub-type/list', UtilityServiceRequestSubTypeList.as_view()),
 
 ]
