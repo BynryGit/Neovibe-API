@@ -1,5 +1,6 @@
 from datetime import datetime # importing package for datetime
-import uuid  # importing package for GUID
+import uuid
+from v1.commonapp.views.custom_exception import CustomAPIException  # importing package for GUID
 from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
 import fsm
@@ -11,7 +12,7 @@ from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.asset.models.asset_master import get_asset_by_id
 from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id
-
+from rest_framework import status
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
 SERVICE_APPOINTMENT_DICT = {

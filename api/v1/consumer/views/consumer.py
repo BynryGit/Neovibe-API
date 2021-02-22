@@ -1159,13 +1159,17 @@ class ConsumerDisconnect(GenericAPIView):
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
-                consumer = get_consumer_by_id_string(request.data['consumer_id'])
-                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
-                if appointment_serializer.is_valid(raise_exception=True):
-                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
-                    appointment_obj.utility = consumer.utility
-                    appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
-                    appointment_obj.save()
+                consumer_service_contract_detail_obj = get_consumer_by_id_string(request.data['consumer_service_contract_detail_id'])
+
+                # appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                # if appointment_serializer.is_valid(raise_exception=True):
+                #     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                #     appointment_obj.utility = consumer.utility
+                #     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
+                #     appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id 
+                #     appointment_obj.save()
+
+                
                 view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
