@@ -16,8 +16,12 @@ import uuid
 from datetime import datetime
 from django.db import models
 from api.constants import get_file_name, METER_PICTURE
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.commonapp.models.premises import get_premise_by_id
+from v1.commonapp.models.state import get_state_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.meter_data_management.models.meter_make import get_meter_make_by_id
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -80,6 +84,26 @@ class Meter(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=True)
+
+    @property
+    def get_state_name(self):
+        state = get_state_by_id(self.state_id)
+        return state
+
+    @property
+    def get_city_name(self):
+        city = get_city_by_id(self.city_id)
+        return city
+
+    @property
+    def get_area_name(self):
+        area = get_area_by_id(self.area_id)
+        return area
+
+    @property
+    def get_sub_area_name(self):
+        subarea = get_sub_area_by_id(self.sub_area_id)
+        return subarea
 
     @property
     def get_route_name(self):

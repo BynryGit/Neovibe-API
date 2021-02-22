@@ -23,6 +23,7 @@ from v1.commonapp.serializers.note import NoteListSerializer, NoteSerializer, No
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
+from v1.meter_data_management.models.meter_make import get_meter_make_by_name
 from v1.meter_data_management.models.route import get_route_by_name
 from v1.meter_data_management.views.status import check_meter_status
 from v1.userapp.decorators import is_token_validate, role_required
@@ -113,23 +114,25 @@ class Meter(GenericAPIView):
                     else:
                         route_obj = get_route_by_name(name=value[0]).id
                         premise_obj = get_premise_by_name(value[1]).id
-                        service_type_obj = get_utility_product_by_name(value[2]).id
+                        utility_product_obj = get_utility_product_by_name(value[2]).id
                         meter_type_obj = get_global_lookup_by_value(value[3]).id
                         meter_status = check_meter_status(value[4])
+                        meter_make_obj = get_meter_make_by_name(value[7]).id
                         MeterTbl(
                             tenant=user.tenant,
                             utility=utility_obj,
                             route_id=route_obj,
                             premise_id=premise_obj,
-                            utility_product_id=service_type_obj,
+                            utility_product_id=utility_product_obj,
                             meter_type_id=meter_type_obj,
                             meter_status=meter_status,
                             meter_no=value[5],
-                            meter_make=value[6],
-                            initial_reading=value[7],
-                            latitude=value[8],
-                            longitude=value[9],
-                            install_date=value[10]
+                            meter_digit=value[6],
+                            meter_make_id=meter_make_obj,
+                            current_reading=value[8],
+                            latitude=value[9],
+                            longitude=value[10],
+                            install_date=value[11]
                         ).save()
                 return Response({
                     STATE: SUCCESS,
@@ -163,9 +166,20 @@ class MeterDetail(GenericAPIView):
             meter_obj = get_meter_by_id_string(id_string)
             if meter_obj:
                 serializer = MeterViewSerializer(instance=meter_obj, context={'request': request})
+                meter_serializer = serializer.data
+                next_record = MeterTbl.objects.filter(id__gt=meter_obj.id).exclude(id=meter_obj.id).order_by('id').first()
+                previous_record = MeterTbl.objects.filter(id__lt=meter_obj.id).exclude(id=meter_obj.id).order_by('-id').first()
+                if next_record:
+                    meter_serializer['Next_Record'] = next_record.id_string
+                else:
+                    meter_serializer['Next_Record'] = next_record
+                if previous_record:
+                    meter_serializer['Previous_Record'] = previous_record.id_string
+                else:
+                    meter_serializer['Previous_Record'] = previous_record
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: serializer.data,
+                    RESULT: meter_serializer,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
