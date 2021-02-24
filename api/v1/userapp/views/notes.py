@@ -159,3 +159,32 @@ from v1.userapp.serializers.notes import NoteSerializer, NoteViewSerializer
 #                 STATE: EXCEPTION,
 #                 RESULT: str(e),
 #             }, status=res.status_code)
+
+
+
+
+import boto3
+from botocore.exceptions import NoCredentialsError
+
+ACCESS_KEY = 'AKIARUU5RUAA6JXDZZGR'
+SECRET_KEY = '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'
+
+class UploadFile(GenericAPIView):
+    # def post(local_file, bucket, s3_file):
+    def post(self, request):
+        print('*********',request.data)
+        s3 = boto3.client(request.data)
+
+        try:
+            s3.upload_file(local_file, bucket, s3_file)
+            print("Upload Successful")
+            return True
+        except FileNotFoundError:
+            print("The file was not found")
+            return False
+        except NoCredentialsError:
+            print("Credentials not available")
+            return False
+
+
+    # uploaded = upload_to_aws('local_file', 'bucket_name', 's3_file_name')
