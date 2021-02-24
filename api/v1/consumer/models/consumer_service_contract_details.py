@@ -65,3 +65,10 @@ def get_consumer_service_contract_detail_by_id_string(id_string):
         return ConsumerServiceContractDetail.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+
+def get_consumer_service_contract_detail_by_meter_id(meter_id):
+    try:
+        return ConsumerServiceContractDetail.objects.get(meter_id=meter_id, is_active=True)
+    except:
+        return False
