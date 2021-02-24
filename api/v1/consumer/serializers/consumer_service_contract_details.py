@@ -19,7 +19,7 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state' , 'consumer_no', 'contract')
         
 # class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 #     tenant = serializers.ReadOnlyField(source='tenant.name')

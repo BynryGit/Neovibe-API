@@ -21,7 +21,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations billing
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations campaign
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations commonapp
-cd /home/ubuntu/smart360/api && yes | python3 manage.py makemigrations consumer
+cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations consumer
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations complaint
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations service
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations contract
@@ -65,7 +65,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate work_order
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate utility
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate tenant
 
-cd /home/ubuntu/smart360/api && yes | python3 manage.py makemigrations 
+cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 
 
 echo "################################################## Loading data ############################################"
