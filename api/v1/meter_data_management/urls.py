@@ -8,7 +8,7 @@ from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortLi
 from v1.meter_data_management.views.route import RouteList, RouteDetail, Route, RouteShortList
 from v1.meter_data_management.views.read_cycle import ReadCycleList
 from v1.meter_data_management.views.schedule_log import ScheduleLogList
-from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail
+from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ReadingScheduleSummary
 from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, MeterLifeCycleList, MeterNoteList, \
     MeterNoteDetail
 
@@ -35,6 +35,7 @@ urlpatterns = [
     path('meter/<uuid:id_string>/note', MeterNoteDetail.as_view(), name='meter_note_detail'),
 
     path('utility/<uuid:id_string>/meter-summary', MeterSummary.as_view(), name='meter_summary'),
+    path('utility/<uuid:id_string>/reading-schedule-summary', ReadingScheduleSummary.as_view(), name='reading_schedule_summary'),
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
 

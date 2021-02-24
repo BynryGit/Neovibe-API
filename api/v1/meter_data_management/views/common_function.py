@@ -24,24 +24,28 @@ def set_schedule_validated_data(validated_data):
             validated_data["utility_id"] = utility.id
         else:
             raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "recurring_id" in validated_data:
         recurring = get_global_lookup_by_id_string(validated_data["recurring_id"])
         if recurring:
             validated_data["recurring_id"] = recurring.id
         else:
             raise CustomAPIException(IS_RECCURING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "read_cycle_id" in validated_data:
         read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
         if read_cycle:
             validated_data["read_cycle_id"] = read_cycle.id
         else:
             raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "activity_type_id" in validated_data:
         activity = get_global_lookup_by_id_string(validated_data["activity_type_id"])
         if activity:
             validated_data["activity_type_id"] = activity.id
         else:
             raise CustomAPIException(ACTIVITY_TYPE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "frequency_id" in validated_data:
         frequency = get_global_lookup_by_id_string(validated_data["frequency_id"])
         if frequency:
@@ -50,6 +54,7 @@ def set_schedule_validated_data(validated_data):
             raise CustomAPIException(FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     else:
         validated_data["frequency_id"] = None
+
     if "repeat_every_id" in validated_data:
         repeat_every = get_global_lookup_by_id_string(validated_data["repeat_every_id"])
         if repeat_every:
@@ -58,20 +63,29 @@ def set_schedule_validated_data(validated_data):
             raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     else:
         validated_data["repeat_every_id"] = None
+
     if "utility_product_id" in validated_data:
         utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
         if utility_product:
             validated_data["utility_product_id"] = utility_product.id
         else:
             raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "occurs_on" in validated_data:
         pass
     else:
         validated_data["occurs_on"] = []
+
     if "end_date" in validated_data:
         pass
     else:
         validated_data["end_date"] = None
+
+    if "cron_expression" in validated_data:
+        pass
+    else:
+        validated_data["cron_expression"] = None
+
     return validated_data
 
 
@@ -144,36 +158,38 @@ def set_meter_validated_data(validated_data):
             validated_data["utility_id"] = utility.id
         else:
             raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "route_id" in validated_data:
         route = get_route_by_id_string(validated_data["route_id"])
         if route:
             validated_data["route_id"] = route.id
         else:
             raise CustomAPIException(ROUTE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "premise_id" in validated_data:
         premise = get_premise_by_id_string(validated_data["premise_id"])
         if premise:
             validated_data["premise_id"] = premise.id
         else:
             raise CustomAPIException(PREMISE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "meter_type_id" in validated_data:
         meter_type = get_global_lookup_by_id_string(validated_data["meter_type_id"])
         if meter_type:
             validated_data["meter_type_id"] = meter_type.id
         else:
             raise CustomAPIException(METER_TYPE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
     if "utility_product_id" in validated_data:
         utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
         if utility_product:
             validated_data["utility_product_id"] = utility_product.id
         else:
             raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
-    if "meter_detail" in validated_data:
-        pass
-    else:
-        validated_data["meter_detail"] = []
+
     if "install_date" in validated_data:
         pass
     else:
         validated_data["install_date"] = None
+
     return validated_data
