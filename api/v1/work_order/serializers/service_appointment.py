@@ -43,6 +43,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     consumer_id = serializers.CharField(required=False, max_length=200)
     asset_id = serializers.CharField(required=False, max_length=200)
+    consumer_service_contract_detail_id = serializers.CharField(required=False, max_length=200)
     work_order_master_id = serializers.CharField(required=False, max_length=200)
     # sa_name = serializers.CharField(required=True, max_length=200)
     # sa_description = serializers.CharField(required=True, max_length=200)
@@ -66,7 +67,7 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
-        if ServiceAppointment.objects.filter(consumer_id=validated_data['consumer_id'],
+        if ServiceAppointment.objects.filter(consumer_service_contract_detail_id=validated_data['consumer_service_contract_detail_id'],
                                              work_order_master_id=validated_data['work_order_master_id'], is_active=True).exists():
             raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():

@@ -10,6 +10,7 @@
 from datetime import datetime  # importing package for datetime
 
 from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_id
+from v1.commonapp.models.work_order_type import get_work_order_type_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
@@ -49,10 +50,10 @@ class UtilityWorkOrderSubType(models.Model):
             return False
 
     @property
-    def get_work_order_type(self):
+    def get_utility_work_order_type(self):
         try:
-            sub_type = get_work_order_type_by_id(self.work_order_type_id)
-            return sub_type
+            type = get_utility_work_order_type_by_id(self.utility_work_order_type_id)
+            return type
         except:
             return False
 

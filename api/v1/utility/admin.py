@@ -26,6 +26,8 @@ from v1.utility.models.utility_department_type import UtilityDepartmentType
 from v1.utility.models.utility_department_subtype import UtilityDepartmentSubType
 from v1.utility.models.utility_working_hours import UtilityWorkingHours
 from v1.utility.models.utility_document_type import UtilityDocumentType
+from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
+from v1.utility.models.utility_work_order_sub_type import UtilityWorkOrderSubType
 
 admin.site.register(UtilityModule)
 admin.site.register(UtilitySubModule)
@@ -52,4 +54,6 @@ admin.site.register(UtilityDepartmentType)
 admin.site.register(UtilityDepartmentSubType)
 admin.site.register(UtilityWorkingHours)
 admin.site.register(UtilityDocumentType)
+admin.site.register(UtilityWorkOrderType)
+admin.site.register(UtilityWorkOrderSubType)
 

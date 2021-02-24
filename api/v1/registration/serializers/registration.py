@@ -18,13 +18,16 @@ class ChoiceField(serializers.ChoiceField):
 
 
 class RegistrationListSerializer(serializers.ModelSerializer):
-    area = AreaListSerializer(many=False, source='get_area')
+    # area = AreaListSerializer(many=False, source='get_area')
 
     class Meta:
         model = Registration
         fields = (
-            'id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
-            'street', 'zipcode', 'state', 'area', 'created_date')
+            'id_string', 'registration_no', 'email_id', 'phone_mobile', 'billing_address_line_1',
+            'billing_street', 'billing_zipcode', 'state', 'billing_area_id', 'created_date')        
+        # fields = (
+        #     'id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
+        #     'street', 'zipcode', 'state', 'area', 'created_date')
 
 
 class RegistrationViewSerializer(serializers.ModelSerializer):

@@ -16,6 +16,7 @@ class UtilityServiceContractMaster(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, null=True, blank=True)
     service_obj = JSONField(default='')
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     deposite_amount = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
@@ -45,6 +46,11 @@ class UtilityServiceContractMaster(models.Model):
     def get_consumer_sub_category(self):
         sub_category = get_consumer_sub_category_by_id(self.consumer_sub_category_id)
         return sub_category
+
+    @property
+    def get_utility_product_by_id(self):
+        utility_product = get_utility_product_by_id(self.utility_product_id)
+        return utility_product    
 
 
 def get_utility_service_contract_master_by_id_string(id_string):
