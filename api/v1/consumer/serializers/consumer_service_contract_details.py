@@ -10,21 +10,31 @@ from v1.utility.serializers.utility_service_contract_master import UtilityServic
 from v1.meter_data_management.serializers.meter import MeterViewSerializer
 from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
 
-
 class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     contract = UtilityServiceContractMasterListSerializer(source='get_contract')
-    consumer_id = ConsumerViewSerializer(many=False, source='get_consumer_number')
-    meter_id = MeterViewSerializer(many=False, source='get_meter_number')
-    status = ChoiceField(choices=ConsumerServiceContractDetail.STATUS)
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract'
-                  'consumer_id', 'meter_id', 'status')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract')
+        
+# class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
+#     tenant = serializers.ReadOnlyField(source='tenant.name')
+#     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
+#     utility = serializers.ReadOnlyField(source='utility.name')
+#     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+#     contract = UtilityServiceContractMasterListSerializer(source='get_contract')
+#     consumer_id = ConsumerViewSerializer(many=False, source='get_consumer_number')
+#     meter_id = MeterViewSerializer(many=False, source='get_meter_number')
+#     status = ChoiceField(choices=ConsumerServiceContractDetail.STATUS)
+
+#     class Meta:
+#         model = ConsumerServiceContractDetail
+#         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract'
+#                   'consumer_id', 'meter_id', 'status')
 
 
 class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):

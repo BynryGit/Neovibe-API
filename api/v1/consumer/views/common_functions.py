@@ -227,7 +227,7 @@ def set_offer_subtype_validated_data(validated_data):
 def generate_consumer_no(consumer):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
-                                                            sub_module_id=get_sub_module_by_key("CONSUMER"))
+                                                            sub_module_id=get_sub_module_by_key("CONSUMERS_CONSUMER"))
         if format_obj.is_prefix:
             consumer_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

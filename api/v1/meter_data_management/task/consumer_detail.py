@@ -4,6 +4,7 @@ from celery.task import task
 from v1.commonapp.views.logger import logger
 from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_meter_id
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail as ConsumerDetailTbl
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
@@ -22,7 +23,7 @@ def create_consumer(schedule_log_obj):
                 premise_obj = get_premise_by_id_string(premise['id_string'])
                 meter_obj = MeterTbl.objects.filter(premise_id=premise_obj.id, is_active=True)
                 for meter in meter_obj:
-                    consumer_meter_obj = ''#todo
+                    consumer_meter_obj = get_consumer_service_contract_detail_by_meter_id(meter.id)
                     consumer_obj = get_consumer_by_id(consumer_meter_obj.consumer_id)
                     if ConsumerDetailTbl.objects.filter(consumer_no=consumer_obj.consumer_no, meter_no=meter.meter_no,
                                                         is_active=True).exists():
