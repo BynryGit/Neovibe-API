@@ -11,7 +11,7 @@ from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.asset.models.asset_master import get_asset_by_id
 from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id
-
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
 SERVICE_APPOINTMENT_DICT = {
@@ -73,6 +73,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     consumer_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
     work_order_master_id = models.BigIntegerField(blank=True, null=True)
+    consumer_service_contract_detail_id = models.BigIntegerField(blank=True, null=True)
     state = models.BigIntegerField(choices=CHOICES, default=1)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
@@ -149,6 +150,11 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
             "status":status_val.status,
             "id_string":status_val.id_string
         }
+
+    @property
+    def get_consumer_service_contract_detail_id(self):
+        consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
+        return consumer_service_contract_detail
     
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:

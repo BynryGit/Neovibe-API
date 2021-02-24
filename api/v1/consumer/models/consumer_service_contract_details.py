@@ -6,13 +6,30 @@ from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id
 from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.meter_data_management.models.meter import get_meter_by_id
+from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
+from v1.commonapp.views.custom_exception import CustomAPIException
+import fsm
 
 
-class ConsumerServiceContractDetail(models.Model):
+CONSUMER_DICT = {
+    "CONNECTED": 0,
+    "DISCONNECTED": 1,
+    "CREATED": 2,
+    "APPROVED": 3
+}
+
+class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
     STATUS = (
         (0, 'CONNECTED'),
         (1, 'DISCONNECTED'),
+        (2, 'CREATED'),
+        (3, 'APPROVED')
     )
+
+    state_machine = {
+        CONSUMER_DICT['CREATED']: (CONSUMER_DICT['APPROVED'], CONSUMER_DICT['CREATED']),
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -21,8 +38,8 @@ class ConsumerServiceContractDetail(models.Model):
     service_contract_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
     meter_id = models.BigIntegerField(null=True, blank=True)
-    status = models.IntegerField(choices=STATUS, default=0)
-    is_active = models.BooleanField(default=True)
+    state = models.IntegerField(choices=STATUS, default=2)
+    is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
@@ -53,6 +70,13 @@ class ConsumerServiceContractDetail(models.Model):
         return meter
 
 
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Consumer transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)    
+
+
 def get_consumer_service_contract_detail_by_id(id):
     try:
         return ConsumerServiceContractDetail.objects.get(id=id, is_active=True)
@@ -62,7 +86,7 @@ def get_consumer_service_contract_detail_by_id(id):
 
 def get_consumer_service_contract_detail_by_id_string(id_string):
     try:
-        return ConsumerServiceContractDetail.objects.get(id_string=id_string, is_active=True)
+        return ConsumerServiceContractDetail.objects.get(id_string=id_string)
     except:
         return False
 

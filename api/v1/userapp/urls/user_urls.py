@@ -12,6 +12,7 @@ from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
 from v1.userapp.views.user_sub_type import UserSubTypeByUserType
 from v1.userapp.views.user_role import UserRoleByUtilityModules,UserRoleByUtilitySubModule,ModulePrivilegesList
 from v1.userapp.views.field_agent_live_location import FieldAgentLiveLocationList
+from v1.userapp.views.notes import UploadFile
 
 urlpatterns = [
     path('', User.as_view(), name='create-user'),
@@ -48,5 +49,6 @@ urlpatterns = [
     path('utility/<uuid:utility_id_string>/bulk-assign/resource/list',BulkAssignResourceList.as_view(),name="bulk_assign_resource_list"),
     # path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/note', UserNote.as_view(), name="add_user_notes_list"),
     # path('<uuid:id_string>/note/list', UserNoteList.as_view(), name="user_notes_list"),
-    path('<uuid:id_string>/life-cycle',UserLifeCycleList.as_view(),name="user_life_cycle")
+    path('<uuid:id_string>/life-cycle',UserLifeCycleList.as_view(),name="user_life_cycle"),
+    path('upload',UploadFile.as_view())
 ]
