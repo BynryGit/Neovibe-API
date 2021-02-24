@@ -34,23 +34,13 @@
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Frequency",
-			"key": "hourly",
-			"value": "Hourly",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "5",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Frequency",
 			"key": "daily",
 			"value": "Daily",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "6",
+		"pk": "5",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Frequency",
@@ -60,7 +50,7 @@
 		}
 	},
 	{
-		"pk": "7",
+		"pk": "6",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Frequency",
@@ -70,7 +60,7 @@
 		}
 	},
 	{
-		"pk": "8",
+		"pk": "7",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Frequency",
@@ -80,7 +70,7 @@
 		}
 	},
 	{
-		"pk": "9",
+		"pk": "8",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Recurrence",
@@ -90,7 +80,7 @@
 		}
 	},
 	{
-		"pk": "10",
+		"pk": "9",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
 			"category": "Recurrence",
@@ -100,12 +90,22 @@
 		}
 	},
 	{
+		"pk": "10",
+		"model": "commonapp.Global_Lookup",
+		"fields": {
+			"category": "Repeat_Day",
+			"key": "1 day",
+			"value": "1 Day",
+			"is_active": "True"
+		}
+	},
+	{
 		"pk": "11",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "1 day",
-			"value": "1 Day",
+			"category": "Repeat_Day",
+			"key": "2 day",
+			"value": "2 Day",
 			"is_active": "True"
 		}
 	},
@@ -113,9 +113,9 @@
 		"pk": "12",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "2 day",
-			"value": "2 Day",
+			"category": "Repeat_Day",
+			"key": "3 day",
+			"value": "3 Day",
 			"is_active": "True"
 		}
 	},
@@ -123,9 +123,9 @@
 		"pk": "13",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "3 day",
-			"value": "3 Day",
+			"category": "Repeat_Day",
+			"key": "4 day",
+			"value": "4 Day",
 			"is_active": "True"
 		}
 	},
@@ -133,9 +133,9 @@
 		"pk": "14",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "4 day",
-			"value": "4 Day",
+			"category": "Repeat_Day",
+			"key": "5 day",
+			"value": "5 Day",
 			"is_active": "True"
 		}
 	},
@@ -143,9 +143,9 @@
 		"pk": "15",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "5 day",
-			"value": "5 Day",
+			"category": "Repeat_Day",
+			"key": "6 day",
+			"value": "6 Day",
 			"is_active": "True"
 		}
 	},
@@ -153,9 +153,9 @@
 		"pk": "16",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "6 day",
-			"value": "6 Day",
+			"category": "Repeat_Day",
+			"key": "7 day",
+			"value": "7 Day",
 			"is_active": "True"
 		}
 	},
@@ -163,9 +163,9 @@
 		"pk": "17",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "7 day",
-			"value": "7 Day",
+			"category": "Repeat_Day",
+			"key": "8 day",
+			"value": "8 Day",
 			"is_active": "True"
 		}
 	},
@@ -173,9 +173,9 @@
 		"pk": "18",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "8 day",
-			"value": "8 Day",
+			"category": "Repeat_Day",
+			"key": "9 day",
+			"value": "9 Day",
 			"is_active": "True"
 		}
 	},
@@ -183,9 +183,9 @@
 		"pk": "19",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "9 day",
-			"value": "9 Day",
+			"category": "Repeat_Day",
+			"key": "10 day",
+			"value": "10 Day",
 			"is_active": "True"
 		}
 	},
@@ -193,9 +193,9 @@
 		"pk": "20",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "10 day",
-			"value": "10 Day",
+			"category": "Repeat_Day",
+			"key": "11 day",
+			"value": "11 Day",
 			"is_active": "True"
 		}
 	},
@@ -203,9 +203,9 @@
 		"pk": "21",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "11 day",
-			"value": "11 Day",
+			"category": "Repeat_Day",
+			"key": "12 day",
+			"value": "12 Day",
 			"is_active": "True"
 		}
 	},
@@ -213,9 +213,9 @@
 		"pk": "22",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "12 day",
-			"value": "12 Day",
+			"category": "Repeat_Day",
+			"key": "13 day",
+			"value": "13 Day",
 			"is_active": "True"
 		}
 	},
@@ -223,9 +223,9 @@
 		"pk": "23",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "13 day",
-			"value": "13 Day",
+			"category": "Repeat_Day",
+			"key": "14 day",
+			"value": "14 Day",
 			"is_active": "True"
 		}
 	},
@@ -233,9 +233,9 @@
 		"pk": "24",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "14 day",
-			"value": "14 Day",
+			"category": "Repeat_Day",
+			"key": "15 day",
+			"value": "15 Day",
 			"is_active": "True"
 		}
 	},
@@ -243,9 +243,9 @@
 		"pk": "25",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Day",
-			"key": "15 day",
-			"value": "15 Day",
+			"category": "Repeat_Month",
+			"key": "1 month",
+			"value": "1 Month",
 			"is_active": "True"
 		}
 	},
@@ -253,9 +253,9 @@
 		"pk": "26",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Hour",
-			"key": "1 hour",
-			"value": "1 Hour",
+			"category": "Repeat_Month",
+			"key": "2 month",
+			"value": "2 Month",
 			"is_active": "True"
 		}
 	},
@@ -263,9 +263,9 @@
 		"pk": "27",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Hour",
-			"key": "2 hour",
-			"value": "2 Hour",
+			"category": "Repeat_Week",
+			"key": "1 week",
+			"value": "1 Week",
 			"is_active": "True"
 		}
 	},
@@ -273,9 +273,9 @@
 		"pk": "28",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Hour",
-			"key": "3 hour",
-			"value": "3 Hour",
+			"category": "Occur_Month",
+			"key": "day 1 of the month",
+			"value": "Day 1 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -283,9 +283,9 @@
 		"pk": "29",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Hour",
-			"key": "4 hour",
-			"value": "4 Hour",
+			"category": "Occur_Month",
+			"key": "day 2 of the month",
+			"value": "Day 2 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -293,9 +293,9 @@
 		"pk": "30",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Hour",
-			"key": "5 hour",
-			"value": "5 Hour",
+			"category": "Occur_Month",
+			"key": "day 3 of the month",
+			"value": "Day 3 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -303,9 +303,9 @@
 		"pk": "31",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Month",
-			"key": "1 month",
-			"value": "1 Month",
+			"category": "Occur_Month",
+			"key": "day 4 of the month",
+			"value": "Day 4 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -313,9 +313,9 @@
 		"pk": "32",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Month",
-			"key": "2 month",
-			"value": "2 Month",
+			"category": "Occur_Month",
+			"key": "day 5 of the month",
+			"value": "Day 5 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -323,9 +323,9 @@
 		"pk": "33",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "1 week",
-			"value": "1 Week",
+			"category": "Occur_Month",
+			"key": "day 6 of the month",
+			"value": "Day 6 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -333,9 +333,9 @@
 		"pk": "34",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "2 week",
-			"value": "2 Week",
+			"category": "Occur_Month",
+			"key": "day 7 of the month",
+			"value": "Day 7 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -343,9 +343,9 @@
 		"pk": "35",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "3 week",
-			"value": "3 Week",
+			"category": "Occur_Month",
+			"key": "day 8 of the month",
+			"value": "Day 8 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -353,9 +353,9 @@
 		"pk": "36",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "4 week",
-			"value": "4 Week",
+			"category": "Occur_Month",
+			"key": "day 9 of the month",
+			"value": "Day 9 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -363,9 +363,9 @@
 		"pk": "37",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "5 week",
-			"value": "5 Week",
+			"category": "Occur_Month",
+			"key": "day 10 of the month",
+			"value": "Day 10 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -373,9 +373,9 @@
 		"pk": "38",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "6 week",
-			"value": "6 Week",
+			"category": "Occur_Month",
+			"key": "day 11 of the month",
+			"value": "Day 11 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -383,9 +383,9 @@
 		"pk": "39",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "7 week",
-			"value": "7 Week",
+			"category": "Occur_Month",
+			"key": "day 12 of the month",
+			"value": "Day 12 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -393,9 +393,9 @@
 		"pk": "40",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "8 week",
-			"value": "8 Week",
+			"category": "Occur_Month",
+			"key": "day 13 of the month",
+			"value": "Day 13 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -403,9 +403,9 @@
 		"pk": "41",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "9 week",
-			"value": "9 Week",
+			"category": "Occur_Month",
+			"key": "day 14 of the month",
+			"value": "Day 14 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -413,9 +413,9 @@
 		"pk": "42",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "10 week",
-			"value": "10 Week",
+			"category": "Occur_Month",
+			"key": "day 15 of the month",
+			"value": "Day 15 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -423,9 +423,9 @@
 		"pk": "43",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "11 week",
-			"value": "11 Week",
+			"category": "Occur_Month",
+			"key": "day 16 of the month",
+			"value": "Day 16 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -433,9 +433,9 @@
 		"pk": "44",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Week",
-			"key": "12 week",
-			"value": "12 Week",
+			"category": "Occur_Month",
+			"key": "day 17 of the month",
+			"value": "Day 17 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -443,9 +443,9 @@
 		"pk": "45",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Year",
-			"key": "1 year",
-			"value": "1 Year",
+			"category": "Occur_Month",
+			"key": "day 18 of the month",
+			"value": "Day 18 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -453,9 +453,9 @@
 		"pk": "46",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Repeat Year",
-			"key": "2 year",
-			"value": "2 Year",
+			"category": "Occur_Month",
+			"key": "day 19 of the month",
+			"value": "Day 19 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -463,9 +463,9 @@
 		"pk": "47",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 1 of the month",
-			"value": "Day 1 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 20 of the month",
+			"value": "Day 20 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -473,9 +473,9 @@
 		"pk": "48",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 2 of the month",
-			"value": "Day 2 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 21 of the month",
+			"value": "Day 21 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -483,9 +483,9 @@
 		"pk": "49",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 3 of the month",
-			"value": "Day 3 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 22 of the month",
+			"value": "Day 22 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -493,9 +493,9 @@
 		"pk": "50",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 4 of the month",
-			"value": "Day 4 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 23 of the month",
+			"value": "Day 23 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -503,9 +503,9 @@
 		"pk": "51",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 5 of the month",
-			"value": "Day 5 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 24 of the month",
+			"value": "Day 24 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -513,9 +513,9 @@
 		"pk": "52",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 6 of the month",
-			"value": "Day 6 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 25 of the month",
+			"value": "Day 25 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -523,9 +523,9 @@
 		"pk": "53",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 7 of the month",
-			"value": "Day 7 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 26 of the month",
+			"value": "Day 26 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -533,9 +533,9 @@
 		"pk": "54",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 8 of the month",
-			"value": "Day 8 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 27 of the month",
+			"value": "Day 27 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -543,9 +543,9 @@
 		"pk": "55",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 9 of the month",
-			"value": "Day 9 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 28 of the month",
+			"value": "Day 28 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -553,9 +553,9 @@
 		"pk": "56",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 10 of the month",
-			"value": "Day 10 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 29 of the month",
+			"value": "Day 29 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -563,9 +563,9 @@
 		"pk": "57",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 11 of the month",
-			"value": "Day 11 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 30 of the month",
+			"value": "Day 30 Of The Month",
 			"is_active": "True"
 		}
 	},
@@ -573,79 +573,19 @@
 		"pk": "58",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 12 of the month",
-			"value": "Day 12 Of The Month",
+			"category": "Occur_Month",
+			"key": "day 31 of the month",
+			"value": "Day 31 Of The Month",
 			"is_active": "True"
 		}
 	},
-	{
+		{
 		"pk": "59",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 14 of the month",
-			"value": "Day 14 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "60",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 15 of the month",
-			"value": "Day 15 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "61",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 16 of the month",
-			"value": "Day 16 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "62",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 17 of the month",
-			"value": "Day 17 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "63",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 18 of the month",
-			"value": "Day 18 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "64",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 19 of the month",
-			"value": "Day 19 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "65",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 20 of the month",
-			"value": "Day 20 Of The Month",
+			"category": "Repeat_Year",
+			"key": "1 year",
+			"value": "1 Year",
 			"is_active": "True"
 		}
 	},
@@ -653,217 +593,107 @@
 		"pk": "66",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Month",
-			"key": "day 21 of the month",
-			"value": "Day 21 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "67",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 22 of the month",
-			"value": "Day 22 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "68",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 23 of the month",
-			"value": "Day 23 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "69",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 24 of the month",
-			"value": "Day 24 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "70",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 25 of the month",
-			"value": "Day 25 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "71",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 26 of the month",
-			"value": "Day 26 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "72",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 27 of the month",
-			"value": "Day 27 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "73",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 28 of the month",
-			"value": "Day 28 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "74",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 29 of the month",
-			"value": "Day 29 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "75",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 30 of the month",
-			"value": "Day 30 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "76",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Month",
-			"key": "day 31 of the month",
-			"value": "Day 31 Of The Month",
-			"is_active": "True"
-		}
-	},
-	{
-		"pk": "77",
-		"model": "commonapp.Global_Lookup",
-		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "sun",
 			"value": "Sun",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "78",
+		"pk": "61",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "mon",
 			"value": "Mon",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "79",
+		"pk": "62",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "tue",
 			"value": "Tue",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "80",
+		"pk": "63",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "wed",
 			"value": "Wed",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "81",
+		"pk": "64",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "thu",
 			"value": "Thu",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "82",
+		"pk": "65",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "fri",
 			"value": "Fri",
 			"is_active": "True"
 		}
 	},
 	{
-		"pk": "83",
+		"pk": "66",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-			"category": "Occur Week",
+			"category": "Occur_Week",
 			"key": "sat",
 			"value": "Sat",
 			"is_active": "True"
 		}
 	},
 	{
-        "pk": "84",
+        "pk": "67",
         "model": "commonapp.Global_Lookup",
         "fields": {
-          "category": "Meter Type",
+          "category": "Meter_Type",
           "key": "smart",
           "value": "Smart",
           "is_active": "True"
         }
 	},
 	{
-        "pk": "85",
+        "pk": "68",
         "model": "commonapp.Global_Lookup",
         "fields": {
-          "category": "Meter Type",
+          "category": "Meter_Type",
           "key": "photo",
           "value": "Photo",
           "is_active": "True"
         }
     },
 	{
-		"pk": "86",
+		"pk": "69",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-		  "category": "Consumer Category",
+		  "category": "Consumer_Category",
 		  "key": "domestic",
 		  "value": "Domestic",
 		  "is_active": "True"
 		}
 	},
 	{
-		"pk": "87",
+		"pk": "70",
 		"model": "commonapp.Global_Lookup",
 		"fields": {
-		  "category": "Consumer Category",
+		  "category": "Consumer_Category",
 		  "key": "industrial",
 		  "value": "Industrial",
 		  "is_active": "True"

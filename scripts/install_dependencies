@@ -21,7 +21,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations billing
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations campaign
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations commonapp
-cd /home/ubuntu/smart360/api && yes | python3 manage.py makemigrations consumer
+cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations consumer
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations complaint
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations service
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations contract
@@ -72,4 +72,5 @@ echo "################################################## Loading data ##########
 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
 
+echo "############################## Successfully load data ######################################################"
 # cd /home/ubuntu/smart360/api && cat <(echo "yes") - | python3 manage.py collectstatic
