@@ -45,13 +45,16 @@ class CountrySerializer(serializers.ModelSerializer):
             else:
                 country_obj = super(CountrySerializer, self).create(validated_data)
                 country_obj.created_by = user.id
-                country_obj.updated_by = user.id
+                country_obj.created_date = datetime.utcnow()
                 country_obj.save()
                 return country_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_country_validated_data(validated_data)
-        with transaction.atomic():
+        if CountryTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                     utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(COUNTRY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
             country_obj = super(CountrySerializer, self).update(instance, validated_data)
             country_obj.tenant = user.tenant
             country_obj.updated_by = user.id

@@ -11,6 +11,7 @@ from v1.work_order.models.material_subtype import MaterialSubType
 from v1.work_order.models.material_name import MaterialName
 from v1.work_order.models.scheduled_appointment import ScheduledAppointment
 
+
 admin.site.register(WorkOrderMaster)
 admin.site.register(ServiceAppointment)
 admin.site.register(ServiceAssignment)
@@ -20,5 +21,6 @@ admin.site.register(MaterialType)
 admin.site.register(MaterialSubType)
 admin.site.register(MaterialName)
 admin.site.register(ScheduledAppointment)
+
 
 # Register your models here.

@@ -51,7 +51,7 @@ class ConsumerDetail(models.Model):
     prev_meter_reading = models.CharField(max_length=200, null=True, blank=True)
     prev_meter_status_id = models.BigIntegerField(null=True, blank=True)
     prev_reader_status_id = models.BigIntegerField(null=True, blank=True)
-    net_meter = models.BooleanField(default=True)
+    net_meter = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

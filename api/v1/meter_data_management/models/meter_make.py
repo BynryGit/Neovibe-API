@@ -49,3 +49,10 @@ def get_meter_make_by_id_string(id_string):
         return MeterMake.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+
+def get_meter_make_by_name(name):
+    try:
+        return MeterMake.objects.get(name=name, is_active=True)
+    except:
+        return False

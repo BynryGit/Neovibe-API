@@ -32,11 +32,11 @@ class MeterSummary(generics.ListAPIView):
             if utility_obj:
                 meter_obj = MeterTbl.objects.filter(is_active=True)
                 Meter_Count = {
+                    'Total_Meter' : meter_obj.count(),
                     'Normal_Meter' : meter_obj.filter(meter_status=0).count(),
                     'Faulty_Meter' :meter_obj.filter(meter_status=1).count(),
                     'RCNT_Meter' : meter_obj.filter(meter_status=2).count(),
                 }
-                print(meter_obj)
                 return Response({
                     STATE: SUCCESS,
                     RESULT: Meter_Count,
