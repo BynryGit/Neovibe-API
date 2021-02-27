@@ -172,45 +172,21 @@ from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
 
-AWS_ACCESS_KEY = 'AKIARUU5RUAA6JXDZZGR'
-AWS_SECRET_KEY = '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'
-AWS_S3_BUCKET = 'smart360-bucket'
-
 class UploadFile(GenericAPIView):
-    # def post(local_file, bucket, s3_file):
-    # def post(self, request):
-    #     print('*********',request.data)
-    #     s3 = boto3.client(request.data)
-
-    #     try:
-    #         s3.upload_file(local_file, bucket, s3_file)
-    #         print("Upload Successful")
-    #         return True
-    #     except FileNotFoundError:
-    #         print("The file was not found")
-    #         return False
-    #     except NoCredentialsError:
-    #         print("Credentials not available")
-    #         return False
 
     def post(self, request, format=None):
+
+        print('***********',request.FILES)
+        reader_obj = SettingReader.get_s3_credentials()
+
         file_obj = request.FILES['file']
 
-        conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-        k = Key(conn.get_bucket(AWS_S3_BUCKET))
+        conn = S3Connection(reader_obj['AWS_ACCESS_KEY'], reader_obj['AWS_SECRET_KEY'])
+        k = Key(conn.get_bucket(reader_obj['AWS_S3_BUCKET']))
         k.key = 'upls/%s/%s.png' % (46, file_obj)
         k.set_contents_from_string(file_obj.read())
         k.set_metadata('Content-Type', 'image/jpeg')
         url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
 
-        # url = k.generate_url(expires_in=0)
-
-        # secure_https_url = 'https://{host}/{bucket}/{key}'.format(
-        # host=conn.server_name(),
-        # bucket='name-of-bucket',
-        # key='name_of_key')
-
         print('*****file_obj.read()****',url)
-        # serializer = UserViewSerializer(upload)
-
-    # uploaded = upload_to_aws('local_file', 'bucket_name', 's3_file_name')
+        

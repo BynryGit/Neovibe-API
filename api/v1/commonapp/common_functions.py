@@ -198,6 +198,20 @@ def set_document_validated_data(validated_data):
             validated_data["document_type_id"] = document_type.id
         else:
             raise CustomAPIException("Document Type Not Found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "sub_module_id_string" in validated_data:
+        sub_module = get_sub_module_by_id_string(validated_data["sub_module_id_string"])
+        if sub_module:
+            validated_data["sub_module_id_string"] = sub_module.id
+        else:
+            raise CustomAPIException("sub_module not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "module_id_string" in validated_data:
+        module = get_module_by_id_string(validated_data["module_id_string"])
+        if module:
+            validated_data["module_id_string"] = module.id
+        else:
+            raise CustomAPIException("module not found.", status_code=status.HTTP_404_NOT_FOUND)
+
     return validated_data
 
 
@@ -637,3 +651,11 @@ def set_integration_master_validated_data(validated_data):
             raise CustomAPIException("Module not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
+def validate_user_data(validated_data):
+    if "user_id_string" in validated_data:
+        user_obj = get_user_by_id_string(validated_data["user_id_string"])
+        if user_obj:
+            validated_data["object_id"] = user_obj.id
+        else:
+            raise CustomAPIException("user_obj not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data

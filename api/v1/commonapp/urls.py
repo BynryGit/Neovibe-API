@@ -34,6 +34,7 @@ from v1.commonapp.views.notification_subtype import NotificationSubTypeList, Not
 from v1.commonapp.views.integration_type import IntegrationTypeList
 from v1.commonapp.views.integration_subtype import IntegrationSubTypeList
 from v1.commonapp.views.integration_master import IntegrationMasterList, IntegrationMasterDetail, IntegrationMaster
+from v1.commonapp.views.document import UploadDocument
 
 urlpatterns = [
     path('utility/region', Region.as_view()),
@@ -131,5 +132,6 @@ urlpatterns = [
     path('<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
     path('currency/list', CurrencyList.as_view()),
     path('global-lookup/list', Global_LookupList.as_view()),
+    path('document/upload',UploadDocument.as_view(), name="upload_document")
 
 ]

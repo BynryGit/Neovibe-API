@@ -53,10 +53,10 @@ class Document(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.document_name
+        return str(self.document_generated_name)
 
     def __unicode__(self):
-        return self.document_name
+        return self.document_generated_name
 
     @property
     def get_tenant(self):
