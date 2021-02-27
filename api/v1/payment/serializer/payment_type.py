@@ -32,7 +32,7 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
     tenant_id = serializers.CharField(required=False, max_length=200)
 
     payment_type_id = serializers.CharField(required=False, max_length=200)
-    utility_product_id = serializers.CharField(required=True, max_length=200)
+
 
     class Meta:
         model = UtilityPaymentTypeTbl
@@ -48,7 +48,7 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
 
                 payment_type_obj = super(PaymentTypeSerializer, self).create(validated_data)
                 payment_type_obj.created_by = user.id
-                payment_type_obj.updated_by = user.id
+                payment_type_obj.created_date = datetime.utcnow()
                 payment_type_obj.save()
                 return payment_type_obj
 

@@ -11,6 +11,9 @@ from v1.meter_data_management.views.schedule_log import ScheduleLogList
 from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ReadingScheduleSummary
 from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, MeterLifeCycleList, MeterNoteList, \
     MeterNoteDetail
+from v1.meter_data_management.views.smart_meter_configuration import SmartMeterList, SmartMeter, SmartMeterDetail
+from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
+from v1.meter_data_management.views.validation_assignments import ValidationAssignmentList,ValidationAssignmentDetail,ValidationAssignment
 
 urlpatterns = [
     path('schedule', Schedule.as_view(), name='schedule'),
@@ -27,10 +30,18 @@ urlpatterns = [
     path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
     path('route', Route.as_view(), name='route_add'),
-
+    path('smart-meter', SmartMeter.as_view()),
+    path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
+    path('smart-meter/<uuid:id_string>', SmartMeterDetail.as_view(), name='meter_detail'),
+    path('task-template', JobCardTemplate.as_view()),
+    path('<uuid:id_string>/task-template/list', JobCardTemplateList.as_view()),
+    path('task-template/<uuid:id_string>', JobCardTemplateDetail.as_view()),
     path('meter', Meter.as_view(), name='meter'),
     path('meter/list', MeterList.as_view(), name='meter_list'),
-    path('meter/<uuid:id_string>', MeterDetail.as_view(), name='meter_detail'),
+    path('validation-assignment/<uuid:id_string>', ValidationAssignmentDetail.as_view()),
+    path('validation-assignment', ValidationAssignment.as_view()),
+    path('<uuid:id_string>/validation-assignment/list', ValidationAssignmentList.as_view()),
+    path('meter/<uuid:id_string>', MeterDetail.as_view()),
     path('meter/note/list',MeterNoteList.as_view(),name="note_list"),
     path('meter/<uuid:id_string>/note', MeterNoteDetail.as_view(), name='meter_note_detail'),
 

@@ -20,6 +20,7 @@ from django.db import models  # importing package for database
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.commonapp.models.sub_module import get_sub_module_by_id
+from v1.commonapp.models.module import get_module_by_id
 
 # *********** UTILITY CONSTANTS **************
 UTILITY_SERVICE_NUMBER_ITEM_DICT = {
@@ -41,6 +42,8 @@ class UtilityServiceNumberFormat(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    module_id = models.BigIntegerField(null=True,
+                                           blank=True)
     sub_module_id = models.BigIntegerField(null=True,
                                            blank=True)  # Survey, Campaign, Registration, Consumer, Receipt, Contract
     is_prefix = models.BooleanField(default=True)
@@ -51,7 +54,7 @@ class UtilityServiceNumberFormat(models.Model):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.utility.name
@@ -63,6 +66,11 @@ class UtilityServiceNumberFormat(models.Model):
     def get_sub_module_by_id(self):
         sub_module = get_sub_module_by_id(self.sub_module_id)
         return sub_module
+
+    @property
+    def get_module_by_id(self):
+        module = get_module_by_id(self.module_id)
+        return module
 
 
 # Create Utility Service Number Format table end.
