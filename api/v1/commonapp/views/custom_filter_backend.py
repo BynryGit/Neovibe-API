@@ -1,6 +1,8 @@
 from v1.meter_data_management.models.schedule import get_schedule_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
 from v1.commonapp.models.module import get_module_by_id_string
+from v1.consumer.models.consumer_master import get_consumer_by_id_string , ConsumerMaster
+from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 
 
 class CustomFilter:
@@ -23,4 +25,14 @@ class CustomFilter:
             module_obj = get_module_by_id_string(request.query_params['module_id'])
             queryset = queryset.filter(module_id=module_obj.id)
 
+        if 'consumer_processing' in request.query_params:
+            consumer_master_list = []
+            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
+            if consumer_master_objs:
+                for consumer_master_obj in consumer_master_objs:
+                    consumer_master_list.append(consumer_master_obj)                    
+                    # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
+                    # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
+                            
         return queryset

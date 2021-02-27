@@ -5,7 +5,7 @@ from v1.consumer.views.consumer_credit_rating import ConsumerCreditRatingList
 from v1.consumer.views.consumer_category import ConsumerCategoryList, ConsumerCategory, ConsumerCategoryDetail
 from v1.consumer.views.consumer_offer_detail import ConsumerOfferDetail
 from v1.consumer.views.consumer_offer_master import ConsumerOfferMasterList, ConsumerOfferMasterDetail, ConsumerOfferMaster
-from v1.consumer.views.consumer_service_contract_details import ConsumerServiceContractDetailList, ConsumerMeterList
+from v1.consumer.views.consumer_service_contract_details import ConsumerServiceContractDetailList, ConsumerMeterList, ConsumerServiceContractDetailApprove
 from v1.consumer.views.consumer_subcategory import ConsumerSubCategoryDetail, ConsumerSubCategoryList, \
     ConsumerSubCategory
 from v1.consumer.views.consumer_ownership import ConsumerOwnership, ConsumerOwnershipDetail, ConsumerOwnershipList
@@ -78,6 +78,7 @@ urlpatterns = [
     # path('service/subtype/<uuid:id_string>', ServiceSubTypeDetail.as_view()),
     # path('service/subtype', ServiceSubType.as_view()),
     path('<uuid:id_string>/service-contract-detail/list', ConsumerServiceContractDetailList.as_view()),
+    path('service-contract-detail',ConsumerServiceContractDetailApprove.as_view()),
     # path('<uuid:id_string>/note', ConsumerNote.as_view()),
     # path('<uuid:id_string>/note/list', ConsumerNoteList.as_view()),
 

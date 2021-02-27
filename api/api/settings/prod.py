@@ -42,7 +42,7 @@ SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 print("=====Secret Key=====", SECRET_KEY)
 # SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 

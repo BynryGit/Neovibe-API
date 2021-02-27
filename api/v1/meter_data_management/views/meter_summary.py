@@ -11,13 +11,13 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_F
 
 
 # API Header
-# API end Point: api/v1/meter-data/meter-summary
+# API end Point: api/v1/meter-data/utility/<uuid:id_string>/meter-summary
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
 # Interaction: meter summary
-# Usage: API will fetch required data for meter-summary against filter and search
+# Usage: API will fetch required data for meter-summary.
 # Tables used: MeterSummary
 # Author: Akshay
 # Created on: 19/02/2021
@@ -30,7 +30,7 @@ class MeterSummary(generics.ListAPIView):
         try:
             utility_obj = get_utility_by_id_string(id_string)
             if utility_obj:
-                meter_obj = MeterTbl.objects.filter(is_active=True)
+                meter_obj = MeterTbl.objects.filter(utility=utility_obj, is_active=True)
                 Meter_Count = {
                     'Total_Meter' : meter_obj.count(),
                     'Normal_Meter' : meter_obj.filter(meter_status=0).count(),

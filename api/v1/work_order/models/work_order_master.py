@@ -4,6 +4,7 @@ from django.db import models  # importing package for database
 from django.contrib.postgres.fields import JSONField
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from v1.utility.models.utility_product import get_utility_product_by_id
 
 
 
@@ -23,6 +24,7 @@ class WorkOrderMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     work_order_number = models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     utility_work_order_type_id = models.BigIntegerField(null=True, blank=True)
     utility_work_order_sub_type_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -56,6 +58,10 @@ class WorkOrderMaster(models.Model):
         work_order_master = get_consumer_service_master_by_id(self.consumer_service_master_id)
         return work_order_master
 
+    @property
+    def get_utility_product_by_id(self):
+        utility_product = get_utility_product_by_id(self.utility_product_id)
+        return utility_product  
 
 # Create work_order_master table end
 

@@ -53,10 +53,13 @@ class RegistrationList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('first_name', 'tenant__id_string',)
-        ordering_fields = ('first_name', 'registration_no',)
-        ordering = ('created_date',)  # always give by default alphabetical order
-        search_fields = ('first_name', 'last_name',)
+        filter_fields = ( 'tenant__id_string',)
+        ordering_fields = ('registration_no',)
+        ordering = ('created_date',)  # always give by default alphabetical order        
+        # filter_fields = ('first_name', 'tenant__id_string',)
+        # ordering_fields = ('first_name', 'registration_no',)
+        # ordering = ('created_date',)  # always give by default alphabetical order
+        # search_fields = ('first_name', 'last_name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])

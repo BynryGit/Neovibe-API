@@ -3149,6 +3149,71 @@
         "is_active": "True"
       }
     },
+    {
+      "pk": "159",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 12,
+        "sub_module_id": 61,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "160",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 12,
+        "sub_module_id": 62,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "161",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 12,
+        "sub_module_id": 63,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "162",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 12,
+        "sub_module_id": 64,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "163",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 13,
+        "sub_module_id": 65,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
    {
       "pk": "1",
       "model": "master.User",
@@ -4047,17 +4112,53 @@
         "utility": 1,
         "label":"Schedule",
         "module_id": 12,
-        "submodule_id": 60,
+        "submodule_id": 61,
         "is_active": "True"
       }
     },
-{
+    {
       "pk": "60",
       "model": "utility.UtilitySubModule",
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Schedule",
+        "label":"Dispatch",
+        "module_id": 12,
+        "submodule_id": 62,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "61",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "label":"Validation",
+        "module_id": 12,
+        "submodule_id": 63,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "62",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "label":"Upload",
+        "module_id": 12,
+        "submodule_id": 64,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "63",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "label":"Dashboard",
         "module_id": 13,
         "submodule_id": 65,
         "is_active": "True"

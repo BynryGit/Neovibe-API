@@ -8,7 +8,7 @@ from v1.utility.models.utility_master import UtilityMaster
 import uuid
 from django.db import models
 import fsm
-
+from v1.commonapp.views.custom_exception import CustomAPIException
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
     "CREATED": 0,
