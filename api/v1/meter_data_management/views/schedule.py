@@ -59,7 +59,7 @@ class ScheduleList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/schedule
+# API end Point: api/v1/meter-data/schedule
 # API verb: POST
 # Package: Basic
 # Modules: All
@@ -120,7 +120,7 @@ class Schedule(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/schedule/id_string
+# API end Point: api/v1/meter-data/schedule/id_string
 # API verb: GET,PUT
 # Package: Basic
 # Modules: All

@@ -38,7 +38,7 @@ class MeterViewSerializer(serializers.ModelSerializer):
     category_id = GlobalLookupShortViewSerializer(many=False, source='get_category_name')
     meter_type_id = GlobalLookupShortViewSerializer(many=False, source='get_meter_type_name')
     meter_make_id = MeterMakeShortViewSerializer(many=False, source='get_meter_make')
-    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
+    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
     meter_status = ChoiceField(choices=MeterTbl.METER_STATUS)
     reader_status = ChoiceField(choices=MeterTbl.READER_STATUS)
 

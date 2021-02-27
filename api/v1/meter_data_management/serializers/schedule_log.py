@@ -20,7 +20,7 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
     read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
     activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type')
     recurring_id = GlobalLookupShortViewSerializer(many=False, source='get_recurring_name')
-    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
+    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
     date_and_time = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)

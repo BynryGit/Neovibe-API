@@ -36,12 +36,11 @@ class NotificationSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_notification_subtype_validated_data(validated_data)
             if NotificationSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                                     utility_id=validated_data['utility_id']).exists():
+                                                     utility_id=validated_data['utility_id'],notification_type_id=validated_data['notification_type_id']).exists():
                 raise CustomAPIException(NOTIFICATION_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 notification_subtype_obj = super(NotificationSubTypeSerializer, self).create(validated_data)
                 notification_subtype_obj.created_by = user.id
-                notification_subtype_obj.updated_by = user.id
                 notification_subtype_obj.save()
                 return notification_subtype_obj
 

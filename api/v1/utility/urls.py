@@ -79,7 +79,7 @@ urlpatterns = [
     path('<uuid:id_string>/payment/subtype/list', UtilityPaymentSubTypeList.as_view(), name='utility_payment_subtype_list'),
     path('<uuid:id_string>/payment/mode/list', UtilityPaymentModeList.as_view(), name='utility_payment_mode_list'),
     path('<uuid:id_string>/numformat/list', UtilityNumFormatList.as_view(), name='utility_num_format_list'),
-    path('<uuid:id_string>/numformat', UtilityNumformatDetail.as_view(), name='numformat'),
+    path('numformat/<uuid:id_string>', UtilityNumformatDetail.as_view(), name='numformat'),
     path('numformat', UtilityNumFormat.as_view(), name='numformat'),
     path('<uuid:id_string>/sub_module/list', UtilitySubModuleListByUtility.as_view()),
     path('<uuid:id_string>/sub_module/delete',api_delete_submodule, name="delete"),

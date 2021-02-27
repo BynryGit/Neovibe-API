@@ -48,7 +48,7 @@ class Frequency(models.Model):
 
     @property
     def get_channel(self):
-        channel = get_utility_channel_by_id(self.channel_type_id)
+        channel = get_utility_payment_channel_by_id(self.channel_type_id)
         return channel
 # Create Frequency table end
 

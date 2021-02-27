@@ -17,6 +17,7 @@ from v1.utility.models.utility_services_number_format import get_item_by_id
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string, get_utility_submodule_by_id
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
+from v1.commonapp.models.module import get_module_by_id_string
 from v1.utility.models.utility_leave_type import get_utility_leave_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
@@ -133,6 +134,12 @@ def set_numformat_validated_data(validated_data):
             validated_data["sub_module_id"] = submodule_id.id
         else:
             raise CustomAPIException("SubModule Not Found", status_code=status.HTTP_404_NOT_FOUND)
+    if "module_id" in validated_data:
+        module_id = get_module_by_id_string(validated_data["module_id"])
+        if module_id:
+            validated_data["module_id"] = module_id.id
+        else:
+            raise CustomAPIException("Module Not Found", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
