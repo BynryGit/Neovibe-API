@@ -4,6 +4,8 @@ __author__ = "aki"
 from django.contrib import admin
 from v1.meter_data_management.models.meter import Meter
 from v1.meter_data_management.models.meter_make import MeterMake
+from v1.meter_data_management.models.meter_reading import MeterReading
+from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment
 from v1.meter_data_management.models.schedule import Schedule
 from v1.meter_data_management.models.schedule_log import ScheduleLog
 from v1.meter_data_management.models.read_cycle import ReadCycle
@@ -18,3 +20,5 @@ admin.site.register(ScheduleLog)
 admin.site.register(ReadCycle)
 admin.site.register(Route)
 admin.site.register(ConsumerDetail)
+admin.site.register(MeterReading)
+admin.site.register(RouteTaskAssignment)

@@ -126,7 +126,7 @@ class Meter(models.Model):
         return meter_type
 
     @property
-    def get_utility_product_type_name(self):
+    def get_utility_product_name(self):
         utility_product_type = get_utility_product_by_id(self.utility_product_id)
         return utility_product_type
 

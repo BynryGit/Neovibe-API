@@ -48,14 +48,14 @@ class ConsumerDetail(models.Model):
 # Create Temp Consumer Master Table end
 
 
-def get_consumer_by_id(id):
+def get_consumer_detail_by_id(id):
     try:
         return ConsumerDetail.objects.get(id=id)
     except:
         return False
 
 
-def get_consumer_by_id_string(id_string):
+def get_consumer_detail_by_id_string(id_string):
     try:
         return ConsumerDetail.objects.get(id_string=id_string)
     except:

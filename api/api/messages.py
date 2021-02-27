@@ -136,6 +136,8 @@ UTILITY_WITH_GIVEN_DETAILS_ALREADY_EXIST = "Utility with given details already e
 METER_NOT_FOUND = 'Meter not found'
 METER_TYPE_NOT_FOUND = 'Meter type not found'
 PREMISE_NOT_FOUND = "Premise not found"
+METER_READING_NOT_FOUND = "Meter Reading not found"
+ROUTE_TASK_ASSIGNMENT_NOT_FOUND = "Route task assignment not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"
@@ -190,3 +192,5 @@ NOTIFICATION_TYPE_ALREADY_EXIST = "Notification Type Already Exist."
 NOTIFICATION_SUBTYPE_ALREADY_EXIST = "Notification SubType Already Exist."
 UTILITY_MODULE_ALREADY_EXIST = "Utility Module Already Exist"
 COMPLAINT_MASTER_ALREADY_EXIST = "Complaint Master Already Exist"
+METER_READING_ALREADY_EXIST = "Meter reading Already Exist"
+ROUTE_TASK_ASSIGNMENT_ALREADY_EXIST = "Route task assignment Already Exist"
