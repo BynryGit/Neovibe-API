@@ -15,6 +15,7 @@ from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.commonapp.models.division import get_division_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
+from master.models import get_user_by_id_string
 
 
 def set_schedule_validated_data(validated_data):
@@ -177,3 +178,75 @@ def set_meter_validated_data(validated_data):
     else:
         validated_data["install_date"] = None
     return validated_data
+
+
+def set_smart_meter_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException(TENANT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_job_card_template_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException(TENANT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+def set_validation_assignment_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException(TENANT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "validator1_id" in validated_data:
+        validator1 = get_user_by_id_string(validated_data["validator1_id"])
+        if validator1:
+            validated_data["validator1_id"] = validator1.id
+        else:
+            raise CustomAPIException("Validator1 not found", status_code=status.HTTP_404_NOT_FOUND)
+    if "validator2_id" in validated_data:
+        validator2 = get_user_by_id_string(validated_data["validator2_id"])
+        if validator2:
+            validated_data["validator2_id"] = validator2.id
+        else:
+            raise CustomAPIException("Validator2 noy found", status_code=status.HTTP_404_NOT_FOUND)
+    if "read_cycle_id" in validated_data:
+        read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
+        if read_cycle:
+            validated_data["read_cycle_id"] = read_cycle.id
+        else:
+            raise CustomAPIException("Read Cycle not Found", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+

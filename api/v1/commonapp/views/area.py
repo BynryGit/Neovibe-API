@@ -51,6 +51,7 @@ class AreaList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
+        print("Area",e)
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 

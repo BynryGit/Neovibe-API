@@ -200,13 +200,13 @@ def is_contact_exists(phone_mobile, tenant_id):
 
 def get_user_by_id_string(id_string):
     try:
-        return User.objects.get(id_string=id_string, is_active=True)
+        return User.objects.get(id_string=id_string)
     except:
         return False
 
 
 def get_user_by_id(id):
-    user = User.objects.filter(id=id, is_active=True).last()
+    user = User.objects.get(id=id)
     return user
 
 

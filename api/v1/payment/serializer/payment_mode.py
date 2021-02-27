@@ -32,7 +32,7 @@ class PaymentModeSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
     payment_mode_id = serializers.CharField(required=False, max_length=200)
-    utility_product_id = serializers.CharField(required=False, max_length=200)
+    # utility_product_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = UtilityPaymentModeTbl
@@ -48,7 +48,7 @@ class PaymentModeSerializer(serializers.ModelSerializer):
                 
                 payment_mode_obj = super(PaymentModeSerializer, self).create(validated_data)
                 payment_mode_obj.created_by = user.id
-                payment_mode_obj.updated_by = user.id
+                payment_mode_obj.created_date = datetime.utcnow()
                 payment_mode_obj.save()
                 return payment_mode_obj
 

@@ -13,6 +13,7 @@ from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
+from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.commonapp.models.products import get_product_by_id_string
 from v1.commonapp.models.region import get_region_by_id_string
@@ -425,7 +426,7 @@ def set_frequency_validated_data(validated_data):
         else:
             raise CustomAPIException("Campaign Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "channel_type_id" in validated_data:
-        channel_type = get_utility_channel_by_id_string(validated_data["channel_type_id"])
+        channel_type = get_utility_payment_channel_by_id_string(validated_data["channel_type_id"])
         if channel_type:
             validated_data["channel_type_id"] = channel_type.id
         else:
