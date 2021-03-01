@@ -232,10 +232,10 @@ class ReadingScheduleSummary(generics.ListAPIView):
             if utility_obj:
                 schedule_obj = ScheduleTbl.objects.filter(utility=utility_obj, is_active=True)
                 Schedule_Count = {
-                    'Total_Schedule' : schedule_obj.count(),
-                    'Pending_Schedule' : schedule_obj.filter(schedule_status=0).count(),
-                    'Complete_Schedule' :schedule_obj.filter(schedule_status=1).count(),
-                    'InProgress_Schedule' : schedule_obj.filter(schedule_status=2).count(),
+                    'Total_Schedule': schedule_obj.count(),
+                    'Pending_Schedule': schedule_obj.filter(schedule_status=0).count(),
+                    'Complete_Schedule': schedule_obj.filter(schedule_status=1).count(),
+                    'InProgress_Schedule': schedule_obj.filter(schedule_status=2).count(),
                 }
                 return Response({
                     STATE: SUCCESS,

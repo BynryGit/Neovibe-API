@@ -43,6 +43,7 @@ def create_consumer(schedule_log_id):
                             utility=route_obj.utility,
                             consumer_id=consumer_obj.id,
                             meter_id=meter.id,
+                            schedule_log_id=schedule_log_obj.id,
                             read_cycle_id=read_cycle_obj.id,
                             route_id=route_obj.id,
                             premise_id=premise_obj.id,
