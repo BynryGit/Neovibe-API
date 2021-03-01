@@ -46,6 +46,7 @@ class RouteTaskAssignment(models.Model):
     dispatch_status = models.IntegerField(choices=DISPATCH_STATUS, default=0)
     assign_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
+    is_completed = models.BooleanField(default=False) # use for reading complete or not
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
