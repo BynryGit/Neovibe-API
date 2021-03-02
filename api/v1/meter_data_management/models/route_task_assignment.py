@@ -42,6 +42,7 @@ class RouteTaskAssignment(models.Model):
     read_cycle_id = models.BigIntegerField(null=False, blank=False)
     route_id = models.BigIntegerField(null=False, blank=False)
     meter_reader_id = models.BigIntegerField(null=False, blank=False)
+    schedule_log_id = models.BigIntegerField(null=True, blank=True)
     consumer_meter_json = JSONField(default=[])
     dispatch_status = models.IntegerField(choices=DISPATCH_STATUS, default=0)
     assign_date = models.DateTimeField(null=True, blank=True)
