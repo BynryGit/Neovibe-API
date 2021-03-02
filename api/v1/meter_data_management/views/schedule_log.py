@@ -6,8 +6,9 @@ from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from v1.commonapp.views.logger import logger
+from rest_framework.generics import GenericAPIView
 from v1.meter_data_management.models.schedule import get_schedule_by_id_string
-from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
+from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl, get_schedule_log_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
@@ -15,7 +16,7 @@ from v1.meter_data_management.serializers.schedule_log import ScheduleLogViewSer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from api.constants import CONSUMER_OPS, METER_DATA, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_FOUND
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_FOUND, SCHEDULE_LOG_NOT_FOUND
 
 
 # API Header
@@ -59,6 +60,43 @@ class ScheduleLogList(generics.ListAPIView):
     except Exception as ex:
         logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
         raise APIException
+
+
+# API Header
+# API end Point: api/v1/meter-data/schedule-log/id_string
+# API verb: GET,PUT
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: View schedule log object
+# Usage: API will fetch and edit required data for schedule log using id_string
+# Tables used: Schedule Log
+# Author: Akshay
+# Created on: 02/03/2021
+
+class ScheduleLogDetail(GenericAPIView):
+    @is_token_validate
+    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    def get(self, request, id_string):
+        try:
+            schedule_log_obj = get_schedule_log_by_id_string(id_string)
+            if schedule_log_obj:
+                serializer = ScheduleLogViewSerializer(instance=schedule_log_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: SCHEDULE_LOG_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # API Header
