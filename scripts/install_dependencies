@@ -21,7 +21,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations billing
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations campaign
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations commonapp
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations consumer
+cd /home/ubuntu/smart360/api && yes | python3 manage.py makemigrations consumer
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations complaint
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations service
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations contract
@@ -46,7 +46,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate asset
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate billing
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate campaign
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate commonapp
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate consumer
+cd /home/ubuntu/smart360/api && yes yes | python3 manage.py migrate consumer
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate complaint
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate service
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate contract
@@ -65,8 +65,9 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate work_order
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate utility
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate tenant
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 
+cd /home/ubuntu/smart360/api && yes | python3 manage.py makemigrations 
+cd /home/ubuntu/smart360/api && yes yes | python3 manage.py migrate 
+cd /home/ubuntu/smart360/api && sudo python3 manage.py showmigrations
 
 echo "################################################## Loading data ############################################"
 
