@@ -32,12 +32,18 @@ from v1.commonapp.views.notification_type import NotificationTypeList, Notificat
 from v1.commonapp.views.notification_subtype import NotificationSubTypeList, NotificationSubTypeDetail, \
     NotificationSubType
 from v1.commonapp.views.integration_type import IntegrationTypeList
+from v1.commonapp.views.work_order_type import WorkOrderTypeList,WorkOrderType,WorkOrderTypeDetail
+from v1.commonapp.views.work_order_sub_type import WorkOrderSubTypeList,WorkOrderSubType,WorkOrderSubTypeDetail
 from v1.commonapp.views.integration_subtype import IntegrationSubTypeList
 from v1.commonapp.views.integration_master import IntegrationMasterList, IntegrationMasterDetail, IntegrationMaster
 from v1.commonapp.views.document import UploadDocument
 
 urlpatterns = [
     path('utility/region', Region.as_view()),
+    path('utility/work-order-type', WorkOrderType.as_view()),
+    path('utility/work-order-type/<uuid:id_string>', WorkOrderTypeDetail.as_view()),
+    path('utility/work-order-sub-type', WorkOrderSubType.as_view()),
+    path('utility/work-order-sub-type/<uuid:id_string>', WorkOrderSubTypeDetail.as_view()),
     path('utility/document_type/<uuid:id_string>', DocumentTypeDetail.as_view()),
     path('utility/document_type', DocumentType.as_view()),
     path('utility/document_subtype/<uuid:id_string>', DocumentSubTypeDetail.as_view()),
@@ -100,6 +106,8 @@ urlpatterns = [
     path('submodule/list', SubModuleList.as_view()),
     # This api used for utility dropdown start
     path('region/list', RegionList.as_view(), name='regions_list'),
+    path('work-order-type/list', WorkOrderTypeList.as_view(), name='work_order_type_list'),
+    path('work-order-sub-type/list', WorkOrderSubTypeList.as_view(), name='work_order_sub_type_list'),
     path('document_type/list', DocumentTypeList.as_view(), name='document_type_list'),
     path('channel/list', ChannelList.as_view(), name='channel_list'),
     path('utility/channel', Channel.as_view(), name='channel_add'),
