@@ -59,7 +59,7 @@ class ScheduleList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/schedule
+# API end Point: api/v1/meter-data/schedule
 # API verb: POST
 # Package: Basic
 # Modules: All
@@ -120,7 +120,7 @@ class Schedule(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/schedule/id_string
+# API end Point: api/v1/meter-data/schedule/id_string
 # API verb: GET,PUT
 # Package: Basic
 # Modules: All
@@ -232,10 +232,10 @@ class ReadingScheduleSummary(generics.ListAPIView):
             if utility_obj:
                 schedule_obj = ScheduleTbl.objects.filter(utility=utility_obj, is_active=True)
                 Schedule_Count = {
-                    'Total_Schedule' : schedule_obj.count(),
-                    'Pending_Schedule' : schedule_obj.filter(schedule_status=0).count(),
-                    'Complete_Schedule' :schedule_obj.filter(schedule_status=1).count(),
-                    'InProgress_Schedule' : schedule_obj.filter(schedule_status=2).count(),
+                    'Total_Schedule': schedule_obj.count(),
+                    'Pending_Schedule': schedule_obj.filter(schedule_status=0).count(),
+                    'Complete_Schedule': schedule_obj.filter(schedule_status=1).count(),
+                    'InProgress_Schedule': schedule_obj.filter(schedule_status=2).count(),
                 }
                 return Response({
                     STATE: SUCCESS,

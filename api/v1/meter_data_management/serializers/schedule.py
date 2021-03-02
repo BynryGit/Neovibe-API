@@ -29,7 +29,7 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     frequency_id = GlobalLookupShortViewSerializer(many=False, source='get_frequency_name')
     repeat_every_id = GlobalLookupShortViewSerializer(many=False, source='get_repeat_every_name')
     recurring_id = GlobalLookupShortViewSerializer(many=False, source='get_recurring_name')
-    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
+    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
     schedule_status = ChoiceField(choices=ScheduleTbl.SCHEDULE_STATUS)
 
     class Meta:

@@ -26,6 +26,7 @@ class ConsumerDetail(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_id = models.BigIntegerField(null=True, blank=True)
     meter_id = models.BigIntegerField(null=True, blank=True)
+    schedule_log_id = models.BigIntegerField(null=True, blank=True)
     read_cycle_id = models.BigIntegerField(null=True, blank=True)
     route_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
@@ -48,14 +49,14 @@ class ConsumerDetail(models.Model):
 # Create Temp Consumer Master Table end
 
 
-def get_consumer_by_id(id):
+def get_consumer_detail_by_id(id):
     try:
         return ConsumerDetail.objects.get(id=id)
     except:
         return False
 
 
-def get_consumer_by_id_string(id_string):
+def get_consumer_detail_by_id_string(id_string):
     try:
         return ConsumerDetail.objects.get(id_string=id_string)
     except:

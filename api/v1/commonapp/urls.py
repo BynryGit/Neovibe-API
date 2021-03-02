@@ -36,6 +36,7 @@ from v1.commonapp.views.work_order_type import WorkOrderTypeList,WorkOrderType,W
 from v1.commonapp.views.work_order_sub_type import WorkOrderSubTypeList,WorkOrderSubType,WorkOrderSubTypeDetail
 from v1.commonapp.views.integration_subtype import IntegrationSubTypeList
 from v1.commonapp.views.integration_master import IntegrationMasterList, IntegrationMasterDetail, IntegrationMaster
+from v1.commonapp.views.document import UploadDocument
 
 urlpatterns = [
     path('utility/region', Region.as_view()),
@@ -139,5 +140,6 @@ urlpatterns = [
     path('<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
     path('currency/list', CurrencyList.as_view()),
     path('global-lookup/list', Global_LookupList.as_view()),
+    path('document/upload',UploadDocument.as_view(), name="upload_document")
 
 ]

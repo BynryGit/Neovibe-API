@@ -2,7 +2,7 @@ from v1.commonapp.models.document import Document as DocumentModel
 from v1.commonapp.serializers.document import DocumentListSerializer, DocumentSerializer, DocumentViewSerializer
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
+from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token, validate_user_data
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
@@ -12,10 +12,19 @@ from rest_framework.response import Response
 from api.messages import *
 from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.commonapp.models.document import get_document_by_id_string
+from v1.commonapp.models.document import get_document_by_id_string,Document as DocumentTbl
 from api.messages import *
 from api.constants import *
+from v1.commonapp.models.module import get_module_by_id_string
+from v1.commonapp.models.sub_module import get_sub_module_by_id_string
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
+import boto3
+from botocore.exceptions import NoCredentialsError
+from rest_framework.parsers import FileUploadParser
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 
 # API Header
 # API end Point: api/v1/utility/:id_string/document/list
@@ -159,6 +168,80 @@ class DocumentDetail(GenericAPIView):
                 return Response({
                     STATE: ERROR,
                 }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+            }, status=res.status_code)
+
+# API Header
+# API end Point: api/v1/document/upload
+# API verb: POST
+# Package: Basic
+# Modules: S&M
+# Sub Module: User
+# Interaction: Save Document
+# Usage: API will save the documents
+# Tables used: Document
+# Author: Priyanka
+# Created on: 25/02/2021
+
+import boto3
+
+class UploadDocument(GenericAPIView):
+    
+    def post(self, request, format=None):
+        try:
+            # getting object_id start
+            user_obj = validate_user_data(request.data)
+            # getting object_id end
+
+            utility_obj = get_utility_by_id_string(request.data["utility_id_string"])
+            module_obj = get_module_by_id_string(request.data["module_id_string"])
+            sub_module_obj = get_sub_module_by_id_string(request.data["sub_module_id_string"])
+
+            # getting S3 credentials from SettingReader 
+            reader_obj = SettingReader.get_s3_credentials()
+
+            file_obj = request.FILES['file']
+            
+
+            # establish connection with AWS s3 & Upload file/image on s3 start
+            conn = S3Connection(reader_obj['AWS_ACCESS_KEY'], reader_obj['AWS_SECRET_KEY'])
+
+            # s3 = boto3.resource('s3',aws_access_key_id=reader_obj['AWS_ACCESS_KEY'],aws_secret_access_key= reader_obj['AWS_SECRET_KEY'])
+            # bucket = s3.Bucket(reader_obj['AWS_S3_BUCKET'])
+            # objs = list(bucket.objects.filter(Key='MRBD/Screenshot%20from%202020-12-08%2013-02-44.png.png'))
+            # print('============',objs)
+            # for obj in objs:
+            #     print('************',obj)
+
+            k = Key(conn.get_bucket(reader_obj['AWS_S3_BUCKET']))
+            k.key = 'MRBD/%s/%s' % ('', file_obj)
+            k.set_contents_from_string(file_obj.read())
+            k.set_metadata('Content-Type', 'image/jpeg')
+            # establish connection with AWS s3 & Upload file/image on s3 end           
+
+            
+            # Create URL
+            url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
+
+            # Save value into Document Table
+            document = DocumentTbl()
+            document.tenant = utility_obj.tenant
+            document.utility = utility_obj
+            document.module_id = module_obj.id
+            document.sub_module_id = sub_module_obj.id
+            document.object_id = user_obj['object_id']
+            document.document_generated_name = url
+            document.document_name = file_obj
+            document.is_active = True
+            document.save()
+            return Response({
+                    STATE: SUCCESS,
+                }, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
             res = self.handle_exception(e)
