@@ -45,7 +45,6 @@ class OfferTypeSerializer(serializers.ModelSerializer):
             else:
                 offer_type_obj = super(OfferTypeSerializer, self).create(validated_data)
                 offer_type_obj.created_by = user.id
-                offer_type_obj.updated_by = user.id
                 offer_type_obj.save()
                 return offer_type_obj
 
