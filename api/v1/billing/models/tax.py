@@ -1,13 +1,13 @@
 # table header
-# module: Utility-Service  | sub-module - Service plan
+# module: billing | sub-module - billing
 # table type : lookup (Local)
-# table name : 2.12.30 Unit Range
-# table description : A lookup table for max unit ranges for given Service plan
+# table name : Tax
+# table description : A lookup table for tax of given rate.
 # frequency of data changes : Low
-# sample tale data : "50","1000"
-# reference tables : 2.2.2. Service Plan Rate
-# author : Saloni Monde
-# created on : 21/04/2020
+# sample tale data : 
+# reference tables : Tax Table
+# author : Priyanka 
+# created on : 01/03/2021
 
 # change history
 # <ddmmyyyy><changes><author>
@@ -19,13 +19,14 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 
-# Create Unit Range table start.
+# Create Tax table start.
 
-class UnitRange(models.Model):
+class Tax(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    range = models.CharField(max_length=200, blank=True, null=True)
+    tax_name = models.CharField(max_length=200, blank=False, null=False)
+    tax_percentage = models.CharField(max_length=200, blank=False, null=False)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -33,9 +34,24 @@ class UnitRange(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.range
+        return self.tax_name
 
     def __unicode__(self):
-        return self.range
-# Create Unit Range table start.
+        return self.tax_name
 
+# Create Tax table end.
+
+def get_tax_by_tenant_id_string(tenant_id_string):
+    return Tax.objects.filter(tenant__id_string=tenant_id_string)
+
+def get_tax_by_id_string(id_string):
+    try:
+        return Tax.objects.get(id_string = id_string)
+    except:
+        return False
+
+def get_tax_by_id(id):
+    try:
+        return Tax.objects.get(id = id)
+    except:
+        return False

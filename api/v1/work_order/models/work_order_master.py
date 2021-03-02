@@ -5,6 +5,8 @@ from django.contrib.postgres.fields import JSONField
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_product import get_utility_product_by_id
+from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id
+from v1.utility.models.utility_work_order_sub_type import get_utility_work_order_sub_type_by_id
 
 
 
@@ -61,7 +63,23 @@ class WorkOrderMaster(models.Model):
     @property
     def get_utility_product_by_id(self):
         utility_product = get_utility_product_by_id(self.utility_product_id)
-        return utility_product  
+        return utility_product
+
+    @property
+    def get_utility_work_order_type(self):
+        try:
+            type = get_utility_work_order_type_by_id(self.utility_work_order_type_id)
+            return type
+        except:
+            return False
+
+    @property
+    def get_utility_work_order_sub_type(self):
+        try:
+            sub_type = get_utility_work_order_sub_type_by_id(self.utility_work_order_sub_type_id)
+            return sub_type
+        except:
+            return False
 
 # Create work_order_master table end
 

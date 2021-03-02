@@ -37,6 +37,8 @@ from v1.utility.views.utility_region import UtilityRegionList
 from v1.utility.views.utility_holiday_calendar import HolidayList, Holiday, HolidayDetail
 from v1.utility.views.utility_working_hours import WorkingHourList, WorkingHour, WorkingHourDetail
 from v1.utility.views.utility_service_contract_template import UtilityServiceContractTemplateList
+from v1.utility.views.utility_work_order_type import UtilityWorkOrderTypeList
+from v1.utility.views.utility_work_order_sub_type import UtilityWorkOrderSubTypeList
 # from v1.utility.views.utility_country import UtilityCountryList
 # from v1.utility.views.utility_state import UtilityStateList
 
@@ -98,6 +100,8 @@ urlpatterns = [
     path('service-contract', UtilityServiceContractMaster.as_view(),
          name='utility_service_contract_master_post'),
     path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
+    path('<uuid:id_string>/work-order-type/list', UtilityWorkOrderTypeList.as_view()),
+    path('<uuid:id_string>/work-order-sub-type/list', UtilityWorkOrderSubTypeList.as_view()),
     # path('<uuid:id_string>/service-request-type/list', UtilityServiceRequestTypeList.as_view()),
     # path('<uuid:id_string>/service-request-sub-type/list', UtilityServiceRequestSubTypeList.as_view()),
 
