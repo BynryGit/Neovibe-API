@@ -49,15 +49,11 @@ class CustomFilter:
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
         
         if 'consumer_id' in request.query_params:
-            print("This is the inital queryset =>", queryset)
             consumer = get_consumer_by_id_string(request.query_params['consumer_id'])
-            print("This is the consumer :", consumer) 
             queryset = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
-            print("This is the queryset after :", queryset)
             if 'temporary_disconnected_meter' in request.query_params:
                 queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=1)
             else:
                 queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=0)
-            print("This is the final queryset =>", queryset)
         return queryset
 
