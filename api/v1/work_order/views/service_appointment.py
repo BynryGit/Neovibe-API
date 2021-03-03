@@ -47,7 +47,7 @@ class ServiceAppointmentList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    utility = get_utility_by_id_string(self.request.query_params['id_string'])
+                    utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
                     queryset = ServiceAppointmentTbl.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
