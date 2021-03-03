@@ -19,7 +19,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
-from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
+from v1.billing.models.bill_cycle import get_bill_cycle_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
@@ -56,15 +56,15 @@ class ScheduleBill(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.bill_cycle_id
+        return str(self.bill_cycle_id)
 
     def __unicode__(self):
         return self.bill_cycle_id
 
     @property
-    def get_read_cycle_name(self):
-        read_cycle = get_read_cycle_by_id(self.read_cycle_id)
-        return read_cycle
+    def get_bill_cycle_name(self):
+        bill_cycle = get_bill_cycle_by_id(self.bill_cycle_id)
+        return bill_cycle
 
     @property
     def get_frequency_name(self):

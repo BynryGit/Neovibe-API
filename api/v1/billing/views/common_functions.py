@@ -9,6 +9,21 @@ from v1.payment.models.payment import Payment
 from v1.utility.models.utility_service_plan import get_utility_service_plans_by_dates, UtilityServicePlan
 from v1.utility.models.utility_service_plan_rate import get_utility_service_plans_rates, UtilityServicePlanRate
 
+from api.messages import *
+from rest_framework import status
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
+from v1.commonapp.models.premises import get_premise_by_id_string
+from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.zone import get_zone_by_id_string
+from v1.commonapp.models.area import get_area_by_id_string
+from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.division import get_division_by_id_string
+from v1.utility.models.utility_product import get_utility_product_by_id_string
+from master.models import get_user_by_id_string
+from  v1.billing.models.bill_cycle import get_bill_cycle_by_id_string
 
 def set_validated_data(validated_data):
     if "consumer_category_id" in validated_data:
@@ -191,3 +206,69 @@ def save_bill_rates(consumer, bill_month, schedule):
             pass
     except:
         pass
+
+
+
+def set_schedule_bill_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "recurring_id" in validated_data:
+        recurring = get_global_lookup_by_id_string(validated_data["recurring_id"])
+        if recurring:
+            validated_data["recurring_id"] = recurring.id
+        else:
+            raise CustomAPIException(IS_RECCURING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "bill_cycle_id" in validated_data:
+        read_cycle = get_bill_cycle_by_id_string(validated_data["bill_cycle_id"])
+        if read_cycle:
+            validated_data["bill_cycle_id"] = read_cycle.id
+        else:
+            raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "frequency_id" in validated_data:
+        frequency = get_global_lookup_by_id_string(validated_data["frequency_id"])
+        if frequency:
+            validated_data["frequency_id"] = frequency.id
+        else:
+            raise CustomAPIException(FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["frequency_id"] = None
+
+    if "repeat_every_id" in validated_data:
+        repeat_every = get_global_lookup_by_id_string(validated_data["repeat_every_id"])
+        if repeat_every:
+            validated_data["repeat_every_id"] = repeat_every.id
+        else:
+            raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["repeat_every_id"] = None
+
+    if "utility_product_id" in validated_data:
+        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
+        if utility_product:
+            validated_data["utility_product_id"] = utility_product.id
+        else:
+            raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "occurs_on" in validated_data:
+        pass
+    else:
+        validated_data["occurs_on"] = []
+
+    if "end_date" in validated_data:
+        pass
+    else:
+        validated_data["end_date"] = None
+
+    if "cron_expression" in validated_data:
+        pass
+    else:
+        validated_data["cron_expression"] = None
+
+    return validated_data
