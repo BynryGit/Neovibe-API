@@ -10,6 +10,7 @@ from v1.utility.models.utility_work_order_sub_type import get_utility_work_order
 
 
 
+
 # table header
 # module: Work Order | sub-module -
 # table type: Master
@@ -55,10 +56,10 @@ class WorkOrderMaster(models.Model):
     #     service_subtype = get_service_sub_type_by_id(self.service_subtype_id)
     #     return service_subtype
 
-    @property
-    def get_consumer_service_master(self):
-        work_order_master = get_consumer_service_master_by_id(self.consumer_service_master_id)
-        return work_order_master
+    # @property
+    # def get_consumer_service_master(self):
+    #     work_order_master = get_consumer_service_master_by_id(self.consumer_service_master_id)
+    #     return work_order_master
 
     @property
     def get_utility_product_by_id(self):

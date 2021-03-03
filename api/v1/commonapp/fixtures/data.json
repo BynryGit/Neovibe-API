@@ -5227,5 +5227,668 @@
         "tax": 5.25,
         "is_active": "True"
       }
-  }
+  },
+  {
+     "pk": "1",
+     "model": "work_order.MaterialType",
+     "fields": {
+       "tenant": 1,
+       "utility":1 ,
+       "name": "Pipe",
+		"is_active": "True"
+     }
+  },
+  {
+     "pk": "2",
+     "model": "work_order.MaterialType",
+     "fields": {
+       "tenant": 1,
+       "utility":1 ,
+       "name": "Elbow",
+		"is_active": "True"
+     }
+  },
+  {
+     "pk": "3",
+     "model": "work_order.MaterialType",
+     "fields": {
+       "tenant": 1,
+       "utility":1 ,
+       "name": "Socket",
+		"is_active": "True"
+     }
+  },
+  {
+     "pk": "4",
+     "model": "work_order.MaterialType",
+     "fields": {
+       "tenant": 1,
+       "utility":1 ,
+       "name": "Valves",
+		"is_active": "True"
+     }
+  },
+  {
+     "pk": "5",
+     "model": "work_order.MaterialType",
+     "fields": {
+       "tenant": 1,
+
+       "utility":1 ,
+       "name": "Regulator",
+		"is_active": "True"
+     }
+  },
+  {
+     "pk": "1",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI pipe",
+		"material_type_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "2",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Copper  pipe",
+		"material_type_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "3",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "MDPE  elbow",
+		"material_type_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "4",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI  pipe",
+		"material_type_id":2,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "5",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Copper  elbow",
+		"material_type_id":2,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "6",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI  Socket",
+		"material_type_id":3,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "7",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Copper  socket",
+		"material_type_id":3,
+		"is_active": "True"
+     }
+},
+  {
+     "pk": "8",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Appliance",
+		"material_type_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "9",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation ",
+		"material_type_id":4,
+		"is_active": "True"
+     }
+},
+{
+    "pk": "10",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Appliance",
+		"material_type_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "11",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation ",
+		"material_type_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "12",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Appliance",
+		"material_type_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "13",
+     "model": "work_order.MaterialSubType",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation ",
+		"material_type_id":4,
+		"is_active": "True"
+     }
+},
+  {
+     "pk": "1",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI pipe 1/2",
+		"material_subtype_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "2",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI pipe 3/4",
+		"material_subtype_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "1",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI pipe 1",
+		"material_subtype_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "4",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI pipe 2",
+		"material_subtype_id":1,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "5",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "CU PIPE 12 MM",
+		"material_subtype_id":2,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "6",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "MDPE PIPE 20MM",
+		"material_subtype_id":3,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "7",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI Elbow 1/2",
+		"material_subtype_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "8",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI Elbow 3/4",
+		"material_subtype_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "9",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI Elbow 1",
+		"material_subtype_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "10",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI Elbow 2",
+		"material_subtype_id":4,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "11",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "CU Elbow 12 MM",
+		"material_subtype_id":5,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "12",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI Socket 1/2",
+		"material_subtype_id":6,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "13",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI Socket 3/4",
+		"material_subtype_id":6,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "14",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI socket 1",
+		"material_subtype_id":6,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "15",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "GI socket 2",
+		"material_subtype_id":6,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "16",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "CU Socket 12 MM",
+		"material_subtype_id":7,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "17",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Appliance valves 1/2",
+		"material_subtype_id":8,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "18",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation  valves 1/2",
+		"material_subtype_id":9,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "19",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation  valves 3/4",
+		"material_subtype_id":9,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "20",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation  valves 1",
+		"material_subtype_id":9,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "21",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Isolation  valves 2",
+		"material_subtype_id":9,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "22",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Meter  Regulator 2.5 SCMH (100 mbar to 22 mbar)",
+		"material_subtype_id":10,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "23",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Riser  Regulator 2.5 SCMH (100 mbar to 22 mbar)",
+		"material_subtype_id":11,
+		"is_active": "True"
+     }
+},
+{
+     "pk": "24",
+     "model": "work_order.MaterialName",
+     "fields": {
+       "tenant": 1,
+       "utility": 1,
+       "name": "Riser  Regulator 6 SCMH (4 bar to 22 mbar)",
+		"material_subtype_id":11,
+		"is_active": "True"
+     }
+},
+  {
+   "pk": "1",
+   "model": "work_order.WorkOrderRule",
+   "fields": {
+    "tenant":"1",
+   "utility": "1",
+    "rule_id": 1,
+    "rule": "Active Resources",
+     "is_active": "True"
+   }
+ },
+ {
+   "pk": "2",
+   "model": "work_order.WorkOrderRule",
+   "fields": {
+    "tenant":"1",
+   "utility": "1",
+  "rule_id": 2,
+    "rule": "Match Skills",
+     "is_active": "True"
+   }
+ },
+{
+   "pk": "3",
+   "model": "work_order.WorkOrderRule",
+   "fields": {
+    "tenant":"1",
+   "utility": "1",
+  "rule_id": 3,
+    "rule": "Resource Availability",
+     "is_active": "True"
+   }
+ },
+{
+   "pk": "4",
+   "model": "work_order.WorkOrderRule",
+   "fields": {
+    "tenant":"1",
+   "utility": "1",
+   "rule_id": 4,
+    "rule": "Due date",
+     "is_active": "True"
+   }
+ },
+  {
+ "pk": "1",
+   "model": "commonapp.Skills",
+   "fields": {
+    "tenant":"1",
+   "utility": "1",
+   "skill": "Technical skill",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "2",
+   "model": "commonapp.Skills",
+   "fields": {
+    "tenant":"1",
+    "utility": "1",
+    "skill": "Work on time",
+     "is_active": "True"
+   }
+ },
+
+
+{
+ "pk": "3",
+   "model": "commonapp.Skills",
+   "fields": {
+    "tenant":"1",
+    "utility": "1",
+    "skill": "Work under pressure",
+     "is_active": "True"
+   }
+ },
+  {
+ "pk": "1",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Installation",
+  "key":"INSTALLATION",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "2",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Services",
+  "key":"SERVICES",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "3",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Complaint",
+     "key":"COMPLAINT",
+     "is_active": "True"
+   }
+ },{
+ "pk": "4",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Maintenance",
+  "key":"MAINTENANCE",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "5",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Outage",
+  "key":"OUTAGE",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "6",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Emergency",
+  "key":"EMERGENCY",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "7",
+   "model": "commonapp.WorkOrderType",
+   "fields": {
+  "name": "Breakdown",
+  "key":"BREAKDOWN",
+     "is_active": "True"
+   }
+ },
+  {
+ "pk": "1",
+   "model": "commonapp.WorkOrderSubType",
+   "fields": {
+  "name": "Domestic meter",
+"work_order_type_id":1,
+"key":"Domestic meter",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "2",
+   "model": "commonapp.WorkOrderSubType",
+   "fields": {
+  "name": "Domestic Smart Meter",
+"work_order_type_id":1,
+"key":"Domestic Smart Meter",
+     "is_active": "True"
+   }
+ },
+
+{
+ "pk": "3",
+   "model": "commonapp.WorkOrderSubType",
+   "fields": {
+  "name": "Disconnection",
+"work_order_type_id":2,
+"key":"Disconnection",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "4",
+   "model": "commonapp.WorkOrderSubType",
+   "fields": {
+  "name": "Damage Installation",
+"work_order_type_id":2,
+"key":"Damage Installation",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "5",
+   "model": "commonapp.WorkOrderSubType",
+   "fields": {
+  "name": "Meter Burnt",
+"work_order_type_id":3,
+"key":"Meter Burnt",
+     "is_active": "True"
+   }
+ },
+{
+ "pk": "6",
+   "model": "commonapp.WorkOrderSubType",
+   "fields": {
+  "name": "Display Out",
+"work_order_type_id":3,
+"key":"Display Out",
+     "is_active": "True"
+   }
+ }
+
+
+
+
+
+
 ]

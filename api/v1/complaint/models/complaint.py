@@ -1,5 +1,6 @@
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime
+from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail # importing package for datetime
 import fsm
 from rest_framework import status
 
@@ -70,6 +71,7 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     complaint_no = models.CharField(max_length=200, null=True, blank=True)
     complaint_name = models.CharField(max_length=500, null=True, blank=True)
+    consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     description = models.CharField(max_length=500, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     consumer_complaint_master_id = models.BigIntegerField(null=True, blank=True)

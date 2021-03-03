@@ -45,20 +45,23 @@ class ComplaintSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_complaint_subtype_validated_data(validated_data)
             if ComplaintSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                                  utility_id=validated_data['utility_id']).exists():
+                                                  utility_id=validated_data['utility_id'], complaint_type_id=validated_data['complaint_type_id']).exists():
                 raise CustomAPIException(COMPLAINT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 complaint_subtype_obj = super(ComplaintSubTypeSerializer, self).create(validated_data)
                 complaint_subtype_obj.created_by = user.id
-                complaint_subtype_obj.updated_by = user.id
                 complaint_subtype_obj.save()
                 return complaint_subtype_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_complaint_subtype_validated_data(validated_data)
-        with transaction.atomic():
-            complaint_subtype_obj = super(ComplaintSubTypeSerializer, self).update(instance, validated_data)
-            complaint_subtype_obj.updated_by = user.id
-            complaint_subtype_obj.updated_date = datetime.utcnow()
-            complaint_subtype_obj.save()
-            return complaint_subtype_obj
+        if ComplaintSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                              utility_id=validated_data['utility_id'],complaint_type_id=validated_data['complaint_type_id']).exists():
+            raise CustomAPIException(COMPLAINT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                complaint_subtype_obj = super(ComplaintSubTypeSerializer, self).update(instance, validated_data)
+                complaint_subtype_obj.updated_by = user.id
+                complaint_subtype_obj.updated_date = datetime.utcnow()
+                complaint_subtype_obj.save()
+                return complaint_subtype_obj
