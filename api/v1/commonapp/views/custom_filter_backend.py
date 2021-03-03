@@ -4,7 +4,7 @@ from v1.commonapp.models.module import get_module_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id_string , ConsumerMaster
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id_string
-
+from v1.complaint.models.complaint_type import get_complaint_type_by_id_string
 
 class CustomFilter:
 
@@ -29,6 +29,10 @@ class CustomFilter:
         if 'utility_work_order_type_id' in request.query_params:
             utility_work_order_type = get_utility_work_order_type_by_id_string(request.query_params['utility_work_order_type_id'])
             queryset = queryset.filter(utility_work_order_type_id=utility_work_order_type.id)
+
+        if 'complaint_type_id' in request.query_params:
+            complaint_type = get_complaint_type_by_id_string(request.query_params['complaint_type_id'])
+            queryset = queryset.filter(complaint_type_id=complaint_type.id)
 
         if 'consumer_processing' in request.query_params:
             consumer_master_list = []
