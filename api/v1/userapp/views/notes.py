@@ -6,15 +6,17 @@ from rest_framework.generics import GenericAPIView
 
 from api.messages import *
 from api.constants import *
-from master.models import get_user_by_id_string
+from master.models import get_user_by_id_string, User
 from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.models.notes import get_notes_by_user_id, get_note_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.userapp.serializers.notes import NoteSerializer, NoteViewSerializer
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 
-
+from v1.userapp.serializers.user import UserViewSerializer
 # API Header
 # API end Point: api/v1/user/:/note
 # API verb: GET, POST, PUT
@@ -159,3 +161,32 @@ from v1.userapp.serializers.notes import NoteSerializer, NoteViewSerializer
 #                 STATE: EXCEPTION,
 #                 RESULT: str(e),
 #             }, status=res.status_code)
+
+
+
+
+import boto3
+from botocore.exceptions import NoCredentialsError
+from rest_framework.parsers import FileUploadParser
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+
+
+class UploadFile(GenericAPIView):
+
+    def post(self, request, format=None):
+
+        print('***********',request.FILES)
+        reader_obj = SettingReader.get_s3_credentials()
+
+        file_obj = request.FILES['file']
+
+        conn = S3Connection(reader_obj['AWS_ACCESS_KEY'], reader_obj['AWS_SECRET_KEY'])
+        k = Key(conn.get_bucket(reader_obj['AWS_S3_BUCKET']))
+        k.key = 'upls/%s/%s.png' % (46, file_obj)
+        k.set_contents_from_string(file_obj.read())
+        k.set_metadata('Content-Type', 'image/jpeg')
+        url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
+
+        print('*****file_obj.read()****',url)
+        

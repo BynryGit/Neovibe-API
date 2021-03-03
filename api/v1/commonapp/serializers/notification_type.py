@@ -40,7 +40,6 @@ class NotificationTypeSerializer(serializers.ModelSerializer):
             else:
                 notification_type_obj = super(NotificationTypeSerializer, self).create(validated_data)
                 notification_type_obj.created_by = user.id
-                notification_type_obj.updated_by = user.id
                 notification_type_obj.save()
                 return notification_type_obj
 

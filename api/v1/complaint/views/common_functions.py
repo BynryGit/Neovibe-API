@@ -74,12 +74,6 @@ def set_complaint_type_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "utility_product_id" in validated_data:
-        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
-        if utility_product:
-            validated_data["utility_product_id"] = utility_product.id
-        else:
-            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

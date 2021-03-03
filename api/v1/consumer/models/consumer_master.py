@@ -91,7 +91,7 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     ownership_id = models.BigIntegerField(null=True, blank=True)
     is_address_same = models.BooleanField(default=False)
     is_vip = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())

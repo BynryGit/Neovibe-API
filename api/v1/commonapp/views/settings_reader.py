@@ -19,3 +19,15 @@ class SettingReader:
         except:
             pass
 
+    @staticmethod
+    def get_s3_credentials():
+        try:
+            data={
+                "AWS_ACCESS_KEY":settings.AWS_ACCESS_KEY,
+                "AWS_SECRET_KEY":settings.AWS_SECRET_KEY,
+                "AWS_S3_BUCKET":settings.AWS_S3_BUCKET
+                }
+            return data
+        except:
+            pass
+

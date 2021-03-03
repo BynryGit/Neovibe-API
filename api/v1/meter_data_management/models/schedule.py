@@ -44,6 +44,7 @@ class Schedule(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     occurs_on = JSONField(default=[])
+    cron_expression = models.CharField(max_length=500, blank=True, null=True)
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -79,7 +80,7 @@ class Schedule(models.Model):
         return recurring
 
     @property
-    def get_utility_product_type_name(self):
+    def get_utility_product_name(self):
         utility_product_type = get_utility_product_by_id(self.utility_product_id)
         return utility_product_type
 

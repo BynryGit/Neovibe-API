@@ -12,6 +12,7 @@ djangorestframework==3.11.0
 PyJWT==1.7.1
 sentry-sdk==0.14.3
 boto3==1.14.4
+boto==2.49.0
 django-crontab==0.7.1
 celery==4.4.5
 redis==3.5.3

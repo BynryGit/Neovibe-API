@@ -33,6 +33,8 @@ class DocumentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
     document_type_id = serializers.CharField(required=False, max_length=200)
+    module_id = serializers.CharField(required=False, max_length=200)
+    sub_module_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = DocumentTbl

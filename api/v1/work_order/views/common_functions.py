@@ -17,6 +17,8 @@ from rest_framework import status
 from v1.commonapp.models.sub_module import get_sub_module_by_key
 # from v1.commonapp.models.service_request_type import get_service_type_by_id_string
 # from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id_string
+from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id_string
+from v1.utility.models.utility_work_order_sub_type import get_utility_work_order_sub_type_by_id_string
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
 from master.models import get_user_by_id_string
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
@@ -36,6 +38,18 @@ def set_work_order_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_work_order_type_id" in validated_data:
+        utility_work_order_type = get_utility_work_order_type_by_id_string(validated_data["utility_work_order_type_id"])
+        if utility_work_order_type:
+            validated_data["utility_work_order_type_id"] = utility_work_order_type.id
+        else:
+            raise CustomAPIException("Utility Work Order Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_work_order_sub_type_id" in validated_data:
+        utility_work_order_sub_type = get_utility_work_order_sub_type_by_id_string(validated_data["utility_work_order_sub_type_id"])
+        if utility_work_order_sub_type:
+            validated_data["utility_work_order_sub_type_id"] = utility_work_order_sub_type.id
+        else:
+            raise CustomAPIException("Utility Work Order Sub Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

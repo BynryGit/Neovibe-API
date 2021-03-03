@@ -42,7 +42,7 @@ SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 print("=====Secret Key=====", SECRET_KEY)
 # SECRET_KEY = get_secret_manager(os.environ['smart360_env'] + "_secret_key")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -239,3 +239,8 @@ EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env'] + "_email_ho
 # SMS configuration
 TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env'] + "_twilio_account_id")
 TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env'] + "_twilio_auth_token")
+
+
+AWS_ACCESS_KEY = 'AKIARUU5RUAA6JXDZZGR'
+AWS_SECRET_KEY = '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'
+AWS_S3_BUCKET = 'smart360-bucket'

@@ -54,14 +54,14 @@ class UtilityModule(models.Model):
 
 def get_utility_module_by_module_id(module_id):
     try:
-        return UtilityModule.objects.get(module_id=module_id)
+        return UtilityModule.objects.get(module_id=module_id, is_active=True)
     except:
         return False
 
 
 def get_utility_module_by_id(id):
     try:
-        return UtilityModule.objects.get(id=id)
+        return UtilityModule.objects.get(id=id, is_active=True)
     except:
         return False
 
@@ -78,4 +78,4 @@ def get_utility_modules_by_tenant_id_string(id_string):
 
 
 def get_utility_modules_by_utility_id_string(id_string):
-    return UtilityModule.objects.filter(utility__id_string=id_string)
+    return UtilityModule.objects.filter(utility__id_string=id_string, is_active=True)

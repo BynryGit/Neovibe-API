@@ -25,6 +25,7 @@ from v1.utility.models.utility_services_number_format import *
 from v1.registration.models import registrations
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 
 
 def is_data_verified(request):
@@ -82,7 +83,10 @@ def set_registration_validated_data(validated_data):
 def generate_registration_no(registration):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=registration.tenant, utility=registration.utility,
-                                                            sub_module_id=get_sub_module_by_key("REGISTRATION"))
+                                                            sub_module_id=get_sub_module_by_key("CONSUMER_OPS_REGISTRATION"))
+        print("==========",format_obj)                                                            
+        # format_obj = UtilityServiceNumberFormat.objects.get(tenant=registration.tenant, utility=registration.utility,
+        #                                                     sub_module_id=get_sub_module_by_key("REGISTRATION"))
         if format_obj.is_prefix:
             registration_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

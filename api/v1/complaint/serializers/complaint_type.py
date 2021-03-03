@@ -13,11 +13,11 @@ from rest_framework import status
 
 
 class ComplaintTypeListSerializer(serializers.ModelSerializer):
-    utility_product = UtilityProductListSerializer(source='get_utility_product')
+
 
     class Meta:
         model = ComplaintTypeTbl
-        fields = ('name', 'id_string', 'utility_product', 'created_date', 'is_active', 'created_by')
+        fields = ('name', 'id_string', 'created_date', 'is_active', 'created_by')
 
 
 class ComplaintTypeViewSerializer(serializers.ModelSerializer):
@@ -36,7 +36,7 @@ class ComplaintTypeSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
-    utility_product_id = serializers.CharField(required=True, max_length=200)
+
 
     class Meta:
         model = ComplaintTypeTbl
@@ -51,15 +51,18 @@ class ComplaintTypeSerializer(serializers.ModelSerializer):
             else:
                 complaint_type_obj = super(ComplaintTypeSerializer, self).create(validated_data)
                 complaint_type_obj.created_by = user.id
-                complaint_type_obj.updated_by = user.id
                 complaint_type_obj.save()
                 return complaint_type_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_complaint_type_validated_data(validated_data)
-        with transaction.atomic():
-            complaint_type_obj = super(ComplaintTypeSerializer, self).update(instance, validated_data)
-            complaint_type_obj.updated_by = user.id
-            complaint_type_obj.updated_date = datetime.utcnow()
-            complaint_type_obj.save()
-            return complaint_type_obj
+        if ComplaintTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                           utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(COMPLAINT_TYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                complaint_type_obj = super(ComplaintTypeSerializer, self).update(instance, validated_data)
+                complaint_type_obj.updated_by = user.id
+                complaint_type_obj.updated_date = datetime.utcnow()
+                complaint_type_obj.save()
+                return complaint_type_obj

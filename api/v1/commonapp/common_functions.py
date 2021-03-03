@@ -13,6 +13,7 @@ from v1.userapp.models.user_utility import check_user_utility_exists
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
+from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.commonapp.models.products import get_product_by_id_string
 from v1.commonapp.models.region import get_region_by_id_string
@@ -22,6 +23,9 @@ from v1.commonapp.models.city import get_city_by_id_string
 from v1.commonapp.models.zone import get_zone_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from v1.commonapp.models.work_order_type import get_work_order_type_by_id_string
+from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_id_string
+from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id_string
 from v1.utility.models.utility_region import get_utility_region_by_id_string
 
 from v1.commonapp.models.channel import get_channel_by_id_string
@@ -198,6 +202,20 @@ def set_document_validated_data(validated_data):
             validated_data["document_type_id"] = document_type.id
         else:
             raise CustomAPIException("Document Type Not Found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "sub_module_id_string" in validated_data:
+        sub_module = get_sub_module_by_id_string(validated_data["sub_module_id_string"])
+        if sub_module:
+            validated_data["sub_module_id_string"] = sub_module.id
+        else:
+            raise CustomAPIException("sub_module not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "module_id_string" in validated_data:
+        module = get_module_by_id_string(validated_data["module_id_string"])
+        if module:
+            validated_data["module_id_string"] = module.id
+        else:
+            raise CustomAPIException("module not found.", status_code=status.HTTP_404_NOT_FOUND)
+
     return validated_data
 
 
@@ -425,7 +443,7 @@ def set_frequency_validated_data(validated_data):
         else:
             raise CustomAPIException("Campaign Type not found.", status_code=status.HTTP_404_NOT_FOUND)
     if "channel_type_id" in validated_data:
-        channel_type = get_utility_channel_by_id_string(validated_data["channel_type_id"])
+        channel_type = get_utility_payment_channel_by_id_string(validated_data["channel_type_id"])
         if channel_type:
             validated_data["channel_type_id"] = channel_type.id
         else:
@@ -637,3 +655,62 @@ def set_integration_master_validated_data(validated_data):
             raise CustomAPIException("Module not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
+
+def set_work_order_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "work_order_type_id" in validated_data:
+        work_order_type = get_work_order_type_by_id_string(validated_data["work_order_type_id"])
+        if work_order_type:
+            validated_data["work_order_type_id"] = work_order_type.id
+        else:
+            raise CustomAPIException("Work Order Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_work_order_sub_type_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "work_order_sub_type_id" in validated_data:
+        work_order_sub_type = get_work_order_sub_type_by_id_string(validated_data["work_order_sub_type_id"])
+        if work_order_sub_type:
+            validated_data["work_order_sub_type_id"] = work_order_sub_type.id
+        else:
+            raise CustomAPIException("Work Order Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "utility_work_order_type_id" in validated_data:
+        utility_work_order_type = get_utility_work_order_type_by_id_string(validated_data["utility_work_order_type_id"])
+        if utility_work_order_type:
+            validated_data["utility_work_order_type_id"] = utility_work_order_type.id
+        else:
+            raise CustomAPIException("Utility Work Order Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def validate_user_data(validated_data):
+    if "user_id_string" in validated_data:
+        user_obj = get_user_by_id_string(validated_data["user_id_string"])
+        if user_obj:
+            validated_data["object_id"] = user_obj.id
+        else:
+            raise CustomAPIException("user_obj not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data

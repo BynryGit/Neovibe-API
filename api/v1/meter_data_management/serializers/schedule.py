@@ -4,7 +4,6 @@ from django.db import transaction
 from django.utils import timezone
 from api.messages import DATA_ALREADY_EXISTS
 from rest_framework import serializers, status
-from v1.commonapp.views.settings_reader import SettingReader
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
@@ -14,8 +13,6 @@ from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.views.common_function import set_schedule_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
-
-setting_reader = SettingReader()
 
 
 class ScheduleShortViewSerializer(serializers.ModelSerializer):
@@ -32,11 +29,7 @@ class ScheduleViewSerializer(serializers.ModelSerializer):
     frequency_id = GlobalLookupShortViewSerializer(many=False, source='get_frequency_name')
     repeat_every_id = GlobalLookupShortViewSerializer(many=False, source='get_repeat_every_name')
     recurring_id = GlobalLookupShortViewSerializer(many=False, source='get_recurring_name')
-    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
-    start_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
-    end_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
-    created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
-    updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
     schedule_status = ChoiceField(choices=ScheduleTbl.SCHEDULE_STATUS)
 
     class Meta:
