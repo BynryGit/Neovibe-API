@@ -7,7 +7,8 @@ from v1.meter_data_management.views.meter_summary import MeterSummary
 from v1.meter_data_management.views.read_cycle import ReadCycleList
 from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortList,ReadCycleDetail
 from v1.meter_data_management.views.route import RouteList, RouteDetail, Route, RouteShortList
-from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary
+from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
+from v1.meter_data_management.views.schedule_log_route import ScheduleLogRouteList
 from v1.meter_data_management.views.smart_meter_configuration import SmartMeterList, SmartMeter, SmartMeterDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
 from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ReadingScheduleSummary
@@ -20,9 +21,11 @@ urlpatterns = [
     path('schedule', Schedule.as_view(), name='schedule'),
     path('schedule/list', ScheduleList.as_view(), name='schedule_list'),
     path('schedule/<uuid:id_string>', ScheduleDetail.as_view(), name='schedule_detail'),
-    path('schedule-log/list', ScheduleLogList.as_view(), name='schedule_log_list'),
     path('utility/<uuid:id_string>/reading-schedule-summary', ReadingScheduleSummary.as_view(),
          name='reading_schedule_summary'),
+
+    path('schedule-log/list', ScheduleLogList.as_view(), name='schedule_log_list'),
+    path('schedule-log/<uuid:id_string>', ScheduleLogDetail.as_view(), name='schedule_detail'),
     path('utility/<uuid:id_string>/reading-schedule-log-summary', ReadingScheduleLogSummary.as_view(),
          name='reading_schedule_summary'),
 
@@ -35,6 +38,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
     path('route', Route.as_view(), name='route_add'),
+    path('schedule-log/<uuid:id_string>/route/list', ScheduleLogRouteList.as_view(), name='schedule_route_list'),
 
     path('smart-meter', SmartMeter.as_view()),
     path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
