@@ -45,16 +45,19 @@ class CustomFilter:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=0)
+                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
         
         if 'consumer_id' in request.query_params:
+            print("This is the inital queryset =>", queryset)
             consumer = get_consumer_by_id_string(request.query_params['consumer_id'])
+            print("This is the consumer :", consumer) 
+            queryset = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
+            print("This is the queryset after :", queryset)
             if 'temporary_disconnected_meter' in request.query_params:
-                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, status=1)
+                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=1)
             else:
-                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, status=0)
-                consumer_master_list.append(consumer_master_obj)                    
-                queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
+                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=0)
+            print("This is the final queryset =>", queryset)
         return queryset
 
