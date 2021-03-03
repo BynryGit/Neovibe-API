@@ -67,11 +67,12 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
         SERVICE_APPOINTMENT_DICT['HOLD']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'], SERVICE_APPOINTMENT_DICT['CLOSED'],),
         SERVICE_APPOINTMENT_DICT['CLOSED']: (SERVICE_APPOINTMENT_DICT['ARCHIVED'],),
     }
-
+    
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_id = models.BigIntegerField(null=True, blank=True)
+    consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
     work_order_master_id = models.BigIntegerField(blank=True, null=True)
     state = models.BigIntegerField(choices=CHOICES, default=1)

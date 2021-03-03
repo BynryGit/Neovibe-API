@@ -1,3 +1,4 @@
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -34,6 +35,11 @@ class ConsumerOfferDetail(GenericAPIView):
             serializer = ConsumerOfferDetailSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 consumer_offer_detail = serializer.create(serializer.validated_data, consumer, user)
+                if request.data['consumer_service_contract_id_string']:
+                    consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(request.data['consumer_service_contract_id_string'])
+                    consumer_offer_detail.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    consumer_offer_detail.save()
+
                 view_serializer = ConsumerOfferDetailSerializer(instance=consumer_offer_detail, context={'request': request})
                 return Response({
                     STATE: SUCCESS,

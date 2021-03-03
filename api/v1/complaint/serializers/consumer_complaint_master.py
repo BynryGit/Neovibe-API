@@ -10,7 +10,7 @@ from v1.complaint.views.common_functions import set_complaint_master_validated_d
 
 class ConsumerComplaintMasterListSerializer(serializers.ModelSerializer):
     complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
-
+    
     class Meta:
         model = ConsumerComplaintMasterTbl
         fields = ('id_string', 'name', 'complaint_sub_type','service_obj')

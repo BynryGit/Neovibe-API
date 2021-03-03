@@ -19,6 +19,7 @@ from v1.commonapp.models.sub_module import get_sub_module_by_key
 # from v1.commonapp.models.service_request_sub_type import get_service_sub_type_by_id_string
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
 from master.models import get_user_by_id_string
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 
 
 
@@ -115,6 +116,13 @@ def set_service_appointment_validated_data(validated_data):
             validated_data["status_id"] = status_obj.id
         else:
             raise CustomAPIException("status not found.", status_code=status.HTTP_404_NOT_FOUND)
+    
+    if "consumer_service_contract_detail_id" in validated_data:
+        consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(validated_data["consumer_service_contract_detail_id"])
+        if consumer_service_contract_detail_obj:
+            validated_data["consumer_service_contract_detail_id"]=consumer_service_contract_detail_obj.id
+        else:
+            raise CustomAPIException("consumer service contract detail not found.", status_code=status.HTTP_404_NOT_FOUND) 
 
     return validated_data
 
@@ -138,9 +146,13 @@ def set_schedule_appointment_validated_data(validated_data):
 # Function for generating service appointment number according to utility
 def generate_service_appointment_no(service_appointment):
     try:
+        print("==========================",service_appointment.tenant)
+        print("=================",get_sub_module_by_key("DISPATCHER"))
+        print("==========================",service_appointment.utility)
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=service_appointment.tenant,
                                                             utility=service_appointment.utility,
                                                             sub_module_id=get_sub_module_by_key("DISPATCHER"))
+        print("+++++++++++++++++++",format_obj)
         if format_obj.is_prefix:
             sa_number = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
@@ -151,6 +163,7 @@ def generate_service_appointment_no(service_appointment):
             format_obj.save()
         return sa_number
     except Exception as e:
+        print("#############", e)
         raise CustomAPIException("sa_number no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -196,4 +209,3 @@ def set_service_appointment_data(work_order, consumer):
     except Exception as e:
         raise CustomAPIException("Error in setting service_appointment_data",
                                  status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-

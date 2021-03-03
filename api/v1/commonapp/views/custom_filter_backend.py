@@ -31,7 +31,10 @@ class CustomFilter:
         
         if 'consumer_id' in request.query_params:
             consumer = get_consumer_by_id_string(request.query_params['consumer_id'])
-            queryset = queryset.filter(consumer_id=consumer.id, is_active=True)
-        return queryset
+            if 'temporary_disconnected_meter' in request.query_params:
+                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, status=1)
+            else:
+                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, status=0)
 
         return queryset
+

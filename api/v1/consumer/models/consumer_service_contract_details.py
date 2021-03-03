@@ -29,7 +29,7 @@ class ConsumerServiceContractDetail(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
 
     def __str__(self):
-        return self.consumer_no
+        return str(self.consumer_no)
 
     def __unicode__(self):
         return self.consumer_no

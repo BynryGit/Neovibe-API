@@ -46,7 +46,7 @@ def set_complaint_validated_data(validated_data):
 def generate_complaint_no(consumer):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
-                                                            sub_module_id=get_sub_module_by_key("COMPLAINT"))
+                                                            sub_module_id=get_sub_module_by_key("COMPLAINTS"))
         if format_obj.is_prefix:
             complaint_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
