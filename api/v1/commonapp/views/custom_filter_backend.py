@@ -1,9 +1,12 @@
 from v1.meter_data_management.models.schedule import get_schedule_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
+from v1.consumer.models.consumer_master import ConsumerMaster, get_consumer_by_id_string
+from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id_string , ConsumerMaster
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id_string
+from v1.complaint.models.complaint_type import get_complaint_type_by_id_string
 
 
 class CustomFilter:
@@ -22,6 +25,7 @@ class CustomFilter:
             schedule_obj = get_schedule_by_id_string(request.query_params['schedule_id'])
             queryset = queryset.filter(schedule_id=schedule_obj.id)
 
+
         if 'module_id' in request.query_params:
             module_obj = get_module_by_id_string(request.query_params['module_id'])
             queryset = queryset.filter(module_id=module_obj.id)
@@ -30,14 +34,26 @@ class CustomFilter:
             utility_work_order_type = get_utility_work_order_type_by_id_string(request.query_params['utility_work_order_type_id'])
             queryset = queryset.filter(utility_work_order_type_id=utility_work_order_type.id)
 
+        if 'complaint_type_id' in request.query_params:
+            complaint_type = get_complaint_type_by_id_string(request.query_params['complaint_type_id'])
+            queryset = queryset.filter(complaint_type_id=complaint_type.id)
+
         if 'consumer_processing' in request.query_params:
             consumer_master_list = []
             consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
             if consumer_master_objs:
                 for consumer_master_obj in consumer_master_objs:
-                    consumer_master_list.append(consumer_master_obj)                    
+                    consumer_master_list.append(consumer_master_obj)
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-                queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
+                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
-
+        
+        if 'consumer_id' in request.query_params:
+            consumer = get_consumer_by_id_string(request.query_params['consumer_id'])
+            queryset = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
+            if 'temporary_disconnected_meter' in request.query_params:
+                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=1)
+            else:
+                queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=0)
         return queryset
+

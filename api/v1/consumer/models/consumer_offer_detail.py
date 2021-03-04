@@ -11,6 +11,7 @@ class ConsumerOfferDetail(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_id = models.BigIntegerField(null=True, blank=True)
     offer_id = models.BigIntegerField(null=True, blank=True)
+    consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
     is_active = models.BooleanField(default=True)

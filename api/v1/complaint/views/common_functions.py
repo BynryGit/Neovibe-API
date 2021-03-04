@@ -46,7 +46,7 @@ def set_complaint_validated_data(validated_data):
 def generate_complaint_no(consumer):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
-                                                            sub_module_id=get_sub_module_by_key("COMPLAINT"))
+                                                            sub_module_id=get_sub_module_by_key("COMPLAINTS"))
         if format_obj.is_prefix:
             complaint_no = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
@@ -74,12 +74,6 @@ def set_complaint_type_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "utility_product_id" in validated_data:
-        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
-        if utility_product:
-            validated_data["utility_product_id"] = utility_product.id
-        else:
-            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

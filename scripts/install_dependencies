@@ -73,4 +73,8 @@ echo "################################################## Loading data ##########
 cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
 
 echo "############################## Successfully load data ######################################################"
+
+cd /home/ubuntu/smart360/api && sudo python3 manage.py showmigrations
+
+echo "############################## MIGRATIONS ######################################################"
 # cd /home/ubuntu/smart360/api && cat <(echo "yes") - | python3 manage.py collectstatic

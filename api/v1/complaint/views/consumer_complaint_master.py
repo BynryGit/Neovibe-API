@@ -1,3 +1,5 @@
+from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.complaint.models.consumer_complaint_master import ConsumerComplaintMaster as ConsumerComplaintMasterModel, get_consumer_complaint_master_by_id_string
@@ -33,7 +35,13 @@ class ConsumerComplaintMasterList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerComplaintMasterModel.objects.filter(utility=utility, is_active=True)
+                    if 'consumer_service_contract_detail_id_string' in self.request.query_params:
+                        consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(self.request.query_params['consumer_service_contract_detail_id_string'])
+                        utility_service_contract_master_obj = get_utility_service_contract_master_by_id(consumer_service_contract_detail_obj.service_contract_id)
+                        utility_product_id = utility_service_contract_master_obj.utility_product_id
+                        queryset = ConsumerComplaintMasterModel.objects.filter(utility=utility, is_active=True, utility_product_id=utility_product_id)
+                    else:
+                        queryset = ConsumerComplaintMasterModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
                     else:

@@ -19,6 +19,7 @@ HUMAN_CAPITAL = get_module_by_key('HUMAN_CAPITAL') if get_module_by_key('HUMAN_C
 FINANCE = get_module_by_key('FINANCE') if get_module_by_key('FINANCE') else ""
 ADMIN = get_module_by_key('ADMIN') if get_module_by_key('ADMIN') else ""
 DEMOM = get_module_by_key('DEMOM') if get_module_by_key('DEMOM') else ""
+BILLING = get_module_by_key('BILLING') if get_module_by_key('BILLING') else ""
 
 # *********** SUB MODULE CONSTANTS **************
 S_AND_M_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD') if get_sub_module_by_key('S_AND_M_DASHBOARD') else ""
@@ -37,7 +38,7 @@ HUMAN_CAPITAL_DASHBOARD = get_sub_module_by_key('HUMAN_CAPITAL_DASHBOARD') if ge
 FINANCE_DASHBOARD = get_sub_module_by_key('S_AND_M_DASHBOARD') if get_sub_module_by_key('S_AND_M_DASHBOARD') else ""
 METER_DATA = get_sub_module_by_key('METER_DATA') if get_sub_module_by_key('METER_DATA') else ""
 
-BILLING = get_sub_module_by_key('BILLING') if get_sub_module_by_key('BILLING') else ""
+SCHEDULE = get_sub_module_by_key('SCHEDULE') if get_sub_module_by_key('SCHEDULE') else ""
 CAMPAIGN = get_sub_module_by_key('CAMPAIGN') if get_sub_module_by_key('CAMPAIGN') else ""
 CONSUMER = get_sub_module_by_key('CONSUMER') if get_sub_module_by_key('CONSUMER') else ""
 CONTRACT = get_sub_module_by_key('CONTRACT') if get_sub_module_by_key('CONTRACT') else ""

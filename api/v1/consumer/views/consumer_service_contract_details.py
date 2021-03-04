@@ -33,12 +33,10 @@ class ConsumerServiceContractDetailList(generics.ListAPIView):
     try:
         serializer_class = ConsumerServiceContractDetailViewSerializer
         pagination_class = StandardResultsSetPagination
-
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('tenant__id_string',)
         ordering_fields = ('tenant',)
         search_fields = ('tenant__name',)
-
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
@@ -56,7 +54,6 @@ class ConsumerServiceContractDetailList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Consumer ops', sub_module='consumer')
-
 # Note: rohan below is updated api for fetch service contract detail list you just delete above code give class name to below api and delete url
 
 

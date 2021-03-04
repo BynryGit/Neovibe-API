@@ -1,4 +1,5 @@
 import traceback
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -6,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from api.messages import *
 from api.constants import *
-from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer,ServiceAppointmentViewSerializer,ServiceAppointmentListSerializer
@@ -21,6 +22,7 @@ from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.module import get_module_by_key
 from v1.commonapp.models.notes import Notes
+from django.db.models import Q
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -45,7 +47,7 @@ class ServiceAppointmentList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
                     queryset = ServiceAppointmentTbl.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
@@ -120,7 +122,7 @@ class ServiceAppointment(GenericAPIView):
 
 
 class ServiceAppointmentDetail(GenericAPIView):
-
+    
     @is_token_validate
     @role_required(WORK_ORDER, DISPATCHER, EDIT)
     def get(self, request, id_string):
@@ -154,31 +156,35 @@ class ServiceAppointmentDetail(GenericAPIView):
             service_appointment = get_service_appointment_by_id_string(id_string)
             if service_appointment:
                 service_assignment_obj = get_service_assignment_by_appointment_id(service_appointment.id).last()
-
-                serializer = ServiceAppointmentSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=False):
-                    with transaction.atomic():      
-                        service_appointment_obj = serializer.update(service_appointment, serializer.validated_data, user)
-
-                        # State change for service assignment start
-                        service_appointment_obj.change_state(SERVICE_APPOINTMENT_DICT["COMPLETED"])
-                        # State change for service assignment end
-                        
-                        # Soft Delete entry from Service Assignment start
-                        service_assignment_obj.is_active = False
-                        service_assignment_obj.save()
-                        # Soft Delete entry from Service Assignment end
-
-                    view_serializer = ServiceAppointmentViewSerializer(instance=service_appointment_obj, context={'request': request})
-                    return Response({
-                        STATE: SUCCESS,
-                        RESULT: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
+                # condition for the disconnection ckeck 
+                if 'disconnect_meter' in self.request.query_params:
+                    if self.request.query_params['disconnect_meter'] == 'true':
+                        service_appointment.save()
                 else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULT: list(serializer.errors.values())[0][0],
-                    }, status=status.HTTP_400_BAD_REQUEST)
+                    serializer = ServiceAppointmentSerializer(data=request.data)
+                    if serializer.is_valid(raise_exception=False):
+                        with transaction.atomic():      
+                            service_appointment_obj = serializer.update(service_appointment, serializer.validated_data, user)
+
+                            # State change for service assignment start
+                            service_appointment_obj.change_state(SERVICE_APPOINTMENT_DICT["COMPLETED"])
+                            # State change for service assignment end
+                            
+                            # Soft Delete entry from Service Assignment start
+                            service_assignment_obj.is_active = False
+                            service_assignment_obj.save()
+                            # Soft Delete entry from Service Assignment end
+
+                        view_serializer = ServiceAppointmentViewSerializer(instance=service_appointment_obj, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: view_serializer.data,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                            RESULT: list(serializer.errors.values())[0][0],
+                        }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,

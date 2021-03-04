@@ -1,3 +1,6 @@
+from v1.utility.models.utility_product import UtilityProduct
+from v1.utility.models.utility_service_contract_master import UtilityServiceContractMaster
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 from rest_framework import generics, status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -9,7 +12,7 @@ from v1.consumer.serializers.consumer_offer_master import ConsumerOfferMasterLis
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
-from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from rest_framework import status, generics
@@ -46,7 +49,13 @@ class ConsumerOfferMasterList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True)
+                    if "consumer_service_contract_id_string" in self.request.query_params:
+                        consumer_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(self.request.query_params["consumer_service_contract_id_string"])
+                        utility_product_obj_id = UtilityServiceContractMaster.objects.get(id=consumer_contract_detail_obj.service_contract_id).utility_product_id
+                        utility_product_obj = UtilityProduct.objects.get(id=utility_product_obj_id)
+                        queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True, utility_product_id=utility_product_obj.id)
+                    else:
+                        queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
                     else:
