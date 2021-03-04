@@ -138,10 +138,10 @@ class ScheduleDetail(GenericAPIView):
         try:
             schedule_obj = get_schedule_by_id_string(id_string)
             if schedule_obj:
-                serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+                schedule_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: serializer.data,
+                    RESULT: schedule_serializer.data,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({

@@ -18,6 +18,7 @@ from datetime import datetime # importing package for datetime
 from master.models import get_user_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id
+from v1.meter_data_management.models.schedule import get_schedule_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
@@ -68,6 +69,11 @@ class RouteTaskAssignment(models.Model):
     def get_meter_reader_name(self):
         meter_reader = get_user_by_id(self.meter_reader_id)
         return meter_reader
+
+    @property
+    def get_schedule_log(self):
+        schedule_log = get_schedule_by_id(self.schedule_log_id)
+        return schedule_log
 
     def __str__(self):
         return str(self.id_string)
