@@ -14,6 +14,12 @@ from v1.meter_data_management.serializers.schedule import ScheduleShortViewSeria
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
 
 
+class ScheduleLogShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScheduleLogTbl
+        fields = ('id_string',)
+
+
 class ScheduleLogViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()

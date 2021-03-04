@@ -136,6 +136,7 @@ IS_RECCURING_NOT_FOUND = 'Reccuring Id Not Found'
 UTILITY_PRODUCT_NOT_FOUND = 'Utility Product not found'
 UTILITY_WITH_GIVEN_DETAILS_ALREADY_EXIST = "Utility with given details already exist"
 METER_NOT_FOUND = 'Meter not found'
+METER_READER_NOT_FOUND = 'Meter reader not found'
 METER_TYPE_NOT_FOUND = 'Meter type not found'
 PREMISE_NOT_FOUND = "Premise not found"
 METER_READING_NOT_FOUND = "Meter Reading not found"
