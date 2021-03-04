@@ -12,6 +12,7 @@ from v1.meter_data_management.serializers.route import RouteShortViewSerializer
 from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment as RouteTaskAssignmentTbl
 from v1.meter_data_management.serializers.schedule_log import ScheduleLogShortViewSerializer
 from v1.meter_data_management.views.common_function import set_route_task_assignment_validated_data
+from v1.meter_data_management.task.route_task_assignment import assign_route_task, assign_partial_route_task
 
 
 class RouteTaskAssignmentShortViewSerializer(serializers.ModelSerializer):
@@ -63,7 +64,9 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
             if route_task_assignment_obj.dispatch_status == 0 or route_task_assignment_obj.dispatch_status == 4:
                 route_task_assignment_obj.meter_reader_id = validated_data["meter_reader_id"]
                 route_task_assignment_obj.dispatch_status = 1
+                route_task_assignment_obj.updated_date = timezone.now()
                 route_task_assignment_obj.save()
+                assign_partial_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
         else:
             with transaction.atomic():
@@ -73,6 +76,7 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
                 route_task_assignment_obj.assign_date = timezone.now()
                 route_task_assignment_obj.dispatch_status = 1
                 route_task_assignment_obj.save()
+                assign_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
 
     def update(self, instance, validated_data, user):

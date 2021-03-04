@@ -19,7 +19,7 @@ from v1.meter_data_management.views.common_function import set_meter_validated_d
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
 
 
-class MeterListSerializer(serializers.ModelSerializer):
+class MeterShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MeterTbl

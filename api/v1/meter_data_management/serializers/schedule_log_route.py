@@ -1,7 +1,6 @@
 __author__ = "aki"
 
 from rest_framework import serializers
-
 from master.models import User, get_user_by_id
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
@@ -58,14 +57,14 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
             assign_date = route_task_assignment_obj.assign_date
             dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
             meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
-                                                                              schedule_log_id=schedule_log_id.id,
-                                                                              is_completed=False,
-                                                                              is_active=True).count()
+                                                                         schedule_log_id=schedule_log_id.id,
+                                                                         is_completed=False, is_active=True).count()
 
         route_detail = {
             'total_consumer': ConsumerDetail.objects.filter(schedule_log_id=schedule_log_id.id, route_id=route_tbl.id,
-                                                             is_active=True).count(),
-            'total_reading': RouteTaskAssignment.objects.filter(consumer_meter_json__contains=[{'status':'completed'}], is_active=True).count(),
+                                                            is_active=True).count(),
+            'total_reading': RouteTaskAssignment.objects.filter(consumer_meter_json__contains=[{'status':'COMPLETED'}],
+                                                                is_active=True).count(),
             'meter_reader_first_name': meter_reader_first_name,
             'meter_reader_last_name': meter_reader_last_name,
             'assign_date': assign_date,
