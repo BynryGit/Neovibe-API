@@ -14,7 +14,7 @@ __author__ = "chinmay"
 
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
-from datetime import datetime # importing package for datetime
+from django.utils import timezone # importing package for datetime
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.zone import get_zone_by_id
 from v1.commonapp.models.division import get_division_by_id
@@ -44,8 +44,8 @@ class ReadCycle(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     @property
     def get_city(self):
