@@ -85,7 +85,8 @@ def assign_route_task(route_task_assignment_id):
     except Exception as ex:
         print(ex)
         logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
-
+        
+        route_task_assignment_obj = RouteTaskAssignment.objects.get(id=route_task_assignment_id, is_active=True)
         try:
             task_count = len(route_task_assignment_obj.consumer_meter_json)
             if task_count > 0:

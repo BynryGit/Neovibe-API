@@ -48,13 +48,8 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_route_task_assignment_validated_data(validated_data)
-        if RouteTaskAssignmentTbl.objects.filter(tenant=user.tenant, utility_id=validated_data['utility_id'],
-                                                 read_cycle_id=validated_data["read_cycle_id"],
-                                                 route_id=validated_data["route_id"],
-                                                 schedule_log_id=validated_data["schedule_log_id"],
-                                                 is_active=True).exists():
-
-            route_task_assignment_obj = RouteTaskAssignmentTbl.objects.filter(tenant=user.tenant,
+        try:
+            route_task_assignment_obj = RouteTaskAssignmentTbl.objects.get(tenant=user.tenant,
                                                                               utility_id=validated_data['utility_id'],
                                                                               read_cycle_id=validated_data["read_cycle_id"],
                                                                               route_id=validated_data["route_id"],
@@ -68,7 +63,7 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
                 route_task_assignment_obj.save()
                 assign_partial_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
-        else:
+        except RouteTaskAssignmentTbl.DoesNotExist:
             with transaction.atomic():
                 route_task_assignment_obj = super(RouteTaskAssignmentSerializer, self).create(validated_data)
                 route_task_assignment_obj.tenant = user.tenant

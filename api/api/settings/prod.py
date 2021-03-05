@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'django_crontab',
+    "fcm_django",
     'master',
     'v1.asset',
     'v1.billing',
@@ -153,6 +154,19 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": "pushNotification",
+    # default: _('FCM Django')
+    "FCM_SERVER_KEY": "AIzaSyC3bCWia94LRa-Oj2FdOnYxS1k4kSo4a9A",
+    # true if you want to have only one active device per registered user at a time
+    # default: False
+    "ONE_DEVICE_PER_USER": False,
+    # devices to which notifications cannot be sent,
+    # are deleted upon receiving error response from FCM
+    # default: False
+    "DELETE_INACTIVE_DEVICES": True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
