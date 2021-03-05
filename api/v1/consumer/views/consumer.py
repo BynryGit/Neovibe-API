@@ -1254,13 +1254,14 @@ class ConsumerDisconnect(GenericAPIView):
                     previous_work_order_master_obj = WorkOrderMaster.objects.filter(
                         utility_work_order_type_id=utility_work_order_type_obj.id,
                         utility_product_id=utility_product_obj.id)
-                    if len(previous_work_order_master_obj) >=2:
-                        final_work_order_obj = previous_work_order_master_obj[0]
+                    disconnection_id = []
+                    for i in previous_work_order_master_obj:
+                        disconnection_id.append(i.id)
 
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
-                        Q(Q(work_order_master_id=final_work_order_obj.id)) &
+                        Q(work_order_master_id__in=disconnection_id)&
                         ~Q(state_id=7) &
                         Q(state_id=1))
                     if previous_connection_request:
@@ -1299,3 +1300,16 @@ class ConsumerDisconnect(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+# API Header
+# API end Point: api/v1/consumer/outagerequest
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer
+# Usage: Outage Request 
+# Tables used: ConsumerMaster, ServiceAppointment
+#updated by : Chetan Dhongade
+# Created on: 01-02-2021
+
