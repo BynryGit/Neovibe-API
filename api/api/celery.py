@@ -48,12 +48,21 @@ CELERY_CONFIG.update(
 CELERY_QUEUES = (
     Queue('Default_Queue', Exchange('Default_Queue'), routing_key='Default_Queue'),
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
+    Queue('Dispatch_I', routing_key='Dispatch_I_Tasks'),
 )
 
 CELERY_ROUTES = {
     'v1.meter_data_management.task.consumer_detail.create_consumer': {
         'queue': 'ImportConsumer',
         'routing_key': 'ImportConsumer_Tasks'
+    },
+    'v1.meter_data_management.task.assign_route_task': {
+            'queue': 'Dispatch_I',
+            'routing_key': 'Dispatch_I_Tasks',
+    },
+    'v1.meter_data_management.task.assign_partial_route_task': {
+            'queue': 'Dispatch_I',
+            'routing_key': 'Dispatch_I_Tasks',
     },
 }
 

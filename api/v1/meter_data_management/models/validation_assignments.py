@@ -14,8 +14,7 @@ __author__ = "chinmay"
 
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
-from datetime import datetime  # importing package for datetime
-from django.contrib.postgres.fields import JSONField
+from django.utils import timezone # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
@@ -34,8 +33,8 @@ class ValidationAssignment(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.tenant.name

@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "priyanka"
 
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -16,25 +16,27 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, SCHEDULE_NOT_FOUND, UTILITY_NOT_FOUND
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
-from v1.meter_data_management.serializers.schedule import ScheduleViewSerializer, ScheduleSerializer
-from v1.meter_data_management.models.schedule import Schedule as ScheduleTbl, get_schedule_by_id_string
+from v1.billing.serializers.bill_schedule import ScheduleBillSerializer, ScheduleBillViewSerializer
+from v1.billing.models.bill_schedule import ScheduleBill as ScheduleBillTbl, get_schedule_bill_by_id_string
+
+
 
 
 # API Header
-# API end Point: api/v1/meter-data/schedule/list
+# API end Point: api/v1/billing/schedule-bill/list
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: schedule list
-# Usage: API will fetch required data for schedule list against filter and search
-# Tables used: Schedule
-# Author: Akshay
-# Created on: 06/01/2021
+# Interaction: bill schedule list
+# Usage: API will fetch required data for bill schedule list against filter and search
+# Tables used: ScheduleBill
+# Author: Priyanka
+# Created on: 03/03/2021
 
-class ScheduleList(generics.ListAPIView):
+class ScheduleBillList(generics.ListAPIView):
     try:
-        serializer_class = ScheduleViewSerializer
+        serializer_class = ScheduleBillViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -47,7 +49,7 @@ class ScheduleList(generics.ListAPIView):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
             if token:
                 if is_authorized(1,1,1,user_obj):
-                    queryset = ScheduleTbl.objects.filter(is_active=True)
+                    queryset = ScheduleBillTbl.objects.filter(is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -59,20 +61,20 @@ class ScheduleList(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/meter-data/schedule
+# API end Point: api/v1/billing/schedule-bill
 # API verb: POST
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: Create schedule object
-# Usage: API will create schedule object based on valid data
-# Tables used: Schedule
-# Author: Akshay
-# Created on: 08/01/2021
+# Interaction: Create schedule bill object
+# Usage: API will create schedule bill object based on valid data
+# Tables used: ScheduleBill
+# Author: Priyanka
+# Created on: 03/03/2021
 
-class Schedule(GenericAPIView):
+class ScheduleBill(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    # @role_required(BILLING, SCHEDULE, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -98,10 +100,10 @@ class Schedule(GenericAPIView):
                 if frequency_obj.key == 'yearly':
                     request.data['cron_expression'] = '0 22 1 1 *'
             # Cron Job Expression Creation End
-            schedule_serializer = ScheduleSerializer(data=request.data)
-            if schedule_serializer.is_valid():
-                schedule_obj = schedule_serializer.create(schedule_serializer.validated_data, user)
-                schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+            schedule_bill_serializer = ScheduleBillSerializer(data=request.data)
+            if schedule_bill_serializer.is_valid():
+                schedule_obj = schedule_bill_serializer.create(schedule_bill_serializer.validated_data, user)
+                schedule_view_serializer = ScheduleBillViewSerializer(instance=schedule_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULT: schedule_view_serializer.data,
@@ -109,39 +111,40 @@ class Schedule(GenericAPIView):
             else:
                 return Response({
                     STATE: ERROR,
-                    RESULT: schedule_serializer.errors,
+                    RESULT: schedule_bill_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
 # API Header
-# API end Point: api/v1/meter-data/schedule/id_string
+# API end Point: api/v1/billing/schedule-bill/id_string
 # API verb: GET,PUT
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: View schedule object
-# Usage: API will fetch and edit required data for schedule using id_string
+# Interaction: View schedule bill object
+# Usage: API will fetch and edit required data for schedule bill using id_string
 # Tables used: Schedule
-# Author: Akshay
-# Created on: 08/01/2021
+# Author: Priyank
+# Created on: 04/03/2021
 
-class ScheduleDetail(GenericAPIView):
+class ScheduleBillDetail(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    # @role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
-            schedule_obj = get_schedule_by_id_string(id_string)
-            if schedule_obj:
-                schedule_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+            schedule_bill_obj = get_schedule_bill_by_id_string(id_string)
+            if schedule_bill_obj:
+                serializer = ScheduleBillViewSerializer(instance=schedule_bill_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: schedule_serializer.data,
+                    RESULT: serializer.data,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
@@ -149,20 +152,20 @@ class ScheduleDetail(GenericAPIView):
                     RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='Billing', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    # @role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            schedule_obj = get_schedule_by_id_string(id_string)
-            if schedule_obj:
+            schedule_bill_obj = get_schedule_bill_by_id_string(id_string)
+            if schedule_bill_obj:
                 # Cron Job Expression Creation Start
                 if 'frequency_id' in request.data:
                     frequency_obj = get_global_lookup_by_id_string(request.data['frequency_id'])
@@ -184,10 +187,10 @@ class ScheduleDetail(GenericAPIView):
                     if frequency_obj.key == 'yearly':
                         request.data['cron_expression'] = '0 22 1 1 *'
                 # Cron Job Expression Creation End
-                schedule_serializer = ScheduleSerializer(data=request.data)
-                if schedule_serializer.is_valid():
-                    schedule_obj = schedule_serializer.update(schedule_obj, schedule_serializer.validated_data, user)
-                    schedule_view_serializer = ScheduleViewSerializer(instance=schedule_obj, context={'request': request})
+                schedule_bill_serializer = ScheduleBillSerializer(data=request.data)
+                if schedule_bill_serializer.is_valid():
+                    schedule_bill_obj = schedule_bill_serializer.update(schedule_bill_obj, schedule_bill_serializer.validated_data, user)
+                    schedule_view_serializer = ScheduleBillViewSerializer(instance=schedule_bill_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULT: schedule_view_serializer.data,
@@ -195,7 +198,7 @@ class ScheduleDetail(GenericAPIView):
                 else:
                     return Response({
                         STATE: ERROR,
-                        RESULT: schedule_serializer.errors,
+                        RESULT: schedule_bill_serializer.errors,
                     }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
@@ -203,43 +206,44 @@ class ScheduleDetail(GenericAPIView):
                     RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
 # API Header
-# API end Point: api/v1/meter-data/utility/<uuid:id_string>/reading-schedule-summary
+# API end Point: api/v1/billing/utility/<uuid:id_string>/bill-schedule-summary
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: Reading Schedule summary
-# Usage: API will fetch required data for reading schedule summary.
-# Tables used: Schedule
-# Author: Akshay
-# Created on: 24/02/2021
+# Interaction: Bill Schedule summary
+# Usage: API will fetch required data for bill schedule summary.
+# Tables used: ScheduleBill
+# Author: Priyank
+# Created on: 03/03/2021
 
 # todo need to fix logic
-class ReadingScheduleSummary(generics.ListAPIView):
+class BillScheduleSummary(generics.ListAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    # @role_required(BILLING, SCHEDULE, EDIT)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
             if utility_obj:
-                schedule_obj = ScheduleTbl.objects.filter(utility=utility_obj, is_active=True)
-                Schedule_Count = {
-                    'Total_Schedule': schedule_obj.count(),
-                    'Pending_Schedule': schedule_obj.filter(schedule_status=0).count(),
-                    'Complete_Schedule': schedule_obj.filter(schedule_status=1).count(),
-                    'InProgress_Schedule': schedule_obj.filter(schedule_status=2).count(),
+                bill_schedule_obj = ScheduleBillTbl.objects.filter(utility=utility_obj, is_active=True)
+                Bill_Schedule_Count = {
+                    'Total_Bill_Schedule': bill_schedule_obj.count(),
+                    'New_Bill_Schedule': bill_schedule_obj.filter(schedule_status=0).count(),
+                    'Complete_Bill_Schedule': bill_schedule_obj.filter(schedule_status=1).count(),
+                    'Remaining_Bill_Schedule': bill_schedule_obj.filter(schedule_status=2).count(),
                 }
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: Schedule_Count,
+                    RESULT: Bill_Schedule_Count,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({
@@ -247,8 +251,9 @@ class ReadingScheduleSummary(generics.ListAPIView):
                     RESULT: UTILITY_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

@@ -12,7 +12,7 @@ __author__ = "aki"
 # Creation Date : 27/02/2021
 
 import uuid  # importing package for GUID
-from datetime import datetime # importing package for datetime
+from django.utils import timezone # importing package for datetime
 from django.db import models  # importing package for database
 from api.constants import get_file_name, METER_PICTURE
 from master.models import get_user_by_id
@@ -65,8 +65,8 @@ class MeterReading(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     @property
     def get_consumer_detail(self):

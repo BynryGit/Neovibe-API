@@ -2,7 +2,7 @@ from django.contrib import admin
 from v1.billing.models.bill_month import BillMonth
 from v1.billing.models.bill_cycle import BillCycle
 from v1.billing.models.bill_frequency import BillFrequency
-from v1.billing.models.schedule_bill import ScheduleBill
+from v1.billing.models.bill_schedule import ScheduleBill
 from v1.billing.models.additional_charges import AdditionalCharges
 from v1.billing.models.tax import Tax
 from v1.billing.models.rate import Rate

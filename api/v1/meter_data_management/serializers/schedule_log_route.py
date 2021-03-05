@@ -1,12 +1,11 @@
 __author__ = "aki"
 
 from rest_framework import serializers
-
-from master.models import User
-from v1.commonapp.common_functions import ChoiceField
+from master.models import User, get_user_by_id
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail
+from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import Route as RouteTbl
 from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
@@ -17,6 +16,7 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
     utility = UtilityMasterViewSerializer()
     route_detail = serializers.SerializerMethodField()
     meter_reader_detail = serializers.SerializerMethodField()
+    other_detail = serializers.SerializerMethodField()
 
     def get_meter_reader_detail(self, route_tbl):
         schedule_log_id = get_schedule_log_by_id_string(self.context.get('schedule_log_id'))
@@ -45,26 +45,46 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
             route_task_assignment_obj = False
 
         if route_task_assignment_obj == False:
-            meter_reader = 'NA'
+            meter_reader_first_name = 'NA'
+            meter_reader_last_name = 'NA'
             assign_date = 'NA'
             dispatch_status = 'NOT-DISPATCHED'
+            meter_reader_task_count = 0
         else:
-            meter_reader = route_task_assignment_obj.meter_reader_id
+            meter_reader_obj = get_user_by_id(route_task_assignment_obj.meter_reader_id)
+            meter_reader_first_name = meter_reader_obj.first_name
+            meter_reader_last_name = meter_reader_obj.last_name
             assign_date = route_task_assignment_obj.assign_date
-            dispatch_status = ChoiceField(choices=route_task_assignment_obj.DISPATCH_STATUS)
+            dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
+            meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
+                                                                         schedule_log_id=schedule_log_id.id,
+                                                                         is_completed=False, is_active=True).count()
 
         route_detail = {
             'total_consumer': ConsumerDetail.objects.filter(schedule_log_id=schedule_log_id.id, route_id=route_tbl.id,
-                                                             is_active=True).count(),
-            'total_reading': RouteTaskAssignment.objects.filter(consumer_meter_json__contains=[{'status':'completed'}], is_active=True).count(),
-            'meter_reader': meter_reader,
+                                                            is_active=True).count(),
+            'total_reading': RouteTaskAssignment.objects.filter(consumer_meter_json__contains=[{'status':'COMPLETED'}],
+                                                                is_active=True).count(),
+            'meter_reader_first_name': meter_reader_first_name,
+            'meter_reader_last_name': meter_reader_last_name,
             'assign_date': assign_date,
-            'dispatch_status': dispatch_status
+            'dispatch_status': dispatch_status,
+            'meter_reader_task_count': meter_reader_task_count
         }
         return route_detail
+
+    def get_other_detail(self, route_tbl):
+        schedule_log_id = get_schedule_log_by_id_string(self.context.get('schedule_log_id'))
+        read_cycle_id = get_read_cycle_by_id(schedule_log_id.read_cycle_id)
+
+        other_detail = {
+            'schedule_log_id_string': self.context.get('schedule_log_id'),
+            'read_cycle_id_string': read_cycle_id.id_string,
+        }
+        return other_detail
 
     class Meta:
         model = RouteTbl
         fields = ('id_string', 'label', 'name', 'description', 'created_date', 'updated_date', 'created_by',
-                  'updated_by', 'meter_reader_detail', 'route_detail', 'premises_json', 'filter_json', 'tenant',
-                  'utility')
+                  'updated_by', 'meter_reader_detail', 'route_detail', 'other_detail', 'premises_json', 'filter_json',
+                  'tenant', 'utility')
