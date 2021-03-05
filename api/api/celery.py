@@ -64,6 +64,10 @@ CELERY_ROUTES = {
             'queue': 'Dispatch_I',
             'routing_key': 'Dispatch_I_Tasks',
     },
+    'v1.meter_data_management.task.de_assign_route_task': {
+            'queue': 'Dispatch_I',
+            'routing_key': 'Dispatch_I_Tasks',
+    },
 }
 
 app.conf.update(**CELERY_CONFIG)

@@ -85,7 +85,7 @@ def assign_route_task(route_task_assignment_id):
     except Exception as ex:
         print(ex)
         logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
-        
+
         route_task_assignment_obj = RouteTaskAssignment.objects.get(id=route_task_assignment_id, is_active=True)
         try:
             task_count = len(route_task_assignment_obj.consumer_meter_json)
@@ -108,10 +108,10 @@ def assign_partial_route_task(route_task_assignment_id):
 
         route_task_assignment_obj = RouteTaskAssignment.objects.get(id=route_task_assignment_id, is_active=True)
 
-        task_obj = RouteTaskAssignment.objects.filter(id=route_task_assignment_obj.id, consumer_meter_json__contains=
-        [{'is_active': True}, {'is_completed': False}, {'is_revisit': False}], is_active=True).count()
+        task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
+                       x['is_completed'] == False and x['is_revisit'] == False]
 
-        if task_obj == 0:
+        if len(task_obj) == 0:
             task_template_obj = JobCardTemplate.objects.get(tenant=route_task_assignment_obj.tenant,
                                                             utility=route_task_assignment_obj.utility, is_active=True)
 
@@ -119,6 +119,7 @@ def assign_partial_route_task(route_task_assignment_id):
                                                                 schedule_log_id=route_task_assignment_obj.schedule_log_id,
                                                                 is_active=True)
             for consumer in consumer_detail_obj:
+                # todo check with meter reading
                 json_data.append(
                     {
                         "consumer_no": consumer.consumer_no,
@@ -150,7 +151,7 @@ def assign_partial_route_task(route_task_assignment_id):
         route_obj = get_route_by_id(route_task_assignment_obj.route_id)
 
         message = "For Read Cycle - " + read_cycle_obj.name + " | Route - " + route_obj.label + " | Consumers - " + \
-                  str(task_obj) + " Are Assigned To You. Please Press Refresh Button.(Time : " + \
+                  str(len(task_obj)) + " Are Assigned To You. Please Press Refresh Button.(Time : " + \
                   time_to_sent + ")"
 
         try:
@@ -168,10 +169,12 @@ def assign_partial_route_task(route_task_assignment_id):
         print(ex)
         logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
 
-        task_obj = RouteTaskAssignment.objects.filter(id=route_task_assignment_obj.id, consumer_meter_json__contains=
-        [{'is_active': True}, {'is_completed': True}, {'is_revisit': False}], is_active=True).count()
+        route_task_assignment_obj = RouteTaskAssignment.objects.get(id=route_task_assignment_id, is_active=True)
 
-        if task_obj == 0:
+        complete_task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
+                    x['is_completed'] == True and x['is_revisit'] == False]
+
+        if len(complete_task_obj) == 0:
             dispatch_status = 0
         else:
             dispatch_status = 4
@@ -179,3 +182,66 @@ def assign_partial_route_task(route_task_assignment_id):
         route_task_assignment_obj.meter_reader_id = None
         route_task_assignment_obj.dispatch_status = dispatch_status
         route_task_assignment_obj.save()
+
+
+@task(name="de-assign-route-task", queue='Dispatch_I')
+def de_assign_route_task(route_task_assignment_id):
+    try:
+        time = datetime.datetime.now().time().strftime("%H %M")
+        t = time.split(" ")
+        time_to_sent = t[0] + ':' + t[1]
+
+        route_task_assignment_obj = RouteTaskAssignment.objects.get(id=route_task_assignment_id, is_active=True)
+
+        complete_task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
+                    x['is_completed'] == True and x['is_revisit'] == False]
+
+        if len(complete_task_obj) == 0:
+            dispatch_status = 0
+        else:
+            dispatch_status = 4
+
+        task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
+                    x['is_completed'] == False and x['is_revisit'] == False]
+
+        for task in task_obj:
+            # todo change status
+            pass
+
+        route_task_assignment_obj.meter_reader_id = None
+        route_task_assignment_obj.dispatch_status = dispatch_status
+        route_task_assignment_obj.save()
+
+        read_cycle_obj = get_read_cycle_by_id(route_task_assignment_obj.read_cycle_id)
+
+        route_obj = get_route_by_id(route_task_assignment_obj.route_id)
+
+        message = "For Read Cycle - " + read_cycle_obj.name + " | Route - " + route_obj.label + " | Consumers - " + \
+                  str(len(task_obj)) + " Are De-Assigned To You. Please Press Refresh Button.(Time : " + \
+                  time_to_sent + ")"
+
+        try:
+            device = FCMDevice.objects.get(user_id=route_task_assignment_obj.meter_reader_id)
+            try:
+                device.send_message(title='Notification-Assign', body=message)
+            except Exception as ex:
+                print(ex)
+                logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+        except Exception as ex:
+            print(ex)
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+
+    except Exception as ex:
+        print(ex)
+        logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+
+        route_task_assignment_obj = RouteTaskAssignment.objects.get(id=route_task_assignment_id, is_active=True)
+
+        task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
+                    x['is_completed'] == False and x['is_revisit'] == False]
+
+        for task in task_obj:
+            # todo change status
+            pass
+
+        route_task_assignment_obj.dispatch_status = 6
