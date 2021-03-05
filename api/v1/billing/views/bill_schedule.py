@@ -114,7 +114,99 @@ class ScheduleBill(GenericAPIView):
                     RESULT: schedule_bill_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+# API Header
+# API end Point: api/v1/billing/schedule-bill/id_string
+# API verb: GET,PUT
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: View schedule bill object
+# Usage: API will fetch and edit required data for schedule bill using id_string
+# Tables used: Schedule
+# Author: Priyank
+# Created on: 04/03/2021
+
+class ScheduleBillDetail(GenericAPIView):
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    def get(self, request, id_string):
+        try:
+            schedule_bill_obj = get_schedule_bill_by_id_string(id_string)
+            if schedule_bill_obj:
+                serializer = ScheduleBillViewSerializer(instance=schedule_bill_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: SCHEDULE_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='Billing', sub_module='Bill')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            schedule_bill_obj = get_schedule_bill_by_id_string(id_string)
+            if schedule_bill_obj:
+                # Cron Job Expression Creation Start
+                if 'frequency_id' in request.data:
+                    frequency_obj = get_global_lookup_by_id_string(request.data['frequency_id'])
+                    repeat_every_obj = get_global_lookup_by_id_string(request.data['repeat_every_id'])
+                    if frequency_obj.key == 'daily':
+                        request.data['cron_expression'] = '0 22 */' + str(repeat_every_obj.key[slice(0, 1)]) + ' * *'
+                    if frequency_obj.key == 'weekly':
+                        week_string = ''
+                        for occurrence in request.data['occurs_on']:
+                            occurrence_obj = get_global_lookup_by_id_string(occurrence['id_string'])
+                            week_string = week_string + occurrence_obj.key + ','
+                        week_string = week_string[:-1]
+                        request.data['cron_expression'] = '0 22 * * ' + week_string
+                    if frequency_obj.key == 'monthly':
+                        for occurrence in request.data['occurs_on']:
+                            occurrence_obj = get_global_lookup_by_id_string(occurrence['id_string'])
+                        request.data['cron_expression'] = '0 22 ' + str(occurrence_obj.key[slice(4, 5)]) \
+                                                          + ' */' + str(repeat_every_obj.key[slice(0, 1)]) + ' *'
+                    if frequency_obj.key == 'yearly':
+                        request.data['cron_expression'] = '0 22 1 1 *'
+                # Cron Job Expression Creation End
+                schedule_bill_serializer = ScheduleBillSerializer(data=request.data)
+                if schedule_bill_serializer.is_valid():
+                    schedule_bill_obj = schedule_bill_serializer.update(schedule_bill_obj, schedule_bill_serializer.validated_data, user)
+                    schedule_view_serializer = ScheduleBillViewSerializer(instance=schedule_bill_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: schedule_view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: schedule_bill_serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: SCHEDULE_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
@@ -159,7 +251,7 @@ class BillScheduleSummary(generics.ListAPIView):
                     RESULT: UTILITY_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
