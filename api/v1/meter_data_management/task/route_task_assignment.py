@@ -217,7 +217,7 @@ def de_assign_route_task(route_task_assignment_id):
         route_obj = get_route_by_id(route_task_assignment_obj.route_id)
 
         message = "For Read Cycle - " + read_cycle_obj.name + " | Route - " + route_obj.label + " | Consumers - " + \
-                  str(len(task_obj)) + " Are De-Assigned To You. Please Press Refresh Button.(Time : " + \
+                  str(len(task_obj)) + " Are De-Assigned From You. Please Press Refresh Button.(Time : " + \
                   time_to_sent + ")"
 
         try:
