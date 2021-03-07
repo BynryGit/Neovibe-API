@@ -73,11 +73,9 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    consumer_id = models.BigIntegerField(null=True, blank=True)
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
     work_order_master_id = models.BigIntegerField(blank=True, null=True)
-    consumer_service_contract_detail_id = models.BigIntegerField(blank=True, null=True)
     state = models.BigIntegerField(choices=CHOICES, default=1)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
@@ -101,7 +99,6 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     actual_duration = models.BigIntegerField(blank=True, null=True)
     completed_task_details = JSONField(default=[])
     sa_GIS_id = models.BigIntegerField(blank=True, null=True)
-    status_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -122,17 +119,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     def get_utility(self):
         return self.utility
 
-    @property
-    def get_consumer(self):
-        consumer = get_consumer_by_id(self.consumer_id)
-        return {
-            "email_id":consumer.email_id,
-            "id_string":consumer.id_string,
-            "consumer_no":consumer.consumer_no,
-            "phone_mobile":consumer.phone_mobile,
-            "billing_address_line_1":consumer.billing_address_line_1
-        }
-
+    
     @property
     def get_asset(self):
         asset = get_asset_by_id(self.asset_id)
