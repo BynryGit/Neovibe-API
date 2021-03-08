@@ -19,7 +19,7 @@ from v1.meter_data_management.views.common_function import set_meter_validated_d
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
 
 
-class MeterListSerializer(serializers.ModelSerializer):
+class MeterShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MeterTbl
@@ -38,7 +38,7 @@ class MeterViewSerializer(serializers.ModelSerializer):
     category_id = GlobalLookupShortViewSerializer(many=False, source='get_category_name')
     meter_type_id = GlobalLookupShortViewSerializer(many=False, source='get_meter_type_name')
     meter_make_id = MeterMakeShortViewSerializer(many=False, source='get_meter_make')
-    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_type_name')
+    utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
     meter_status = ChoiceField(choices=MeterTbl.METER_STATUS)
     reader_status = ChoiceField(choices=MeterTbl.READER_STATUS)
 

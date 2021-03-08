@@ -29,7 +29,7 @@ class WorkOrderSubType(models.Model):
         return self.name
 
     @property
-    def work_order_type(self):
+    def get_work_order_type(self):
         work_order_type = get_work_order_type_by_id(self.work_order_type_id)
         return work_order_type
 

@@ -11,6 +11,7 @@ from v1.complaint.models.complaint_sub_type import ComplaintSubType as Complaint
 from v1.complaint.serializers.complaint_subtype import ComplaintSubTypeListSerializer,ComplaintSubTypeViewSerializer,ComplaintSubTypeSerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from rest_framework.response import Response
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
@@ -50,6 +51,7 @@ class ComplaintSubTypeList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ComplaintSubTypeModel.objects.filter(utility=utility, is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

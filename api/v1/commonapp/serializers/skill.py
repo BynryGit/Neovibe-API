@@ -54,7 +54,7 @@ class SkillSerializer(serializers.ModelSerializer):
             else:
                 skill_obj = super(SkillSerializer, self).create(validated_data)
                 skill_obj.created_by = user.id
-                skill_obj.updated_by = user.id
+
                 skill_obj.save()
                 return skill_obj
 

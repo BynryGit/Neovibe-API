@@ -20,7 +20,7 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state' , 'consumer_no', 'contract')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state' , 'consumer_no', 'contract', 'meter_id')
         
 # class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 #     tenant = serializers.ReadOnlyField(source='tenant.name')
@@ -36,6 +36,7 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 #         model = ConsumerServiceContractDetail
 #         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract'
 #                   'consumer_id', 'meter_id', 'status')
+
 
 
 class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):

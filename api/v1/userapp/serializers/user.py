@@ -81,7 +81,7 @@ class GetUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'id_string','user_id','first_name', 'last_name', 'phone_mobile')
+        fields = ('id_string','email','user_id','first_name', 'last_name', 'phone_mobile')
 
 
 class UserStatusSerializer(serializers.ModelSerializer):
@@ -157,3 +157,8 @@ class UserViewSerializer(serializers.ModelSerializer):
                   'user_id','created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city',
                   'department', 'status', 'supplier')
 
+
+class UserShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id_string', 'first_name', 'last_name', 'email')

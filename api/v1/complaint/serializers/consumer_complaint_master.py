@@ -10,7 +10,7 @@ from v1.complaint.views.common_functions import set_complaint_master_validated_d
 
 class ConsumerComplaintMasterListSerializer(serializers.ModelSerializer):
     complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
-
+    
     class Meta:
         model = ConsumerComplaintMasterTbl
         fields = ('id_string', 'name', 'complaint_sub_type','service_obj')
@@ -50,15 +50,19 @@ class ConsumerComplaintMasterSerializer(serializers.ModelSerializer):
             else:
                 complaint_obj = super(ConsumerComplaintMasterSerializer, self).create(validated_data)
                 complaint_obj.created_by = user.id
-                complaint_obj.updated_by = user.id
                 complaint_obj.save()
                 return complaint_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_complaint_master_validated_data(validated_data)
-        with transaction.atomic():
-            complaint_obj = super(ConsumerComplaintMasterSerializer, self).update(instance, validated_data)
-            complaint_obj.updated_by = user.id
-            complaint_obj.updated_date = datetime.utcnow()
-            complaint_obj.save()
-            return complaint_obj
+        if ConsumerComplaintMasterTbl.objects.filter(name=validated_data['name'],
+                                                     tenant_id=validated_data['tenant_id'],
+                                                     utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(COMPLAINT_MASTER_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                complaint_obj = super(ConsumerComplaintMasterSerializer, self).update(instance, validated_data)
+                complaint_obj.updated_by = user.id
+                complaint_obj.updated_date = datetime.utcnow()
+                complaint_obj.save()
+                return complaint_obj

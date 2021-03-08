@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "chinmay"
 
 import traceback
 from rest_framework import generics

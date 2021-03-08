@@ -11,27 +11,26 @@ from api.messages import WORK_ORDER_ALREADY_EXIST
 from v1.work_order.views.common_functions import set_work_order_validated_data
 # from v1.commonapp.serializers.service_request_sub_type import ServiceSubTypeListSerializer,ServiceSubTypeShortListSerializer
 from rest_framework import status
-# from v1.service.serializers.consumer_service_master import ConsumerServiceMasterListSerializer
-import json
+from v1.utility.serializers.utility_work_order_sub_type import UtilityWorkOrderSubTypeListSerializer
+from v1.utility.models.utility_work_order_sub_type import get_utility_work_order_sub_type_by_id
 
 
 class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
-    # service_type_id = ServiceTypeListSerializer(source='get_service_type')
-    # service_subtype_id = ServiceSubTypeShortListSerializer(source='get_service_subtype')
+
     class Meta:
         model = WorkOrderMasterTbl
         fields = ('name', 'id_string','description','json_obj')
 
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):
-    # work_order_master = ConsumerServiceMasterListSerializer(source='get_consumer_service_master')
+    utility_work_order_sub_type = UtilityWorkOrderSubTypeListSerializer(source='get_utility_work_order_sub_type')
+
 
     class Meta:
         model = WorkOrderMasterTbl
         fields = (
-            'name', 'json_obj', 'id_string', 'description', 'service_obj', 'created_date', 'is_active',
+            'name', 'json_obj', 'id_string', 'utility_work_order_sub_type', 'description', 'service_obj', 'created_date', 'is_active',
             'created_by')
-
 
 class WorkOrderMasterViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
@@ -53,6 +52,8 @@ class WorkOrderMasterSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=True, max_length=200)
     tenant_id = serializers.CharField(required=True, max_length=200)
     json_obj = serializers.JSONField(required=False)
+    utility_work_order_type_id = serializers.CharField(required=False, max_length=200)
+    utility_work_order_sub_type_id = serializers.CharField(required=False, max_length=200)
     consumer_service_master_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:

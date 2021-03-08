@@ -13,7 +13,7 @@ __author__ = "aki"
 
 
 import uuid
-from datetime import datetime
+from django.utils import timezone # importing package for datetime
 from django.db import models
 from api.constants import get_file_name, METER_PICTURE
 from v1.commonapp.models.area import get_area_by_id
@@ -81,8 +81,8 @@ class Meter(models.Model):
     install_date = models.DateTimeField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
 
     @property
@@ -126,7 +126,7 @@ class Meter(models.Model):
         return meter_type
 
     @property
-    def get_utility_product_type_name(self):
+    def get_utility_product_name(self):
         utility_product_type = get_utility_product_by_id(self.utility_product_id)
         return utility_product_type
 

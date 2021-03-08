@@ -1,5 +1,14 @@
 __author__ = "aki"
 
+# API Header
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Usage: This task is used to save schedule log
+# Tables used: Schedule, ScheduleLog, Global Lookup
+# Author: Akshay
+# Created on: 26/02/2021
+
 from django.utils import timezone
 from django.db import transaction
 from django.db.models import Q
@@ -79,9 +88,13 @@ def schedule_log(request):
 def create_schedule_log(schedule):
     current_date = timezone.now()
     with transaction.atomic():
-        schedule_log_obj = ScheduleLog(tenant=schedule.tenant, utility=schedule.utility, schedule_id=schedule.id,
-                                       read_cycle_id=schedule.read_cycle_id, activity_type_id=schedule.activity_type_id,
-                                       recurring_id=schedule.recurring_id,
-                                       utility_product_id=schedule.utility_product_id, date_and_time=current_date)
-        schedule_log_obj.save()
-        create_consumer.delay(schedule_log_obj)
+        try:
+            schedule_log_obj = ScheduleLog(tenant=schedule.tenant, utility=schedule.utility, schedule_id=schedule.id,
+                                           read_cycle_id=schedule.read_cycle_id, activity_type_id=schedule.activity_type_id,
+                                           recurring_id=schedule.recurring_id,
+                                           utility_product_id=schedule.utility_product_id, date_and_time=current_date)
+            schedule_log_obj.save()
+            create_consumer.delay(schedule_log_obj.id)
+        except Exception as ex:
+            print(ex)
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')

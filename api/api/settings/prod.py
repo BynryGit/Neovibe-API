@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'django_crontab',
+    "fcm_django",
     'master',
     'v1.asset',
     'v1.billing',
@@ -154,6 +155,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": "pushNotification",
+    # default: _('FCM Django')
+    "FCM_SERVER_KEY": "AIzaSyC3bCWia94LRa-Oj2FdOnYxS1k4kSo4a9A",
+    # true if you want to have only one active device per registered user at a time
+    # default: False
+    "ONE_DEVICE_PER_USER": False,
+    # devices to which notifications cannot be sent,
+    # are deleted upon receiving error response from FCM
+    # default: False
+    "DELETE_INACTIVE_DEVICES": True,
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -239,3 +253,8 @@ EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env'] + "_email_ho
 # SMS configuration
 TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env'] + "_twilio_account_id")
 TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env'] + "_twilio_auth_token")
+
+
+AWS_ACCESS_KEY = 'AKIARUU5RUAA6JXDZZGR'
+AWS_SECRET_KEY = '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'
+AWS_S3_BUCKET = 'smart360-bucket'

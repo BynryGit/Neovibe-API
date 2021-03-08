@@ -14,7 +14,7 @@ __author__ = "aki"
 
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
-from datetime import datetime # importing package for datetime
+from django.utils import timezone # importing package for datetime
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.schedule import get_schedule_by_id
@@ -46,8 +46,8 @@ class ScheduleLog(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     @property
     def get_schedule_name(self):
@@ -70,7 +70,7 @@ class ScheduleLog(models.Model):
         return recurring
 
     @property
-    def get_utility_product_type_name(self):
+    def get_utility_product_name(self):
         utility_product_type = get_utility_product_by_id(self.utility_product_id)
         return utility_product_type
 

@@ -53,7 +53,6 @@ class ConsumerOfferMasterSerializer(serializers.ModelSerializer):
             else:
                 consumer_offer_obj = super(ConsumerOfferMasterSerializer, self).create(validated_data)
                 consumer_offer_obj.created_by = user.id
-                consumer_offer_obj.updated_by = user.id
                 consumer_offer_obj.save()
                 return consumer_offer_obj
 
