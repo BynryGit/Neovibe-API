@@ -6,8 +6,8 @@ from rest_framework.validators import UniqueTogetherValidator
 from api.messages import MOBILE_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_master import ConsumerMaster
-from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
-
+# from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
+from v1.consumer.views.common_functions import *
 
 class ChoiceField(serializers.ChoiceField):
 
@@ -63,7 +63,9 @@ class ConsumerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data, user):
+        print("|||||||||||||||||||||||||INSIDE CREATE|||||||||||||||||||")
         validated_data = set_consumer_validated_data(validated_data)
+        print("++++++++++++++++++++++",validated_data)
         if ConsumerMaster.objects.filter(phone_mobile=validated_data['phone_mobile'],
                                          utility_id=validated_data['utility']).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)

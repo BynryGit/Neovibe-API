@@ -129,6 +129,7 @@ def perform_signals(next_state, registration):
             registration_approved.connect(after_registration_approved)
             registration_approved.send(registration)
     except Exception as e:
+        print("error",e)
         raise CustomAPIException("Registration transition failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

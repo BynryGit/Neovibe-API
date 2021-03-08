@@ -16,6 +16,7 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     contract = UtilityServiceContractMasterListSerializer(source='get_contract')
+    # meter_id = MeterViewSerializer(source='get_meter_number')
 
     class Meta:
         model = ConsumerServiceContractDetail
