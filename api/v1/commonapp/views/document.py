@@ -12,12 +12,13 @@ from rest_framework.response import Response
 from api.messages import *
 from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.commonapp.models.document import get_document_by_id_string,Document as DocumentTbl
+from v1.commonapp.models.document import get_document_by_id_string, Document as DocumentTbl
 from api.messages import *
 from api.constants import *
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.settings_reader import SettingReader
+
 setting_reader = SettingReader()
 
 import boto3
@@ -25,6 +26,7 @@ from botocore.exceptions import NoCredentialsError
 from rest_framework.parsers import FileUploadParser
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
+
 
 # API Header
 # API end Point: api/v1/utility/:id_string/document/list
@@ -176,6 +178,7 @@ class DocumentDetail(GenericAPIView):
                 RESULTS: str(e),
             }, status=res.status_code)
 
+
 # API Header
 # API end Point: api/v1/document/upload
 # API verb: POST
@@ -190,8 +193,9 @@ class DocumentDetail(GenericAPIView):
 
 import boto3
 
+
 class UploadDocument(GenericAPIView):
-    
+
     def post(self, request, format=None):
         try:
             # getting object_id start
@@ -206,7 +210,6 @@ class UploadDocument(GenericAPIView):
             reader_obj = SettingReader.get_s3_credentials()
 
             file_obj = request.FILES['file']
-            
 
             # establish connection with AWS s3 & Upload file/image on s3 start
             conn = S3Connection(reader_obj['AWS_ACCESS_KEY'], reader_obj['AWS_SECRET_KEY'])
@@ -224,7 +227,6 @@ class UploadDocument(GenericAPIView):
             k.set_metadata('Content-Type', 'image/jpeg')
             # establish connection with AWS s3 & Upload file/image on s3 end           
 
-            
             # Create URL
             url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
 
@@ -240,8 +242,8 @@ class UploadDocument(GenericAPIView):
             document.is_active = True
             document.save()
             return Response({
-                    STATE: SUCCESS,
-                }, status=status.HTTP_201_CREATED)
+                STATE: SUCCESS,
+            }, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
             res = self.handle_exception(e)

@@ -37,7 +37,8 @@ from v1.commonapp.views.work_order_sub_type import WorkOrderSubTypeList,WorkOrde
 from v1.commonapp.views.integration_subtype import IntegrationSubTypeList
 from v1.commonapp.views.integration_master import IntegrationMasterList, IntegrationMasterDetail, IntegrationMaster
 from v1.commonapp.views.document import UploadDocument
-
+from v1.commonapp.views.meter_status import MeterStatusList
+from v1.commonapp.views.admin_life_cycle import AdminLifeCycleList
 urlpatterns = [
     path('utility/region', Region.as_view()),
     path('utility/work-order-type', WorkOrderType.as_view()),
@@ -140,6 +141,8 @@ urlpatterns = [
     path('<uuid:id_string>/state/list', StateList.as_view(), name='state_list'),
     path('currency/list', CurrencyList.as_view()),
     path('global-lookup/list', Global_LookupList.as_view()),
-    path('document/upload',UploadDocument.as_view(), name="upload_document")
+    path('document/upload',UploadDocument.as_view(), name="upload_document"),
+    path('meter-status/list',MeterStatusList.as_view(), name="meter_status_list"),
+    path('admin/<uuid:id_string>/life-cycle/list',AdminLifeCycleList.as_view(), name="admin-life-cycle-list")
 
 ]

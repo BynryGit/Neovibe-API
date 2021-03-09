@@ -14,6 +14,7 @@ from v1.commonapp.models.zone import get_zone_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from v1.commonapp.models.division import get_division_by_id_string
+from v1.commonapp.models.meter_status import get_meter_status_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
 from master.models import get_user_by_id_string
 
@@ -233,6 +234,7 @@ def set_job_card_template_validated_data(validated_data):
             raise CustomAPIException(TENANT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
+
 def set_validation_assignment_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -266,3 +268,24 @@ def set_validation_assignment_validated_data(validated_data):
             raise CustomAPIException("Read Cycle not Found", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
+
+def set_reader_status_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException(TENANT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    if "meter_status_id" in validated_data:
+        meter_status = get_meter_status_by_id_string(validated_data["meter_status_id"])
+        if tenant:
+            validated_data["meter_status_id"] = meter_status.id
+        else:
+            raise CustomAPIException("Meter Status Not Found", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data

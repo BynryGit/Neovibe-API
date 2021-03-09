@@ -53,20 +53,24 @@ class ConsumerCategorySerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_consumer_category_validated_data(validated_data)
             if ConsumerCategoryTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                                  utility_id=validated_data['utility_id']).exists():
+                                                  utility_id=validated_data['utility_id'],utility_product_id=validated_data['utility_product_id']).exists():
                 raise CustomAPIException(COSUMER_CATEGORY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 consumer_category_obj = super(ConsumerCategorySerializer, self).create(validated_data)
                 consumer_category_obj.created_by = user.id
-                consumer_category_obj.updated_by = user.id
                 consumer_category_obj.save()
                 return consumer_category_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_consumer_category_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_category_obj = super(ConsumerCategorySerializer, self).update(instance, validated_data)
-            consumer_category_obj.updated_by = user.id
-            consumer_category_obj.updated_date = datetime.utcnow()
-            consumer_category_obj.save()
-            return consumer_category_obj
+        if ConsumerCategoryTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                              utility_id=validated_data['utility_id'],
+                                              utility_product_id=validated_data['utility_product_id']).exists():
+            raise CustomAPIException(COSUMER_CATEGORY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_category_obj = super(ConsumerCategorySerializer, self).update(instance, validated_data)
+                consumer_category_obj.updated_by = user.id
+                consumer_category_obj.updated_date = datetime.utcnow()
+                consumer_category_obj.save()
+                return consumer_category_obj

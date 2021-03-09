@@ -168,3 +168,4 @@ class RegionDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
+
