@@ -77,7 +77,6 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
     work_order_master_id = models.BigIntegerField(blank=True, null=True)
-    consumer_service_contract_detail_id = models.BigIntegerField(blank=True, null=True)
     state = models.BigIntegerField(choices=CHOICES, default=1)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)

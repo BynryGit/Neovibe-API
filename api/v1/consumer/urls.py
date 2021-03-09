@@ -89,6 +89,8 @@ urlpatterns = [
     path('<uuid:id_string>/offer-detail', ConsumerOfferDetail.as_view()),
     path('approve', ConsumerApprove.as_view()),
     path('connect', ConsumerConnect.as_view()),
-    path('disconnect', ConsumerDisconnect.as_view())
+    path('disconnect', ConsumerDisconnect.as_view()),
+    path('outage', ConsumerOutage.as_view()),
+    path('service', ConsumerService.as_view()),
     # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),
 ]
