@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "chinmay"
 
 from rest_framework import serializers, status
 from v1.tenant.models.tenant_region import TenantRegion as TenantRegionTbl

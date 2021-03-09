@@ -24,3 +24,4 @@ aws-secretsmanager-caching==1.1.1.4
 django-twilio==0.13.1
 xlrd==2.0.1
 fcm-django==0.3.7
+pycurl==7.43.0.5

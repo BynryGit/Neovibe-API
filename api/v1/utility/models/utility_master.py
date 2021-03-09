@@ -16,18 +16,39 @@ __author__ = "aki"
 
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
+from rest_framework import serializers, status
 from django.db import models  # importing package for database
+import fsm
+from v1.utility.views.utility_function import perform_events
+from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
+# from v1.utility.views.common_functions import perform_events
+# *********** UTILITY CONSTANTS **************
+UTILITY_DICT = {
+    "CREATED": 0,
+    "APPROVED": 1,
+}
 
 
 # Create Utility Master table start.
 
-class UtilityMaster(models.Model):
+class UtilityMaster(models.Model, fsm.FiniteStateMachineMixin):
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'APPROVED'),
+    )
+
+    state_machine = {
+        UTILITY_DICT['CREATED']: (UTILITY_DICT['APPROVED'], UTILITY_DICT['CREATED']),
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     short_name = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     phone_no = models.CharField(max_length=200, blank=True, null=True)
     email_id = models.CharField(max_length=200, blank=True, null=True)
     company_id = models.CharField(max_length=200, blank=True, null=True)
@@ -37,6 +58,7 @@ class UtilityMaster(models.Model):
     short_logo = models.CharField(max_length=200, blank=True, null=True)
     long_logo = models.CharField(max_length=200, blank=True, null=True)
     status_id = models.BigIntegerField(null=True, blank=True)
+    currency_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -52,12 +74,21 @@ class UtilityMaster(models.Model):
     def get_tenant(self):
         return self.tenant
 
+    def on_change_state(self, previous_state, next_state, **kwargs):
+
+        try:
+            perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT['UTILITY'])
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Utility transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
+
+
 # Create Utility Master table end.
 
 
 def get_utility_by_id(id):
     try:
-        return UtilityMaster.objects.get(id = id)
+        return UtilityMaster.objects.get(id=id)
     except:
         return False
 

@@ -15,7 +15,7 @@ class ConsumerFaqListSerializer(serializers.ModelSerializer):
         class Meta:
             model = ConsumerFaqTbl
             fields = (
-                'question', 'answer', 'service_obj', 'id_string', 'created_date', 'is_active',
+                'question', 'answer', 'id_string', 'created_date', 'is_active',
                 'created_by')
 
 
@@ -50,15 +50,18 @@ class ConsumerFaqSerializer(serializers.ModelSerializer):
             else:
                 consumer_faq_obj = super(ConsumerFaqSerializer, self).create(validated_data)
                 consumer_faq_obj.created_by = user.id
-                consumer_faq_obj.updated_by = user.id
                 consumer_faq_obj.save()
                 return consumer_faq_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_consumer_faq_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_faq_obj = super(ConsumerFaqSerializer, self).update(instance, validated_data)
-            consumer_faq_obj.updated_by = user.id
-            consumer_faq_obj.updated_date = datetime.utcnow()
-            consumer_faq_obj.save()
-            return consumer_faq_obj
+        if ConsumerFaqTbl.objects.filter(question=validated_data['question'], tenant_id=validated_data['tenant_id'],
+                                         utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(CONSUMER_FAQ_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_faq_obj = super(ConsumerFaqSerializer, self).update(instance, validated_data)
+                consumer_faq_obj.updated_by = user.id
+                consumer_faq_obj.updated_date = datetime.utcnow()
+                consumer_faq_obj.save()
+                return consumer_faq_obj

@@ -46,20 +46,24 @@ class ConsumerSupportSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_consumer_support_validated_data(validated_data)
             if ConsumerSupportTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                                 utility_id=validated_data['utility_id']).exists():
+                                                 utility_id=validated_data['utility_id'],city_id=validated_data['city_id']).exists():
                 raise CustomAPIException(COSUMER_SUPPORT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 consumer_support_obj = super(ConsumerSupportSerializer, self).create(validated_data)
                 consumer_support_obj.created_by = user.id
-                consumer_support_obj.updated_by = user.id
                 consumer_support_obj.save()
                 return consumer_support_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_consumer_support_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_support_obj = super(ConsumerSupportSerializer, self).update(instance, validated_data)
-            consumer_support_obj.updated_by = user.id
-            consumer_support_obj.updated_date = datetime.utcnow()
-            consumer_support_obj.save()
-            return consumer_support_obj
+        if ConsumerSupportTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                             utility_id=validated_data['utility_id'],
+                                             city_id=validated_data['city_id']).exists():
+            raise CustomAPIException(COSUMER_SUPPORT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_support_obj = super(ConsumerSupportSerializer, self).update(instance, validated_data)
+                consumer_support_obj.updated_by = user.id
+                consumer_support_obj.updated_date = datetime.utcnow()
+                consumer_support_obj.save()
+                return consumer_support_obj
