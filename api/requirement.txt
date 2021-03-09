@@ -25,3 +25,4 @@ django-twilio==0.13.1
 psycopg2-binary==2.8.6
 xlrd==2.0.1
 fcm-django==0.3.7
+pycurl==7.43.0.5

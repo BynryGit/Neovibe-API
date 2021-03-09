@@ -6,14 +6,16 @@ from rest_framework import serializers
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from v1.meter_data_management.task.update_route_task_status import update_route_task_status
+from v1.meter_data_management.task.assign_route_task import assign_route_task
+from v1.meter_data_management.task.assign_partial_route_task import assign_partial_route_task
+from v1.meter_data_management.task.de_assign_route_task import de_assign_route_task
 from v1.userapp.serializers.user import UserShortViewSerializer
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.serializers.route import RouteShortViewSerializer
 from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment as RouteTaskAssignmentTbl
 from v1.meter_data_management.serializers.schedule_log import ScheduleLogShortViewSerializer
 from v1.meter_data_management.views.common_function import set_route_task_assignment_validated_data
-from v1.meter_data_management.task.route_task_assignment import assign_route_task, assign_partial_route_task, \
-    de_assign_route_task
 
 
 class RouteTaskAssignmentShortViewSerializer(serializers.ModelSerializer):
@@ -30,10 +32,27 @@ class RouteTaskAssignmentViewSerializer(serializers.ModelSerializer):
     meter_reader_id = UserShortViewSerializer(many=False, source='get_meter_reader_name')
     schedule_log_id = ScheduleLogShortViewSerializer(many=False, source='get_schedule_log')
     dispatch_status = ChoiceField(choices=RouteTaskAssignmentTbl.DISPATCH_STATUS)
+    task_detail = serializers.SerializerMethodField()
+
+    def get_task_detail(self, route_task_assignment_tbl):
+        Meter_List = []
+        task_obj = [x for x in route_task_assignment_tbl.consumer_meter_json if x['is_active'] == True and
+                    x['status'] == 'ALLOCATED']
+
+        for task in task_obj:
+            Meter_List.append(task['meter_no'])
+
+        task_detail = {
+            'task_count': len(task_obj),
+            'task_obj': task_obj
+        }
+        update_route_task_status.delay(route_task_assignment_tbl.id, Meter_List)
+        return task_detail
 
     class Meta:
         model = RouteTaskAssignmentTbl
-        fields = ('__all__')
+        fields = ('id_string', 'dispatch_status', 'assign_date', 'read_cycle_id', 'route_id', 'meter_reader_id',
+                  'schedule_log_id', 'tenant', 'utility', 'task_detail')
 
 
 class RouteTaskAssignmentSerializer(serializers.ModelSerializer):

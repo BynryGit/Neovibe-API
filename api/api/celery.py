@@ -49,6 +49,7 @@ CELERY_QUEUES = (
     Queue('Default_Queue', Exchange('Default_Queue'), routing_key='Default_Queue'),
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
     Queue('Dispatch_I', routing_key='Dispatch_I_Tasks'),
+    Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
 )
 
 CELERY_ROUTES = {
@@ -56,17 +57,21 @@ CELERY_ROUTES = {
         'queue': 'ImportConsumer',
         'routing_key': 'ImportConsumer_Tasks'
     },
-    'v1.meter_data_management.task.assign_route_task': {
+    'v1.meter_data_management.task.assign_route_task.assign_route_task': {
             'queue': 'Dispatch_I',
             'routing_key': 'Dispatch_I_Tasks',
     },
-    'v1.meter_data_management.task.assign_partial_route_task': {
+    'v1.meter_data_management.task.assign_partial_route_task.assign_partial_route_task': {
             'queue': 'Dispatch_I',
             'routing_key': 'Dispatch_I_Tasks',
     },
-    'v1.meter_data_management.task.de_assign_route_task': {
+    'v1.meter_data_management.task.de_assign_route_task.de_assign_route_task': {
             'queue': 'Dispatch_I',
             'routing_key': 'Dispatch_I_Tasks',
+    },
+    'v1.meter_data_management.task.update_route_task_status.update_route_task_status': {
+            'queue': 'Dispatch_II',
+            'routing_key': 'Dispatch_II_Tasks',
     },
 }
 
