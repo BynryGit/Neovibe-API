@@ -89,7 +89,6 @@ def schedule_bill_log(request):
 
 
 def create_schedule_log(schedule):
-    print('***********',schedule)
     current_date = timezone.now()
     with transaction.atomic():
         try:
