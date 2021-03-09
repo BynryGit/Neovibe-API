@@ -1,5 +1,14 @@
 __author__ = "aki"
 
+# API Header
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Usage: This task is used to save schedule log
+# Tables used: Schedule, ScheduleLog, Global Lookup
+# Author: Akshay
+# Created on: 26/02/2021
+
 from django.utils import timezone
 from django.db import transaction
 from django.db.models import Q

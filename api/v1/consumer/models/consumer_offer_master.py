@@ -17,6 +17,7 @@ class ConsumerOfferMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility_product_id= models.BigIntegerField(null=True, blank=True)
     module_id = models.BigIntegerField(null=True, blank=True)
     submodule_id = models.BigIntegerField(null=True, blank=True)
     offer_name = models.CharField(max_length=200, null=True, blank=True)

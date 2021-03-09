@@ -160,9 +160,13 @@ def set_schedule_appointment_validated_data(validated_data):
 # Function for generating service appointment number according to utility
 def generate_service_appointment_no(service_appointment):
     try:
+        print("==========================",service_appointment.tenant)
+        print("=================",get_sub_module_by_key("DISPATCHER"))
+        print("==========================",service_appointment.utility)
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=service_appointment.tenant,
                                                             utility=service_appointment.utility,
                                                             sub_module_id=get_sub_module_by_key("DISPATCHER"))
+        print("+++++++++++++++++++",format_obj)
         if format_obj.is_prefix:
             sa_number = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
@@ -219,4 +223,3 @@ def set_service_appointment_data(work_order, consumer):
     except Exception as e:
         raise CustomAPIException("Error in setting service_appointment_data",
                                  status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-

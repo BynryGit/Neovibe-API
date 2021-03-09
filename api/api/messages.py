@@ -137,11 +137,14 @@ IS_RECCURING_NOT_FOUND = 'Reccuring Id Not Found'
 UTILITY_PRODUCT_NOT_FOUND = 'Utility Product not found'
 UTILITY_WITH_GIVEN_DETAILS_ALREADY_EXIST = "Utility with given details already exist"
 METER_NOT_FOUND = 'Meter not found'
+METER_READER_NOT_FOUND = 'Meter reader not found'
 METER_TYPE_NOT_FOUND = 'Meter type not found'
 PREMISE_NOT_FOUND = "Premise not found"
 METER_READING_NOT_FOUND = "Meter Reading not found"
 ROUTE_TASK_ASSIGNMENT_NOT_FOUND = "Route task assignment not found"
 READER_STATUS_NOT_FOUND = "Reader Status Not Found."
+ALLOCATION_IN_PROGRESS = "Allocation is in progress"
+
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

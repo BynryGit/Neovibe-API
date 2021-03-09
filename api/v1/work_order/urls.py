@@ -14,7 +14,7 @@ urlpatterns = [
     path('utility/service', WorkOrderService.as_view(), name='work_order_service'),
     path('utility/service/<uuid:id_string>', WorkOrderDetail.as_view(), name='work_order_service_detail'),
     path('service-appointment', ServiceAppointment.as_view(), name='service_appointment'),
-    path('utility/<uuid:id_string>/service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list'),
+    # path('utility/<uuid:id_string>/service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list'),
     path('utility/<uuid:id_string>/material_type/list', MaterialTypeList.as_view(), name='material_type_list'),
     path('utility/<uuid:id_string>/material_subtype/list', MaterialSubTypeList.as_view(), name='material_subtype_list'),
     path('utility/<uuid:id_string>/material_name/list', MaterialNameList.as_view(), name='material_name_list'),
@@ -24,5 +24,7 @@ urlpatterns = [
     path('service-assignment/<uuid:id_string>',ServiceAssignmentDetail.as_view(),name="service_assignment_detail"),
     path('utility/<uuid:utility_id_string>/user/<uuid:user_id_string>/service-assignment/list',ServiceAssignmentList.as_view(),name="service_assignment_list"),
     path('scheduled-appointment',ScheduledAppointment.as_view(), name="add_scheduled_appointment"),
-    path('service-appointment/<uuid:id_string>/life-cycle',ServiceAppointmentLifeCycleList.as_view(),name="service_life_cycle")
+    path('service-appointment/<uuid:id_string>/life-cycle',ServiceAppointmentLifeCycleList.as_view(),name="service_life_cycle"),
+    # path('service-appointment/<uuid:id_string>/disconnect-list',ServiceAppointmentConsumerDisconnectList.as_view(), name="service_disconnect_list"),
+    path('service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list')
 ]

@@ -10,7 +10,7 @@ setting_reader = SettingReader()
 from v1.work_order.models.service_appointments import ServiceAppointment
 from v1.work_order.views.common_functions import set_service_appointment_validated_data
 from v1.tenant.serializers.tenant import TenantStatusViewSerializer
-from v1.consumer.serializers.consumer_master import ConsumerListSerializer
+from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailViewSerializer
 from v1.asset.serializer.asset import AssetShortListSerializer
 from v1.work_order.serializers.work_order_master import WorkOrderMasterShortListSerializer
 from v1.work_order.serializers.service_appointment_status import ServiceAppointmentStatusListSerializer
@@ -24,24 +24,22 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-    consumer_id = ConsumerListSerializer(many=False, required=True, source='get_consumer')
-    asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
-    status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
+    consumer_service_contract_detail_id = ConsumerServiceContractDetailViewSerializer(many=False, required=True, source='get_consumer_service_contract_detail_id')
+    asset_id = AssetShortListSerializer(many=False, required=False, source='get_asset')
     work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
     class Meta:
         model = ServiceAppointment
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_id', 'asset_id',
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_service_contract_detail_id', 'asset_id',
                   'work_order_master_id',
                   'sa_number', 'sa_name', 'sa_date', 'sa_description', 'sa_rule', 'created_date', 'updated_date',
-                  'status_id', 'state')
+                  'state')
 
 
 class ServiceAppointmentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)
-    consumer_id = serializers.CharField(required=False, max_length=200)
     asset_id = serializers.CharField(required=False, max_length=200)
     consumer_service_contract_detail_id = serializers.CharField(required=False, max_length=200)
     work_order_master_id = serializers.CharField(required=False, max_length=200)
@@ -59,7 +57,6 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     # actual_start_time = serializers.CharField(required=False, max_length=200)
     # actual_end_time = serializers.CharField(required=False, max_length=200)
     # actual_duration = serializers.CharField(required=False, max_length=200)
-    status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ServiceAppointment
@@ -75,7 +72,6 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
             appointment_obj.created_by = user.id
             appointment_obj.created_date = datetime.utcnow()
             appointment_obj.tenant = user.tenant
-            appointment_obj.status_id = 1
             appointment_obj.save()
             appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
             appointment_obj.save()
@@ -95,10 +91,9 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
 
 class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
-    consumer_id = ConsumerListSerializer(many=False, required=True, source='get_consumer')
-    asset_id = AssetShortListSerializer(many=False, required=True, source='get_asset')
+    consumer_service_contract_detail_id = ConsumerServiceContractDetailViewSerializer(many=False, required=True, source='get_consumer_service_contract_detail_id')
+    asset_id = AssetShortListSerializer(many=False, required=False, source='get_asset')
     work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
-    status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 

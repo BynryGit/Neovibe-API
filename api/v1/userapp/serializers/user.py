@@ -157,3 +157,8 @@ class UserViewSerializer(serializers.ModelSerializer):
                   'user_id','created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor', 'city',
                   'department', 'status', 'supplier')
 
+
+class UserShortViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id_string', 'first_name', 'last_name', 'email')

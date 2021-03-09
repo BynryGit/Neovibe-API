@@ -17,6 +17,9 @@ from v1.meter_data_management.views.validation_assignments import ValidationAssi
 from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, MeterLifeCycleList, MeterNoteList, \
     MeterNoteDetail
 from v1.meter_data_management.views.reader_status import ReaderStatusDetail, ReaderStatus, ReaderStatusList
+from v1.meter_data_management.views.route_task_assignment import RouteTaskAssignment, RouteTaskAssignmentList, \
+    RouteTaskAssignmentDetail
+
 
 urlpatterns = [
     path('schedule', Schedule.as_view(), name='schedule'),
@@ -66,6 +69,10 @@ urlpatterns = [
     path('utility/<uuid:id_string>/meter-summary', MeterSummary.as_view(), name='meter_summary'),
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
+
+    path('route-task-assignment', RouteTaskAssignment.as_view(), name='route_task_assignment'),
+    path('route-task-assignment/list', RouteTaskAssignmentList.as_view(), name='route_task_assignment_list'),
+    path('route-task-assignment/<uuid:id_string>', RouteTaskAssignmentDetail.as_view(), name='route_task_assignment_detail'),
 
     path('log', schedule_log, name='route_add')
 ]
