@@ -41,24 +41,27 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
         try:
             route_task_assignment_obj = RouteTaskAssignment.objects.get(schedule_log_id=schedule_log_id.id,
                                                                         route_id=route_tbl.id, is_active=True)
+            if route_task_assignment_obj.meter_reader_id == None:
+                meter_reader_first_name = 'NA'
+                meter_reader_last_name = 'NA'
+                meter_reader_task_count = 0
+                assign_date = route_task_assignment_obj.assign_date
+                dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
+            else:
+                meter_reader_obj = get_user_by_id(route_task_assignment_obj.meter_reader_id)
+                meter_reader_first_name = meter_reader_obj.first_name
+                meter_reader_last_name = meter_reader_obj.last_name
+                assign_date = route_task_assignment_obj.assign_date
+                dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
+                meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
+                                                                             schedule_log_id=schedule_log_id.id,
+                                                                             is_completed=False, is_active=True).count()
         except:
-            route_task_assignment_obj = False
-
-        if route_task_assignment_obj == False:
             meter_reader_first_name = 'NA'
             meter_reader_last_name = 'NA'
             assign_date = 'NA'
             dispatch_status = 'NOT-DISPATCHED'
             meter_reader_task_count = 0
-        else:
-            meter_reader_obj = get_user_by_id(route_task_assignment_obj.meter_reader_id)
-            meter_reader_first_name = meter_reader_obj.first_name
-            meter_reader_last_name = meter_reader_obj.last_name
-            assign_date = route_task_assignment_obj.assign_date
-            dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
-            meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
-                                                                         schedule_log_id=schedule_log_id.id,
-                                                                         is_completed=False, is_active=True).count()
 
         route_detail = {
             'total_consumer': ConsumerDetail.objects.filter(schedule_log_id=schedule_log_id.id, route_id=route_tbl.id,

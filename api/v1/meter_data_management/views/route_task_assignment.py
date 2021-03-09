@@ -10,7 +10,6 @@ from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, ROUTE_TASK_ASSIGNMENT_NOT_FOUND
@@ -18,6 +17,8 @@ from v1.meter_data_management.models.route_task_assignment import RouteTaskAssig
     get_route_task_assignment_by_id_string
 from v1.meter_data_management.serializers.route_task_assignment import RouteTaskAssignmentViewSerializer, \
     RouteTaskAssignmentSerializer
+from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException, \
+    AllocationInProgress
 
 
 # API Header
@@ -30,7 +31,7 @@ from v1.meter_data_management.serializers.route_task_assignment import RouteTask
 # Usage: API will fetch required data for route task assignment list against filter and search
 # Tables used: Route Task Assignment
 # Author: Akshay
-# Created on: 27/02/2021
+# Created on: 09/03/2021
 
 
 class RouteTaskAssignmentList(generics.ListAPIView):
@@ -48,8 +49,18 @@ class RouteTaskAssignmentList(generics.ListAPIView):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
             if token:
                 if is_authorized(1,1,1,user_obj):
-                    queryset = RouteTaskAssignmentTbl.objects.filter(is_active=True)
-                    return queryset
+                    user = get_user_by_id_string(user_obj)
+                    route_task_assignment_obj = RouteTaskAssignmentTbl.objects.filter(meter_reader_id=user.id,
+                                                                                      dispatch_status=1, is_active=True)
+                    if route_task_assignment_obj.exists():
+                        raise AllocationInProgress
+                    else:
+                        route_task_assignment_obj = RouteTaskAssignmentTbl.objects.filter(meter_reader_id=user.id,
+                                                                                          consumer_meter_json__contains=
+                                                                                          [{'is_active': True},
+                                                                                           {'status': 'ALLOCATED'}],
+                                                                                          is_active=True)
+                        return route_task_assignment_obj
                 else:
                     raise InvalidAuthorizationException
             else:

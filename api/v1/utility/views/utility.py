@@ -17,7 +17,7 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string
+from v1.utility.models.utility_master import UtilityMaster as UtilityMasterTbl, get_utility_by_id_string, UTILITY_DICT
 from v1.utility.serializers.utility import UtilityMasterViewSerializer, UtilityMasterSerializer
 from v1.utility.serializers.utility_module import UtilityModuleSerializer, UtilityModuleViewSerializer
 from v1.utility.serializers.utility_sub_module import UtilitySubModuleSerializer
@@ -26,6 +26,14 @@ from api.constants import *
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
+
+import boto3
+from botocore.exceptions import NoCredentialsError
+from rest_framework.parsers import FileUploadParser
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 
 
 # API Header
@@ -128,6 +136,7 @@ class Utility(GenericAPIView):
             serializer = UtilityMasterSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 area_obj = serializer.create(serializer.validated_data, user)
+                area_obj.change_state(UTILITY_DICT["APPROVED"])
                 view_serializer = UtilityMasterViewSerializer(instance=area_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
@@ -190,6 +199,7 @@ class UtilityDetail(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             utility_obj = get_utility_by_id_string(id_string)
             if utility_obj:
+                utility_obj.change_state(UTILITY_DICT["APPROVED"])
                 serializer = UtilityMasterSerializer(data=request.data)
                 if serializer.is_valid():
                     utility_obj = serializer.update(utility_obj, serializer.validated_data, user)
@@ -271,4 +281,5 @@ class UtilityModule(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
+
 

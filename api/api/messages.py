@@ -142,6 +142,9 @@ METER_TYPE_NOT_FOUND = 'Meter type not found'
 PREMISE_NOT_FOUND = "Premise not found"
 METER_READING_NOT_FOUND = "Meter Reading not found"
 ROUTE_TASK_ASSIGNMENT_NOT_FOUND = "Route task assignment not found"
+READER_STATUS_NOT_FOUND = "Reader Status Not Found."
+ALLOCATION_IN_PROGRESS = "Allocation is in progress"
+
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"
@@ -201,3 +204,4 @@ ROUTE_TASK_ASSIGNMENT_ALREADY_EXIST = "Route task assignment Already Exist"
 JOB_CARD_TEMPLATE_ALREADY_EXISTS = "Template Already Exist."
 WORK_ORDER_TYPE_ALREADY_EXIST = "Work Order Type Already Exist."
 WORK_ORDER_SUB_TYPE_ALREADY_EXIST = "Work Order Sub Type Already Exist."
+READER_STATUS_ALREADY_EXIST = "Reader Status Already Exist."

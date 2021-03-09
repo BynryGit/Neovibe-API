@@ -7,6 +7,8 @@ from v1.consumer.models.consumer_master import get_consumer_by_id_string , Consu
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
 from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id_string
 from v1.complaint.models.complaint_type import get_complaint_type_by_id_string
+from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
+from v1.utility.models.utility_module import get_utility_module_by_id_string
 
 
 class CustomFilter:
@@ -30,6 +32,10 @@ class CustomFilter:
             module_obj = get_module_by_id_string(request.query_params['module_id'])
             queryset = queryset.filter(module_id=module_obj.id)
 
+        if 'category_id' in request.query_params:
+            consumer_category = get_consumer_category_by_id_string(request.query_params['category_id'])
+            queryset = queryset.filter(category_id=consumer_category.id)
+
         if 'utility_work_order_type_id' in request.query_params:
             utility_work_order_type = get_utility_work_order_type_by_id_string(request.query_params['utility_work_order_type_id'])
             queryset = queryset.filter(utility_work_order_type_id=utility_work_order_type.id)
@@ -37,6 +43,11 @@ class CustomFilter:
         if 'complaint_type_id' in request.query_params:
             complaint_type = get_complaint_type_by_id_string(request.query_params['complaint_type_id'])
             queryset = queryset.filter(complaint_type_id=complaint_type.id)
+
+        if 'module_id' in request.query_params:
+            module = get_utility_module_by_id_string(request.query_params['module_id'])
+            queryset = queryset.filter(module_id=module.id)
+
 
         if 'consumer_processing' in request.query_params:
             consumer_master_list = []

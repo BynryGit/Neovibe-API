@@ -18,7 +18,7 @@ from django.utils import timezone # importing package for datetime
 from master.models import get_user_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id
-from v1.meter_data_management.models.schedule import get_schedule_by_id
+from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
@@ -40,11 +40,11 @@ class RouteTaskAssignment(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    read_cycle_id = models.BigIntegerField(null=False, blank=False)
+    read_cycle_id = models.BigIntegerField(null=True, blank=True)
     route_id = models.BigIntegerField(null=False, blank=False)
-    meter_reader_id = models.BigIntegerField(null=False, blank=False)
+    meter_reader_id = models.BigIntegerField(null=True, blank=True)
     schedule_log_id = models.BigIntegerField(null=True, blank=True)
-    consumer_meter_json = JSONField(default=[])
+    consumer_meter_json = JSONField(null=True, blank=True)
     dispatch_status = models.IntegerField(choices=DISPATCH_STATUS, default=0)
     assign_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
@@ -72,7 +72,7 @@ class RouteTaskAssignment(models.Model):
 
     @property
     def get_schedule_log(self):
-        schedule_log = get_schedule_by_id(self.schedule_log_id)
+        schedule_log = get_schedule_log_by_id(self.schedule_log_id)
         return schedule_log
 
     def __str__(self):

@@ -47,15 +47,18 @@ class ConsumerOwnershipSerializer(serializers.ModelSerializer):
             else:
                 consumer_ownership_obj = super(ConsumerOwnershipSerializer, self).create(validated_data)
                 consumer_ownership_obj.created_by = user.id
-                consumer_ownership_obj.updated_by = user.id
                 consumer_ownership_obj.save()
                 return consumer_ownership_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_consumer_ownership_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_ownership_obj = super(ConsumerOwnershipSerializer, self).update(instance, validated_data)
-            consumer_ownership_obj.updated_by = user.id
-            consumer_ownership_obj.updated_date = datetime.utcnow()
-            consumer_ownership_obj.save()
-            return consumer_ownership_obj
+        if ConsumerOwnershipTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                               utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(COSUMER_OWNERSHIP_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_ownership_obj = super(ConsumerOwnershipSerializer, self).update(instance, validated_data)
+                consumer_ownership_obj.updated_by = user.id
+                consumer_ownership_obj.updated_date = datetime.utcnow()
+                consumer_ownership_obj.save()
+                return consumer_ownership_obj
