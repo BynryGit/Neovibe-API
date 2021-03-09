@@ -1316,7 +1316,12 @@ class ConsumerDisconnect(GenericAPIView):
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
-# Author : Chetan Dhongade
+# Interaction: Outage
+# Usage: Outage 
+# Tables used: workorder master, service appointment 
+# Author: Chetan
+# Created on: 09-03-2021
+
 
 class ConsumerOutage(GenericAPIView):
     @is_token_validate
@@ -1372,7 +1377,12 @@ class ConsumerOutage(GenericAPIView):
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
-# Author : Chetan Dhongade
+# Interaction: Service 
+# Usage: service 
+# Tables used: workorder master, service appointment 
+# Author: Chetan Dhongade 
+# Created on: 09-03-2021
+
 
 class ConsumerService(GenericAPIView):
     @is_token_validate
