@@ -16,56 +16,9 @@ echo "smart360_env=$DEPLOYMENT_GROUP_NAME" >> /home/ubuntu/smart360/api/.env
 
 echo "################################################## Running makemigrations ############################################"
 # export smart360_env="$DEPLOYMENT_GROUP_NAME"
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations master
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations asset
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations billing
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations campaign
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations commonapp
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations consumer
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations complaint
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations service
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations contract
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations employee
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations meter_data_management
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations payment
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations payroll
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations registration
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations request
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations store
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations supplier
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations survey
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations userapp
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations tender
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations work_order
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations utility
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations tenant
 
 echo "################################################## Running migrate command ############################################" 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate master
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate asset
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate billing
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate campaign
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate commonapp
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate consumer
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate complaint
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate service
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate contract
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate employee
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate meter_data_management
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate payment
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate payroll
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate registration
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate request
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate store
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate supplier
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate survey
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate userapp
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate tender
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate work_order
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate utility
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate tenant
-
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations 
+ 
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 
 
 echo "################################################## Loading data ############################################"
