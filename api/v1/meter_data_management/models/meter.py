@@ -146,7 +146,7 @@ def get_meter_by_id(id):
     try:
         return Meter.objects.get(id=id, is_active=True)
     except:
-        return False
+        return None
 
 
 def get_meter_by_id_string(id_string):
