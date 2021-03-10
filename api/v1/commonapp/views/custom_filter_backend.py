@@ -44,9 +44,9 @@ class CustomFilter:
             complaint_type = get_complaint_type_by_id_string(request.query_params['complaint_type_id'])
             queryset = queryset.filter(complaint_type_id=complaint_type.id)
 
-        if 'module_id' in request.query_params:
-            module = get_utility_module_by_id_string(request.query_params['module_id'])
-            queryset = queryset.filter(module_id=module.id)
+        # if 'module_id' in request.query_params:
+        #     module = get_utility_module_by_id_string(request.query_params['module_id'])
+        #     queryset = queryset.filter(module_id=module.id)
 
 
         if 'consumer_processing' in request.query_params:
