@@ -11,6 +11,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.userapp.decorators import is_token_validate, role_required
 from master.models import get_user_by_id_string
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -56,6 +57,7 @@ class UtilitySubModuleList(generics.ListAPIView):
             if response:
                 if is_authorized(1,1,1,user_obj):
                     queryset = UtilitySubModuleTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

@@ -345,18 +345,18 @@ def set_consumer_consent_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "registration_type_id" in validated_data:
-        registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
-        if registration_type:
-            validated_data["registration_type_id"] = registration_type.id
+    if "consumer_category_id" in validated_data:
+        consumer_category = get_consumer_category_by_id_string(validated_data["consumer_category_id"])
+        if consumer_category:
+            validated_data["consumer_category_id"] = consumer_category.id
         else:
-            raise CustomAPIException("Registration Type not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "registration_subtype_id" in validated_data:
-        registration_subtype = get_registration_subtype_by_id_string(validated_data["registration_subtype_id"])
-        if registration_subtype:
-            validated_data["registration_subtype_id"] = registration_subtype.id
+            raise CustomAPIException("Consumer Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "consumer_subcategory_id" in validated_data:
+        consumer_subcategory = get_consumer_sub_category_by_id_string(validated_data["consumer_subcategory_id"])
+        if consumer_subcategory:
+            validated_data["consumer_subcategory_id"] = consumer_subcategory.id
         else:
-            raise CustomAPIException("Registration SubType not found", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Consumer SubCategory not found", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

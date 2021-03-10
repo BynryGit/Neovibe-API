@@ -7,7 +7,7 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_sub_category import ConsumerSubCategory as ConsumerSubCategoryModel, \
     get_consumer_sub_category_by_id_string
@@ -55,9 +55,7 @@ class ConsumerSubCategoryList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerSubCategoryModel.objects.filter(utility=utility, is_active=True)
-                    if 'category_id' in self.request.query_params:
-                        category = get_consumer_category_by_id_string(self.request.query_params['category_id'])
-                        queryset = queryset.filter(category_id=category.id)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

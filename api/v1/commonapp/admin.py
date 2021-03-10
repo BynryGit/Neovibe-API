@@ -37,6 +37,7 @@ from v1.commonapp.models.integration_subtype import IntegrationSubType
 from v1.commonapp.models.integration_master import IntegrationMaster
 from v1.commonapp.models.work_order_type import WorkOrderType
 from v1.commonapp.models.work_order_sub_type import WorkOrderSubType
+from v1.commonapp.models.meter_status import MeterStatus
 
 admin.site.register(Region)
 admin.site.register(Country)
@@ -76,3 +77,4 @@ admin.site.register(IntegrationSubType)
 admin.site.register(IntegrationMaster)
 admin.site.register(WorkOrderType)
 admin.site.register(WorkOrderSubType)
+admin.site.register(MeterStatus)

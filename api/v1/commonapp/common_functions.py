@@ -82,6 +82,9 @@ def is_authorized(module_id, sub_module_id, privilege_id, user_id):
         return False
 
 
+
+
+
 def is_utility(utility_id, user_obj):
     try:
         if check_user_utility_exists(user_obj.id, utility_id):
@@ -92,7 +95,6 @@ def is_utility(utility_id, user_obj):
     except Exception as e:
         logger().log(e, 'ERROR', user='test', name='test')
         return False
-
 
 def set_note_validated_data(validated_data):
     if "utility_id" in validated_data:
@@ -709,6 +711,7 @@ def set_work_order_sub_type_validated_data(validated_data):
 def validate_user_data(validated_data):
     if "user_id_string" in validated_data:
         user_obj = get_user_by_id_string(validated_data["user_id_string"])
+
         if user_obj:
             validated_data["object_id"] = user_obj.id
         else:

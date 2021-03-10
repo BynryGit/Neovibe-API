@@ -1,3 +1,6 @@
+from django.db.models import query
+from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
+from v1.commonapp.models.work_order_type import get_work_order_type_by_key
 from v1.commonapp.serializers.region import TenantRegionSerializer
 from v1.tenant.models.tenant_region import TenantRegion as TenantRegionTbl
 from rest_framework import generics
@@ -51,6 +54,10 @@ class WorkOrderMasterList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = WorkOrderMasterModel.objects.filter(utility=utility, is_active=True)
+                    if 'filter_key' in self.request.query_params:
+                        work_obj = get_work_order_type_by_key(self.request.query_params['filter_key'])
+                        util_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_obj.id)
+                        queryset = queryset.filter(utility_work_order_type_id = util_obj.id)
                     if queryset:
                         return queryset
                     else:

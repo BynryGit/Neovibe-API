@@ -24,6 +24,7 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
 from v1.utility.models.utility_service_contract_template import get_utility_service_contract_template_by_id_string
 
 
+
 def set_utility_validated_data(validated_data):
     if "tenant" in validated_data:
         tenant_id_string = (validated_data["tenant"])
@@ -80,6 +81,9 @@ def set_utility_contract_validated_data(validated_data):
         else:
             raise CustomAPIException("Contract Template not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+
+
 
 
 def set_utility_module_validated_data(validated_data):
@@ -214,4 +218,3 @@ def generate_company_id(user):
         return user_id
     except Exception as e:
         raise CustomAPIException("Company ID generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-

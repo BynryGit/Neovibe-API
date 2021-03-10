@@ -1,13 +1,13 @@
 import uuid
 from django.db import models
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
+# from v1.utility.models.utility_master import UtilityMaster
 
 
 class EmailConfiguration(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey('utility.UtilityMaster', blank=True, null=True, on_delete=models.SET_NULL)
     email_port = models.CharField(max_length = 200, null = True, blank = True)
     email_backend = models.CharField(max_length = 200, null = True, blank = True)
     email_host = models.CharField(max_length = 200, null = True, blank = True)

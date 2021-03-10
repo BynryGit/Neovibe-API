@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from django.db import models
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
+# from v1.utility.models.utility_master import UtilityMaster
 
 TRANSITION_CONFIGURATION_DICT = {
     "ASSET"           : 0,
@@ -61,7 +61,7 @@ class TransitionConfiguration(models.Model):
     )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey('utility.UtilityMaster', blank=True, null=True, on_delete=models.SET_NULL)
     transition_object = models.BigIntegerField(choices=CHOICES, default=0)
     transition_state = models.BigIntegerField(null=True, blank=True)
     channel = models.BigIntegerField(choices=CHANNEL_CHOICES, default=0)
@@ -87,7 +87,10 @@ def get_transition_configuration_by_id(id):
 
 def is_transition_configuration_exists(transition_object, next_state, utility):
     try:
-        return TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
+        fill = TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
                                                   utility=utility, is_active=True).exists()
+        print("HHHHHHHHHHHHHHH",fill)
+        return fill
+
     except Exception as e:
         return False
