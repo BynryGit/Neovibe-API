@@ -27,14 +27,8 @@ MANIFEST
 !.vscode/extensions.json
 *.code-workspace
 
-migrations/
-0001_initial.py
-migrations/000*
-*/migrations/000*
-migrations/*
 db.sqlite3
 media/*
-000*.py
 
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm

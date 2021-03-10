@@ -12,6 +12,7 @@ from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_b
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
+from v1.consumer.serializers.consumer_master import ConsumerSerializer
 from v1.registration.models import registrations
 from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat, \
@@ -26,7 +27,6 @@ from v1.consumer.models.offer_type import get_offer_type_by_id_string
 from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
-from v1.consumer.models.offer_type import get_offer_type_by_id
 from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 # Function for converting id_strings to id's
@@ -354,18 +354,18 @@ def set_consumer_consent_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "registration_type_id" in validated_data:
-        registration_type = get_registration_type_by_id_string(validated_data["registration_type_id"])
-        if registration_type:
-            validated_data["registration_type_id"] = registration_type.id
+    if "consumer_category_id" in validated_data:
+        consumer_category = get_consumer_category_by_id_string(validated_data["consumer_category_id"])
+        if consumer_category:
+            validated_data["consumer_category_id"] = consumer_category.id
         else:
-            raise CustomAPIException("Registration Type not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "registration_subtype_id" in validated_data:
-        registration_subtype = get_registration_subtype_by_id_string(validated_data["registration_subtype_id"])
-        if registration_subtype:
-            validated_data["registration_subtype_id"] = registration_subtype.id
+            raise CustomAPIException("Consumer Category not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "consumer_subcategory_id" in validated_data:
+        consumer_subcategory = get_consumer_sub_category_by_id_string(validated_data["consumer_subcategory_id"])
+        if consumer_subcategory:
+            validated_data["consumer_subcategory_id"] = consumer_subcategory.id
         else:
-            raise CustomAPIException("Registration SubType not found", status_code=status.HTTP_404_NOT_FOUND)
+            raise CustomAPIException("Consumer SubCategory not found", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 

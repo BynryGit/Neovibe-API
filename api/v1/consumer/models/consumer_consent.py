@@ -3,8 +3,8 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-from v1.registration.models.registration_type import get_registration_type_by_id
-from v1.registration.models.registration_subtype import get_registration_subtype_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 
 
 # Create Consumer Category table start
@@ -16,13 +16,13 @@ class ConsumerConsent(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    registration_type_id = models.BigIntegerField(null=True, blank=True)
-    registration_subtype_id = models.BigIntegerField(null=True, blank=True)
+    consumer_category_id = models.BigIntegerField(null=True, blank=True)
+    consumer_subcategory_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -31,14 +31,14 @@ class ConsumerConsent(models.Model):
         return self.name
     
     @property
-    def get_registration_type(self):
-        registration_type = get_registration_type_by_id(self.registration_type_id)
-        return registration_type
+    def get_consumer_category(self):
+        consumer_category = get_consumer_category_by_id(self.consumer_category_id)
+        return consumer_category
     
     @property
-    def get_registration_subtype(self):
-        registration_subtype = get_registration_subtype_by_id(self.registration_subtype_id)
-        return registration_subtype
+    def get_consumer_subcategory(self):
+        consumer_subcategory = get_consumer_sub_category_by_id(self.consumer_subcategory_id)
+        return consumer_subcategory
 
 # Create Consumer Category table end
 

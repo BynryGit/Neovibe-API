@@ -1,3 +1,7 @@
+from typing import FrozenSet
+from v1.work_order.models.work_order_master import WorkOrderMaster, get_work_order_master_by_id_string
+from v1.commonapp.views.notifications import send_sms
+from v1.utility.models.utility_work_order_sub_type import UtilityWorkOrderSubType, get_utility_work_order_sub_type_by_id
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.exceptions import APIException
@@ -41,6 +45,11 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.complaint.models.complaint import Complaint
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from v1.utility.models.utility_product import get_utility_product_by_id
+from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id
+from v1.commonapp.models.work_order_type import WorkOrderType, get_work_order_type_by_key
+from v1.utility.models.utility_work_order_type import UtilityWorkOrderType, get_utility_work_order_type_by_id
+
 
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
@@ -101,7 +110,6 @@ class ConsumerList(generics.ListAPIView):
 # Author: Rohan
 # Created on: 19/05/2020
 class Consumer(GenericAPIView):
-
     @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
@@ -1140,7 +1148,10 @@ class ConsumerApprove(GenericAPIView):
 # Usage: Connect
 # Tables used: ConsumerMaster
 # Author: Rohan
+# updated by : Chetan Dhongade
 # Created on: 01-02-2021
+# Updated date: 05-03-2021
+
 class ConsumerConnect(GenericAPIView):
 
     @is_token_validate
@@ -1151,13 +1162,58 @@ class ConsumerConnect(GenericAPIView):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
                 consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
+                    request.data['consumer_service_contract_detail_id'])
+                if consumer_service_contract_detail_obj:
+                    service_contract_obj = get_utility_service_contract_master_by_id(
+                        consumer_service_contract_detail_obj.service_contract_id)
+                    if service_contract_obj:
+                        utility_product_obj = get_utility_product_by_id(service_contract_obj.utility_product_id)
+
+
+                work_order_type_obj = get_work_order_type_by_key('CONNECTION')
+                work_order_sub_type_obj = get_work_order_sub_type_by_key('CONNECTION')
+
+                utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_order_type_obj.id)
+                utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id=work_order_sub_type_obj.id)
+
+
+                work_order_master_obj = WorkOrderMaster.objects.get(utility_product_id=utility_product_obj.id,
+                                            utility_work_order_type_id= utility_work_order_type_obj.id,
+                                            utility_work_order_sub_type_id = utility_work_order_sub_type_obj.id
+                                            )
+
+                request.data['work_order_master_id'] = str(work_order_master_obj.id_string)
+
+                try:
+                    previous_connection_request = ServiceAppointmentTbl.objects.filter(
+                        Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
+                        & Q(is_active=False) &
+                        Q(Q(work_order_master_id=work_order_master_obj.id)) &
+                        ~Q(state_id=7) &
+                        Q(state_id=1))
+                    if previous_connection_request:
+                        raise CustomAPIException(
+                            "Service Appointment Already Exist",
+                            status_code=status.HTTP_409_CONFLICT)
+                except Exception as e:
+                    res = self.handle_exception(e)
+                    return Response({
+                        STATE: EXCEPTION,
+                        RESULT: str(e),
+                    }, status=res.status_code)
+
                 appointment_serializer = ServiceAppointmentSerializer(data=request.data)
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer.utility
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
-                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+                # view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+
+                # return the service appointent  obj to print the recipt in the front end
+                view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
+
                 return Response({
                     STATE: SUCCESS,
                     RESULT: view_serializer.data,
@@ -1181,9 +1237,10 @@ class ConsumerConnect(GenericAPIView):
 # Usage: disconnect
 # Tables used: ConsumerMaster
 # Author: Rohan
+# updated by : Chetan Dhongade
 # Created on: 01-02-2021
+# Updated date: 05-03-2021
 class ConsumerDisconnect(GenericAPIView):
-
     @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
@@ -1191,14 +1248,75 @@ class ConsumerDisconnect(GenericAPIView):
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
-                consumer = get_consumer_by_id_string(request.data['consumer_id'])
+                consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
+                    request.data['consumer_service_contract_detail_id'])
+
+                if consumer_service_contract_detail_obj:
+                    service_contract_obj = get_utility_service_contract_master_by_id(
+                        consumer_service_contract_detail_obj.service_contract_id)
+                    if service_contract_obj:
+                        utility_product_obj = get_utility_product_by_id(service_contract_obj.utility_product_id)
+
+                work_order_type_obj = get_work_order_type_by_key('DISCONNECTION')
+
+                if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+
+                # check disconnect type is TEMPORARY OR PERMANENT
+                if request.data['disconnect_type'] == 'TEMPORARY':
+                    work_order_sub_type_obj = get_work_order_sub_type_by_key('TEMPORARY_DISCONNECTION')
+                if request.data['disconnect_type'] == 'PERMANENT':
+                    work_order_sub_type_obj = get_work_order_sub_type_by_key('PERMANENT_DISCONNECTION')
+
+                if work_order_sub_type_obj:
+                    utility_work_order_sub_type_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_obj.id)
+                if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_obj:
+                    work_order_master_obj = WorkOrderMaster.objects.get(
+                        utility_work_order_type_id= utility_work_order_type_obj.id,
+                        utility_work_order_sub_type_id=utility_work_order_sub_type_obj.id,
+                        utility_product_id=utility_product_obj.id)
+
+                request.data['work_order_master_id'] = str(work_order_master_obj.id_string)
+
+                # prevent adding multiple request for the same meter
+                try:
+                    previous_work_order_master_obj = WorkOrderMaster.objects.filter(
+                        utility_work_order_type_id=utility_work_order_type_obj.id,
+                        utility_product_id=utility_product_obj.id)
+                    disconnection_id = []
+                    for i in previous_work_order_master_obj:
+                        disconnection_id.append(i.id)
+
+                    previous_connection_request = ServiceAppointmentTbl.objects.filter(
+                        Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
+                        & Q(is_active=False) &
+                        Q(work_order_master_id__in=disconnection_id)&
+                        ~Q(state_id=7) &
+                        Q(state_id=1))
+                    if previous_connection_request:
+                        raise CustomAPIException(
+                            "Service Appointment Already Exist",
+                            status_code=status.HTTP_409_CONFLICT)
+                except Exception as e:
+                    res = self.handle_exception(e)
+                    return Response({
+                        STATE: EXCEPTION,
+                        RESULT: str(e),
+                    }, status=res.status_code)
+
                 appointment_serializer = ServiceAppointmentSerializer(data=request.data)
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer.utility
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
-                view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
+
+                # view_serializer = ConsumerServiceContractDetailViewSerializer(instance=consumer_service_contract_detail_obj, context={'request': request})
+
+                # serializer to return the created servie appointment for printing the recipt
+
+                view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
+
                 return Response({
                     STATE: SUCCESS,
                     RESULT: view_serializer.data,
@@ -1210,3 +1328,131 @@ class ConsumerDisconnect(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
+
+# API Header
+# API end Point: api/v1/consumer/outage
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Outage
+# Usage: Outage 
+# Tables used: workorder master, service appointment 
+# Author: Chetan
+# Created on: 09-03-2021
+
+
+class ConsumerOutage(GenericAPIView):
+    @is_token_validate
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
+                    request.data['consumer_service_contract_detail_id'])
+                work_order_master_obj = get_work_order_master_by_id_string(request.data['work_order_master_id'])
+                try:
+                    previous_connection_request = ServiceAppointmentTbl.objects.filter(
+                        Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
+                        & Q(is_active=False) &
+                        Q(work_order_master_id=work_order_master_obj.id)&
+                        ~Q(state_id=7) &
+                        Q(state_id=1))
+                    if previous_connection_request:
+                        raise CustomAPIException(
+                            "Service Appointment Already Exist",
+                            status_code=status.HTTP_409_CONFLICT)
+                except Exception as e:
+                    res = self.handle_exception(e)
+                    return Response({
+                        STATE: EXCEPTION,
+                        RESULT: str(e),
+                    }, status=res.status_code)
+
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                    appointment_obj.is_active = False
+                    appointment_obj.save()
+
+                view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
+                return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+# API Header
+# API end Point: api/v1/consumer/service
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Service 
+# Usage: service 
+# Tables used: workorder master, service appointment 
+# Author: Chetan Dhongade 
+# Created on: 09-03-2021
+
+
+class ConsumerService(GenericAPIView):
+    @is_token_validate
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
+                    request.data['consumer_service_contract_detail_id'])
+                work_order_master_obj = get_work_order_master_by_id_string(request.data['work_order_master_id'])
+                try:
+                    previous_connection_request = ServiceAppointmentTbl.objects.filter(
+                        Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
+                        & Q(is_active=False) &
+                        Q(work_order_master_id=work_order_master_obj.id)&
+                        ~Q(state_id=7) &
+                        Q(state_id=1))
+                    if previous_connection_request:
+                        raise CustomAPIException(
+                            "Service Appointment Already Exist",
+                            status_code=status.HTTP_409_CONFLICT)
+                except Exception as e:
+                    res = self.handle_exception(e)
+                    return Response({
+                        STATE: EXCEPTION,
+                        RESULT: str(e),
+                    }, status=res.status_code)
+
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                    appointment_obj.is_active = False
+                    appointment_obj.save()
+
+                view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
+                return Response({
+                        STATE: SUCCESS,
+                        RESULT: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+            
+            
+
+

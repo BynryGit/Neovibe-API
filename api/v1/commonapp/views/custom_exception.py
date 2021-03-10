@@ -30,3 +30,8 @@ class CustomAPIException(ValidationError):
         self.detail = detail
         if status_code is not None:
             self.status_code = status_code
+
+
+class AllocationInProgress(APIException):
+    status_code = 201
+    default_detail = ALLOCATION_IN_PROGRESS

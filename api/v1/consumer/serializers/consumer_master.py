@@ -1,13 +1,13 @@
 from datetime import datetime
 from django.db import transaction
 from rest_framework import serializers, status
-from rest_framework.validators import UniqueTogetherValidator
-
 from api.messages import MOBILE_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_master import ConsumerMaster
 # from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
 from v1.consumer.views.common_functions import *
+from v1.consumer.views import common_functions
+
 
 class ChoiceField(serializers.ChoiceField):
 
@@ -63,9 +63,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data, user):
-        print("|||||||||||||||||||||||||INSIDE CREATE|||||||||||||||||||")
-        validated_data = set_consumer_validated_data(validated_data)
-        print("++++++++++++++++++++++",validated_data)
+        validated_data = common_functions.set_consumer_validated_data(validated_data)
         if ConsumerMaster.objects.filter(phone_mobile=validated_data['phone_mobile'],
                                          utility_id=validated_data['utility']).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
@@ -75,7 +73,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
                 consumer_obj.tenant = user.tenant
                 consumer_obj.created_by = user.id
                 consumer_obj.created_date = datetime.now()
-                consumer_obj.consumer_no = generate_consumer_no(consumer_obj)
+                consumer_obj.consumer_no = common_functions.generate_consumer_no(consumer_obj)
                 consumer_obj.is_active = True
                 consumer_obj.save()
                 return consumer_obj
