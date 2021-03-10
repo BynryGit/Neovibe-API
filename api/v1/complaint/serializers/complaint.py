@@ -6,12 +6,15 @@ from api.messages import CONSUMER_COMPLAINT_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.complaint.models.complaint import Complaint
 from v1.complaint.views.common_functions import set_complaint_validated_data, generate_complaint_no
-
+from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailViewSerializer
+from v1.registration.serializers.registration import ChoiceField
 
 class ComplaintListSerializer(serializers.ModelSerializer):
+    consumer_service_contract_detail_id=ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail_id')
+    state = ChoiceField(choices=Complaint.CHOICES)
     class Meta:
         model = Complaint
-        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_no', 'complaint_no', 'created_date')
+        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date')
 
 
 class ComplaintViewSerializer(serializers.ModelSerializer):

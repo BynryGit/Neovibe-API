@@ -17,7 +17,7 @@ from v1.work_order.serializers.service_appointment_status import ServiceAppointm
 from v1.work_order.views.common_functions import generate_service_appointment_no
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SERVICE_APPOINTMENT_ALREADY_EXIST
-
+from v1.registration.serializers.registration import ChoiceField
 
 class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
@@ -29,6 +29,7 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    state = ChoiceField(choices=ServiceAppointment.CHOICES)
 
     class Meta:
         model = ServiceAppointment

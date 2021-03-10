@@ -9,6 +9,7 @@ from v1.consumer.views.common_functions import set_consumer_service_contract_det
 from v1.utility.serializers.utility_service_contract_master import UtilityServiceContractMasterListSerializer
 from v1.meter_data_management.serializers.meter import MeterViewSerializer
 from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
+from v1.registration.serializers.registration import ChoiceField
 
 class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
@@ -16,11 +17,13 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     contract = UtilityServiceContractMasterListSerializer(source='get_contract')
-    meter_id = MeterViewSerializer(many=False, source='get_meter_number')
+    consumer_id=ConsumerViewSerializer(source='get_consumer_number')
+    state = ChoiceField(choices=ConsumerServiceContractDetail.STATUS)
+    meter_id = MeterViewSerializer(required=False, source='get_meter_number')
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state' , 'consumer_no', 'contract', 'meter_id')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state' , 'consumer_id','consumer_no', 'contract', 'meter_id','created_date')
         
 # class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 #     tenant = serializers.ReadOnlyField(source='tenant.name')

@@ -36,6 +36,8 @@ class BillCycle(models.Model):
     area_id = models.BigIntegerField(null=True, blank=True)
     subarea_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
+    route_json = JSONField(default='')
+    label = models.CharField(max_length=200, blank=True, null=True)
     bill_cycle_code = models.CharField(max_length=200, blank=False, null=False)
     bill_cycle_name = models.CharField(max_length=200, blank=False, null=False)
     description = models.CharField(max_length=500, blank=True, null=True)

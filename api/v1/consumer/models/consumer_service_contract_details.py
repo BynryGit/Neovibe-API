@@ -66,8 +66,11 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
 
     @property
     def get_meter_number(self):
-        meter = get_meter_by_id(self.meter_id)
-        return meter
+        try:
+            meter = get_meter_by_id(self.meter_id)
+            return meter
+        except:
+            return False    
 
 
     def on_change_state(self, previous_state, next_state, **kwargs):

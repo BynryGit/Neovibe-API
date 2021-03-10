@@ -9,6 +9,7 @@ import uuid
 from django.db import models
 import fsm
 from v1.commonapp.views.custom_exception import CustomAPIException
+from django.contrib.postgres.fields import JSONField
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
     "CREATED": 0,
@@ -55,6 +56,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     billing_sub_area_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
     credit_rating_id = models.BigIntegerField(null=True, blank=True)
+    registration_obj = JSONField()
     is_auto_pay = models.BooleanField(default=False)
     is_loan = models.BooleanField(default=False)
     is_upfront_amount = models.BooleanField(default=False)
@@ -94,6 +96,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
             perform_signals(next_state, self)
             self.save()
         except Exception as e:
+            print("===error",e)
             raise CustomAPIException("Registration transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 
