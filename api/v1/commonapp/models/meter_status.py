@@ -58,4 +58,12 @@ def get_meter_status_by_id_string(id_string):
         return MeterStatus.objects.get(id_string=id_string)
     except:
         return False
+
+
+def get_meter_status_by_name(name):
+    try:
+        return MeterStatus.objects.get(name=name)
+    except:
+        return False
+
 # Create Reader Status table end.
