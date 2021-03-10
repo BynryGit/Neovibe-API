@@ -3,7 +3,6 @@ from v1.registration.views.registration import *
 from v1.registration.views.registration_type import *
 from v1.registration.views.registration_subtype import *
 
-
 urlpatterns = [
     path('list', RegistrationList.as_view()),
     path('status-list', RegistrationStatusList.as_view()),

@@ -8,6 +8,7 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
 
 
 # *********** COMPLAINT CONSTANTS **************
@@ -96,6 +97,11 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
 
     def __unicode__(self):
         return self.consumer_no
+
+    @property
+    def get_consumer_service_contract_detail_id(self):
+        consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
+        return consumer_service_contract_detail
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
