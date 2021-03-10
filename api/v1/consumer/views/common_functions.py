@@ -12,6 +12,7 @@ from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_b
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.consumer.models.scheme_type import get_scheme_type_by_id_string
+from v1.consumer.serializers.consumer_master import ConsumerSerializer
 from v1.registration.models import registrations
 from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat, \
@@ -26,7 +27,6 @@ from v1.consumer.models.offer_type import get_offer_type_by_id_string
 from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
-from v1.consumer.models.offer_type import get_offer_type_by_id
 from v1.utility.models.utility_product import get_utility_product_by_id_string
 
 
