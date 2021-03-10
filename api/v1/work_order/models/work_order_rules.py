@@ -24,6 +24,7 @@ from v1.commonapp.models.region import get_region_by_id
 from v1.commonapp.models.country import get_country_by_id
 from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.city import get_city_by_id
+from django.utils import timezone # importing package for datetime
 
 
 # Create WorkOrderRule table start
@@ -38,8 +39,8 @@ class WorkOrderRule(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.rule 

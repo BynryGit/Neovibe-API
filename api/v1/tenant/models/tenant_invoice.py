@@ -19,6 +19,7 @@ from django.db import models  # importing package for database
 from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.tenant.models.tenant_subscription import get_tenant_subscription_by_id
+from django.utils import timezone # importing package for datetime
 
 
 # Create Tenant Invoices table start.
@@ -30,11 +31,11 @@ class TenantInvoice(models.Model):
     tenant_subscription_id = models.BigIntegerField(null=True, blank=True)
     tenant_bank_detail_id = models.BigIntegerField(null=True, blank=True)
     invoice_number = models.CharField(max_length=200, blank=False, null=False)
-    invoice_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    invoice_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     invoice_amt = models.FloatField(null=True, blank=True)
     invoice_tax = models.FloatField(null=True, blank=True)
     invoice_url = models.CharField(max_length=200, blank=True, null=True)
-    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    due_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     contact_name = models.CharField(max_length=500, blank=True, null=True)
     contact_no = models.BigIntegerField(null=True, blank=True)
     email_id = models.CharField(max_length=200, blank=False, null=False)
@@ -44,8 +45,8 @@ class TenantInvoice(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.invoice_number

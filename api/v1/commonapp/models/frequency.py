@@ -20,6 +20,7 @@ from django.db import models  # importing package for database
 from v1.campaign.models.campaign_type import get_campaign_type_by_id
 from v1.commonapp.models.channel import get_channel_by_id
 from v1.utility.models.utility_payment_channel import get_utility_payment_channel_by_id
+from django.utils import timezone # importing package for datetime
 
 # Create Frequency table start
 class Frequency(models.Model):
@@ -32,8 +33,8 @@ class Frequency(models.Model):
     channel_type_id =  models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.name

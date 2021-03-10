@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import models
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.commonapp.models.sub_module import get_sub_module_by_id
-
+from django.utils import timezone # importing package for datetime
 
 # from v1.utility.models.utility_master import UtilityMaster
 
@@ -26,7 +26,7 @@ class NotificationTemplate(models.Model):
     attachment = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
 

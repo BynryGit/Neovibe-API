@@ -9,7 +9,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
-
+from django.utils import timezone # importing package for datetime
 
 # *********** COMPLAINT CONSTANTS **************
 COMPLAINT_DICT = {
@@ -78,18 +78,18 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     consumer_complaint_master_id = models.BigIntegerField(null=True, blank=True)
     complaint_type_id = models.BigIntegerField(null=True, blank=True)
     complaint_sub_type_id = models.BigIntegerField(null=True, blank=True)
-    complaint_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    complaint_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     channel = models.BigIntegerField(null=True, blank=True)
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)
     admin_remark = models.CharField(max_length=500, null=True, blank=True)
     complaint_raised_by = models.BigIntegerField(null=True, blank=True)
     state = models.BigIntegerField(choices=CHOICES, default=0)
-    close_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    close_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     closure_remark = models.CharField(max_length=500, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

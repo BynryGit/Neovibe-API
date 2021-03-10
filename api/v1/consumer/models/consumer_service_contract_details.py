@@ -9,6 +9,7 @@ from v1.meter_data_management.models.meter import get_meter_by_id
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 from v1.commonapp.views.custom_exception import CustomAPIException
 import fsm
+from django.utils import timezone # importing package for datetime
 
 
 CONSUMER_DICT = {
@@ -42,8 +43,8 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.consumer_no)

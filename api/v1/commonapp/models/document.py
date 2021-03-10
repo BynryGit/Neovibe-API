@@ -28,7 +28,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 from django.db import models  # importing package for database
-
+from django.utils import timezone # importing package for datetime
 
 # Create Document table start
 
@@ -48,9 +48,9 @@ class Document(models.Model):
     document_size = models.CharField(max_length=1000, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.document_generated_name)

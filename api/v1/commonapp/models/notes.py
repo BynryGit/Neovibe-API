@@ -15,7 +15,7 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-
+from django.utils import timezone # importing package for datetime
 from v1.commonapp.models.module import get_module_by_id
 
 from v1.commonapp.models.sub_module import get_sub_module_by_id
@@ -38,8 +38,8 @@ class Notes(models.Model):
     status = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
