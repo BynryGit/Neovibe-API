@@ -62,3 +62,10 @@ def get_reader_status_by_id_string(id_string):
         return ReaderStatus.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+
+def get_reader_status_by_name(name):
+    try:
+        return ReaderStatus.objects.get(name=name, is_active=True)
+    except:
+        return False
