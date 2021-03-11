@@ -22,10 +22,10 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations utility
 cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations work_order
 
 echo "################################################## Running migrate command ############################################" 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate registration
+cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate registration --fake
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate utility
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate work_order
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
+cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate --fake
 
 echo "################################################## Loading data ############################################"
 
