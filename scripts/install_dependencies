@@ -17,11 +17,9 @@ echo "smart360_env=$DEPLOYMENT_GROUP_NAME" >> /home/ubuntu/smart360/api/.env
 echo "################################################## Running makemigrations ############################################"
 # export smart360_env="$DEPLOYMENT_GROUP_NAME"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations registration
-
 echo "################################################## Running migrate command ############################################" 
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate --fake
+cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 0001 --fake
 
 echo "################################################## After fake ############################################"
 
