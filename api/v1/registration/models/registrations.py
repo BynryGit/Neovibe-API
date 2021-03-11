@@ -58,7 +58,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     billing_sub_area_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
     credit_rating_id = models.BigIntegerField(null=True, blank=True)
-    registration_obj = JSONField(default='')
+    # registration_obj = JSONField(default='')
     is_auto_pay = models.BooleanField(default=False)
     is_loan = models.BooleanField(default=False)
     is_upfront_amount = models.BooleanField(default=False)
