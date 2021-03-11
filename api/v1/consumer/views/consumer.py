@@ -1321,8 +1321,6 @@ class ConsumerDisconnect(GenericAPIView):
 # Tables used: workorder master, service appointment 
 # Author: Chetan
 # Created on: 09-03-2021
-
-
 class ConsumerOutage(GenericAPIView):
     @is_token_validate
     def post(self, request):
@@ -1382,8 +1380,6 @@ class ConsumerOutage(GenericAPIView):
 # Tables used: workorder master, service appointment 
 # Author: Chetan Dhongade 
 # Created on: 09-03-2021
-
-
 class ConsumerService(GenericAPIView):
     @is_token_validate
     def post(self, request):
