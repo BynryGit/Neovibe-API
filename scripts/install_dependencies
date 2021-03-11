@@ -25,6 +25,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate --fake
 
 echo "################################################## After fake ############################################"
 
+cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
 
 echo "################################################## Loading data ############################################"
