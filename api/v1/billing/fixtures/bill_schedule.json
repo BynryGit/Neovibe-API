@@ -1,0 +1,75 @@
+[
+	{
+		"pk": "1",
+		"model": "utility.UtilityProduct",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"product_id": 1,
+            "name":"Gas",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "utility.UtilityProduct",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"product_id": 2,
+            "name":"Power",
+			"is_active": "True"
+		}
+	},
+    {
+		"pk": "1",
+		"model": "billing.BillCycle",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"city_id": 1,
+            "zone_id" : 1,
+            "division_id": 1,
+            "area_id":1,
+            "subarea_id":1,
+            "utility_product_id":1,
+            "bill_cycle_code":"101",
+            "bill_cycle_name":"Cycle A",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "billing.BillCycle",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"city_id": 1,
+            "zone_id" : 1,
+            "division_id": 1,
+            "area_id":1,
+            "subarea_id":1,
+            "utility_product_id":1,
+            "bill_cycle_code":"102",
+            "bill_cycle_name":"Cycle B",
+			"is_active": "True"
+		}
+	},
+    {
+		"pk": "3",
+		"model": "billing.BillCycle",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"city_id": 1,
+            "zone_id" : 1,
+            "division_id": 1,
+            "area_id":1,
+            "subarea_id":1,
+            "utility_product_id":2,
+            "bill_cycle_code":"103",
+            "bill_cycle_name":"Cycle C",
+			"is_active": "True"
+		}
+	}
+]

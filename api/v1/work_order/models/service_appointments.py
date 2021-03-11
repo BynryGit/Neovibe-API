@@ -82,7 +82,6 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     sa_name = models.CharField(max_length=200, blank=True, null=True)
     sa_description = models.CharField(max_length=200, blank=True, null=True)
     sa_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    sa_time = models.TimeField(null=True, blank=True,default='20:00')
     sa_estimated_effort = models.BigIntegerField(null=True, blank=True)
     sa_rule = JSONField(default=[])
     sa_user_remark = models.CharField(max_length=200, blank=True, null=True)
