@@ -19,11 +19,9 @@ echo "################################################## Running makemigrations 
 
 echo "################################################## Running migrate command ############################################" 
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 0001 --fake
 
 echo "################################################## After fake ############################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py makemigrations
 cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
 
 echo "################################################## Loading data ############################################"
