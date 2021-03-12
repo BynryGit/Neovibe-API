@@ -60,7 +60,7 @@ class MeterReading(models.Model):
     current_meter_reading = models.CharField(max_length=200, null=True, blank=True)
     current_meter_reading_v1 = models.CharField(max_length=200, null=True, blank=True)
     current_meter_reading_v2 = models.CharField(max_length=200, null=True, blank=True)
-    meter_reading_json = JSONField(default=[])
+    meter_reading_json = JSONField(null=True, blank=True)
     is_assign_to_v1 = models.BooleanField(default=False)
     is_assign_to_v2 = models.BooleanField(default=False)
     is_meter_matching = models.BooleanField(default=False)
