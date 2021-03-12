@@ -18,8 +18,11 @@ echo "################################################## Running makemigrations 
 # export smart360_env="$DEPLOYMENT_GROUP_NAME"
 
 echo "################################################## Running migrate command ############################################" 
- 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate 
+
+
+echo "################################################## After fake ############################################"
+
+cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
 
 echo "################################################## Loading data ############################################"
 

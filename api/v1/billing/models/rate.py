@@ -19,7 +19,9 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from django.utils import timezone # importing package for datetime
-
+from v1.utility.models.utility_product import get_utility_product_by_id
+from v1.consumer.models.consumer_category import get_consumer_category_by_id
+from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 # Create Rate table start.
 
 class Rate(models.Model):
@@ -46,6 +48,26 @@ class Rate(models.Model):
     def __unicode__(self):
         return self.rate
 
+    @property
+    def get_utility_product_name(self):
+        try:
+            return get_utility_product_by_id(self.product_id)
+        except:
+            return False
+    
+    @property
+    def get_consumer_category(self):
+        try:
+            return get_consumer_category_by_id(self.consumer_category_id)
+        except:
+            return False
+    @property
+    def get_consumer_sub_category(self):
+        try:
+            return get_consumer_sub_category_by_id(self.consumer_subcategory_id)
+        except:
+            return False
+
 # Create Rate table end.
 
 def get_rate_by_tenant_id_string(tenant_id_string):
@@ -60,5 +82,11 @@ def get_rate_by_id_string(id_string):
 def get_rate_by_id(id):
     try:
         return Rate.objects.get(id = id)
+    except:
+        return False
+
+def get_rate_by_category_sub_category_wise(utility,utility_product_id,consumer_category_id,consumer_sub_category_id):
+    try:
+        return Rate.objects.filter(utility=utility,product_id=utility_product_id,consumer_category_id=consumer_category_id,consumer_subcategory_id=consumer_sub_category_id,is_active=True).last()
     except:
         return False
