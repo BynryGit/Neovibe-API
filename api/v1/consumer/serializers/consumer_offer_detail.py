@@ -7,6 +7,8 @@ from rest_framework import serializers, status
 from api.messages import CONSUMER_OFFER_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail
+from v1.consumer.serializers.consumer_offer_master import ConsumerOfferMasterListSerializer
+from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailViewSerializer
 from v1.consumer.views.common_functions import set_consumer_offer_detail_validated_data
 
 
@@ -15,10 +17,12 @@ class ConsumerOfferDetailListSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    offer = ConsumerOfferMasterListSerializer(source='get_offer')
+    consumer_service_contract_detail = ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail')
 
     class Meta:
         model = ConsumerOfferDetail
-        fields = ('tenant', 'tenant_id_string', 'utility', 'utility_id_string',)
+        fields = ('tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'offer', 'consumer_service_contract_detail')
 
 
 class ConsumerOfferDetailSerializer(serializers.ModelSerializer):
