@@ -19,7 +19,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
-
+from django.utils import timezone # importing package for datetime
 
 # Create Reader Status table start
 
@@ -31,7 +31,7 @@ class MeterStatus(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -58,4 +58,12 @@ def get_meter_status_by_id_string(id_string):
         return MeterStatus.objects.get(id_string=id_string)
     except:
         return False
+
+
+def get_meter_status_by_name(name):
+    try:
+        return MeterStatus.objects.get(name=name)
+    except:
+        return False
+
 # Create Reader Status table end.

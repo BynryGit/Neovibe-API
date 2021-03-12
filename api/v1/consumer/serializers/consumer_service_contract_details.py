@@ -11,6 +11,7 @@ from v1.meter_data_management.serializers.meter import MeterViewSerializer
 from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
 from v1.registration.serializers.registration import ChoiceField
 
+
 class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
@@ -39,7 +40,6 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 #         model = ConsumerServiceContractDetail
 #         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no', 'contract'
 #                   'consumer_id', 'meter_id', 'status')
-
 
 
 class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):

@@ -41,17 +41,22 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
         try:
             route_task_assignment_obj = RouteTaskAssignment.objects.get(schedule_log_id=schedule_log_id.id,
                                                                         route_id=route_tbl.id, is_active=True)
+            complete_task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
+                                 x['is_completed'] == True and x['is_revisit'] == False]
+
             if route_task_assignment_obj.meter_reader_id == None:
                 meter_reader_first_name = 'NA'
                 meter_reader_last_name = 'NA'
                 meter_reader_task_count = 0
                 assign_date = route_task_assignment_obj.assign_date
+                total_reading = len(complete_task_obj)
                 dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
             else:
                 meter_reader_obj = get_user_by_id(route_task_assignment_obj.meter_reader_id)
                 meter_reader_first_name = meter_reader_obj.first_name
                 meter_reader_last_name = meter_reader_obj.last_name
                 assign_date = route_task_assignment_obj.assign_date
+                total_reading = len(complete_task_obj)
                 dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
                 meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
                                                                              schedule_log_id=schedule_log_id.id,
@@ -62,12 +67,12 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
             assign_date = 'NA'
             dispatch_status = 'NOT-DISPATCHED'
             meter_reader_task_count = 0
+            total_reading = 0
 
         route_detail = {
             'total_consumer': ConsumerDetail.objects.filter(schedule_log_id=schedule_log_id.id, route_id=route_tbl.id,
                                                             is_active=True).count(),
-            'total_reading': RouteTaskAssignment.objects.filter(consumer_meter_json__contains=[{'status':'COMPLETED'}],
-                                                                is_active=True).count(),
+            'total_reading': total_reading,
             'meter_reader_first_name': meter_reader_first_name,
             'meter_reader_last_name': meter_reader_last_name,
             'assign_date': assign_date,

@@ -12,12 +12,13 @@
 
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
-
+from django.utils import timezone # importing package for datetime
 from v1.consumer.models.consumer_category import get_consumer_category_by_id
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 
 # Create Invoice Bill Table Start.
@@ -27,27 +28,27 @@ class InvoiceBill(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     invoice_no = models.CharField(max_length=200, null=True, blank=True)
-    invoice_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    invoice_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     category_id = models.BigIntegerField(null=True, blank=True)
     sub_category_id = models.BigIntegerField(null=True, blank=True)
     address = models.CharField(max_length=500, null=True, blank=True)
     contact = models.CharField(max_length=200, null=True, blank=True)
-    conversion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    conversion_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     consumer_status = models.CharField(max_length=200, null=True, blank=True)
     cycle_id = models.BigIntegerField(null=True, blank=True)
     route_id = models.BigIntegerField(null=True, blank=True)
     utility_service_plan_id = models.BigIntegerField(null=True, blank=True)
     bill_count = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, null=True, blank=True)
-    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    due_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     meter_no = models.CharField(max_length=200, null=True, blank=True)
     meter_status = models.BigIntegerField(null=True, blank=True)
     meter_reading = models.BigIntegerField(null=True, blank=True)
     previous_reading = models.FloatField(null=True, blank=True)
     current_reading = models.FloatField(null=True, blank=True)
-    previous_reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    current_reading_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    previous_reading_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    current_reading_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     consumption = models.FloatField(null=True, blank=True)
     basic_price = models.FloatField(null=True, blank=True)
     vat_percent = models.FloatField(null=True, blank=True)
@@ -72,8 +73,8 @@ class InvoiceBill(models.Model):
     instruction_id = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
 
 

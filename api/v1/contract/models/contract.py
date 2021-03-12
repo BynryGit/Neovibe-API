@@ -24,6 +24,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from decimal import Decimal  # importing package for decimal
+from django.utils import timezone # importing package for datetime
 
 
 # Create Contracts Master Table start
@@ -35,8 +36,8 @@ class Contract(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     contract_type = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    end_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     contract_period = models.BigIntegerField(null=True, blank=True)
     contract_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0, null=True, blank=True)
     supplier = models.BigIntegerField(null=True, blank=True)
@@ -45,8 +46,8 @@ class Contract(models.Model):
     status = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

@@ -21,6 +21,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.work_order.models.material_type import get_material_type_by_id
 from v1.work_order.models.material_subtype import get_material_subtype_by_id
+from django.utils import timezone # importing package for datetime
 
 
 # Create Material table start
@@ -35,8 +36,8 @@ class MaterialName(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.name

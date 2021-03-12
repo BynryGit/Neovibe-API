@@ -17,6 +17,7 @@ from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 
 # Create Service Request Priority table start
@@ -28,8 +29,8 @@ class ServiceRequestPriority(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(null=False, blank=False)
     updated_by = models.BigIntegerField(null=False, blank=False)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

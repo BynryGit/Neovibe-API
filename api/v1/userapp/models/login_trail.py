@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 
 # table header
@@ -20,7 +21,7 @@ class LoginTrail(models.Model): # change name to role
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     email = models.CharField(max_length=200,blank=False, null=False)
     status = models.CharField(max_length=200,blank=False, null=False)
-    login_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    login_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     logout_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

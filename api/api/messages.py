@@ -144,6 +144,7 @@ METER_READING_NOT_FOUND = "Meter Reading not found"
 ROUTE_TASK_ASSIGNMENT_NOT_FOUND = "Route task assignment not found"
 READER_STATUS_NOT_FOUND = "Reader Status Not Found."
 ALLOCATION_IN_PROGRESS = "Allocation is in progress"
+READING_NOT_PROVIDED = "Readings data not provided"
 
 
 # *********** ALREADY EXIST CONSTANTS **************

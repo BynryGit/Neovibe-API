@@ -24,6 +24,7 @@ from v1.survey.models.survey_type import get_survey_type_by_id
 from v1.survey.models.survey_status import get_survey_status_by_id
 from v1.consumer.models.consumer_category import get_consumer_category_by_id
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id
+from django.utils import timezone # importing package for datetime
 
 # Create Survey table start
 
@@ -38,17 +39,17 @@ class Survey(models.Model):
     category_id = models.BigIntegerField(null=True, blank=True)
     sub_category_id = models.BigIntegerField(null=True, blank=True)
     no_of_consumers = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    end_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     area_id = models.BigIntegerField(null=True, blank=True)
     sub_area_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
-    completion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    completion_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.name

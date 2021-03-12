@@ -1,5 +1,6 @@
 __author__ = "aki"
 
+import json
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -7,7 +8,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, METER_READING_NOT_FOUND
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, METER_READING_NOT_FOUND, READING_NOT_PROVIDED
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
@@ -56,6 +57,66 @@ class MeterReadingList(generics.ListAPIView):
     except Exception as ex:
         logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
         raise APIException
+
+
+# API Header
+# API end Point: api/v1/meter-data/meter-reading
+# API verb: POST
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: Create meter reading object
+# Usage: API will create meter reading object based on valid data
+# Tables used: Meter Reading
+# Author: Akshay
+# Created on: 09/03/2021
+
+class MeterReading(GenericAPIView):
+    @is_token_validate
+    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    def post(self, request):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            dict = {}
+            if len(request.data) > 0:
+                dict['image_missing'] = []
+                dict['created_meter_reading'] = []
+                dict['create_meter_reading_error'] = []
+                dict['serializer_error'] = []
+                image_dict = {}
+                for data in request.data:
+                    meter_image = data.get("meter_image")
+                    if meter_image:
+                        meter_reading_serializer = MeterReadingSerializer(data=data)
+                        if meter_reading_serializer.is_valid():
+                            meter_reading_obj = meter_reading_serializer.create(meter_reading_serializer.validated_data,
+                                                                                user)
+                            if meter_reading_obj:
+                                dict['created_meter_reading'].append(data.get('consumer_detail_id'))
+                                image_dict[meter_reading_obj.id] = {}
+                                image_dict[meter_reading_obj.id]['meter_image'] = json.dumps(meter_image)
+                            else:
+                                dict['create_meter_reading_error'].append(data.get('consumer_detail_id'))
+                        else:
+                            dict['serializer_error'].append(data.get('consumer_detail_id'))
+                    else:
+                        dict['image_missing'].append(data.get('consumer_detail_id'))
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: dict,
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: READING_NOT_PROVIDED,
+                }, status=status.HTTP_201_CREATED)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # API Header

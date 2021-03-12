@@ -21,6 +21,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 # *********** COMPLAINT CONSTANTS **************
 SERVICE_DICT = {
@@ -76,16 +77,16 @@ class ServiceDetails(models.Model, fsm.FiniteStateMachineMixin):
     service_sub_type_id = models.BigIntegerField(null=True, blank=True)
     consumer_remark = models.CharField(max_length=500, null=True, blank=True)
     admin_remark = models.CharField(max_length=500, null=True, blank=True)
-    request_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    request_due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    request_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    request_due_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     request_channel_id = models.BigIntegerField(null=True, blank=True)
     is_field_appointment = models.BooleanField(default=False)
     state = models.BigIntegerField(choices=CHOICES, default=0)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.consumer_no

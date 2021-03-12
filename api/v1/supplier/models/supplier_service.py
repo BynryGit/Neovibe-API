@@ -21,6 +21,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from decimal import Decimal  # importing package for float number
+from django.utils import timezone # importing package for datetime
 
 
 # Create Product Service Table start
@@ -42,8 +43,8 @@ class SupplierService(models.Model):
     source_type = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

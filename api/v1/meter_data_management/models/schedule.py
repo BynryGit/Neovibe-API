@@ -43,7 +43,7 @@ class Schedule(models.Model):
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    occurs_on = JSONField(default=[])
+    occurs_on = JSONField(null=True, blank=True)
     cron_expression = models.CharField(max_length=500, blank=True, null=True)
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
     start_date = models.DateTimeField(null=True, blank=True)

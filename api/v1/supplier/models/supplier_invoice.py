@@ -22,6 +22,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from decimal import Decimal  # importing package for float number
+from django.utils import timezone # importing package for datetime
 
 
 # Create Invoice Table start
@@ -36,13 +37,13 @@ class SupplierInvoice(models.Model):
     demand = models.BigIntegerField(null=True, blank=True)
     invoice_no = models.BigIntegerField(null=True, blank=True)
     invoice_amount = models.FloatField(max_length=80, blank=False, null=False, default=Decimal(0.00))
-    invoice_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    due_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    invoice_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    due_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     status_id = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
