@@ -27,7 +27,7 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
                                      error_messages={"required": "The field Template is required."})
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
-    sub_module_id = serializers.CharField(required=False, max_length=200)
+
 
     class Meta:
         model = NotificationTemplateTbl
@@ -39,12 +39,11 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
             if NotificationTemplateTbl.objects.filter(template=validated_data['template'],
                                                       tenant_id=validated_data['tenant_id'],
                                                       utility_id=validated_data['utility_id'],
-                                                      sub_module_id=validated_data['sub_module_id']).exists():
+                                                      ).exists():
                 raise CustomAPIException(NOTIFICATION_TEMPLATE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 notification_template_obj = super(NotificationTemplateSerializer, self).create(validated_data)
                 notification_template_obj.created_by = user.id
-                notification_template_obj.updated_by = user.id
                 notification_template_obj.save()
                 return notification_template_obj
 

@@ -1,3 +1,5 @@
+from django.contrib.postgres.fields import JSONField
+
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 from v1.consumer.models.consumer_category import *
@@ -58,7 +60,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     billing_sub_area_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
     credit_rating_id = models.BigIntegerField(null=True, blank=True)
-    registration_obj = JSONField(default='')
+    registration_obj = JSONField(default="")
     is_auto_pay = models.BooleanField(default=False)
     is_loan = models.BooleanField(default=False)
     is_upfront_amount = models.BooleanField(default=False)
@@ -98,7 +100,6 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
             perform_signals(next_state, self)
             self.save()
         except Exception as e:
-            print("===error",e)
             raise CustomAPIException("Registration transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 

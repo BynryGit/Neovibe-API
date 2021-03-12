@@ -721,12 +721,6 @@ def set_notification_template_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "sub_module_id" in validated_data:
-        sub_module = get_sub_module_by_id_string(validated_data["sub_module_id"])
-        if sub_module:
-            validated_data["sub_module_id"] = sub_module.id
-        else:
-            raise CustomAPIException("Sub Module not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
