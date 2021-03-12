@@ -18,7 +18,7 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+from django.utils import timezone # importing package for datetime
 # Create Deprecation Method table start.
 
 
@@ -30,7 +30,7 @@ class DeprecationMethod(models.Model):
     method = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(blank=False, null=False)
     updated_by = models.BigIntegerField(blank=False, null=False)
-    created_date = models.DateTimeField(default=datetime.now)
+    created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 

@@ -9,6 +9,7 @@ from v1.meter_data_management.models.meter import get_meter_by_id
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 from v1.commonapp.views.custom_exception import CustomAPIException
 import fsm
+from django.utils import timezone # importing package for datetime
 
 
 CONSUMER_DICT = {
@@ -42,8 +43,8 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.consumer_no)
@@ -66,8 +67,11 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
 
     @property
     def get_meter_number(self):
-        meter = get_meter_by_id(self.meter_id)
-        return meter
+        try:
+            meter = get_meter_by_id(self.meter_id)
+            return meter
+        except:
+            return False    
 
 
     def on_change_state(self, previous_state, next_state, **kwargs):
@@ -94,5 +98,11 @@ def get_consumer_service_contract_detail_by_id_string(id_string):
 def get_consumer_service_contract_detail_by_meter_id(meter_id):
     try:
         return ConsumerServiceContractDetail.objects.get(meter_id=meter_id, is_active=True)
+    except:
+        return False
+
+def get_consumer_service_contract_detail_by_premise_id(premise_id):
+    try:
+        return ConsumerServiceContractDetail.objects.get(premise_id=premise_id, is_active=True)
     except:
         return False

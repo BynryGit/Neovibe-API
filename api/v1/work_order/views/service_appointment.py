@@ -23,13 +23,14 @@ from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.models.module import get_module_by_key
 from v1.commonapp.models.notes import Notes
 from django.db.models import Q
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
 # API verb: GET
 # Interaction: Service Appointment list
 # Usage: API will fetch all Service Appointment List
-# Tables used: ServiceAppointment
+# Tables used: ServiceAppointment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 # Author: Priyanka
 # Created on: 29/12/2020
 
@@ -43,12 +44,13 @@ class ServiceAppointmentList(generics.ListAPIView):
         ordering = ('sa_number',)  # always give by default alphabetical order
         search_fields = ('sa_number','sa_name', 'tenant__name',)
 
-        def get_queryset(self):
+        def get_queryset(self):                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
-                    queryset = ServiceAppointmentTbl.objects.filter(utility=utility, is_active=True)
+                    queryset = ServiceAppointmentTbl.objects.filter(utility=utility,is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

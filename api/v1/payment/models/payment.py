@@ -11,6 +11,7 @@ from v1.payment.models.payment_type import get_payment_type_by_id
 from django.db import models  # importing package for database
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from django.utils import timezone # importing package for datetime
 
 # *********** PAYMENT CONSTANTS **************
 PAYMENT_DICT = {
@@ -67,7 +68,7 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     transaction_id = models.CharField(max_length=200, null=True, blank=True)
     transaction_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
     transaction_charges = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
-    transaction_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    transaction_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     payment_mode_id = models.BigIntegerField(null=True, blank=True)
     payment_channel_id = models.BigIntegerField(null=True, blank=True)
     payment_source_id = models.BigIntegerField(null=True, blank=True)
@@ -75,12 +76,12 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
     cheque_dd_no = models.CharField(max_length=200, null=True, blank=True)
-    cheque_dd_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    cheque_dd_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     ifsc_code = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
     is_penalty = models.BooleanField(default=False)
 

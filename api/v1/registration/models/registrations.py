@@ -11,6 +11,9 @@ import uuid
 from django.db import models
 import fsm
 from v1.commonapp.views.custom_exception import CustomAPIException
+from django.contrib.postgres.fields import JSONField
+from django.utils import timezone # importing package for datetime
+
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
     "CREATED": 0,
@@ -67,8 +70,8 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.email_id + " " + str(self.id_string)

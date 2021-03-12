@@ -20,6 +20,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.supplier.models.supplier import get_supplier_by_id
 from v1.survey.models.survey import get_survey_by_id
+from django.utils import timezone # importing package for datetime
 
 
 # Create Survey Consumer table start
@@ -49,8 +50,8 @@ class SurveyConsumer(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.first_name

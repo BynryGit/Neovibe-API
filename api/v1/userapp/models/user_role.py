@@ -22,6 +22,7 @@ from v1.userapp.models.role import get_role_by_id, get_role_by_id_string
 from v1.userapp.models.role_privilege import get_role_privilege_by_role_id
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 
 # Create User Privilege table start
@@ -35,8 +36,8 @@ class UserRole(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     # def __str__(self):
     #     return self.user_id

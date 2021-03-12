@@ -4,6 +4,8 @@ from rest_framework import serializers, status
 from api.messages import MOBILE_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_master import ConsumerMaster
+# from v1.consumer.views.common_functions import set_consumer_validated_data, generate_consumer_no
+from v1.consumer.views.common_functions import *
 from v1.consumer.views import common_functions
 
 

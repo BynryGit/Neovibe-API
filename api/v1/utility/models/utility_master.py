@@ -25,6 +25,8 @@ from v1.utility.views.utility_function import perform_events
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 # from v1.utility.views.common_functions import perform_events
+from django.utils import timezone # importing package for datetime
+
 # *********** UTILITY CONSTANTS **************
 UTILITY_DICT = {
     "CREATED": 0,
@@ -62,7 +64,7 @@ class UtilityMaster(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

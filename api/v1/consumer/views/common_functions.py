@@ -22,13 +22,12 @@ from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.registration.models.registration_type import get_registration_type_by_id_string
 from v1.registration.models.registration_subtype import get_registration_subtype_by_id_string
 from v1.commonapp.models.city import get_city_by_id_string
-
+from v1.consumer.serializers.consumer_master import ConsumerSerializer
 from v1.consumer.models.offer_type import get_offer_type_by_id_string
 from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
-
 
 # Function for converting id_strings to id's
 def set_consumer_validated_data(validated_data):
@@ -248,27 +247,37 @@ def create_consumer_after_registration(registration_id):
         dict = {}
         dict['tenant'] = registration.tenant
         dict['utility'] = registration.utility
-        dict['first_name'] = registration.first_name
-        dict['middle_name'] = registration.middle_name
-        dict['last_name'] = registration.last_name
         dict['email_id'] = registration.email_id
         dict['phone_mobile'] = registration.phone_mobile
         dict['phone_landline'] = registration.phone_landline
-        dict['address_line_1'] = registration.address_line_1
-        dict['street'] = registration.street
-        dict['zipcode'] = registration.zipcode
-        dict['country_id'] = registration.country_id
-        dict['state_id'] = registration.state_id
-        dict['city_id'] = registration.city_id
-        dict['country_id'] = registration.country_id
-        dict['area_id'] = registration.area_id
-        dict['sub_area_id'] = registration.sub_area_id
+        dict['billing_address_line_1'] = registration.billing_address_line_1
+        dict['billing_street'] = registration.billing_street
+        dict['billing_zipcode'] = registration.billing_zipcode
+        dict['billing_state_id'] = registration.billing_state_id
+        dict['billing_city_id'] = registration.billing_city_id
+        dict['billing_area_id'] = registration.billing_area_id
+        dict['billing_sub_area_id'] = registration.billing_sub_area_id
         dict['registration_id'] = registration.id
+        dict['premise_id'] = registration.premise_id
+        dict['credit_rating_id'] = registration.credit_rating_id
+        dict['is_auto_pay'] = registration.is_auto_pay
+        dict['is_loan'] = registration.is_loan
+        dict['is_upfront_amount'] = registration.is_upfront_amount
+        dict['ownership_id'] = registration.ownership_id
+        dict['is_address_same'] = registration.is_address_same
+        dict['is_vip'] = registration.is_vip
+        dict['is_active'] = registration.is_active
+        dict['created_by'] = registration.created_by
+        dict['updated_by'] = registration.updated_by
+        dict['created_date'] = registration.created_date
+        dict['updated_date'] = registration.updated_date
         data = collections.OrderedDict(dict)
         consumer = super(ConsumerSerializer, ConsumerSerializer()).create(data)
         consumer.consumer_no = generate_consumer_no(consumer)
         consumer.save()
+        return consumer
     except Exception as e:
+        print("=====",e)
         raise CustomAPIException("Consumer creation failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

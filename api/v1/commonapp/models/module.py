@@ -16,6 +16,7 @@
 import uuid  # importing package for guid
 from datetime import datetime # importing package for datetime
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 # Create Module table start
 
@@ -26,7 +27,7 @@ class Module(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     created_by = models.BigIntegerField(blank=True, null=True)
     updated_by = models.BigIntegerField(blank=True, null=True)
-    created_date = models.DateTimeField(default=datetime.now)
+    created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 

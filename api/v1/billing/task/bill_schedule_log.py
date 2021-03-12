@@ -56,13 +56,13 @@ def schedule_bill_log(request):
                 elif frequency_obj.key == "daily":
                     if repeat_every_obj.key == "1 day":
                         print('*****in if')
-                        # if ScheduleBillLog.objects.filter(tenant=schedule.tenant, utility=schedule.utility,
-                        #                               bill_schedule_id=schedule.id, date_and_time__date=current_date.date(),
-                        #                               is_active=True).exists():
-                        #     print("Schedule For Current Date Is Already Exist")
-                        # else:
-                        print('--------',schedule)
-                        create_schedule_log(schedule)
+                        if ScheduleBillLog.objects.filter(tenant=schedule.tenant, utility=schedule.utility,
+                                                      bill_schedule_id=schedule.id, date_and_time__date=current_date.date(),
+                                                      is_active=True).exists():
+                            print("Schedule For Current Date Is Already Exist")
+                        else:
+                            print('--------',schedule)
+                            create_schedule_log(schedule)
                     elif repeat_every_obj.key == "2 day":
                         pass
                     elif repeat_every_obj.key == "3 day":

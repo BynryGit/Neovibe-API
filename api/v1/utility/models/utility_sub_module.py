@@ -23,6 +23,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_module import get_utility_module_by_id
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 
 # Create Utility Sub Module table start.
@@ -37,8 +38,8 @@ class UtilitySubModule(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.label)

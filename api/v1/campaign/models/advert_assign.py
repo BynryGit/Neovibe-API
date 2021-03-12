@@ -17,6 +17,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid
 from django.db import models
+from django.utils import timezone # importing package for datetime
 
 # Create advertisement assignment table starts
 
@@ -27,14 +28,14 @@ class AdvertisementAssignment(models.Model):
     campaign_id = models.BigIntegerField(default=1, null=True, blank=True)
     group_id = models.BigIntegerField(default=1, null=True, blank=True)
     vendor_id = models.BigIntegerField(default=1, null=True, blank=True)  # todo: check actual name
-    assigned_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    completion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    assigned_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    completion_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     status_id = models.BigIntegerField(default=1, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.vendor_id

@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from django.db import models
+from django.utils import timezone # importing package for datetime
 
 
 class UtilityServiceMaster(models.Model):
@@ -12,8 +13,8 @@ class UtilityServiceMaster(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.service_name

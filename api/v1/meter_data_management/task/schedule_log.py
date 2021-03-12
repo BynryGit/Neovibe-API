@@ -19,7 +19,7 @@ from v1.meter_data_management.models.schedule import Schedule
 from v1.meter_data_management.task.consumer_detail import create_consumer
 
 
-def schedule_log(request):
+def schedule_log():
     try:
         current_date = timezone.now()
         schedule_obj = Schedule.objects.filter(Q(end_date__date__gte=current_date.date()) |
@@ -82,7 +82,7 @@ def schedule_log(request):
         logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
 
 
-# create_schedule_log()
+schedule_log()
 
 
 def create_schedule_log(schedule):
