@@ -8,7 +8,7 @@ from v1.consumer.models.consumer_service_contract_details import ConsumerService
 from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
 from v1.utility.serializers.utility_service_contract_master import UtilityServiceContractMasterListSerializer
 from v1.meter_data_management.serializers.meter import MeterViewSerializer
-from v1.consumer.serializers.consumer_master import ConsumerViewSerializer
+
 
 class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
