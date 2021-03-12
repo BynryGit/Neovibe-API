@@ -21,7 +21,6 @@ class NotificationTemplate(models.Model):
     notification_type = models.BigIntegerField(choices=CHOICES, default=0)
     is_template = models.BooleanField(default=True)
     template = models.TextField(max_length=10000, null=True, blank=True)
-    sub_module_id = models.BigIntegerField(null=True, blank=True)
     is_attachment = models.BooleanField(default=False)
     attachment = models.CharField(max_length=200, null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
