@@ -1,5 +1,5 @@
 from django.urls import path
-from v1.payment.views.payment import *
+from v1.payment.views.payment import PaymentList,PaymentApprove, PaymentReject
 from v1.payment.views.payment_channel import PaymentChannelList
 from v1.payment.views.payment_sub_type import PaymentSubTypeList, PaymentSubType, PaymentSubTypeDetail
 from v1.payment.views.payment_type import PaymentTypeList, PaymentTypeDetail, PaymentType
@@ -20,5 +20,6 @@ urlpatterns = [
     path('payment-sub-types', PaymentSubTypeList.as_view()),
     path('<uuid:id_string>/payment-modes', PaymentModeList.as_view()),
     path('<uuid:id_string>/payment-channels', PaymentChannelList.as_view()),
+    path('<uuid:id_string>/list', PaymentList.as_view()),
 
 ]

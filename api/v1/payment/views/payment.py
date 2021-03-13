@@ -9,7 +9,13 @@ from v1.payment.models.payment import get_payment_by_id_string, PAYMENT_DICT, PA
 from v1.payment.serializer.payment import PaymentViewSerializer
 from v1.registration.signals.signals import registration_payment_approved, registration_approved, after_payment
 from v1.userapp.decorators import is_token_validate, role_required
-
+from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
+from rest_framework import generics
+from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
+from rest_framework.response import Response
+from v1.payment.models.payment import Payment
 
 # API Header
 # API end Point: api/v1/payment/:id_string
@@ -95,3 +101,36 @@ class PaymentReject(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+# API Header
+# API end Point: api/v1/payment/:id_string/list
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Payment
+# Interaction: consumer payment list
+# Usage: API will fetch all Payment list
+# Tables used: Payment
+# Auther: Gaurav
+# Created on: 12/03/2021
+class PaymentList(generics.ListAPIView):
+    try:
+        serializer_class = PaymentViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = Payment.objects.filter(utility=utility, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Payment not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Admin')            
