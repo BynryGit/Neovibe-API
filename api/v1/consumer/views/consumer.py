@@ -51,8 +51,8 @@ from v1.commonapp.models.work_order_type import WorkOrderType, get_work_order_ty
 from v1.utility.models.utility_work_order_type import UtilityWorkOrderType, get_utility_work_order_type_by_id
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_key
-from django.db import Q
 from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
+from django.db.models import Q
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
