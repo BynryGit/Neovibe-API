@@ -35,18 +35,18 @@ class RouteTaskAssignmentViewSerializer(serializers.ModelSerializer):
     task_detail = serializers.SerializerMethodField()
 
     def get_task_detail(self, route_task_assignment_tbl):
-        Meter_List = []
+        meter_list = []
         task_obj = [x for x in route_task_assignment_tbl.consumer_meter_json if x['is_active'] == True and
                     x['status'] == 'ALLOCATED']
 
         for task in task_obj:
-            Meter_List.append(task['meter_no'])
+            meter_list.append(task['meter_no'])
 
         task_detail = {
             'task_count': len(task_obj),
             'task_obj': task_obj
         }
-        update_route_task_status.delay(route_task_assignment_tbl.id, Meter_List)
+        update_route_task_status.delay(route_task_assignment_tbl.id, meter_list)
         return task_detail
 
     class Meta:

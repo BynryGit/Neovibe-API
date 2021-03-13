@@ -25,6 +25,13 @@ from v1.utility.models.utility_product import get_utility_product_by_id_string
 from master.models import get_user_by_id_string
 from  v1.billing.models.bill_cycle import get_bill_cycle_by_id_string
 
+from v1.billing.models.bill_schedule import get_schedule_bill_by_id_string
+from v1.billing.models.bill_cycle import get_bill_cycle_by_id
+from v1.meter_data_management.models.route import get_route_by_id_string
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_premise_id
+from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id
+
+
 def set_validated_data(validated_data):
     if "consumer_category_id" in validated_data:
         consumer_category = get_consumer_category_by_id_string(validated_data["consumer_category_id"])
@@ -67,33 +74,33 @@ def generate_consumer_bill(consumer, bill_month, due_date, schedule):
         pass
 
 
-def save_outstanding(consumer, bill_month):
-    try:
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        if bill.bill_count == 1:
-            bill.outstanding = 0.0
-            bill.save()
-        else:
-            prvious_bill = get_previous_consumer_bill(consumer)
-            if prvious_bill.bill_status_id == 'PAID':#TODO:Replace with Id
-                if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
-                    bill.outstanding = prvious_bill.after_due_date_amount
-                    bill.save()
-                else:
-                    bill.outstanding = prvious_bill.before_due_date_amount
-                    bill.save()
-            if prvious_bill.bill_status_id == "PARTIAL":#TODO:Replace with Id
-                if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
-                    bill.outstanding = prvious_bill.after_due_date_amount
-                    bill.save()
-                else:
-                    bill.outstanding = prvious_bill.before_due_date_amount
-                    bill.save()
-            if prvious_bill.bill_status_id == "UNPAID":#TODO:Replace with Id
-                bill.outstanding = prvious_bill.after_due_date_amount
-                bill.save()
-    except:
-        pass
+# def save_outstanding(consumer, bill_month):
+#     try:
+#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+#         if bill.bill_count == 1:
+#             bill.outstanding = 0.0
+#             bill.save()
+#         else:
+#             prvious_bill = get_previous_consumer_bill(consumer)
+#             if prvious_bill.bill_status_id == 'PAID':#TODO:Replace with Id
+#                 if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
+#                     bill.outstanding = prvious_bill.after_due_date_amount
+#                     bill.save()
+#                 else:
+#                     bill.outstanding = prvious_bill.before_due_date_amount
+#                     bill.save()
+#             if prvious_bill.bill_status_id == "PARTIAL":#TODO:Replace with Id
+#                 if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
+#                     bill.outstanding = prvious_bill.after_due_date_amount
+#                     bill.save()
+#                 else:
+#                     bill.outstanding = prvious_bill.before_due_date_amount
+#                     bill.save()
+#             if prvious_bill.bill_status_id == "UNPAID":#TODO:Replace with Id
+#                 bill.outstanding = prvious_bill.after_due_date_amount
+#                 bill.save()
+#     except:
+#         pass
 
 
 def save_payment(consumer, bill_month):
@@ -207,8 +214,70 @@ def save_bill_rates(consumer, bill_month, schedule):
     except:
         pass
 
+# Function for get rate
+def get_rate(schedule):
+    bill_shedule_obj = get_schedule_bill_by_id_string(schedule.id_string)
+    bill_cycle_obj = get_bill_cycle_by_id(bill_shedule_obj.bill_cycle_id)
+    for route in bill_cycle_obj.route_json:
+        route_obj = get_route_by_id_string(route['id_string'])
+        for premise in route_obj.premises_json:
+            premise_obj = get_premise_by_id_string(premise['id_string'])
+            consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
+            contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
+    rate_obj = get_rate_by_category_sub_category_wise(bill_shedule_obj.utility,bill_shedule_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
+    return rate_obj.rate
+
+# Function for generate current charges
+def generate_current_charges(meter, bill_month, schedule):
+    consumption = meter.current_reading - meter.previous_reading
+    rate = get_rate(schedule)
+    current_charge = consumption * rate
+    return current_charge
+
+# Function for save readings and consumption
+def save_meter_data(consumer, bill_month):
+    try:
+        consumption = 0.0
+        current_reading = 0.0
+        readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
+        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+        for reading in readings:
+            current_reading += reading.current_reading
+            consumption += reading.consumption
+        bill.meter_reading = {"current_reading":current_reading, "consumption":consumption}
+        bill.save()
+    except:
+        pass
+
+# Function for save outstanding
+def save_outstanding(consumer, bill_month):
+    try:
+        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+        
+        prvious_bill = get_previous_consumer_bill(consumer)
+        if prvious_bill.bill_status_id == 'PAID':#TODO:Replace with Id
+            if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
+                bill.outstanding = prvious_bill.after_due_date_amount
+                bill.save()
+            else:
+                bill.outstanding = prvious_bill.before_due_date_amount
+                bill.save()
+        if prvious_bill.bill_status_id == "PARTIAL":#TODO:Replace with Id
+            if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
+                bill.outstanding = prvious_bill.after_due_date_amount
+                bill.save()
+            else:
+                bill.outstanding = prvious_bill.before_due_date_amount
+                bill.save()
+        if prvious_bill.bill_status_id == "UNPAID":#TODO:Replace with Id
+            bill.outstanding = prvious_bill.after_due_date_amount
+            bill.save()
+    except:
+        pass
 
 
+
+# Function for validate data at time of add add bill schedule
 def set_schedule_bill_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])

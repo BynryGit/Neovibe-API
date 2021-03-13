@@ -100,3 +100,9 @@ def get_consumer_service_contract_detail_by_meter_id(meter_id):
         return ConsumerServiceContractDetail.objects.get(meter_id=meter_id, is_active=True)
     except:
         return False
+
+def get_consumer_service_contract_detail_by_premise_id(premise_id):
+    try:
+        return ConsumerServiceContractDetail.objects.get(premise_id=premise_id, is_active=True)
+    except:
+        return False
