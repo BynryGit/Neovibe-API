@@ -4,10 +4,10 @@ __author__ = "aki"
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Usage: This task is used to create task according route.
-# Tables used: ConsumerDetail, RouteTaskAssignment, JobCardTemplate
+# Usage: This task is used to de-assign revisit task according.
+# Tables used: RouteTaskAssignment, JobCardTemplate
 # Author: Akshay
-# Created on: 04/03/2021
+# Created on: 13/03/2021
 
 import datetime
 from celery.task import task
@@ -20,8 +20,8 @@ from v1.meter_data_management.models.route_task_assignment import get_route_task
 from v1.meter_data_management.models.route import get_route_by_id
 
 
-@task(name="assign-route-task", queue='Dispatch_I')
-def assign_route_task(route_task_assignment_id):
+@task(name="de-assign-revisit-task", queue='Dispatch_I')
+def de_assign_revisit_task(route_task_assignment_id):
     try:
         time = datetime.datetime.now().time().strftime("%H %M")
         t = time.split(" ")
