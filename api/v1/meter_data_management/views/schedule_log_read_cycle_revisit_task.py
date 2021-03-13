@@ -54,7 +54,7 @@ class ScheduleLogReadCycleRevisitTaskList(generics.ListAPIView):
                                                                                       read_cycle_id=schedule_log_obj.read_cycle_id,
                                                                                       consumer_meter_json__contains=
                                                                                       [{'is_active': True},
-                                                                                       {'status': 'REVISIT'}],
+                                                                                       {'is_revisit': True}],
                                                                                       is_active=True)
                     return route_task_assignment_obj
                 else:

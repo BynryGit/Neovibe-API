@@ -41,6 +41,7 @@ def de_assign_route_task(route_task_assignment_id):
 
         for task in task_obj:
             task['status'] = 'ALLOCATED'
+            task['meter_reader_id'] = None
 
         route_task_assignment_obj.meter_reader_id = None
         route_task_assignment_obj.dispatch_status = dispatch_status
@@ -76,6 +77,7 @@ def de_assign_route_task(route_task_assignment_id):
 
         for task in task_obj:
             task['status'] = 'ALLOCATED'
+            task['meter_reader_id'] = None
 
         route_task_assignment_obj.dispatch_status = 6
         route_task_assignment_obj.save()

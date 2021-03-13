@@ -6,14 +6,16 @@ from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
 from v1.meter_data_management.views.meter_summary import MeterSummary
 from v1.meter_data_management.views.read_cycle import ReadCycleList
-from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortList,ReadCycleDetail
-from v1.meter_data_management.views.route import RouteList, RouteDetail, Route, RouteShortList
-from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
-from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
 from v1.meter_data_management.views.schedule_log_route import ScheduleLogRouteList
+from v1.meter_data_management.views.route import RouteList, RouteDetail, Route, RouteShortList
+from v1.meter_data_management.views.assign_revisit_task_assignment import AssignRevisitTaskAssignment
+from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortList,ReadCycleDetail
+from v1.meter_data_management.views.deassign_revisit_task_assignment import DeAssignRevisitTaskAssignment
 from v1.meter_data_management.views.smart_meter_configuration import SmartMeterList, SmartMeter, SmartMeterDetail
-from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
 from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ReadingScheduleSummary
+from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
+from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
+from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
 from v1.meter_data_management.views.validation_assignments import ValidationAssignmentList,ValidationAssignmentDetail,\
     ValidationAssignment
 from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, MeterLifeCycleList, MeterNoteList, \
@@ -77,6 +79,8 @@ urlpatterns = [
     path('route-task-assignment', RouteTaskAssignment.as_view(), name='route_task_assignment'),
     path('route-task-assignment/list', RouteTaskAssignmentList.as_view(), name='route_task_assignment_list'),
     path('route-task-assignment/<uuid:id_string>', RouteTaskAssignmentDetail.as_view(), name='route_task_assignment_detail'),
+    path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(), name='assign_revisit_task_assignment'),
+    path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(), name='de_revisit_route_task_assignment'),
 
     path('meter-reading', MeterReading.as_view(), name='meter_reading'),
 
