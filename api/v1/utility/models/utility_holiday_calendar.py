@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import JSONField
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_leave_type import get_utility_leave_by_id
+from django.utils import timezone # importing package for datetime
 
 # table header
 # module: Work Order | sub-module -
@@ -25,7 +26,7 @@ class UtilityHolidayCalendar(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    date = models.DateTimeField(null=False, blank=False, default=datetime.now())
+    date = models.DateTimeField(null=False, blank=False, default=timezone.now)
     start_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     end_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     holiday_type_id = models.BigIntegerField(null=False, blank=False)
@@ -34,8 +35,8 @@ class UtilityHolidayCalendar(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.name

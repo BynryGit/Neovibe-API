@@ -19,6 +19,7 @@ class ChoiceField(serializers.ChoiceField):
 
 class RegistrationListSerializer(serializers.ModelSerializer):
     # area = AreaListSerializer(many=False, source='get_area')
+    state = ChoiceField(choices=Registration.CHOICES)
 
     class Meta:
         model = Registration

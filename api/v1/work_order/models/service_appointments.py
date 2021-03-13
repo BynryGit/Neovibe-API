@@ -14,6 +14,7 @@ from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id
 from rest_framework import status
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
+from django.utils import timezone # importing package for datetime
 
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
@@ -80,8 +81,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
     sa_description = models.CharField(max_length=200, blank=True, null=True)
-    sa_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    sa_time = models.TimeField(null=True, blank=True,default='20:00')
+    sa_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     sa_estimated_effort = models.BigIntegerField(null=True, blank=True)
     sa_rule = JSONField(default=[])
     sa_user_remark = models.CharField(max_length=200, blank=True, null=True)
@@ -102,8 +102,8 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     # def __str__(self):
     #     return self.id_string

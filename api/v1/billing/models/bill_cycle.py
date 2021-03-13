@@ -23,6 +23,7 @@ from v1.commonapp.models.zone import get_zone_by_id
 from v1.commonapp.models.division import get_division_by_id
 from v1.commonapp.models.area import get_area_by_id
 from django.contrib.postgres.fields import JSONField
+from django.utils import timezone # importing package for datetime
 
 # Create Bill Cycle table start.
 
@@ -36,7 +37,7 @@ class BillCycle(models.Model):
     area_id = models.BigIntegerField(null=True, blank=True)
     subarea_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
-    route_json = JSONField(default='')
+    route_json = JSONField(blank=False, null=False)
     label = models.CharField(max_length=200, blank=True, null=True)
     bill_cycle_code = models.CharField(max_length=200, blank=False, null=False)
     bill_cycle_name = models.CharField(max_length=200, blank=False, null=False)
@@ -44,8 +45,8 @@ class BillCycle(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.bill_cycle_name

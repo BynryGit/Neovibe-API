@@ -7,6 +7,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
 from v1.utility.models.utility_product import get_utility_product_by_id
+from django.utils import timezone # importing package for datetime
 
 
 
@@ -17,8 +18,8 @@ class UtilityServiceContractMaster(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     service_obj = JSONField(default='')
     utility_product_id = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    end_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     deposite_amount = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
     consumer_category_id = models.BigIntegerField(null=True, blank=True)
     consumer_sub_category_id = models.BigIntegerField(null=True, blank=True)
@@ -27,8 +28,8 @@ class UtilityServiceContractMaster(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.utility.name + " " + str(self.id_string)

@@ -5,7 +5,7 @@ from django.db import models  # importing package for database
 
 # Create Integration Type table start
 from v1.utility.models.utility_master import UtilityMaster
-
+from django.utils import timezone # importing package for datetime
 
 class IntegrationType(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -14,8 +14,8 @@ class IntegrationType(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.name

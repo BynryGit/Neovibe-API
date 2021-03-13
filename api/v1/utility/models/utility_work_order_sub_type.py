@@ -17,6 +17,7 @@ from django.db import models  # importing package for database
 
 # Create Utility Work Order Sub Type table start
 from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id
+from django.utils import timezone # importing package for datetime
 
 
 class UtilityWorkOrderSubType(models.Model):
@@ -28,8 +29,8 @@ class UtilityWorkOrderSubType(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

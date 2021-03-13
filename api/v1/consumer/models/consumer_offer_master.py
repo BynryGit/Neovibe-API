@@ -7,6 +7,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from v1.utility.models.utility_module import get_utility_module_by_id
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id
 from django.contrib.postgres.fields import JSONField
+from django.utils import timezone # importing package for datetime
 
 
 class ConsumerOfferMaster(models.Model):
@@ -17,7 +18,7 @@ class ConsumerOfferMaster(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility_product_id= models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     module_id = models.BigIntegerField(null=True, blank=True)
     submodule_id = models.BigIntegerField(null=True, blank=True)
     offer_name = models.CharField(max_length=200, null=True, blank=True)
@@ -28,14 +29,14 @@ class ConsumerOfferMaster(models.Model):
     offer_max_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
     offer_percentage = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=4)
     description = models.CharField(max_length=2000, null=True, blank=True)
-    effective_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    expiry_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    effective_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    expiry_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     category = models.BigIntegerField(choices=CHOICES, default=0)
     service_obj = JSONField(default='')
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

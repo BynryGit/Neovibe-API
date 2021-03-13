@@ -19,6 +19,7 @@ from v1.commonapp.models.meter_status import get_meter_status_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
+from django.utils import timezone # importing package for datetime
 
 
 # Create ReadCycle Table Start
@@ -33,7 +34,7 @@ class ReaderStatus(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True)
 
     @property
@@ -60,5 +61,12 @@ def get_reader_status_by_id(id):
 def get_reader_status_by_id_string(id_string):
     try:
         return ReaderStatus.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
+
+
+def get_reader_status_by_name(name):
+    try:
+        return ReaderStatus.objects.get(name=name, is_active=True)
     except:
         return False

@@ -24,4 +24,4 @@ def registration_email_to_consumer(registration_id, transition_obj_id):
         else:
             pass
     except Exception as e:
-        logger().log(e, 'LOW', module = 'Consumer Ops', sub_module = 'Registations', registration = registration_id)
+        logger().log(e, 'LOW', module='Consumer Ops', sub_module='Registrations', registration=registration_id)

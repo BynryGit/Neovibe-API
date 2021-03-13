@@ -50,7 +50,7 @@ class ScheduleBillLog(models.Model):
 
     @property
     def get_schedule_bill_name(self):
-        schedule = get_schedule_bill_by_id(self.bill_schedule_id)
+        schedule = get_schedule_bill_by_id(self.schedule_bill_id)
         return schedule
 
     @property

@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-
+from django.utils import timezone # importing package for datetime
 from django.db import models
 
 # Create your models here.
@@ -111,8 +111,8 @@ class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     date_joined = models.DateTimeField(blank=True, null=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     objects = MyUserManager()
     REQUIRED_FIELDS = []

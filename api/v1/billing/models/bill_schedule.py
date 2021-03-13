@@ -24,6 +24,7 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
 from v1.utility.models.utility_product import get_utility_product_by_id
+from django.utils import timezone # importing package for datetime
 
 # Create Bill Frequency table start.
 
@@ -44,7 +45,7 @@ class ScheduleBill(models.Model):
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
-    occurs_on = JSONField(default=[])
+    occurs_on = JSONField(blank=True, null=True)
     cron_expression = models.CharField(max_length=500, blank=True, null=True)
     schedule_status = models.IntegerField(choices=SCHEDULE_STATUS, default=0)
     start_date = models.DateTimeField(null=True, blank=True)
@@ -52,8 +53,8 @@ class ScheduleBill(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.bill_cycle_id)

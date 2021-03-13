@@ -39,6 +39,7 @@ from v1.commonapp.views.integration_master import IntegrationMasterList, Integra
 from v1.commonapp.views.document import UploadDocument
 from v1.commonapp.views.meter_status import MeterStatusList
 from v1.commonapp.views.admin_life_cycle import AdminLifeCycleList
+from v1.commonapp.views.notification_template import NotificationTemplateList, NotificationTemplate, NotificationTemplateDetail
 urlpatterns = [
     path('utility/region', Region.as_view()),
     path('utility/work-order-type', WorkOrderType.as_view()),
@@ -143,6 +144,9 @@ urlpatterns = [
     path('global-lookup/list', Global_LookupList.as_view()),
     path('document/upload',UploadDocument.as_view(), name="upload_document"),
     path('meter-status/list',MeterStatusList.as_view(), name="meter_status_list"),
+    path('utility/<uuid:id_string>/notification-template/list', NotificationTemplateList.as_view(), name="notification_template_list"),
+    path('utility/notification-template', NotificationTemplate.as_view(), name="notification_template"),
+    path('utility/notification-template/<uuid:id_string>', NotificationTemplateDetail.as_view(), name="notification_template_detail"),
     path('admin/<uuid:id_string>/life-cycle/list',AdminLifeCycleList.as_view(), name="admin-life-cycle-list")
 
 ]

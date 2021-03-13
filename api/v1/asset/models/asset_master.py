@@ -24,6 +24,7 @@ from v1.asset.models.asset_sub_category import get_asset_sub_category_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
+from django.utils import timezone # importing package for datetime
 # Create Asset Master table start
 
 class Asset(models.Model):
@@ -57,8 +58,8 @@ class Asset(models.Model):
     flag = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

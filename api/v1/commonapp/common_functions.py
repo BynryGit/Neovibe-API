@@ -708,6 +708,22 @@ def set_work_order_sub_type_validated_data(validated_data):
     return validated_data
 
 
+def set_notification_template_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
 def validate_user_data(validated_data):
     if "user_id_string" in validated_data:
         user_obj = get_user_by_id_string(validated_data["user_id_string"])

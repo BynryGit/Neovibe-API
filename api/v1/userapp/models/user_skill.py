@@ -7,6 +7,7 @@ from django.db import models
 from v1.commonapp.models.skills import get_skill_by_id_string, get_skill_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from master import models as userModel
+from django.utils import timezone # importing package for datetime
 
 class UserSkill(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -16,8 +17,8 @@ class UserSkill(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.user_id)+ "-" + str(self.skill_id)

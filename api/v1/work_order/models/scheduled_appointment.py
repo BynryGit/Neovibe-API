@@ -26,6 +26,8 @@ from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.city import get_city_by_id
 from django.contrib.postgres.fields import JSONField
 from master.models import get_user_by_id
+from django.utils import timezone # importing package for datetime
+
 # Create ScheduledAppointment table start
 
 
@@ -35,12 +37,12 @@ class ScheduledAppointment(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     appointments = JSONField()
     user_id = models.BigIntegerField(null=True, blank=True)
-    assignment_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    assignment_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return str(self.user_id)

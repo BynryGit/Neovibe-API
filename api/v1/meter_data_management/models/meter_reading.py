@@ -34,8 +34,8 @@ def get_file_path(instance, filename):
 
 class MeterReading(models.Model):
     READING_STATUS = (
-        (0, 'VALIDATION-One'),
-        (1, 'VALIDATION-Two'),
+        (0, 'VALIDATION-ONE'),
+        (1, 'VALIDATION-TWO'),
         (2, 'COMPLETED'),
         (3, 'REVISIT'),
     )
@@ -47,16 +47,20 @@ class MeterReading(models.Model):
     route_id = models.BigIntegerField(null=True, blank=True)
     route_task_assignment_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
+    schedule_log_id = models.BigIntegerField(null=True, blank=True)
     meter_reader_id = models.BigIntegerField(null=True, blank=True)
     validator_one_id = models.BigIntegerField(null=True, blank=True)
     validator_two_id = models.BigIntegerField(null=True, blank=True)
     meter_status_id = models.BigIntegerField(null=True, blank=True)
     reader_status_id = models.BigIntegerField(null=True, blank=True)
-    meter_reading_json = JSONField(default=[])
     reading_status = models.IntegerField(choices=READING_STATUS, default=0)
     meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     meter_no = models.CharField(max_length=200, null=True, blank=True)
+    current_meter_reading = models.CharField(max_length=200, null=True, blank=True)
+    current_meter_reading_v1 = models.CharField(max_length=200, null=True, blank=True)
+    current_meter_reading_v2 = models.CharField(max_length=200, null=True, blank=True)
+    meter_reading_json = JSONField(null=True, blank=True)
     is_assign_to_v1 = models.BooleanField(default=False)
     is_assign_to_v2 = models.BooleanField(default=False)
     is_meter_matching = models.BooleanField(default=False)
@@ -109,10 +113,10 @@ class MeterReading(models.Model):
         return validator_two
 
     def __str__(self):
-        return self.consumer_no
+        return self.meter_no
 
     def __unicode__(self):
-        return self.consumer_no
+        return self.meter_no
 
 # Create Meter Reading Table end
 

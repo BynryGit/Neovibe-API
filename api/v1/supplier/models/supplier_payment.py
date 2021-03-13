@@ -21,6 +21,7 @@ from v1.supplier.models.supplier import get_supplier_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
+from django.utils import timezone # importing package for datetime
 
 
 # Create Payment Table start
@@ -40,19 +41,19 @@ class SupplierPayment(models.Model):
     payment_mode = models.BigIntegerField(null=True, blank=True)
     cheque_no = models.BigIntegerField(null=True, blank=True)
     dd_no = models.BigIntegerField(null=True, blank=True)
-    cheque_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    dd_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    cheque_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    dd_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     txn_id = models.BigIntegerField(null=True, blank=True)
     account_no = models.CharField(max_length=200, blank=True, null=True)
     ifsc_code = models.CharField(max_length=200, blank=True, null=True)
     payment_source = models.BigIntegerField(null=True, blank=True)
-    payment_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    payment_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     payment_status = models.BigIntegerField(null=True, blank=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

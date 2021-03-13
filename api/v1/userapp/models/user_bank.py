@@ -8,6 +8,7 @@ from master.models import get_user_by_id_string
 from v1.tenant.models.tenant_bank_details import get_tenant_bank_details_by_id_string, get_tenant_bank_details_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from django.utils import timezone # importing package for datetime
 
 
 class UserBank(models.Model):
@@ -19,8 +20,8 @@ class UserBank(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.tenant.name

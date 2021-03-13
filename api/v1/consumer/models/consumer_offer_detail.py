@@ -1,8 +1,12 @@
 import uuid
 from datetime import datetime
 from django.db import models
+
+from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
+from django.utils import timezone # importing package for datetime
 
 
 class ConsumerOfferDetail(models.Model):
@@ -12,16 +16,32 @@ class ConsumerOfferDetail(models.Model):
     consumer_id = models.BigIntegerField(null=True, blank=True)
     offer_id = models.BigIntegerField(null=True, blank=True)
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
-    start_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    end_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    start_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    end_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.utility.name
 
     def __unicode__(self):
         return self.utility.name
+
+    @property
+    def get_offer(self):
+        try:
+            offer = get_consumer_offer_master_by_id(self.offer_id)
+            return offer
+        except:
+            return False
+
+    @property
+    def get_consumer_service_contract_detail(self):
+        try:
+            consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
+            return consumer_service_contract_detail
+        except:
+            return False

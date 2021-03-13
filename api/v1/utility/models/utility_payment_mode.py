@@ -9,6 +9,7 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from rest_framework import status
 from v1.payment.models.payment_type import get_payment_type_by_id
 from v1.utility.models.utility_product import get_utility_product_by_id
+from django.utils import timezone # importing package for datetime
 
 
 # Create Utility Payment Mode table start
@@ -24,8 +25,8 @@ class UtilityPaymentMode(models.Model):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.name

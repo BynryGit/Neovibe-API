@@ -79,7 +79,7 @@ UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER') if get_sub_module_by_ke
 VIEW = get_privilege_by_key('VIEW') if get_privilege_by_key('VIEW') else ""
 EDIT = get_privilege_by_key('EDIT') if get_privilege_by_key('EDIT') else ""
 
-METER_PICTURE = 'media/meter'
+METER_PICTURE = 'Meter-Image'
 
 
 def get_file_name(upload_folder, filename):

@@ -26,7 +26,7 @@ class BillConsumerDetail(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_id = models.BigIntegerField(null=True, blank=True)
     meter_id = models.BigIntegerField(null=True, blank=True)
-    schedule_log_id = models.BigIntegerField(null=True, blank=True)
+    bill_schedule_log_id = models.BigIntegerField(null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     route_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)

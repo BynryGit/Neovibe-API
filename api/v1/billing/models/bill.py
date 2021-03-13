@@ -21,6 +21,7 @@ from django.db import models  # importing package for database
 
 from django.contrib.postgres.fields import JSONField
 import fsm
+from django.utils import timezone # importing package for datetime
 
 # Create Bill Master table start.
 
@@ -31,11 +32,11 @@ class Bill(models.Model):
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     bill_month = models.CharField(max_length=200, blank=False, null=False)
-    bill_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    bill_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     bill_period = models.CharField(max_length=200, blank=False, null=False)
-    meter_reading = JSONField(default=[])
-    rate_details = JSONField(default=[])
-    additional_charges = JSONField(default=[])
+    meter_reading = JSONField(blank=False, null=False)
+    rate_details = JSONField(blank=False, null=False)
+    additional_charges = JSONField(blank=False, null=False)
     opening_balance = models.CharField(max_length=200, blank=False, null=False)
     current_charges = models.CharField(max_length=200, blank=False, null=False)
     bill_frequency_id = models.BigIntegerField(null=True, blank=True)
@@ -45,8 +46,8 @@ class Bill(models.Model):
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
         return self.consumer_service_contract_detail_id

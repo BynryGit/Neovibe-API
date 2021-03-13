@@ -10,6 +10,7 @@ from v1.utility.models.utility_master import UtilityMaster
 from v1.work_order.models.service_appointment_status import get_service_appointment_status_by_id
 from master.models import get_user_by_id
 from v1.work_order.models.service_appointments import get_service_appointment_by_id
+from django.utils import timezone # importing package for datetime
 
 # *********** SERVICE ASSIGNMENT CONSTANTS **************
 SERVICE_ASSIGNMENT_DICT = {
@@ -62,9 +63,9 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
     sa_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
     state = models.BigIntegerField(choices=CHOICES, default=1)
-    assignment_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    assignment_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     assignment_time = models.TimeField(null=True, blank=True)
-    completion_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    completion_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     completion_time = models.TimeField(null=True, blank=True)
     TAT = models.BigIntegerField(null=True, blank=True)
     remark = models.CharField(max_length=200, blank=True, null=True)
@@ -72,8 +73,8 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
-    created_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
-    updated_date = models.DateTimeField(null=True, blank=True, default=datetime.now())
+    created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     # def __str__(self):
     #     return self.id
