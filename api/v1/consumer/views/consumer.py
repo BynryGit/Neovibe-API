@@ -1461,6 +1461,7 @@ class ConsumerTransfer(GenericAPIView):
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
+            print("This is the ConsumerTransfer api")
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
