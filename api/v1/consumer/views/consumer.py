@@ -1431,3 +1431,109 @@ class ConsumerService(GenericAPIView):
             
 
 
+#consumer transfer 
+#Auther: Chetan Dhongade 
+class ConsumerTransfer(GenericAPIView):
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    def post(self, request):
+        try:
+            with transaction.atomic():
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
+                    request.data['consumer_service_contract_detail_id'])
+
+                if consumer_service_contract_detail_obj:
+                    service_contract_obj = get_utility_service_contract_master_by_id(
+                        consumer_service_contract_detail_obj.service_contract_id)
+                    if service_contract_obj:
+                        utility_product_obj = get_utility_product_by_id(service_contract_obj.utility_product_id)
+
+                work_order_type_obj = get_work_order_type_by_key('TRANSFER')
+
+                if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+
+                
+                #create the transfer connection request 
+                
+                work_order_sub_type_connect_obj = get_work_order_sub_type_by_key('TRANSFER_CONNECT')
+    
+                if work_order_sub_type_connect_obj:
+                    utility_work_order_sub_type_connect_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_connect_obj.id)
+                   
+                    
+                if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_connect_obj:
+                    work_order_master_obj = WorkOrderMaster.objects.get(
+                        utility_work_order_type_id= utility_work_order_type_obj.id,
+                        utility_work_order_sub_type_id=utility_work_order_sub_type_connect_obj.id,
+                        utility_product_id=utility_product_obj.id)
+
+                request.data['work_order_master_id'] = str(work_order_master_obj.id_string)
+
+                # prevent adding multiple request for the same meter
+                try:
+                    previous_work_order_master_obj = WorkOrderMaster.objects.filter(
+                        utility_work_order_type_id=utility_work_order_type_obj.id,
+                        utility_product_id=utility_product_obj.id)
+                    transfer_id = []
+                    for i in previous_work_order_master_obj:
+                        transfer_id.append(i.id)
+
+                    previous_transfer_request = ServiceAppointmentTbl.objects.filter(
+                        Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
+                        & Q(is_active=False) &
+                        Q(work_order_master_id__in=transfer_id)&
+                        ~Q(state_id=7) &
+                        Q(state_id=1))
+                    if previous_transfer_request:
+                        raise CustomAPIException(
+                            "Transfer Request Already Exist",
+                            status_code=status.HTTP_409_CONFLICT)
+                except Exception as e:
+                    res = self.handle_exception(e)
+                    return Response({
+                        STATE: EXCEPTION,
+                        RESULT: str(e),
+                    }, status=res.status_code)
+
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                    appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    appointment_obj.is_active = False
+                    appointment_obj.save()
+
+                #making the transfer disconnection request 
+                work_order_sub_type_disconnect_obj = get_work_order_sub_type_by_key('TRANSFER_DISCONNECT')
+                if work_order_sub_type_disconnect_obj:
+                    utility_work_order_sub_type_disconnect_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_disconnect_obj.id)
+                if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_disconnect_obj:
+                    work_order_master_obj = WorkOrderMaster.objects.get(
+                        utility_work_order_type_id= utility_work_order_type_obj.id,
+                        utility_work_order_sub_type_id=utility_work_order_sub_type_disconnect_obj.id,
+                        utility_product_id=utility_product_obj.id)
+                request.data['custom_data']['work_order_master_id'] = str(work_order_master_obj.id_string)
+                appointment_serializer = ServiceAppointmentSerializer(data=request.data['custom_data'])
+                if appointment_serializer.is_valid(raise_exception=True):
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                    appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    appointment_obj.is_active = False
+                    appointment_obj.save()
+
+                view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
+
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
