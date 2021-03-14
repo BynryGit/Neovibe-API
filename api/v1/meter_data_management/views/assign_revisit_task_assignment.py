@@ -6,7 +6,7 @@ from rest_framework.generics import GenericAPIView
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from api.constants import CONSUMER_OPS, EDIT, METER_DATA
-from v1.meter_data_management.task import assign_revisit_task
+from v1.meter_data_management.task.assign_revisit_task import assign_revisit_task
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import STATE, ERROR, EXCEPTION, RESULT, SUCCESS
 from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id_string
