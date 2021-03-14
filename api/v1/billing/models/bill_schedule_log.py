@@ -89,3 +89,9 @@ def get_schedule_bill_log_by_id_string(id_string):
         return ScheduleBillLog.objects.get(id_string=id_string, is_active=True)
     except:
         return False
+
+def get_schedule_bill_log_by_schedule_id(id):
+    try:
+        return ScheduleBillLog.objects.filter(schedule_bill_id=id, is_active=True).last()
+    except:
+        return False
