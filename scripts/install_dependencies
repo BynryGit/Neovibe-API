@@ -22,15 +22,15 @@ echo "################################################## Running migrate command
 
 echo "################################################## After fake ############################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
+# cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
 
 echo "################################################## Loading data ############################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
+# cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
 
 echo "############################## Successfully load data ######################################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py showmigrations
+# cd /home/ubuntu/smart360/api && sudo python3 manage.py showmigrations
 
 echo "############################## SHOWING MIGRATIONS ######################################################"
 # cd /home/ubuntu/smart360/api && cat <(echo "yes") - | python3 manage.py collectstatic
