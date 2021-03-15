@@ -386,13 +386,13 @@ def get_outstanding_amount(schedule_bill_obj):
 
     schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
     consumer_list = []
-    print('************schedule_log_id*',schedule_bill_obj.id)
     if schedule_log_id:
         bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
         for consumer in bill_consumer_obj:
             consumer_list.append(consumer.consumer_no)
-            print('...........',consumer.consumer_no)
 
-    bill_obj = Bill.objects.filter(bill_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()], consumer_no__in=consumer_list).aggregate(Sum('field_name'))
+    print('...........',schedule_obj.end_date.date(),schedule_bill_obj.start_date.date())
+    bill_obj = Bill.objects.filter(bill_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()])
     for consumer_obj in bill_obj:
-        print('//////schedule_obj////',contract_obj.consumer_no)
+        print('//////schedule_obj////',consumer_obj.id)
+# .aggregate(Sum('field_name'))
