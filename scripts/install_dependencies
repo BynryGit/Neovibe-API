@@ -3,6 +3,7 @@
 echo "################################################## Installing dependencies############################################"
 source  /home/ubuntu/smart360/smart360venv/bin/activate
 pip install django gunicorn psycopg2-binary
+sudo -H apt install -y libcurl4-openssl-dev libssl-dev
 pip install -r /home/ubuntu/smart360/api/requirement.txt
 sudo -H pip install django gunicorn psycopg2-binary
 sudo -H pip install -r /home/ubuntu/smart360/api/requirement.txt

@@ -43,7 +43,7 @@ class MeterReadingSummary(generics.ListAPIView):
                     total_completed_task = total_completed_task + len(complete_task_obj)
 
                 Meter_Reading_Count = {
-                    'Total_consumer' : consumer_obj,
+                    'total_consumer' : consumer_obj,
                     'reading_received' : total_completed_task,
                     'pending_reading' : consumer_obj - total_completed_task,
                     'total_revisit' : meter_reading_obj.filter(reading_status=3, is_active=False).count(),
