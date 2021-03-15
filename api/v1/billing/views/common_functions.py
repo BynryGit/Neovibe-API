@@ -349,6 +349,7 @@ def set_schedule_bill_validated_data(validated_data):
     return validated_data
 
 
+# Function for get consumer count it used before runbill
 def get_consumer_count(schedule_id):
     consumer = {}
     schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_id)
@@ -359,7 +360,7 @@ def get_consumer_count(schedule_id):
     else:
         return False
 
-
+# Function for get rate it used before runbill
 def get_rate(bill_cycle_id):  
     rate = {}
     bill_cycle_obj = get_bill_cycle_by_id(bill_cycle_id)
@@ -380,14 +381,14 @@ def get_rate(bill_cycle_id):
     else:
         return False
 
-
+# Function for getting additional charge count it used before runbill
 def get_additional_charges_amount(schedule_bill_obj):
     outstanding_amount = 0
     adjustment_amount = 0
     refund_amount = 0
     credit_amount = 0
     penalty_amount = 0
-
+    paid_amount = 0
     schedule_obj = ScheduleBill.objects.filter(utility_product_id=schedule_bill_obj.utility_product_id, bill_cycle_id = schedule_bill_obj.bill_cycle_id,end_date__lte=schedule_bill_obj.start_date.date(), is_active=True)
     
     if schedule_obj:
@@ -413,16 +414,26 @@ def get_additional_charges_amount(schedule_bill_obj):
             if "refund" in bill.additional_charges:
                 refund_amount += bill.additional_charges['refund']
             if "credit_amount" in bill.additional_charges:
-                credit_amount += ill.additional_charges['credit_amount']
+                credit_amount += bill.additional_charges['credit_amount']
             if "penalty" in bill.additional_charges:
                 penalty_amount += bill.additional_charges['penalty']
-                
+
+        payment_obj = Payment.objects.filter(transaction_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()],
+        consumer_no__in = [consumer.consumer_no for consumer in consumer_list])
+
+        for payment in payment_obj:
+            if payment.transaction_amount and payment.transaction_charges:
+                paid_amount += payment.transaction_amount + payment.transaction_charges
+            else:
+                paid_amount += payment.transaction_amount
+
         data['outstanding_amount'] = outstanding_amount
         data['adjustment_amount'] = adjustment_amount
         data['refund_amount'] = refund_amount
         data['credit_amount'] = credit_amount
         data['penalty_amount'] = penalty_amount
-        
+        data['paid_amount'] = paid_amount
+
         return data
     else:
         return 0
