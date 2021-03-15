@@ -17,6 +17,7 @@ from v1.meter_data_management.views.schedule import Schedule, ScheduleList, Sche
 from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
 from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
+from v1.meter_data_management.views.validation_schedule_log import ValidationScheduleLogList
 from v1.meter_data_management.views.validation_assignments import ValidationAssignmentList,ValidationAssignmentDetail,\
     ValidationAssignment
 from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, MeterLifeCycleList, MeterNoteList, \
@@ -24,7 +25,6 @@ from v1.meter_data_management.views.meter import MeterList, Meter, MeterDetail, 
 from v1.meter_data_management.views.reader_status import ReaderStatusDetail, ReaderStatus, ReaderStatusList
 from v1.meter_data_management.views.route_task_assignment import RouteTaskAssignment, RouteTaskAssignmentList, \
     RouteTaskAssignmentDetail
-
 
 urlpatterns = [
     path('schedule', Schedule.as_view(), name='schedule'),
@@ -83,6 +83,7 @@ urlpatterns = [
     path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(), name='assign_revisit_task_assignment'),
     path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(), name='de_revisit_route_task_assignment'),
 
+    path('validation-schedule-log/list', ValidationScheduleLogList.as_view(), name='validation_schedule_log_list'),
     path('utility/<uuid:id_string>/meter-reading-summary', MeterReadingSummary.as_view(), name='meter_reading_summary'),
     path('meter-reading', MeterReading.as_view(), name='meter_reading'),
 
