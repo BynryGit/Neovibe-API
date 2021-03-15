@@ -27,7 +27,7 @@ from  v1.billing.models.bill_cycle import get_bill_cycle_by_id_string
 from v1.billing.models.bill_schedule import get_schedule_bill_by_id_string
 from v1.billing.models.bill_cycle import get_bill_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id_string
-from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_premise_id,get_consumer_service_contract_detail_by_id
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_premise_id,get_consumer_service_contract_detail_by_id, ConsumerServiceContractDetail
 from v1.billing.models.bill_schedule_log import get_schedule_bill_log_by_schedule_id
 from v1.billing.models.bill_consumer_detail import get_bill_consumer_detail_by_schedule_log_id
 from v1.meter_data_management.models.route import get_route_by_id_string
@@ -349,8 +349,6 @@ def set_schedule_bill_validated_data(validated_data):
     return validated_data
 
 
-
-
 def get_consumer_count(schedule_id):
     consumer = {}
     schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_id)
@@ -360,6 +358,7 @@ def get_consumer_count(schedule_id):
         return consumer
     else:
         return False
+
 
 def get_rate(bill_cycle_id):  
     rate = {}
@@ -381,18 +380,49 @@ def get_rate(bill_cycle_id):
     else:
         return False
 
-def get_outstanding_amount(schedule_bill_obj):
-    schedule_obj = ScheduleBill.objects.filter(bill_cycle_id = schedule_bill_obj.bill_cycle_id,end_date__lte=schedule_bill_obj.start_date.date()).order_by('-bill_cycle_id')[0]
 
-    schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
-    consumer_list = []
-    if schedule_log_id:
-        bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
-        for consumer in bill_consumer_obj:
-            consumer_list.append(consumer.consumer_no)
+def get_additional_charges_amount(schedule_bill_obj):
+    outstanding_amount = 0
+    adjustment_amount = 0
+    refund_amount = 0
+    credit_amount = 0
+    penalty_amount = 0
 
-    print('...........',schedule_obj.end_date.date(),schedule_bill_obj.start_date.date())
-    bill_obj = Bill.objects.filter(bill_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()])
-    for consumer_obj in bill_obj:
-        print('//////schedule_obj////',consumer_obj.id)
-# .aggregate(Sum('field_name'))
+    schedule_obj = ScheduleBill.objects.filter(utility_product_id=schedule_bill_obj.utility_product_id, bill_cycle_id = schedule_bill_obj.bill_cycle_id,end_date__lte=schedule_bill_obj.start_date.date(), is_active=True)
+    
+    if schedule_obj:
+        schedule_obj = schedule_obj.filter().order_by('-bill_cycle_id')[0]
+        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
+        consumer_list = []
+        data = {}
+        if schedule_log_id:
+            bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+            for consumer in bill_consumer_obj:
+                consumer_list.append(consumer)
+
+        consumer_contract = ConsumerServiceContractDetail.objects.filter(consumer_no__in = [consumer.consumer_no for consumer in consumer_list])
+        
+        bill_obj = Bill.objects.filter(bill_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()],
+        consumer_service_contract_detail_id__in = [con_contract.id for con_contract in consumer_contract] )
+
+        for bill in bill_obj:
+            if "outstanding" in bill.rate_details:
+                outstanding_amount += bill.rate_details['outstanding']
+            if "adjustment" in bill.additional_charges:
+                adjustment_amount += bill.additional_charges['adjustment']
+            if "refund" in bill.additional_charges:
+                refund_amount += bill.additional_charges['refund']
+            if "credit_amount" in bill.additional_charges:
+                credit_amount += ill.additional_charges['credit_amount']
+            if "penalty" in bill.additional_charges:
+                penalty_amount += bill.additional_charges['penalty']
+                
+        data['outstanding_amount'] = outstanding_amount
+        data['adjustment_amount'] = adjustment_amount
+        data['refund_amount'] = refund_amount
+        data['credit_amount'] = credit_amount
+        data['penalty_amount'] = penalty_amount
+        
+        return data
+    else:
+        return 0

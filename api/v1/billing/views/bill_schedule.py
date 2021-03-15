@@ -19,7 +19,7 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.billing.serializers.bill_schedule import ScheduleBillSerializer, ScheduleBillViewSerializer
 from v1.billing.models.bill_schedule import ScheduleBill as ScheduleBillTbl, get_schedule_bill_by_id_string
 from v1.billing.models.bill_cycle import get_bill_cycle_by_id
-from v1.billing.views.common_functions import get_consumer_count, get_rate, get_outstanding_amount
+from v1.billing.views.common_functions import get_consumer_count, get_rate, get_additional_charges_amount
 
 
 
@@ -285,10 +285,9 @@ class GetAllDetails(GenericAPIView):
             detail_value['bill_cycle_id'] = get_bill_cycle_by_id(schedule_bill_obj.bill_cycle_id).bill_cycle_name
             detail_value['start_date'] = schedule_bill_obj.start_date
             detail_value['end_date'] = schedule_bill_obj.end_date
-
             detail_value['consumer_count'] = get_consumer_count(schedule_bill_obj.id)
             detail_value['rate'] =  get_rate(schedule_bill_obj.bill_cycle_id)
-            detail_value['outstanding_amount'] =  get_outstanding_amount(schedule_bill_obj)
+            detail_value['additional_charges'] =  get_additional_charges_amount(schedule_bill_obj)
 
             data.append(detail_value)
             if data:
