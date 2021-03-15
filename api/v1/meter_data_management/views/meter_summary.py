@@ -18,7 +18,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_F
 # Sub Module: All
 # Interaction: meter summary
 # Usage: API will fetch required data for meter-summary.
-# Tables used: MeterSummary
+# Tables used: Meter
 # Author: Akshay
 # Created on: 19/02/2021
 
@@ -34,7 +34,7 @@ class MeterSummary(generics.ListAPIView):
                 Meter_Count = {
                     'Total_Meter' : meter_obj.count(),
                     'Normal_Meter' : meter_obj.filter(meter_status=0).count(),
-                    'Faulty_Meter' :meter_obj.filter(meter_status=1).count(),
+                    'Faulty_Meter' : meter_obj.filter(meter_status=1).count(),
                     'RCNT_Meter' : meter_obj.filter(meter_status=2).count(),
                 }
                 return Response({

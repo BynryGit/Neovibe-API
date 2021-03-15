@@ -4,6 +4,7 @@ from django.urls import path
 from v1.meter_data_management.task.schedule_log import schedule_log
 from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
+from v1.meter_data_management.views.meter_reading_summary import MeterReadingSummary
 from v1.meter_data_management.views.meter_summary import MeterSummary
 from v1.meter_data_management.views.read_cycle import ReadCycleList
 from v1.meter_data_management.views.schedule_log_route import ScheduleLogRouteList
@@ -82,6 +83,7 @@ urlpatterns = [
     path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(), name='assign_revisit_task_assignment'),
     path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(), name='de_revisit_route_task_assignment'),
 
+    path('utility/<uuid:id_string>/meter-reading-summary', MeterReadingSummary.as_view(), name='meter_reading_summary'),
     path('meter-reading', MeterReading.as_view(), name='meter_reading'),
 
     path('log', schedule_log, name='route_add')
