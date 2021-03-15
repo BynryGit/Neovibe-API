@@ -60,3 +60,10 @@ def get_bill_consumer_detail_by_id_string(id_string):
         return BillConsumerDetail.objects.get(id_string=id_string)
     except:
         return False
+
+
+def get_bill_consumer_detail_by_schedule_log_id(id):
+    try:
+        return BillConsumerDetail.objects.filter(bill_schedule_log_id=id, is_active=True)
+    except:
+        return False

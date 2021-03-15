@@ -103,6 +103,6 @@ def get_consumer_service_contract_detail_by_meter_id(meter_id):
 
 def get_consumer_service_contract_detail_by_premise_id(premise_id):
     try:
-        return ConsumerServiceContractDetail.objects.get(premise_id=premise_id, is_active=True)
+        return ConsumerServiceContractDetail.objects.filter(premise_id=premise_id, is_active=True).last()
     except:
         return False

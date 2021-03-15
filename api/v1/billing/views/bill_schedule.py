@@ -18,7 +18,8 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, SCHEDULE_NOT_
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.billing.serializers.bill_schedule import ScheduleBillSerializer, ScheduleBillViewSerializer
 from v1.billing.models.bill_schedule import ScheduleBill as ScheduleBillTbl, get_schedule_bill_by_id_string
-
+from v1.billing.models.bill_cycle import get_bill_cycle_by_id
+from v1.billing.views.common_functions import get_consumer_count, get_rate, get_additional_charges_amount
 
 
 
@@ -257,3 +258,51 @@ class BillScheduleSummary(generics.ListAPIView):
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+
+# API Header
+# API end Point: api/v1/billing/run-schedule-bill-detail/id_string
+# API verb: GET,PUT
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: View all details before run bill
+# Usage: API will fetch all details before run bill for schedule bill using id_string
+# Tables used: Schedule
+# Author: Priyank
+# Created on: 14/03/2021
+
+class GetAllDetails(GenericAPIView):
+    @is_token_validate
+    # @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    def get(self, request, id_string):
+        try:
+            data=[]
+            summary = {}
+            detail_value={}
+            schedule_bill_obj = get_schedule_bill_by_id_string(id_string)
+            detail_value['name'] = schedule_bill_obj.name
+            detail_value['bill_cycle_id'] = get_bill_cycle_by_id(schedule_bill_obj.bill_cycle_id).bill_cycle_name
+            detail_value['start_date'] = schedule_bill_obj.start_date
+            detail_value['end_date'] = schedule_bill_obj.end_date
+            detail_value['consumer_count'] = get_consumer_count(schedule_bill_obj.id)
+            detail_value['rate'] =  get_rate(schedule_bill_obj.bill_cycle_id)
+            detail_value['additional_charges'] =  get_additional_charges_amount(schedule_bill_obj)
+
+            data.append(detail_value)
+            if data:
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: SCHEDULE_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='Billing', sub_module='Bill')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
