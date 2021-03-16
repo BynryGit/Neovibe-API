@@ -1,6 +1,8 @@
 __author__ = "aki"
 
 from django.urls import path
+
+from v1.utility.views.contact_us import ContactUsList
 from v1.utility.views.document import UtilityDocumentList, UtilityDocumentDetail
 from v1.utility.views.document_sub_type import UtilityDocumentSubTypeList
 from v1.utility.views.notes import UtilityNoteList, UtilityNoteDetail
@@ -102,6 +104,7 @@ urlpatterns = [
     path('service-contract/<uuid:id_string>', UtilityServiceContractMasterDetail.as_view()),
     path('<uuid:id_string>/work-order-type/list', UtilityWorkOrderTypeList.as_view()),
     path('<uuid:id_string>/work-order-sub-type/list', UtilityWorkOrderSubTypeList.as_view()),
+    path('<uuid:id_string>/contact-us/list', ContactUsList.as_view()),
     # path('<uuid:id_string>/service-request-type/list', UtilityServiceRequestTypeList.as_view()),
     # path('<uuid:id_string>/service-request-sub-type/list', UtilityServiceRequestSubTypeList.as_view()),
 
