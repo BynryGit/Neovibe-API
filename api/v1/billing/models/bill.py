@@ -50,7 +50,7 @@ class Bill(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return self.consumer_service_contract_detail_id
+        return str(self.consumer_service_contract_detail_id)
 
     def __unicode__(self):
         return self.consumer_service_contract_detail_id

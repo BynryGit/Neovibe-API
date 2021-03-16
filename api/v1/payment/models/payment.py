@@ -72,6 +72,7 @@ class Payment(models.Model, fsm.FiniteStateMachineMixin):
     payment_mode_id = models.BigIntegerField(null=True, blank=True)
     payment_channel_id = models.BigIntegerField(null=True, blank=True)
     payment_source_id = models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     receipt_no = models.CharField(max_length=200, null=True, blank=True)
     bank_name = models.CharField(max_length=200, null=True, blank=True)
     account_no = models.CharField(max_length=200, null=True, blank=True)
