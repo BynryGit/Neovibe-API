@@ -73,38 +73,4 @@ class RateList(GenericAPIView):
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    # try:
-    #     serializer_class = RateShortViewSerializer
-    #     pagination_class = StandardResultsSetPagination
-
-    #     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-    #     filter_fields = ('utility__id_string',)
-    #     ordering_fields = ('utility__id_string',)
-    #     ordering = ('utility__id_string',) # always give by default alphabetical order
-    #     search_fields = ('utility__name',)
-
-    #     def get_queryset(self):
-    #         token, user_obj = is_token_valid(self.request.headers['Authorization'])
-    #         if token:
-    #             if is_authorized(1,1,1,user_obj):
-    #                 bill_shedule_obj = get_schedule_bill_by_id_string(self.request.query_params['bill_shedule_id_string'])
-    #                 bill_cycle_obj = get_bill_cycle_by_id(bill_shedule_obj.bill_cycle_id)
-    #                 for route in bill_cycle_obj.route_json:
-    #                     route_obj = get_route_by_id_string(route['id_string'])
-    #                     for premise in route_obj.premises_json:
-    #                         premise_obj = get_premise_by_id_string(premise['id_string'])
-    #                         consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
-    #                         contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
-
-    #                     print('*******',bill_shedule_obj.utility,bill_shedule_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
-
-    #                 queryset = RateTbl.objects.filter(utility=bill_shedule_obj.utility,product_id=bill_shedule_obj.utility_product_id,consumer_category_id=contract_obj.consumer_category_id,consumer_subcategory_id=contract_obj.consumer_sub_category_id,is_active=True)
-    #                 return queryset
-    #             else:
-    #                 raise InvalidAuthorizationException
-    #         else:
-    #             raise InvalidTokenException
-    # except Exception as ex:
-    #     logger().log(ex, 'LOW', module='Billing', sub_module='Schedule')
-    #     raise APIException
-
+    

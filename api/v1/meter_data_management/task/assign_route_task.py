@@ -13,8 +13,8 @@ import datetime
 from celery.task import task
 from fcm_django.models import FCMDevice
 from v1.commonapp.views.logger import logger
-from v1.meter_data_management.models.consumer_detail import ConsumerDetail
-from v1.meter_data_management.models.job_card_template import JobCardTemplate
+from v1.meter_data_management.models.consumer_detail import ConsumerDetail as ConsumerDetailTbl
+from v1.meter_data_management.models.job_card_template import JobCardTemplate as JobCardTemplateTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
 from v1.meter_data_management.models.route import get_route_by_id
@@ -30,10 +30,10 @@ def assign_route_task(route_task_assignment_id):
 
         route_task_assignment_obj = get_route_task_assignment_by_id(route_task_assignment_id)
 
-        task_template_obj = JobCardTemplate.objects.get(tenant=route_task_assignment_obj.tenant,
-                                                        utility=route_task_assignment_obj.utility, is_active=True)
+        task_template_obj = JobCardTemplateTbl.objects.get(tenant=route_task_assignment_obj.tenant,
+                                                           utility=route_task_assignment_obj.utility, is_active=True)
 
-        consumer_detail_obj = ConsumerDetail.objects.filter(route_id=route_task_assignment_obj.route_id,
+        consumer_detail_obj = ConsumerDetailTbl.objects.filter(route_id=route_task_assignment_obj.route_id,
                                                             schedule_log_id=route_task_assignment_obj.schedule_log_id,
                                                             is_active=True)
 
@@ -50,6 +50,7 @@ def assign_route_task(route_task_assignment_id):
                     "activity_type_id": consumer.activity_type_id,
                     "utility_product_id": consumer.utility_product_id,
                     "route_task_assignment_id": route_task_assignment_obj.id,
+                    "meter_reader_id": route_task_assignment_obj.meter_reader_id,
                     "is_active": True,
                     "is_completed": False,
                     "is_revisit": False,

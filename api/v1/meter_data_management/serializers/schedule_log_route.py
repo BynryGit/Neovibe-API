@@ -1,7 +1,7 @@
 __author__ = "aki"
 
 from rest_framework import serializers
-from master.models import User, get_user_by_id
+from master.models import User as UserTbl, get_user_by_id
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail
@@ -20,7 +20,7 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
 
     def get_meter_reader_detail(self, route_tbl):
         schedule_log_id = get_schedule_log_by_id_string(self.context.get('schedule_log_id'))
-        meter_reader_obj = User.objects.filter(is_active=True)
+        meter_reader_obj = UserTbl.objects.filter(is_active=True)
         meter_reader_detail =[]
         for meter_reader in meter_reader_obj:
             meter_reader_dict = {

@@ -35,6 +35,7 @@ class RouteTaskAssignment(models.Model):
         (4, 'PARTIAL'),
         (5, 'ASSIGN-FAIL'),
         (6, 'DE-ASSIGN-FAIL'),
+        (7, 'COMPLETED'),
     )
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
