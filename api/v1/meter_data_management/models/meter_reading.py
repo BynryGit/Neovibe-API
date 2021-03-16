@@ -66,6 +66,7 @@ class MeterReading(models.Model):
     is_assign_to_v2 = models.BooleanField(default=False)
     is_meter_matching = models.BooleanField(default=False)
     is_reading_matching = models.BooleanField(default=False)
+    is_validated = models.BooleanField(default=False)
     is_duplicate = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
