@@ -35,8 +35,7 @@ class PremiseViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PremiseTbl
-        fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'subarea')
+        fields = ('tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'subarea')
 
 
 class PremiseSerializer(serializers.ModelSerializer):

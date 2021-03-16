@@ -3,6 +3,7 @@ from rest_framework import serializers
 # from v1.commonapp.serializers.service_request_type import ServiceTypeListSerializer
 from v1.work_order.models.work_order_master import WorkOrderMaster as WorkOrderMasterTbl
 from v1.commonapp.views.settings_reader import SettingReader
+
 setting_reader = SettingReader()
 from django.db import transaction
 from datetime import datetime
@@ -16,30 +17,33 @@ from v1.utility.serializers.utility_product import UtilityProductListSerializer
 from v1.utility.models.utility_work_order_sub_type import get_utility_work_order_sub_type_by_id
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
 
+
 class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
-    utility_product_id=UtilityProductShortViewSerializer(source='get_utility_product_by_id')
+    utility_product_id = UtilityProductShortViewSerializer(source='get_utility_product_by_id')
     utility_work_order_sub_type = UtilityWorkOrderSubTypeListSerializer(source='get_utility_work_order_sub_type')
 
     class Meta:
         model = WorkOrderMasterTbl
-        fields = ('name', 'id_string','description','json_obj','utility_product_id','utility_work_order_sub_type')
+        fields = ('name', 'id_string', 'description', 'json_obj', 'utility_product_id', 'utility_work_order_sub_type')
 
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):
     utility_work_order_sub_type = UtilityWorkOrderSubTypeListSerializer(source='get_utility_work_order_sub_type')
     utility_product = UtilityProductListSerializer(source='get_utility_product_by_id')
+
     class Meta:
         model = WorkOrderMasterTbl
         fields = (
-            'name', 'json_obj', 'id_string', 'utility_work_order_sub_type', 'description', 'service_obj', 'created_date', 'is_active',
+            'name', 'json_obj', 'id_string', 'utility_work_order_sub_type', 'description', 'service_obj',
+            'created_date', 'is_active',
             'created_by', 'utility_product', 'base_rate', 'tax_rate', 'is_taxable')
+
 
 class WorkOrderMasterViewSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-
 
     class Meta:
         model = WorkOrderMasterTbl

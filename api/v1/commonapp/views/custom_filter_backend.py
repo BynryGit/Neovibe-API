@@ -106,6 +106,30 @@ class CustomFilter:
                 if work_order_master_obj:
                     print("++++MASTER+++++++",work_order_master_obj)
                     queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
+                    print("++++++++++",queryset)
+                    
+        if 'Transfer_processing' in request.query_params:
+            work_order_type_obj = get_work_order_type_by_key('TRANSFER')
+            if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+            if utility_work_order_type_obj:
+                print("++++++++++++",utility_work_order_type_obj)
+                work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
+                if work_order_master_obj:
+                    print("++++MASTER+++++++",work_order_master_obj)
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
                     print("++++++++++",queryset) 
+
+        if 'Service_processing' in request.query_params:
+            work_order_type_obj = get_work_order_type_by_key('SERVICE')
+            if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+            if utility_work_order_type_obj:
+                print("++++++++++++",utility_work_order_type_obj)
+                work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
+                if work_order_master_obj:
+                    print("++++MASTER+++++++",work_order_master_obj)
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
+                    print("++++++++++",queryset)                                           
         return queryset
 

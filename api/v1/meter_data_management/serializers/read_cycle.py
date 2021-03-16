@@ -21,7 +21,7 @@ class ReadCycleViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReadCycleTbl
-        fields = ('name', 'id_string', 'utility', 'utility_id_string', 'tenant', 'tenant_id_string')
+        fields = ('name', 'id_string', 'utility', 'utility_id_string', 'tenant', 'tenant_id_string', 'route_json')
 
 
 class ReadCycleSerializer(serializers.ModelSerializer):

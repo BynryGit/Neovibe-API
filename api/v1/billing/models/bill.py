@@ -34,9 +34,9 @@ class Bill(models.Model):
     bill_month = models.CharField(max_length=200, blank=False, null=False)
     bill_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     bill_period = models.CharField(max_length=200, blank=False, null=False)
-    meter_reading = JSONField(default=[])
-    rate_details = JSONField(default=[])
-    additional_charges = JSONField(default=[])
+    meter_reading = JSONField(blank=False, null=False)
+    rate_details = JSONField(blank=False, null=False)
+    additional_charges = JSONField(blank=False, null=False)
     opening_balance = models.CharField(max_length=200, blank=False, null=False)
     current_charges = models.CharField(max_length=200, blank=False, null=False)
     bill_frequency_id = models.BigIntegerField(null=True, blank=True)
@@ -50,7 +50,7 @@ class Bill(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return self.consumer_service_contract_detail_id
+        return str(self.consumer_service_contract_detail_id)
 
     def __unicode__(self):
         return self.consumer_service_contract_detail_id

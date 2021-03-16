@@ -46,8 +46,11 @@ class Country(models.Model):
 
     @property
     def get_utility_region(self):
-        region = get_utility_region_by_id(self.region_id)
-        return region
+        try:
+            region = get_utility_region_by_id(self.region_id)
+            return region
+        except:
+            return False
 
 # Create Country table end
 
