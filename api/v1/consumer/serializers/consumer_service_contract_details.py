@@ -18,13 +18,13 @@ class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     contract = UtilityServiceContractMasterListSerializer(source='get_contract')
-    consumer_id=ConsumerViewSerializer(source='get_consumer_number')
+    consumer_id = ConsumerViewSerializer(source='get_consumer_number')
     state = ChoiceField(choices=ConsumerServiceContractDetail.STATUS)
     meter_id = MeterViewSerializer(required=False, source='get_meter_number')
 
     class Meta:
         model = ConsumerServiceContractDetail
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state' , 'consumer_id','consumer_no', 'contract', 'meter_id','created_date')
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'state', 'consumer_id', 'consumer_no', 'contract', 'meter_id','created_date')
         
 # class ConsumerServiceContractDetailViewSerializer(serializers.ModelSerializer):
 #     tenant = serializers.ReadOnlyField(source='tenant.name')
