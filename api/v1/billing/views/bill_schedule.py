@@ -261,7 +261,7 @@ class BillScheduleSummary(generics.ListAPIView):
 
 
 # API Header
-# API end Point: api/v1/billing/run-schedule-bill-detail/id_string
+# API end Point: api/v1/billing/get-charges/id_string
 # API verb: GET,PUT
 # Package: Basic
 # Modules: All
@@ -272,7 +272,7 @@ class BillScheduleSummary(generics.ListAPIView):
 # Author: Priyank
 # Created on: 14/03/2021
 
-class GetAllDetails(GenericAPIView):
+class GetAllChargesDetails(GenericAPIView):
     @is_token_validate
     # @role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
@@ -282,7 +282,7 @@ class GetAllDetails(GenericAPIView):
             detail_value={}
             schedule_bill_obj = get_schedule_bill_by_id_string(id_string)
             detail_value['name'] = schedule_bill_obj.name
-            detail_value['bill_cycle_id'] = get_bill_cycle_by_id(schedule_bill_obj.bill_cycle_id).bill_cycle_name
+            detail_value['bill_cycle_name'] = get_bill_cycle_by_id(schedule_bill_obj.bill_cycle_id).bill_cycle_name
             detail_value['start_date'] = schedule_bill_obj.start_date
             detail_value['end_date'] = schedule_bill_obj.end_date
             detail_value['consumer_count'] = get_consumer_count(schedule_bill_obj.id)
