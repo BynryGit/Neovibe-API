@@ -58,9 +58,14 @@ class ConsumerOfferMasterSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_consumer_offer_master_validated_data(validated_data)
-        with transaction.atomic():
-            consumer_offer_obj = super(ConsumerOfferMasterSerializer, self).update(instance, validated_data)
-            consumer_offer_obj.updated_by = user.id
-            consumer_offer_obj.updated_date = datetime.utcnow()
-            consumer_offer_obj.save()
-            return consumer_offer_obj
+        if ConsumerOfferMasterTbl.objects.filter(offer_name=validated_data['offer_name'],
+                                                 tenant_id=validated_data['tenant_id'],
+                                                 utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(CONSUMER_OFFER_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                consumer_offer_obj = super(ConsumerOfferMasterSerializer, self).update(instance, validated_data)
+                consumer_offer_obj.updated_by = user.id
+                consumer_offer_obj.updated_date = datetime.utcnow()
+                consumer_offer_obj.save()
+                return consumer_offer_obj

@@ -49,19 +49,22 @@ class RegionSerializer(serializers.ModelSerializer):
                 
                 region_obj = super(RegionSerializer, self).create(validated_data)
                 region_obj.created_by = user.id
-                region_obj.updated_by = user.id
                 region_obj.save()
                 return region_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_region_validated_data(validated_data)
-        with transaction.atomic():
-            region_obj = super(RegionSerializer, self).update(instance, validated_data)
-            region_obj.tenant = user.tenant
-            region_obj.updated_by = user.id
-            region_obj.updated_date = datetime.utcnow()
-            region_obj.save()
-            return region_obj
+        if UtilityRegionTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                           utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(REGION_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                region_obj = super(RegionSerializer, self).update(instance, validated_data)
+                region_obj.tenant = user.tenant
+                region_obj.updated_by = user.id
+                region_obj.updated_date = datetime.utcnow()
+                region_obj.save()
+                return region_obj
 
 
 class RegionListSerializer(serializers.ModelSerializer):

@@ -48,19 +48,22 @@ class ReadCycleSerializer(serializers.ModelSerializer):
             else:
                 read_cycle_obj = super(ReadCycleSerializer, self).create(validated_data)
                 read_cycle_obj.created_by = user.id
-                read_cycle_obj.updated_by = user.id
                 read_cycle_obj.save()
                 return read_cycle_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_read_cycle_validated_data(validated_data)
-        with transaction.atomic():
-            read_cycle_obj = super(ReadCycleSerializer, self).update(instance, validated_data)
-            read_cycle_obj.tenant = user.tenant
-            read_cycle_obj.updated_by = user.id
-            read_cycle_obj.updated_date = datetime.utcnow()
-            read_cycle_obj.save()
-            return read_cycle_obj
+        if ReadCycleTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                       utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(READ_CYCLE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                read_cycle_obj = super(ReadCycleSerializer, self).update(instance, validated_data)
+                read_cycle_obj.tenant = user.tenant
+                read_cycle_obj.updated_by = user.id
+                read_cycle_obj.updated_date = datetime.utcnow()
+                read_cycle_obj.save()
+                return read_cycle_obj
 
 
 class ReadCycleListSerializer(serializers.ModelSerializer):

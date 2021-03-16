@@ -51,18 +51,21 @@ class AreaSerializer(serializers.ModelSerializer):
             else:
                 area_obj = super(AreaSerializer, self).create(validated_data)
                 area_obj.created_by = user.id
-                area_obj.updated_by = user.id
                 area_obj.save()
                 return area_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_area_validated_data(validated_data)
-        with transaction.atomic():
-            area_obj = super(AreaSerializer, self).update(instance, validated_data)
-            area_obj.updated_by = user.id
-            area_obj.updated_date = datetime.utcnow()
-            area_obj.save()
-            return area_obj
+        if AreaTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                  utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(AREA_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                area_obj = super(AreaSerializer, self).update(instance, validated_data)
+                area_obj.updated_by = user.id
+                area_obj.updated_date = datetime.utcnow()
+                area_obj.save()
+                return area_obj
 
 
 class AreaListSerializer(serializers.ModelSerializer):

@@ -61,10 +61,15 @@ class JobCardTemplateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_job_card_template_validated_data(validated_data)
-        with transaction.atomic():
-            job_card_template_obj = super(JobCardTemplateSerializer, self).update(instance, validated_data)
-            job_card_template_obj.tenant = user.tenant
-            job_card_template_obj.updated_by = user.id
-            job_card_template_obj.updated_date = timezone.now()
-            job_card_template_obj.save()
-            return job_card_template_obj
+        if JobCardTemplateTbl.objects.filter(tenant_id=validated_data['tenant_id'],
+                                             utility_id=validated_data['utility_id'],
+                                             task_name=validated_data['task_name']).exists():
+            raise CustomAPIException(JOB_CARD_TEMPLATE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                job_card_template_obj = super(JobCardTemplateSerializer, self).update(instance, validated_data)
+                job_card_template_obj.tenant = user.tenant
+                job_card_template_obj.updated_by = user.id
+                job_card_template_obj.updated_date = timezone.now()
+                job_card_template_obj.save()
+                return job_card_template_obj

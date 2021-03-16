@@ -70,15 +70,15 @@ class TransitionConfiguration(models.Model):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     template_id = models.BigIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.utility.name
+        return self.tenant.name
 
     def __unicode__(self):
-        return self.utility.name
+        return self.tenant.name
 
 def get_transition_configuration_by_id(id):
     try:
@@ -90,7 +90,7 @@ def is_transition_configuration_exists(transition_object, next_state, utility):
     try:
         fill = TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
                                                   utility=utility, is_active=True).exists()
-        print("HHHHHHHHHHHHHHH",fill)
+        print("HHHHHHHHHHHHHHH",transition_object,next_state,utility)
         return fill
 
     except Exception as e:

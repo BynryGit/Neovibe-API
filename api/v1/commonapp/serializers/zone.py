@@ -48,18 +48,21 @@ class ZoneSerializer(serializers.ModelSerializer):
             else:
                 zone_obj = super(ZoneSerializer, self).create(validated_data)
                 zone_obj.created_by = user.id
-                zone_obj.updated_by = user.id
                 zone_obj.save()
                 return zone_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_zone_validated_data(validated_data)
-        with transaction.atomic():
-            zone_obj = super(ZoneSerializer, self).update(instance, validated_data)
-            zone_obj.updated_by = user.id
-            zone_obj.updated_date = datetime.utcnow()
-            zone_obj.save()
-            return zone_obj
+        if ZoneTbl.objects.filter(name=validated_data['name'], tenant=user.tenant,
+                                  utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(ZONE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                zone_obj = super(ZoneSerializer, self).update(instance, validated_data)
+                zone_obj.updated_by = user.id
+                zone_obj.updated_date = datetime.utcnow()
+                zone_obj.save()
+                return zone_obj
 
 
 class ZoneListSerializer(serializers.ModelSerializer):

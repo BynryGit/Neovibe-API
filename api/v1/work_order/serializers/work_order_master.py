@@ -71,16 +71,20 @@ class WorkOrderMasterSerializer(serializers.ModelSerializer):
             else:
                 work_order_obj = super(WorkOrderMasterSerializer, self).create(validated_data)
                 work_order_obj.created_by = user.id
-                work_order_obj.updated_by = user.id
+
                 # work_order_obj.json_obj = json.dumps(json_obj)
                 work_order_obj.save()
                 return work_order_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_work_order_validated_data(validated_data)
-        with transaction.atomic():
-            work_order_obj = super(WorkOrderMasterSerializer, self).update(instance, validated_data)
-            work_order_obj.updated_by = user.id
-            work_order_obj.updated_date = datetime.utcnow()
-            work_order_obj.save()
-            return work_order_obj
+        if WorkOrderMasterTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                             utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(WORK_ORDER_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                work_order_obj = super(WorkOrderMasterSerializer, self).update(instance, validated_data)
+                work_order_obj.updated_by = user.id
+                work_order_obj.updated_date = datetime.utcnow()
+                work_order_obj.save()
+                return work_order_obj

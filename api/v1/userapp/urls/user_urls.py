@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('<uuid:id_string>/privilege/', UserPrivilegeDetail.as_view()),
 
-    path('<uuid:id_string>/note/', UserNote.as_view()),
+    # path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/note', UserNote.as_view()),
 
     path('<uuid:id_string>/document/', UserDocument.as_view()),
 
@@ -46,7 +46,7 @@ urlpatterns = [
     path('role/<uuid:role_id_string>/module/<uuid:module_id_string>/sub-module/<uuid:sub_module_id_string>',ModulePrivilegesList.as_view()),
     path('utility/<uuid:utility_id_string>/appointment/<uuid:appointment_id_string>/resource/list',ResourceList.as_view(),name="fitered_resource_list"),
     path('utility/<uuid:utility_id_string>/bulk-assign/resource/list',BulkAssignResourceList.as_view(),name="bulk_assign_resource_list"),
-    # path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/note', UserNote.as_view(), name="add_user_notes_list"),
-    # path('<uuid:id_string>/note/list', UserNoteList.as_view(), name="user_notes_list"),
+    path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/note', UserNote.as_view(), name="add_user_notes_list"),
+    path('<uuid:id_string>/note/list', UserNoteList.as_view(), name="user_notes_list"),
     path('<uuid:id_string>/life-cycle',UserLifeCycleList.as_view(),name="user_life_cycle"),
 ]

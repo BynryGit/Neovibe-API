@@ -44,9 +44,7 @@ class RoleSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 role_obj = super(RoleSerializer, self).create(validated_data)
                 role_obj.created_by = user.id
-                role_obj.updated_by = user.id
                 role_obj.created_date = datetime.utcnow()
-                role_obj.update_date = datetime.utcnow()
                 role_obj.tenant = user.tenant
                 role_obj.is_active = True
                 role_obj.save()
