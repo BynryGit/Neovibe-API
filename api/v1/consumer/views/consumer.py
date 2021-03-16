@@ -1209,6 +1209,7 @@ class ConsumerConnect(GenericAPIView):
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer.utility
+                    appointment_obj.is_active = False
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
                 # view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
@@ -1288,7 +1289,8 @@ class ConsumerDisconnect(GenericAPIView):
                     disconnection_id = []
                     for i in previous_work_order_master_obj:
                         disconnection_id.append(i.id)
-
+                    print(disconnection_id)
+                    
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
@@ -1310,6 +1312,7 @@ class ConsumerDisconnect(GenericAPIView):
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                    appointment_obj.is_active = False
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
 
@@ -1454,8 +1457,17 @@ class ConsumerService(GenericAPIView):
             
 
 
-#consumer transfer 
-#Auther: Chetan Dhongade 
+# API Header
+# API end Point: api/v1/consumer/transfer
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Transfer 
+# Usage: Transfer 
+# Tables used: workorder master, service appointment 
+# Author: Chetan Dhongade 
+# Created on: -03-2021
 class ConsumerTransfer(GenericAPIView):
     @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
