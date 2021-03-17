@@ -8,6 +8,7 @@ from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_credit_rating import get_consumer_credit_rating_by_id_string
+from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
@@ -28,6 +29,7 @@ from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
+
 
 # Function for converting id_strings to id's
 def set_consumer_validated_data(validated_data):
@@ -277,7 +279,7 @@ def create_consumer_after_registration(registration_id):
         consumer.save()
         return consumer
     except Exception as e:
-        print("=====",e)
+        print("=====", e)
         raise CustomAPIException("Consumer creation failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -461,4 +463,21 @@ def set_service_subtype_validated_data(validated_data):
             validated_data["service_type_id"] = service_type.id
         else:
             raise CustomAPIException("Service Type not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+# Function for converting id_strings to id's
+def set_consumer_feedback_validated_data(validated_data):
+    if "utility" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility"])
+        if utility:
+            validated_data["utility"] = utility
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "consumer_id" in validated_data:
+        consumer = get_consumer_by_id_string(validated_data["consumer_id"])
+        if consumer:
+            validated_data["consumer_id"] = consumer.id
+        else:
+            raise CustomAPIException("Consumer not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data

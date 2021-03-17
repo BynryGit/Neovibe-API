@@ -4,6 +4,7 @@ from v1.complaint.models.complaint_sub_type import ComplaintSubType
 from v1.complaint.models.complaint_type import ComplaintType
 from v1.consumer.models.consumer_credit_rating import ConsumerCreditRating
 from v1.consumer.models.consumer_down_payment import ConsumerDownPayment
+from v1.consumer.models.consumer_feedback import ConsumerFeedback
 from v1.consumer.models.consumer_loan import ConsumerLoan
 from v1.consumer.models.consumer_notification import ConsumerNotification
 from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail
@@ -62,3 +63,4 @@ admin.site.register(OfferSubType)
 admin.site.register(ConsumerFaq)
 admin.site.register(ConsumerSupport)
 admin.site.register(ConsumerConsent)
+admin.site.register(ConsumerFeedback)
