@@ -19,7 +19,7 @@ class ContactUsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContactUsTbl
-        fields = ('tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'email', "emergency_no",
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'email', "emergency_no",
                   "working_days", "portal_site")
 
 

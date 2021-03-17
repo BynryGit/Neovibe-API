@@ -1,7 +1,9 @@
 __author__ = "aki"
 
+from django.db.models import Q
 from rest_framework.exceptions import APIException
 from rest_framework import generics
+from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -9,6 +11,8 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.meter_data_management.models.meter_reading import MeterReading as MeterReadingTbl
+from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
+from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
 from v1.meter_data_management.serializers.validation_one import ValidationOneViewSerializer
 
 
@@ -51,7 +55,13 @@ class ValidationOneList(generics.ListAPIView):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
             if token:
                 if is_authorized(1,1,1,user_obj):
-                    queryset = MeterReadingTbl.objects.filter(is_active=True)
+                    user_obj = get_user_by_id_string(user_obj)
+                    schedule_log_obj = get_schedule_log_by_id_string(self.kwargs['schedule_log'])
+                    read_cycle_obj = get_read_cycle_by_id_string(self.kwargs['read_cycle'])
+                    queryset = MeterReadingTbl.objects.filter(~Q(reading_status=3), validator_one_id=user_obj.id,
+                                                              read_cycle_id=read_cycle_obj.id,
+                                                              schedule_log_id=schedule_log_obj.id,
+                                                              is_active=True, is_duplicate=False)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
