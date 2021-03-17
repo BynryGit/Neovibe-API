@@ -15,6 +15,7 @@ from api.messages import *
 from api.constants import *
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, AREA_NOT_FOUND
 from v1.commonapp.models.division import get_division_by_id_string
+
 # API Header
 # API end Point: api/v1/utility/:id_string/area/list
 # API verb: GET
