@@ -48,18 +48,21 @@ class StateSerializer(serializers.ModelSerializer):
             else:
                 state_obj = super(StateSerializer, self).create(validated_data)
                 state_obj.created_by = user.id
-                state_obj.updated_by = user.id
                 state_obj.save()
                 return state_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_state_validated_data(validated_data)
-        with transaction.atomic():
-            state_obj = super(StateSerializer, self).update(instance, validated_data)
-            state_obj.updated_by = user.id
-            state_obj.updated_date = datetime.utcnow()
-            state_obj.save()
-            return state_obj
+        if StateTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                   utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(STATE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                state_obj = super(StateSerializer, self).update(instance, validated_data)
+                state_obj.updated_by = user.id
+                state_obj.updated_date = datetime.utcnow()
+                state_obj.save()
+                return state_obj
 
 
 class StateListSerializer(serializers.ModelSerializer):

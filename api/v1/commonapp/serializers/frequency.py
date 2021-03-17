@@ -28,7 +28,6 @@ class FrequencySerializer(serializers.ModelSerializer):
             validated_data = set_frequency_validated_data(validated_data)
             frequency_obj = super(FrequencySerializer, self).create(validated_data)
             frequency_obj.created_by = user.id
-            frequency_obj.updated_by = user.id
             frequency_obj.save()
             return frequency_obj
 

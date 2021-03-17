@@ -31,7 +31,6 @@ class UserRoleSerializer(serializers.ModelSerializer):
                 user_role_obj.created_by = user.id
                 user_role_obj.updated_by = user.id
                 user_role_obj.created_date = datetime.utcnow()
-                user_role_obj.update_date = datetime.utcnow()
                 user_role_obj.tenant = user.tenant
                 user_role_obj.is_active = True
                 user_role_obj.save()

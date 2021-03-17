@@ -3,7 +3,7 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id_str
 from v1.consumer.models.consumer_master import ConsumerMaster, get_consumer_by_consumer_no
 from v1.consumer.models.consumer_scheme_master import ConsumerSchemeMaster
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string, get_consumer_sub_category_by_id
-# from v1.meter_data_management.models.meter_reading import get_consumer_meter_reading_by_bill_month, MeterReading
+from v1.meter_data_management.models.meter_reading import MeterReading
 # from v1.meter_data_management.models.temp_consumer_master import TempConsumerMaster
 from v1.payment.models.payment import Payment
 from v1.utility.models.utility_service_plan import get_utility_service_plans_by_dates, UtilityServicePlan
@@ -30,7 +30,7 @@ from v1.meter_data_management.models.route import get_route_by_id_string
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_premise_id,get_consumer_service_contract_detail_by_id, ConsumerServiceContractDetail
 from v1.billing.models.bill_schedule_log import get_schedule_bill_log_by_schedule_id
 from v1.billing.models.bill_consumer_detail import get_bill_consumer_detail_by_schedule_log_id
-from v1.meter_data_management.models.route import get_route_by_id_string
+from v1.meter_data_management.models.meter import Meter
 from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.utility.models.utility_service_contract_master import get_utility_service_contract_master_by_id
 from v1.commonapp.models.premises import get_premise_by_id_string
@@ -351,89 +351,135 @@ def set_schedule_bill_validated_data(validated_data):
 
 # Function for get consumer count it used before runbill
 def get_consumer_count(schedule_id):
-    consumer = {}
-    schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_id)
-    if schedule_log_id:
-        bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id).count()
-        consumer['consumer'] = bill_consumer_obj
-        return consumer
-    else:
-        return False
+    try:
+        consumer = {}
+        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_id)
+        if schedule_log_id:
+            bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id).count()
+            consumer['consumer'] = bill_consumer_obj
+        else:
+            consumer['consumer'] = "----"
+        return consumer['consumer'] 
+    except Exception as e:
+        pass
+
+# Function for get reading count it used before runbill
+def get_reading_count(schedule_obj):
+    try:
+        schedule = get_schedule_bill_by_id_string(schedule_obj.id_string)
+        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule.id)
+        if schedule_log_id:
+            bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+            meter_reading_obj = MeterReading.objects.filter(created_date=schedule.start_date)
+            print('*********',meter_reading_obj)
+        
+        return 0
+    except:
+        pass
+    
 
 # Function for get rate it used before runbill
-def get_rate(bill_cycle_id):  
-    rate = {}
-    bill_cycle_obj = get_bill_cycle_by_id(bill_cycle_id)
-    if bill_cycle_obj:
-        for route in bill_cycle_obj.route_json:
-            route_obj = get_route_by_id_string(route['id_string'])
-            for premise in route_obj.premises_json:
-                premise_obj = get_premise_by_id_string(premise['id_string'])
-                consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
-                contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
-        rate_obj = get_rate_by_category_sub_category_wise(bill_cycle_obj.utility,bill_cycle_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
-        rate['rate'] = rate_obj.rate
-        rate['product']= get_utility_product_by_id(rate_obj.product_id).name
-        rate['category'] = get_consumer_category_by_id(rate_obj.consumer_category_id).name
-        rate['sub_category'] = get_consumer_sub_category_by_id(rate_obj.consumer_subcategory_id).name
-        rate['unit'] = rate_obj.unit
-        return rate
-    else:
-        return False
+def get_rate(bill_cycle_id): 
+    try: 
+        rate = {}
+        bill_cycle_obj = get_bill_cycle_by_id(bill_cycle_id)
+        if bill_cycle_obj:
+            for route in bill_cycle_obj.route_json:
+                route_obj = get_route_by_id_string(route['id_string'])
+                for premise in route_obj.premises_json:
+                    premise_obj = get_premise_by_id_string(premise['id_string'])
+                    consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
+                    contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
+            rate_obj = get_rate_by_category_sub_category_wise(bill_cycle_obj.utility,bill_cycle_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
+            rate['rate'] = rate_obj.rate
+            rate['product']= get_utility_product_by_id(rate_obj.product_id).name
+            rate['category'] = get_consumer_category_by_id(rate_obj.consumer_category_id).name
+            rate['sub_category'] = get_consumer_sub_category_by_id(rate_obj.consumer_subcategory_id).name
+            rate['unit'] = rate_obj.unit
+            return rate
+        else:
+            return False
+    except:
+        pass
 
 # Function for getting additional charge count it used before runbill
 def get_additional_charges_amount(schedule_bill_obj):
-    outstanding_amount = 0
-    adjustment_amount = 0
-    refund_amount = 0
-    credit_amount = 0
-    penalty_amount = 0
-    paid_amount = 0
-    schedule_obj = ScheduleBill.objects.filter(utility_product_id=schedule_bill_obj.utility_product_id, bill_cycle_id = schedule_bill_obj.bill_cycle_id,end_date__lte=schedule_bill_obj.start_date.date(), is_active=True)
-    
-    if schedule_obj:
-        schedule_obj = schedule_obj.filter().order_by('-bill_cycle_id')[0]
-        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
-        consumer_list = []
-        data = {}
-        if schedule_log_id:
-            bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
-            for consumer in bill_consumer_obj:
-                consumer_list.append(consumer)
+    try:
+        outstanding_amount = 0
+        adjustment_amount = 0
+        refund_amount = 0
+        credit_amount = 0
+        penalty_amount = 0
+        paid_amount = 0
+        normal_meter = 0
+        rcnt_meter = 0
+        faulty_meter = 0
 
-        consumer_contract = ConsumerServiceContractDetail.objects.filter(consumer_no__in = [consumer.consumer_no for consumer in consumer_list])
+        schedule_obj = ScheduleBill.objects.filter(utility_product_id=schedule_bill_obj.utility_product_id, bill_cycle_id = schedule_bill_obj.bill_cycle_id,end_date__lte=schedule_bill_obj.start_date.date(), is_active=True)
         
-        bill_obj = Bill.objects.filter(bill_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()],
-        consumer_service_contract_detail_id__in = [con_contract.id for con_contract in consumer_contract] )
+        if schedule_obj:
+            schedule_obj = schedule_obj.filter().order_by('-bill_cycle_id')[0]
+            schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
+            consumer_list = []
+            additional_charges = {}
+            data = {}
+            meter_status = {}
+            outstanding = {}
+            if schedule_log_id:
+                bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+                for consumer in bill_consumer_obj:
+                    consumer_list.append(consumer)
 
-        for bill in bill_obj:
-            if "outstanding" in bill.rate_details:
-                outstanding_amount += bill.rate_details['outstanding']
-            if "adjustment" in bill.additional_charges:
-                adjustment_amount += bill.additional_charges['adjustment']
-            if "refund" in bill.additional_charges:
-                refund_amount += bill.additional_charges['refund']
-            if "credit_amount" in bill.additional_charges:
-                credit_amount += bill.additional_charges['credit_amount']
-            if "penalty" in bill.additional_charges:
-                penalty_amount += bill.additional_charges['penalty']
+            consumer_contract = ConsumerServiceContractDetail.objects.filter(consumer_no__in = [consumer.consumer_no for consumer in consumer_list])
 
-        payment_obj = Payment.objects.filter(transaction_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()],
-        consumer_no__in = [consumer.consumer_no for consumer in consumer_list])
+            bill_obj = Bill.objects.filter(bill_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()],
+            consumer_service_contract_detail_id__in = [con_contract.id for con_contract in consumer_contract] )
 
-        for payment in payment_obj:
-            if payment.transaction_amount and payment.transaction_charges:
-                paid_amount += payment.transaction_amount + payment.transaction_charges
-            else:
-                paid_amount += payment.transaction_amount
+            for bill in bill_obj:
+                if "outstanding" in bill.rate_details:
+                    outstanding_amount += bill.rate_details['outstanding']
+                if "adjustment" in bill.additional_charges:
+                    adjustment_amount += bill.additional_charges['adjustment']
+                if "refund" in bill.additional_charges:
+                    refund_amount += bill.additional_charges['refund']
+                if "credit_amount" in bill.additional_charges:
+                    credit_amount += bill.additional_charges['credit_amount']
+                if "penalty" in bill.additional_charges:
+                    penalty_amount += bill.additional_charges['penalty']
 
-        data['outstanding_amount'] = outstanding_amount
-        data['adjustment_amount'] = adjustment_amount
-        data['refund_amount'] = refund_amount
-        data['credit_amount'] = credit_amount
-        data['penalty_amount'] = penalty_amount
-        data['paid_amount'] = paid_amount
 
-        return data
-    else:
-        return 0
+            meter_obj = Meter.objects.filter(id__in=[con_contract.meter_id for con_contract in consumer_contract])
+            for meter in meter_obj:
+
+                if meter.meter_status == 0:
+                    normal_meter += 1
+                if meter.meter_status == 1:
+                    faulty_meter += 1
+                if meter.meter_status == 2:
+                    rcnt_meter += 1
+            
+            payment_obj = Payment.objects.filter(transaction_date__range=[schedule_obj.end_date.date(),schedule_bill_obj.start_date.date()],
+            consumer_no__in = [consumer.consumer_no for consumer in consumer_list])
+
+            for payment in payment_obj:
+                if payment.transaction_amount and payment.transaction_charges:
+                    paid_amount += payment.transaction_amount + payment.transaction_charges
+                else:
+                    paid_amount += payment.transaction_amount
+
+            meter_status['normal_meter'] = normal_meter
+            meter_status['faulty_meter'] = faulty_meter
+            meter_status['rcnt_meter'] = rcnt_meter
+            outstanding['outstanding_amount'] = outstanding_amount
+            additional_charges['adjustment_amount'] = adjustment_amount
+            additional_charges['refund_amount'] = refund_amount
+            additional_charges['credit_amount'] = credit_amount
+            additional_charges['penalty_amount'] = penalty_amount
+            additional_charges['paid_amount'] = paid_amount
+
+            data = {"meter_status":meter_status,"outstanding":outstanding,"additional_charges":additional_charges }
+            return data
+        else:
+            return 0
+    except:
+        pass

@@ -9,15 +9,19 @@ def perform_events(next_state, utility, transition_object):
     print("JJJJJJHHHEELOOOOKKKK")
     try:
         print(utility)
-        if is_transition_configuration_exists(transition_object, next_state, utility):
+        if TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
+                                                  tenant=utility.tenant, is_active=True).exists():
+
             print("Inside")
 
             transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object,
                                                                      transition_state=next_state,
-                                                                     utility=utility, is_active=True)
+                                                                     tenant=utility.tenant, is_active=True)
+            print(transition_objs)
             for transition_obj in transition_objs:
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
-                    utility_email_to_admin(utility.id, transition_obj.id)
+                    print("DDDOOONNNE")
+                    utility_email_to_admin(utility, transition_obj.id)
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
                     pass
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['WHATSAPP']:
@@ -25,5 +29,5 @@ def perform_events(next_state, utility, transition_object):
         else:
             pass
     except Exception as e:
-        logger().log(e, 'LOW', module='Consumer Ops', sub_module='Registrations', utility=utility.id)
+        logger().log(e, 'LOW', module='Consumer Ops', sub_module='Registrations')
         pass

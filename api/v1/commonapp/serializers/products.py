@@ -48,13 +48,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_product_validated_data(validated_data)
-        with transaction.atomic():
-            product_obj = super(ProductSerializer, self).update(instance, validated_data)
-            product_obj.tenant = user.tenant
-            product_obj.updated_by = user.id
-            product_obj.updated_date = datetime.utcnow()
-            product_obj.save()
-            return product_obj
+        if UtilityProductTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                            utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(PRODUCT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                product_obj = super(ProductSerializer, self).update(instance, validated_data)
+                product_obj.tenant = user.tenant
+                product_obj.updated_by = user.id
+                product_obj.updated_date = datetime.utcnow()
+                product_obj.save()
+                return product_obj
 
 
 class ProductListSerializer(serializers.ModelSerializer):
