@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from api.messages import *
-from master.models import get_user_by_email, get_user_by_id_string
+from master.models import get_user_by_email, get_user_by_id_string, get_all_users
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.secret_reader import SecretReader
 from v1.userapp.models.login_trail import LoginTrail
@@ -106,7 +106,10 @@ class LoginApiView(APIView):
                             STATE: SUCCESS,
                             RESULTS: SUCCESSFUL_LOGIN,
                             Token: token,
-                            ID_STRING: user.id_string
+                            ID_STRING: user.id_string,
+                            EMAIL:user.email
+
+
                         }, status=status.HTTP_200_OK)
                 else:
                     set_login_trail(email, 'Fail')

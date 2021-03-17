@@ -37,9 +37,7 @@ class RolePrivilegeSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 role_privilege_obj = super(RolePrivilegeSerializer, self).create(validated_data)
                 role_privilege_obj.created_by = user.id
-                role_privilege_obj.updated_by = user.id
                 role_privilege_obj.created_date = datetime.utcnow()
-                role_privilege_obj.update_date = datetime.utcnow()
                 role_privilege_obj.tenant = user.tenant
                 role_privilege_obj.is_active = True
                 role_privilege_obj.save()

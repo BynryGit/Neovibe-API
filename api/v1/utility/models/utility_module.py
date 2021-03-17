@@ -37,7 +37,7 @@ class UtilityModule(models.Model):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str(self.label)

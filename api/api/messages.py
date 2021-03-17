@@ -11,6 +11,8 @@ DATA = 'data'
 ERROR = 'error'
 DUPLICATE = 'duplicate',
 ID_STRING = 'id_string'
+EMAIL = 'email'
+NAME = 'name'
 
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER = "User is not authorised"

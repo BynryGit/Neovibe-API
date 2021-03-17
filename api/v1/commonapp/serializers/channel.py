@@ -49,6 +49,5 @@ class ChannelSerializer(serializers.ModelSerializer):
             else:
                 channel_obj = super(ChannelSerializer, self).create(validated_data)
                 channel_obj.created_by = user.id
-                channel_obj.updated_by = user.id
                 channel_obj.save()
                 return channel_obj

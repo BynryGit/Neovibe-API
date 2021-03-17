@@ -49,12 +49,18 @@ class NotificationTemplateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_notification_template_validated_data(validated_data)
-        with transaction.atomic():
-            notification_template_obj = super(NotificationTemplateSerializer, self).update(instance, validated_data)
-            notification_template_obj.updated_by = user.id
-            notification_template_obj.updated_date = datetime.utcnow()
-            notification_template_obj.save()
-            return notification_template_obj
+        if NotificationTemplateTbl.objects.filter(template=validated_data['template'],
+                                                  tenant_id=validated_data['tenant_id'],
+                                                  utility_id=validated_data['utility_id'],
+                                                  ).exists():
+            raise CustomAPIException(NOTIFICATION_TEMPLATE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                notification_template_obj = super(NotificationTemplateSerializer, self).update(instance, validated_data)
+                notification_template_obj.updated_by = user.id
+                notification_template_obj.updated_date = datetime.utcnow()
+                notification_template_obj.save()
+                return notification_template_obj
 
 
 class NotificationTemplateListSerializer(serializers.ModelSerializer):

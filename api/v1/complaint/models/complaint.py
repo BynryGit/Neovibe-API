@@ -89,7 +89,7 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
