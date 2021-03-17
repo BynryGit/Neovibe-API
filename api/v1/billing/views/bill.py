@@ -13,7 +13,8 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.billing.models.bill_schedule import ScheduleBill as ScheduleBillTbl, get_schedule_bill_by_id_string
 from v1.billing.models.bill_cycle import get_bill_cycle_by_id
-from v1.billing.views.common_functions import get_consumer_count, get_rate, get_additional_charges_amount,get_reading_count
+from v1.billing.views.common_functions import get_consumer_count, get_rate, get_additional_charges_amount,\
+     get_reading_count,save_current_charges
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
 
@@ -78,12 +79,13 @@ class SaveBillCharges(GenericAPIView):
             data = {}
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
+            print('*************',request.data)
+            data['current_charges'] = save_current_charges(request.data)
             data['schedule_bill_id_string'] = request.data['schedule_bill_id_string']
             return Response({
                     STATE: SUCCESS,
                     RESULT: data,
                 }, status=status.HTTP_200_OK)
-            print('*************',request.data)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='Billing', sub_module='Bill')
             return Response({
