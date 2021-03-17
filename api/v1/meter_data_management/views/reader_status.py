@@ -6,6 +6,7 @@ from django.db import transaction
 from master.models import get_user_by_id_string
 from v1.billing.serializers.invoice_bill import *
 from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
+from v1.commonapp.models.meter_status import get_meter_status_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -45,7 +46,7 @@ class ReaderStatusList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('tenant__id_string',)
+        filter_fields = ('tenant__id_string', 'meter_status_id')
         ordering_fields = ('tenant',)
         search_fields = ('tenant__name',)
 
@@ -54,6 +55,11 @@ class ReaderStatusList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    self.request.query_params._mutable = True
+                    if 'meter_status_id' in self.request.query_params:
+                        self.request.query_params['meter_status_id'] = get_meter_status_by_id_string(
+                            self.request.query_params['meter_status_id']).id
+                    self.request.query_params._mutable = False
                     queryset = ReaderStatusModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
