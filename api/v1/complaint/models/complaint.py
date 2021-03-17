@@ -1,5 +1,6 @@
 import uuid  # importing package for guid
 from datetime import datetime
+from v1.complaint.models.complaint_sub_type import get_complaint_sub_type_by_id
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail # importing package for datetime
 import fsm
 from rest_framework import status
@@ -103,11 +104,18 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
         consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
         return consumer_service_contract_detail
 
+    @property
+    def get_complaint_sub_type(self):
+        complaint_sub_type = get_complaint_sub_type_by_id(id=self.complaint_sub_type_id)
+        return complaint_sub_type
+    
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
             self.save()
         except Exception as e:
             raise CustomAPIException("Complaint transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
+    
+
 # Create Consumer Complaints table end.
 
 def get_consumer_complaints_by_consumer_no(consumer_no):

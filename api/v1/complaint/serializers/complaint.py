@@ -1,4 +1,6 @@
 from datetime import datetime
+from v1.complaint.serializers.complaint_subtype import ComplaintSubTypeListSerializer
+from v1.complaint.serializers.complaint_type import ComplaintTypeListSerializer
 from django.db import transaction
 from rest_framework import serializers, status
 
@@ -12,9 +14,10 @@ from v1.registration.serializers.registration import ChoiceField
 class ComplaintListSerializer(serializers.ModelSerializer):
     consumer_service_contract_detail_id=ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail_id')
     state = ChoiceField(choices=Complaint.CHOICES)
+    complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
     class Meta:
         model = Complaint
-        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date')
+        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date', 'is_active', 'complaint_sub_type')
 
 
 class ComplaintViewSerializer(serializers.ModelSerializer):

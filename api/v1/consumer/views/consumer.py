@@ -1,4 +1,6 @@
 from typing import FrozenSet
+
+from django_filters import rest_framework
 from v1.work_order.models.work_order_master import WorkOrderMaster, get_work_order_master_by_id_string
 from v1.commonapp.views.notifications import send_sms
 from v1.utility.models.utility_work_order_sub_type import UtilityWorkOrderSubType, get_utility_work_order_sub_type_by_id
@@ -53,6 +55,7 @@ from v1.consumer.models.consumer_service_contract_details import get_consumer_se
 from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_key
 from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
 from django.db.models import Q
+from v1.meter_data_management.models.meter import Meter
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
@@ -82,12 +85,17 @@ class ConsumerList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerMaster.objects.filter(utility=utility, is_active=True)
+                    print("This is the queryset =>", queryset)
                     if "consumer_no" in self.request.query_params:
                         queryset = queryset.filter(consumer_no=self.request.query_params['consumer_no'])
                     if "email_id" in self.request.query_params:
                         queryset = queryset.filter(email_id=self.request.query_params['email_id'])
                     if "phone_mobile" in self.request.query_params:
                         queryset = queryset.filter(phone_mobile=self.request.query_params['phone_mobile'])
+                    if "meter_no" in self.request.query_params:
+                        meter_obj = Meter.objects.get(meter_no=self.request.query_params['meter_no'])
+                        get_consumer_service_contract_detail = ConsumerServiceContractDetail.objects.get(meter_id=meter_obj.id)
+                        queryset = queryset.filter(id=get_consumer_service_contract_detail.consumer_id)
                     if queryset:
                         return queryset
                     else:
@@ -381,6 +389,34 @@ class ConsumerPaymentList(generics.ListAPIView):
 # Tables used: ConsumerComplaint, ConsumerMaster
 # Author: Rohan
 # Created on: 21/05/2020
+
+class ConsumerComplaintList(generics.ListAPIView):
+    try:
+        serializer_class = ComplaintListSerializer
+        pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('complaint_date',)
+        ordering_fields = ('complaint_date',)
+        ordering = ('complaint_date',)  # always give by default alphabetical order
+        search_fields = ('complaint_date',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):    
+                    consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    if consumer:
+                        queryset = get_consumer_complaints_by_consumer_no(consumer.consumer_no)
+                        return queryset
+                    else:
+                        raise InvalidAuthorizationException
+                else:
+                    raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException
+
+
 # class ConsumerComplaintList(generics.ListAPIView):
 #     try:
 #         serializer_class = ComplaintListSerializer
@@ -393,48 +429,21 @@ class ConsumerPaymentList(generics.ListAPIView):
 #         search_fields = ('complaint_date',)
 
 #         def get_queryset(self):
-#             if is_token_valid(self.request.headers['token']):
-#                 if is_authorized():
-#                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-#                     if consumer:
-#                         queryset = get_consumer_complaints_by_consumer_no(consumer.consumer_no)
+#             response, user_obj = is_token_valid(self.request.headers['Authorization'])
+#             if response:
+#                 if is_authorized(1, 1, 1, user_obj):
+#                     utility = get_utility_by_id_string(self.kwargs['id_string'])
+#                     queryset = Complaint.objects.filter(utility=utility, is_active=True)
+#                     if queryset:
 #                         return queryset
 #                     else:
-#                         raise InvalidAuthorizationException
+#                         raise CustomAPIException("Consumer Complaint master not found.", status.HTTP_404_NOT_FOUND)
 #                 else:
-#                     raise InvalidTokenException
+#                     raise InvalidAuthorizationException
+#             else:
+#                 raise InvalidTokenException
 #     except Exception as e:
-#         logger().log(e, 'ERROR')
-#         raise APIException
-
-
-class ConsumerComplaintList(generics.ListAPIView):
-    try:
-        serializer_class = ComplaintListSerializer
-        pagination_class = StandardResultsSetPagination
-
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('complaint_date',)
-        ordering_fields = ('complaint_date',)
-        ordering = ('complaint_date',)  # always give by default alphabetical order
-        search_fields = ('complaint_date',)
-
-        def get_queryset(self):
-            response, user_obj = is_token_valid(self.request.headers['Authorization'])
-            if response:
-                if is_authorized(1, 1, 1, user_obj):
-                    utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = Complaint.objects.filter(utility=utility, is_active=True)
-                    if queryset:
-                        return queryset
-                    else:
-                        raise CustomAPIException("Consumer Complaint master not found.", status.HTTP_404_NOT_FOUND)
-                else:
-                    raise InvalidAuthorizationException
-            else:
-                raise InvalidTokenException
-    except Exception as e:
-        logger().log(e, 'MEDIUM', module='Complaint', sub_module='Complaint')
+#         logger().log(e, 'MEDIUM', module='Complaint', sub_module='Complaint')
 
 
 
