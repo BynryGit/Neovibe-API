@@ -129,7 +129,7 @@ class RouteShortList(generics.ListAPIView):
 class Route(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -173,7 +173,7 @@ class Route(GenericAPIView):
 class RouteDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             route = get_route_by_id_string(id_string)
@@ -196,7 +196,7 @@ class RouteDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

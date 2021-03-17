@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from v1.commonapp.views.logger import logger
 from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND, SUCCESSFULLY_DATA_SAVE
-from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+##from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_value
 from v1.commonapp.models.lifecycle import LifeCycle as LifeCycleTbl
@@ -86,7 +86,7 @@ class MeterList(generics.ListAPIView):
 
 class Meter(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -160,7 +160,7 @@ class Meter(GenericAPIView):
 
 class MeterDetail(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
             meter_obj = get_meter_by_id_string(id_string)
@@ -194,7 +194,7 @@ class MeterDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -330,7 +330,7 @@ class MeterNoteList(generics.ListAPIView):
 # todo need to fix this api and note serializer
 class MeterNoteDetail(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

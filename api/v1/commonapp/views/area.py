@@ -70,7 +70,7 @@ class AreaList(generics.ListAPIView):
 class Area(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -114,7 +114,7 @@ class Area(GenericAPIView):
 class AreaDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             area = get_area_by_id_string(id_string)
@@ -137,7 +137,7 @@ class AreaDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from django.db import transaction
-from api.constants import ADMIN, UTILITY_MASTER, EDIT
+# #from api.constants import ADMIN, UTILITY_MASTER, EDIT
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
@@ -75,7 +75,7 @@ class SupplierTypeList(generics.ListAPIView):
 
 class SupplierTypeDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             supplier = get_supplier_type_by_id_string(id_string)
@@ -99,7 +99,7 @@ class SupplierTypeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -149,7 +149,7 @@ class SupplierTypeDetail(GenericAPIView):
 class SupplierType(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

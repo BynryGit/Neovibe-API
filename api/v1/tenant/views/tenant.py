@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from api.constants import ADMIN, TENANT, VIEW, EDIT
+##from api.constants import ADMIN, TENANT, VIEW, EDIT
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -73,7 +73,7 @@ class TenantList(generics.ListAPIView):
 class Tenant(GenericAPIView):
 
     # @is_token_validate
-    # @role_required(ADMIN, TENANT, EDIT)
+    # #role_required(ADMIN, TENANT, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -114,7 +114,7 @@ class Tenant(GenericAPIView):
 
 class TenantDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, TENANT, VIEW)
+    #role_required(ADMIN, TENANT, VIEW)
     def get(self, request, id_string):
         try:
             tenant_obj = get_tenant_by_id_string(id_string)
@@ -137,7 +137,7 @@ class TenantDetail(GenericAPIView):
             }, status=response.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])

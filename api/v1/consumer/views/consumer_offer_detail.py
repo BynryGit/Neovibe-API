@@ -33,7 +33,7 @@ from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail as Cons
 class ConsumerOfferDetail(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

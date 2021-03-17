@@ -25,6 +25,8 @@ class Module(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     key = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=False, null=False)
+    short_desc = models.CharField(max_length=200, blank=True, null=True)
+    long_desc = models.CharField(max_length=200, blank=True, null=True)
     created_by = models.BigIntegerField(blank=True, null=True)
     updated_by = models.BigIntegerField(blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)

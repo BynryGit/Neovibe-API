@@ -121,7 +121,7 @@ class ConsumerList(generics.ListAPIView):
 # Created on: 19/05/2020
 class Consumer(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -228,7 +228,7 @@ class Consumer(GenericAPIView):
 # Created on: 19/05/2020
 class ConsumerDetail(GenericAPIView):
     # @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    # #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             consumer = get_consumer_by_id_string(id_string)
@@ -252,7 +252,7 @@ class ConsumerDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             with transaction.atomic():
@@ -499,7 +499,7 @@ class ConsumerServiceList(generics.ListAPIView):
 class ConsumerBillDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             bill = get_invoice_bill_by_id_string(id_string)
@@ -523,7 +523,7 @@ class ConsumerBillDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -571,7 +571,7 @@ class ConsumerBillDetail(GenericAPIView):
 class ConsumerPayment(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -613,7 +613,7 @@ class ConsumerPayment(GenericAPIView):
 class ConsumerPaymentDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             payment = get_payment_by_id_string(id_string)
@@ -637,7 +637,7 @@ class ConsumerPaymentDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -684,7 +684,7 @@ class ConsumerPaymentDetail(GenericAPIView):
 # Created on: 22/05/2020
 class ConsumerComplaint(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -727,7 +727,7 @@ class ConsumerComplaint(GenericAPIView):
 class ConsumerComplaintDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             complaint = get_consumer_complaint_by_id_string(id_string)
@@ -751,7 +751,7 @@ class ConsumerComplaintDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -794,7 +794,7 @@ class ConsumerComplaintDetail(GenericAPIView):
 class ConsumerScheme(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -838,7 +838,7 @@ class ConsumerScheme(GenericAPIView):
 class ConsumerSchemeDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             scheme = get_scheme_by_id_string(id_string)
@@ -862,7 +862,7 @@ class ConsumerSchemeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             scheme = get_scheme_by_id_string(id_string)
@@ -1015,7 +1015,7 @@ class ConsumerOwnershipList(generics.ListAPIView):
 class ConsumerNote(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -1117,7 +1117,7 @@ from v1.userapp.decorators import is_token_validate
 class ConsumerApprove(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -1164,7 +1164,7 @@ class ConsumerApprove(GenericAPIView):
 class ConsumerConnect(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -1253,7 +1253,7 @@ class ConsumerConnect(GenericAPIView):
 # Updated date: 05-03-2021
 class ConsumerDisconnect(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -1481,7 +1481,7 @@ class ConsumerService(GenericAPIView):
 # Created on: 17-03-2021
 class ConsumerTransfer(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():

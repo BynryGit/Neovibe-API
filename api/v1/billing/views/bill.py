@@ -33,7 +33,7 @@ from master.models import get_user_by_id_string
 
 class GetAllChargesDetails(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    # #role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
             data=[]
@@ -73,7 +73,7 @@ class GetAllChargesDetails(GenericAPIView):
 
 class SaveBillCharges(GenericAPIView):
     @is_token_validate
-    # @role_required(BILLING, SCHEDULE, EDIT)
+    # #role_required(BILLING, SCHEDULE, EDIT)
     def post(self, request):
         try:
             data = {}
