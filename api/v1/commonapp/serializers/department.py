@@ -41,19 +41,22 @@ class DepartmentSerializer(serializers.ModelSerializer):
             else:
                 department_type_obj = super(DepartmentSerializer, self).create(validated_data)
                 department_type_obj.created_by = user.id
-                department_type_obj.updated_by = user.id
                 department_type_obj.save()
                 return department_type_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_department_type_validated_data(validated_data)
-        with transaction.atomic():
-            department_type_obj = super(DepartmentSerializer, self).update(instance, validated_data)
-            department_type_obj.tenant = user.tenant
-            department_type_obj.updated_by = user.id
-            department_type_obj.updated_date = datetime.utcnow()
-            department_type_obj.save()
-            return department_type_obj
+        if UtilityDepartmentTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                                   utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(DEPARTMENT_TYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                department_type_obj = super(DepartmentSerializer, self).update(instance, validated_data)
+                department_type_obj.tenant = user.tenant
+                department_type_obj.updated_by = user.id
+                department_type_obj.updated_date = datetime.utcnow()
+                department_type_obj.save()
+                return department_type_obj
 
 
 class DepartmentListSerializer(serializers.ModelSerializer):

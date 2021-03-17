@@ -65,10 +65,14 @@ class SmartMeterSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_smart_meter_validated_data(validated_data)
-        with transaction.atomic():
-            smart_meter_obj = super(SmartMeterSerializer, self).update(instance, validated_data)
-            smart_meter_obj.tenant = user.tenant
-            smart_meter_obj.updated_by = user.id
-            smart_meter_obj.updated_date = timezone.now()
-            smart_meter_obj.save()
-            return smart_meter_obj
+        if SmartMeterConfigurationTbl.objects.filter(tenant_id=validated_data['tenant_id'], utility_id=validated_data['utility_id'],
+                                                     smart_meter_api_name=validated_data['smart_meter_api_name']).exists():
+            raise CustomAPIException(SMART_METER_CONFIGURATION_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                smart_meter_obj = super(SmartMeterSerializer, self).update(instance, validated_data)
+                smart_meter_obj.tenant = user.tenant
+                smart_meter_obj.updated_by = user.id
+                smart_meter_obj.updated_date = timezone.now()
+                smart_meter_obj.save()
+                return smart_meter_obj

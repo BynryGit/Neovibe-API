@@ -11,6 +11,8 @@ DATA = 'data'
 ERROR = 'error'
 DUPLICATE = 'duplicate',
 ID_STRING = 'id_string'
+EMAIL = 'email'
+NAME = 'name'
 
 # *********** VALUE CONSTANTS **************
 UNAUTHORIZED_USER = "User is not authorised"
@@ -207,3 +209,4 @@ WORK_ORDER_TYPE_ALREADY_EXIST = "Work Order Type Already Exist."
 WORK_ORDER_SUB_TYPE_ALREADY_EXIST = "Work Order Sub Type Already Exist."
 READER_STATUS_ALREADY_EXIST = "Reader Status Already Exist."
 NOTIFICATION_TEMPLATE_ALREADY_EXIST = "Notification Template Already Exist."
+CONTACT_DATA_WITH_EMAIL_ALREADY_EXIST = "Contact Us Details Already Exist."

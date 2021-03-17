@@ -43,19 +43,22 @@ class DocumentSubTypeSerializer(serializers.ModelSerializer):
 
                 document_subtype_obj = super(DocumentSubTypeSerializer, self).create(validated_data)
                 document_subtype_obj.created_by = user.id
-                document_subtype_obj.updated_by = user.id
                 document_subtype_obj.save()
                 return document_subtype_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_document_subtype_validated_data(validated_data)
-        with transaction.atomic():
-            document_subtype_obj = super(DocumentSubTypeSerializer, self).update(instance, validated_data)
-            document_subtype_obj.tenant = user.tenant
-            document_subtype_obj.updated_by = user.id
-            document_subtype_obj.updated_date = datetime.utcnow()
-            document_subtype_obj.save()
-            return document_subtype_obj
+        if DocumentSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                             utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(DOCUMENT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                document_subtype_obj = super(DocumentSubTypeSerializer, self).update(instance, validated_data)
+                document_subtype_obj.tenant = user.tenant
+                document_subtype_obj.updated_by = user.id
+                document_subtype_obj.updated_date = datetime.utcnow()
+                document_subtype_obj.save()
+                return document_subtype_obj
 
 
 class DocumentSubTypeListSerializer(serializers.ModelSerializer):

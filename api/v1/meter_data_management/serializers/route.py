@@ -43,13 +43,17 @@ class RouteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_route_validated_data(validated_data)
-        with transaction.atomic():
-            route_obj = super(RouteSerializer, self).update(instance, validated_data)
-            route_obj.tenant = user.tenant
-            route_obj.updated_by = user.id
-            route_obj.updated_date = datetime.utcnow()
-            route_obj.save()
-            return route_obj
+        if RouteTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                   utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(ROUTE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                route_obj = super(RouteSerializer, self).update(instance, validated_data)
+                route_obj.tenant = user.tenant
+                route_obj.updated_by = user.id
+                route_obj.updated_date = datetime.utcnow()
+                route_obj.save()
+                return route_obj
 
 
 class RouteListSerializer(serializers.ModelSerializer):
