@@ -227,7 +227,6 @@ class Consumer(GenericAPIView):
 # Author: Rohan
 # Created on: 19/05/2020
 class ConsumerDetail(GenericAPIView):
-
     # @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
@@ -684,7 +683,6 @@ class ConsumerPaymentDetail(GenericAPIView):
 # Author: Rohan
 # Created on: 22/05/2020
 class ConsumerComplaint(GenericAPIView):
-
     @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
@@ -1201,8 +1199,8 @@ class ConsumerConnect(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(Q(work_order_master_id=work_order_master_obj.id)) &
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1219,6 +1217,7 @@ class ConsumerConnect(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer.utility
                     appointment_obj.is_active = False
+                    appointment_obj.state = 11
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
                 # view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
@@ -1304,8 +1303,8 @@ class ConsumerDisconnect(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id__in=disconnection_id)&
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1322,6 +1321,7 @@ class ConsumerDisconnect(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.is_active = False
+                    appointment_obj.state = 11
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
 
@@ -1371,8 +1371,8 @@ class ConsumerOutage(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id=work_order_master_obj.id)&
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1387,6 +1387,7 @@ class ConsumerOutage(GenericAPIView):
                 appointment_serializer = ServiceAppointmentSerializer(data=request.data)
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.state = 11
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.is_active = False
                     appointment_obj.save()
@@ -1430,8 +1431,8 @@ class ConsumerService(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id=work_order_master_obj.id)&
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1448,6 +1449,7 @@ class ConsumerService(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.is_active = False
+                    appointment_obj.state = 11
                     appointment_obj.save()
 
                 view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
@@ -1476,15 +1478,12 @@ class ConsumerService(GenericAPIView):
 # Usage: Transfer 
 # Tables used: workorder master, service appointment 
 # Author: Chetan Dhongade 
-# Created on: -03-2021
+# Created on: 17-03-2021
 class ConsumerTransfer(GenericAPIView):
     @is_token_validate
     # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
-            print("This is the ConsumerTransfer api")
-            print("This is the ConsumerTransfer api")
-            print("This is the user remark =>", request.data['sa_user_remark'])
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
@@ -1532,8 +1531,9 @@ class ConsumerTransfer(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id__in=transfer_id)&
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
+                    
                     if previous_transfer_request:
                         raise CustomAPIException(
                             "Transfer Request Already Exist",
@@ -1550,6 +1550,7 @@ class ConsumerTransfer(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    appointment_obj.state = 11 
                     appointment_obj.is_active = False
                     appointment_obj.save()
 
@@ -1568,6 +1569,7 @@ class ConsumerTransfer(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    appointment_obj.state = 11
                     appointment_obj.is_active = False
                     appointment_obj.save()
 

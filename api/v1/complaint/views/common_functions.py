@@ -1,3 +1,4 @@
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
 from rest_framework import status
 
 from v1.commonapp.models.sub_module import get_sub_module_by_key
@@ -39,6 +40,12 @@ def set_complaint_validated_data(validated_data):
             validated_data["complaint_status_id"] = complaint_status.id
         else:
             raise CustomAPIException("Complaint status not found.", status.HTTP_404_NOT_FOUND)
+    if "consumer_service_contract_detail_id" in validated_data:
+        c_obj = get_consumer_service_contract_detail_by_id_string(validated_data['consumer_service_contract_detail_id'])
+        if c_obj:
+            validated_data["consumer_service_contract_detail_id"] = c_obj.id
+        else:
+            raise CustomAPIException("Consumer Service contract detail not found.", status.HTTP_404_NOT_FOUND)
     return validated_data
 
 
