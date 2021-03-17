@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from v1.utility.models.contact_us import ContactUs as ContactUsTbl
-from v1.work_order.models.work_order_master import WorkOrderMaster as ContactUsTbl
 from v1.commonapp.views.settings_reader import SettingReader
 
 setting_reader = SettingReader()
@@ -20,7 +19,7 @@ class ContactUsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContactUsTbl
-        fields = ('tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'email', "emergency_no",
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'email', "emergency_no",
                   "working_days", "portal_site")
 
 
