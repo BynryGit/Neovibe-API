@@ -36,6 +36,7 @@ from v1.registration.views.tasks import save_registration_timeline
 from v1.userapp.decorators import is_token_validate, role_required
 from django.forms.models import model_to_dict
 from v1.consumer.views.common_functions import create_consumer_after_registration
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 
 # API Header
@@ -67,9 +68,10 @@ class RegistrationList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    queryset = RegTbl.objects.filter(is_active=True)
+                    queryset = RegTbl.objects.filter(is_active=True, state=0)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
-                else:
+                else:       
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
