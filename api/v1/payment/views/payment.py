@@ -16,6 +16,7 @@ from rest_framework import generics
 from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
 from rest_framework.response import Response
 from v1.payment.models.payment import Payment
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 # API Header
 # API end Point: api/v1/payment/:id_string
@@ -123,7 +124,8 @@ class PaymentList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = Payment.objects.filter(utility=utility, is_active=True)
+                    queryset = Payment.objects.filter(utility=utility, is_active=True, state__in=[0,2,3])
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

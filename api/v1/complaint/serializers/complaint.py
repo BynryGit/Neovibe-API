@@ -60,9 +60,13 @@ class ComplaintSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_complaint_validated_data(validated_data)
-        with transaction.atomic():
-            complaint = super(ComplaintSerializer, self).update(instance, validated_data)
-            complaint.updated_by = user.id
-            complaint.updated_date = datetime.utcnow()
-            complaint.save()
-            return complaint
+        if Complaint.objects.filter(consumer_no=consumer.consumer_no, is_active=True,
+                                    consumer_complaint_master_id=validated_data['consumer_complaint_master_id']).exists():
+            raise CustomAPIException(CONSUMER_COMPLAINT_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                complaint = super(ComplaintSerializer, self).update(instance, validated_data)
+                complaint.updated_by = user.id
+                complaint.updated_date = datetime.utcnow()
+                complaint.save()
+                return complaint

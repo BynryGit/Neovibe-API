@@ -58,6 +58,7 @@ class StateList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = StateModel.objects.filter(utility=utility, is_active=True)
+                    print("***********", queryset)
                     if queryset:
                         return queryset
                     else:

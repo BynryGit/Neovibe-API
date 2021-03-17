@@ -23,6 +23,9 @@ from v1.userapp.serializers.role import GetRoleSerializer
 from v1.userapp.serializers.user_role import UserRoleViewSerializer
 from v1.userapp.views.common_functions import set_user_validated_data
 from v1.commonapp.views.custom_exception import CustomAPIException
+from v1.userapp.models.login_trail import LoginTrail
+
+l1 = LoginTrail
 
 class UserSerializer(serializers.ModelSerializer):
     city_id = serializers.CharField(required=False, max_length=200)
@@ -39,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(required=False, max_length=200)
     phone_mobile = serializers.CharField(required=False, max_length=200)
     phone_landline = serializers.CharField(required=False, max_length=200)
+    # last_login = serializers.DateTimeField(required=False)
 
     class Meta:
         model = User
@@ -53,9 +57,9 @@ class UserSerializer(serializers.ModelSerializer):
             user_obj = super(UserSerializer, self).create(validated_data)
             user_obj.set_password(validated_data['password'])
             user_obj.created_by = user.id
-            user_obj.updated_by = user.id
             user_obj.created_date = datetime.utcnow()
-            user_obj.updated_date = datetime.utcnow()
+            user_obj.joined_date = datetime.utcnow()
+            user_obj.last_login = datetime.utcnow()
             user_obj.tenant = user.tenant
             user_obj.status_id = 2
             user_obj.is_active = True

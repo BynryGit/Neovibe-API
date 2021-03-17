@@ -36,7 +36,7 @@ class Country(models.Model):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -46,8 +46,11 @@ class Country(models.Model):
 
     @property
     def get_utility_region(self):
-        region = get_utility_region_by_id(self.region_id)
-        return region
+        try:
+            region = get_utility_region_by_id(self.region_id)
+            return region
+        except:
+            return False
 
 # Create Country table end
 

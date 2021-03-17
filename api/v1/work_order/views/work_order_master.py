@@ -24,12 +24,14 @@ from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAutho
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.work_order.serializers.work_order_master import WorkOrderMasterListSerializer,WorkOrderMasterSerializer,WorkOrderMasterViewSerializer
+from v1.work_order.serializers.work_order_master import WorkOrderMasterListSerializer, WorkOrderMasterSerializer, \
+    WorkOrderMasterViewSerializer
 from v1.work_order.models.work_order_master import WorkOrderMaster as WorkOrderMasterModel
 from v1.work_order.models.work_order_master import get_work_order_master_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/work_order/utility/:id_string/list
@@ -42,7 +44,6 @@ from api.constants import *
 # Tables used: WorkOrderMaster
 # Author: Chinmay
 # Created on: 22/12/2020
-
 class WorkOrderMasterList(generics.ListAPIView):
     try:
         serializer_class = WorkOrderMasterListSerializer
@@ -57,7 +58,7 @@ class WorkOrderMasterList(generics.ListAPIView):
                     if 'filter_key' in self.request.query_params:
                         work_obj = get_work_order_type_by_key(self.request.query_params['filter_key'])
                         util_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_obj.id)
-                        queryset = queryset.filter(utility_work_order_type_id = util_obj.id)
+                        queryset = queryset.filter(utility_work_order_type_id=util_obj.id)
                     if queryset:
                         return queryset
                     else:
@@ -110,6 +111,7 @@ class WorkOrderService(GenericAPIView):
                 RESULTS: str(e),
             }, status=res.status_code)
 
+
 # API Header
 # API end Point: api/v1/work_order/utility/service/:id_string
 # API verb: GET,PUT
@@ -161,7 +163,7 @@ class WorkOrderDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     work_order_obj = serializer.update(work_order_obj, serializer.validated_data, user)
                     view_serializer = WorkOrderMasterViewSerializer(instance=work_order_obj,
-                                                         context={'request': request})
+                                                                    context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

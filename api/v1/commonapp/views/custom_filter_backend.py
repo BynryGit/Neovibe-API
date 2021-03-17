@@ -9,12 +9,20 @@ from v1.utility.models.utility_work_order_type import get_utility_work_order_typ
 from v1.complaint.models.complaint_type import get_complaint_type_by_id_string
 from v1.work_order.models.service_appointments import ServiceAppointment
 from v1.commonapp.models.work_order_type import get_work_order_type_by_key
+from v1.commonapp.models.work_order_type import get_work_order_type_by_id_string
 from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_key
 from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id
 from v1.utility.models.utility_work_order_sub_type import get_utility_work_order_sub_type_by_id
 from v1.work_order.models.work_order_master import get_work_order_master_by_id, WorkOrderMaster, get_work_order_master_by_id_string
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
+from datetime import datetime, timedelta
+from django.db.models import Q
+from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT
+from v1.complaint.models.complaint import get_consumer_complaint_by_id_string, COMPLAINT_DICT,Complaint as ComplaintTbl
+from v1.payment.models.payment import Payment
+from v1.work_order.models.material_type import get_material_type_by_id_string
+from v1.work_order.models.material_subtype import get_material_subtype_by_id_string
 
 
 class CustomFilter:
@@ -33,10 +41,18 @@ class CustomFilter:
             schedule_obj = get_schedule_by_id_string(request.query_params['schedule_id'])
             queryset = queryset.filter(schedule_id=schedule_obj.id)
 
+        if 'material_type_id' in request.query_params:
+            material_type_obj = get_material_type_by_id_string(request.query_params['material_type_id'])
+            queryset = queryset.filter(material_type_id=material_type_obj.id)
 
-        if 'module_id' in request.query_params:
-            module_obj = get_module_by_id_string(request.query_params['module_id'])
-            queryset = queryset.filter(module_id=module_obj.id)
+        if 'material_subtype_id' in request.query_params:
+            material_subtype_obj = get_material_subtype_by_id_string(request.query_params['material_subtype_id'])
+            queryset = queryset.filter(material_subtype_id=material_subtype_obj.id)
+
+
+        # if 'module_id' in request.query_params:
+        #     module_obj = get_module_by_id_string(request.query_params['module_id'])
+        #     queryset = queryset.filter(module_id=module_obj.id)
 
         if 'category_id' in request.query_params:
             consumer_category = get_consumer_category_by_id_string(request.query_params['category_id'])
@@ -50,9 +66,9 @@ class CustomFilter:
             complaint_type = get_complaint_type_by_id_string(request.query_params['complaint_type_id'])
             queryset = queryset.filter(complaint_type_id=complaint_type.id)
 
-        # if 'module_id' in request.query_params:
-        #     module = get_utility_module_by_id_string(request.query_params['module_id'])
-        #     queryset = queryset.filter(module_id=module.id)
+        if 'module_id' in request.query_params:
+            module = get_utility_module_by_id_string(request.query_params['module_id'])
+            queryset = queryset.filter(module_id=module.id)
 
 
         if 'consumer_processing' in request.query_params:
@@ -65,6 +81,16 @@ class CustomFilter:
                     queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
         
+        if 'consumer_processing_history' in request.query_params:
+            consumer_master_list = []
+            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
+            if consumer_master_objs:
+                for consumer_master_obj in consumer_master_objs:
+                    consumer_master_list.append(consumer_master_obj)
+                    # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=True, state=0, created_date__gte = datetime.now()-timedelta(days=180))
+                    # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
+
         if 'consumer_id' in request.query_params:
             consumer = get_consumer_by_id_string(request.query_params['consumer_id'])
             queryset = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
@@ -82,8 +108,20 @@ class CustomFilter:
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
                 if work_order_master_obj:
                     print("++++MASTER+++++++",work_order_master_obj)
-                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state=11, is_active=False)
                     print("++++++++++",queryset)
+
+        if 'Disconnect_processing_history' in request.query_params:
+            work_order_type_obj = get_work_order_type_by_key('DISCONNECTION')
+            if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+            if utility_work_order_type_obj:
+                print("++++++++++++",utility_work_order_type_obj)
+                work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
+                if work_order_master_obj:
+                    print("++++MASTER+++++++",work_order_master_obj)
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj], created_date__gte = datetime.now()-timedelta(days=180), state__in=[7, 10] )
+                    print("++++++++++",queryset)        
 
         if 'Outage_processing' in request.query_params:
             work_order_type_obj = get_work_order_type_by_key('OUTAGE')
@@ -94,7 +132,19 @@ class CustomFilter:
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
                 if work_order_master_obj:
                     print("++++MASTER+++++++",work_order_master_obj)
-                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state=11, is_active=False)
+                    print("++++++++++",queryset)
+
+        if 'Outage_processing_history' in request.query_params:
+            work_order_type_obj = get_work_order_type_by_key('OUTAGE')
+            if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+            if utility_work_order_type_obj:
+                print("++++++++++++",utility_work_order_type_obj)
+                work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
+                if work_order_master_obj:
+                    print("++++MASTER+++++++",work_order_master_obj)
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj], created_date__gte = datetime.now()-timedelta(days=180), state__in=[7, 10] )
                     print("++++++++++",queryset)
                     
         if 'Transfer_processing' in request.query_params:
@@ -106,8 +156,20 @@ class CustomFilter:
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
                 if work_order_master_obj:
                     print("++++MASTER+++++++",work_order_master_obj)
-                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
-                    print("++++++++++",queryset) 
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state=11, is_active=False)
+                    print("++++++++++",queryset)
+
+        if 'Transfer_processing_history' in request.query_params:
+            work_order_type_obj = get_work_order_type_by_key('TRANSFER')
+            if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+            if utility_work_order_type_obj:
+                print("++++++++++++",utility_work_order_type_obj)
+                work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
+                if work_order_master_obj:
+                    print("++++MASTER+++++++",work_order_master_obj)
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj], created_date__gte = datetime.now()-timedelta(days=180), state__in=[7, 10] )
+                    print("++++++++++",queryset)  
 
         if 'Service_processing' in request.query_params:
             work_order_type_obj = get_work_order_type_by_key('SERVICE')
@@ -118,7 +180,33 @@ class CustomFilter:
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
                 if work_order_master_obj:
                     print("++++MASTER+++++++",work_order_master_obj)
-                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj])
-                    print("++++++++++",queryset)                                           
+                    filter_from= datetime.now()
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state=11, is_active=False)
+                    print("++++++++++",queryset) 
+
+        if 'Service_processing_history' in request.query_params:
+            work_order_type_obj = get_work_order_type_by_key('SERVICE')
+            if work_order_type_obj:
+                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+            if utility_work_order_type_obj:
+                print("++++++++++++",utility_work_order_type_obj)
+                work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
+                if work_order_master_obj:
+                    print("++++MASTER+++++++",work_order_master_obj)
+                    filter_to= datetime.now()-timedelta(days=180)
+                    print("++++++++++filter to++++++++",filter_to)
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj], created_date__gte = datetime.now()-timedelta(days=180), state__in=[7, 10] )
+                    # queryset = ServiceAppointment.objects.filter(Q(work_order_master_id__in = [ i.id for i in work_order_master_obj]) & Q(created_date__gte = datetime.now()-timedelta(days=180)) | Q(state=7) | Q(state=10) )
+                    print("++++++++++",queryset)
+
+        if 'Registration_history' in request.query_params:
+            queryset = RegTbl.objects.filter(is_active=True, state=1, created_date__gte = datetime.now()-timedelta(days=180))
+        
+        if 'Complaint_history' in request.query_params:
+            queryset = ComplaintTbl.objects.filter(is_active=True,  created_date__gte = datetime.now()-timedelta(days=180), state__in=[6, 10] )
+
+        if 'Payment_history' in request.query_params:
+            queryset = Payment.objects.filter(is_active=True,  created_date__gte = datetime.now()-timedelta(days=180), state=1 )
+
         return queryset
 

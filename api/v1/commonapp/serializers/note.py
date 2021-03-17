@@ -34,7 +34,8 @@ class NoteSerializer(serializers.ModelSerializer):
     identification_id = serializers.CharField(required=False, max_length=200)
     note_name = serializers.CharField(required=True, max_length=200,
                                       error_messages={"required": "The field note_name is required."})
-    note = serializers.CharField(required=False, max_length=200)
+    note = serializers.CharField(required=True, max_length=200,
+                                 error_messages={"required": "The field note is required."})
     note_color = serializers.CharField(required=False, max_length=200)
 
     class Meta:

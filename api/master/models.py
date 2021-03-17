@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from django.utils import timezone # importing package for datetime
+from django.utils import timezone  # importing package for datetime
 from django.db import models
 
 # Create your models here.
@@ -57,6 +57,7 @@ class MyUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 # *********** USER CONSTANTS **************
 USER_DICT = {
     "CREATED": 0,
@@ -68,7 +69,6 @@ USER_DICT = {
 
 # Create USER Master table start.
 class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
-
     CHOICES = (
         (0, 'CREATED'),
         (1, 'ACTIVE'),
@@ -112,7 +112,7 @@ class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     objects = MyUserManager()
     REQUIRED_FIELDS = []
@@ -184,6 +184,9 @@ class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
 
 def get_user_by_email(email):
     return User.objects.get(email=email, is_active=True)
+
+
+
 
 
 def get_all_users():

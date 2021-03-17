@@ -50,9 +50,14 @@ class OfferTypeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_offer_type_validated_data(validated_data)
-        with transaction.atomic():
-            offer_type_obj = super(OfferTypeSerializer, self).update(instance, validated_data)
-            offer_type_obj.updated_by = user.id
-            offer_type_obj.updated_date = datetime.utcnow()
-            offer_type_obj.save()
-            return offer_type_obj
+        if OfferTypeTbl.objects.filter(name=validated_data['name'],
+                                       tenant_id=validated_data['tenant_id'],
+                                       utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(OFFER_TYPE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                offer_type_obj = super(OfferTypeSerializer, self).update(instance, validated_data)
+                offer_type_obj.updated_by = user.id
+                offer_type_obj.updated_date = datetime.utcnow()
+                offer_type_obj.save()
+                return offer_type_obj

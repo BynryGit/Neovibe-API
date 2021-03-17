@@ -1,6 +1,8 @@
 __author__ = "aki"
 
 from django.contrib import admin
+
+from v1.utility.models.contact_us import ContactUs
 from v1.utility.models.mandatory_fields import UtilityMandetoryFields
 from v1.utility.models.utility_currency import UtilityCurrency
 from v1.utility.models.utility_master import UtilityMaster
@@ -13,6 +15,7 @@ from v1.utility.models.utility_service_plan_rate import UtilityServicePlanRate
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.utility.models.utility_status import UtilityStatus
 from v1.utility.models.utility_sub_module import UtilitySubModule
+from v1.utility.models.utility_tip import UtilityTip
 from v1.utility.models.utility_usage_summary import UtilityUsageSummary
 from v1.utility.models.utility_region import UtilityRegion
 from v1.utility.models.utility_payment_channel import UtilityPaymentChannel
@@ -56,4 +59,6 @@ admin.site.register(UtilityWorkingHours)
 admin.site.register(UtilityDocumentType)
 admin.site.register(UtilityWorkOrderType)
 admin.site.register(UtilityWorkOrderSubType)
+admin.site.register(ContactUs)
+admin.site.register(UtilityTip)
 

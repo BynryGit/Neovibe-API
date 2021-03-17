@@ -3,6 +3,7 @@
 echo "################################################## Installing dependencies############################################"
 source  /home/ubuntu/smart360/smart360venv/bin/activate
 pip install django gunicorn psycopg2-binary
+sudo -H apt install -y libcurl4-openssl-dev libssl-dev
 pip install -r /home/ubuntu/smart360/api/requirement.txt
 sudo -H pip install django gunicorn psycopg2-binary
 sudo -H pip install -r /home/ubuntu/smart360/api/requirement.txt
@@ -22,15 +23,15 @@ echo "################################################## Running migrate command
 
 echo "################################################## After fake ############################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
+# cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
 
 echo "################################################## Loading data ############################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
+# cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
 
 echo "############################## Successfully load data ######################################################"
 
-cd /home/ubuntu/smart360/api && sudo python3 manage.py showmigrations
+# cd /home/ubuntu/smart360/api && sudo python3 manage.py showmigrations
 
 echo "############################## SHOWING MIGRATIONS ######################################################"
 # cd /home/ubuntu/smart360/api && cat <(echo "yes") - | python3 manage.py collectstatic

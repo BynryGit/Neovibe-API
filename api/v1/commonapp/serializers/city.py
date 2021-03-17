@@ -47,18 +47,21 @@ class CitySerializer(serializers.ModelSerializer):
             else:
                 city_obj = super(CitySerializer, self).create(validated_data)
                 city_obj.created_by = user.id
-                city_obj.updated_by = user.id
                 city_obj.save()
                 return city_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_city_validated_data(validated_data)
-        with transaction.atomic():
-            city_obj = super(CitySerializer, self).update(instance, validated_data)
-            city_obj.updated_by = user.id
-            city_obj.updated_date = datetime.utcnow()
-            city_obj.save()
-            return city_obj
+        if CityTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                  utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(CITY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                city_obj = super(CitySerializer, self).update(instance, validated_data)
+                city_obj.updated_by = user.id
+                city_obj.updated_date = datetime.utcnow()
+                city_obj.save()
+                return city_obj
 
 
 class CityListSerializer(serializers.ModelSerializer):

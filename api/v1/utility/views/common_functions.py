@@ -24,7 +24,6 @@ from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_b
 from v1.utility.models.utility_service_contract_template import get_utility_service_contract_template_by_id_string
 
 
-
 def set_utility_validated_data(validated_data):
     if "tenant" in validated_data:
         tenant_id_string = (validated_data["tenant"])
@@ -81,9 +80,6 @@ def set_utility_contract_validated_data(validated_data):
         else:
             raise CustomAPIException("Contract Template not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
-
-
-
 
 
 def set_utility_module_validated_data(validated_data):
@@ -170,6 +166,22 @@ def set_holiday_validated_data(validated_data):
 
 
 def set_working_hours_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException("Utility not found.", status_code=status.HTTP_404_NOT_FOUND)
+    if "tenant_id" in validated_data:
+        tenant = get_tenant_by_id_string(validated_data["tenant_id"])
+        if tenant:
+            validated_data["tenant_id"] = tenant.id
+        else:
+            raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
+    return validated_data
+
+
+def set_contact_us_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
         if utility:

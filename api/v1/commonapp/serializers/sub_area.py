@@ -51,18 +51,21 @@ class SubAreaSerializer(serializers.ModelSerializer):
             else:
                 subarea_obj = super(SubAreaSerializer, self).create(validated_data)
                 subarea_obj.created_by = user.id
-                subarea_obj.updated_by = user.id
                 subarea_obj.save()
                 return subarea_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_subarea_validated_data(validated_data)
-        with transaction.atomic():
-            subarea_obj = super(SubAreaSerializer, self).update(instance, validated_data)
-            subarea_obj.updated_by = user.id
-            subarea_obj.updated_date = datetime.utcnow()
-            subarea_obj.save()
-            return subarea_obj
+        if SubAreaTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                     utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(SUBAREA_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                subarea_obj = super(SubAreaSerializer, self).update(instance, validated_data)
+                subarea_obj.updated_by = user.id
+                subarea_obj.updated_date = datetime.utcnow()
+                subarea_obj.save()
+                return subarea_obj
 
 
 class SubAreaListSerializer(serializers.ModelSerializer):

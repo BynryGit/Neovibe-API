@@ -17,6 +17,7 @@ from v1.commonapp.serializers.work_order_sub_type import WorkOrderSubTypeSeriali
 from v1.commonapp.models.work_order_sub_type import WorkOrderSubType as WorkOrderSubTypeModel
 from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_id_string
 from v1.commonapp.views.pagination import StandardResultsSetPagination
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from api.messages import *
 from api.constants import *
 
@@ -42,8 +43,7 @@ class WorkOrderSubTypeList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    # utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = WorkOrderSubTypeModel.objects.all()
+                    queryset = WorkOrderSubTypeModel.objects.filter(is_active=True)
                     if queryset:
                         return queryset
                     else:

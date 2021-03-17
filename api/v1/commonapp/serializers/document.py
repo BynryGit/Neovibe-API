@@ -49,18 +49,22 @@ class DocumentSerializer(serializers.ModelSerializer):
             else:
                 document_obj = super(DocumentSerializer, self).create(validated_data)
                 document_obj.created_by = user.id
-                document_obj.updated_by = user.id
                 document_obj.save()
                 return document_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_document_validated_data(validated_data)
-        with transaction.atomic():
-            document_obj = super(DocumentSerializer, self).update(instance, validated_data)
-            document_obj.updated_by = user.id
-            document_obj.updated_date = datetime.utcnow()
-            document_obj.save()
-            return document_obj
+        if DocumentTbl.objects.filter(document_name=validated_data['document_name'],
+                                      tenant_id=validated_data['tenant_id'],
+                                      utility_id=validated_data['utility_id']).exists():
+            raise CustomAPIException(DOCUMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                document_obj = super(DocumentSerializer, self).update(instance, validated_data)
+                document_obj.updated_by = user.id
+                document_obj.updated_date = datetime.utcnow()
+                document_obj.save()
+                return document_obj
 
 
 class DocumentListSerializer(serializers.ModelSerializer):
