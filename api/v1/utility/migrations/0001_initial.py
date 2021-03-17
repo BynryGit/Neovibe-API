@@ -511,22 +511,5 @@ class Migration(migrations.Migration):
                 ('utility', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='utility.UtilityMaster')),
             ],
         ),
-        migrations.CreateModel(
-            name='ContactUs',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('id_string', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
-                ('email', models.CharField(blank=True, max_length=200, null=True)),
-                ('emergency_no', models.CharField(blank=True, max_length=200, null=True)),
-                ('working_days', models.CharField(blank=True, max_length=200, null=True)),
-                ('portal_site', models.CharField(blank=True, max_length=200, null=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_by', models.BigIntegerField(blank=True, null=True)),
-                ('updated_by', models.BigIntegerField(blank=True, null=True)),
-                ('created_date', models.DateTimeField(blank=True, default=django.utils.timezone.now, null=True)),
-                ('updated_date', models.DateTimeField(blank=True, default=django.utils.timezone.now, null=True)),
-                ('tenant', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='tenant.TenantMaster')),
-                ('utility', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='utility.UtilityMaster')),
-            ],
-        ),
+        
     ]
