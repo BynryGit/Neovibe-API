@@ -1,4 +1,7 @@
 from datetime import datetime
+from v1.consumer.views import consumer_service_contract_details
+from v1.complaint.serializers.complaint_subtype import ComplaintSubTypeListSerializer
+from v1.complaint.serializers.complaint_type import ComplaintTypeListSerializer
 from django.db import transaction
 from rest_framework import serializers, status
 
@@ -12,9 +15,10 @@ from v1.registration.serializers.registration import ChoiceField
 class ComplaintListSerializer(serializers.ModelSerializer):
     consumer_service_contract_detail_id=ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail_id')
     state = ChoiceField(choices=Complaint.CHOICES)
+    complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
     class Meta:
         model = Complaint
-        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date')
+        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date', 'is_active', 'complaint_sub_type')
 
 
 class ComplaintViewSerializer(serializers.ModelSerializer):
@@ -30,6 +34,7 @@ class ComplaintViewSerializer(serializers.ModelSerializer):
 
 class ComplaintSerializer(serializers.ModelSerializer):
     consumer_complaint_master_id = serializers.CharField(required=False, max_length=200)
+    consumer_service_contract_detail_id = serializers.CharField(required=False, max_length=200)
     complaint_type_id = serializers.CharField(required=False, max_length=200)
     complaint_sub_type_id = serializers.CharField(required=False, max_length=200)
     complaint_status_id = serializers.CharField(required=False, max_length=200)
@@ -57,7 +62,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_complaint_validated_data(validated_data)
-        if Complaint.objects.filter(consumer_no=consumer.consumer_no, is_active=True,
+        if Complaint.objects.filter(consumer_no=instance.consumer_no, is_active=True,
                                     consumer_complaint_master_id=validated_data['consumer_complaint_master_id']).exists():
             raise CustomAPIException(CONSUMER_COMPLAINT_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:

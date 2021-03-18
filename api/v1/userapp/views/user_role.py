@@ -42,7 +42,7 @@ from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSer
 class UserRole(GenericAPIView):
 
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    #role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             data = {}
@@ -81,7 +81,7 @@ class UserRole(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             role_list = []
@@ -125,7 +125,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             data = {}
@@ -170,7 +170,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def delete(self, request, id_string):
         try:
             user_obj = get_user_by_id_string(id_string)
@@ -208,7 +208,7 @@ class UserRole(GenericAPIView):
 
 class UserRoleByUtilityModules(GenericAPIView):
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    #role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, utility_id_string):
         try:
             data = {}
@@ -230,6 +230,8 @@ class UserRoleByUtilityModules(GenericAPIView):
                             module_data['role_id_string'] = a['id_string']
                             module_data['name'] = d['name']
                             module_data['id_string'] = d['id_string']
+                            module_data['short_desc'] = d['short_desc']
+                            module_data['long_desc'] = d['long_desc']
                             module_obj_list.append(module_data)
 
             else:
@@ -261,6 +263,8 @@ class UserRoleByUtilityModules(GenericAPIView):
                         data['name'] = utility['module_id']['name']
                         data['id_string'] = roleprivilege['id_string']
                         data['role_id_string'] = roleprivilege['role_id_string']
+                        data['short_desc'] = roleprivilege['short_desc']                                     
+                        data['long_desc'] = roleprivilege['long_desc'] 
                         new_list.append(data)
             return Response({
                 STATE: SUCCESS,
@@ -284,7 +288,7 @@ class UserRoleByUtilityModules(GenericAPIView):
 
 class UserRoleByUtilitySubModule(GenericAPIView):
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    #role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, module_id_string):
         try:
             data = {}
@@ -364,7 +368,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
 
 class ModulePrivilegesList(GenericAPIView):
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    #role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, role_id_string, module_id_string, sub_module_id_string):
         try:
             privilege_list = []

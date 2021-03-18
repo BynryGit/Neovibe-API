@@ -34,7 +34,7 @@ from django.db import transaction
 class ScheduledAppointment(GenericAPIView):
     
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
             schedule_appointment_serializer = ScheduledAppointmentSerializer(data=request.data)

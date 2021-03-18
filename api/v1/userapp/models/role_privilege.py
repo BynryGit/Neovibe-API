@@ -172,6 +172,8 @@ def get_module_by_role_id(role_id):
             module_list.append({
                     "id_string" : module_data.id_string,
                     "name" : module_data.name,
-                    "sub_module" : sub_module_list
+                    "sub_module" : sub_module_list,
+                    "short_desc" : module_data.short_desc,
+                    "long_desc" : module_data.long_desc
                 })
     return {'module' : module_list}

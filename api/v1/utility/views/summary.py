@@ -28,7 +28,7 @@ from v1.userapp.decorators import is_token_validate, role_required
 
 class UtilitySummaryDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_summary_obj = get_utility_usage_summary_by_utility_id_string(id_string)

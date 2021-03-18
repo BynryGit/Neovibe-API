@@ -32,7 +32,7 @@ from v1.commonapp.views.custom_filter_backend import CustomFilter
 class PaymentApprove(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, PAYMENT, EDIT)
+    #role_required(CONSUMER_OPS, PAYMENT, EDIT)
     def put(self, request, id_string):
         try:
             payment = get_payment_by_id_string(id_string)
@@ -76,7 +76,7 @@ class PaymentApprove(GenericAPIView):
 class PaymentReject(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, PAYMENT, EDIT)
+    #role_required(CONSUMER_OPS, PAYMENT, EDIT)
     def put(self, request, id_string):
         try:
             payment = get_payment_by_id_string(id_string)

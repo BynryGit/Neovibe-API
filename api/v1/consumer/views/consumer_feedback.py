@@ -11,7 +11,7 @@ from v1.userapp.decorators import is_token_validate
 
 class ConsumerFeedback(GenericAPIView):
     @is_token_validate
-    # @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         print("$$$$$$$$$$$$$$$$$$$$$",request)
         try:

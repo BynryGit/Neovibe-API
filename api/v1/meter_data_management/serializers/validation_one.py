@@ -56,6 +56,7 @@ class ValidationOneViewSerializer(serializers.ModelSerializer):
         mr_object = get_user_by_id(meter_reading_tbl.meter_reader_id)
         validator_one_object = get_user_by_id(meter_reading_tbl.meter_reader_id)
         user_details = {
+            'consumer_no': consumer_master_obj.consumer_no,
             'consumer_name': 'Na',
             'consumer_email': consumer_master_obj.email_id,
             'consumer_phone_mobile': consumer_master_obj.phone_mobile,
@@ -96,12 +97,15 @@ class ValidationOneViewSerializer(serializers.ModelSerializer):
             read_cycle_obj = get_read_cycle_by_id(validation_assignment.read_cycle_id)
             read_cycle_list.append({
                 'name': read_cycle_obj.name,
+                'label': read_cycle_obj.label,
                 'id_string': read_cycle_obj.id_string,
             })
 
         additional_details= {
             'meter_status_id_string':meter_status_obj.id_string,
+            'meter_status_name':meter_status_obj.name,
             'reader_status_id_string':reader_status_obj.id_string,
+            'reader_status_name':reader_status_obj.name,
             'total_reading': total_reading,
             'completed_reading': completed_reading,
             'pending_reading': total_reading - completed_reading,
