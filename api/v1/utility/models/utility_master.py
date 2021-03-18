@@ -25,7 +25,7 @@ from v1.utility.views.utility_function import perform_events
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 # from v1.utility.views.common_functions import perform_events
-from django.utils import timezone # importing package for datetime
+from django.utils import timezone  # importing package for datetime
 
 # *********** UTILITY CONSTANTS **************
 UTILITY_DICT = {
