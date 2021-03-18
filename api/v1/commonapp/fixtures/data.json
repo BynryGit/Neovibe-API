@@ -273,8 +273,8 @@
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 2,
-        "key" : "SMART_METER",
-        "name": "Smart Meter",
+        "key" : "METER_MASTER",
+        "name": "Meter Master",
         "is_active": "True"
       }
     },
@@ -2598,7 +2598,7 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Smart Meter",
+        "label":"Meter Master",
         "module_id": 2,
         "submodule_id": 8,
         "is_active": "True"
