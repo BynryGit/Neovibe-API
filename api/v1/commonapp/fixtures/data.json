@@ -442,6 +442,26 @@
     },
 
     {
+      "pk": "25",
+      "model": "commonapp.SubModule",
+      "fields": {
+        "module_id": 8,
+        "key" : "UTILITY_MASTER",
+        "name": "Utility Master",
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "26",
+      "model": "commonapp.SubModule",
+      "fields": {
+        "module_id": 8,
+        "key" : "SYSTEM_CONFIGURATION",
+        "name": "System Configuration",
+        "is_active": "True"
+      }
+    },
+    {
       "pk": "1",
       "model": "userapp.Privilege",
       "fields": {
@@ -2302,6 +2322,32 @@
         "is_active": "True"
       }
     },
+    {
+      "pk": "126",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 8,
+        "sub_module_id": 25,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "127",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 8,
+        "sub_module_id": 26,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
  
    {
       "pk": "1",
@@ -2750,6 +2796,32 @@
         "is_active": "True"
       }
     },
+
+    {
+      "pk": "25",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "label":"Utility Master",
+        "module_id": 8,
+        "submodule_id": 25,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "26",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "label":"System Configuration",
+        "module_id": 8,
+        "submodule_id": 26,
+        "is_active": "True"
+      }
+    },
+
     {
       "pk": "1",
       "model": "tenant.TenantModule",
