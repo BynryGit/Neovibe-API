@@ -36,7 +36,7 @@ class ServiceAppointmentListSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_service_contract_detail_id', 'asset_id',
                   'work_order_master_id',
                   'sa_number', 'sa_name', 'sa_date', 'sa_description', 'sa_rule', 'created_date', 'updated_date',
-                  'state')
+                  'state', 'is_active')
 
 
 class ServiceAppointmentSerializer(serializers.ModelSerializer):
