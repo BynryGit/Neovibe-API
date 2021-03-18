@@ -75,7 +75,7 @@ class UesrUtilityList(generics.ListAPIView):
 class UserUtility(GenericAPIView):
 
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    #role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             utility_list = []
@@ -113,7 +113,7 @@ class UserUtility(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def post(self, request, id_string):
         try:
             utility_list = []
@@ -153,7 +153,7 @@ class UserUtility(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             utility_list = []

@@ -7,7 +7,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+##from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, METER_READING_NOT_FOUND, READING_NOT_PROVIDED
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
@@ -73,7 +73,7 @@ class MeterReadingList(generics.ListAPIView):
 
 class MeterReading(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -133,7 +133,7 @@ class MeterReading(GenericAPIView):
 
 class MeterReadingDetail(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
             meter_reading_obj = get_meter_reading_by_id_string(id_string)
@@ -156,7 +156,7 @@ class MeterReadingDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

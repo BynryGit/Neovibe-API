@@ -79,7 +79,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
                 return consumer_obj
 
     def update(self, instance, validated_data, user):
-        validated_data = set_consumer_validated_data(validated_data)
+        validated_data = common_functions.set_consumer_validated_data(validated_data)
         if ConsumerMaster.objects.exclude(id_string=instance.id_string).filter(
                 phone_mobile=validated_data['phone_mobile'], utility=instance.utility).exists():
             raise CustomAPIException(MOBILE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)

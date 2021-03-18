@@ -4,7 +4,7 @@ from v1.consumer.models.consumer_master import ConsumerMaster, get_consumer_by_c
 from v1.consumer.models.consumer_scheme_master import ConsumerSchemeMaster
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string, get_consumer_sub_category_by_id
 from v1.meter_data_management.models.meter_reading import MeterReading
-# from v1.meter_data_management.models.temp_consumer_master import TempConsumerMaster
+from v1.meter_data_management.models.meter import get_meter_by_id
 from v1.payment.models.payment import Payment
 from v1.utility.models.utility_service_plan import get_utility_service_plans_by_dates, UtilityServicePlan
 from v1.utility.models.utility_service_plan_rate import get_utility_service_plans_rates, UtilityServicePlanRate
@@ -366,14 +366,16 @@ def get_consumer_count(schedule_id):
 # Function for get reading count it used before runbill
 def get_reading_count(schedule_obj):
     try:
+        meters_no_list = []
         schedule = get_schedule_bill_by_id_string(schedule_obj.id_string)
         schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule.id)
         if schedule_log_id:
             bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
-            meter_reading_obj = MeterReading.objects.filter(created_date=schedule.start_date)
-            print('*********',meter_reading_obj)
-        
-        return 0
+            for meter in bill_consumer_obj:
+                meter_id = get_meter_by_id(meter.meter_id)
+                meters_no_list.append(meter_id.meter_no)
+            meter_reading_obj = MeterReading.objects.filter(created_date__date=schedule.start_date.date(),meter_no__in=meters_no_list).count()
+        return meter_reading_obj
     except:
         pass
     
@@ -391,6 +393,7 @@ def get_rate(bill_cycle_id):
                     consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
                     contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
             rate_obj = get_rate_by_category_sub_category_wise(bill_cycle_obj.utility,bill_cycle_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
+            rate['id_string'] = rate_obj.id_string
             rate['rate'] = rate_obj.rate
             rate['product']= get_utility_product_by_id(rate_obj.product_id).name
             rate['category'] = get_consumer_category_by_id(rate_obj.consumer_category_id).name
@@ -483,3 +486,6 @@ def get_additional_charges_amount(schedule_bill_obj):
             return 0
     except:
         pass
+
+def save_current_charges(data):
+    print(data)

@@ -74,7 +74,7 @@ class ServiceList(generics.ListAPIView):
 class ConsumerServiceDetail(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():

@@ -72,7 +72,7 @@ class ComplaintAssignmentList(generics.ListAPIView):
 class ComplaintDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, COMPLAINT, VIEW)
+    #role_required(CONSUMER_OPS, COMPLAINT, VIEW)
     def get(self, request, id_string):
         try:
             complaint = get_consumer_complaint_by_id_string(id_string)
@@ -110,7 +110,7 @@ class ComplaintDetail(GenericAPIView):
 class ComplaintAccept(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
     def put(self, request, id_string):
         try:
             complaint = get_consumer_complaint_by_id_string(id_string)
@@ -151,7 +151,7 @@ class ComplaintAccept(GenericAPIView):
 class ComplaintReject(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
     def put(self, request, id_string):
         try:
             complaint = get_consumer_complaint_by_id_string(id_string)
@@ -192,7 +192,7 @@ class ComplaintReject(GenericAPIView):
 class ComplaintComplete(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
     def put(self, request, id_string):
         try:
             complaint = get_consumer_complaint_by_id_string(id_string)

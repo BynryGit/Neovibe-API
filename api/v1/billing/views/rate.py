@@ -14,7 +14,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.billing.serializers.rate import RateShortViewSerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
-from api.constants import CONSUMER_OPS, METER_DATA, VIEW
+#from api.constants import CONSUMER_OPS, METER_DATA, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_FOUND, SCHEDULE_LOG_NOT_FOUND
 from v1.billing.models.rate import Rate as RateTbl, get_rate_by_category_sub_category_wise

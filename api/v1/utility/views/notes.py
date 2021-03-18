@@ -28,7 +28,7 @@ from v1.utility.serializers.notes import NoteSerializer
 
 class UtilityNoteList(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_notes_obj = get_notes_by_utility_id_string(id_string)
@@ -56,7 +56,7 @@ class UtilityNoteList(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
@@ -100,7 +100,7 @@ class UtilityNoteList(GenericAPIView):
 
 class UtilityNoteDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_notes_obj = get_note_by_id_string(id_string)
@@ -128,7 +128,7 @@ class UtilityNoteDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             utility_note_obj = get_note_by_id_string(id_string)

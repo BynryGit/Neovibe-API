@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from api.constants import ADMIN, VIEW, TENANT, EDIT
+#from api.constants import ADMIN, VIEW, TENANT, EDIT
 from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
@@ -75,7 +75,7 @@ class TenantSubscription(GenericAPIView):
     serializer_class = TenantSubscriptionSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -124,7 +124,7 @@ class TenantSubscriptionDetail(GenericAPIView):
     serializer_class = TenantSubscriptionSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, VIEW)
+    #role_required(ADMIN, TENANT, VIEW)
     def get(self, request, id_string):
         try:
             tenant_subscription_obj = get_tenant_subscription_by_id_string(id_string)
@@ -147,7 +147,7 @@ class TenantSubscriptionDetail(GenericAPIView):
             }, status=response.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])

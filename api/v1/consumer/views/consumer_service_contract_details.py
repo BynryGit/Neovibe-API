@@ -121,7 +121,7 @@ class ConsumerMeterList(generics.ListAPIView):
 class ConsumerServiceContractDetailApprove(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

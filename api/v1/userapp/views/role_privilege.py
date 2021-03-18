@@ -33,7 +33,7 @@ from v1.userapp.views.common_functions import set_role_privilege_validated_data
 class RolePrivilegeDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             role_obj = get_role_by_id_string(id_string)
@@ -76,7 +76,7 @@ class RolePrivilegeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
@@ -100,7 +100,7 @@ class RolePrivilegeDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
@@ -148,7 +148,7 @@ class RolePrivilegeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def delete(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
