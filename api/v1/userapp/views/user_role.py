@@ -230,6 +230,8 @@ class UserRoleByUtilityModules(GenericAPIView):
                             module_data['role_id_string'] = a['id_string']
                             module_data['name'] = d['name']
                             module_data['id_string'] = d['id_string']
+                            module_data['short_desc'] = d['short_desc']
+                            module_data['long_desc'] = d['long_desc']
                             module_obj_list.append(module_data)
 
             else:
@@ -261,6 +263,8 @@ class UserRoleByUtilityModules(GenericAPIView):
                         data['name'] = utility['module_id']['name']
                         data['id_string'] = roleprivilege['id_string']
                         data['role_id_string'] = roleprivilege['role_id_string']
+                        data['short_desc'] = roleprivilege['short_desc']                                     
+                        data['long_desc'] = roleprivilege['long_desc'] 
                         new_list.append(data)
             return Response({
                 STATE: SUCCESS,
