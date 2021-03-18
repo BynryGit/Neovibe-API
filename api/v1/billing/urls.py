@@ -16,5 +16,5 @@ urlpatterns = [
     path('bill-schedule-log/list', ScheduleBillLogByBillSchedule.as_view(), name="ScheduleBillLogByBillSchedule"),
     path('rate/schedule-bill/<uuid:id_string>', RateList.as_view(), name="RateList"),
     path('get-charges/<uuid:id_string>',GetAllChargesDetails.as_view(),name="GetAllChargesDetails"),
-    path('run-bill/',SaveBillCharges.as_view(),name="SaveBillCharges")
+    path('save-run-bill/',SaveBillCharges.as_view(),name="SaveBillCharges")
 ]

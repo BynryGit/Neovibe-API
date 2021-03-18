@@ -24,7 +24,7 @@ from rest_framework.generics import GenericAPIView
 from v1.userapp.decorators import is_token_validate, role_required
 from master.models import get_user_by_id_string
 from django.db import transaction
-from api.constants import ADMIN, UTILITY_MASTER, EDIT
+#from api.constants import ADMIN, UTILITY_MASTER, EDIT
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
@@ -83,7 +83,7 @@ class ContractTermAndConditionList(generics.ListAPIView):
 
 class ContractTermAndConditionDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             contract_term = get_contract_term_and_condition_by_id_string(id_string)
@@ -107,7 +107,7 @@ class ContractTermAndConditionDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -156,7 +156,7 @@ class ContractTermAndConditionDetail(GenericAPIView):
 class ContractTermAndCondition(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

@@ -4,7 +4,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from v1.userapp.decorators import is_token_validate, role_required
-from api.constants import ADMIN, TENANT, VIEW
+#from api.constants import ADMIN, TENANT, VIEW
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.commonapp.views.logger import logger
 from v1.tenant.serializers.tenant_summary import TenantSummaryOnMonthlyBasisViewSerializer
@@ -28,7 +28,7 @@ class TenantSummaryDetail(GenericAPIView):
     serializer_class = TenantSummaryOnMonthlyBasisViewSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, VIEW)
+    #role_required(ADMIN, TENANT, VIEW)
     def get(self, request, id_string):
         try:
             tenant_summary_obj = get_tenant_usage_summary_by_tenant_id_string(id_string)

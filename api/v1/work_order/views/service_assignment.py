@@ -78,7 +78,7 @@ class ServiceAssignmentList(generics.ListAPIView):
 class ServiceAssignment(GenericAPIView):
     
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
             assignment_serializer = ServiceAssignmentSerializer(data=request.data)
@@ -138,7 +138,7 @@ class ServiceAssignment(GenericAPIView):
 class ServiceDessignmentDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def put(self, request, id_string):
         try:
             deassignment_serializer = ServiceAssignmentSerializer(data=request.data)
@@ -185,7 +185,7 @@ class ServiceDessignmentDetail(GenericAPIView):
 class ServiceAssignmentDetail(GenericAPIView):
     
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def get(self, request, id_string):
         try:
             service_appointment = get_service_appointment_by_id_string(id_string)

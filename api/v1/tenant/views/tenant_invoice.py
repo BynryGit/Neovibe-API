@@ -7,7 +7,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from master.models import get_user_by_id_string
-from api.constants import ADMIN, VIEW, TENANT, EDIT
+#from api.constants import ADMIN, VIEW, TENANT, EDIT
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.views.logger import logger
@@ -73,7 +73,7 @@ class TenantInvoice(GenericAPIView):
     serializer_class = TenantInvoiceSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -122,7 +122,7 @@ class TenantInvoiceDetail(GenericAPIView):
     serializer_class = TenantInvoiceSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, VIEW)
+    #role_required(ADMIN, TENANT, VIEW)
     def get(self, request, id_string):
         try:
             tenant_invoice_obj = get_tenant_invoice_by_id_string(id_string)
@@ -145,7 +145,7 @@ class TenantInvoiceDetail(GenericAPIView):
             }, status=response.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])

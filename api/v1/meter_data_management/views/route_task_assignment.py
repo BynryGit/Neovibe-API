@@ -6,7 +6,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+##from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
@@ -84,7 +84,7 @@ class RouteTaskAssignmentList(generics.ListAPIView):
 
 class RouteTaskAssignment(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -126,7 +126,7 @@ class RouteTaskAssignment(GenericAPIView):
 
 class RouteTaskAssignmentDetail(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
             route_task_assignment_obj = get_route_task_assignment_by_id_string(id_string)
@@ -150,7 +150,7 @@ class RouteTaskAssignmentDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

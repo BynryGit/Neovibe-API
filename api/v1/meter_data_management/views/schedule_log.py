@@ -14,7 +14,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.meter_data_management.serializers.schedule_log import ScheduleLogViewSerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
-from api.constants import CONSUMER_OPS, METER_DATA, VIEW
+#from api.constants import CONSUMER_OPS, METER_DATA, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_FOUND, SCHEDULE_LOG_NOT_FOUND
 
@@ -76,7 +76,7 @@ class ScheduleLogList(generics.ListAPIView):
 
 class ScheduleLogDetail(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
             schedule_log_obj = get_schedule_log_by_id_string(id_string)
@@ -114,7 +114,7 @@ class ScheduleLogDetail(GenericAPIView):
 # todo need to fix logic
 class ReadingScheduleLogSummary(generics.ListAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)

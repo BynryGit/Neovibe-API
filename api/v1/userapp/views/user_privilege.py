@@ -34,7 +34,7 @@ from v1.userapp.views.common_functions import set_user_privilege_validated_data
 class UserPrivilegeDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def post(self, request, id_string):
         try:
             data = []
@@ -74,7 +74,7 @@ class UserPrivilegeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             sub_modules = []
@@ -119,7 +119,7 @@ class UserPrivilegeDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             data = []
@@ -173,7 +173,7 @@ class UserPrivilegeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def delete(self, request, id_string):
         try:
             data = []

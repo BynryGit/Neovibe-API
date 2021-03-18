@@ -78,7 +78,7 @@ class ServiceAppointmentList(generics.ListAPIView):
 class ServiceAppointment(GenericAPIView):
     
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
             appointment_serializer = ServiceAppointmentSerializer(data=request.data)
@@ -126,7 +126,7 @@ class ServiceAppointment(GenericAPIView):
 class ServiceAppointmentDetail(GenericAPIView):
     
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def get(self, request, id_string):
         try:
             service_appointment = get_service_appointment_by_id_string(id_string)
@@ -150,7 +150,7 @@ class ServiceAppointmentDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(WORK_ORDER, DISPATCHER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
