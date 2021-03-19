@@ -34,12 +34,12 @@ class MeterReadingValidationOneSerializer(serializers.ModelSerializer):
                     return False
                     # todo send return response of duplication
                 else:
-                    meter_reading_obj.is_validated = True
                     meter_reading_obj.meter_status_v1_id = validated_data["meter_status_v1_id"]
                     meter_reading_obj.reader_status_v1_id = validated_data["reader_status_v1_id"]
                     meter_reading_obj.current_meter_reading_v1 = validated_data["current_meter_reading_v1"]
 
                     if validated_data["is_meter_matching"] and validated_data["is_reading_matching"]:
+                        meter_reading_obj.is_validated = True
                         meter_reading_obj.reading_status = 2
                         meter_reading_obj.meter_status_v2_id = validated_data["meter_status_v1_id"]
                         meter_reading_obj.reader_status_v2_id = validated_data["reader_status_v1_id"]

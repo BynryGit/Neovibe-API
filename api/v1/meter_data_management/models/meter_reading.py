@@ -20,6 +20,7 @@ from v1.meter_data_management.models.consumer_detail import get_consumer_detail_
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
+from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
@@ -97,6 +98,11 @@ class MeterReading(models.Model):
     def get_route_task_assignmnet(self):
         route_task_assignment = get_route_task_assignment_by_id(self.route_task_assignment_id)
         return route_task_assignment
+
+    @property
+    def get_schedule_log_name(self):
+        schedule_log = get_schedule_log_by_id(self.schedule_log_id)
+        return schedule_log
 
     @property
     def get_utility_product_name(self):

@@ -18,6 +18,7 @@ from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id, get
 from v1.meter_data_management.models.reader_status import get_reader_status_by_id
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
 from v1.meter_data_management.models.validation_assignments import ValidationAssignment as ValidationAssignmentTbl
+from v1.meter_data_management.serializers.schedule_log import ScheduleLogShortViewSerializer
 
 
 class ValidationOneViewSerializer(serializers.ModelSerializer):
@@ -25,6 +26,7 @@ class ValidationOneViewSerializer(serializers.ModelSerializer):
     utility = UtilityMasterViewSerializer()
     read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')
     route_id = RouteShortViewSerializer(many=False, source='get_route_name')
+    schedule_log_id = ScheduleLogShortViewSerializer(many=False, source='get_schedule_log_name')
     reading_status = ChoiceField(choices=MeterReadingTbl.READING_STATUS)
     additional_details = serializers.SerializerMethodField()
     meter_details = serializers.SerializerMethodField()
@@ -116,6 +118,7 @@ class ValidationOneViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MeterReadingTbl
-        fields = ('id_string', 'reading_status', 'consumer_no', 'meter_no', 'current_meter_reading', 'meter_image',
-                  'meter_details', 'user_details', 'additional_details', 'meter_reading_json',
-                  'additional_parameter_json', 'read_cycle_id', 'route_id', 'tenant', 'utility')
+        fields = ('id_string', 'reading_status', 'consumer_no', 'meter_no', 'current_meter_reading', 'is_meter_matching',
+                  'is_reading_matching', 'is_validated', 'meter_image', 'meter_details', 'user_details',
+                  'additional_details', 'meter_reading_json', 'additional_parameter_json', 'read_cycle_id',
+                  'route_id', 'schedule_log_id', 'tenant', 'utility')
