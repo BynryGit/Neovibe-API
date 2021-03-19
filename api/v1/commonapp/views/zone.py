@@ -9,7 +9,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS, ZONE_NOT_FOU
 from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-#from api.constants import ADMIN,UTILITY_MASTER,EDIT
+from api.constants import ADMIN,UTILITY_MASTER,EDIT
 from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.models.zone import get_zone_by_id_string
@@ -69,7 +69,7 @@ class ZoneList(generics.ListAPIView):
 class Zone(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -112,7 +112,7 @@ class Zone(GenericAPIView):
 class ZoneDetail(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             zone = get_zone_by_id_string(id_string)
@@ -135,7 +135,7 @@ class ZoneDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

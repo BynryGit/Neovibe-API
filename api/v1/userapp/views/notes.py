@@ -189,4 +189,3 @@ class UploadFile(GenericAPIView):
         url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
 
         print('*****file_obj.read()****',url)
-        
