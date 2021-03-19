@@ -52,7 +52,11 @@ class MeterReading(models.Model):
     validator_one_id = models.BigIntegerField(null=True, blank=True)
     validator_two_id = models.BigIntegerField(null=True, blank=True)
     meter_status_id = models.BigIntegerField(null=True, blank=True)
+    meter_status_v1_id = models.BigIntegerField(null=True, blank=True)
+    meter_status_v2_id = models.BigIntegerField(null=True, blank=True)
     reader_status_id = models.BigIntegerField(null=True, blank=True)
+    reader_status_v1_id = models.BigIntegerField(null=True, blank=True)
+    reader_status_v2_id = models.BigIntegerField(null=True, blank=True)
     reading_status = models.IntegerField(choices=READING_STATUS, default=0)
     meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
@@ -115,10 +119,10 @@ class MeterReading(models.Model):
         return validator_two
 
     def __str__(self):
-        return self.meter_no
+        return self.meter_no + ' ' + str(self.id_string)
 
     def __unicode__(self):
-        return self.meter_no
+        return self.meter_no + ' ' +  str(self.id_string)
 
 # Create Meter Reading Table end
 
