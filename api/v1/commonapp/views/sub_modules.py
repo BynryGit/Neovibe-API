@@ -7,6 +7,7 @@ from v1.commonapp.models.sub_module import get_all_sub_modules, get_sub_module_b
 from v1.commonapp.serializers.sub_module import SubModuleListSerializer, SubModuleViewSerializer
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.views.custom_filter_backend import CustomFilter
+from v1.commonapp.models.module import get_module_by_id_string
 
 # API Header
 # API end Point: api/v1/submodule/list
@@ -28,7 +29,9 @@ class SubModuleList(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = get_all_sub_modules()
-        queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
+        if 'module_id' in self.request.query_params:
+            module = get_module_by_id_string(self.request.query_params['module_id'])
+            queryset = queryset.filter(module_id=module.id)
         utility_id_string = self.request.query_params.get('utility', None)
 
         if utility_id_string is not None:

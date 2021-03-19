@@ -466,12 +466,6 @@ def set_channel_validated_data(validated_data):
             validated_data["tenant_id"] = tenant.id
         else:
             raise CustomAPIException("Tenant not found.", status_code=status.HTTP_404_NOT_FOUND)
-    if "utility_product_id" in validated_data:
-        utility_product = get_utility_product_by_id_string(validated_data["utility_product_id"])
-        if utility_product:
-            validated_data["utility_product_id"] = utility_product.id
-        else:
-            raise CustomAPIException("Utility Product not found.", status_code=status.HTTP_404_NOT_FOUND)
 
     # if "channel_id" in validated_data:
     #     channel = get_channel_by_id_string(validated_data["channel_id"])

@@ -7,8 +7,9 @@ from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAu
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from v1.consumer.models.consumer_faq import ConsumerFaq as ConsumerFaqModel,get_consumer_faq_by_id_string
-from v1.consumer.serializers.consumer_faq import ConsumerFaqListSerializer,ConsumerFaqViewSerializer,ConsumerFaqSerializer
+from v1.consumer.models.consumer_faq import ConsumerFaq as ConsumerFaqModel, get_consumer_faq_by_id_string
+from v1.consumer.serializers.consumer_faq import ConsumerFaqListSerializer, ConsumerFaqViewSerializer, \
+    ConsumerFaqSerializer
 from v1.commonapp.views.logger import logger
 from v1.commonapp.common_functions import is_token_valid, get_payload, is_authorized
 from rest_framework.response import Response
@@ -20,6 +21,7 @@ from v1.commonapp.views.logger import logger
 from master.models import get_user_by_id_string
 from api.messages import *
 from api.constants import *
+
 
 # API Header
 # API end Point: api/v1/consumer/utility/:id_string/faq/list
@@ -62,6 +64,7 @@ class ConsumerFaqList(generics.ListAPIView):
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
+
 # API Header
 # API end Point: api/v1/consumer/faq
 # API verb: POST
@@ -76,7 +79,7 @@ class ConsumerFaqList(generics.ListAPIView):
 class ConsumerFaq(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -117,10 +120,9 @@ class ConsumerFaq(GenericAPIView):
 
 
 class ConsumerFaqDetail(GenericAPIView):
-    
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             consumer_faq = get_consumer_faq_by_id_string(id_string)
@@ -143,12 +145,12 @@ class ConsumerFaqDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            
+
             consumer_faq_obj = get_consumer_faq_by_id_string(id_string)
             if "question" not in request.data:
                 request.data['question'] = consumer_faq_obj.question
@@ -157,7 +159,7 @@ class ConsumerFaqDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     consumer_faq_obj = serializer.update(consumer_faq_obj, serializer.validated_data, user)
                     view_serializer = ConsumerFaqViewSerializer(instance=consumer_faq_obj,
-                                                          context={'request': request})
+                                                                context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

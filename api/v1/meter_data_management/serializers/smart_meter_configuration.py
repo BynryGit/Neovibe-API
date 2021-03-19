@@ -53,7 +53,7 @@ class SmartMeterSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_smart_meter_validated_data(validated_data)
         if SmartMeterConfigurationTbl.objects.filter(tenant_id=validated_data['tenant_id'], utility_id=validated_data['utility_id'],
-                                                     smart_meter_api_name=validated_data['smart_meter_api_name']).exists():
+                                                     smart_meter_api_name=validated_data['smart_meter_api_name'],vendor_name=validated_data['vendor_name']).exists():
             raise CustomAPIException(SMART_METER_CONFIGURATION_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
@@ -66,7 +66,7 @@ class SmartMeterSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_smart_meter_validated_data(validated_data)
         if SmartMeterConfigurationTbl.objects.filter(tenant_id=validated_data['tenant_id'], utility_id=validated_data['utility_id'],
-                                                     smart_meter_api_name=validated_data['smart_meter_api_name']).exists():
+                                                     smart_meter_api_name=validated_data['smart_meter_api_name'],vendor_name=validated_data['vendor_name']).exists():
             raise CustomAPIException(SMART_METER_CONFIGURATION_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
