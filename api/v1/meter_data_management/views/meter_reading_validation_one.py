@@ -37,9 +37,14 @@ class MeterReadingValidationOneDetail(GenericAPIView):
                 if meter_reading_serializer.is_valid():
                     meter_reading_obj = meter_reading_serializer.update(meter_reading_obj,
                                                                         meter_reading_serializer.validated_data, user)
-                    return Response({
-                        STATE: SUCCESS,
-                    }, status=status.HTTP_200_OK)
+                    if meter_reading_obj:
+                        return Response({
+                            STATE: SUCCESS,
+                        }, status=status.HTTP_200_OK)
+                    else:
+                        return Response({
+                            STATE: ERROR,
+                        }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,

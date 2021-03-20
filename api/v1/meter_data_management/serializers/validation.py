@@ -21,7 +21,7 @@ from v1.meter_data_management.models.validation_assignments import ValidationAss
 from v1.meter_data_management.serializers.schedule_log import ScheduleLogShortViewSerializer
 
 
-class ValidationOneViewSerializer(serializers.ModelSerializer):
+class ValidationViewSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
     utility = UtilityMasterViewSerializer()
     read_cycle_id = ReadCycleShortViewSerializer(many=False, source='get_read_cycle_name')

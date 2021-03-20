@@ -9,6 +9,8 @@ from v1.meter_data_management.views.common_function import set_meter_reading_val
 
 class MeterReadingValidationOneSerializer(serializers.ModelSerializer):
     utility_id = serializers.UUIDField(required=True)
+    meter_status_v1_id = serializers.UUIDField(required=True)
+    reader_status_v1_id = serializers.UUIDField(required=True)
 
     class Meta:
         model = MeterReadingTbl
