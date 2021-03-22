@@ -14,6 +14,8 @@ from v1.meter_data_management.models.meter_reading import MeterReading as MeterR
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
 from v1.meter_data_management.serializers.validation import ValidationViewSerializer
+from v1.userapp.models.role import Role as RoleTbl
+from v1.userapp.models.user_role import UserRole as UserRoleTbl
 
 
 # API Header
@@ -56,13 +58,23 @@ class ValidationList(generics.ListAPIView):
             if token:
                 if is_authorized(1,1,1,user_obj):
                     user_obj = get_user_by_id_string(user_obj)
+                    user_role_obj = UserRoleTbl.objects.get(user_id=user_obj.id)
+                    role_obj = RoleTbl.objects.get(id=user_role_obj.role_id)
                     schedule_log_obj = get_schedule_log_by_id_string(self.kwargs['schedule_log'])
                     read_cycle_obj = get_read_cycle_by_id_string(self.kwargs['read_cycle'])
-                    queryset = MeterReadingTbl.objects.filter(~Q(reading_status=3), validator_one_id=user_obj.id,
-                                                              read_cycle_id=read_cycle_obj.id,
-                                                              schedule_log_id=schedule_log_obj.id,
-                                                              is_active=True, is_duplicate=False)
-                    return queryset
+                    if role_obj.role_ID == 'Validator_One':
+                        queryset = MeterReadingTbl.objects.filter(~Q(reading_status=3), validator_one_id=user_obj.id,
+                                                                  read_cycle_id=read_cycle_obj.id,
+                                                                  schedule_log_id=schedule_log_obj.id,
+                                                                  is_active=True, is_duplicate=False)
+                        return queryset
+                    elif role_obj.role_ID == 'Validator_Two':
+                        queryset = MeterReadingTbl.objects.filter((Q(reading_status=1) | Q(reading_status=2)),
+                                                                  validator_two_id=user_obj.id,
+                                                                  read_cycle_id=read_cycle_obj.id,
+                                                                  schedule_log_id=schedule_log_obj.id,
+                                                                  is_active=True, is_duplicate=False)
+                        return queryset
                 else:
                     raise InvalidAuthorizationException
             else:
