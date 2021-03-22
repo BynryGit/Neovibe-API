@@ -6,6 +6,7 @@ from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
 from v1.meter_data_management.views.meter_reading_summary import MeterReadingSummary
 from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
+from v1.meter_data_management.views.meter_reading_validation_two import MeterReadingValidationTwoDetail
 from v1.meter_data_management.views.meter_summary import MeterSummary
 from v1.meter_data_management.views.read_cycle import ReadCycleList
 from v1.meter_data_management.views.schedule_log_route import ScheduleLogRouteList
@@ -99,6 +100,8 @@ urlpatterns = [
          ValidationList.as_view(), name='validation_list'),
     path('meter-reading/<uuid:id_string>/validation-one', MeterReadingValidationOneDetail.as_view(),
          name='meter_reading_validation_one_detail'),
+    path('meter-reading/<uuid:id_string>/validation-two', MeterReadingValidationTwoDetail.as_view(),
+         name='meter_reading_validation_two_detail'),
 
     path('log', schedule_log, name='route_add')
 ]
