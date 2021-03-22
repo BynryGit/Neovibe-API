@@ -492,8 +492,6 @@ def get_additional_charges_amount(schedule_bill_obj):
 # Save bill current charges
 def save_current_charges(data):
     try:
-        consumer_list = []
-        service_contract_obj_list = []
         # get bill schedule object
         schedule_bill_obj = get_schedule_bill_by_id_string(data['schedule_bill_id_string'])
         rate = data['rate_obj']
@@ -504,8 +502,6 @@ def save_current_charges(data):
             # get Consumers according to bill schedule log
             bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
             for consumer in bill_consumer_obj:
-                consumer_list.append(consumer)
-
                 # getting consumer service contract by consumer Id
                 service_contract_obj = get_consumer_service_contract_detail_by_consumer_id(consumer.consumer_id)
                 if service_contract_obj:
@@ -518,7 +514,8 @@ def save_current_charges(data):
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
                         meter_data = [{
                             "privious_meter_reading" : privious_meter_reading,
-                            "current_meter_reading" : meter_reading.current_meter_reading
+                            "current_meter_reading" : meter_reading.current_meter_reading,
+                            "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading)
                         }]
                         if bill_obj.opening_balance != 0:
                             current_charge = int(current_charge) + int(bill_obj.opening_balance)
@@ -528,11 +525,12 @@ def save_current_charges(data):
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
                         meter_data = [{
                             "privious_meter_reading" : privious_meter_reading,
-                            "current_meter_reading" : meter_reading.current_meter_reading
+                            "current_meter_reading" : meter_reading.current_meter_reading,
+                            "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading)
                         }]
-
+                        
                     # save bill data
-                    if BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id,bill_cycle_id = schedule_bill_obj.bill_cycle_id,meter_reading = meter_data,is_active=True).exists():
+                    if BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id,bill_cycle_id = schedule_bill_obj.bill_cycle_id,opening_balance = current_charge,is_active=True).exists():
                         print('EXISTS')
                     else:
                         with transaction.atomic():    
