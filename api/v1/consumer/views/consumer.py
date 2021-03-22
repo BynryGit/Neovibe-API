@@ -1,4 +1,6 @@
 from typing import FrozenSet
+from v1.commonapp.models.lifecycle import LifeCycle
+from v1.registration.models.registrations import get_registration_by_id_string
 
 from django_filters import rest_framework
 from v1.work_order.models.work_order_master import WorkOrderMaster, get_work_order_master_by_id_string
@@ -56,6 +58,7 @@ from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_k
 from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
 from django.db.models import Q
 from v1.meter_data_management.models.meter import Meter
+from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
@@ -1183,6 +1186,7 @@ class ConsumerConnect(GenericAPIView):
                 work_order_type_obj = get_work_order_type_by_key('CONNECTION')
                 work_order_sub_type_obj = get_work_order_sub_type_by_key('CONNECTION')
 
+                print("######################", work_order_sub_type_obj, work_order_type_obj)
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_order_type_obj.id)
                 utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id=work_order_sub_type_obj.id)
 
@@ -1271,16 +1275,16 @@ class ConsumerDisconnect(GenericAPIView):
                 work_order_type_obj = get_work_order_type_by_key('DISCONNECTION')
 
                 if work_order_type_obj:
-                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
 
                 # check disconnect type is TEMPORARY OR PERMANENT
                 if request.data['disconnect_type'] == 'TEMPORARY':
                     work_order_sub_type_obj = get_work_order_sub_type_by_key('TEMPORARY_DISCONNECTION')
                 if request.data['disconnect_type'] == 'PERMANENT':
                     work_order_sub_type_obj = get_work_order_sub_type_by_key('PERMANENT_DISCONNECTION')
-
                 if work_order_sub_type_obj:
-                    utility_work_order_sub_type_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_obj.id)
+                    utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id = work_order_sub_type_obj.id)
+
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
                         utility_work_order_type_id= utility_work_order_type_obj.id,
@@ -1499,7 +1503,7 @@ class ConsumerTransfer(GenericAPIView):
                 work_order_type_obj = get_work_order_type_by_key('TRANSFER')
 
                 if work_order_type_obj:
-                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
 
                 
                 #create the transfer connection request 
@@ -1507,7 +1511,7 @@ class ConsumerTransfer(GenericAPIView):
                 work_order_sub_type_connect_obj = get_work_order_sub_type_by_key('TRANSFER_CONNECT')
     
                 if work_order_sub_type_connect_obj:
-                    utility_work_order_sub_type_connect_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_connect_obj.id)
+                    utility_work_order_sub_type_connect_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id = work_order_sub_type_connect_obj.id)
                    
                     
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_connect_obj:
@@ -1557,7 +1561,7 @@ class ConsumerTransfer(GenericAPIView):
                 #making the transfer disconnection request 
                 work_order_sub_type_disconnect_obj = get_work_order_sub_type_by_key('TRANSFER_DISCONNECT')
                 if work_order_sub_type_disconnect_obj:
-                    utility_work_order_sub_type_disconnect_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_disconnect_obj.id)
+                    utility_work_order_sub_type_disconnect_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id = work_order_sub_type_connect_obj.id)
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_disconnect_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
                         utility_work_order_type_id= utility_work_order_type_obj.id,
@@ -1586,3 +1590,32 @@ class ConsumerTransfer(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+            
+            
+#consumer Life cycle List 
+#Auther : Chetan Dhongade 
+
+class ConsumerLifeCycleList(generics.ListAPIView):
+    try:
+        serializer_class = LifeCycleListSerializer
+        def get_queryset(self):
+            # response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            # if response:
+                # if is_authorized(1, 1, 1, user_obj):
+            consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+            print("#######################", consumer)
+            module = get_module_by_key("CX")
+            sub_module = get_sub_module_by_key("CONSUMER")
+            print("############### module ", module)
+            print("################ submodule", sub_module)
+            queryset = LifeCycle.objects.filter(object_id=consumer.id, module_id=module, sub_module_id=sub_module, is_active=True)
+            if queryset:
+                return queryset
+            else:
+                raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
+                # else:
+                #     raise InvalidAuthorizationException
+            # else:
+            #     raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
