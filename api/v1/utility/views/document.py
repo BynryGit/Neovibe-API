@@ -1,4 +1,4 @@
-__author__ = "aki"
+__author__ = "chinmay"
 
 import traceback
 from api.constants import *
@@ -28,7 +28,7 @@ from v1.utility.serializers.document import DocumentSerializer
 
 class UtilityDocumentList(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_document_obj = get_documents_by_utility_id_string(id_string)
@@ -56,7 +56,7 @@ class UtilityDocumentList(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request,id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
@@ -100,7 +100,7 @@ class UtilityDocumentList(GenericAPIView):
 
 class UtilityDocumentDetail(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_document_obj = get_document_by_id_string(id_string)
@@ -128,7 +128,7 @@ class UtilityDocumentDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request,id_string):
         try:
             utility_document_obj = get_document_by_id_string(id_string)

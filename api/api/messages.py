@@ -210,4 +210,4 @@ WORK_ORDER_SUB_TYPE_ALREADY_EXIST = "Work Order Sub Type Already Exist."
 READER_STATUS_ALREADY_EXIST = "Reader Status Already Exist."
 NOTIFICATION_TEMPLATE_ALREADY_EXIST = "Notification Template Already Exist."
 CONTACT_DATA_WITH_EMAIL_ALREADY_EXIST = "Contact Us Details Already Exist."
-
+TIP_ALREADY_EXIST = "Tip Already Exists."

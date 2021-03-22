@@ -59,8 +59,8 @@ class AdminLifeCycleList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     user_obj = get_user_by_id_string(self.kwargs['id_string'])
-                    module = get_module_by_key("S&M")
-                    sub_module = get_sub_module_by_key("S_AND_M_USER")
+                    module = get_module_by_key("ADMIN")
+                    sub_module = get_sub_module_by_key("UTILITY_CONFIGURATION")
                     queryset = LifeCycleTbl.objects.filter(object_id=user_obj.id, module_id=module,
                                                            sub_module_id=sub_module, is_active=True)
                     if queryset:
@@ -72,5 +72,5 @@ class AdminLifeCycleList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='ADMIN', sub_module='UTILITY_CONFIGURATION')
         raise APIException

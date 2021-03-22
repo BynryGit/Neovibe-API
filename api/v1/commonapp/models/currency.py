@@ -21,7 +21,8 @@ from rest_framework import status
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-from django.utils import timezone # importing package for datetime
+from django.utils import timezone  # importing package for datetime
+
 
 class Currency(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -43,5 +44,12 @@ class Currency(models.Model):
 def get_currency_by_id(id):
     try:
         return Currency.objects.get(id=id)
+    except Exception as e:
+        raise CustomAPIException("Currency not exists.", status_code=status.HTTP_404_NOT_FOUND)
+
+
+def get_currency_by_id_string(id_string):
+    try:
+        return Currency.objects.get(id_string=id_string)
     except Exception as e:
         raise CustomAPIException("Currency not exists.", status_code=status.HTTP_404_NOT_FOUND)

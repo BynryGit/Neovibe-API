@@ -44,6 +44,8 @@ SX_SERVICE = get_sub_module_by_key('SX_SERVICE') if get_sub_module_by_key('SX_SE
 ORDER = get_sub_module_by_key('ORDER') if get_sub_module_by_key('ORDER') else ""
 CONTRACT = get_sub_module_by_key('CONTRACT') if get_sub_module_by_key('CONTRACT') else ""
 SUPPLIER = get_sub_module_by_key('SUPPLIER') if get_sub_module_by_key('SUPPLIER') else ""
+UTILITY_MASTER = get_sub_module_by_key('UTILITY_MASTER') if get_sub_module_by_key('UTILITY_MASTER') else ""
+
 
 # *********** PRIVILEGE CONSTANTS **************
 VIEW = get_privilege_by_key('VIEW') if get_privilege_by_key('VIEW') else ""

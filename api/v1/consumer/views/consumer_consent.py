@@ -74,7 +74,7 @@ class ConsumerConsentList(generics.ListAPIView):
 # Created on: 1/12/2020
 class ConsumerConsent(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -116,7 +116,7 @@ class ConsumerConsent(GenericAPIView):
 
 class ConsumerConsentDetail(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             consumer_consent = get_consumer_consent_by_id_string(id_string)
@@ -139,7 +139,7 @@ class ConsumerConsentDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

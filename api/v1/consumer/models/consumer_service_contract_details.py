@@ -106,3 +106,9 @@ def get_consumer_service_contract_detail_by_premise_id(premise_id):
         return ConsumerServiceContractDetail.objects.filter(premise_id=premise_id, is_active=True).last()
     except:
         return False
+
+def get_consumer_service_contract_detail_by_consumer_id(consumer_id):
+    try:
+        return ConsumerServiceContractDetail.objects.filter(consumer_id=consumer_id, is_active=True).last()
+    except:
+        return False

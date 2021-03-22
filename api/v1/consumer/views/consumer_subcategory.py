@@ -82,7 +82,7 @@ class ConsumerSubCategoryList(generics.ListAPIView):
 class ConsumerSubCategory(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -126,7 +126,7 @@ class ConsumerSubCategory(GenericAPIView):
 class ConsumerSubCategoryDetail(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             consumer_subcategory = get_consumer_sub_category_by_id_string(id_string)
@@ -150,7 +150,7 @@ class ConsumerSubCategoryDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
