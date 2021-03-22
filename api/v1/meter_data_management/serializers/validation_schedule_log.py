@@ -45,9 +45,9 @@ class ValidationScheduleLogViewSerializer(serializers.ModelSerializer):
             'pending_reading' : consumer_obj - total_completed_task,
             'rcnt_reading' : meter_reading_obj.filter(reading_status=2, meter_status_id=meter_status_obj.id, is_active=True).count(),
             'duplicate_reading' : meter_reading_obj.filter(is_duplicate=True, is_active=False).count(),
-            'validation_one' : meter_reading_obj.filter(reading_status=0, is_active=True).count(),
-            'validation_two' : meter_reading_obj.filter(reading_status=1, is_assign_to_v1=True, is_active=True).count(),
-            'completed_reading': meter_reading_obj.filter(reading_status=2, is_assign_to_v2=True, is_active=True).count(),
+            'validation_one' : meter_reading_obj.filter(reading_status=0, is_assign_to_v1=True, is_active=True).count(),
+            'validation_two' : meter_reading_obj.filter(reading_status=1, is_assign_to_v2=True, is_active=True).count(),
+            'completed_reading': meter_reading_obj.filter(reading_status=2, is_active=True).count(),
         }
         return meter_reading_detail
 

@@ -13,7 +13,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.meter_data_management.models.meter_reading import MeterReading as MeterReadingTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id_string
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
-from v1.meter_data_management.serializers.validation_one import ValidationOneViewSerializer
+from v1.meter_data_management.serializers.validation import ValidationViewSerializer
 
 
 # API Header
@@ -29,9 +29,9 @@ from v1.meter_data_management.serializers.validation_one import ValidationOneVie
 # Created on: 16/03/2021
 
 
-class ValidationOneList(generics.ListAPIView):
+class ValidationList(generics.ListAPIView):
     try:
-        serializer_class = ValidationOneViewSerializer
+        serializer_class = ValidationViewSerializer
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
