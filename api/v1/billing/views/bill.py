@@ -79,7 +79,6 @@ class SaveBillCharges(GenericAPIView):
             data = {}
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            print('*************',request.data)
             data['current_charges'] = save_current_charges(request.data)
             data['schedule_bill_id_string'] = request.data['schedule_bill_id_string']
             return Response({

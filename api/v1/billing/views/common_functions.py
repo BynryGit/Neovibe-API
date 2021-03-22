@@ -27,7 +27,8 @@ from  v1.billing.models.bill_cycle import get_bill_cycle_by_id_string
 from v1.billing.models.bill_schedule import get_schedule_bill_by_id_string
 from v1.billing.models.bill_cycle import get_bill_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id_string
-from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_premise_id,get_consumer_service_contract_detail_by_id, ConsumerServiceContractDetail
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_premise_id,get_consumer_service_contract_detail_by_id,\
+     ConsumerServiceContractDetail,get_consumer_service_contract_detail_by_consumer_id
 from v1.billing.models.bill_schedule_log import get_schedule_bill_log_by_schedule_id
 from v1.billing.models.bill_consumer_detail import get_bill_consumer_detail_by_schedule_log_id
 from v1.meter_data_management.models.meter import Meter
@@ -487,5 +488,25 @@ def get_additional_charges_amount(schedule_bill_obj):
     except:
         pass
 
+# Save bill current charges
 def save_current_charges(data):
-    print(data)
+    try:
+        consumer_list = []
+        service_contract_obj_list = []
+        schedule_bill_obj = get_schedule_bill_by_id_string(data['schedule_bill_id_string'])
+        rate = data['rate_obj']
+        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
+        if schedule_log_id:
+            bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+            for consumer in bill_consumer_obj:
+                consumer_list.append(consumer)
+                service_contract_obj_list.append(get_consumer_service_contract_detail_by_consumer_id(consumer.consumer_id))
+            for a in service_contract_obj_list:
+                print('=======',a.id)
+        bill_obj = Bill.objects.filter(consumer_service_contract_detail_id__in = [service.id for service in service_contract_obj_list])            
+        # reading_obj = MeterReading.objects.filter(created_date__date=schedule_bill_obj.start_date.date(),
+        #                                           consumer_no__in=[consumer.consumer_no for consumer in consumer_list],meter_no__in=[consumer.meter_no for consumer in consumer_list])
+        print('reading_obj',bill_obj)
+
+    except:
+        pass

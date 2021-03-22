@@ -223,7 +223,7 @@
       "fields": {
         "module_id": 1,
         "key" : "CX_SERVICE",
-        "name": "Service",
+        "name": "Consumer Service",
         "is_active": "True"
       }
     },
@@ -444,7 +444,7 @@
       "fields": {
         "module_id": 6,
         "key" : "SX_SERVICE",
-        "name": "Service",
+        "name": "Vendor Service",
         "is_active": "True"
       }
     },
@@ -2671,7 +2671,7 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Service",
+        "label":"Consumer Service",
         "module_id": 1,
         "submodule_id": 3,
         "is_active": "True"
@@ -2936,7 +2936,7 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Service",
+        "label":"Vendor Service",
         "module_id": 6,
         "submodule_id": 25,
         "is_active": "True"
