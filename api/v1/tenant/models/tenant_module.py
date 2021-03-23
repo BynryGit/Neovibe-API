@@ -67,3 +67,9 @@ def get_tenant_modules_by_tenant_id_string(id_string):
 
 def get_tenant_modules_by_utility_id_string(id_string):
     return TenantModule.objects.filter(utility__id_string=id_string)
+
+def get_tenant_module_by_module_id(module_id):
+    try:
+        return TenantModule.objects.get(module_id=module_id, is_active=True)
+    except:
+        return False

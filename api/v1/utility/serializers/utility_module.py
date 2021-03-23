@@ -84,6 +84,8 @@ from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.utility.models.utility_module import UtilityModule as UtilityModuleTbl
 from v1.utility.views.common_functions import set_utility_module_validated_data
+from v1.commonapp.views.custom_exception import CustomAPIException
+from rest_framework import serializers, status
 
 
 class UtilityModuleShortViewSerializer(serializers.ModelSerializer):
@@ -114,31 +116,39 @@ class UtilityModuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityModuleTbl
-        fields = ('id_string', 'tenant', 'utility', 'subscription_id', 'module_id', 'is_active', 'created_by',
+        fields = ('id_string', 'label', 'tenant', 'utility', 'subscription_id', 'module_id', 'is_active', 'created_by',
                   'updated_by', 'created_date', 'updated_date')
 
     def create(self, validated_data, user):
         validated_data = set_utility_module_validated_data(validated_data)
+        print("Inside Create",validated_data)
         if UtilityModuleTbl.objects.filter(tenant=validated_data["tenant"], utility=validated_data["utility"],
                                            module_id=validated_data["module_id"]).exists():
-            return False
-        with transaction.atomic():
-            if 'tenant' in validated_data:
-                tenant = validated_data.pop('tenant')
-            if 'utility' in validated_data:
-                utility = validated_data.pop('utility')
-            utility_module_obj = super(UtilityModuleSerializer, self).create(validated_data)
-            utility_module_obj.updated_by = user.id
-            utility_module_obj.updated_date = timezone.now()
-            utility_module_obj.tenant_id = tenant
-            utility_module_obj.utility_id = utility
-            utility_module_obj.save()
-            return utility_module_obj
+            raise CustomAPIException("Module Already Exist", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                if 'tenant' in validated_data:
+                    tenant = validated_data.pop('tenant')
+                if 'utility' in validated_data:
+                    utility = validated_data.pop('utility')
+                print("Iinside Transaction")
+                utility_module_obj = super(UtilityModuleSerializer, self).create(validated_data)
+                print("In create", utility_module_obj)
+                utility_module_obj.updated_by = user.id
+                utility_module_obj.updated_date = timezone.now()
+                utility_module_obj.tenant_id = tenant
+                utility_module_obj.utility_id = utility
+                utility_module_obj.save()
+                return utility_module_obj
 
     def update(self, instance, validated_data, user):
-        with transaction.atomic():
-            utility_module_obj = super(UtilityModuleSerializer, self).update(instance, validated_data)
-            utility_module_obj.updated_by = user.id
-            utility_module_obj.updated_date = timezone.now()
-            utility_module_obj.save()
-            return utility_module_obj
+        if UtilityModuleTbl.objects.filter(tenant=validated_data["tenant"], utility=validated_data["utility"],
+                                           module_id=validated_data["module_id"]).exists():
+            raise CustomAPIException("Module Already Exist", status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                utility_module_obj = super(UtilityModuleSerializer, self).update(instance, validated_data)
+                utility_module_obj.updated_by = user.id
+                utility_module_obj.updated_date = timezone.now()
+                utility_module_obj.save()
+                return utility_module_obj
