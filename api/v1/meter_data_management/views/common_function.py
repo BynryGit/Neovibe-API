@@ -418,3 +418,26 @@ def set_meter_reading_validation_one_validated_data(validated_data):
 
     return validated_data
 
+
+def set_meter_reading_validation_two_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "meter_status_v2_id" in validated_data:
+        meter_status_obj = get_meter_status_by_id_string(
+            validated_data['meter_status_v2_id'])
+        if meter_status_obj:
+            validated_data["meter_status_v2_id"] = meter_status_obj.id
+
+    if "reader_status_v2_id" in validated_data:
+        reader_status_obj = get_reader_status_by_id_string(
+            validated_data['reader_status_v2_id'])
+        if reader_status_obj:
+            validated_data["reader_status_v2_id"] = reader_status_obj.id
+
+    return validated_data
+

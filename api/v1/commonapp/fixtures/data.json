@@ -494,14 +494,24 @@
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 7,
-        "key" : "ROLE_PRIVILEGE",
-        "name": "Role Privilege",
+        "key" : "ROLE",
+        "name": "Role",
         "is_active": "True"
       }
     },
-
     {
       "pk": "31",
+      "model": "commonapp.SubModule",
+      "fields": {
+        "module_id": 7,
+        "key" : "USER",
+        "name": "User",
+        "is_active": "True"
+      }
+    },  
+
+    {
+      "pk": "32",
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 8,
@@ -511,7 +521,7 @@
       }
     },
     {
-      "pk": "32",
+      "pk": "33",
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 8,
@@ -521,7 +531,7 @@
       }
     },
     {
-      "pk": "33",
+      "pk": "34",
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 10,
@@ -2437,7 +2447,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 6,
-        "module_id": 8,
+        "module_id": 7,
         "sub_module_id": 31,
         "privilege_id": 2,
         "is_active": "True"
@@ -2463,8 +2473,8 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 6,
-        "module_id": 9,
-        "sub_module_id": 1,
+        "module_id": 8,
+        "sub_module_id": 33,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -2476,8 +2486,21 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 6,
+        "module_id": 9,
+        "sub_module_id": 1,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "133",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
         "module_id": 10,
-        "sub_module_id": 33,
+        "sub_module_id": 34,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -3047,32 +3070,32 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Role Privilege",
+        "label":"Role",
         "module_id": 7,
         "submodule_id": 30,
         "is_active": "True"
       }
     },  
-
     {
       "pk": "31",
       "model": "utility.UtilitySubModule",
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Utility Master",
-        "module_id": 8,
+        "label":"User",
+        "module_id": 7,
         "submodule_id": 31,
         "is_active": "True"
       }
-    },
+    }, 
+
     {
       "pk": "32",
       "model": "utility.UtilitySubModule",
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"System Configuration",
+        "label":"Utility Master",
         "module_id": 8,
         "submodule_id": 32,
         "is_active": "True"
@@ -3084,9 +3107,21 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
+        "label":"System Configuration",
+        "module_id": 8,
+        "submodule_id": 33,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "34",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
         "label":"DemoSM",
         "module_id": 10,
-        "submodule_id": 33,
+        "submodule_id": 34,
         "is_active": "True"
       }
     },

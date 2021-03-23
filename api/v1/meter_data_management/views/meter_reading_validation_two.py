@@ -7,13 +7,13 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, METER_READING
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.meter_reading import get_meter_reading_by_id_string
-from v1.meter_data_management.serializers.meter_reading_validation_one import MeterReadingValidationOneSerializer
+from v1.meter_data_management.serializers.meter_reading_validation_two import MeterReadingValidationTwoSerializer
 from v1.userapp.decorators import is_token_validate
 from v1.commonapp.common_functions import get_user_from_token
 
 
 # API Header
-# API end Point: api/v1/meter-data/validation-one
+# API end Point: api/v1/meter-data/validation-two
 # API verb: POST
 # Package: Basic
 # Modules: All
@@ -22,9 +22,9 @@ from v1.commonapp.common_functions import get_user_from_token
 # Usage: API will Update meter reading object and route task Assignment obj based on valid data
 # Tables used: Meter Reading, Route Task Assignment
 # Author: Akshay
-# Created on: 18/03/2021
+# Created on: 22/03/2021
 
-class MeterReadingValidationOneDetail(GenericAPIView):
+class MeterReadingValidationTwoDetail(GenericAPIView):
     @is_token_validate
     #role_required(MX, METER_DATA, EDIT)
     def put(self, request, id_string):
@@ -33,7 +33,7 @@ class MeterReadingValidationOneDetail(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             meter_reading_obj = get_meter_reading_by_id_string(id_string)
             if meter_reading_obj:
-                meter_reading_serializer = MeterReadingValidationOneSerializer(data=request.data)
+                meter_reading_serializer = MeterReadingValidationTwoSerializer(data=request.data)
                 if meter_reading_serializer.is_valid():
                     meter_reading_obj = meter_reading_serializer.update(meter_reading_obj,
                                                                         meter_reading_serializer.validated_data, user)
