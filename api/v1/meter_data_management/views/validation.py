@@ -40,7 +40,7 @@ class ValidationList(generics.ListAPIView):
         filter_fields = ('utility__id_string',)
         ordering_fields = ('utility__id_string',)
         ordering = ('utility__id_string',) # always give by default alphabetical order
-        search_fields = ('utility__name',)
+        search_fields = ('utility__name', 'consumer_no', 'meter_no')
 
         def get_serializer_context(self):
             """
