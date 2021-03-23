@@ -107,7 +107,8 @@ class LoginApiView(APIView):
                             RESULTS: SUCCESSFUL_LOGIN,
                             Token: token,
                             ID_STRING: user.id_string,
-                            EMAIL:user.email
+                            EMAIL:user.email,
+                            ID : user.id
 
 
                         }, status=status.HTTP_200_OK)

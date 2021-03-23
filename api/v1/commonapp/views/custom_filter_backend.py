@@ -23,6 +23,7 @@ from v1.complaint.models.complaint import get_consumer_complaint_by_id_string, C
 from v1.payment.models.payment import Payment
 from v1.work_order.models.material_type import get_material_type_by_id_string
 from v1.work_order.models.material_subtype import get_material_subtype_by_id_string
+from master.models import get_user_by_id_string
 
 
 class CustomFilter:
@@ -69,6 +70,10 @@ class CustomFilter:
         if 'module_id' in request.query_params:
             module = get_utility_module_by_id_string(request.query_params['module_id'])
             queryset = queryset.filter(module_id=module.id)
+
+        if 'user_id' in request.query_params:
+            user = get_user_by_id_string(request.query_params['user_id'])
+            queryset = queryset.filter(user_id=user.id)
 
 
         if 'consumer_processing' in request.query_params:
