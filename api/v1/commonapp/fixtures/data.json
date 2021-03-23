@@ -4379,6 +4379,16 @@
 "key":"Display Out",
      "is_active": "True"
    }
+ },
+  {
+ "pk": "1",
+   "model": "utility.UtilityServiceNumberFormat",
+   "fields": {
+    "name": "Display Out",
+    "work_order_type_id":3,
+    "key":"Display Out",
+         "is_active": "True"
+     }
  }
 
 
