@@ -39,6 +39,8 @@ from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.billing.models.rate import Rate as RateTbl, get_rate_by_category_sub_category_wise
 from v1.billing.models.bill_schedule import ScheduleBill
 from v1.billing.models.bill import Bill as BillTbl
+from v1.payment.models.payment import Payment as PaymentTbl
+
 
 def set_validated_data(validated_data):
     if "consumer_category_id" in validated_data:
@@ -489,8 +491,8 @@ def get_additional_charges_amount(schedule_bill_obj):
     except:
         pass
 
-# Save bill current charges
-def save_current_charges(data):
+# Calculate bill current charges
+def calculate_current_all_charges(data):
     try:
         # get bill schedule object
         schedule_bill_obj = get_schedule_bill_by_id_string(data['schedule_bill_id_string'])
@@ -510,27 +512,48 @@ def save_current_charges(data):
                     bill_obj = BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id, is_active=True).last() 
                     if bill_obj:
                         meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
-                        privious_meter_reading = bill_obj.meter_reading[0]['current_meter_reading']
+                        privious_meter_reading = bill_obj.meter_reading['current_meter_reading']
+                        
+                        # calculate current charge
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
-                        meter_data = [{
+                        
+                        # calculate outstanding amount
+                        outstanding_amt = get_outstanding_amount(consumer,bill_obj)
+
+                        # calculate opening balance
+                        if int(bill_obj.opening_balance) > 0:
+                            opening_balance = int(current_charge) + int(outstanding_amt)
+
+                        meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
                             "current_meter_reading" : meter_reading.current_meter_reading,
-                            "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading)
-                        }]
-                        if bill_obj.opening_balance != 0:
-                            current_charge = int(current_charge) + int(bill_obj.opening_balance)
+                            "previous_meter_reading_date" : str((bill_obj.bill_date).date()),
+                            "current_meter_reading_date" : str((meter_reading.created_date).date()), 
+                            "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading),
+                            "amount_before_due_date" : int(opening_balance),
+                            "amount_after_due_date" : int(opening_balance) + 50,
+                        }
+
+                        
+                        rate_details = [{"unit":rate['unit'],"rate":rate['rate'], "outstanding" : outstanding_amt,"consumption_charges":current_charge}]
                     else:
                         meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
                         privious_meter_reading = 0
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
-                        meter_data = [{
+                        opening_balance = int(current_charge) 
+                        meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
                             "current_meter_reading" : meter_reading.current_meter_reading,
-                            "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading)
-                        }]
-                        
+                            "previous_meter_reading_date" : "",
+                            "current_meter_reading_date" : str((meter_reading.created_date).date()),
+                            "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading),
+                            "amount_before_due_date" : int(opening_balance),
+                            "amount_after_due_date" : int(opening_balance) + 50,
+                        }
+                        rate_details = [{"unit":rate['unit'],"rate":rate['rate'], "outstanding" : 0,"consumption_charges":current_charge}]
+
                     # save bill data
-                    if BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id,bill_cycle_id = schedule_bill_obj.bill_cycle_id,opening_balance = current_charge,is_active=True).exists():
+                    if BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id,bill_cycle_id = schedule_bill_obj.bill_cycle_id,current_charges = current_charge,is_active=True).exists():
                         print('EXISTS')
                     else:
                         with transaction.atomic():    
@@ -540,10 +563,11 @@ def save_current_charges(data):
                                 consumer_service_contract_detail_id = service_contract_obj.id,
                                 bill_cycle_id = schedule_bill_obj.bill_cycle_id,
                                 meter_reading = meter_data,
-                                rate_details = rate,
+                                bill_month = (meter_reading.created_date).strftime("%B"),
+                                rate_details = rate_details,
                                 bill_date = (datetime.now() + timedelta(days=7)),
                                 bill_period = "7 Days",
-                                opening_balance = current_charge,
+                                opening_balance = opening_balance,
                                 current_charges = current_charge,
                                 is_active = True                        
                             ).save()
@@ -559,3 +583,13 @@ def save_current_charges(data):
 def calculate_current_charges(privious_meter_reading,current_meter_reading,rate):
     current_charge = (int(current_meter_reading) - int(privious_meter_reading)) * int(rate['rate'])
     return current_charge
+
+
+# geberate Outstanding amount function
+def get_outstanding_amount(consumer,bill_obj):
+    if PaymentTbl.objects.filter(consumer_no=consumer.consumer_no, state=1,transaction_date__lte=bill_obj.bill_date.date()).exists():
+        return bill_obj.meter_reading['amount_before_due_date']
+    elif PaymentTbl.objects.filter(consumer_no=consumer.consumer_no, state=1,transaction_date__gte=bill_obj.bill_date.date()).exists():
+        return bill_obj.meter_reading['amount_after_due_date']
+    else:
+        return 0
