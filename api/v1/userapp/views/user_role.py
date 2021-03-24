@@ -20,6 +20,11 @@ from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.role import get_role_by_id_string
+from v1.tenant.models.tenant_module import get_tenant_modules_by_tenant_id_string, get_tenant_module_by_id, \
+    get_tenant_module_by_module_id
+from v1.tenant.serializers.tenant_module import TenantModuleViewSerializer
+from v1.tenant.models.tenant_sub_module import TenantSubModule, get_tenant_submodule_by_id
+from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer
 
 # API Header
 # API end Point: api/v1/user/:id_string/role
@@ -42,7 +47,7 @@ from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSer
 class UserRole(GenericAPIView):
 
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             data = {}
@@ -81,7 +86,7 @@ class UserRole(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             role_list = []
@@ -125,7 +130,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             data = {}
@@ -170,7 +175,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def delete(self, request, id_string):
         try:
             user_obj = get_user_by_id_string(id_string)
@@ -208,7 +213,7 @@ class UserRole(GenericAPIView):
 
 class UserRoleByUtilityModules(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, utility_id_string):
         try:
             data = {}
@@ -263,8 +268,8 @@ class UserRoleByUtilityModules(GenericAPIView):
                         data['name'] = utility['module_id']['name']
                         data['id_string'] = roleprivilege['id_string']
                         data['role_id_string'] = roleprivilege['role_id_string']
-                        data['short_desc'] = roleprivilege['short_desc']                                     
-                        data['long_desc'] = roleprivilege['long_desc'] 
+                        data['short_desc'] = roleprivilege['short_desc']
+                        data['long_desc'] = roleprivilege['long_desc']
                         new_list.append(data)
             return Response({
                 STATE: SUCCESS,
@@ -288,7 +293,7 @@ class UserRoleByUtilityModules(GenericAPIView):
 
 class UserRoleByUtilitySubModule(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, module_id_string):
         try:
             data = {}
@@ -368,7 +373,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
 
 class ModulePrivilegesList(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, role_id_string, module_id_string, sub_module_id_string):
         try:
             privilege_list = []
@@ -383,6 +388,157 @@ class ModulePrivilegesList(GenericAPIView):
             return Response({
                 STATE: SUCCESS,
                 DATA: privilege_list,
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Admin', sub_module='User Role')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserRoleByTenantModules(GenericAPIView):
+    @is_token_validate
+    # role_required(DEMOM, DEMOSM, EDIT)
+    def get(self, request, user_id_string, tenant_id_string):
+        try:
+            data = {}
+            role_list = []
+            user = get_user_by_id_string(user_id_string)
+            tenant_module_obj = get_tenant_modules_by_tenant_id_string(tenant_id_string)
+            module_obj_data = []
+            if user:
+                user_roles = get_user_role_by_user_id(user.id)
+                if user_roles:
+                    for user_role in user_roles:
+                        role_obj = get_role_by_id(user_role.role_id)
+                        role = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
+                        role_list.append(role.data)
+                    module_obj_list = []
+                    for a in role_list:
+                        for d in a['modules']['module']:
+                            module_data = {}
+                            module_data['role_id_string'] = a['id_string']
+                            module_data['name'] = d['name']
+                            module_data['id_string'] = d['id_string']
+                            module_data['short_desc'] = d['short_desc']
+                            module_data['long_desc'] = d['long_desc']
+                            module_obj_list.append(module_data)
+
+            else:
+                return Response({
+                    STATE: ERROR,
+                    DATA: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            if tenant_module_obj:
+                for b in tenant_module_obj:
+                    module_obj = get_tenant_module_by_id(b.id)
+                    module = TenantModuleViewSerializer(instance=module_obj, context={'request': request})
+                    module_obj_data.append(module.data)
+                    utility_module_list = []
+                for l in module_obj_data:
+                    utility_module_list.append(l)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    DATA: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            new_list = []
+            for roleprivilege in module_obj_list:
+                for utility in utility_module_list:
+                    data = {}
+                    if roleprivilege['name'] == utility['module_id']['name']:
+                        data['name'] = utility['module_id']['name']
+                        data['id_string'] = roleprivilege['id_string']
+                        data['role_id_string'] = roleprivilege['role_id_string']
+                        data['short_desc'] = roleprivilege['short_desc']
+                        data['long_desc'] = roleprivilege['long_desc']
+                        new_list.append(data)
+            return Response({
+                STATE: SUCCESS,
+                DATA: new_list,
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Admin', sub_module='User Role')
+            return Response({
+                STATE: EXCEPTION,
+                DATA: '',
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserRoleByTenantSubModule(GenericAPIView):
+    # @is_token_validate
+    # role_required(DEMOM, DEMOSM, EDIT)
+    def get(self, request, user_id_string, module_id_string):
+        try:
+            data = {}
+            role_list = []
+            user = get_user_by_id_string(user_id_string)
+            module_id = get_module_by_id_string(module_id_string)
+            utility_module_obj = get_tenant_module_by_module_id(module_id.id)
+            sub_module_list = TenantSubModule.objects.filter(module_id=utility_module_obj.module_id, is_active=True)
+
+            module_obj_data = []
+            if user:
+                data['email'] = user.email
+                data['id_string'] = user_id_string
+
+                user_roles = get_user_role_by_user_id(user.id)
+                if user_roles:
+                    for user_role in user_roles:
+                        role_obj = get_role_by_id(user_role.role_id)
+                        role = RoleDetailViewSerializer(instance=role_obj, context={'request': request})
+                        role_list.append(role.data)
+                    for a in role_list:
+                        module_obj_list = []
+                        for d in a['modules']['module']:
+                            for submodule in d['sub_module']:
+                                module_data = {}
+                                module_data['role_id_string'] = a['id_string']
+                                module_data['modulename'] = d['name']
+                                module_data['name'] = submodule['name']
+                                module_data['id_string'] = submodule['id_string']
+                                module_obj_list.append(module_data)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    DATA: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            if sub_module_list:
+                for sub_module in sub_module_list:
+                    submodule_obj = get_tenant_submodule_by_id(sub_module.id)
+                    module = TenantSubModuleViewSerializer(instance=submodule_obj, context={'request': request})
+                    module_obj_data.append(module.data)
+                utility_submodule_list = []
+                for l in module_obj_data:
+                    utility_submodule_list.append(l)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    DATA: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            new_list = []
+            for roleprivilege in module_obj_list:
+                for utility in utility_submodule_list:
+                    data = {}
+                    if (roleprivilege['name'] == utility['sub_module_id']['name']) & (
+                            roleprivilege['modulename'] == utility['module_id']['name']):
+                        data['module_id_string'] = utility['module_id']['id_string']
+                        data['module_name'] = utility['module_id']['name']
+                        data['name'] = utility['sub_module_id']['name']
+                        data['id_string'] = roleprivilege['id_string']
+                        data['role_id_string'] = roleprivilege['role_id_string']
+                        new_list.append(data)
+            return Response({
+                STATE: SUCCESS,
+                DATA: new_list,
             }, status=status.HTTP_200_OK)
 
         except Exception as e:

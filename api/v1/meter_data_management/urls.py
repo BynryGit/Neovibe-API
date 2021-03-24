@@ -19,6 +19,8 @@ from v1.meter_data_management.views.schedule import Schedule, ScheduleList, Sche
 from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
 from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
+from v1.meter_data_management.views.upload_route import UploadRouteList, UploadRoute
+from v1.meter_data_management.views.upload_route_sammary import UploadRouteSummary
 from v1.meter_data_management.views.validation import ValidationList
 from v1.meter_data_management.views.meter_reading_validation_revisit import MeterReadingValidationRevisitDetail
 from v1.meter_data_management.views.validation_schedule_log import ValidationScheduleLogList
@@ -102,6 +104,9 @@ urlpatterns = [
          name='meter_reading_validation_one_detail'),
     path('meter-reading/<uuid:id_string>/validation-two', MeterReadingValidationTwoDetail.as_view(),
          name='meter_reading_validation_two_detail'),
+    path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
+    path('upload-route', UploadRoute.as_view(), name='upload_route'),
+    path('utility/<uuid:id_string>/upload-route-summary', UploadRouteSummary.as_view(), name='upload_route_summary'),
 
     path('log', schedule_log, name='route_add')
 ]

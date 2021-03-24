@@ -140,6 +140,7 @@ def set_numformat_validated_data(validated_data):
             raise CustomAPIException("SubModule Not Found", status_code=status.HTTP_404_NOT_FOUND)
     if "module_id" in validated_data:
         module_id = get_module_by_id_string(validated_data["module_id"])
+        print(module_id)
         if module_id:
             validated_data["module_id"] = module_id.id
         else:
