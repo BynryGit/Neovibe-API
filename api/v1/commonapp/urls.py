@@ -134,7 +134,7 @@ urlpatterns = [
     path('sub-area/<uuid:id_string>/premises', PremiseList.as_view()),
     # path('<uuid:id_string>/cities', CityList.as_view()),
     path('<uuid:id_string>/states', StateList.as_view()),
-    path('role-type/list', RoleTypeList.as_view()),
+    path('role-type/<uuid:id_string>/list', RoleTypeList.as_view()),
     path('utility/<uuid:id_string>/skill/list', SkillsList.as_view()),
     path('user-type/list', UserTypeList.as_view()),
     path('<uuid:id_string>/skill/list', SkillsList.as_view()),

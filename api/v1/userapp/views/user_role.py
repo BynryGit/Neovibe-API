@@ -20,9 +20,10 @@ from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.userapp.models.role_privilege import RolePrivilege
 from v1.userapp.models.role import get_role_by_id_string
-from v1.tenant.models.tenant_module import get_tenant_modules_by_tenant_id_string, get_tenant_module_by_id,get_tenant_module_by_module_id
+from v1.tenant.models.tenant_module import get_tenant_modules_by_tenant_id_string, get_tenant_module_by_id, \
+    get_tenant_module_by_module_id
 from v1.tenant.serializers.tenant_module import TenantModuleViewSerializer
-from v1.tenant.models.tenant_sub_module import TenantSubModule,get_tenant_submodule_by_id
+from v1.tenant.models.tenant_sub_module import TenantSubModule, get_tenant_submodule_by_id
 from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer
 
 # API Header
@@ -46,7 +47,7 @@ from v1.userapp.serializers.user_role import UserRoleSerializer, UserRoleViewSer
 class UserRole(GenericAPIView):
 
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             data = {}
@@ -85,7 +86,7 @@ class UserRole(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             role_list = []
@@ -129,7 +130,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             data = {}
@@ -174,7 +175,7 @@ class UserRole(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def delete(self, request, id_string):
         try:
             user_obj = get_user_by_id_string(id_string)
@@ -212,7 +213,7 @@ class UserRole(GenericAPIView):
 
 class UserRoleByUtilityModules(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, utility_id_string):
         try:
             data = {}
@@ -292,7 +293,7 @@ class UserRoleByUtilityModules(GenericAPIView):
 
 class UserRoleByUtilitySubModule(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, module_id_string):
         try:
             data = {}
@@ -372,7 +373,7 @@ class UserRoleByUtilitySubModule(GenericAPIView):
 
 class ModulePrivilegesList(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, role_id_string, module_id_string, sub_module_id_string):
         try:
             privilege_list = []
@@ -398,15 +399,9 @@ class ModulePrivilegesList(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
-
-
-
-
-
 class UserRoleByTenantModules(GenericAPIView):
     @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, tenant_id_string):
         try:
             data = {}
@@ -478,7 +473,7 @@ class UserRoleByTenantModules(GenericAPIView):
 
 class UserRoleByTenantSubModule(GenericAPIView):
     # @is_token_validate
-    #role_required(DEMOM, DEMOSM, EDIT)
+    # role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, user_id_string, module_id_string):
         try:
             data = {}
@@ -553,4 +548,3 @@ class UserRoleByTenantSubModule(GenericAPIView):
                 DATA: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
