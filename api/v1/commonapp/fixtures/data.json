@@ -870,7 +870,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 4,
         "privilege_id": 2,
         "is_active": "True"
@@ -883,7 +883,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 5,
         "privilege_id": 2,
         "is_active": "True"
@@ -896,7 +896,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 6,
         "privilege_id": 2,
         "is_active": "True"
@@ -909,7 +909,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 7,
         "privilege_id": 2,
         "is_active": "True"
@@ -922,7 +922,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 8,
         "privilege_id": 2,
         "is_active": "True"
@@ -948,7 +948,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 10,
         "privilege_id": 2,
         "is_active": "True"
@@ -961,7 +961,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 11,
         "privilege_id": 2,
         "is_active": "True"
@@ -974,7 +974,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 12,
         "privilege_id": 2,
         "is_active": "True"
@@ -987,7 +987,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 13,
         "privilege_id": 2,
         "is_active": "True"
@@ -1000,8 +1000,8 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
-        "sub_module_id": 14,
+        "module_id": 8,
+        "sub_module_id": 32,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -1013,8 +1013,8 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 3,
-        "sub_module_id": 15,
+        "module_id": 8,
+        "sub_module_id": 33,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -3352,7 +3352,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 4,
         "is_active": "True"
       }
@@ -3362,7 +3362,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 5,
         "is_active": "True"
       }
@@ -3372,7 +3372,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 6,
         "is_active": "True"
       }
@@ -3382,7 +3382,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 7,
         "is_active": "True"
       }
@@ -3392,7 +3392,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 8,
         "is_active": "True"
       }
@@ -3412,7 +3412,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 10,
         "is_active": "True"
       }
@@ -3422,7 +3422,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 11,
         "is_active": "True"
       }
@@ -3433,7 +3433,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 12,
         "is_active": "True"
       }
@@ -3444,7 +3444,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 13,
         "is_active": "True"
       }
@@ -3454,8 +3454,8 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
-        "sub_module_id": 14,
+        "module_id": 8,
+        "sub_module_id": 32,
         "is_active": "True"
       }
     },
@@ -3464,8 +3464,8 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 3,
-        "sub_module_id": 15,
+        "module_id": 8,
+        "sub_module_id": 33,
         "is_active": "True"
       }
     },

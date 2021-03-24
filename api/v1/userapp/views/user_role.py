@@ -294,14 +294,14 @@ class UserRoleByUtilityModules(GenericAPIView):
 class UserRoleByUtilitySubModule(GenericAPIView):
     @is_token_validate
     # role_required(DEMOM, DEMOSM, EDIT)
-    def get(self, request, user_id_string, module_id_string):
+    def get(self, request, user_id_string, utility_id_string,module_id_string):
         try:
             data = {}
             role_list = []
             user = get_user_by_id_string(user_id_string)
             module_id = get_module_by_id_string(module_id_string)
             # utility_module_obj = get_utility_module_by_id(module_id.id)
-            utility_module_obj = get_utility_module_by_module_id(module_id.id)
+            utility_module_obj = get_utility_module_by_module_id(utility_id_string,module_id.id)
             sub_module_list = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.module_id, is_active=True)
 
             module_obj_data = []
@@ -474,13 +474,15 @@ class UserRoleByTenantModules(GenericAPIView):
 class UserRoleByTenantSubModule(GenericAPIView):
     # @is_token_validate
     # role_required(DEMOM, DEMOSM, EDIT)
-    def get(self, request, user_id_string, module_id_string):
+    def get(self, request, user_id_string,tenant_id_string, module_id_string):
         try:
             data = {}
             role_list = []
             user = get_user_by_id_string(user_id_string)
             module_id = get_module_by_id_string(module_id_string)
-            utility_module_obj = get_tenant_module_by_module_id(module_id.id)
+            utility_module_obj = get_tenant_module_by_module_id(tenant_id_string,module_id.id)
+            print("Module ID",module_id.id)
+            print("Utility Module Obj",utility_module_obj)
             sub_module_list = TenantSubModule.objects.filter(module_id=utility_module_obj.module_id, is_active=True)
 
             module_obj_data = []

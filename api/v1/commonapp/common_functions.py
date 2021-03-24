@@ -61,6 +61,7 @@ def is_token_valid(token):
     try:
         decoded_token = get_payload(token)
         user_obj = get_user_by_id_string(decoded_token['user_id_string'])
+        print("USER OBJ",user_obj)
         if check_token_exists_for_user(token, user_obj.id):
             return True, user_obj.id_string
         else:
