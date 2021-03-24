@@ -18,7 +18,7 @@ from api.messages import CONTRACT_PERIOD_NOT_FOUND, STATE, SUCCESS, EXCEPTION, R
 from rest_framework.response import Response
 from master.models import get_user_by_id_string
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
-from api.constants import ADMIN, UTILITY_MASTER, EDIT
+#from api.constants import ADMIN, UTILITY_MASTER, EDIT
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
@@ -78,7 +78,7 @@ class ContractperiodList(generics.ListAPIView):
 
 class ContractPeriodDetail(GenericAPIView):
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             contract = get_contract_period_by_id_string(id_string)
@@ -101,7 +101,7 @@ class ContractPeriodDetail(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -151,7 +151,7 @@ class ContractPeriodDetail(GenericAPIView):
 class ContractPeriod(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

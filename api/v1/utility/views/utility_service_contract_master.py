@@ -115,7 +115,7 @@ class UtilityServiceContractMasterDetail(GenericAPIView):
     serializer_class = UtilityServiceContractMasterDetailSerializer
 
     @is_token_validate
-    # @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
 

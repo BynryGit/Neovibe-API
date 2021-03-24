@@ -1,4 +1,6 @@
 from typing import FrozenSet
+
+from django_filters import rest_framework
 from v1.work_order.models.work_order_master import WorkOrderMaster, get_work_order_master_by_id_string
 from v1.commonapp.views.notifications import send_sms
 from v1.utility.models.utility_work_order_sub_type import UtilityWorkOrderSubType, get_utility_work_order_sub_type_by_id
@@ -53,6 +55,7 @@ from v1.consumer.models.consumer_service_contract_details import get_consumer_se
 from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_key
 from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
 from django.db.models import Q
+from v1.meter_data_management.models.meter import Meter
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
@@ -82,12 +85,17 @@ class ConsumerList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerMaster.objects.filter(utility=utility, is_active=True)
+                    print("This is the queryset =>", queryset)
                     if "consumer_no" in self.request.query_params:
                         queryset = queryset.filter(consumer_no=self.request.query_params['consumer_no'])
                     if "email_id" in self.request.query_params:
                         queryset = queryset.filter(email_id=self.request.query_params['email_id'])
                     if "phone_mobile" in self.request.query_params:
                         queryset = queryset.filter(phone_mobile=self.request.query_params['phone_mobile'])
+                    if "meter_no" in self.request.query_params:
+                        meter_obj = Meter.objects.get(meter_no=self.request.query_params['meter_no'])
+                        get_consumer_service_contract_detail = ConsumerServiceContractDetail.objects.get(meter_id=meter_obj.id)
+                        queryset = queryset.filter(id=get_consumer_service_contract_detail.consumer_id)
                     if queryset:
                         return queryset
                     else:
@@ -113,7 +121,7 @@ class ConsumerList(generics.ListAPIView):
 # Created on: 19/05/2020
 class Consumer(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -219,9 +227,8 @@ class Consumer(GenericAPIView):
 # Author: Rohan
 # Created on: 19/05/2020
 class ConsumerDetail(GenericAPIView):
-
     # @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    # #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             consumer = get_consumer_by_id_string(id_string)
@@ -245,7 +252,7 @@ class ConsumerDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             with transaction.atomic():
@@ -381,6 +388,34 @@ class ConsumerPaymentList(generics.ListAPIView):
 # Tables used: ConsumerComplaint, ConsumerMaster
 # Author: Rohan
 # Created on: 21/05/2020
+
+class ConsumerComplaintList(generics.ListAPIView):
+    try:
+        serializer_class = ComplaintListSerializer
+        pagination_class = StandardResultsSetPagination
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('complaint_date',)
+        ordering_fields = ('complaint_date',)
+        ordering = ('complaint_date',)  # always give by default alphabetical order
+        search_fields = ('complaint_date',)
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):    
+                    consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    if consumer:
+                        queryset = get_consumer_complaints_by_consumer_no(consumer.consumer_no)
+                        return queryset
+                    else:
+                        raise InvalidAuthorizationException
+                else:
+                    raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'ERROR')
+        raise APIException
+
+
 # class ConsumerComplaintList(generics.ListAPIView):
 #     try:
 #         serializer_class = ComplaintListSerializer
@@ -393,48 +428,21 @@ class ConsumerPaymentList(generics.ListAPIView):
 #         search_fields = ('complaint_date',)
 
 #         def get_queryset(self):
-#             if is_token_valid(self.request.headers['token']):
-#                 if is_authorized():
-#                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-#                     if consumer:
-#                         queryset = get_consumer_complaints_by_consumer_no(consumer.consumer_no)
+#             response, user_obj = is_token_valid(self.request.headers['Authorization'])
+#             if response:
+#                 if is_authorized(1, 1, 1, user_obj):
+#                     utility = get_utility_by_id_string(self.kwargs['id_string'])
+#                     queryset = Complaint.objects.filter(utility=utility, is_active=True)
+#                     if queryset:
 #                         return queryset
 #                     else:
-#                         raise InvalidAuthorizationException
+#                         raise CustomAPIException("Consumer Complaint master not found.", status.HTTP_404_NOT_FOUND)
 #                 else:
-#                     raise InvalidTokenException
+#                     raise InvalidAuthorizationException
+#             else:
+#                 raise InvalidTokenException
 #     except Exception as e:
-#         logger().log(e, 'ERROR')
-#         raise APIException
-
-
-class ConsumerComplaintList(generics.ListAPIView):
-    try:
-        serializer_class = ComplaintListSerializer
-        pagination_class = StandardResultsSetPagination
-
-        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('complaint_date',)
-        ordering_fields = ('complaint_date',)
-        ordering = ('complaint_date',)  # always give by default alphabetical order
-        search_fields = ('complaint_date',)
-
-        def get_queryset(self):
-            response, user_obj = is_token_valid(self.request.headers['Authorization'])
-            if response:
-                if is_authorized(1, 1, 1, user_obj):
-                    utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = Complaint.objects.filter(utility=utility, is_active=True)
-                    if queryset:
-                        return queryset
-                    else:
-                        raise CustomAPIException("Consumer Complaint master not found.", status.HTTP_404_NOT_FOUND)
-                else:
-                    raise InvalidAuthorizationException
-            else:
-                raise InvalidTokenException
-    except Exception as e:
-        logger().log(e, 'MEDIUM', module='Complaint', sub_module='Complaint')
+#         logger().log(e, 'MEDIUM', module='Complaint', sub_module='Complaint')
 
 
 # API Header
@@ -489,7 +497,7 @@ class ConsumerServiceList(generics.ListAPIView):
 class ConsumerBillDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             bill = get_invoice_bill_by_id_string(id_string)
@@ -513,7 +521,7 @@ class ConsumerBillDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -561,7 +569,7 @@ class ConsumerBillDetail(GenericAPIView):
 class ConsumerPayment(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -603,7 +611,7 @@ class ConsumerPayment(GenericAPIView):
 class ConsumerPaymentDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             payment = get_payment_by_id_string(id_string)
@@ -627,7 +635,7 @@ class ConsumerPaymentDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -673,9 +681,8 @@ class ConsumerPaymentDetail(GenericAPIView):
 # Author: Rohan
 # Created on: 22/05/2020
 class ConsumerComplaint(GenericAPIView):
-
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -718,7 +725,7 @@ class ConsumerComplaint(GenericAPIView):
 class ConsumerComplaintDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             complaint = get_consumer_complaint_by_id_string(id_string)
@@ -742,7 +749,7 @@ class ConsumerComplaintDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -785,7 +792,7 @@ class ConsumerComplaintDetail(GenericAPIView):
 class ConsumerScheme(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -829,7 +836,7 @@ class ConsumerScheme(GenericAPIView):
 class ConsumerSchemeDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
     def get(self, request, id_string):
         try:
             scheme = get_scheme_by_id_string(id_string)
@@ -853,7 +860,7 @@ class ConsumerSchemeDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def put(self, request, id_string):
         try:
             scheme = get_scheme_by_id_string(id_string)
@@ -1006,7 +1013,7 @@ class ConsumerOwnershipList(generics.ListAPIView):
 class ConsumerNote(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -1108,7 +1115,7 @@ from v1.userapp.decorators import is_token_validate
 class ConsumerApprove(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -1155,7 +1162,7 @@ class ConsumerApprove(GenericAPIView):
 class ConsumerConnect(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -1190,8 +1197,8 @@ class ConsumerConnect(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(Q(work_order_master_id=work_order_master_obj.id)) &
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1207,6 +1214,8 @@ class ConsumerConnect(GenericAPIView):
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer.utility
+                    appointment_obj.is_active = False
+                    appointment_obj.state = 11
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
                 # view_serializer = ConsumerViewSerializer(instance=consumer, context={'request': request})
@@ -1242,7 +1251,7 @@ class ConsumerConnect(GenericAPIView):
 # Updated date: 05-03-2021
 class ConsumerDisconnect(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -1286,13 +1295,14 @@ class ConsumerDisconnect(GenericAPIView):
                     disconnection_id = []
                     for i in previous_work_order_master_obj:
                         disconnection_id.append(i.id)
+                    print(disconnection_id)
 
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id__in=disconnection_id) &
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1308,6 +1318,8 @@ class ConsumerDisconnect(GenericAPIView):
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                    appointment_obj.is_active = False
+                    appointment_obj.state = 11
                     appointment_obj.sa_number = generate_service_appointment_no(appointment_obj)
                     appointment_obj.save()
 
@@ -1337,8 +1349,8 @@ class ConsumerDisconnect(GenericAPIView):
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
 # Interaction: Outage
-# Usage: Outage 
-# Tables used: workorder master, service appointment 
+# Usage: Outage
+# Tables used: workorder master, service appointment
 # Author: Chetan
 # Created on: 09-03-2021
 class ConsumerOutage(GenericAPIView):
@@ -1356,8 +1368,8 @@ class ConsumerOutage(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id=work_order_master_obj.id) &
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1372,6 +1384,7 @@ class ConsumerOutage(GenericAPIView):
                 appointment_serializer = ServiceAppointmentSerializer(data=request.data)
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.state = 11
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.is_active = False
                     appointment_obj.save()
@@ -1396,10 +1409,10 @@ class ConsumerOutage(GenericAPIView):
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
-# Interaction: Service 
-# Usage: service 
-# Tables used: workorder master, service appointment 
-# Author: Chetan Dhongade 
+# Interaction: Service
+# Usage: service
+# Tables used: workorder master, service appointment
+# Author: Chetan Dhongade
 # Created on: 09-03-2021
 class ConsumerService(GenericAPIView):
     @is_token_validate
@@ -1416,8 +1429,8 @@ class ConsumerService(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id=work_order_master_obj.id) &
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
                         raise CustomAPIException(
                             "Service Appointment Already Exist",
@@ -1434,6 +1447,7 @@ class ConsumerService(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.is_active = False
+                    appointment_obj.state = 11
                     appointment_obj.save()
 
                 view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
@@ -1450,16 +1464,22 @@ class ConsumerService(GenericAPIView):
             }, status=res.status_code)
 
 
-# consumer transfer
-# Auther: Chetan Dhongade
+# API Header
+# API end Point: api/v1/consumer/transfer
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Transfer
+# Usage: Transfer
+# Tables used: workorder master, service appointment
+# Author: Chetan Dhongade
+# Created on: 17-03-2021
 class ConsumerTransfer(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
-            print("This is the ConsumerTransfer api")
-            print("This is the ConsumerTransfer api")
-            print("This is the user remark =>", request.data['sa_user_remark'])
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
@@ -1506,8 +1526,9 @@ class ConsumerTransfer(GenericAPIView):
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
                         Q(work_order_master_id__in=transfer_id) &
-                        ~Q(state_id=7) &
-                        Q(state_id=1))
+                        ~Q(state=7) &
+                        Q(Q(state=1) | Q(state=11)))
+
                     if previous_transfer_request:
                         raise CustomAPIException(
                             "Transfer Request Already Exist",
@@ -1524,6 +1545,7 @@ class ConsumerTransfer(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    appointment_obj.state = 11
                     appointment_obj.is_active = False
                     appointment_obj.save()
 
@@ -1543,6 +1565,7 @@ class ConsumerTransfer(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    appointment_obj.state = 11
                     appointment_obj.is_active = False
                     appointment_obj.save()
 

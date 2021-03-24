@@ -34,7 +34,7 @@ from v1.userapp.serializers.user import UserViewSerializer
 # class UserNote(GenericAPIView):
 #
 #     @is_token_validate
-#     @role_required(ADMIN, UTILITY_MASTER, EDIT)
+#     #role_required(ADMIN, UTILITY_MASTER, EDIT)
 #     def get(self, request, id_string):
 #         try:
 #             data = {}
@@ -79,7 +79,7 @@ from v1.userapp.serializers.user import UserViewSerializer
 #             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 #
 #     @is_token_validate
-#     @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+#     #role_required(ADMIN, UTILITY_MASTER,  EDIT)
 #     def post(self, request, id_string):
 #         try:
 #             data = {}
@@ -122,7 +122,7 @@ from v1.userapp.serializers.user import UserViewSerializer
 #             }, status=res.status_code)
 #
 #     @is_token_validate
-#     @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+#     #role_required(ADMIN, UTILITY_MASTER,  EDIT)
 #     def put(self, request, id_string):
 #         try:
 #             user_obj = get_user_by_id_string(id_string)
@@ -189,4 +189,3 @@ class UploadFile(GenericAPIView):
         url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
 
         print('*****file_obj.read()****',url)
-        

@@ -55,7 +55,6 @@ class RoleTypeSerializer(serializers.ModelSerializer):
             type_obj.created_by = user.id
             type_obj.updated_by = user.id
             type_obj.created_date = datetime.utcnow()
-            type_obj.updated_date = datetime.utcnow()
             type_obj.tenant = user.tenant
             type_obj.utility = user.utility
             type_obj.is_active = True

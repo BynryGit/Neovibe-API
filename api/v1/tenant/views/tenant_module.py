@@ -6,7 +6,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
-from api.constants import ADMIN, VIEW, TENANT, EDIT
+#from api.constants import ADMIN, VIEW, TENANT, EDIT
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
@@ -73,7 +73,7 @@ class TenantModule(GenericAPIView):
     serializer_class = TenantModuleSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -122,7 +122,7 @@ class TenantModuleDetail(GenericAPIView):
     serializer_class = TenantModuleSerializer
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, VIEW)
+    #role_required(ADMIN, TENANT, VIEW)
     def get(self, request, id_string):
         try:
             tenant_module_obj = get_tenant_module_by_id_string(id_string)
@@ -145,7 +145,7 @@ class TenantModuleDetail(GenericAPIView):
             }, status=response.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, TENANT, EDIT)
+    #role_required(ADMIN, TENANT, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])

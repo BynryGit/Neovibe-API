@@ -2,6 +2,7 @@ import traceback
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from api.messages import *
 from api.constants import *
 from rest_framework.generics import GenericAPIView
@@ -13,24 +14,25 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values,UserUtility as UserUtilityTbl
+from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values, UserUtility as UserUtilityTbl
 from v1.userapp.serializers.user_utility import UserUtilitySerializer, UserUtilityViewSerializer
 from v1.userapp.views.common_functions import set_user_utility_validated_data
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.common_functions import is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 
+
 # API Header
-# API end Point: api/v1/user/tenant/id/utility/list
+# API end Point: api/v1/user/:id/utility/list
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: UesrUtilityList list
+# Interaction: UesrUtilityList by User
 # Usage: API will fetch required data for UesrUtility list against filter and search
 # Tables used: UesrUtility
 # Author: Priyanka
-# Created on: 15/11/2020
+# Created on: 22/03/2021
 
 class UesrUtilityList(generics.ListAPIView):
     try:
@@ -38,17 +40,18 @@ class UesrUtilityList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ( 'utility__id_string',)
-        ordering_fields = ( 'utility__id_string',)
-        ordering = ('user_id') # always give by default alphabetical order
-        search_fields = ( 'utility__name',)
+        filter_fields = ('utility__id_string',)
+        ordering_fields = ('utility__id_string',)
+        ordering = ('user_id')  # always give by default alphabetical order
+        search_fields = ('utility__name',)
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
 
             if response:
-                if is_authorized(1,1,1,user_obj):
-                    queryset = UserUtilityTbl.objects.filter(tenant__id_string=self.kwargs['id_string'],is_active=True)
+                if is_authorized(1, 1, 1, user_obj):
+                    queryset = UserUtilityTbl.objects.filter(tenant__id_string=self.kwargs['id_string'], is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -75,7 +78,7 @@ class UesrUtilityList(generics.ListAPIView):
 class UserUtility(GenericAPIView):
 
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    # @role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             utility_list = []
@@ -96,16 +99,16 @@ class UserUtility(GenericAPIView):
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({
-                        STATE: ERROR,
+                        STATE: SUCCESS,
                         DATA: UTILITY_NOT_ASSIGNED,
-                    }, status=status.HTTP_404_NOT_FOUND)
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: EXCEPTION,
                     DATA: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User Utility')
+            logger().log(e, 'MEDIUM', module='Admin', sub_module='User Utility')
             return Response({
                 STATE: EXCEPTION,
                 DATA: '',
@@ -113,7 +116,7 @@ class UserUtility(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    # @role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def post(self, request, id_string):
         try:
             utility_list = []
@@ -130,7 +133,7 @@ class UserUtility(GenericAPIView):
                         user = get_user_by_id_string(user_id_string)
                         user_utility_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
-                                                                 context={'request': request})
+                                                                    context={'request': request})
                         utility_list.append(view_serializer.data['utility'])
                     else:
                         return Response({
@@ -145,7 +148,7 @@ class UserUtility(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Utility')
+            logger().log(e, 'HIGH', module='Admin', sub_module='User Utility')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -153,7 +156,7 @@ class UserUtility(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    # role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             utility_list = []
@@ -175,7 +178,7 @@ class UserUtility(GenericAPIView):
                         else:
                             user_utility_obj = serializer.create(serializer.validated_data, user)
                         view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
-                                                                 context={'request': request})
+                                                                    context={'request': request})
                         utility_list.append(view_serializer.data['utility'])
                     else:
                         return Response({
@@ -190,7 +193,7 @@ class UserUtility(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Utility')
+            logger().log(e, 'HIGH', module='Admin', sub_module='User Utility')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,

@@ -4,7 +4,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from rest_framework.response import Response
-from api.constants import ADMIN, VIEW, TENANT, EDIT
+# #from api.constants import ADMIN, VIEW, TENANT, EDIT
 from v1.userapp.models.role_type import get_role_type_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from django_filters.rest_framework import DjangoFilterBackend

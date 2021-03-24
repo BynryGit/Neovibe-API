@@ -79,10 +79,18 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     def __unicode__(self):
         return self.email_id
 
+    # @property
+    # def get_area(self):
+    #     area = get_area_by_id(self.area_id)
+    #     return area
+    
     @property
     def get_area(self):
-        area = get_area_by_id(self.area_id)
-        return area
+        area = get_area_by_id(self.billing_area_id)
+        return {
+            'name': area.name,
+            'id_string': area.id_string
+        }
 
     @property
     def get_consumer_category(self):

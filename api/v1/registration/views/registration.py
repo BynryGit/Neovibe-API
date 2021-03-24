@@ -94,7 +94,7 @@ class RegistrationList(generics.ListAPIView):
 class Registration(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -184,7 +184,7 @@ class Registration(GenericAPIView):
 class RegistrationDetail(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, VIEW)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, VIEW)
     def get(self, request, id_string):
         try:
             registration = get_registration_by_id_string(id_string)
@@ -210,7 +210,7 @@ class RegistrationDetail(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -261,7 +261,7 @@ class RegistrationDetail(GenericAPIView):
 class RegistrationPayment(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -294,7 +294,7 @@ class RegistrationPayment(GenericAPIView):
             }, status=res.status_code)
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['token'])
@@ -342,7 +342,7 @@ class RegistrationPayment(GenericAPIView):
 class RegistrationPaymentApprove(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             payment = get_payment_by_id_string(id_string)
@@ -384,7 +384,7 @@ class RegistrationPaymentApprove(GenericAPIView):
 class RegistrationPaymentReject(GenericAPIView):
 
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             payment = get_payment_by_id_string(id_string)
@@ -453,7 +453,7 @@ class RegistrationStatusList(generics.ListAPIView):
 # Created on: 28/09/2020
 class RegistrationReject(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             registration = get_registration_by_id_string(id_string)
@@ -493,7 +493,7 @@ class RegistrationReject(GenericAPIView):
 # Created on: 29/09/2020
 class RegistrationHold(GenericAPIView):
     @is_token_validate
-    @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             registration = get_registration_by_id_string(id_string)
@@ -534,7 +534,7 @@ class RegistrationHold(GenericAPIView):
 
 class RegistrationApprove(GenericAPIView):
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -699,7 +699,7 @@ class RegistrationNoteList(generics.ListAPIView):
 class RegistrationNote(GenericAPIView):
 
     @is_token_validate
-    # @role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
+    # #role_required(CONSUMER_OPS, CONSUMER_OPS_REGISTRATION, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

@@ -63,7 +63,7 @@ class RoleList(generics.ListAPIView):
 class Role(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def post(self, request, format=None):
         try:
             serializer = RoleSerializer(data=request.data)
@@ -106,7 +106,7 @@ class Role(GenericAPIView):
 class RoleDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(DEMOM, DEMOSM, EDIT)
+    #role_required(DEMOM, DEMOSM, EDIT)
     def get(self, request, id_string):
         try:
             role = get_role_by_id_string(id_string)
@@ -130,7 +130,7 @@ class RoleDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             role_obj = get_role_by_id_string(id_string)
@@ -177,7 +177,7 @@ class RoleDetail(GenericAPIView):
 class GetRoleDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, type_id_string, sub_type_id_string):
         try:
             role_list = []

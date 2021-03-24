@@ -29,7 +29,7 @@ class SkillList(generics.ListAPIView):
     serializer_class = SkillListSerializer
 
     @is_token_validate
-    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get_queryset(self):
         queryset = get_skills_by_utility_id_string(1)
         return queryset

@@ -14,7 +14,7 @@ from v1.commonapp.views.logger import logger
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.serializers.consumer_offer_detail import ConsumerOfferDetailSerializer, \
     ConsumerOfferDetailListSerializer
-from v1.userapp.decorators import is_token_validate
+from v1.userapp.decorators import is_token_validate, role_required
 from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail as ConsumerOfferModel
 
 # API Header
