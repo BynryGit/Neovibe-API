@@ -115,4 +115,11 @@ def get_registration_by_id(id):
         return Registration.objects.get(id=id)
     except:
         return False
+
+
+def get_registration_by_registration_no(no):
+    try:
+        return Registration.objects.get(registration_no = no)
+    except:
+        return False
 # Create Consumer Registration table end.
