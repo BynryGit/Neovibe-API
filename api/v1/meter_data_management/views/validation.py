@@ -76,6 +76,11 @@ class ValidationList(generics.ListAPIView):
                                                                   schedule_log_id=schedule_log_obj.id,
                                                                   is_active=True, is_duplicate=False)
                         return queryset
+                    else:
+                        queryset = MeterReadingTbl.objects.filter(read_cycle_id=read_cycle_obj.id,
+                                                                  schedule_log_id=schedule_log_obj.id,
+                                                                  is_active=True, is_duplicate=False)
+                        return queryset
                 else:
                     raise InvalidAuthorizationException
             else:
