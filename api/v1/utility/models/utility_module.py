@@ -53,9 +53,9 @@ class UtilityModule(models.Model):
 
 # Create Utility Module table end.
 
-def get_utility_module_by_module_id(module_id):
+def get_utility_module_by_module_id(utility_id_string,module_id):
     try:
-        return UtilityModule.objects.get(module_id=module_id, is_active=True)
+        return UtilityModule.objects.get(utility__id_string=utility_id_string,module_id=module_id, is_active=True)
     except:
         return False
 

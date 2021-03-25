@@ -45,7 +45,7 @@ urlpatterns = [
     path('logout/', LogoutApiView.as_view()),
 
     path('<uuid:user_id_string>/utility/<uuid:utility_id_string>', UserRoleByUtilityModules.as_view()),
-    path('<uuid:user_id_string>/module/<uuid:module_id_string>', UserRoleByUtilitySubModule.as_view()),
+    path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/module/<uuid:module_id_string>', UserRoleByUtilitySubModule.as_view()),
     path('role/<uuid:role_id_string>/module/<uuid:module_id_string>/sub-module/<uuid:sub_module_id_string>',ModulePrivilegesList.as_view()),
     path('utility/<uuid:utility_id_string>/appointment/<uuid:appointment_id_string>/resource/list',ResourceList.as_view(),name="fitered_resource_list"),
     path('utility/<uuid:utility_id_string>/bulk-assign/resource/list',BulkAssignResourceList.as_view(),name="bulk_assign_resource_list"),
@@ -57,7 +57,7 @@ urlpatterns = [
          name='password-reset-complete'),
     path('change-password/<uuid:id_string>',ChangePasswordView.as_view()),
     path('<uuid:user_id_string>/tenant/<uuid:tenant_id_string>', UserRoleByTenantModules.as_view()),
-    path('<uuid:user_id_string>/tenant-module/<uuid:module_id_string>', UserRoleByTenantSubModule.as_view()),
+    path('<uuid:user_id_string>/tenant/<uuid:tenant_id_string>/tenant-module/<uuid:module_id_string>', UserRoleByTenantSubModule.as_view()),
 
 
 ]

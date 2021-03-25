@@ -445,8 +445,6 @@ class ConsumerComplaintList(generics.ListAPIView):
 #         logger().log(e, 'MEDIUM', module='Complaint', sub_module='Complaint')
 
 
-
-
 # API Header
 # API end Point: api/v1/consumer/:id_string/service/list
 # API verb: GET
@@ -1179,18 +1177,18 @@ class ConsumerConnect(GenericAPIView):
                     if service_contract_obj:
                         utility_product_obj = get_utility_product_by_id(service_contract_obj.utility_product_id)
 
-
                 work_order_type_obj = get_work_order_type_by_key('CONNECTION')
                 work_order_sub_type_obj = get_work_order_sub_type_by_key('CONNECTION')
 
-                utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_order_type_obj.id)
-                utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id=work_order_sub_type_obj.id)
-
+                utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
+                    work_order_type_id=work_order_type_obj.id)
+                utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(
+                    work_order_sub_type_id=work_order_sub_type_obj.id)
 
                 work_order_master_obj = WorkOrderMaster.objects.get(utility_product_id=utility_product_obj.id,
-                                            utility_work_order_type_id= utility_work_order_type_obj.id,
-                                            utility_work_order_sub_type_id = utility_work_order_sub_type_obj.id
-                                            )
+                                                                    utility_work_order_type_id=utility_work_order_type_obj.id,
+                                                                    utility_work_order_sub_type_id=utility_work_order_sub_type_obj.id
+                                                                    )
 
                 request.data['work_order_master_id'] = str(work_order_master_obj.id_string)
 
@@ -1283,7 +1281,7 @@ class ConsumerDisconnect(GenericAPIView):
                     utility_work_order_sub_type_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_obj.id)
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
-                        utility_work_order_type_id= utility_work_order_type_obj.id,
+                        utility_work_order_type_id=utility_work_order_type_obj.id,
                         utility_work_order_sub_type_id=utility_work_order_sub_type_obj.id,
                         utility_product_id=utility_product_obj.id)
 
@@ -1298,11 +1296,11 @@ class ConsumerDisconnect(GenericAPIView):
                     for i in previous_work_order_master_obj:
                         disconnection_id.append(i.id)
                     print(disconnection_id)
-                    
+
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
-                        Q(work_order_master_id__in=disconnection_id)&
+                        Q(work_order_master_id__in=disconnection_id) &
                         ~Q(state=7) &
                         Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
@@ -1344,7 +1342,6 @@ class ConsumerDisconnect(GenericAPIView):
             }, status=res.status_code)
 
 
-
 # API Header
 # API end Point: api/v1/consumer/outage
 # API verb: POST
@@ -1352,8 +1349,8 @@ class ConsumerDisconnect(GenericAPIView):
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
 # Interaction: Outage
-# Usage: Outage 
-# Tables used: workorder master, service appointment 
+# Usage: Outage
+# Tables used: workorder master, service appointment
 # Author: Chetan
 # Created on: 09-03-2021
 class ConsumerOutage(GenericAPIView):
@@ -1370,7 +1367,7 @@ class ConsumerOutage(GenericAPIView):
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
-                        Q(work_order_master_id=work_order_master_obj.id)&
+                        Q(work_order_master_id=work_order_master_obj.id) &
                         ~Q(state=7) &
                         Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
@@ -1394,9 +1391,9 @@ class ConsumerOutage(GenericAPIView):
 
                 view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
                 return Response({
-                        STATE: SUCCESS,
-                        RESULT: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
             res = self.handle_exception(e)
@@ -1405,16 +1402,17 @@ class ConsumerOutage(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
+
 # API Header
 # API end Point: api/v1/consumer/service
 # API verb: POST
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
-# Interaction: Service 
-# Usage: service 
-# Tables used: workorder master, service appointment 
-# Author: Chetan Dhongade 
+# Interaction: Service
+# Usage: service
+# Tables used: workorder master, service appointment
+# Author: Chetan Dhongade
 # Created on: 09-03-2021
 class ConsumerService(GenericAPIView):
     @is_token_validate
@@ -1430,7 +1428,7 @@ class ConsumerService(GenericAPIView):
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
-                        Q(work_order_master_id=work_order_master_obj.id)&
+                        Q(work_order_master_id=work_order_master_obj.id) &
                         ~Q(state=7) &
                         Q(Q(state=1) | Q(state=11)))
                     if previous_connection_request:
@@ -1454,9 +1452,9 @@ class ConsumerService(GenericAPIView):
 
                 view_serializer = ServiceAppointmentSerializer(instance=appointment_obj, context={'request': request})
                 return Response({
-                        STATE: SUCCESS,
-                        RESULT: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
+                    STATE: SUCCESS,
+                    RESULT: view_serializer.data,
+                }, status=status.HTTP_200_OK)
         except Exception as e:
             logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
             res = self.handle_exception(e)
@@ -1464,8 +1462,6 @@ class ConsumerService(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-            
-            
 
 
 # API Header
@@ -1474,10 +1470,10 @@ class ConsumerService(GenericAPIView):
 # Package: Basic
 # Modules: S&M, Consumer Care, Consumer Ops
 # Sub Module: Consumer
-# Interaction: Transfer 
-# Usage: Transfer 
-# Tables used: workorder master, service appointment 
-# Author: Chetan Dhongade 
+# Interaction: Transfer
+# Usage: Transfer
+# Tables used: workorder master, service appointment
+# Author: Chetan Dhongade
 # Created on: 17-03-2021
 class ConsumerTransfer(GenericAPIView):
     @is_token_validate
@@ -1501,18 +1497,17 @@ class ConsumerTransfer(GenericAPIView):
                 if work_order_type_obj:
                     utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
 
-                
-                #create the transfer connection request 
-                
+                # create the transfer connection request
+
                 work_order_sub_type_connect_obj = get_work_order_sub_type_by_key('TRANSFER_CONNECT')
-    
+
                 if work_order_sub_type_connect_obj:
-                    utility_work_order_sub_type_connect_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_connect_obj.id)
-                   
-                    
+                    utility_work_order_sub_type_connect_obj = get_utility_work_order_sub_type_by_id(
+                        work_order_sub_type_connect_obj.id)
+
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_connect_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
-                        utility_work_order_type_id= utility_work_order_type_obj.id,
+                        utility_work_order_type_id=utility_work_order_type_obj.id,
                         utility_work_order_sub_type_id=utility_work_order_sub_type_connect_obj.id,
                         utility_product_id=utility_product_obj.id)
 
@@ -1530,10 +1525,10 @@ class ConsumerTransfer(GenericAPIView):
                     previous_transfer_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
                         & Q(is_active=False) &
-                        Q(work_order_master_id__in=transfer_id)&
+                        Q(work_order_master_id__in=transfer_id) &
                         ~Q(state=7) &
                         Q(Q(state=1) | Q(state=11)))
-                    
+
                     if previous_transfer_request:
                         raise CustomAPIException(
                             "Transfer Request Already Exist",
@@ -1550,17 +1545,18 @@ class ConsumerTransfer(GenericAPIView):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility
                     appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
-                    appointment_obj.state = 11 
+                    appointment_obj.state = 11
                     appointment_obj.is_active = False
                     appointment_obj.save()
 
-                #making the transfer disconnection request 
+                # making the transfer disconnection request
                 work_order_sub_type_disconnect_obj = get_work_order_sub_type_by_key('TRANSFER_DISCONNECT')
                 if work_order_sub_type_disconnect_obj:
-                    utility_work_order_sub_type_disconnect_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_disconnect_obj.id)
+                    utility_work_order_sub_type_disconnect_obj = get_utility_work_order_sub_type_by_id(
+                        work_order_sub_type_disconnect_obj.id)
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_disconnect_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
-                        utility_work_order_type_id= utility_work_order_type_obj.id,
+                        utility_work_order_type_id=utility_work_order_type_obj.id,
                         utility_work_order_sub_type_id=utility_work_order_sub_type_disconnect_obj.id,
                         utility_product_id=utility_product_obj.id)
                 request.data['custom_data']['work_order_master_id'] = str(work_order_master_obj.id_string)
