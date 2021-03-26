@@ -21,6 +21,10 @@ from django.db import models  # importing package for database
 # Create Temp Consumer Master Table Start
 
 class ConsumerDetail(models.Model):
+    METER_READING_TYPE = (
+        (0, 'MANUAL'),
+        (1, 'SMART'),
+    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -34,6 +38,7 @@ class ConsumerDetail(models.Model):
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     meter_no = models.CharField(max_length=200, null=True, blank=True)
+    state = models.IntegerField(choices=METER_READING_TYPE, default=0)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
