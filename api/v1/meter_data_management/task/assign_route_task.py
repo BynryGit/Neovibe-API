@@ -34,8 +34,8 @@ def assign_route_task(route_task_assignment_id):
                                                            utility=route_task_assignment_obj.utility, is_active=True)
 
         consumer_detail_obj = ConsumerDetailTbl.objects.filter(route_id=route_task_assignment_obj.route_id,
-                                                            schedule_log_id=route_task_assignment_obj.schedule_log_id,
-                                                            is_active=True)
+                                                               schedule_log_id=route_task_assignment_obj.schedule_log_id,
+                                                               state=0, is_active=True)
 
         for consumer in consumer_detail_obj:
             json_data.append(

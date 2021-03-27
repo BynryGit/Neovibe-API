@@ -33,17 +33,20 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
     total_consumer = serializers.SerializerMethodField()
 
     def get_route_detail(self, schedule_log_tbl):
-        total_route = get_read_cycle_by_id(id=schedule_log_tbl.read_cycle_id)
+        read_cycle_obj = get_read_cycle_by_id(id=schedule_log_tbl.read_cycle_id)
         route_detail = {
-            'total_route' : len(total_route.route_json),
-            'started_route': RouteTaskAssignment.objects.filter(dispatch_status=2, is_active=True).count(),
-            'dispatch_route': RouteTaskAssignment.objects.filter(dispatch_status=3, is_active=True).count(),
-            'completed_route': RouteTaskAssignment.objects.filter(dispatch_status=3, is_completed=True, is_active=True).count(),
+            'total_route' : len(read_cycle_obj.route_json),
+            'started_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, dispatch_status=2,
+                                                                is_active=True).count(),
+            'dispatch_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, dispatch_status=3,
+                                                                 is_active=True).count(),
+            'completed_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, dispatch_status=3,
+                                                                  is_completed=True, is_active=True).count(),
         }
         return route_detail
 
     def get_total_consumer(self, schedule_log_tbl):
-        return ConsumerDetail.objects.filter(schedule_log_id=schedule_log_tbl.id, is_active=True).count()
+        return ConsumerDetail.objects.filter(schedule_log_id=schedule_log_tbl.id, state=0, is_active=True).count()
 
     class Meta:
         model = ScheduleLogTbl

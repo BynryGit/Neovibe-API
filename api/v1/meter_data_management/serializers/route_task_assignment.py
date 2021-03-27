@@ -70,11 +70,11 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
         validated_data = set_route_task_assignment_validated_data(validated_data)
         try:
             route_task_assignment_obj = RouteTaskAssignmentTbl.objects.get(tenant=user.tenant,
-                                                                              utility_id=validated_data['utility_id'],
-                                                                              read_cycle_id=validated_data["read_cycle_id"],
-                                                                              route_id=validated_data["route_id"],
-                                                                              schedule_log_id=validated_data["schedule_log_id"],
-                                                                              is_active=True)
+                                                                           utility_id=validated_data['utility_id'],
+                                                                           read_cycle_id=validated_data["read_cycle_id"],
+                                                                           route_id=validated_data["route_id"],
+                                                                           schedule_log_id=validated_data["schedule_log_id"],
+                                                                           is_active=True)
 
             if route_task_assignment_obj.dispatch_status == 0 or route_task_assignment_obj.dispatch_status == 4:
                 route_task_assignment_obj.meter_reader_id = validated_data["meter_reader_id"]
