@@ -13,6 +13,7 @@ from v1.meter_data_management.models.route import Route
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail
 from v1.meter_data_management.models.smart_meter_configuration import SmartMeterConfiguration
 from v1.meter_data_management.models.job_card_template import JobCardTemplate
+from v1.meter_data_management.models.spot_bill import SpotBill
 from v1.meter_data_management.models.upload_route import UploadRoute
 from v1.meter_data_management.models.validation_assignments import ValidationAssignment
 from v1.meter_data_management.models.reader_status import ReaderStatus
@@ -31,3 +32,4 @@ admin.site.register(JobCardTemplate)
 admin.site.register(ValidationAssignment)
 admin.site.register(ReaderStatus)
 admin.site.register(UploadRoute)
+admin.site.register(SpotBill)
