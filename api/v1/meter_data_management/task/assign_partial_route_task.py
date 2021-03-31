@@ -41,7 +41,7 @@ def assign_partial_route_task(route_task_assignment_id):
 
             consumer_detail_obj = ConsumerDetailTbl.objects.filter(route_id=route_task_assignment_obj.route_id,
                                                                    schedule_log_id=route_task_assignment_obj.schedule_log_id,
-                                                                   is_active=True)
+                                                                   state=0, is_active=True)
             for consumer in consumer_detail_obj:
                 try:
                     meter_reading_obj = MeterReadingTbl.objects.get(route_id=route_task_assignment_obj.route_id,
