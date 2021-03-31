@@ -18,6 +18,7 @@ from v1.meter_data_management.models.job_card_template import JobCardTemplate as
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
 from v1.meter_data_management.models.route import get_route_by_id
+from v1.meter_data_management.models.spot_bill import get_spot_bill_by_consumer_detail_id
 
 
 @task(name="assign-route-task", queue='Dispatch_I')
@@ -59,7 +60,10 @@ def assign_route_task(route_task_assignment_id):
             }
 
             if consumer.is_spot_bill:
+                spot_bill_obj = get_spot_bill_by_consumer_detail_id(consumer.id)
                 task_dict['is_spot_bill'] = True
+                task_dict['spot_bill_detail'] = spot_bill_obj.spot_bill_detail
+                task_dict['rate_detail'] = spot_bill_obj.rate_detail
 
             task_data_list.append(task_dict)
 

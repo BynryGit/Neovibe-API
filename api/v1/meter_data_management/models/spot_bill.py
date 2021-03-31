@@ -11,10 +11,11 @@ __author__ = "aki"
 # Author : Akshay Nibrad
 # Creation Date : 30/03/2021
 
+import uuid  # importing package for GUID
 from django.utils import timezone # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
-import uuid  # importing package for GUID
+from django.contrib.postgres.fields import JSONField
 from django.db import models  # importing package for database
 
 
@@ -25,24 +26,8 @@ class SpotBill(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_detail_id = models.BigIntegerField(null=True, blank=True)
-    invoice_no = models.CharField(max_length=200, null=True, blank=True)
-    consumption = models.CharField(max_length=200, null=True, blank=True)
-    consumption_charges = models.CharField(max_length=200, null=True, blank=True)
-    basic_price = models.CharField(max_length=200, null=True, blank=True)
-    vat_percentage = models.CharField(max_length=200, null=True, blank=True)
-    total_price = models.CharField(max_length=200, null=True, blank=True)
-    net_amount = models.CharField(max_length=200, null=True, blank=True)
-    previous_balance = models.CharField(max_length=200, null=True, blank=True)
-    current_charges = models.CharField(max_length=200, null=True, blank=True)
-    emi_security_deposit = models.CharField(max_length=200, null=True, blank=True)
-    current_emi_amount = models.CharField(max_length=200, null=True, blank=True)
-    remaining_emi_amount = models.CharField(max_length=200, null=True, blank=True)
-    due_date = models.DateTimeField(null=True, blank=True)
-    bill_period_from = models.DateTimeField(null=True, blank=True)
-    bill_period_to = models.DateTimeField(null=True, blank=True)
-    before_due_date = models.DateTimeField(null=True, blank=True)
-    after_due_date = models.DateTimeField(null=True, blank=True)
-    invoice_date = models.DateTimeField(null=True, blank=True)
+    spot_bill_detail = JSONField(blank=True, null=True)
+    rate_detail = JSONField(blank=True, null=True)
     is_paid = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
     is_adjusted = models.BooleanField(default=False)
@@ -71,5 +56,12 @@ def get_spot_bill_by_id(id):
 def get_spot_bill_by_id_string(id_string):
     try:
         return SpotBill.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_spot_bill_by_consumer_detail_id(consumer_detail_id):
+    try:
+        return SpotBill.objects.get(consumer_detail_id=consumer_detail_id)
     except:
         return False
