@@ -43,7 +43,7 @@ class Rate(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return self.rate
+        return str(self.rate) +" - "+ str(self.id_string)
 
     def __unicode__(self):
         return self.rate

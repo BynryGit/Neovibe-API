@@ -11,7 +11,7 @@ from v1.utility.models.utility_service_plan_rate import get_utility_service_plan
 from datetime import datetime, timedelta
 from api.messages import *
 from rest_framework import status
-from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string,get_global_lookup_by_id
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
@@ -225,24 +225,24 @@ def save_bill_rates(consumer, bill_month, schedule):
         pass
 
 # Function for get rate
-def get_rate(schedule):
-    bill_shedule_obj = get_schedule_bill_by_id_string(schedule.id_string)
-    bill_cycle_obj = get_bill_cycle_by_id(bill_shedule_obj.bill_cycle_id)
-    for route in bill_cycle_obj.route_json:
-        route_obj = get_route_by_id_string(route['id_string'])
-        for premise in route_obj.premises_json:
-            premise_obj = get_premise_by_id_string(premise['id_string'])
-            consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
-            contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
-    rate_obj = get_rate_by_category_sub_category_wise(bill_shedule_obj.utility,bill_shedule_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
-    return rate_obj.rate
+# def get_rate(schedule):
+#     bill_shedule_obj = get_schedule_bill_by_id_string(schedule.id_string)
+#     bill_cycle_obj = get_bill_cycle_by_id(bill_shedule_obj.bill_cycle_id)
+#     for route in bill_cycle_obj.route_json:
+#         route_obj = get_route_by_id_string(route['id_string'])
+#         for premise in route_obj.premises_json:
+#             premise_obj = get_premise_by_id_string(premise['id_string'])
+#             consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
+#             contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
+#     rate_obj = get_rate_by_category_sub_category_wise(bill_shedule_obj.utility,bill_shedule_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
+#     return rate_obj.rate
 
-# Function for generate current charges
-def generate_current_charges(meter, bill_month, schedule):
-    consumption = meter.current_reading - meter.previous_reading
-    rate = get_rate(schedule)
-    current_charge = consumption * rate
-    return current_charge
+# # Function for generate current charges
+# def generate_current_charges(meter, bill_month, schedule):
+#     consumption = meter.current_reading - meter.previous_reading
+#     rate = get_rate(schedule)
+#     current_charge = consumption * rate
+#     return current_charge
 
 # Function for save readings and consumption
 def save_meter_data(consumer, bill_month):
@@ -365,6 +365,7 @@ def get_consumer_count(schedule_id):
             consumer['consumer'] = "----"
         return consumer['consumer'] 
     except Exception as e:
+        print('-get_consumer_count-----',e)
         pass
 
 # Function for get reading count it used before runbill
@@ -372,15 +373,25 @@ def get_reading_count(schedule_obj):
     try:
         meters_no_list = []
         schedule = get_schedule_bill_by_id_string(schedule_obj.id_string)
-        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule.id)
-        if schedule_log_id:
-            bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
-            for meter in bill_consumer_obj:
-                meter_id = get_meter_by_id(meter.meter_id)
-                meters_no_list.append(meter_id.meter_no)
-            meter_reading_obj = MeterReading.objects.filter(created_date__date=schedule.start_date.date(),meter_no__in=meters_no_list).count()
-        return meter_reading_obj
-    except:
+        if schedule:
+            frequency = get_global_lookup_by_id(schedule.frequency_id)
+            schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule.id)
+            if schedule_log_id:
+                bill_consumer_obj = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+                for meter in bill_consumer_obj:
+                    meter_id = get_meter_by_id(meter.meter_id)
+                    meters_no_list.append(meter_id.meter_no)
+                if frequency.key == 'daily':
+                    meter_reading_obj = MeterReading.objects.filter(created_date__date=schedule.start_date.date(),meter_no__in=meters_no_list).count()
+                elif frequency.key == 'monthly':
+                    meter_reading_obj = MeterReading.objects.filter(created_date__month=schedule.start_date.month,meter_no__in=meters_no_list).count()
+                else:
+                    return 0
+            return meter_reading_obj
+        else:
+            return 'schedule obj not found'
+    except Exception as e:
+        print('======get_reading_count========',e)
         pass
     
 
@@ -406,7 +417,8 @@ def get_rate(bill_cycle_id):
             return rate
         else:
             return False
-    except:
+    except Exception as e:
+        print('-get_rate-----',e)
         pass
 
 # Function for getting additional charge count it used before runbill
@@ -423,7 +435,6 @@ def get_additional_charges_amount(schedule_bill_obj):
         faulty_meter = 0
 
         schedule_obj = ScheduleBill.objects.filter(utility_product_id=schedule_bill_obj.utility_product_id, bill_cycle_id = schedule_bill_obj.bill_cycle_id,end_date__lte=schedule_bill_obj.start_date.date(), is_active=True)
-        
         if schedule_obj:
             schedule_obj = schedule_obj.filter().order_by('-bill_cycle_id')[0]
             schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
@@ -487,8 +498,23 @@ def get_additional_charges_amount(schedule_bill_obj):
             data = {"meter_status":meter_status,"outstanding":outstanding,"additional_charges":additional_charges }
             return data
         else:
-            return 0
-    except:
+            meter_status = {}
+            outstanding = {}
+            additional_charges = {}
+            meter_status['normal_meter'] = 0
+            meter_status['faulty_meter'] = 0
+            meter_status['rcnt_meter'] = 0
+            outstanding['outstanding_amount'] = 0
+            additional_charges['adjustment_amount'] = 0
+            additional_charges['refund_amount'] = 0
+            additional_charges['credit_amount'] = 0
+            additional_charges['penalty_amount'] = 0
+            additional_charges['paid_amount'] = 0
+
+            data = {"meter_status":meter_status,"outstanding":outstanding,"additional_charges":additional_charges }
+            return data
+    except Exception as e:
+        print('=====get_additional_charges_amount====',e)
         pass
 
 # Calculate bill current charges
@@ -496,6 +522,7 @@ def calculate_current_all_charges(data):
     try:
         # get bill schedule object
         schedule_bill_obj = get_schedule_bill_by_id_string(data['schedule_bill_id_string'])
+        frequency = get_global_lookup_by_id(schedule_bill_obj.frequency_id)
         rate = data['rate_obj']
         # get bill schedule log object by schedule
         schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
@@ -511,7 +538,15 @@ def calculate_current_all_charges(data):
                     # get bill objects according to consumer service contract
                     bill_obj = BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id, is_active=True).last() 
                     if bill_obj:
-                        meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
+                        
+                        if frequency.key == 'daily':
+                            meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
+                            bill_date_val = (datetime.now() + timedelta(days=7))
+                            bill_period_val = "7 Days"
+                        elif frequency.key == 'monthly':
+                            meter_reading = MeterReading.objects.get(created_date__month=schedule_bill_obj.start_date.month,consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
+                            bill_date_val = (meter_reading.created_date + timedelta(days=30))
+                            bill_period_val = "30 Days"
                         privious_meter_reading = bill_obj.meter_reading['current_meter_reading']
                         
                         # calculate current charge
@@ -537,7 +572,15 @@ def calculate_current_all_charges(data):
                         
                         rate_details = [{"unit":rate['unit'],"rate":rate['rate'], "outstanding" : outstanding_amt,"consumption_charges":current_charge}]
                     else:
-                        meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
+                        if frequency.key == 'daily':
+                            meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
+                            bill_date_val = (datetime.now() + timedelta(days=7))
+                            bill_period_val = "7 Days"
+                        elif frequency.key == 'monthly':
+                            meter_reading = MeterReading.objects.get(created_date__month=schedule_bill_obj.start_date.month,consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
+                            bill_date_val = (meter_reading.created_date + timedelta(days=30))
+                            bill_period_val = "30 Days"
+
                         privious_meter_reading = 0
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
                         opening_balance = int(current_charge) 
@@ -565,8 +608,8 @@ def calculate_current_all_charges(data):
                                 meter_reading = meter_data,
                                 bill_month = (meter_reading.created_date).strftime("%B"),
                                 rate_details = rate_details,
-                                bill_date = (datetime.now() + timedelta(days=7)),
-                                bill_period = "7 Days",
+                                bill_date = bill_date_val,
+                                bill_period = bill_period_val,
                                 opening_balance = opening_balance,
                                 current_charges = current_charge,
                                 is_active = True                        
@@ -592,4 +635,4 @@ def get_outstanding_amount(consumer,bill_obj):
     elif PaymentTbl.objects.filter(consumer_no=consumer.consumer_no, state=1,transaction_date__gte=bill_obj.bill_date.date()).exists():
         return bill_obj.meter_reading['amount_after_due_date']
     else:
-        return 0
+        return bill_obj.meter_reading['amount_after_due_date']

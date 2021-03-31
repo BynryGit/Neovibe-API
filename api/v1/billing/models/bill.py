@@ -67,6 +67,7 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
     state = models.BigIntegerField(choices=CHOICES, default=0)
     bill_month = models.CharField(max_length=200, blank=False, null=False)
     bill_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
