@@ -39,6 +39,7 @@ class ConsumerDetail(models.Model):
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     meter_no = models.CharField(max_length=200, null=True, blank=True)
     state = models.IntegerField(choices=METER_READING_TYPE, default=0)
+    is_spot_bill = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

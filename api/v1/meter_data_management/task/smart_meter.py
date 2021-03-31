@@ -28,7 +28,7 @@ def smart_meter():
             MeterReadingTbl(
                 tenant=consumer.tenant,
                 utility=consumer.utility,
-                consumer_detail_id=consumer.consumer_id,
+                consumer_detail_id=consumer.id,
                 read_cycle_id=consumer.read_cycle_id,
                 route_id=consumer.route_id,
                 utility_product_id=consumer.utility_product_id,
