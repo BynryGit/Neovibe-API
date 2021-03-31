@@ -385,9 +385,9 @@ def get_reading_count(schedule_obj):
                     meter_reading_obj = MeterReading.objects.filter(created_date__date=schedule.start_date.date(),meter_no__in=meters_no_list).count()
                 elif frequency.key == 'monthly':
                     meter_reading_obj = MeterReading.objects.filter(created_date__month=schedule.start_date.month,meter_no__in=meters_no_list).count()
-                else:
-                    return 0
-            return meter_reading_obj
+                return meter_reading_obj
+            else:
+                return 'schedule log obj not found'
         else:
             return 'schedule obj not found'
     except Exception as e:
@@ -396,10 +396,11 @@ def get_reading_count(schedule_obj):
     
 
 # Function for get rate it used before runbill
-def get_rate(bill_cycle_id): 
+def get_rate(schedule_bill_obj): 
     try: 
-        rate = {}
-        bill_cycle_obj = get_bill_cycle_by_id(bill_cycle_id)
+        electricity = []
+        schedule_bill_obj = get_schedule_bill_by_id_string(schedule_bill_obj.id_string)
+        bill_cycle_obj = get_bill_cycle_by_id(schedule_bill_obj.bill_cycle_id)
         if bill_cycle_obj:
             for route in bill_cycle_obj.route_json:
                 route_obj = get_route_by_id_string(route['id_string'])
@@ -407,14 +408,17 @@ def get_rate(bill_cycle_id):
                     premise_obj = get_premise_by_id_string(premise['id_string'])
                     consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
                     contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
-            rate_obj = get_rate_by_category_sub_category_wise(bill_cycle_obj.utility,bill_cycle_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
-            rate['id_string'] = rate_obj.id_string
-            rate['rate'] = rate_obj.rate
-            rate['product']= get_utility_product_by_id(rate_obj.product_id).name
-            rate['category'] = get_consumer_category_by_id(rate_obj.consumer_category_id).name
-            rate['sub_category'] = get_consumer_sub_category_by_id(rate_obj.consumer_subcategory_id).name
-            rate['unit'] = rate_obj.unit
-            return rate
+            rate_obj = get_rate_by_category_sub_category_wise(schedule_bill_obj.utility,schedule_bill_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
+            for electricity_rate in rate_obj:
+                rate = {}
+                # rate['id_string'] = electricity_rate.id_string
+                rate['unit'] = electricity_rate.unit
+                rate['rate'] = electricity_rate.rate
+                rate['product']= get_utility_product_by_id(electricity_rate.utility_product_id).name
+                rate['category'] = get_consumer_category_by_id(electricity_rate.consumer_category_id).name
+                rate['sub_category'] = get_consumer_sub_category_by_id(electricity_rate.consumer_subcategory_id).name
+                electricity.append(rate)
+            return electricity
         else:
             return False
     except Exception as e:
@@ -604,6 +608,7 @@ def calculate_current_all_charges(data):
                                 tenant = schedule_bill_obj.tenant,
                                 utility = schedule_bill_obj.utility,
                                 consumer_service_contract_detail_id = service_contract_obj.id,
+                                consumer_no = service_contract_obj.consumer_no,
                                 bill_cycle_id = schedule_bill_obj.bill_cycle_id,
                                 meter_reading = meter_data,
                                 bill_month = (meter_reading.created_date).strftime("%B"),

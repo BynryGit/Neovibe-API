@@ -49,7 +49,7 @@ class GetAllChargesDetails(GenericAPIView):
             # it's getting total consumer count
             detail_value['consumer_count'] = get_consumer_count(schedule_bill_obj.id)
             # it's getting rate according to Consumer category subcategory wise
-            detail_value['rate'] =  get_rate(schedule_bill_obj.bill_cycle_id)
+            detail_value['rate'] =  get_rate(schedule_bill_obj)
             # it's getting total reading count
             detail_value['reading_count'] = get_reading_count(schedule_bill_obj)
             # it's getting total consumer count
