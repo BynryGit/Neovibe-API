@@ -387,9 +387,9 @@ def get_reading_count(schedule_obj):
                     meter_reading_obj = MeterReading.objects.filter(created_date__month=schedule.start_date.month,meter_no__in=meters_no_list).count()
                 return meter_reading_obj
             else:
-                return 'schedule log obj not found'
+                return '----'
         else:
-            return 'schedule obj not found'
+            return '----'
     except Exception as e:
         print('======get_reading_count========',e)
         pass
@@ -415,8 +415,6 @@ def get_rate(schedule_bill_obj):
                 rate['unit'] = electricity_rate.unit
                 rate['rate'] = electricity_rate.rate
                 rate['product']= get_utility_product_by_id(electricity_rate.utility_product_id).name
-                rate['category'] = get_consumer_category_by_id(electricity_rate.consumer_category_id).name
-                rate['sub_category'] = get_consumer_sub_category_by_id(electricity_rate.consumer_subcategory_id).name
                 electricity.append(rate)
             return electricity
         else:
@@ -555,7 +553,6 @@ def calculate_current_all_charges(data):
                         
                         # calculate current charge
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
-                        
                         # calculate outstanding amount
                         outstanding_amt = get_outstanding_amount(consumer,bill_obj)
 
@@ -574,7 +571,7 @@ def calculate_current_all_charges(data):
                         }
 
                         
-                        rate_details = [{"unit":rate['unit'],"rate":rate['rate'], "outstanding" : outstanding_amt,"consumption_charges":current_charge}]
+                        rate_details = [{"rate":rate, "outstanding" : outstanding_amt,"consumption_charges":current_charge}]
                     else:
                         if frequency.key == 'daily':
                             meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
@@ -618,7 +615,8 @@ def calculate_current_all_charges(data):
                                 opening_balance = opening_balance,
                                 current_charges = current_charge,
                                 is_active = True                        
-                            ).save()
+                            )
+                            # .save()
 
             # return bill_val
 
@@ -629,8 +627,33 @@ def calculate_current_all_charges(data):
 
 # geberate current charges function
 def calculate_current_charges(privious_meter_reading,current_meter_reading,rate):
-    current_charge = (int(current_meter_reading) - int(privious_meter_reading)) * int(rate['rate'])
-    return current_charge
+    unit_list = []
+    rate_list = []
+    finalunitrate = []
+    print('----------',current_meter_reading,privious_meter_reading)
+    current_charge = (int(current_meter_reading) - int(privious_meter_reading))
+    if rate[0]['product'] == 'Gas':
+        current_charge = current_charge * int(rate[0]['rate'])
+        return current_charge
+    elif rate[0]['product'] == 'Power':
+        for rate_val in rate:
+            unit_list.append(rate_val['unit'])
+            rate_list.append(rate_val['rate'])
+        for a in range(len(unit_list)):
+            print('====unit_list[a].split('')[0]=========',unit_list[a].split('-')[0])
+            if current_charge > (len(unit_list)-1):
+                if unit_list[a].split('-')[0] != '>':
+                    finalunitrate.append((int(unit_list[a].split('-')[1])-(int(unit_list[a].split('-')[0])-1))*int(rate_list[a]))
+                else:
+                    finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * int(rate_list[a]))
+            else:
+                finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * int(rate_list[a]))
+
+
+        print('-----finalunitrate--------',finalunitrate)
+
+    return 1
+
 
 
 # geberate Outstanding amount function
