@@ -68,7 +68,7 @@ class RegistrationList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    queryset = RegTbl.objects.filter(is_active=True, state=0)
+                    queryset = RegTbl.objects.filter(is_active=True, state__in=[0,3])
                     queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:       
@@ -100,6 +100,8 @@ class Registration(GenericAPIView):
                 services = []
                 transactions_reg = []
                 payment = []
+                offer = []
+                # upfPayment = []
                 # registration_obj = {}
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
@@ -118,10 +120,16 @@ class Registration(GenericAPIView):
                         payment=request.data.pop('payment')
                         registration_obj.registration_obj['payment'] = payment
                         print("---------------------------",payment)
-                    if 'offer_id' in request.data:
-                        registration_obj.registration_obj['offer_id'] = request.data.pop('offer_id')
+                    # if 'offer_id' in request.data:
+                    #     registration_obj.registration_obj['offer_id'] = request.data.pop('offer_id')
+                    if 'offer' in request.data:
+                        offer = request.data.pop('offer')
+                        registration_obj.registration_obj['offer'] = offer
+                        print("++++++++++OFFER++++++++++++++",offer)
                     if 'upfPayment' in request.data:
-                        registration_obj.registration_obj['upfPayment'] = request.data.pop('upfPayment')                                             
+                        upfPayment = request.data.pop('upfPayment')
+                        print("==================UPFPAYMENT=========================",upfPayment)
+                        registration_obj.registration_obj['upfPayment'] = upfPayment                                          
                     registration_obj.save()
                     # payment and transaction save code start
                     if payment and transactions_reg:
@@ -560,13 +568,18 @@ class RegistrationApprove(GenericAPIView):
                         upfPayment=registration.registration_obj['upfPayment']
                         print("===upfPayment=====",upfPayment)
 
-                    offer_id=[]
-                    if 'offer_id' in registration.registration_obj:    
-                        offer_id={'offer_id':registration.registration_obj['offer_id']}
-                        print("===OFFER_ID=====",offer_id)
+                    # offer_id=[]
+                    # if 'offer_id' in registration.registration_obj:    
+                    #     offer_id={'offer_id':registration.registration_obj['offer_id']}
+                    #     print("===OFFER_ID=====",offer_id)
+
+                    offer=[]
+                    if 'offer' in registration.registration_obj:    
+                        offer=registration.registration_obj['offer']
+                        print("===OFFER_ID=====",offer)
 
                      # Consumer service contract details save start
-                    if service_new:
+                    if service_new and offer:
                         for service_obj in service_new:
                             print("++++++++++++++++++++++++++++++",service_obj)
                             consumer_service_contract_serializer = ConsumerServiceContractDetailSerializer(
@@ -575,6 +588,39 @@ class RegistrationApprove(GenericAPIView):
                             contract_detail_obj = consumer_service_contract_serializer.create(
                                 consumer_service_contract_serializer.validated_data, consumer, user)
                             contract_detail_obj.save()
+                            product_id=service_obj['product_id']
+                            print("=PROOOOOO===",product_id)
+                            
+                            for offer_obj in offer:
+                                print("=PROOOOOOoooooooooooooo===",offer_obj)
+                                if offer_obj['product_id']==product_id:
+                                    consumer_offer_detail_serializer = ConsumerOfferDetailSerializer(data=offer_obj)
+                                    consumer_offer_detail_serializer.is_valid(raise_exception=True)
+                                    consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
+                                        consumer_offer_detail_serializer.validated_data, consumer, user)
+                                    print("*****************CREATED SUCCESSFULLY************************************")
+                                    print("==========OFFER OBJ===============",offer_obj)
+                                    offer_contract=offer_obj['offer_id']
+                                    consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
+                                        offer_contract).id
+                                    consumer_offer_detail_obj.consumer_service_contract_detail_id = contract_detail_obj.id
+                                    consumer_offer_detail_obj.save()
+
+
+                        # if contract_detail_obj:
+                        #     for offer_obj in offer:
+                        #         print("==++++++++======++++++++++++++++",offer_obj)
+                        #         consumer_offer_detail_serializer = ConsumerOfferDetailSerializer(data=offer_obj)
+                        #         consumer_offer_detail_serializer.is_valid(raise_exception=True)
+                        #         consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
+                        #             consumer_offer_detail_serializer.validated_data, consumer, user)
+                        #         print("*****************CREATED SUCCESSFULLY************************************")
+                        #         print("==========OFFER OBJ===============",offer_obj)
+                        #         offer=offer_obj['offer_id']
+                        #         consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
+                        #             offer).id
+                        #         consumer_offer_detail_obj.consumer_service_contract_detail_id = contract_detail_obj.id
+                        #         consumer_offer_detail_obj.save()
                     # Consumer service contract details save end
 
                     # payment and transaction save code start
@@ -609,17 +655,20 @@ class RegistrationApprove(GenericAPIView):
                     # upfront payment save code start
 
                     # Consumer offer detail save code start
-                    if offer_id:
-                        consumer_offer_detail_serializer = ConsumerOfferDetailSerializer(data=offer_id)
-                        consumer_offer_detail_serializer.is_valid(raise_exception=True)
-                        consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
-                            consumer_offer_detail_serializer.validated_data, consumer, user)
-                        print("*****************CREATED SUCCESSFULLY************************************")
-                        offer=registration.registration_obj['offer_id']
-                        consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
-                            offer).id
-                        consumer_offer_detail_obj.save()
-                        # Consumer offer detail save code end
+                    # if offer:
+                    #     for offer_obj in offer:
+                    #         print("==++++++++======++++++++++++++++",offer_obj)
+                    #         consumer_offer_detail_serializer = ConsumerOfferDetailSerializer(data=offer_obj)
+                    #         consumer_offer_detail_serializer.is_valid(raise_exception=True)
+                    #         consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
+                    #             consumer_offer_detail_serializer.validated_data, consumer, user)
+                    #         print("*****************CREATED SUCCESSFULLY************************************")
+                    #         print("==========OFFER OBJ===============",offer_obj)
+                    #         offer=offer_obj['offer_id']
+                    #         consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
+                    #             offer).id
+                    #         consumer_offer_detail_obj.save()
+                    #         # Consumer offer detail save code end
 
                     
                                     

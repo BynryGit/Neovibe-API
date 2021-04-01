@@ -1,7 +1,7 @@
 from django.urls import path
 from v1.work_order.views.work_order_rules import WorkOrderRuleList
 from v1.work_order.views.work_order_master import WorkOrderMasterList,WorkOrderService,WorkOrderDetail
-from v1.work_order.views.service_appointment import ServiceAppointment,ServiceAppointmentList,ServiceAppointmentDetail, ServiceAppointmentLifeCycleList
+from v1.work_order.views.service_appointment import ServiceAppointment,ServiceAppointmentList,ServiceAppointmentDetail, ServiceAppointmentLifeCycleList, ServiceAppointmentReject, ServiceAppointmentHold, ServiceAppointmentApprove
 from v1.work_order.views.material_type import MaterialTypeList
 from v1.work_order.views.material_subtype import MaterialSubTypeList
 from v1.work_order.views.material_name import MaterialNameList
@@ -26,5 +26,9 @@ urlpatterns = [
     path('scheduled-appointment',ScheduledAppointment.as_view(), name="add_scheduled_appointment"),
     path('service-appointment/<uuid:id_string>/life-cycle',ServiceAppointmentLifeCycleList.as_view(),name="service_life_cycle"),
     # path('service-appointment/<uuid:id_string>/disconnect-list',ServiceAppointmentConsumerDisconnectList.as_view(), name="service_disconnect_list"),
-    path('service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list')
+    path('service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list'),
+    path('service-appointment/<uuid:id_string>/reject',ServiceAppointmentReject.as_view(),name='service_appointment_reject'),
+    path('service-appointment/<uuid:id_string>/hold',ServiceAppointmentHold.as_view(),name='service_appointment_hold'),
+    path('service-appointment/<uuid:id_string>/approve',ServiceAppointmentApprove.as_view(),name='service_appointment_approve')
+
 ]
