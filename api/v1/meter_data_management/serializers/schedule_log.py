@@ -28,7 +28,7 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
     activity_type_id = GlobalLookupShortViewSerializer(many=False, source='get_activity_type')
     recurring_id = GlobalLookupShortViewSerializer(many=False, source='get_recurring_name')
     utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
-    schedule_log_status = ChoiceField(choices=ScheduleLogTbl.SCHEDULE_LOG_STATUS)
+    state = ChoiceField(choices=ScheduleLogTbl.SCHEDULE_LOG_STATUS)
     route_detail = serializers.SerializerMethodField()
     total_consumer = serializers.SerializerMethodField()
 
@@ -50,6 +50,6 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ScheduleLogTbl
-        fields = ('id_string', 'schedule_log_status', 'date_and_time', 'created_date', 'updated_date', 'created_by',
-                  'updated_by', 'total_consumer', 'route_detail', 'schedule_id', 'read_cycle_id', 'activity_type_id',
-                  'recurring_id', 'utility_product_id', 'tenant', 'utility')
+        fields = ('id_string', 'state', 'date_and_time', 'created_date', 'updated_date', 'created_by', 'updated_by',
+                  'total_consumer', 'route_detail', 'schedule_id', 'read_cycle_id', 'activity_type_id', 'recurring_id',
+                  'utility_product_id', 'tenant', 'utility')

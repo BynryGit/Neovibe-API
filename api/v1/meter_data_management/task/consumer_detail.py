@@ -19,13 +19,14 @@ from v1.meter_data_management.models.consumer_detail import ConsumerDetail as Co
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id_string
-from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
+from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl, SCHEDULE_LOG_STATUS_DICT
 
 
 @task(name="ImportConsumer-task", queue='ImportConsumer')
 def create_consumer(schedule_log_id):
     try:
         schedule_log_obj = ScheduleLogTbl.objects.get(id=schedule_log_id)
+        schedule_log_obj.change_state(SCHEDULE_LOG_STATUS_DICT["IN-PROGRESS"])
         read_cycle_obj = get_read_cycle_by_id(schedule_log_obj.read_cycle_id)
         for route in read_cycle_obj.route_json:
             route_obj = get_route_by_id_string(route['id_string'])
