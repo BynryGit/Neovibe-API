@@ -39,6 +39,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
     phone_no = serializers.CharField(required=False, max_length=200)
     email_id = serializers.CharField(required=False, max_length=200)
     company_id = serializers.CharField(required=False, max_length=200)
+    currency_id = serializers.CharField(required=False, max_length=200)
     pan_no = serializers.CharField(required=False, max_length=200)
     tax_id = serializers.CharField(required=True, max_length=200,
                                    error_messages={"required": "The field Tax ID is required."})
@@ -48,6 +49,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
     state_id = serializers.IntegerField(required=False)
     city_id = serializers.IntegerField(required=False)
     status_id = serializers.IntegerField(required=False)
+
 
     class Meta:
         model = UtilityMasterTbl
@@ -66,7 +68,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
                 utility_obj.created_by = user.id
                 utility_obj.created_date = timezone.now()
                 utility_obj.tenant_id = tenant
-                utility_obj.company_id = generate_company_id(utility_obj)
+                # utility_obj.company_id = generate_company_id(utility_obj)
                 utility_obj.save()
                 return utility_obj
 

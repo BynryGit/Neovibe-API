@@ -24,7 +24,8 @@ from v1.payment.models.payment import get_payment_by_id_string, PAYMENT_DICT
 from v1.payment.models.payment_transactions import PaymentTransaction
 from v1.payment.serializer.payment import *
 from v1.payment.serializer.payment_transactions import PaymentTransactionListSerializer, PaymentTransactionSerializer
-from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT
+from v1.registration.models.registrations import Registration as RegTbl, REGISTRATION_DICT, \
+    get_registration_by_registration_no
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.registration.models.registrations import get_registration_by_id_string
 from v1.registration.serializers.registration import *
@@ -195,6 +196,8 @@ class RegistrationDetail(GenericAPIView):
     def get(self, request, id_string):
         try:
             registration = get_registration_by_id_string(id_string)
+            if "registration_no" in self.request.query_params:
+                registration = get_registration_by_registration_no(self.request.query_params['registration_no'])
             if registration:
                 serializer = RegistrationViewSerializer(instance=registration, context={'request': request})
                 return Response({
@@ -837,10 +840,15 @@ class RegistrationLifeCycleList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    registration = get_registration_by_id_string(self.kwargs['id_string'])
-                    module = get_module_by_key("CONSUMEROPS")
-                    sub_module = get_sub_module_by_key("REGISTRATION")
-                    queryset = LifeCycle.objects.filter(object_id=registration.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    module = get_module_by_key("CONSUMER_OPS")
+                    sub_module = get_sub_module_by_key("CONSUMER_OPS_REGISTRATION")
+                    queryset = ""
+                    if 'registration_id' in self.request.query_params:
+                        registration = get_registration_by_id_string(self.request.query_params['registration_id'])
+                        queryset = LifeCycle.objects.filter(object_id=registration.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    if 'registration_no' in self.request.query_params:
+                        registration = get_registration_by_registration_no(self.request.query_params['registration_no'])
+                        queryset = LifeCycle.objects.filter(object_id=registration.id, module_id=module, sub_module_id=sub_module, is_active=True)
                     if queryset:
                         return queryset
                     else:

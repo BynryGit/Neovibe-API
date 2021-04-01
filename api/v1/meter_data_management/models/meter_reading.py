@@ -20,6 +20,7 @@ from v1.meter_data_management.models.consumer_detail import get_consumer_detail_
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
+from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
@@ -52,7 +53,11 @@ class MeterReading(models.Model):
     validator_one_id = models.BigIntegerField(null=True, blank=True)
     validator_two_id = models.BigIntegerField(null=True, blank=True)
     meter_status_id = models.BigIntegerField(null=True, blank=True)
+    meter_status_v1_id = models.BigIntegerField(null=True, blank=True)
+    meter_status_v2_id = models.BigIntegerField(null=True, blank=True)
     reader_status_id = models.BigIntegerField(null=True, blank=True)
+    reader_status_v1_id = models.BigIntegerField(null=True, blank=True)
+    reader_status_v2_id = models.BigIntegerField(null=True, blank=True)
     reading_status = models.IntegerField(choices=READING_STATUS, default=0)
     meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
@@ -62,12 +67,14 @@ class MeterReading(models.Model):
     current_meter_reading_v2 = models.CharField(max_length=200, null=True, blank=True)
     meter_reading_json = JSONField(null=True, blank=True)
     additional_parameter_json = JSONField(null=True, blank=True)
+    spot_bill_json = JSONField(null=True, blank=True)
     is_assign_to_v1 = models.BooleanField(default=False)
     is_assign_to_v2 = models.BooleanField(default=False)
     is_meter_matching = models.BooleanField(default=False)
     is_reading_matching = models.BooleanField(default=False)
     is_validated = models.BooleanField(default=False)
     is_duplicate = models.BooleanField(default=False)
+    is_spot_bill = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -95,6 +102,11 @@ class MeterReading(models.Model):
         return route_task_assignment
 
     @property
+    def get_schedule_log_name(self):
+        schedule_log = get_schedule_log_by_id(self.schedule_log_id)
+        return schedule_log
+
+    @property
     def get_utility_product_name(self):
         utility_product = get_utility_product_by_id(self.utility_product_id)
         return utility_product
@@ -115,10 +127,10 @@ class MeterReading(models.Model):
         return validator_two
 
     def __str__(self):
-        return self.meter_no
+        return self.meter_no + ' ' + str(self.id_string)
 
     def __unicode__(self):
-        return self.meter_no
+        return self.meter_no + ' ' +  str(self.id_string)
 
 # Create Meter Reading Table end
 

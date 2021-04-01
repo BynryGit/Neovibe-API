@@ -57,7 +57,7 @@ class ScheduleBill(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return str(self.bill_cycle_id)
+        return str(self.bill_cycle_id)+ " "+str(self.id_string)
 
     def __unicode__(self):
         return self.bill_cycle_id

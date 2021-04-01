@@ -6,6 +6,7 @@ from rest_framework import serializers, status
 from v1.commonapp.views.settings_reader import SettingReader
 setting_reader = SettingReader()
 from v1.commonapp.views.custom_exception import CustomAPIException
+
 from v1.userapp.models.user_utility import UserUtility
 from v1.userapp.views.common_functions import set_user_utility_validated_data
 from v1.utility.serializers.utility import UtilityMasterViewSerializer

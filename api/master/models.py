@@ -209,8 +209,10 @@ def get_user_by_id_string(id_string):
 
 
 def get_user_by_id(id):
-    user = User.objects.get(id=id)
-    return user
+    try:
+        return User.objects.get(id=id)
+    except:
+        return False
 
 
 def get_user_by_username_password(email, password):

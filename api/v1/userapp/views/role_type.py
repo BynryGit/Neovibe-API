@@ -16,6 +16,7 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.models.role_type import RoleType as RoleTypeTbl
 from v1.userapp.serializers.role_type import GetRoleTypeSerializer
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 
 # API Header
@@ -47,7 +48,8 @@ class RoleTypeList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1,1,1,user_obj):
-                    queryset = RoleTypeTbl.objects.filter(is_active=True)
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = RoleTypeTbl.objects.filter(utility=utility, is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

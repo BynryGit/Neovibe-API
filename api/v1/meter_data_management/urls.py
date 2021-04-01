@@ -1,10 +1,11 @@
 __author__ = "aki"
 
 from django.urls import path
-from v1.meter_data_management.task.schedule_log import schedule_log
 from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
 from v1.meter_data_management.views.meter_reading_summary import MeterReadingSummary
+from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
+from v1.meter_data_management.views.meter_reading_validation_two import MeterReadingValidationTwoDetail
 from v1.meter_data_management.views.meter_summary import MeterSummary
 from v1.meter_data_management.views.read_cycle import ReadCycleList
 from v1.meter_data_management.views.schedule_log_route import ScheduleLogRouteList
@@ -17,7 +18,10 @@ from v1.meter_data_management.views.schedule import Schedule, ScheduleList, Sche
 from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
 from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
-from v1.meter_data_management.views.validation_one import ValidationOneList
+from v1.meter_data_management.views.upload_route import UploadRouteList, UploadRoute
+from v1.meter_data_management.views.upload_route_sammary import UploadRouteSummary
+from v1.meter_data_management.views.validation import ValidationList
+from v1.meter_data_management.views.meter_reading_validation_revisit import MeterReadingValidationRevisitDetail
 from v1.meter_data_management.views.validation_schedule_log import ValidationScheduleLogList
 from v1.meter_data_management.views.validation_assignments import ValidationAssignmentList,ValidationAssignmentDetail,\
     ValidationAssignment
@@ -79,15 +83,28 @@ urlpatterns = [
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
 
     path('route-task-assignment', RouteTaskAssignment.as_view(), name='route_task_assignment'),
-    path('route-task-assignment/list', RouteTaskAssignmentList.as_view(), name='route_task_assignment_list'),
-    path('route-task-assignment/<uuid:id_string>', RouteTaskAssignmentDetail.as_view(), name='route_task_assignment_detail'),
-    path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(), name='assign_revisit_task_assignment'),
-    path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(), name='de_revisit_route_task_assignment'),
+    path('route-task-assignment/list', RouteTaskAssignmentList.as_view(),
+         name='route_task_assignment_list'),
+    path('route-task-assignment/<uuid:id_string>', RouteTaskAssignmentDetail.as_view(),
+         name='route_task_assignment_detail'),
+    path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(),
+         name='assign_revisit_task_assignment'),
+    path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(),
+         name='de_revisit_route_task_assignment'),
 
     path('validation-schedule-log/list', ValidationScheduleLogList.as_view(), name='validation_schedule_log_list'),
     path('utility/<uuid:id_string>/meter-reading-summary', MeterReadingSummary.as_view(), name='meter_reading_summary'),
     path('meter-reading', MeterReading.as_view(), name='meter_reading'),
-    path('validation-one/schedule-log/<uuid:schedule_log>/read-cycle/<uuid:read_cycle>/list', ValidationOneList.as_view(), name='validation_one_list'),
+    path('meter-reading/<uuid:id_string>/validation-revisit', MeterReadingValidationRevisitDetail.as_view(),
+         name='validation_revisit_detail'),
+    path('schedule-log/<uuid:schedule_log>/read-cycle/<uuid:read_cycle>/validation/list',
+         ValidationList.as_view(), name='validation_list'),
+    path('meter-reading/<uuid:id_string>/validation-one', MeterReadingValidationOneDetail.as_view(),
+         name='meter_reading_validation_one_detail'),
+    path('meter-reading/<uuid:id_string>/validation-two', MeterReadingValidationTwoDetail.as_view(),
+         name='meter_reading_validation_two_detail'),
+    path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
+    path('upload-route', UploadRoute.as_view(), name='upload_route'),
+    path('utility/<uuid:id_string>/upload-route-summary', UploadRouteSummary.as_view(), name='upload_route_summary'),
 
-    path('log', schedule_log, name='route_add')
 ]

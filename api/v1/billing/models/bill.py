@@ -18,25 +18,63 @@ from datetime import datetime # importing package for datetime
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
-
+import fsm
 from django.contrib.postgres.fields import JSONField
 import fsm
 from django.utils import timezone # importing package for datetime
+from v1.commonapp.views.custom_exception import CustomAPIException
+
+# *********** BILL CONSTANTS **************
+BILL_DICT = {
+    "CREATED": 0,
+    "UN BILLED": 1,
+    "IN PROGRESS": 2,
+    "PARTIAL": 3,
+    "HOLD": 4,
+    "COMPLETED": 5,
+    "APPROVED": 6,
+    "ARCHIVED": 7,
+}
+
 
 # Create Bill Master table start.
 
-class Bill(models.Model):
+class Bill(models.Model, fsm.FiniteStateMachineMixin):
+
+    CHOICES = (
+        (0, 'CREATED'),
+        (1, 'UN BILLED'),
+        (2, 'IN PROGRESS'),
+        (3, 'PARTIAL'),
+        (4, 'HOLD'),
+        (5, 'COMPLETED'),
+        (6, 'APPROVED'),
+        (7, 'ARCHIVED'),
+    )
+
+    state_machine = {
+        BILL_DICT['CREATED']: (BILL_DICT['UN BILLED'],),
+        BILL_DICT['UN BILLED']: (BILL_DICT['IN PROGRESS'],),
+        BILL_DICT['IN PROGRESS']: (BILL_DICT['PARTIAL'],BILL_DICT['COMPLETED'],),
+        BILL_DICT['PARTIAL']: (BILL_DICT['COMPLETED'],),
+        BILL_DICT['COMPLETED']: (BILL_DICT['APPROVED'],BILL_DICT['HOLD'],),
+        BILL_DICT['HOLD']: (BILL_DICT['APPROVED'],),
+        BILL_DICT['APPROVED']: (BILL_DICT['ARCHIVED'],),
+    }
+
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
+    consumer_no = models.CharField(max_length=200, null=True, blank=True)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     bill_month = models.CharField(max_length=200, blank=False, null=False)
     bill_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     bill_period = models.CharField(max_length=200, blank=False, null=False)
-    meter_reading = JSONField(blank=False, null=False)
-    rate_details = JSONField(blank=False, null=False)
-    additional_charges = JSONField(blank=False, null=False)
+    meter_reading = JSONField(blank=True, null=True)
+    rate_details = JSONField(blank=True, null=True)
+    additional_charges = JSONField(blank=True, null=True)
     opening_balance = models.CharField(max_length=200, blank=False, null=False)
     current_charges = models.CharField(max_length=200, blank=False, null=False)
     bill_frequency_id = models.BigIntegerField(null=True, blank=True)
@@ -50,10 +88,19 @@ class Bill(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return str(self.consumer_service_contract_detail_id)
+        return str(self.id_string)+"-"+str(self.consumer_service_contract_detail_id)
 
     def __unicode__(self):
-        return self.consumer_service_contract_detail_id
+        return self.id_string
+
+    
+    # Function for finite state machine state change
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            self.save()
+        except Exception as e:
+            raise CustomAPIException("Billing transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)
+
 
 # Create Bill Master table end.
 

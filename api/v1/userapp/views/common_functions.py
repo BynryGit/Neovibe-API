@@ -408,7 +408,9 @@ def set_user_sub_type_validated_data(validated_data):
 def generate_user_id(user):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=user.tenant,
-                                                            sub_module_id=get_sub_module_by_key("S_AND_M_USER"))
+                                                            sub_module_id=get_sub_module_by_key("ROLE"))
+
+        print("PRINT",get_sub_module_by_key("ROLE"))
         if format_obj.is_prefix == True:
             user_id = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

@@ -25,6 +25,8 @@ from v1.work_order.models.material_type import get_material_type_by_id_string
 from v1.work_order.models.material_subtype import get_material_subtype_by_id_string
 from v1.utility.models.utility_work_order_sub_type import get_utility_work_order_sub_type_by_id_string
 from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
+from master.models import get_user_by_id_string
+
 
 class CustomFilter:
 
@@ -74,6 +76,10 @@ class CustomFilter:
         if 'module_id' in request.query_params:
             module = get_utility_module_by_id_string(request.query_params['module_id'])
             queryset = queryset.filter(module_id=module.id)
+
+        if 'user_id' in request.query_params:
+            user = get_user_by_id_string(request.query_params['user_id'])
+            queryset = queryset.filter(user_id=user.id)
 
 
         if 'consumer_processing' in request.query_params:

@@ -4,6 +4,7 @@ import traceback
 from api.constants import *
 from django.db import transaction
 from rest_framework.exceptions import APIException
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -65,6 +66,7 @@ class UtilityList(generics.ListAPIView):
             if response:
                 if is_authorized(1,1,1,user_obj):
                     queryset = UtilityMasterTbl.objects.filter(is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -128,7 +130,7 @@ class UtilityListByTenant(generics.ListAPIView):
 
 class Utility(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -170,7 +172,7 @@ class Utility(GenericAPIView):
 
 class UtilityDetail(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
@@ -192,7 +194,7 @@ class UtilityDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -227,7 +229,7 @@ class UtilityDetail(GenericAPIView):
 
 class UtilityModule(GenericAPIView):
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -241,8 +243,8 @@ class UtilityModule(GenericAPIView):
                 a = get_module_by_id_string(id_string=utility_module['module_id'])
                 print("AAAA", a)
                 serializer = UtilityModuleSerializer(data=request.data)
-                request.data['module_id'] = a.id
-                print("AAAAAAAID",a.id)
+                request.data['module_id'] = a.id_string
+                print("AAAAAAAID",a.id_string)
                 request.data['label'] = a.name
                 print("AAANAME",a.name)
                 if serializer.is_valid(raise_exception=False):
@@ -255,15 +257,28 @@ class UtilityModule(GenericAPIView):
                             b = get_sub_module_by_id_string(id_string=utility_submodule['submodule_id'])
                             print("BBBBBBBBBBBBBB",b)
                             serializer = UtilitySubModuleSerializer(data = request.data)
-                            print("Serializer",serializer)
-                            request.data['submodule_id'] = b.id
-                            print("BBBID",b.id)
+                            print("Serializer",request.data)
+                            request.data['submodule_id'] = b.id_string
+                            print("BBBID",b.id_string)
                             request.data['label'] = b.name
                             print("bBBNAME",b.name)
-                            request.data['module_id'] = a.id
+                            request.data['module_id'] = a.id_string
+                            print("Request Dta 222",request.data)
                             if serializer.is_valid(raise_exception=False):
+                                print("SFjvcjh",serializer.validated_data)
                                 utility_submodule_obj = serializer.create(serializer.validated_data, user)
-                                print("VVVDSA",serializer.validated_data)
+                                print("VVVDSA",utility_submodule_obj)
+                                # if utility_submodule_obj:
+                                #     view_serializer = UtilitySubModuleSerializer(instance=utility_module_obj, context={'request': request})
+                                #     return Response({
+                                #         STATE: SUCCESS,
+                                #         RESULTS: view_serializer.data,
+                                #     }, status=status.HTTP_201_CREATED)
+                                # else:
+                                #     return Response({
+                                #         STATE: ERROR,
+                                #         RESULTS: list(serializer.errors.values())[0][0],
+                                #     }, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response({
                         STATE: ERROR,

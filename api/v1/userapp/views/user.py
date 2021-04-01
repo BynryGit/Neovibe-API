@@ -1,19 +1,22 @@
 import traceback
+import rest_framework
+from django.contrib.auth.decorators import login_required
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, UpdateAPIView
 from api.messages import *
 from api.constants import *
-from master.models import get_all_users, get_user_by_id_string, is_email_exists,User as UserTbl
+from master.models import get_all_users, get_user_by_id_string, get_user_by_email, is_email_exists, User as UserTbl
 from v1.userapp.models.user_utility import UserUtility
-from v1.commonapp.common_functions import get_user_from_token,is_token_valid,is_authorized
+from v1.commonapp.common_functions import get_user_from_token, is_token_valid, is_authorized
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import is_token_validate, role_required, utility_required
-from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserSerializer
+from v1.userapp.serializers.user import UserListSerializer, UserViewSerializer, UserSerializer, \
+    ResetPasswordEmailSerializer, SetNewPasswordSerializer, ChangePasswordSerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.userapp.serializers.user_utility import UserUtilityViewSerializer
 from v1.userapp.models.user_skill import UserSkill
@@ -30,6 +33,20 @@ from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 from v1.commonapp.models.lifecycle import LifeCycle
 from v1.userapp.views.task import save_user_timeline
 from django.db import transaction
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse, reverse_lazy
+# from v1.userapp.utlis import Util
+from django.core.mail import send_mail
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from master.models import User
+from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+
 
 # API Header
 # API end Point: api/v1/user/list
@@ -58,18 +75,18 @@ class UserList(generics.ListAPIView):
         search_fields = ('first_name', 'email',)
 
         def get_queryset(self):
-                response, user_obj = is_token_valid(self.request.headers['Authorization'])
-                if response:
-                    if is_authorized(1, 1, 1, user_obj):
-                        queryset = UserTbl.objects.filter(form_factor_id=1, is_active=True)
-                        if queryset:
-                            return queryset
-                        else:
-                            raise CustomAPIException("User not found.", status.HTTP_404_NOT_FOUND)
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    queryset = UserTbl.objects.filter(form_factor_id=1, is_active=True)
+                    if queryset:
+                        return queryset
                     else:
-                        raise InvalidAuthorizationException
+                        raise CustomAPIException("User not found.", status.HTTP_404_NOT_FOUND)
                 else:
-                    raise InvalidTokenException
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
 
@@ -112,23 +129,26 @@ class ResourceList(generics.ListAPIView):
 
                     if appointment_obj:
                         work_order_obj = get_work_order_master_by_id(appointment_obj.work_order_master_id)
-                        for skill_obj in work_order_obj.json_obj['skill_details']:  
-                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])  
-                            skill_id_list.append(skill_id.id)                    
+                        for skill_obj in work_order_obj.json_obj['skill_details']:
+                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])
+                            skill_id_list.append(skill_id.id)
 
                     user_utility_objs = UserUtility.objects.filter(utility=utility, is_active=True)
                     if user_utility_objs:
                         for user_utility_obj in user_utility_objs:
-                            user_obj = UserTbl.objects.filter(id = user_utility_obj.user_id, form_factor_id=2, is_active=True).last()
+                            user_obj = UserTbl.objects.filter(id=user_utility_obj.user_id, form_factor_id=2,
+                                                              is_active=True).last()
                             if user_obj:
-                                user_list.append(user_obj)  
+                                user_list.append(user_obj)
 
-                        user_skills = UserSkill.objects.filter(user_id__in = [user.id for user in user_list],skill_id__in=skill_id_list, is_active=True).distinct('user_id')                    
+                        user_skills = UserSkill.objects.filter(user_id__in=[user.id for user in user_list],
+                                                               skill_id__in=skill_id_list, is_active=True).distinct(
+                            'user_id')
                         for user_skill in user_skills:
                             user_skill_list.append(user_skill.user_id)
 
-                        
-                        user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list, date__date=(appointment_obj.sa_date).date())
+                        user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list,
+                                                                    date__date=(appointment_obj.sa_date).date())
                         for user_leaves in user_leaves_obj:
                             uesr_leaves_list.append(user_leaves.user_id)
 
@@ -145,7 +165,6 @@ class ResourceList(generics.ListAPIView):
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
-
 # API Header
 # API end Point: api/v1/bulk-assign/resource/list
 # API verb: POST
@@ -159,7 +178,6 @@ class ResourceList(generics.ListAPIView):
 # Created on: 05/02/2020
 
 class BulkAssignResourceList(generics.ListAPIView):
-
     try:
         serializer_class = UserSkillViewSerializer
         pagination_class = StandardResultsSetPagination
@@ -177,7 +195,7 @@ class BulkAssignResourceList(generics.ListAPIView):
                     a = self.request.query_params.get('selectedRow')
                     a = a.split(',')
 
-                    appointment_obj = ServiceAppointment.objects.filter(id_string__in = a)
+                    appointment_obj = ServiceAppointment.objects.filter(id_string__in=a)
                     workOrderList = []
                     skill_id_list = []
                     user_list = []
@@ -188,30 +206,33 @@ class BulkAssignResourceList(generics.ListAPIView):
                         appointment_date.append((a.sa_date).date())
                         workOrderList.append(get_work_order_master_by_id(a.work_order_master_id))
 
-                    for work_order in  workOrderList:
-                        for skill_obj in work_order.json_obj['skill_details']:  
-                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])  
-                            skill_id_list.append(skill_id.id)   
+                    for work_order in workOrderList:
+                        for skill_obj in work_order.json_obj['skill_details']:
+                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])
+                            skill_id_list.append(skill_id.id)
 
                     user_utility_objs = UserUtility.objects.filter(utility=utility, is_active=True)
 
                     if user_utility_objs:
                         for user_utility_obj in user_utility_objs:
-                            user_obj = UserTbl.objects.filter(id = user_utility_obj.user_id, form_factor_id=2, is_active=True).last()
+                            user_obj = UserTbl.objects.filter(id=user_utility_obj.user_id, form_factor_id=2,
+                                                              is_active=True).last()
                             if user_obj:
-                                user_list.append(user_obj)  
+                                user_list.append(user_obj)
 
-                        user_skills = UserSkill.objects.filter(user_id__in = [user.id for user in user_list],skill_id__in=skill_id_list, is_active=True).distinct('user_id')                    
+                        user_skills = UserSkill.objects.filter(user_id__in=[user.id for user in user_list],
+                                                               skill_id__in=skill_id_list, is_active=True).distinct(
+                            'user_id')
                         for user_skill in user_skills:
                             user_skill_list.append(user_skill.user_id)
 
-                        
-                        user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list, date__date__in=appointment_date)
+                        user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list,
+                                                                    date__date__in=appointment_date)
                         for user_leaves in user_leaves_obj:
                             uesr_leaves_list.append(user_leaves.user_id)
 
                         queryset = user_skills.filter().exclude(user_id__in=uesr_leaves_list)
-                        
+
                         return queryset
                     else:
                         raise CustomAPIException("User Utility not found.", status.HTTP_404_NOT_FOUND)
@@ -222,7 +243,7 @@ class BulkAssignResourceList(generics.ListAPIView):
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
-       
+
 # API Header
 # API end Point: api/v1/user
 # API verb: POST
@@ -239,7 +260,7 @@ class BulkAssignResourceList(generics.ListAPIView):
 class User(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request, format=None):
         try:
             serializer = UserSerializer(data=request.data)
@@ -247,7 +268,7 @@ class User(GenericAPIView):
                 if not is_email_exists(request.data['email']):
                     user_id_string = get_user_from_token(request.headers['Authorization'])
                     user = get_user_by_id_string(user_id_string)
-                    with transaction.atomic():  
+                    with transaction.atomic():
                         user_obj = serializer.create(serializer.validated_data, user)
 
                         # State change for user start
@@ -273,7 +294,7 @@ class User(GenericAPIView):
                     RESULTS: list(serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User')
+            logger().log(e, 'HIGH', module='Admin', sub_module='User')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
@@ -298,7 +319,7 @@ class User(GenericAPIView):
 class UserDetail(GenericAPIView):
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request, id_string):
         try:
             user = get_user_by_id_string(id_string)
@@ -314,7 +335,7 @@ class UserDetail(GenericAPIView):
                     RESULTS: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'MEDIUM', module = 'Admin', sub_module = 'User')
+            logger().log(e, 'MEDIUM', module='Admin', sub_module='User')
             return Response({
                 STATE: EXCEPTION,
                 RESULTS: '',
@@ -322,7 +343,7 @@ class UserDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(ADMIN, UTILITY_MASTER,  EDIT)
+    # role_required(ADMIN, UTILITY_MASTER,  EDIT)
     def put(self, request, id_string):
         try:
             user_obj = get_user_by_id_string(id_string)
@@ -345,13 +366,12 @@ class UserDetail(GenericAPIView):
             else:
                 raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User')
+            logger().log(e, 'HIGH', module='Admin', sub_module='User')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
-
 
 
 # API Header
@@ -405,8 +425,6 @@ class UserNote(GenericAPIView):
             }, status=res.status_code)
 
 
-
-
 # API Header
 # API end Point: api/v1/user/:id_string/note/list
 # API verb: POST
@@ -446,7 +464,6 @@ class UserNoteList(generics.ListAPIView):
         logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
 
 
-
 # API Header
 # API end Point: api/v1/user/:id_string/life-cycles
 # API verb: GET
@@ -469,7 +486,8 @@ class UserLifeCycleList(generics.ListAPIView):
                     user_obj = get_user_by_id_string(self.kwargs['id_string'])
                     module = get_module_by_key("S&M")
                     sub_module = get_sub_module_by_key("S_AND_M_USER")
-                    queryset = LifeCycle.objects.filter(object_id=user_obj.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    queryset = LifeCycle.objects.filter(object_id=user_obj.id, module_id=module,
+                                                        sub_module_id=sub_module, is_active=True)
                     if queryset:
                         return queryset
                     else:
@@ -480,4 +498,129 @@ class UserLifeCycleList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
+
+
+class RequestPasswordResetEmail(generics.GenericAPIView):
+    serializer_class = ResetPasswordEmailSerializer
+
+    def post(self, request):
+        try:
+            serializer = self.serializer_class(data=request.data)
+            email = request.data['email']
+            if is_email_exists(request.data['email']):
+                user = get_user_by_email(email)
+                uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+                token = PasswordResetTokenGenerator().make_token(user)
+                absurl = 'http://localhost:4200/reset-password/' + uidb64 + '/' + token
+                # current_site=get_current_site(request=request).domain
+                # relativeLink=reverse('password-reset-complete',kwargs={'uidb64':uidb64, 'token':token})
+                # absurl='http://'+current_site+ relativeLink
+                email_body = 'Hello, \n Use link below to reset your password \n' + absurl
+                # data = {'email_body':email_body, 'to_email':user.email, 'email_subject':'Reset your password'}
+                send_mail('Reset Your Password', email_body, 'gaurav.satpute@bynry.com', [user.email],
+                          fail_silently=False)
+                # try:
+                #     send_mail('Subject here', 'Here is the message.', 'gaurav.satpute@bynry.com', ['satputegaurav18@gmail.com'],fail_silently=False)
+                # except Exception as e:
+                #     print(e)
+                # Util.send_email(data)
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: 'we have sent you a link to reset password',
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: FAIL,
+                    RESULTS: 'You entered wrong email address',
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='User')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+class SetNewPasswordAPIView(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+
+    def patch(self, request, uidb64, token):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)
+
+
+# class ChangePasswordView(UpdateAPIView):
+#     serializer_class = ChangePasswordSerializer
+#     model = User
+#     # permission_classes = (IsAuthenticated,)
+#
+#     def get_object(self, queryset=None):
+#         obj = self.request.user
+#         print("OBJ",obj)
+#         return obj
+#
+#     def update(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         serializer = self.get_serializer(data=request.data)
+#
+#         if serializer.is_valid():
+#             # Check old password
+#             if not self.object.check_password(serializer.data.get("old_password")):
+#                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+#             # set_password
+#             self.object.set_password(serializer.data.get("new_password"))
+#             self.object.save()
+#             response = {
+#                 'status': 'success',
+#                 'code': status.HTTP_200_OK,
+#                 'message': 'Password updated successfully',
+#                 'data': []
+#             }
+#
+#             return Response(response)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangePasswordView(generics.UpdateAPIView):
+    # queryset = UserTbl.objects.all()
+    # print("QUERYSET",queryset)
+    # permission_classes = (
+    #     rest_framework.permissions.AllowAny,
+    # )
+    # serializer_class = ChangePasswordSerializer
+
+    @is_token_validate
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            if user:
+                serializer = ChangePasswordSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    print(serializer.validated_data['password'])
+                    user_obj = serializer.update(user, serializer.validated_data, user)
+                    return Response({
+                        STATE: SUCCESS,
+                        # RESULTS: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+            }, status=res.status_code)
+
 

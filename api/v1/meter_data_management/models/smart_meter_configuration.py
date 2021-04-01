@@ -30,15 +30,14 @@ class SmartMeterConfiguration(models.Model):
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     vendor_name = models.CharField(max_length=200, blank=True, null=True)
     smart_meter_api_name = models.CharField(max_length=200, blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
     api_url = models.CharField(max_length=200, blank=True, null=True)
     api_key = models.CharField(max_length=200, blank=True, null=True)
-    request_parameter = JSONField()
+    # request_parameter = JSONField()
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.smart_meter_api_name

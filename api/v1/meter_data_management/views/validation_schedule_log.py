@@ -37,6 +37,15 @@ class ValidationScheduleLogList(generics.ListAPIView):
         ordering = ('utility__id_string',) # always give by default alphabetical order
         search_fields = ('utility__name',)
 
+        def get_serializer_context(self):
+            """
+            Extra context provided to the serializer class.
+            """
+            token, user_obj = is_token_valid(self.request.headers['Authorization'])
+            return {
+                'user_id_string': user_obj,
+            }
+
         def get_queryset(self):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
             if token:
