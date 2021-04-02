@@ -1,4 +1,5 @@
 from typing import FrozenSet
+from v1.payment.models.payment_transactions import PaymentTransaction
 from v1.commonapp.models.lifecycle import LifeCycle
 from v1.registration.models.registrations import get_registration_by_id_string
 
@@ -18,7 +19,7 @@ from master.models import get_user_by_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no, get_invoice_bill_by_id_string
 from v1.billing.serializers.invoice_bill import *
 from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
-from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -59,6 +60,7 @@ from v1.work_order.models.service_appointments import ServiceAppointment as Serv
 from django.db.models import Q
 from v1.meter_data_management.models.meter import Meter
 from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
+from v1.payment.serializer.payment_transactions import PaymentTransactionListSerializer, PaymentTransactionSerializer
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
@@ -365,8 +367,9 @@ class ConsumerPaymentList(generics.ListAPIView):
         search_fields = ('transaction_amount',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     if consumer:
                         queryset = get_payments_by_consumer_no(consumer.consumer_no)
@@ -577,7 +580,7 @@ class ConsumerPayment(GenericAPIView):
     #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             consumer_obj = get_consumer_by_id_string(id_string)
             serializer = PaymentSerializer(data=request.data)
@@ -1016,7 +1019,6 @@ class ConsumerOwnershipList(generics.ListAPIView):
 # Author: Rohan
 # Created on: 11/01/2021
 class ConsumerNote(GenericAPIView):
-
     @is_token_validate
     # #role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
     def post(self, request, id_string):
@@ -1053,7 +1055,7 @@ class ConsumerNote(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
-
+        
 # API Header
 # API end Point: api/v1/consumer/:id_string/note/list
 # API verb: POST
@@ -1592,30 +1594,71 @@ class ConsumerTransfer(GenericAPIView):
             }, status=res.status_code)
             
             
-#consumer Life cycle List 
-#Auther : Chetan Dhongade 
-
+# API Header
+# API end Point: api/v1/consumer/lifecyclelist/<uuid:id_string>
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer Life Cycle List
+# Usage: API will fetch required data for consumer life cycle list
+# Tables used: Life Cycle List, Consumer Master
+# Author: Chetan
+# Created on: 22/03/2021
 class ConsumerLifeCycleList(generics.ListAPIView):
     try:
         serializer_class = LifeCycleListSerializer
         def get_queryset(self):
-            # response, user_obj = is_token_valid(self.request.headers['Authorization'])
-            # if response:
-                # if is_authorized(1, 1, 1, user_obj):
-            consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-            print("#######################", consumer)
-            module = get_module_by_key("CX")
-            sub_module = get_sub_module_by_key("CONSUMER")
-            print("############### module ", module)
-            print("################ submodule", sub_module)
-            queryset = LifeCycle.objects.filter(object_id=consumer.id, module_id=module, sub_module_id=sub_module, is_active=True)
-            if queryset:
-                return queryset
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    module = get_module_by_key("CX")
+                    sub_module = get_sub_module_by_key("CONSUMER")
+                    queryset = LifeCycle.objects.filter(object_id=consumer.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
             else:
-                raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
-                # else:
-                #     raise InvalidAuthorizationException
-            # else:
-            #     raise InvalidTokenException
+                raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
+        
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/payment-transactions/list
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer Payment Transactions
+# Usage: API will fetch required data for Consumer payment transactions
+# Tables used: Payment Transaction
+# Author: Chetan
+# Created on: 24/03/2021
+class ConsumerPaymentTransactionList(generics.ListAPIView):
+    try:
+        serializer_class = PaymentTransactionListSerializer
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    payment = get_payment_by_id_string(self.kwargs['id_string'])
+                    queryset = PaymentTransaction.objects.filter(payment_id = payment.id)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Transactions not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
+
+
+
+

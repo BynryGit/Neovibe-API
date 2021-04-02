@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from api.messages import *
 from api.constants import *
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-
+from v1.payment.models.payment_type import get_payment_type_by_id_string
 
 # API Header
 # API end Point: api/v1/payment/:id_string/subtype/list
@@ -46,8 +46,12 @@ class PaymentSubTypeList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    # utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = PaymentSubTypeModel.objects.all()
+                    if 'TYPE' in self.request.query_params:
+                        payment_type_obj = get_payment_type_by_id_string(self.request.query_params['TYPE'])
+                        queryset = PaymentSubTypeModel.objects.filter(payment_type_id = payment_type_obj.id)
+                    else:
+                        # utility = get_utility_by_id_string(self.kwargs['id_string'])
+                        queryset = PaymentSubTypeModel.objects.all()
                     if queryset:
                         return queryset
                     else:
@@ -173,3 +177,6 @@ class PaymentSubTypeDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
+            
+
+    

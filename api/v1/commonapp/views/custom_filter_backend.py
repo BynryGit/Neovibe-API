@@ -5,7 +5,7 @@ from v1.consumer.models.consumer_service_contract_details import ConsumerService
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id_string , ConsumerMaster
 from v1.consumer.models.consumer_service_contract_details import ConsumerServiceContractDetail
-from v1.utility.models.utility_work_order_type import get_utility_work_order_type_by_id_string
+from v1.utility.models.utility_work_order_type import UtilityWorkOrderType, get_utility_work_order_type_by_id_string
 from v1.complaint.models.complaint_type import get_complaint_type_by_id_string
 from v1.work_order.models.service_appointments import ServiceAppointment
 from v1.commonapp.models.work_order_type import get_work_order_type_by_key
@@ -211,9 +211,9 @@ class CustomFilter:
         if 'Service_list_of_consumer' in request.query_params:
             consumer = get_consumer_by_id_string(request.query_params['Service_list_of_consumer'])
             consumer_service_contract_detail_obj = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
-            work_order_type_obj = get_work_order_type_by_key('SERVICE')
+            work_order_type_obj = get_work_order_type_by_key('SERVICES')
             if work_order_type_obj:
-                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
             if utility_work_order_type_obj:
                 print("++++++++++++",utility_work_order_type_obj)
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)

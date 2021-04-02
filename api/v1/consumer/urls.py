@@ -96,7 +96,7 @@ urlpatterns = [
     path('transfer', ConsumerTransfer.as_view()),
     path('offer/list', ConsumerOfferDetailList.as_view()),
     path('feedback', ConsumerFeedback.as_view()),
-    path('lifecyclelist/<uuid:id_string>', ConsumerLifeCycleList.as_view())
-    # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),
-    
+    path('lifecyclelist/<uuid:id_string>', ConsumerLifeCycleList.as_view()),
+    path('<uuid:id_string>/payment-transactions/list', ConsumerPaymentTransactionList.as_view())
+    # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()),   
 ]
