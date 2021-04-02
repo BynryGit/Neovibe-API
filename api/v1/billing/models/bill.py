@@ -118,3 +118,9 @@ def get_bill_by_id(id):
         return Bill.objects.get(id = id)
     except:
         return False
+
+def get_bill_by_consumer_service_contract_detail_id(consumer_service_contract_detail_id):
+    try:
+        return Bill.objects.get(consumer_service_contract_detail_id = id)
+    except:
+        return False
