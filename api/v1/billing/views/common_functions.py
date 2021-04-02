@@ -40,7 +40,7 @@ from v1.billing.models.rate import Rate as RateTbl, get_rate_by_category_sub_cat
 from v1.billing.models.bill_schedule import ScheduleBill
 from v1.billing.models.bill import Bill as BillTbl
 from v1.payment.models.payment import Payment as PaymentTbl
-
+from v1.billing.models.fixed_charges import get_fixed_charges_by_id_meter_no
 
 def set_validated_data(validated_data):
     if "consumer_category_id" in validated_data:
@@ -540,7 +540,6 @@ def calculate_current_all_charges(data):
                     # get bill objects according to consumer service contract
                     bill_obj = BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id, is_active=True).last() 
                     if bill_obj:
-                        
                         if frequency.key == 'daily':
                             meter_reading = MeterReading.objects.get(created_date__date=schedule_bill_obj.start_date.date(),consumer_no=consumer.consumer_no, meter_no=consumer.meter_no)
                             bill_date_val = (datetime.now() + timedelta(days=7))
@@ -553,12 +552,14 @@ def calculate_current_all_charges(data):
                         
                         # calculate current charge
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
+                        fixed_charges = get_fixed_charges_by_id_meter_no(consumer.meter_no)
+
                         # calculate outstanding amount
                         outstanding_amt = get_outstanding_amount(consumer,bill_obj)
 
                         # calculate opening balance
                         if int(bill_obj.opening_balance) > 0:
-                            opening_balance = int(current_charge) + int(outstanding_amt)
+                            opening_balance = int(current_charge) + int(outstanding_amt) + int(fixed_charges)
 
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
@@ -568,6 +569,7 @@ def calculate_current_all_charges(data):
                             "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading),
                             "amount_before_due_date" : int(opening_balance),
                             "amount_after_due_date" : int(opening_balance) + 50,
+                            "fixed_charges": fixed_charges,
                         }
 
                         
@@ -584,7 +586,7 @@ def calculate_current_all_charges(data):
 
                         privious_meter_reading = 0
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
-                        opening_balance = int(current_charge) 
+                        opening_balance = int(current_charge) + int(fixed_charges)
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
                             "current_meter_reading" : meter_reading.current_meter_reading,
@@ -593,6 +595,7 @@ def calculate_current_all_charges(data):
                             "consumption" : int(meter_reading.current_meter_reading) - int(privious_meter_reading),
                             "amount_before_due_date" : int(opening_balance),
                             "amount_after_due_date" : int(opening_balance) + 50,
+                            "fixed_charges": fixed_charges,
                         }
                         rate_details = [{"unit":rate['unit'],"rate":rate['rate'], "outstanding" : 0,"consumption_charges":current_charge}]
 
@@ -615,8 +618,7 @@ def calculate_current_all_charges(data):
                                 opening_balance = opening_balance,
                                 current_charges = current_charge,
                                 is_active = True                        
-                            )
-                            # .save()
+                            ).save()
 
             # return bill_val
 
@@ -627,32 +629,46 @@ def calculate_current_all_charges(data):
 
 # geberate current charges function
 def calculate_current_charges(privious_meter_reading,current_meter_reading,rate):
-    unit_list = []
-    rate_list = []
-    finalunitrate = []
-    print('----------',current_meter_reading,privious_meter_reading)
-    current_charge = (int(current_meter_reading) - int(privious_meter_reading))
-    if rate[0]['product'] == 'Gas':
-        current_charge = current_charge * int(rate[0]['rate'])
-        return current_charge
-    elif rate[0]['product'] == 'Power':
-        for rate_val in rate:
-            unit_list.append(rate_val['unit'])
-            rate_list.append(rate_val['rate'])
-        for a in range(len(unit_list)):
-            print('====unit_list[a].split('')[0]=========',unit_list[a].split('-')[0])
-            if current_charge > (len(unit_list)-1):
-                if unit_list[a].split('-')[0] != '>':
-                    finalunitrate.append((int(unit_list[a].split('-')[1])-(int(unit_list[a].split('-')[0])-1))*int(rate_list[a]))
-                else:
-                    finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * int(rate_list[a]))
+    try:
+        unit_list = []
+        rate_list = []
+        finalunitrate = []
+        current_charge = (int(current_meter_reading) - int(privious_meter_reading))
+        item = []
+        if rate[0]['product'] == 'Gas':
+            current_charge = current_charge * int(rate[0]['rate'])
+            return current_charge
+        elif rate[0]['product'] == 'Power':
+            for rate_val in rate:
+                unit_list.append(rate_val['unit'])
+                rate_list.append(rate_val['rate'])
+            # creating length of list (e.g. current_charge is 250 )
+            for a in range(len(unit_list)):
+                if str(unit_list[a].split('-')[0]) != str('>') and int(current_charge) > int(unit_list[a].split('-')[0]):
+                    item.append(unit_list[a])
+                
+            if int(current_charge) > int(unit_list[len(unit_list)-1].split('-')[1]): # it check last element value
+                for a in range(len(unit_list)): # if current_charge are greater than all unit range then loop iterate len wise
+                    if int(current_charge) > int(unit_list[a].split('-')[1]) or int(current_charge) == int(unit_list[a].split('-')[1]):
+                        if str(unit_list[a].split('-')[0]) != '>':                        
+                            finalunitrate.append((int(unit_list[a].split('-')[1])-(int(unit_list[a].split('-')[0])-1))*int(rate_list[a]))
+                        else:
+                            finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * int(rate_list[a]))
+                    else:
+                        finalunitrate.append((int(unit_list[a].split('-')[1])-int(current_charge))*int(rate_list[a])) # not needed
             else:
-                finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * int(rate_list[a]))
+                for a in range(len(item)):
+                    if int(current_charge) > int(unit_list[a].split('-')[1]) or int(current_charge) == int(unit_list[a].split('-')[1]):
+                        if str(unit_list[a].split('-')[0]) != '>':                        
+                            finalunitrate.append((int(unit_list[a].split('-')[1])-(int(unit_list[a].split('-')[0])-1))*int(rate_list[a]))
+                        else:
+                            finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * int(rate_list[a]))
+                    else:
+                        finalunitrate.append((int(current_charge) - (int(unit_list[a-1].split('-')[1])))*int(rate_list[a]))
 
-
-        print('-----finalunitrate--------',finalunitrate)
-
-    return 1
+            return sum(finalunitrate)
+    except Exception as ex:
+        print('=========Excepion====>',ex)
 
 
 
