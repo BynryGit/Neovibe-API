@@ -46,3 +46,9 @@ def get_consumer_complaint_master_by_id_string(id_string):
     except:
         return False
 
+def get_consumer_complaint_master_by_id(id):
+    try:
+        return ConsumerComplaintMaster.objects.get(id = id)
+    except:
+        return False
+

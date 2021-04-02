@@ -82,10 +82,10 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
         validated_data = set_service_appointment_validated_data(validated_data)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).update(instance, validated_data)
-            appointment_obj.state = 5
+            # appointment_obj.state = 5
             appointment_obj.updated_by = user.id
             appointment_obj.updated_date = datetime.utcnow()
-            appointment_obj.is_active = True
+            # appointment_obj.is_active = True
             appointment_obj.save()
             return appointment_obj
 
@@ -97,6 +97,12 @@ class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     work_order_master_id = WorkOrderMasterShortListSerializer(many=False, required=True, source='get_service')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
+    state = ChoiceField(choices=ServiceAppointment.CHOICES)
+    state_id = serializers.ReadOnlyField(source='get_state')
+    city_id = serializers.ReadOnlyField(source='get_city')
+    area_id = serializers.ReadOnlyField(source='get_area')
+    sub_area_id = serializers.ReadOnlyField(source='get_sub_area')
+    
 
     class Meta:
         model = ServiceAppointment

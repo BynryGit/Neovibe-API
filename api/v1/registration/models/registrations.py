@@ -13,11 +13,14 @@ import fsm
 from v1.commonapp.views.custom_exception import CustomAPIException
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone # importing package for datetime
+from v1.commonapp.models.state import get_state_by_id
 
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
     "CREATED": 0,
     "APPROVED": 1,
+    "REJECTED": 2,
+    "HOLD": 3,
 }
 
 
@@ -37,10 +40,13 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
         (0, 'CREATED'),
         (1, 'APPROVED'),
+        (2, 'REJECTED'),
+        (3, 'HOLD'),       
     )
 
     state_machine = {
-        REGISTRATION_DICT['CREATED']: (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['CREATED']),
+        REGISTRATION_DICT['CREATED']: (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['CREATED'], REGISTRATION_DICT['REJECTED'], REGISTRATION_DICT['HOLD']),
+        REGISTRATION_DICT['HOLD']: (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['REJECTED']),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -90,6 +96,14 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         return {
             'name': area.name,
             'id_string': area.id_string
+        }
+
+    @property
+    def get_state(self):
+        state = get_state_by_id(self.billing_state_id)
+        return {
+            'name': state.name,
+            'id_string': state.id_string
         }
 
     @property

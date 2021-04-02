@@ -15,7 +15,10 @@ from v1.work_order.models.service_appointment_status import get_service_appointm
 from rest_framework import status
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
 from django.utils import timezone # importing package for datetime
-
+from v1.commonapp.models.state import get_state_by_id
+from v1.commonapp.models.area import get_area_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
 SERVICE_APPOINTMENT_DICT = {
@@ -64,13 +67,13 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
 
     state_machine = {
         SERVICE_APPOINTMENT_DICT['CREATED']: (SERVICE_APPOINTMENT_DICT['NOT ASSIGNED'],SERVICE_APPOINTMENT_DICT['REQUESTED'],),
-        SERVICE_APPOINTMENT_DICT['REQUESTED']: (SERVICE_APPOINTMENT_DICT['CREATED'],),
+        SERVICE_APPOINTMENT_DICT['REQUESTED']: (SERVICE_APPOINTMENT_DICT['CREATED'],SERVICE_APPOINTMENT_DICT['REJECTED'],SERVICE_APPOINTMENT_DICT['NOT ASSIGNED'],SERVICE_APPOINTMENT_DICT['HOLD'],),
         SERVICE_APPOINTMENT_DICT['NOT ASSIGNED']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'],SERVICE_APPOINTMENT_DICT['FAILED'],SERVICE_APPOINTMENT_DICT['IN PROGRESS'],),
         SERVICE_APPOINTMENT_DICT['ASSIGNED']: (SERVICE_APPOINTMENT_DICT['ACCEPTED'],SERVICE_APPOINTMENT_DICT['REJECTED'],SERVICE_APPOINTMENT_DICT['NOT ASSIGNED'],),
         SERVICE_APPOINTMENT_DICT['REJECTED']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'],),
         SERVICE_APPOINTMENT_DICT['ACCEPTED']: (SERVICE_APPOINTMENT_DICT['COMPLETED'],),
         SERVICE_APPOINTMENT_DICT['COMPLETED']: (SERVICE_APPOINTMENT_DICT['HOLD'], SERVICE_APPOINTMENT_DICT['CLOSED'],),
-        SERVICE_APPOINTMENT_DICT['HOLD']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'], SERVICE_APPOINTMENT_DICT['CLOSED'],),
+        SERVICE_APPOINTMENT_DICT['HOLD']: (SERVICE_APPOINTMENT_DICT['ASSIGNED'], SERVICE_APPOINTMENT_DICT['CLOSED'],SERVICE_APPOINTMENT_DICT['REJECTED'],SERVICE_APPOINTMENT_DICT['NOT ASSIGNED'],),
         SERVICE_APPOINTMENT_DICT['CLOSED']: (SERVICE_APPOINTMENT_DICT['ARCHIVED'],),
     }
     
@@ -146,12 +149,46 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
         }
 
     @property
+    def get_state(self):
+        state = get_state_by_id(self.state_id)
+        return {
+            'name': state.name,
+            'id_string': state.id_string
+        }
+
+    @property
+    def get_area(self):
+        area = get_area_by_id(self.area_id)
+        return {
+            'name': area.name,
+            'id_string': area.id_string
+        }
+    
+    @property
+    def get_sub_area(self):
+        sub_area = get_sub_area_by_id(self.sub_area_id)
+        return {
+            'name': sub_area.name,
+            'id_string': sub_area.id_string
+        }
+
+    @property
+    def get_city(self):
+        city = get_city_by_id(self.city_id)
+        return {
+            'name': city.name,
+            'id_string': city.id_string
+        }
+
+    @property
     def get_consumer_service_contract_detail_id(self):
         consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
         return consumer_service_contract_detail
     
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
+            print("======",previous_state)
+            print("======",next_state)
             # perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT["REGISTRATION"])
             # perform_signals(next_state, self)
             self.save()

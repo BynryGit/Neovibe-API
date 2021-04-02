@@ -21,12 +21,13 @@ class RegistrationListSerializer(serializers.ModelSerializer):
     # area = AreaListSerializer(many=False, source='get_area')
     state = ChoiceField(choices=Registration.CHOICES)
     billing_area = serializers.ReadOnlyField(source='get_area')
+    billing_state = serializers.ReadOnlyField(source='get_state')
 
     class Meta:
         model = Registration
         fields = (
             'id_string', 'registration_no', 'email_id', 'phone_mobile', 'billing_address_line_1',
-            'billing_street', 'billing_zipcode', 'state', 'billing_area', 'created_date')        
+            'billing_street', 'billing_zipcode', 'state', 'billing_area', 'billing_state','created_date')        
         # fields = (
         #     'id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
         #     'street', 'zipcode', 'state', 'area', 'created_date')

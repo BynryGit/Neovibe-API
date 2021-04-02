@@ -122,9 +122,9 @@ class ReadingScheduleLogSummary(generics.ListAPIView):
                 schedule_log_obj = ScheduleLogTbl.objects.filter(utility=utility_obj, is_active=True)
                 Schedule_log_Count = {
                     'Total_Schedule_Log': schedule_log_obj.count(),
-                    'Pending_Schedule_Log': schedule_log_obj.filter(schedule_log_status=0).count(),
-                    'Complete_Schedule_Log': schedule_log_obj.filter(schedule_log_status=1).count(),
-                    'InProgress_Schedule_Log': schedule_log_obj.filter(schedule_log_status=2).count(),
+                    'Pending_Schedule_Log': schedule_log_obj.filter(state=0).count(),
+                    'InProgress_Schedule_Log': schedule_log_obj.filter(state=2).count(),
+                    'Complete_Schedule_Log': schedule_log_obj.filter(state=4).count(),
                 }
                 return Response({
                     STATE: SUCCESS,

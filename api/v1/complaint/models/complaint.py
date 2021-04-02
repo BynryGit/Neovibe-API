@@ -11,6 +11,9 @@ from v1.utility.models.utility_master import UtilityMaster
 from django.db import models  # importing package for database
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
 from django.utils import timezone # importing package for datetime
+from v1.complaint.models.consumer_complaint_master import get_consumer_complaint_master_by_id
+from v1.complaint.models.complaint_sub_type import get_complaint_sub_type_by_id
+from v1.complaint.models.complaint_type import get_complaint_type_by_id
 
 # *********** COMPLAINT CONSTANTS **************
 COMPLAINT_DICT = {
@@ -57,14 +60,14 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     )
 
     state_machine = {
-        COMPLAINT_DICT['CREATED']        : (COMPLAINT_DICT['NOT ASSIGNED'],),
+        COMPLAINT_DICT['CREATED']        : (COMPLAINT_DICT['NOT ASSIGNED'],COMPLAINT_DICT['IN PROGRESS'],COMPLAINT_DICT['COMPLETED'], COMPLAINT_DICT['REJECTED'], COMPLAINT_DICT['HOLD']),
         COMPLAINT_DICT['ACCEPTED']       : (COMPLAINT_DICT['COMPLETED'],),
         COMPLAINT_DICT['REJECTED']       : (COMPLAINT_DICT['ASSIGNED'],),
         COMPLAINT_DICT['IN PROGRESS']    : (COMPLAINT_DICT['REJECTED'], COMPLAINT_DICT['HOLD'],),
         COMPLAINT_DICT['NOT ASSIGNED']   : (COMPLAINT_DICT['FAILED'], COMPLAINT_DICT['IN PROGRESS'], COMPLAINT_DICT['ASSIGNED']),
         COMPLAINT_DICT['ASSIGNED']       : (COMPLAINT_DICT['ACCEPTED'], COMPLAINT_DICT['REJECTED'],),
         COMPLAINT_DICT['COMPLETED']      : (COMPLAINT_DICT['HOLD'], COMPLAINT_DICT['CLOSED'],),
-        COMPLAINT_DICT['HOLD']           : (COMPLAINT_DICT['ASSIGNED'], COMPLAINT_DICT['CLOSED']),
+        COMPLAINT_DICT['HOLD']           : (COMPLAINT_DICT['ASSIGNED'], COMPLAINT_DICT['CLOSED'], COMPLAINT_DICT['IN PROGRESS'],COMPLAINT_DICT['COMPLETED'], COMPLAINT_DICT['REJECTED']),
         COMPLAINT_DICT['CLOSED']         : (COMPLAINT_DICT['ARCHIVED'],),
         COMPLAINT_DICT['ARCHIVED']       : (COMPLAINT_DICT['ARCHIVED'],),
     }
@@ -103,6 +106,15 @@ class Complaint(models.Model, fsm.FiniteStateMachineMixin):
     def get_consumer_service_contract_detail_id(self):
         consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
         return consumer_service_contract_detail
+
+    @property
+    def get_complaint_master_id(self):
+        complaint_master = get_consumer_complaint_master_by_id(self.consumer_complaint_master_id)
+        return complaint_master
+
+    @property
+    def get_complaint_type(self):
+        return get_complaint_type_by_id(self.complaint_type_id)
 
     @property
     def get_complaint_sub_type(self):

@@ -31,7 +31,7 @@ from v1.work_order.models.work_order_master import get_work_order_master_by_id_s
 from v1.utility.models.utility_master import get_utility_by_id_string
 from api.messages import *
 from api.constants import *
-
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 # API Header
 # API end Point: api/v1/work_order/utility/:id_string/list
@@ -55,6 +55,7 @@ class WorkOrderMasterList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = WorkOrderMasterModel.objects.filter(utility=utility, is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if 'filter_key' in self.request.query_params:
                         work_obj = get_work_order_type_by_key(self.request.query_params['filter_key'])
                         util_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_obj.id)

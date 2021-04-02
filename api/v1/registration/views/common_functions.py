@@ -83,8 +83,7 @@ def set_registration_validated_data(validated_data):
 def generate_registration_no(registration):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=registration.tenant, utility=registration.utility,
-                                                            sub_module_id=get_sub_module_by_key("CONSUMER_OPS_REGISTRATION"))
-        print("==========",format_obj)                                                            
+                                                            sub_module_id=get_sub_module_by_key("REGISTRATION"))
         # format_obj = UtilityServiceNumberFormat.objects.get(tenant=registration.tenant, utility=registration.utility,
         #                                                     sub_module_id=get_sub_module_by_key("REGISTRATION"))
         if format_obj.is_prefix:

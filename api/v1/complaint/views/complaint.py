@@ -13,12 +13,13 @@ from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.complaint.models.complaint import get_consumer_complaint_by_id_string, COMPLAINT_DICT,Complaint as ComplaintTbl
 from v1.complaint.models.complaint_assignment import get_complaint_assignments_by_field_operator_id
-from v1.complaint.serializers.complaint import ComplaintViewSerializer,ComplaintListSerializer
+from v1.complaint.serializers.complaint import ComplaintViewSerializer,ComplaintListSerializer, ComplaintSerializer
 from v1.complaint.serializers.complaint_assignment import ComplaintAssignmentListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
 from v1.commonapp.views.custom_filter_backend import CustomFilter
+from v1.work_order.serializers.service_appointment import ServiceAppointmentSerializer,ServiceAppointmentViewSerializer,ServiceAppointmentListSerializer
 
 # API Header
 # API end Point: api/v1/complaint/assignment/list
@@ -95,6 +96,39 @@ class ComplaintDetail(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
+    @is_token_validate
+    #role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            complaint_obj = get_consumer_complaint_by_id_string(id_string)
+            if complaint_obj:
+                serializer = ComplaintSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    complaint_obj = serializer.update(complaint_obj, serializer.validated_data, user)
+                    view_serializer = ComplaintViewSerializer(instance=complaint_obj,
+                                                          context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+            }, status=res.status_code)
 
 # API Header
 # API end Point: api/v1/complaint/:id_string/accept
@@ -154,17 +188,79 @@ class ComplaintReject(GenericAPIView):
     #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
     def put(self, request, id_string):
         try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
             complaint = get_consumer_complaint_by_id_string(id_string)
             if complaint:
-                with transaction.atomic():
-                    # State change for payment start
-                    complaint.change_state(COMPLAINT_DICT["REJECTED"])
-                    # State change for payment end
-                serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
+                serializer = ComplaintSerializer(data=request.data)
+                complaint.change_state(COMPLAINT_DICT["REJECTED"])
+                if serializer.is_valid(raise_exception=False):
+                    complaint = serializer.update(complaint, serializer.validated_data, user)
+                    with transaction.atomic():
+                        # State change for payment start                    
+                        # State change for payment end
+                        serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
                 return Response({
-                    STATE: SUCCESS,
-                    RESULT: serializer.data,
-                }, status=status.HTTP_200_OK)
+                    STATE: ERROR,
+                    RESULT: COMPLAINT_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Complaint')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# API Header
+# API end Point: api/v1/complaint/:id_string/hold
+# API verb: PUT
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Complaint
+# Interaction: Complaint
+# Usage: API will change the state of complaint to reject
+# Tables used: CompaintAssignment, Complaint, User
+# Author: Gauarv
+# Created on: 27/03/2021
+
+class ComplaintHold(GenericAPIView):
+
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            complaint = get_consumer_complaint_by_id_string(id_string)
+            if complaint:
+                serializer = ComplaintSerializer(data=request.data)
+                complaint.change_state(COMPLAINT_DICT["HOLD"])
+                if serializer.is_valid(raise_exception=False):
+                    complaint = serializer.update(complaint, serializer.validated_data, user)
+                    with transaction.atomic():
+                        # State change for payment start                    
+                        # State change for payment end
+                        serializer = ComplaintViewSerializer(instance=complaint, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({
                     STATE: ERROR,
@@ -259,3 +355,57 @@ class ComplaintList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
+
+
+# API Header
+# API end Point: api/v1/complaint/:id_string/approve
+# API verb: POST
+# Package: Basic
+# Modules: Work Order
+# Sub Module: 
+# Interaction: Add Work Order
+# Usage: Add
+# Tables used: ServiceAppointment
+# Author: Gaurav
+# Created on: 25/03/2021
+
+class ComplaintApprove(GenericAPIView):
+    
+    @is_token_validate
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
+    def post(self, request, id_string):
+        try:
+            complaint = get_consumer_complaint_by_id_string(id_string)
+            remark=request.data['sa_user_remark']
+            appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+            if appointment_serializer.is_valid(raise_exception=False):
+                user_id_string = get_user_from_token(request.headers['Authorization'])
+                user = get_user_by_id_string(user_id_string)
+                with transaction.atomic():
+                    complaint.change_state(COMPLAINT_DICT["IN PROGRESS"])
+                    complaint.closure_remark=remark
+                    complaint.save()
+                    appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    # # Timeline code start
+                    # transaction.on_commit(
+                    #     lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
+                        # Timeline code end
+                    view_serializer = ServiceAppointmentViewSerializer(instance=appointment_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)                
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULTS: list(appointment_serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print("=======error=========",e)
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
