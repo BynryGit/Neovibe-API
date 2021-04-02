@@ -68,7 +68,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
                 utility_obj.created_by = user.id
                 utility_obj.created_date = timezone.now()
                 utility_obj.tenant_id = tenant
-                utility_obj.company_id = generate_company_id(utility_obj)
+                # utility_obj.company_id = generate_company_id(utility_obj)
                 utility_obj.save()
                 return utility_obj
 

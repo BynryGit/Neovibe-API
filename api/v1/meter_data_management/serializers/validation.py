@@ -109,12 +109,14 @@ class ValidationViewSerializer(serializers.ModelSerializer):
             meter_status_obj = get_meter_status_by_id(meter_reading_tbl.meter_status_id)
             reader_status_obj = get_reader_status_by_id(meter_reading_tbl.reader_status_id)
 
-            total_reading = MeterReadingTbl.objects.filter(~Q(reading_status=3), validator_one_id=user_obj.id,
+            total_reading = MeterReadingTbl.objects.filter((Q(reading_status=0) | Q(reading_status=2)),
+                                                           validator_one_id=user_obj.id,
                                                            read_cycle_id=read_cycle_obj.id,
                                                            schedule_log_id=schedule_log_obj.id,
                                                            is_active=True, is_duplicate=False).count()
 
-            completed_reading = MeterReadingTbl.objects.filter(~Q(reading_status=3), validator_one_id=user_obj.id,
+            completed_reading = MeterReadingTbl.objects.filter((Q(reading_status=0) | Q(reading_status=2)),
+                                                               validator_one_id=user_obj.id,
                                                                read_cycle_id=read_cycle_obj.id, is_validated=True,
                                                                schedule_log_id=schedule_log_obj.id,
                                                                is_active=True, is_duplicate=False).count()

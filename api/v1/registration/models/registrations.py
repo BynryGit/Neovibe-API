@@ -13,11 +13,14 @@ import fsm
 from v1.commonapp.views.custom_exception import CustomAPIException
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone # importing package for datetime
+from v1.commonapp.models.state import get_state_by_id
 
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
     "CREATED": 0,
     "APPROVED": 1,
+    "REJECTED": 2,
+    "HOLD": 3,
 }
 
 
@@ -37,10 +40,13 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     CHOICES = (
         (0, 'CREATED'),
         (1, 'APPROVED'),
+        (2, 'REJECTED'),
+        (3, 'HOLD'),       
     )
 
     state_machine = {
-        REGISTRATION_DICT['CREATED']: (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['CREATED']),
+        REGISTRATION_DICT['CREATED']: (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['CREATED'], REGISTRATION_DICT['REJECTED'], REGISTRATION_DICT['HOLD']),
+        REGISTRATION_DICT['HOLD']: (REGISTRATION_DICT['APPROVED'], REGISTRATION_DICT['REJECTED']),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -93,6 +99,14 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         }
 
     @property
+    def get_state(self):
+        state = get_state_by_id(self.billing_state_id)
+        return {
+            'name': state.name,
+            'id_string': state.id_string
+        }
+
+    @property
     def get_consumer_category(self):
         category = get_consumer_category_by_id(self.consumer_category_id)
         return category
@@ -121,6 +135,13 @@ def get_registration_by_id_string(id_string):
 def get_registration_by_id(id):
     try:
         return Registration.objects.get(id=id)
+    except:
+        return False
+
+
+def get_registration_by_registration_no(no):
+    try:
+        return Registration.objects.get(registration_no = no)
     except:
         return False
 # Create Consumer Registration table end.

@@ -235,3 +235,124 @@ class ServiceAppointmentLifeCycleList(generics.ListAPIView):
                 raise InvalidTokenException
     except Exception as e:
         logger().log(e, 'MEDIUM', module='Work Order', sub_module='DISPATCHER')
+
+
+
+class ServiceAppointmentReject(GenericAPIView):
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            if service_appointment:
+                serializer = ServiceAppointmentSerializer(data=request.data)
+                service_appointment.change_state(SERVICE_APPOINTMENT_DICT["REJECTED"])
+                if serializer.is_valid(raise_exception=False):
+                    service_appointment = serializer.update(service_appointment, serializer.validated_data, user)
+                    with transaction.atomic():
+                        # State change for payment start                    
+                        # State change for payment end
+                        serializer = ServiceAppointmentViewSerializer(instance=service_appointment, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: COMPLAINT_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Work Order', Sub_module='service_appointment')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+
+class ServiceAppointmentHold(GenericAPIView):
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            if service_appointment:
+                serializer = ServiceAppointmentSerializer(data=request.data)
+                service_appointment.change_state(SERVICE_APPOINTMENT_DICT["HOLD"])
+                if serializer.is_valid(raise_exception=False):
+                    service_appointment = serializer.update(service_appointment, serializer.validated_data, user)
+                    with transaction.atomic():
+                        # State change for payment start                    
+                        # State change for payment end
+                        serializer = ServiceAppointmentViewSerializer(instance=service_appointment, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: COMPLAINT_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Work Order', Sub_module='service_appointment')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+class ServiceAppointmentApprove(GenericAPIView):
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            if service_appointment:
+                serializer = ServiceAppointmentSerializer(data=request.data)
+                service_appointment.change_state(SERVICE_APPOINTMENT_DICT["NOT ASSIGNED"])
+                service_appointment.is_active=True
+                service_appointment.save()
+                if serializer.is_valid(raise_exception=False):
+                    service_appointment = serializer.update(service_appointment, serializer.validated_data, user)
+                    with transaction.atomic():
+                        # State change for payment start                    
+                        # State change for payment end
+                        serializer = ServiceAppointmentViewSerializer(instance=service_appointment, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: COMPLAINT_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Work Order', Sub_module='service_appointment')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)

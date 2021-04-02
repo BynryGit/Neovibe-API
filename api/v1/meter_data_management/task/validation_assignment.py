@@ -19,14 +19,14 @@ def validation_assignment():
         validation_assignment_obj = ValidationAssignmentTbl.objects.filter(is_active=True)
         for validation in validation_assignment_obj:
             meter_reading_obj = MeterReadingTbl.objects.filter(reading_status=0, is_assign_to_v1=False, is_active=True,
-                                                            is_duplicate=False, read_cycle_id=validation.read_cycle_id)
+                                                               is_duplicate=False, read_cycle_id=validation.read_cycle_id)
             for meter_reading in meter_reading_obj:
                 meter_reading.validator_one_id = validation.validator1_id
                 meter_reading.is_assign_to_v1 = True
                 meter_reading.save()
 
             meter_reading_obj = MeterReadingTbl.objects.filter(reading_status=1, is_assign_to_v2=False, is_active=True,
-                                                            is_duplicate=False, read_cycle_id=validation.read_cycle_id)
+                                                               is_duplicate=False, read_cycle_id=validation.read_cycle_id)
             for meter_reading in meter_reading_obj:
                 meter_reading.validator_two_id = validation.validator2_id
                 meter_reading.is_assign_to_v2 = True

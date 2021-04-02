@@ -24,10 +24,10 @@
       "pan_no":"ASDFG5671H",
       "tax_id":1234,
       "address":"P. NO.19 , LOTUS ENCLAVE Nashik",
-      "is_active": "True"
+      "is_active": "True",
+      "company_id": 1001
     }
   },
-
   {
       "pk": "1",
       "model": "commonapp.Region",
@@ -427,7 +427,7 @@
         "is_active": "True"
       }
     },
-    
+
     {
       "pk": "24",
       "model": "commonapp.SubModule",
@@ -494,14 +494,24 @@
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 7,
-        "key" : "ROLE_PRIVILEGE",
-        "name": "Role Privilege",
+        "key" : "ROLE",
+        "name": "Role",
         "is_active": "True"
       }
-    },   
-
+    },
     {
       "pk": "31",
+      "model": "commonapp.SubModule",
+      "fields": {
+        "module_id": 7,
+        "key" : "USER",
+        "name": "User",
+        "is_active": "True"
+      }
+    },  
+
+    {
+      "pk": "32",
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 8,
@@ -511,7 +521,7 @@
       }
     },
     {
-      "pk": "32",
+      "pk": "33",
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 8,
@@ -521,7 +531,7 @@
       }
     },
     {
-      "pk": "33",
+      "pk": "34",
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 10,
@@ -860,7 +870,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 4,
         "privilege_id": 2,
         "is_active": "True"
@@ -873,7 +883,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 5,
         "privilege_id": 2,
         "is_active": "True"
@@ -886,7 +896,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 6,
         "privilege_id": 2,
         "is_active": "True"
@@ -899,7 +909,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 7,
         "privilege_id": 2,
         "is_active": "True"
@@ -912,7 +922,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 8,
         "privilege_id": 2,
         "is_active": "True"
@@ -938,7 +948,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 10,
         "privilege_id": 2,
         "is_active": "True"
@@ -951,7 +961,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 11,
         "privilege_id": 2,
         "is_active": "True"
@@ -964,7 +974,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 12,
         "privilege_id": 2,
         "is_active": "True"
@@ -977,7 +987,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 13,
         "privilege_id": 2,
         "is_active": "True"
@@ -990,8 +1000,8 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 2,
-        "sub_module_id": 14,
+        "module_id": 8,
+        "sub_module_id": 32,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -1003,8 +1013,8 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 2,
-        "module_id": 3,
-        "sub_module_id": 15,
+        "module_id": 8,
+        "sub_module_id": 33,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -2437,7 +2447,7 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 6,
-        "module_id": 8,
+        "module_id": 7,
         "sub_module_id": 31,
         "privilege_id": 2,
         "is_active": "True"
@@ -2463,8 +2473,8 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 6,
-        "module_id": 9,
-        "sub_module_id": 1,
+        "module_id": 8,
+        "sub_module_id": 33,
         "privilege_id": 2,
         "is_active": "True"
       }
@@ -2476,7 +2486,59 @@
         "tenant": 1,
         "utility": 1,
         "role_id": 6,
+        "module_id": 9,
+        "sub_module_id": 1,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "133",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
         "module_id": 10,
+        "sub_module_id": 34,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "133",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 2,
+        "module_id": 8,
+        "sub_module_id": 31,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+  {
+      "pk": "134",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 2,
+        "module_id": 8,
+        "sub_module_id": 32,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+  {
+      "pk": "135",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 2,
+        "module_id": 8,
         "sub_module_id": 33,
         "privilege_id": 2,
         "is_active": "True"
@@ -2500,7 +2562,24 @@
       "model": "master.User",
       "fields": {
         "tenant": 1,
-        "email": "tenant@bynry.com",
+        "user_type_id":1,
+        "user_subtype_id":1,
+        "email": "mngl@bynry.com",
+        "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+        "is_staff": "True",
+        "is_active": "True",
+        "status_id":1,
+        "is_superuser": "True"
+      }
+    },
+    {
+      "pk": "3",
+      "model": "master.User",
+      "fields": {
+        "tenant": 2,
+        "user_type_id":1,
+        "user_subtype_id":1,
+        "email": "bgcl@bynry.com",
         "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
         "is_staff": "True",
         "is_active": "True",
@@ -2519,7 +2598,26 @@
         "is_active": "True"
       }
     },
-    
+    {
+      "pk": "2",
+      "model": "userapp.UserRole",
+      "fields": {
+        "tenant": 1,
+        "user_id": 2,
+        "role_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "3",
+      "model": "userapp.UserRole",
+      "fields": {
+        "tenant": 1,
+        "user_id": 3,
+        "role_id": 2,
+        "is_active": "True"
+      }
+    },
     {
       "pk": "1",
       "model": "userapp.UserUtility",
@@ -2529,7 +2627,7 @@
         "user_id": 1,
         "is_active": "True"
       }
-    },    
+    },
     {
       "pk": "1",
       "model": "utility.UtilityModule",
@@ -2844,7 +2942,7 @@
         "submodule_id": 17,
         "is_active": "True"
       }
-    }, 
+    },
     {
       "pk": "18",
       "model": "utility.UtilitySubModule",
@@ -2881,7 +2979,7 @@
         "is_active": "True"
       }
     },
-        
+
     {
       "pk": "21",
       "model": "utility.UtilitySubModule",
@@ -2996,32 +3094,32 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Role Privilege",
+        "label":"Role",
         "module_id": 7,
         "submodule_id": 30,
         "is_active": "True"
       }
     },  
-
     {
       "pk": "31",
       "model": "utility.UtilitySubModule",
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"Utility Master",
-        "module_id": 8,
+        "label":"User",
+        "module_id": 7,
         "submodule_id": 31,
         "is_active": "True"
       }
-    },
+    }, 
+
     {
       "pk": "32",
       "model": "utility.UtilitySubModule",
       "fields": {
         "tenant": 1,
         "utility": 1,
-        "label":"System Configuration",
+        "label":"Utility Master",
         "module_id": 8,
         "submodule_id": 32,
         "is_active": "True"
@@ -3033,9 +3131,21 @@
       "fields": {
         "tenant": 1,
         "utility": 1,
+        "label":"System Configuration",
+        "module_id": 8,
+        "submodule_id": 33,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "34",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
         "label":"DemoSM",
         "module_id": 10,
-        "submodule_id": 33,
+        "submodule_id": 34,
         "is_active": "True"
       }
     },
@@ -3122,6 +3232,91 @@
     },
 
 
+  {
+      "pk": "10",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "11",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "12",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "13",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 4,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "14",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 5,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "15",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 6,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "16",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 7,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "17",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 8,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "18",
+      "model": "tenant.TenantModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 9,
+        "is_active": "True"
+      }
+    },
+
+
+
+
     {
       "pk": "1",
       "model": "tenant.TenantSubModule",
@@ -3157,7 +3352,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 4,
         "is_active": "True"
       }
@@ -3167,7 +3362,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 5,
         "is_active": "True"
       }
@@ -3177,7 +3372,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 6,
         "is_active": "True"
       }
@@ -3187,7 +3382,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 7,
         "is_active": "True"
       }
@@ -3197,7 +3392,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 1,
+        "module_id": 2,
         "sub_module_id": 8,
         "is_active": "True"
       }
@@ -3217,7 +3412,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 10,
         "is_active": "True"
       }
@@ -3227,7 +3422,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 11,
         "is_active": "True"
       }
@@ -3238,7 +3433,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 12,
         "is_active": "True"
       }
@@ -3249,7 +3444,7 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
+        "module_id": 3,
         "sub_module_id": 13,
         "is_active": "True"
       }
@@ -3259,8 +3454,8 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 2,
-        "sub_module_id": 14,
+        "module_id": 8,
+        "sub_module_id": 32,
         "is_active": "True"
       }
     },
@@ -3269,8 +3464,8 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
-        "module_id": 3,
-        "sub_module_id": 15,
+        "module_id": 8,
+        "sub_module_id": 33,
         "is_active": "True"
       }
     },
@@ -3349,6 +3544,238 @@
       "model": "tenant.TenantSubModule",
       "fields": {
         "tenant": 1,
+        "module_id": 3,
+        "sub_module_id": 23,
+        "is_active": "True"
+      }
+    },
+  {
+      "pk": "24",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 1,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "25",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 2,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "26",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 3,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "27",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 4,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "28",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 5,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "29",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 6,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "30",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 7,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "31",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 1,
+        "sub_module_id": 8,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "32",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "sub_module_id": 9,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "33",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "sub_module_id": 10,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "34",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "sub_module_id": 11,
+        "is_active": "True"
+      }
+    },
+{
+
+      "pk": "35",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "sub_module_id": 12,
+        "is_active": "True"
+      }
+    },
+{
+
+      "pk": "36",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "sub_module_id": 13,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "37",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 2,
+        "sub_module_id": 14,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "38",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 15,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "39",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 16,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "40",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 17,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "41",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 18,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "42",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 19,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "43",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 20,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "44",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 21,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "45",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
+        "module_id": 3,
+        "sub_module_id": 22,
+        "is_active": "True"
+      }
+    },
+{
+      "pk": "46",
+      "model": "tenant.TenantSubModule",
+      "fields": {
+        "tenant": 2,
         "module_id": 3,
         "sub_module_id": 23,
         "is_active": "True"

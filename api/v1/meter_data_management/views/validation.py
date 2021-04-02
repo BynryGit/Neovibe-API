@@ -40,7 +40,7 @@ class ValidationList(generics.ListAPIView):
         filter_fields = ('utility__id_string',)
         ordering_fields = ('utility__id_string',)
         ordering = ('utility__id_string',) # always give by default alphabetical order
-        search_fields = ('utility__name',)
+        search_fields = ('utility__name', 'consumer_no', 'meter_no')
 
         def get_serializer_context(self):
             """
@@ -63,7 +63,8 @@ class ValidationList(generics.ListAPIView):
                     schedule_log_obj = get_schedule_log_by_id_string(self.kwargs['schedule_log'])
                     read_cycle_obj = get_read_cycle_by_id_string(self.kwargs['read_cycle'])
                     if role_obj.role_ID == 'Validator_One':
-                        queryset = MeterReadingTbl.objects.filter(~Q(reading_status=3), validator_one_id=user_obj.id,
+                        queryset = MeterReadingTbl.objects.filter((Q(reading_status=0) | Q(reading_status=2)),
+                                                                  validator_one_id=user_obj.id,
                                                                   read_cycle_id=read_cycle_obj.id,
                                                                   schedule_log_id=schedule_log_obj.id,
                                                                   is_active=True, is_duplicate=False)
@@ -72,6 +73,11 @@ class ValidationList(generics.ListAPIView):
                         queryset = MeterReadingTbl.objects.filter((Q(reading_status=1) | Q(reading_status=2)),
                                                                   validator_two_id=user_obj.id,
                                                                   read_cycle_id=read_cycle_obj.id,
+                                                                  schedule_log_id=schedule_log_obj.id,
+                                                                  is_active=True, is_duplicate=False)
+                        return queryset
+                    else:
+                        queryset = MeterReadingTbl.objects.filter(read_cycle_id=read_cycle_obj.id,
                                                                   schedule_log_id=schedule_log_obj.id,
                                                                   is_active=True, is_duplicate=False)
                         return queryset

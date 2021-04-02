@@ -32,10 +32,12 @@ class ConsumerCategoryViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    utility_product = UtilityProductListSerializer(source='get_utility_product')
+
 
     class Meta:
         model = ConsumerCategoryTbl
-        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date')
+        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'utility_product' ,'created_date')
 
 
 class ConsumerCategorySerializer(serializers.ModelSerializer):

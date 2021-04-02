@@ -23,6 +23,7 @@ from master.models import get_user_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import *
 from api.constants import *
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 
 # API Header
@@ -56,6 +57,7 @@ class ConsumerOfferMasterList(generics.ListAPIView):
                         queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True, utility_product_id=utility_product_obj.id)
                     else:
                         queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True)
+                        queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

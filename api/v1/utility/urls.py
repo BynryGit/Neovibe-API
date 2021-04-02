@@ -7,7 +7,7 @@ from v1.utility.views.document import UtilityDocumentList, UtilityDocumentDetail
 from v1.utility.views.document_sub_type import UtilityDocumentSubTypeList
 from v1.utility.views.notes import UtilityNoteList, UtilityNoteDetail
 from v1.utility.views.status import UtilityStatusList
-from v1.utility.views.utility import UtilityList, UtilityDetail, Utility, UtilityModule
+from v1.utility.views.utility import UtilityList, UtilityDetail, Utility, UtilityModule, UtilityListByTenant
 from v1.utility.views.summary import UtilitySummaryDetail
 from v1.utility.views.utility_currency import UtilityCurrencyList
 from v1.utility.views.utility_module import UtilityModuleList, UtilityModuleDetail
@@ -111,6 +111,7 @@ urlpatterns = [
     path('<uuid:id_string>/tip/list', UtilityTipList.as_view()),
     path('tip', UtilityTip.as_view()),
     path('tip/<uuid:id_string>', UtilityTipDetail.as_view()),
+    path('tenant/<uuid:id_string>/list', UtilityListByTenant.as_view()),
 
     # path('<uuid:id_string>/service-request-type/list', UtilityServiceRequestTypeList.as_view()),
     # path('<uuid:id_string>/service-request-sub-type/list', UtilityServiceRequestSubTypeList.as_view()),

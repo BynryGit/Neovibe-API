@@ -60,6 +60,7 @@ class UtilityMaster(models.Model, fsm.FiniteStateMachineMixin):
     short_logo = models.CharField(max_length=200, blank=True, null=True)
     long_logo = models.CharField(max_length=200, blank=True, null=True)
     status_id = models.BigIntegerField(null=True, blank=True)
+    user_id = models.BigIntegerField(null=True, blank=True)
     currency_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
@@ -98,6 +99,13 @@ def get_utility_by_id(id):
 def get_utility_by_id_string(id_string):
     try:
         return UtilityMaster.objects.get(id_string=id_string, is_active=True)
+    except:
+        return False
+
+
+def get_utility_by_tenant_id_string(id_string):
+    try:
+        return UtilityMaster.objects.get(tenant__id_string=id_string, is_active=True)
     except:
         return False
 

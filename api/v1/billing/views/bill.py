@@ -14,7 +14,7 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.billing.models.bill_schedule import ScheduleBill as ScheduleBillTbl, get_schedule_bill_by_id_string
 from v1.billing.models.bill_cycle import get_bill_cycle_by_id
 from v1.billing.views.common_functions import get_consumer_count, get_rate, get_additional_charges_amount,\
-     get_reading_count,save_current_charges
+     get_reading_count,calculate_current_all_charges
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
 
@@ -45,14 +45,19 @@ class GetAllChargesDetails(GenericAPIView):
             detail_value['bill_cycle_name'] = get_bill_cycle_by_id(schedule_bill_obj.bill_cycle_id).bill_cycle_name
             detail_value['start_date'] = schedule_bill_obj.start_date
             detail_value['end_date'] = schedule_bill_obj.end_date
+
+            # it's getting total consumer count
             detail_value['consumer_count'] = get_consumer_count(schedule_bill_obj.id)
-            detail_value['rate'] =  get_rate(schedule_bill_obj.bill_cycle_id)
+            # it's getting rate according to Consumer category subcategory wise
+            detail_value['rate'] =  get_rate(schedule_bill_obj)
+            # it's getting total reading count
             detail_value['reading_count'] = get_reading_count(schedule_bill_obj)
-            additional_val =  get_additional_charges_amount(schedule_bill_obj)
+            # it's getting total consumer count
+            additional_val =  get_additional_charges_amount(schedule_bill_obj)            
             detail_value['meter_status'] =  additional_val['meter_status']
             detail_value['outstanding_amount'] =  additional_val['outstanding']
             detail_value['additional_charges'] =  additional_val['additional_charges']
-
+            
             data.append(detail_value)
             if data:
                 return Response({
@@ -65,6 +70,7 @@ class GetAllChargesDetails(GenericAPIView):
                     RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
+            print('-----ex---GetAllChargesDetails----',ex)
             logger().log(ex, 'MEDIUM', module='Billing', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,
@@ -79,7 +85,7 @@ class SaveBillCharges(GenericAPIView):
             data = {}
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            data['current_charges'] = save_current_charges(request.data)
+            data['current_charges'] = calculate_current_all_charges(request.data)
             data['schedule_bill_id_string'] = request.data['schedule_bill_id_string']
             return Response({
                     STATE: SUCCESS,
