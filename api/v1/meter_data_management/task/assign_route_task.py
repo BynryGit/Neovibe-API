@@ -16,7 +16,8 @@ from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail as ConsumerDetailTbl
 from v1.meter_data_management.models.job_card_template import JobCardTemplate as JobCardTemplateTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
-from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
+from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id, \
+    ROUTE_TASK_ASSIGNMENT_STATUS_DICT
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.meter_data_management.models.spot_bill import get_spot_bill_by_consumer_detail_id
 
@@ -68,7 +69,7 @@ def assign_route_task(route_task_assignment_id):
             task_data_list.append(task_dict)
 
         route_task_assignment_obj.consumer_meter_json = task_data_list
-        route_task_assignment_obj.dispatch_status = 2
+        route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["STARTED"])
         route_task_assignment_obj.save()
 
         read_cycle_obj = get_read_cycle_by_id(route_task_assignment_obj.read_cycle_id)
@@ -99,8 +100,8 @@ def assign_route_task(route_task_assignment_id):
             task_count = len(route_task_assignment_obj.consumer_meter_json)
             if task_count > 0:
                 route_task_assignment_obj.consumer_meter_json = []
-            route_task_assignment_obj.dispatch_status = 5
+            route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["ASSIGN-FAIL"])
             route_task_assignment_obj.save()
         except:
-            route_task_assignment_obj.dispatch_status = 5
+            route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["ASSIGN-FAIL"])
             route_task_assignment_obj.save()

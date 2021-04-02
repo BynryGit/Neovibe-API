@@ -6,7 +6,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-##from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+#from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
@@ -18,7 +18,7 @@ from v1.meter_data_management.models.route_task_assignment import RouteTaskAssig
 from v1.meter_data_management.serializers.route_task_assignment import RouteTaskAssignmentViewSerializer, \
     RouteTaskAssignmentSerializer
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException, \
-    AllocationInProgress
+    AllocationInProgress, ObjectNotFoundException
 
 
 # API Header
@@ -51,7 +51,7 @@ class RouteTaskAssignmentList(generics.ListAPIView):
                 if is_authorized(1,1,1,user_obj):
                     user = get_user_by_id_string(user_obj)
                     route_task_assignment_obj = RouteTaskAssignmentTbl.objects.filter(meter_reader_id=user.id,
-                                                                                      dispatch_status=1, is_active=True)
+                                                                                      state=1, is_active=True)
                     if route_task_assignment_obj.exists():
                         raise AllocationInProgress
                     else:
@@ -60,7 +60,10 @@ class RouteTaskAssignmentList(generics.ListAPIView):
                                                                                           [{'is_active': True},
                                                                                            {'status': 'ALLOCATED'}],
                                                                                           is_active=True)
-                        return route_task_assignment_obj
+                        if route_task_assignment_obj.exists():
+                            return route_task_assignment_obj
+                        else:
+                            raise ObjectNotFoundException
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -93,11 +96,8 @@ class RouteTaskAssignment(GenericAPIView):
             if route_task_assignment_serializer.is_valid():
                 route_task_assignment_obj = route_task_assignment_serializer.create\
                     (route_task_assignment_serializer.validated_data, user)
-                route_task_assignment_view_serializer = RouteTaskAssignmentViewSerializer\
-                    (instance=route_task_assignment_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: route_task_assignment_view_serializer.data,
                 }, status=status.HTTP_201_CREATED)
             else:
                 return Response({
