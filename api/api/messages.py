@@ -216,3 +216,4 @@ TIP_ALREADY_EXIST = "Tip Already Exists."
 
 # *********** TRANSITION CONSTANTS **************
 SCHEDULE_LOG_TRANSITION = "Schedule Log transition failed."
+ROUTE_TASK_ASSIGNMENT_TRANSITION = "Route Task Assignment transition failed."
