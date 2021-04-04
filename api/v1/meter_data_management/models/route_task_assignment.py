@@ -12,9 +12,12 @@ __author__ = "aki"
 # Creation Date : 27/02/2021
 
 
+import fsm
 import uuid  # importing package for GUID
+from rest_framework import status
 from django.db import models  # importing package for database
 from django.utils import timezone # importing package for datetime
+from api.messages import ROUTE_TASK_ASSIGNMENT_TRANSITION
 from master.models import get_user_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id
@@ -22,12 +25,28 @@ from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id
 from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.contrib.postgres.fields import JSONField
+from v1.commonapp.views.custom_exception import CustomAPIException
 
 # Create Schedule Table Start
 
+# *********** ROUTE TASK ASSIGNMENT CONSTANTS **************
+ROUTE_TASK_ASSIGNMENT_STATUS_DICT = {
+    "NOT-DISPATCHED": 0,
+    "IN-PROGRESS": 1,
+    "STARTED": 2,
+    "DISPATCHED": 3,
+    "PARTIAL": 4,
+    "ASSIGN-FAIL": 5,
+    "DE-ASSIGN-FAIL": 6,
+    "COMPLETED": 7,
+    "ARCHIVED": 8,
+}
 
-class RouteTaskAssignment(models.Model):
-    DISPATCH_STATUS = (
+
+# Create Schedule Table Start
+
+class RouteTaskAssignment(models.Model, fsm.FiniteStateMachineMixin):
+    ROUTE_TASK_ASSIGNMENT_STATUS = (
         (0, 'NOT-DISPATCHED'),
         (1, 'IN-PROGRESS'),
         (2, 'STARTED'),
@@ -36,7 +55,24 @@ class RouteTaskAssignment(models.Model):
         (5, 'ASSIGN-FAIL'),
         (6, 'DE-ASSIGN-FAIL'),
         (7, 'COMPLETED'),
+        (8, 'ARCHIVED'),
     )
+    state_machine = {
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['NOT-DISPATCHED']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['PARTIAL']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['ASSIGN-FAIL']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['DE-ASSIGN-FAIL']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['STARTED'],
+                                                           ROUTE_TASK_ASSIGNMENT_STATUS_DICT['NOT-DISPATCHED'],
+                                                           ROUTE_TASK_ASSIGNMENT_STATUS_DICT['PARTIAL'],
+                                                           ROUTE_TASK_ASSIGNMENT_STATUS_DICT['ASSIGN-FAIL'],
+                                                           ROUTE_TASK_ASSIGNMENT_STATUS_DICT['DE-ASSIGN-FAIL'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['STARTED']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['DISPATCHED'],
+                                                       ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['DISPATCHED']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['COMPLETED'],
+                                                          ROUTE_TASK_ASSIGNMENT_STATUS_DICT['IN-PROGRESS'],),
+        ROUTE_TASK_ASSIGNMENT_STATUS_DICT['COMPLETED']: (ROUTE_TASK_ASSIGNMENT_STATUS_DICT['ARCHIVED'],),
+    }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -46,7 +82,7 @@ class RouteTaskAssignment(models.Model):
     meter_reader_id = models.BigIntegerField(null=True, blank=True)
     schedule_log_id = models.BigIntegerField(null=True, blank=True)
     consumer_meter_json = JSONField(null=True, blank=True)
-    dispatch_status = models.IntegerField(choices=DISPATCH_STATUS, default=0)
+    state = models.IntegerField(choices=ROUTE_TASK_ASSIGNMENT_STATUS, default=0)
     assign_date = models.DateTimeField(null=True, blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
     is_completed = models.BooleanField(default=False) # use for reading complete or not
@@ -81,6 +117,12 @@ class RouteTaskAssignment(models.Model):
 
     def __unicode__(self):
         return str(self.id_string)
+
+    def on_change_state(self, previous_state, next_state, **kwargs):
+        try:
+            self.save()
+        except Exception as ex:
+            raise CustomAPIException(ROUTE_TASK_ASSIGNMENT_TRANSITION, status_code=status.HTTP_412_PRECONDITION_FAILED)
 
 # Create Schedule Table end
 
