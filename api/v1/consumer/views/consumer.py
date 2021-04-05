@@ -90,7 +90,6 @@ class ConsumerList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerMaster.objects.filter(utility=utility, is_active=True)
-                    print("This is the queryset =>", queryset)
                     if "consumer_no" in self.request.query_params:
                         queryset = queryset.filter(consumer_no=self.request.query_params['consumer_no'])
                     if "email_id" in self.request.query_params:
