@@ -32,7 +32,7 @@ class ConsumerOfferMaster(models.Model):
     effective_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     expiry_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     category = models.BigIntegerField(choices=CHOICES, default=0)
-    service_obj = JSONField(default='')
+    service_obj = JSONField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -67,6 +67,6 @@ def get_consumer_offer_master_by_id_string(id_string):
 
 def get_consumer_offer_master_by_id(id):
     try:
-        return ConsumerOfferMaster.objects.get(id=id)
+        return ConsumerOfferMaster.objects.get(id=id,is_active=True)
     except:
         return False
