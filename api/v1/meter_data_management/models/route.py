@@ -28,6 +28,7 @@ class Route(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     label = models.CharField(max_length=200, blank=True, null=True)
     name = models.CharField(max_length=200, blank=True, null=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     premises_json = JSONField()
     filter_json = JSONField()
@@ -35,7 +36,7 @@ class Route(models.Model):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str(self.name) + ""+str(self.id_string)

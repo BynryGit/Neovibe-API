@@ -27,7 +27,7 @@ from v1.work_order.models.work_order_master import get_work_order_master_by_id
 from v1.commonapp.models.skills import get_skill_by_id_string
 from v1.userapp.serializers.user_skill import UserSkillViewSerializer
 from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
-from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from master.models import USER_DICT
 from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 from v1.commonapp.models.lifecycle import LifeCycle
@@ -46,6 +46,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from v1.commonapp.models.module import get_module_by_key
+from v1.commonapp.models.sub_module import get_sub_module_by_key
 
 
 # API Header
@@ -395,8 +397,8 @@ class UserNote(GenericAPIView):
             user = get_user_by_id_string(id_string)
             user_obj = get_user_by_id_string(user_id_string)
             utility_obj = get_utility_by_id_string(utility_id_string)
-            module = get_module_by_key("S&M")
-            sub_module = get_sub_module_by_key("S_AND_M_USER")
+            module = get_module_by_key("USER")
+            sub_module = get_sub_module_by_key("USER")
             serializer = NoteSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 note_obj = serializer.create(serializer.validated_data, user)
@@ -422,6 +424,89 @@ class UserNote(GenericAPIView):
             return Response({
                 STATE: EXCEPTION,
                 RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/utility/note/:id_string
+# API verb: GET,PUT
+# Package: Basic
+# Modules: Admin
+# Sub Module: Admin
+# Interaction: City corresponding to the id
+# Usage: API will fetch and update Cities for a given id
+# Tables used: City
+# Author: Chinmay
+# Created on: 10/11/2020
+
+
+class UserNoteDetail(GenericAPIView):
+    @is_token_validate
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def put(self, request, id_string, utility_id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            user_note_obj = get_note_by_id_string(id_string)
+            utility_obj = get_utility_by_id_string(utility_id_string)
+            module = get_module_by_key("USER")
+            sub_module = get_sub_module_by_key("USER")
+            if user_note_obj:
+                serializer = NoteSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    user_note_obj = serializer.update(user_note_obj, serializer.validated_data, user)
+                    user_note_obj.identification_id = user.id
+                    user_note_obj.tenant = user.tenant
+                    user_note_obj.utility = utility_obj
+                    user_note_obj.module_id = module
+                    user_note_obj.sub_module_id = sub_module
+                    user_note_obj.save()
+                    view_serializer = NoteViewSerializer(instance=user_note_obj,
+                                                         context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+            }, status=res.status_code)
+
+
+class UserNoteDetailList(GenericAPIView):
+    @is_token_validate
+    # @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def get(self, request, id_string):
+        try:
+            user_note = get_note_by_id_string(id_string)
+            if user_note:
+                serializer = NoteViewSerializer(instance=user_note, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
             }, status=res.status_code)
 
 
@@ -622,5 +707,3 @@ class ChangePasswordView(generics.UpdateAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
-
-

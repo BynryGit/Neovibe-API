@@ -7,8 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('work_order', '0002_auto_20210317_1139'),
-        ('work_order', '0002_auto_20210317_1202'),
-    ]
+            ]
 
     operations = [
     ]

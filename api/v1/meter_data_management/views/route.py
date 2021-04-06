@@ -14,7 +14,8 @@ from v1.complaint.serializers.complaint import *
 from v1.consumer.serializers.consumer_scheme_master import *
 from v1.payment.serializer.payment import *
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.meter_data_management.serializers.route import RouteViewSerializer, RouteSerializer, RouteListSerializer, RouteShortViewSerializer
+from v1.meter_data_management.serializers.route import RouteViewSerializer, RouteSerializer, RouteListSerializer, \
+    RouteShortViewSerializer
 from v1.meter_data_management.models.route import Route as RouteModel
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.meter_data_management.models.route import get_route_by_id_string
@@ -27,6 +28,7 @@ from v1.commonapp.models.zone import get_zone_by_id_string
 from v1.commonapp.models.division import get_division_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
+from datetime import datetime, timedelta
 
 # API Header
 # API end Point: api/v1/utility/:id_string/route/list
@@ -56,7 +58,7 @@ class RouteList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = RouteModel.objects.filter(utility=utility, is_active=True)
+                    queryset = RouteModel.objects.filter(utility=utility, is_active=True, created_date__gte=datetime.now() - timedelta(days=180))
                     if 'city_id' in self.request.query_params:
                         city = get_city_by_id_string(self.request.query_params['city_id'])
                         queryset = queryset.filter(city_id=city.id)
@@ -112,7 +114,6 @@ class RouteShortList(generics.ListAPIView):
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
-
 # API Header
 # API end Point: api/v1/meter-data/route
 # API verb: POST
@@ -124,6 +125,8 @@ class RouteShortList(generics.ListAPIView):
 # Tables used: Route
 # Author: Chinmay
 # Created on: 14/1/2021
+premise_id_string_list = []
+
 
 
 class Route(GenericAPIView):
@@ -132,11 +135,22 @@ class Route(GenericAPIView):
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
     def post(self, request):
         try:
+            global premise_id_string_list
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
                 serializer = RouteSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
+                    print("Route Object", serializer.validated_data['route_json'])
+                    for premises_id_string in serializer.validated_data['premises_json']['premises_details']:
+                        if premises_id_string['id_string'] in premise_id_string_list:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: 'CANNOT_ENTER_DUPLICATE_PREMISE',
+                            }, status=status.HTTP_409_CONFLICT)
+                        else:
+                            premise_id_string_list.append(premises_id_string['id_string'])
+                    print("LIST",premise_id_string_list)
                     route_obj = serializer.create(serializer.validated_data, user)
                     view_serializer = RouteViewSerializer(instance=route_obj, context={'request': request})
                     return Response({
@@ -209,7 +223,7 @@ class RouteDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     route_obj = serializer.update(route_obj, serializer.validated_data, user)
                     view_serializer = RouteViewSerializer(instance=route_obj,
-                                                            context={'request': request})
+                                                          context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,

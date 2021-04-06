@@ -23,6 +23,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from v1.commonapp.views.custom_filter_backend import CustomFilter
 from api.messages import READ_CYCLE_NOT_FOUND, SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from api.constants import *
+from datetime import datetime, timedelta
 
 # API Header
 # API end Point: api/v1/utility/:id_string/read_cycle/list
@@ -52,7 +53,7 @@ class ReadCycleList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ReadCycleModel.objects.filter(utility=utility, is_active=True)
+                    queryset = ReadCycleModel.objects.filter(utility=utility, is_active=True,created_date__gte=datetime.now() - timedelta(days=180))
                     queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
@@ -105,7 +106,7 @@ class ReadCycleShortList(generics.ListAPIView):
 # Tables used: ReadCycle
 # Author: Chinmay
 # Created on: 14/1/2021
-
+route_id_string_list = []
 
 class ReadCycle(GenericAPIView):
 
@@ -118,6 +119,16 @@ class ReadCycle(GenericAPIView):
                 user = get_user_by_id_string(user_id_string)
                 serializer = ReadCycleSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
+                    print("Premise Object", serializer.validated_data['route_json'])
+                    for premises_id_string in serializer.validated_data['route_json']['route_details']:
+                        if premises_id_string['id_string'] in route_id_string_list:
+                            return Response({
+                                STATE: ERROR,
+                                RESULTS: 'CANNOT_ENTER_DUPLICATE_ROUTES',
+                            }, status=status.HTTP_409_CONFLICT)
+                        else:
+                            route_id_string_list.append(premises_id_string['id_string'])
+                    print("LIST",route_id_string_list)
                     read_cycle_obj = serializer.create(serializer.validated_data, user)
                     view_serializer = ReadCycleViewSerializer(instance=read_cycle_obj, context={'request': request})
                     return Response({
