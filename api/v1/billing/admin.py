@@ -10,6 +10,9 @@ from v1.billing.models.bill import Bill
 from v1.billing.models.bill_consumer_detail import BillConsumerDetail
 from v1.billing.models.bill_schedule_log import ScheduleBillLog
 from v1.billing.models.fixed_charges import FixedCharges
+from v1.billing.models.bill_invoice_section_lookup import BillInvoiceSection
+from v1.billing.models.bill_invoice_section_master import BillInvoiceSectionMaster
+from v1.billing.models.render_invoice_template import RenderInvoiceTemplate
 
 admin.site.register(BillMonth)
 admin.site.register(BillCycle)
@@ -22,3 +25,6 @@ admin.site.register(Bill)
 admin.site.register(BillConsumerDetail)
 admin.site.register(ScheduleBillLog)
 admin.site.register(FixedCharges)
+admin.site.register(BillInvoiceSection)
+admin.site.register(BillInvoiceSectionMaster)
+admin.site.register(RenderInvoiceTemplate)
