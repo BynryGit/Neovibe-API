@@ -13,7 +13,8 @@ from v1.meter_data_management.task.de_assign_route_task import de_assign_route_t
 from v1.userapp.serializers.user import UserShortViewSerializer
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.serializers.route import RouteShortViewSerializer
-from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment as RouteTaskAssignmentTbl
+from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment as RouteTaskAssignmentTbl, \
+    ROUTE_TASK_ASSIGNMENT_STATUS_DICT
 from v1.meter_data_management.serializers.schedule_log import ScheduleLogShortViewSerializer
 from v1.meter_data_management.views.common_function import set_route_task_assignment_validated_data
 
@@ -31,7 +32,7 @@ class RouteTaskAssignmentViewSerializer(serializers.ModelSerializer):
     route_id = RouteShortViewSerializer(many=False, source='get_route_name')
     meter_reader_id = UserShortViewSerializer(many=False, source='get_meter_reader_name')
     schedule_log_id = ScheduleLogShortViewSerializer(many=False, source='get_schedule_log')
-    dispatch_status = ChoiceField(choices=RouteTaskAssignmentTbl.DISPATCH_STATUS)
+    state = ChoiceField(choices=RouteTaskAssignmentTbl.ROUTE_TASK_ASSIGNMENT_STATUS)
     task_detail = serializers.SerializerMethodField()
 
     def get_task_detail(self, route_task_assignment_tbl):
@@ -51,8 +52,8 @@ class RouteTaskAssignmentViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RouteTaskAssignmentTbl
-        fields = ('id_string', 'dispatch_status', 'assign_date', 'read_cycle_id', 'route_id', 'meter_reader_id',
-                  'schedule_log_id', 'tenant', 'utility', 'task_detail')
+        fields = ('id_string', 'state', 'assign_date', 'read_cycle_id', 'route_id', 'meter_reader_id', 'schedule_log_id',
+                  'tenant', 'utility', 'task_detail')
 
 
 class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
@@ -70,33 +71,33 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
         validated_data = set_route_task_assignment_validated_data(validated_data)
         try:
             route_task_assignment_obj = RouteTaskAssignmentTbl.objects.get(tenant=user.tenant,
-                                                                              utility_id=validated_data['utility_id'],
-                                                                              read_cycle_id=validated_data["read_cycle_id"],
-                                                                              route_id=validated_data["route_id"],
-                                                                              schedule_log_id=validated_data["schedule_log_id"],
-                                                                              is_active=True)
+                                                                           utility_id=validated_data['utility_id'],
+                                                                           read_cycle_id=validated_data["read_cycle_id"],
+                                                                           route_id=validated_data["route_id"],
+                                                                           schedule_log_id=validated_data["schedule_log_id"],
+                                                                           is_active=True)
 
-            if route_task_assignment_obj.dispatch_status == 0 or route_task_assignment_obj.dispatch_status == 4:
+            if route_task_assignment_obj.state == 0 or route_task_assignment_obj.state == 4:
                 route_task_assignment_obj.meter_reader_id = validated_data["meter_reader_id"]
-                route_task_assignment_obj.dispatch_status = 1
+                route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["IN-PROGRESS"])
                 route_task_assignment_obj.updated_date = timezone.now()
                 route_task_assignment_obj.save()
                 assign_partial_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
-            if route_task_assignment_obj.dispatch_status == 2 or route_task_assignment_obj.dispatch_status == 3:
-                route_task_assignment_obj.dispatch_status = 1
+            if route_task_assignment_obj.state == 2 or route_task_assignment_obj.state == 3:
+                route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["IN-PROGRESS"])
                 route_task_assignment_obj.updated_date = timezone.now()
                 route_task_assignment_obj.save()
                 de_assign_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
-            if route_task_assignment_obj.dispatch_status == 5:
-                route_task_assignment_obj.dispatch_status = 1
+            if route_task_assignment_obj.state == 5:
+                route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["IN-PROGRESS"])
                 route_task_assignment_obj.updated_date = timezone.now()
                 route_task_assignment_obj.save()
                 assign_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
-            if route_task_assignment_obj.dispatch_status == 6:
-                route_task_assignment_obj.dispatch_status = 1
+            if route_task_assignment_obj.state == 6:
+                route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["IN-PROGRESS"])
                 route_task_assignment_obj.updated_date = timezone.now()
                 route_task_assignment_obj.save()
                 de_assign_route_task.delay(route_task_assignment_obj.id)
@@ -107,7 +108,7 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
                 route_task_assignment_obj.tenant = user.tenant
                 route_task_assignment_obj.created_by = user.id
                 route_task_assignment_obj.assign_date = timezone.now()
-                route_task_assignment_obj.dispatch_status = 1
+                route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["IN-PROGRESS"])
                 route_task_assignment_obj.save()
                 assign_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj

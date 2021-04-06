@@ -45,3 +45,9 @@ class ConsumerOfferDetail(models.Model):
             return consumer_service_contract_detail
         except:
             return False
+
+def get_consumer_offer_by_consumer_service_contract_detail_id(consumer_service_contract_detail_id):
+    try:
+        return ConsumerOfferDetail.objects.filter(consumer_service_contract_detail_id=consumer_service_contract_detail_id)
+    except:
+        return False

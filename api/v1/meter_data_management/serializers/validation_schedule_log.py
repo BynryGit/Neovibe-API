@@ -32,7 +32,8 @@ class ValidationScheduleLogViewSerializer(serializers.ModelSerializer):
         role_list = []
         total_completed_task = 0
         meter_status_obj = get_meter_status_by_name('RCNT')
-        consumer_obj = ConsumerDetailTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, is_active=True).count()
+        consumer_obj = ConsumerDetailTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, state=0,
+                                                        is_active=True).count()
         meter_reading_obj = MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id)
         route_task_assignment_obj = RouteTaskAssignmentTbl.objects.filter(schedule_log_id=schedule_log_tbl.id,
                                                                           is_active=True)

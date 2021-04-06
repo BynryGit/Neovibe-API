@@ -11,7 +11,8 @@ __author__ = "aki"
 
 from celery.task import task
 from v1.commonapp.views.logger import logger
-from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
+from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id, \
+    ROUTE_TASK_ASSIGNMENT_STATUS_DICT
 
 
 # todo need to fix json code
@@ -26,7 +27,7 @@ def update_route_task_status(route_task_assignment_id, meter_list):
             for task in task_obj:
                 task['status'] = 'ASSIGNED'
 
-        route_task_assignment_obj.dispatch_status = 3
+        route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["DISPATCHED"])
         route_task_assignment_obj.save()
     except Exception as ex:
         print(ex)

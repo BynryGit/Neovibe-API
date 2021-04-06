@@ -1,7 +1,6 @@
 __author__ = "aki"
 
 from django.urls import path
-from v1.meter_data_management.task.schedule_log import schedule_log
 from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
 from v1.meter_data_management.views.meter_reading_summary import MeterReadingSummary
@@ -108,5 +107,4 @@ urlpatterns = [
     path('upload-route', UploadRoute.as_view(), name='upload_route'),
     path('utility/<uuid:id_string>/upload-route-summary', UploadRouteSummary.as_view(), name='upload_route_summary'),
 
-    path('log', schedule_log, name='route_add')
 ]

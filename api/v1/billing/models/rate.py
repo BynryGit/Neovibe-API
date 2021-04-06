@@ -28,7 +28,7 @@ class Rate(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    product_id = models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     consumer_category_id = models.BigIntegerField(null=True, blank=True)
     consumer_subcategory_id = models.BigIntegerField(null=True, blank=True)
     unit = models.CharField(max_length=200, blank=False, null=False)
@@ -43,7 +43,7 @@ class Rate(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return self.rate
+        return str(self.rate) +" - "+ str(self.id_string)
 
     def __unicode__(self):
         return self.rate
@@ -51,7 +51,7 @@ class Rate(models.Model):
     @property
     def get_utility_product_name(self):
         try:
-            return get_utility_product_by_id(self.product_id)
+            return get_utility_product_by_id(self.utility_product_id)
         except:
             return False
     
@@ -87,6 +87,6 @@ def get_rate_by_id(id):
 
 def get_rate_by_category_sub_category_wise(utility,utility_product_id,consumer_category_id,consumer_sub_category_id):
     try:
-        return Rate.objects.filter(utility=utility,product_id=utility_product_id,consumer_category_id=consumer_category_id,consumer_subcategory_id=consumer_sub_category_id,is_active=True).last()
+        return Rate.objects.filter(utility=utility,utility_product_id=utility_product_id,consumer_category_id=consumer_category_id,consumer_subcategory_id=consumer_sub_category_id,is_active=True).order_by('id')
     except:
         return False

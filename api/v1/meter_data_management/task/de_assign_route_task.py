@@ -14,7 +14,8 @@ from celery.task import task
 from fcm_django.models import FCMDevice
 from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
-from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
+from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id, \
+    ROUTE_TASK_ASSIGNMENT_STATUS_DICT
 from v1.meter_data_management.models.route import get_route_by_id
 
 
@@ -32,9 +33,9 @@ def de_assign_route_task(route_task_assignment_id):
                     x['is_completed'] == True and x['is_revisit'] == False]
 
         if len(complete_task_obj) == 0:
-            dispatch_status = 0
+            route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["NOT-DISPATCHED"])
         else:
-            dispatch_status = 4
+            route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["PARTIAL"])
 
         task_obj = [x for x in route_task_assignment_obj.consumer_meter_json if x['is_active'] == True and
                     x['is_completed'] == False and x['is_revisit'] == False]
@@ -44,7 +45,6 @@ def de_assign_route_task(route_task_assignment_id):
             task['meter_reader_id'] = None
 
         route_task_assignment_obj.meter_reader_id = None
-        route_task_assignment_obj.dispatch_status = dispatch_status
         route_task_assignment_obj.save()
 
         read_cycle_obj = get_read_cycle_by_id(route_task_assignment_obj.read_cycle_id)
@@ -79,5 +79,5 @@ def de_assign_route_task(route_task_assignment_id):
             task['status'] = 'ALLOCATED'
             task['meter_reader_id'] = None
 
-        route_task_assignment_obj.dispatch_status = 6
+        route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["DE-ASSIGN-FAIL"])
         route_task_assignment_obj.save()
