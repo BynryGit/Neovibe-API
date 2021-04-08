@@ -2,7 +2,7 @@ from typing import FrozenSet
 
 from django_filters import rest_framework
 from v1.work_order.models.work_order_master import WorkOrderMaster, get_work_order_master_by_id_string
-from v1.commonapp.views.notifications import send_sms
+# from v1.commonapp.views.notifications import send_sms
 from v1.utility.models.utility_work_order_sub_type import UtilityWorkOrderSubType, get_utility_work_order_sub_type_by_id
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
