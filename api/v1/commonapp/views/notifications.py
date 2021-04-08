@@ -18,8 +18,11 @@ secret_reader = SecretReader()
 @task(name='send_mail')
 def send_email(subject, from_email, to, body=None, attachments=None, html=None):
     try:
-        backend = EmailBackend(host='smtp.sendgrid.net', port=587,
-                               username='apikey', use_tls=True, fail_silently=False)
+        email_host = secret_reader.get_email_host()
+        email_port = secret_reader.get_email_port()
+        email_username = secret_reader.get_email_host_user()
+        backend = EmailBackend(host=email_host, port=email_port,
+                               username=email_username, use_tls=True, fail_silently=False)
         msg = EmailMultiAlternatives(subject=subject, body=body, from_email=from_email, to=to, connection=backend,
                                      attachments=attachments)
         if html is not None:
@@ -48,15 +51,14 @@ def send_sms(sms_body, from_number, to_number):
 
 
 def handle_communications(type, instance):
-    array_of_variables = {}
-    if type == 'Utility':
+    dictionary_of_variables = {}
+    if type == 19:
         utility = utility_master.get_utility_by_id(instance.id)
-        array_of_variables = {
+        dictionary_of_variables = {
             "{Utility.email}": utility.email_id,
             "{Utility.utility_name}": utility.name,
-
         }
-    return array_of_variables
+    return dictionary_of_variables
 
 
 def html_handler(html_template, array):

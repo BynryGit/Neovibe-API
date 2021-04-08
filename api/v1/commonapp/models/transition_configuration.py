@@ -32,6 +32,8 @@ TRANSITION_CHANNEL_DICT = {
     "SMS"             : 1,
     "WHATSAPP"        : 2,
 }
+
+
 class TransitionConfiguration(models.Model):
     CHOICES = (
         (0, 'ASSET'),
@@ -80,18 +82,18 @@ class TransitionConfiguration(models.Model):
     def __unicode__(self):
         return self.tenant.name
 
+
 def get_transition_configuration_by_id(id):
     try:
         return TransitionConfiguration.objects.get(id = id)
     except Exception as e:
         return False
 
+
 def is_transition_configuration_exists(transition_object, next_state, utility):
     try:
         fill = TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
-                                                  utility=utility, is_active=True).exists()
-        print("HHHHHHHHHHHHHHH",transition_object,next_state,utility)
+                                                      utility=utility, is_active=True).exists()
         return fill
-
     except Exception as e:
         return False

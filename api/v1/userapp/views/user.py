@@ -536,7 +536,7 @@ class UserNoteList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     user = get_user_by_id_string(self.kwargs['id_string'])
-                    queryset = Notes.objects.filter(identification_id=user.id, is_active=True)
+                    queryset = Notes.objects.filter(is_active=True)
                     if queryset:
                         return queryset
                     else:
@@ -669,12 +669,6 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ChangePasswordView(generics.UpdateAPIView):
-    # queryset = UserTbl.objects.all()
-    # print("QUERYSET",queryset)
-    # permission_classes = (
-    #     rest_framework.permissions.AllowAny,
-    # )
-    # serializer_class = ChangePasswordSerializer
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)

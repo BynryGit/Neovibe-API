@@ -21,7 +21,7 @@ class NoteViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'note_color', 'is_active', 'created_date')
 
 
 class NoteSerializer(serializers.ModelSerializer):

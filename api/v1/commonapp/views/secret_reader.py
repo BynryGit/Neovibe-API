@@ -35,6 +35,7 @@ class SecretReader:
     @staticmethod
     def get_email_backend():
         try:
+            print("EMAIL BACKEND CALLED")
             return settings.EMAIL_BACKEND
         except:
             pass
@@ -42,6 +43,7 @@ class SecretReader:
     @staticmethod
     def get_email_host():
         try:
+            print("EMAIL HOST CALLED")
             return settings.EMAIL_HOST
         except:
             pass
@@ -54,8 +56,22 @@ class SecretReader:
             pass
 
     @staticmethod
-    def get_host_user():
+    def get_email_host_user():
         try:
             return settings.EMAIL_HOST_USER
+        except:
+            pass
+
+    @staticmethod
+    def get_from_email():
+        try:
+            return settings.FROM_EMAIL
+        except:
+            pass
+
+    @staticmethod
+    def get_from_number():
+        try:
+            return settings.FROM_NUMBER
         except:
             pass

@@ -26,3 +26,6 @@ xlrd==2.0.1
 fcm-django==0.3.7
 pycurl>=7.43.0
 croniter==1.0.9
+bs4==0.0.1
+beautifulsoup4==4.9.3
+
