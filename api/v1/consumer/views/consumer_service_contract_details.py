@@ -28,6 +28,10 @@ from api.constants import *
 from api.messages import *
 from master.models import get_user_by_id_string
 from rest_framework.response import Response
+from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
+from v1.utility.models.utility_work_order_sub_type import UtilityWorkOrderSubType
+from django.db import transaction
+from v1.meter_data_management.models.meter import get_meter_by_id_string
 
 class ConsumerServiceContractDetailList(generics.ListAPIView):
     try:
@@ -118,51 +122,270 @@ class ConsumerMeterList(generics.ListAPIView):
 # Author: Gaurav
 # Created on: 22-02-2021
 
-class ConsumerServiceContractDetailApprove(GenericAPIView):
+# class ConsumerServiceContractDetailApprove(GenericAPIView):
 
+#     @is_token_validate
+#     # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
+#     def post(self, request):
+#         try:
+#             user_id_string = get_user_from_token(request.headers['Authorization'])
+#             user = get_user_by_id_string(user_id_string)
+#             print("=======request data===",request.data)
+#             print("======yesorno=========",request.data['meter_status'])
+#             consumer_service_contract_details_obj = get_consumer_service_contract_detail_by_id_string(request.data['consumer_service_contract_detail_id'])
+#             if consumer_service_contract_details_obj:
+#                 print("=====consumer id==",consumer_service_contract_details_obj.id)
+#                 print("=====consumer contract id==",consumer_service_contract_details_obj.service_contract_id)
+#                 service_contract_obj = get_utility_service_contract_master_by_id(consumer_service_contract_details_obj.service_contract_id)
+#                 print("==============serv=======",service_contract_obj)
+#                 if service_contract_obj:
+#                     utility_product_obj=get_utility_product_by_id(service_contract_obj.utility_product_id)
+#                     print("===========product========",utility_product_obj)
+
+#                 work_order_type_obj = get_work_order_type_by_key('INSTALLATION')
+#                 if work_order_type_obj:
+#                     # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+#                     utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_order_type_obj.id)
+#                     print("========UWOT=======",utility_work_order_type_obj)
+
+#                 work_order_sub_type_obj = get_work_order_sub_type_by_key('Meter Installation')
+#                 if work_order_sub_type_obj:
+#                     # utility_work_order_sub_type_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_obj.id)
+#                     utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id=work_order_sub_type_obj.id)
+#                     print("========UWOST=======",utility_work_order_sub_type_obj)
+
+#                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_obj:
+#                     work_order_master_obj = WorkOrderMaster.objects.get(utility_work_order_sub_type_id=utility_work_order_sub_type_obj.id,utility_product_id=utility_product_obj.id)
+#                     print("=====master======",work_order_master_obj)
+
+#                     if work_order_master_obj:
+#                         request.data['work_order_master_id']=str(work_order_master_obj.id_string)
+#                         appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+#                         if appointment_serializer.is_valid(raise_exception=True):                           
+#                             appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+#                             appointment_obj.utility = consumer_service_contract_details_obj.utility
+#                             appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_details_obj.id 
+#                             appointment_obj.save()
+#                             consumer_service_contract_details_obj.change_state(CONSUMER_DICT["APPROVED"])
+#                             consumer_service_contract_details_obj.is_active = True
+#                             consumer_service_contract_details_obj.save()                             
+#                     view_serializer = ConsumerServiceContractDetailViewSerializer(instance=consumer_service_contract_details_obj, context={'request': request})
+#                     return Response({
+#                         STATE: SUCCESS,
+#                         RESULT: view_serializer.data,
+#                     }, status=status.HTTP_200_OK)
+#         except Exception as e:
+#             logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+#             res = self.handle_exception(e)
+#             return Response({
+#                 STATE: EXCEPTION,
+#                 RESULT: str(e),
+#             }, status=res.status_code)
+
+
+class ConsumerServiceContractDetailApprove(GenericAPIView):
+    
     @is_token_validate
-    # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
+    #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
+            print("=======request data===",request.data)
+            print("======yesorno=========",request.data['meter_status'])
             consumer_service_contract_details_obj = get_consumer_service_contract_detail_by_id_string(request.data['consumer_service_contract_detail_id'])
-            if consumer_service_contract_details_obj:
-                service_contract_obj = get_utility_service_contract_master_by_id(consumer_service_contract_details_obj.service_contract_id)
-                if service_contract_obj:
-                    utility_product_obj=get_utility_product_by_id(service_contract_obj.utility_product_id)
+            appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+            if appointment_serializer.is_valid(raise_exception=False):
+                with transaction.atomic():
+                    if request.data['meter_status'] == "yes":
+                        print("inside yesssssssss")
+                        appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                        appointment_obj.utility = consumer_service_contract_details_obj.utility
+                        appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_details_obj.id 
+                        appointment_obj.save()
+                        consumer_service_contract_details_obj.change_state(CONSUMER_DICT["APPROVED"])
+                        consumer_service_contract_details_obj.is_active = True
+                        consumer_service_contract_details_obj.save()
+                        # # Timeline code start
+                        # transaction.on_commit(
+                        #     lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
+                            # Timeline code end
+                    elif request.data['meter_status'] == "no":
+                        print("inside noooooooooo")
+                        meter = get_meter_by_id_string(request.data['meter_id'])
+                        print("========meter id string==========",meter)
+                        print("======meteeerer id=======",meter.id)
+                        appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                        appointment_obj.utility = consumer_service_contract_details_obj.utility
+                        appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_details_obj.id 
+                        appointment_obj.save()
+                        consumer_service_contract_details_obj.change_state(CONSUMER_DICT["APPROVED"])
+                        consumer_service_contract_details_obj.is_active = True
+                        consumer_service_contract_details_obj.meter_id = meter.id
+                        consumer_service_contract_details_obj.save()
+                        # # Timeline code start
+                        # transaction.on_commit(
+                        #     lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
+                            # Timeline code end
 
-                work_order_type_obj = get_work_order_type_by_key('Installation')
-                if work_order_type_obj:
-                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
-
-                work_order_sub_type_obj = get_work_order_sub_type_by_key('Meter Installation')
-                if work_order_sub_type_obj:
-                    utility_work_order_sub_type_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_obj.id)
-
-                if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_obj:
-                    work_order_master_obj = WorkOrderMaster.objects.get(utility_work_order_sub_type_id=utility_work_order_sub_type_obj.id,utility_product_id=utility_product_obj.id)
-
-                    if work_order_master_obj:
-                        request.data['work_order_master_id']=str(work_order_master_obj.id_string)
-                        appointment_serializer = ServiceAppointmentSerializer(data=request.data)
-                        if appointment_serializer.is_valid(raise_exception=True):                           
-                            appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
-                            appointment_obj.utility = consumer_service_contract_details_obj.utility
-                            appointment_obj.consumer_service_contract_detail_id = consumer_service_contract_details_obj.id 
-                            appointment_obj.save()
-                            consumer_service_contract_details_obj.change_state(CONSUMER_DICT["APPROVED"])
-                            consumer_service_contract_details_obj.is_active = True
-                            consumer_service_contract_details_obj.save()                             
                     view_serializer = ConsumerServiceContractDetailViewSerializer(instance=consumer_service_contract_details_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
-                        RESULT: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)                
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULTS: list(appointment_serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger().log(e, 'HIGH', module='Consumer Ops', sub_module='Consumer')
+            print("=======error=========",e)
+            logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User')
             res = self.handle_exception(e)
             return Response({
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/<uuid:id_string>/service-contract-detail
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: ConsumerServiceContractDetail
+# Usage: ConsumerServiceContractDetail details
+# Tables used: ConsumerServiceContractDetail
+# Author: Gaurav
+# Created on: 08-04-2021
+
+class ConsumerServiceContractDetailDetails(GenericAPIView):
+
+    @is_token_validate
+    #role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    def get(self, request, id_string):
+        try:
+            consumer = get_consumer_service_contract_detail_by_id_string(id_string)
+            if consumer:
+                serializer = ConsumerServiceContractDetailViewSerializer(instance=consumer, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Consumer Ops', Sub_module='Consumer')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+
+# API Header
+# API end Point: api/v1/consumer/<uuid:id_string>/service-contract-detail/reject
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: ConsumerServiceContractDetail
+# Usage: ConsumerServiceContractDetail Reject
+# Tables used: ConsumerServiceContractDetail
+# Author: Gaurav
+# Created on: 08-04-2021
+
+class ConsumerServiceContractDetailReject(GenericAPIView):
+
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            consumer_contract = get_consumer_service_contract_detail_by_id_string(id_string)
+            print("==========consumer========",consumer_contract)
+            if consumer_contract:
+                # serializer = ComplaintSerializer(data=request.data)
+                # consumer_contract.change_state(CONSUMER_DICT["REJECTED"])
+                # if serializer.is_valid(raise_exception=False):
+                    # consumer_contract = serializer.update(consumer_contract, serializer.validated_data, user)
+                    with transaction.atomic():
+                        consumer_contract.change_state(CONSUMER_DICT["REJECTED"])
+                        serializer = ConsumerServiceContractDetailViewSerializer(instance=consumer_contract, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                # else:
+                #     return Response({
+                #         STATE: ERROR,
+                #         RESULTS: list(serializer.errors.values())[0][0],
+                #     }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# API Header
+# API end Point: api/v1/consumer/<uuid:id_string>/service-contract-detail/hold
+# API verb: POST
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: ConsumerServiceContractDetail
+# Usage: ConsumerServiceContractDetail hold
+# Tables used: ConsumerServiceContractDetail
+# Author: Gaurav
+# Created on: 08-04-2021
+
+class ConsumerServiceContractDetailHold(GenericAPIView):
+
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            consumer_contract = get_consumer_service_contract_detail_by_id_string(id_string)
+            print("==========consumer========",consumer_contract)
+            if consumer_contract:
+                # serializer = ComplaintSerializer(data=request.data)
+                # consumer_contract.change_state(CONSUMER_DICT["REJECTED"])
+                # if serializer.is_valid(raise_exception=False):
+                    # consumer_contract = serializer.update(consumer_contract, serializer.validated_data, user)
+                    with transaction.atomic():
+                        consumer_contract.change_state(CONSUMER_DICT["HOLD"])
+                        serializer = ConsumerServiceContractDetailViewSerializer(instance=consumer_contract, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                # else:
+                #     return Response({
+                #         STATE: ERROR,
+                #         RESULTS: list(serializer.errors.values())[0][0],
+                #     }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Consumer Ops', Sub_module='Consumer')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
