@@ -16,11 +16,8 @@
 import uuid  # importing package for guid
 from datetime import datetime  # importing package for datetime
 from django.db import models  # importing package for database
-
-from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.views.custom_exception import ObjectNotFoundException
 from v1.tenant.models.tenant_master import TenantMaster
-from v1.utility.models.utility_master import UtilityMaster
 from v1.commonapp.models.division import get_division_by_id
 from django.utils import timezone # importing package for datetime
 
@@ -30,7 +27,7 @@ from django.utils import timezone # importing package for datetime
 class Area(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    utility = models.ForeignKey('utility.UtilityMaster', blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=False, null=False)
     division_id = models.BigIntegerField(blank=True, null=True)
     pin_code = models.CharField(max_length=200, blank=True, null=True)

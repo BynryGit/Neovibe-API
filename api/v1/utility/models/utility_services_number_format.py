@@ -58,10 +58,10 @@ class UtilityServiceNumberFormat(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.utility.name
+        return str(self.startingno)
 
     def __unicode__(self):
-        return self.utility.name
+        return str(self.startingno)
 
     @property
     def get_sub_module_by_id(self):

@@ -36,11 +36,11 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
         read_cycle_obj = get_read_cycle_by_id(id=schedule_log_tbl.read_cycle_id)
         route_detail = {
             'total_route' : len(read_cycle_obj.route_json),
-            'started_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, dispatch_status=2,
+            'started_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, state=2,
                                                                 is_active=True).count(),
-            'dispatch_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, dispatch_status=3,
+            'dispatch_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, state=3,
                                                                  is_active=True).count(),
-            'completed_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, dispatch_status=3,
+            'completed_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, state=3,
                                                                   is_completed=True, is_active=True).count(),
         }
         return route_detail

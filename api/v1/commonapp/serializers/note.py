@@ -4,7 +4,7 @@ from v1.commonapp.common_functions import set_note_validated_data
 from v1.commonapp.models.notes import Notes
 from v1.tenant.serializers.tenant_status import TenantStatusViewSerializer
 from v1.utility.serializers.utility import UtilitySerializer
-
+from datetime import datetime
 
 class NoteListSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
@@ -21,7 +21,7 @@ class NoteViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notes
-        fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'created_date')
+        fields = ('id_string', 'tenant', 'utility', 'note_name', 'note', 'note_color', 'is_active', 'created_date')
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -56,4 +56,5 @@ class NoteSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             note_obj = super(NoteSerializer, self).update(instance, validated_data)
             note_obj.updated_by = user.id
+            note_obj.updated_date = datetime.utcnow()
             return note_obj

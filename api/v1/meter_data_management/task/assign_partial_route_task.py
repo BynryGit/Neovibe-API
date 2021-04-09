@@ -17,7 +17,8 @@ from v1.meter_data_management.models.consumer_detail import ConsumerDetail as Co
 from v1.meter_data_management.models.meter_reading import MeterReading as MeterReadingTbl
 from v1.meter_data_management.models.job_card_template import JobCardTemplate as JobCardTemplateTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
-from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id
+from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id, \
+    ROUTE_TASK_ASSIGNMENT_STATUS_DICT
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.meter_data_management.models.spot_bill import get_spot_bill_by_consumer_detail_id
 
@@ -83,7 +84,7 @@ def assign_partial_route_task(route_task_assignment_id):
                 task['status'] = 'ALLOCATED'
                 task['meter_reader_id'] = route_task_assignment_obj.meter_reader_id
 
-        route_task_assignment_obj.dispatch_status = 2
+        route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["STARTED"])
         route_task_assignment_obj.save()
 
         read_cycle_obj = get_read_cycle_by_id(route_task_assignment_obj.read_cycle_id)
@@ -118,14 +119,13 @@ def assign_partial_route_task(route_task_assignment_id):
                     x['is_completed'] == True and x['is_revisit'] == False]
 
         if len(complete_task_obj) == 0:
-            dispatch_status = 0
+            route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["NOT-DISPATCHED"])
         else:
-            dispatch_status = 4
+            route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["PARTIAL"])
 
         for task in task_obj:
             task['status'] = 'ALLOCATED'
             task['meter_reader_id'] = None
 
         route_task_assignment_obj.meter_reader_id = None
-        route_task_assignment_obj.dispatch_status = dispatch_status
         route_task_assignment_obj.save()

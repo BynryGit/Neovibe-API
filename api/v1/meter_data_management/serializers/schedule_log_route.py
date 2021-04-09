@@ -55,14 +55,14 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
                 meter_reader_task_count = 0
                 assign_date = route_task_assignment_obj.assign_date
                 total_reading = complete_task_obj
-                dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
+                state = route_task_assignment_obj.get_state_display()
             else:
                 meter_reader_obj = get_user_by_id(route_task_assignment_obj.meter_reader_id)
                 meter_reader_first_name = meter_reader_obj.first_name
                 meter_reader_last_name = meter_reader_obj.last_name
                 assign_date = route_task_assignment_obj.assign_date
                 total_reading = complete_task_obj
-                dispatch_status = route_task_assignment_obj.get_dispatch_status_display()
+                state = route_task_assignment_obj.get_state_display()
                 meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
                                                                              schedule_log_id=schedule_log_id.id,
                                                                              is_completed=False, is_active=True).count()
@@ -70,7 +70,7 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
             meter_reader_first_name = 'NA'
             meter_reader_last_name = 'NA'
             assign_date = 'NA'
-            dispatch_status = 'NOT-DISPATCHED'
+            state = 'NOT-DISPATCHED'
             meter_reader_task_count = 0
             total_reading = 0
 
@@ -81,7 +81,7 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
             'meter_reader_first_name': meter_reader_first_name,
             'meter_reader_last_name': meter_reader_last_name,
             'assign_date': assign_date,
-            'dispatch_status': dispatch_status,
+            'state': state,
             'meter_reader_task_count': meter_reader_task_count
         }
         return route_detail

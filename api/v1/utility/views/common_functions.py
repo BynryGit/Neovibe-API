@@ -23,6 +23,7 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id_str
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.utility.models.utility_service_contract_template import get_utility_service_contract_template_by_id_string
 from v1.commonapp.models.currency import get_currency_by_id_string
+from master.models import get_user_by_id_string
 
 
 def set_utility_validated_data(validated_data):
@@ -48,6 +49,9 @@ def set_utility_validated_data(validated_data):
     if "currency_id" in validated_data:
         currency = get_currency_by_id_string(validated_data["currency_id"])
         validated_data["currency_id"] = currency.id
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
     return validated_data
 
 

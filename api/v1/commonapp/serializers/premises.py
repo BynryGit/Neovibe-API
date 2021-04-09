@@ -17,13 +17,20 @@ from api.messages import PREMISE_ALREADY_EXIST
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.common_functions import set_premise_validated_data
 from v1.commonapp.serializers.sub_area import SubAreaListSerializer
+from v1.meter_data_management.models.meter import Meter
 from v1.commonapp.models.area import get_area_by_id
 
 
 class PremisesShortViewSerializer(serializers.ModelSerializer):
+    meter_count = serializers.SerializerMethodField()
+
+    def get_meter_count(self, premise_tbl):
+        meter_count = Meter.objects.filter(is_active=True, premise_id=premise_tbl.id).count()
+        return meter_count
+
     class Meta:
         model = PremiseTbl
-        fields = ('id_string', 'name')
+        fields = ('id_string', 'name', 'meter_count')
 
 
 class PremiseViewSerializer(serializers.ModelSerializer):
@@ -79,8 +86,12 @@ class PremiseSerializer(serializers.ModelSerializer):
 
 
 
+
+
 class PremiseListSerializer(serializers.ModelSerializer):
     subarea = SubAreaListSerializer(source="get_sub_area")
+
+
 
     class Meta:
         model = PremiseTbl

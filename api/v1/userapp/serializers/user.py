@@ -72,8 +72,8 @@ class UserSerializer(serializers.ModelSerializer):
             user_obj.tenant = user.tenant
             user_obj.status_id = 2
             user_obj.is_active = True
-            user_obj.save()
-            # user_obj.user_id = generate_user_id(user_obj)
+            # user_obj.save()
+            user_obj.user_id = generate_user_id(user_obj)
             user_obj.save()
             return user_obj
 
