@@ -148,7 +148,7 @@ ROUTE_TASK_ASSIGNMENT_NOT_FOUND = "Route task assignment not found"
 READER_STATUS_NOT_FOUND = "Reader Status Not Found."
 ALLOCATION_IN_PROGRESS = "Allocation is in progress"
 READING_NOT_PROVIDED = "Readings data not provided"
-
+CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND = "Consumer service contract detail not found"
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"
