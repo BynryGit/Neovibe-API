@@ -8,7 +8,7 @@ from v1.userapp.views.user_bank import UserBankDetail
 from v1.userapp.views.user_privilege import UserPrivilegeDetail
 from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
-from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
+from v1.userapp.views.user_utility import UserUtility,UesrUtilityList, UserUtilityDetail
 from v1.userapp.views.user_sub_type import UserSubTypeByUserType
 from v1.userapp.views.user_role import UserRoleByUtilityModules,UserRoleByUtilitySubModule,ModulePrivilegesList,\
 UserRoleByTenantModules, UserRoleByTenantSubModule
@@ -60,6 +60,7 @@ urlpatterns = [
     path('change-password/<uuid:id_string>',ChangePasswordView.as_view()),
     path('<uuid:user_id_string>/tenant/<uuid:tenant_id_string>', UserRoleByTenantModules.as_view()),
     path('<uuid:user_id_string>/tenant/<uuid:tenant_id_string>/tenant-module/<uuid:module_id_string>', UserRoleByTenantSubModule.as_view()),
+    path('utility/<uuid:id_string>/detail-list', UserUtilityDetail.as_view()),
 
 
 ]

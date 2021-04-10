@@ -42,7 +42,7 @@ class StateSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         with transaction.atomic():
             validated_data = set_state_validated_data(validated_data)
-            if StateTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+            if StateTbl.objects.filter(name=validated_data['name'],country_id=validated_data['country_id'], tenant_id=validated_data['tenant_id'],
                                        utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(STATE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
@@ -53,7 +53,7 @@ class StateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_state_validated_data(validated_data)
-        if StateTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+        if StateTbl.objects.filter(name=validated_data['name'],country_id=validated_data['country_id'], tenant_id=validated_data['tenant_id'],
                                    utility_id=validated_data['utility_id']).exists():
             raise CustomAPIException(STATE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:

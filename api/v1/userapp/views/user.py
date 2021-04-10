@@ -602,7 +602,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
                 # absurl='http://'+current_site+ relativeLink
                 email_body = 'Hello, \n Use link below to reset your password \n' + absurl
                 # data = {'email_body':email_body, 'to_email':user.email, 'email_subject':'Reset your password'}
-                send_mail('Reset Your Password', email_body, 'gaurav.satpute@bynry.com', [user.email],
+                send_mail('Reset Your Password', email_body, 'chinmay.pathak@bynry.com', [user.email],
                           fail_silently=False)
                 # try:
                 #     send_mail('Subject here', 'Here is the message.', 'gaurav.satpute@bynry.com', ['satputegaurav18@gmail.com'],fail_silently=False)

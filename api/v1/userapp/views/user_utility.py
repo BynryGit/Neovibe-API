@@ -3,6 +3,7 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from v1.commonapp.views.custom_filter_backend import CustomFilter
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
 from api.messages import *
 from api.constants import *
 from rest_framework.generics import GenericAPIView
@@ -14,7 +15,7 @@ from v1.commonapp.common_functions import get_user_from_token
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values, UserUtility as UserUtilityTbl
+from v1.userapp.models.user_utility import get_utility_by_user, get_record_by_values, UserUtility as UserUtilityTbl, get_user_utility_by_id_string
 from v1.userapp.serializers.user_utility import UserUtilitySerializer, UserUtilityViewSerializer
 from v1.userapp.views.common_functions import set_user_utility_validated_data
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -199,3 +200,66 @@ class UserUtility(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+
+
+class UserUtilityDetail(GenericAPIView):
+    @is_token_validate
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def get(self, request, id_string):
+        try:
+            user_utility = get_user_utility_by_id_string(id_string)
+            if user_utility:
+                serializer = UserUtilityViewSerializer(instance=user_utility, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+            }, status=res.status_code)
+
+    @is_token_validate
+    @role_required(ADMIN, UTILITY_MASTER, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            user_utility_obj = get_user_utility_by_id_string(id_string)
+            if user_utility_obj:
+                serializer = UserUtilitySerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    user_utility_obj = serializer.update(user_utility_obj, serializer.validated_data, user)
+                    view_serializer = UserUtilityViewSerializer(instance=user_utility_obj,
+                                                         context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='Utility')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+            }, status=res.status_code)
+
+
+
+
