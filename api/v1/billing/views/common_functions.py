@@ -43,7 +43,7 @@ from v1.payment.models.payment import Payment as PaymentTbl
 from v1.billing.models.fixed_charges import get_fixed_charges_by_id_meter_no
 from v1.consumer.models.consumer_offer_detail import get_consumer_offer_by_consumer_service_contract_detail_id
 from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id
-
+from v1.billing.models.bill import get_bill_by_id_string
 
 def set_validated_data(validated_data):
     if "consumer_category_id" in validated_data:
@@ -55,177 +55,146 @@ def set_validated_data(validated_data):
     return validated_data
 
 
-def run_bill(consumer, bill_month, due_date, schedule):
-    try:
-        generate_consumer_bill(consumer, bill_month, due_date, schedule)
-    except:
-        pass
 
 
-def generate_consumer_bill(consumer, bill_month, due_date, schedule):
-    try:
-        consumer_obj = TempConsumerMaster.objects.get(consumer_no = consumer, bill_month = bill_month)
-        if InvoiceBill.objects.filter(consumer_no = consumer, bill_month = bill_month).exists():
-            pass
-        else:
-            bill = InvoiceBill()
-            bill.tenant = schedule.tenent
-            bill.utility = schedule.utility
-            bill.consumer_no = consumer
-            bill.bill_month = bill_month
-            bill.due_date = due_date
-            bill.address = consumer_obj.address_line_1
-            bill.contact = consumer_obj.phone_mobile
-            bill.route_id = consumer_obj.route
-            bill.cycle_id = consumer_obj.bill_cycle
-            if InvoiceBill.objects.filter(consumer_no = consumer).exists():
-                bill.bill_count = InvoiceBill.objects.filter(consumer_no = consumer).count() + 1
-            else:
-                bill.bill_count = 1
-            bill.save()
-    except:
-        pass
+
+# def generate_consumer_bill(consumer, bill_month, due_date, schedule):
+#     try:
+#         consumer_obj = TempConsumerMaster.objects.get(consumer_no = consumer, bill_month = bill_month)
+#         if InvoiceBill.objects.filter(consumer_no = consumer, bill_month = bill_month).exists():
+#             pass
+#         else:
+#             bill = InvoiceBill()
+#             bill.tenant = schedule.tenent
+#             bill.utility = schedule.utility
+#             bill.consumer_no = consumer
+#             bill.bill_month = bill_month
+#             bill.due_date = due_date
+#             bill.address = consumer_obj.address_line_1
+#             bill.contact = consumer_obj.phone_mobile
+#             bill.route_id = consumer_obj.route
+#             bill.cycle_id = consumer_obj.bill_cycle
+#             if InvoiceBill.objects.filter(consumer_no = consumer).exists():
+#                 bill.bill_count = InvoiceBill.objects.filter(consumer_no = consumer).count() + 1
+#             else:
+#                 bill.bill_count = 1
+#             bill.save()
+#     except:
+#         pass
 
 
-# def save_outstanding(consumer, bill_month):
+
+
+# def save_payment(consumer, bill_month):
 #     try:
 #         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
 #         if bill.bill_count == 1:
-#             bill.outstanding = 0.0
+#             bill.payment = 0.0
 #             bill.save()
 #         else:
 #             prvious_bill = get_previous_consumer_bill(consumer)
-#             if prvious_bill.bill_status_id == 'PAID':#TODO:Replace with Id
-#                 if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
-#                     bill.outstanding = prvious_bill.after_due_date_amount
-#                     bill.save()
-#                 else:
-#                     bill.outstanding = prvious_bill.before_due_date_amount
-#                     bill.save()
-#             if prvious_bill.bill_status_id == "PARTIAL":#TODO:Replace with Id
-#                 if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
-#                     bill.outstanding = prvious_bill.after_due_date_amount
-#                     bill.save()
-#                 else:
-#                     bill.outstanding = prvious_bill.before_due_date_amount
-#                     bill.save()
-#             if prvious_bill.bill_status_id == "UNPAID":#TODO:Replace with Id
-#                 bill.outstanding = prvious_bill.after_due_date_amount
+#             payment = 0.0
+#             if Payment.objects.filter(identification_id=prvious_bill.id, is_active=True).exists():
+#                 for payment in Payment.objects.filter(identification_id=prvious_bill.id, is_active=True):
+#                     payment += payment.transaction_amount
+#                 bill.payment = payment
+#                 bill.save()
+#             else:
+#                 bill.payment = payment
 #                 bill.save()
 #     except:
 #         pass
 
 
-def save_payment(consumer, bill_month):
-    try:
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        if bill.bill_count == 1:
-            bill.payment = 0.0
-            bill.save()
-        else:
-            prvious_bill = get_previous_consumer_bill(consumer)
-            payment = 0.0
-            if Payment.objects.filter(identification_id=prvious_bill.id, is_active=True).exists():
-                for payment in Payment.objects.filter(identification_id=prvious_bill.id, is_active=True):
-                    payment += payment.transaction_amount
-                bill.payment = payment
-                bill.save()
-            else:
-                bill.payment = payment
-                bill.save()
-    except:
-        pass
+# def save_emi(consumer, bill_month):
+#     try:
+#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+#         emi = 0.0
+#         if ConsumerMaster.objects.filter(consumer_no=consumer).exists():
+#             consumer = ConsumerMaster.objects.filter(consumer_no=consumer)
+#             scheme = ConsumerSchemeMaster.objects.filter(id=consumer.scheme_id)
+#             if consumer.deposit_amt - consumer.collected_amt <= 0:
+#                 consumer.collected_amt = consumer.collected_amt + scheme.monthly_emi
+#                 bill.current_emi_amt = scheme.monthly_emi
+#                 consumer.save()
+#                 bill.save()
+#             else:
+#                 bill.current_emi_amt = emi
+#                 bill.save()
+#         else:
+#             bill.current_emi_amt = emi
+#             bill.save()
+#     except:
+#         pass
 
 
-def save_emi(consumer, bill_month):
-    try:
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        emi = 0.0
-        if ConsumerMaster.objects.filter(consumer_no=consumer).exists():
-            consumer = ConsumerMaster.objects.filter(consumer_no=consumer)
-            scheme = ConsumerSchemeMaster.objects.filter(id=consumer.scheme_id)
-            if consumer.deposit_amt - consumer.collected_amt <= 0:
-                consumer.collected_amt = consumer.collected_amt + scheme.monthly_emi
-                bill.current_emi_amt = scheme.monthly_emi
-                consumer.save()
-                bill.save()
-            else:
-                bill.current_emi_amt = emi
-                bill.save()
-        else:
-            bill.current_emi_amt = emi
-            bill.save()
-    except:
-        pass
+# def save_meter_data(consumer, bill_month):
+#     try:
+#         consumption = 0.0
+#         current_reading = 0.0
+#         readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
+#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+#         for reading in readings:
+#             current_reading += reading.current_reading
+#             consumption += reading.consumption
+#         bill.current_reading = current_reading
+#         bill.consumption = consumption
+#         bill.save()
+#     except:
+#         pass
 
 
-def save_meter_data(consumer, bill_month):
-    try:
-        consumption = 0.0
-        current_reading = 0.0
-        readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        for reading in readings:
-            current_reading += reading.current_reading
-            consumption += reading.consumption
-        bill.current_reading = current_reading
-        bill.consumption = consumption
-        bill.save()
-    except:
-        pass
+# def save_bill_rates(consumer, bill_month, schedule):
+#     try:
+#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+#         consumption_charges = 0.0
+#         if schedule.reading_frequency == "HOURLY":
+#             readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
+#             for reading in readings:
+#                 plan = UtilityServicePlan.objects.get(utility=schedule.utility,
+#                                                       start_date__hour=reading.reading_date.hour)
+#                 rate = UtilityServicePlanRate.objects.get(utility_service_plan_id=plan.id)
+#                 if rate.is_taxable == True:
+#                     consumption_charges += (rate.base_rate + ((rate.taxrate/100) * rate.base_rate)) * reading.consumption
+#                 else:
+#                     consumption_charges += rate.base_rate * reading.consumption
+#             bill.consumption_charges = consumption_charges
+#             bill.save()
 
+#         if schedule.reading_frequency == "MONTHLY":
+#             reading = MeterReading.objects.filter(month=bill_month, consumer_no=consumer).last()
+#             plans = UtilityServicePlan.objects.filter(utility=schedule.utility,
+#                                                       start_date__lte=bill.previous_reading_date,
+#                                                       end_date__gte=bill.current_reading_date).oder_by("start_date")
+#             rates = UtilityServicePlanRate.objects.filter(utility_service_plan_id__in=[plan.id for plan in plans])
+#             days = (bill.current_reading_date - bill.previous_reading_date).days
+#             per_day_consumption = bill.consumption/days
+#             if rates.len == 1:
+#                 if rates[0].is_taxable == True:
+#                     consumption_charges += (rates[0].base_rate +
+#                                             ((rates[0].taxrate / 100) * rates[0].base_rate)) * reading.consumption
+#                 else:
+#                     consumption_charges += rates[0].base_rate * reading.consumption
+#             else:
+#                 previous_reading_date = bill.previous_reading_date
+#                 for rate in rates:
+#                     days = (rate.end_date - previous_reading_date).days
+#                     if rates.last() == rate:
+#                         days = (bill.current_reading_date - previous_reading_date).days
+#                     if rate.is_taxable == True:
+#                         consumption_charges += (rate.base_rate + (
+#                                 (rate.taxrate / 100) * rate.base_rate)) * per_day_consumption * days
+#                         previous_reading_date = rate.end_date
+#                     else:
+#                         consumption_charges += rate.base_rate * per_day_consumption * days
+#                         previous_reading_date = rate.end_date
+#             bill.consumption_charges = consumption_charges
+#             bill.save()
 
-def save_bill_rates(consumer, bill_month, schedule):
-    try:
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        consumption_charges = 0.0
-        if schedule.reading_frequency == "HOURLY":
-            readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
-            for reading in readings:
-                plan = UtilityServicePlan.objects.get(utility=schedule.utility,
-                                                      start_date__hour=reading.reading_date.hour)
-                rate = UtilityServicePlanRate.objects.get(utility_service_plan_id=plan.id)
-                if rate.is_taxable == True:
-                    consumption_charges += (rate.base_rate + ((rate.taxrate/100) * rate.base_rate)) * reading.consumption
-                else:
-                    consumption_charges += rate.base_rate * reading.consumption
-            bill.consumption_charges = consumption_charges
-            bill.save()
-
-        if schedule.reading_frequency == "MONTHLY":
-            reading = MeterReading.objects.filter(month=bill_month, consumer_no=consumer).last()
-            plans = UtilityServicePlan.objects.filter(utility=schedule.utility,
-                                                      start_date__lte=bill.previous_reading_date,
-                                                      end_date__gte=bill.current_reading_date).oder_by("start_date")
-            rates = UtilityServicePlanRate.objects.filter(utility_service_plan_id__in=[plan.id for plan in plans])
-            days = (bill.current_reading_date - bill.previous_reading_date).days
-            per_day_consumption = bill.consumption/days
-            if rates.len == 1:
-                if rates[0].is_taxable == True:
-                    consumption_charges += (rates[0].base_rate +
-                                            ((rates[0].taxrate / 100) * rates[0].base_rate)) * reading.consumption
-                else:
-                    consumption_charges += rates[0].base_rate * reading.consumption
-            else:
-                previous_reading_date = bill.previous_reading_date
-                for rate in rates:
-                    days = (rate.end_date - previous_reading_date).days
-                    if rates.last() == rate:
-                        days = (bill.current_reading_date - previous_reading_date).days
-                    if rate.is_taxable == True:
-                        consumption_charges += (rate.base_rate + (
-                                (rate.taxrate / 100) * rate.base_rate)) * per_day_consumption * days
-                        previous_reading_date = rate.end_date
-                    else:
-                        consumption_charges += rate.base_rate * per_day_consumption * days
-                        previous_reading_date = rate.end_date
-            bill.consumption_charges = consumption_charges
-            bill.save()
-
-        if schedule.reading_frequency == "DAILY":
-            pass
-    except:
-        pass
+#         if schedule.reading_frequency == "DAILY":
+#             pass
+#     except:
+#         pass
 
 # Function for get rate
 # def get_rate(schedule):
@@ -248,45 +217,45 @@ def save_bill_rates(consumer, bill_month, schedule):
 #     return current_charge
 
 # Function for save readings and consumption
-def save_meter_data(consumer, bill_month):
-    try:
-        consumption = 0.0
-        current_reading = 0.0
-        readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-        for reading in readings:
-            current_reading += reading.current_reading
-            consumption += reading.consumption
-        bill.meter_reading = {"current_reading":current_reading, "consumption":consumption}
-        bill.save()
-    except:
-        pass
+# def save_meter_data(consumer, bill_month):
+#     try:
+#         consumption = 0.0
+#         current_reading = 0.0
+#         readings = MeterReading.objects.filter(month=bill_month, consumer_no=consumer)
+#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+#         for reading in readings:
+#             current_reading += reading.current_reading
+#             consumption += reading.consumption
+#         bill.meter_reading = {"current_reading":current_reading, "consumption":consumption}
+#         bill.save()
+#     except:
+#         pass
 
 # Function for save outstanding
-def save_outstanding(consumer, bill_month):
-    try:
-        bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+# def save_outstanding(consumer, bill_month):
+#     try:
+#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
         
-        prvious_bill = get_previous_consumer_bill(consumer)
-        if prvious_bill.bill_status_id == 'PAID':#TODO:Replace with Id
-            if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
-                bill.outstanding = prvious_bill.after_due_date_amount
-                bill.save()
-            else:
-                bill.outstanding = prvious_bill.before_due_date_amount
-                bill.save()
-        if prvious_bill.bill_status_id == "PARTIAL":#TODO:Replace with Id
-            if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
-                bill.outstanding = prvious_bill.after_due_date_amount
-                bill.save()
-            else:
-                bill.outstanding = prvious_bill.before_due_date_amount
-                bill.save()
-        if prvious_bill.bill_status_id == "UNPAID":#TODO:Replace with Id
-            bill.outstanding = prvious_bill.after_due_date_amount
-            bill.save()
-    except:
-        pass
+#         prvious_bill = get_previous_consumer_bill(consumer)
+#         if prvious_bill.bill_status_id == 'PAID':#TODO:Replace with Id
+#             if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
+#                 bill.outstanding = prvious_bill.after_due_date_amount
+#                 bill.save()
+#             else:
+#                 bill.outstanding = prvious_bill.before_due_date_amount
+#                 bill.save()
+#         if prvious_bill.bill_status_id == "PARTIAL":#TODO:Replace with Id
+#             if Payment.objects.filter(penalty=True, identification_id=prvious_bill.id, is_active=True).exists():
+#                 bill.outstanding = prvious_bill.after_due_date_amount
+#                 bill.save()
+#             else:
+#                 bill.outstanding = prvious_bill.before_due_date_amount
+#                 bill.save()
+#         if prvious_bill.bill_status_id == "UNPAID":#TODO:Replace with Id
+#             bill.outstanding = prvious_bill.after_due_date_amount
+#             bill.save()
+#     except:
+#         pass
 
 
 
@@ -713,3 +682,23 @@ def calculate_consumer_offer(consumer_service_contract_detail_id):
                 return 0
     else:
         return 0
+
+
+
+def generate_formate(bill_id_string):
+    try:
+        data = {}
+        bill = get_bill_by_id_string(bill_id_string)
+        data = {
+            "{header.utility_name}" : bill.utility.name
+        }   
+        return data
+    except:
+        return False
+
+
+def html_handler(html_template, array):
+    # Replace the Keys with their actual values
+    for k, v in array.items():
+        html_template = html_template.replace(k, array[k])
+    return html_template
