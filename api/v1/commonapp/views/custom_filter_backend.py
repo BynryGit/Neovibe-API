@@ -89,7 +89,7 @@ class CustomFilter:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state=2)
+                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False, state__in=[2, 5])
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
         
         if 'consumer_processing_history' in request.query_params:
@@ -99,7 +99,7 @@ class CustomFilter:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
-                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=True, state=0, created_date__gte = datetime.now()-timedelta(days=180))
+                    queryset = ConsumerServiceContractDetail.objects.filter(consumer_id__in=[consumer.id for consumer in consumer_master_list], state__in=[0, 3, 4], created_date__gte = datetime.now()-timedelta(days=180))
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
 
         if 'consumer_id' in request.query_params:

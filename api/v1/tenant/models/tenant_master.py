@@ -48,7 +48,7 @@ class TenantMaster(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return str(self.id_string)
+        return self.name
 
     def __unicode__(self):
         return self.name

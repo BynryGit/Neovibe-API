@@ -25,7 +25,14 @@ from v1.utility.views.utility_function import perform_events
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 # from v1.utility.views.common_functions import perform_events
+# from api import get_file_name, METER_PICTURE
+from api import *
 from django.utils import timezone  # importing package for datetime
+
+
+def get_file_path(instance, filename):
+    return constants.get_file_name(constants.METER_PICTURE, filename)
+
 
 # *********** UTILITY CONSTANTS **************
 UTILITY_DICT = {
@@ -57,8 +64,8 @@ class UtilityMaster(models.Model, fsm.FiniteStateMachineMixin):
     pan_no = models.CharField(max_length=200, blank=True, null=True)
     tax_id = models.CharField(max_length=200, blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
-    short_logo = models.CharField(max_length=200, blank=True, null=True)
-    long_logo = models.CharField(max_length=200, blank=True, null=True)
+    short_logo = models.FileField(upload_to=get_file_path, null=True, blank=True)
+    long_logo = models.FileField(upload_to=get_file_path, null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
     currency_id = models.BigIntegerField(null=True, blank=True)

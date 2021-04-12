@@ -31,7 +31,7 @@ from v1.meter_data_management.models.meter import Meter as MeterTbl, get_meter_b
 from v1.meter_data_management.serializers.meter import MeterViewSerializer, MeterSerializer
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_name
-
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 # API Header
 # API end Point: api/v1/meter-data/meter/list
@@ -62,6 +62,7 @@ class MeterList(generics.ListAPIView):
             if token:
                 if is_authorized(1,1,1,user_obj):
                     queryset = MeterTbl.objects.filter(is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
