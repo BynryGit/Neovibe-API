@@ -23,9 +23,8 @@ class UtilityServiceContractMasterListSerializer(serializers.ModelSerializer):
         model = UtilityServiceContractMaster
         fields = (
 
-            'id_string', 'deposite_amount', 'name', 'tenant', 'tenant_id_string', 'utility',
-            'utility_id_string', 'service_obj', 'category', 'sub_category','start_date', 'end_date')
-
+            'id_string', 'deposite_amount', 'name', 'duration', 'tenant', 'tenant_id_string', 'utility',
+            'utility_id_string', 'service_obj', 'category', 'sub_category', 'start_date', 'end_date')
 
 
 class UtilityServiceContractMasterDetailSerializer(serializers.ModelSerializer):
@@ -39,9 +38,8 @@ class UtilityServiceContractMasterDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UtilityServiceContractMaster
 
-        fields = ('name', 'id_string', 'tenant', 'utility', 'tenant_id_string', 'tenant_id_string', 'utility_id_string',
-                  'category', 'sub_category','terms','service_obj', 'deposite_amount','start_date', 'end_date')
-
+        fields = ('name', 'id_string', 'tenant', 'duration', 'utility', 'tenant_id_string', 'tenant_id_string', 'utility_id_string',
+                  'category', 'sub_category', 'terms', 'service_obj', 'deposite_amount', 'start_date', 'end_date')
 
 
 class UtilityServiceContractMasterViewSerializer(serializers.ModelSerializer):
@@ -53,7 +51,7 @@ class UtilityServiceContractMasterViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UtilityServiceContractMaster
         fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string', 'start_date', 'end_date')
+            'tenant', 'tenant_id_string', 'utility', 'duration', 'utility_id_string', 'name', 'id_string', 'start_date', 'end_date')
 
 
 class UtilityServiceContractMasterSerializer(serializers.ModelSerializer):
@@ -79,7 +77,6 @@ class UtilityServiceContractMasterSerializer(serializers.ModelSerializer):
             else:
                 contract_obj = super(UtilityServiceContractMasterSerializer, self).create(validated_data)
                 contract_obj.created_by = user.id
-                contract_obj.updated_by = user.id
                 contract_obj.save()
                 return contract_obj
 
