@@ -24,10 +24,18 @@ class UtilityMasterViewSerializer(serializers.ModelSerializer):
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
+    def get_utility_short_logo_url(self, utility_master_tbl):
+        request = self.context.get('request')
+        if utility_master_tbl.short_logo:
+            utility_short_logo_url = request.build_absolute_uri(utility_master_tbl.short_logo.url)
+        else:
+            utility_short_logo_url = ''
+        return utility_short_logo_url
+
     class Meta:
         model = UtilityMasterTbl
         fields = (
-            'id_string', 'short_name', 'name', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',
+            'id_string', 'short_name', 'name', 'short_logo', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',
             'created_date', 'updated_date', 'tenant')
 
 

@@ -14,12 +14,12 @@
 
 
 import uuid  # importing package for guid
-from datetime import datetime # importing package for datetime
+from datetime import datetime  # importing package for datetime
 
 from v1.tenant.models.tenant_master import TenantMaster, get_tenant_by_id
 from v1.utility.models.utility_master import UtilityMaster, get_utility_by_id, get_utility_by_id_string
 from django.db import models  # importing package for database
-from django.utils import timezone # importing package for datetime
+from django.utils import timezone  # importing package for datetime
 
 
 # Create User Privilege table start
@@ -67,5 +67,11 @@ def get_utility_by_user(user_id):
 def get_record_by_values(user_id_string, utility_id_string):
     user = get_user_by_id_string(user_id_string)
     utility = get_utility_by_id_string(utility_id_string)
-    return UserUtility.objects.filter(user_id=user.id,utility=utility).last()
+    return UserUtility.objects.filter(user_id=user.id, utility=utility).last()
 
+
+def get_user_utility_by_id_string(id_string):
+    try:
+        return UserUtility.objects.get(id_string=id_string)
+    except:
+        return False

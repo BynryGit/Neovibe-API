@@ -2,7 +2,7 @@ from v1.commonapp.models.transition_configuration import TransitionConfiguration
     is_transition_configuration_exists
 from v1.commonapp.views.logger import logger
 # from v1.commonapp.views.notifications import handle_communications, html_handler
-from v1.commonapp.views.notifications import OutboundHandler, EmailHandler
+from v1.commonapp.views.notifications import OutboundHandler, EmailHandler, SMSHandler
 from v1.commonapp.models.notification_template import get_notification_template_by_id
 from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
 # from v1.commonapp.views.notifications import send_email
@@ -38,16 +38,18 @@ def perform_events(next_state, utility, transition_object):
 
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
                     # Call to the first function
-                    array = handle_communications(transition_obj.transition_object, utility)
+                    e1 = SMSHandler(transition_obj.transition_object, utility)
+
+                    array = e1.handle_communications()
+
                     transition_obj = get_transition_configuration_by_id(transition_obj.id)
 
                     html = get_notification_template_by_id(transition_obj.template_id)
-                    # Call to the second function to replace template from database.
-                    sms_body = html_handler(html.template, array)
-                    # Call to the common send email function
+
+                    sms_body = e1.html_handler(html.template, array)
                     print("SMS Body", utility.phone_no)
-                    send_sms(sms_body, SecretReader.get_from_number(),
-                             utility.phone_no)
+                    e1.send_sms(sms_body, SecretReader.get_from_number(),
+                                utility.phone_no)
         else:
             pass
     except Exception as e:
