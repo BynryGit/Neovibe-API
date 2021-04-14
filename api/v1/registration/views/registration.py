@@ -722,6 +722,7 @@ class RegistrationNoteList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     registration = get_registration_by_id_string(self.kwargs['id_string'])
                     queryset = Notes.objects.filter(identification_id=registration.id, is_active=True)
+                    print("========queryset=====",queryset)
                     if queryset:
                         return queryset
                     else:
@@ -754,8 +755,11 @@ class RegistrationNote(GenericAPIView):
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             registration = get_registration_by_id_string((id_string))
-            module = get_module_by_key("CONSUMEROPS")
+            module = get_module_by_key("CX")
+            print("======module======",module)
             sub_module = get_sub_module_by_key("REGISTRATION")
+            print("===submodule====",sub_module)
+            print("====request data======",request.data)
             serializer = NoteSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 note_obj = serializer.create(serializer.validated_data, user)

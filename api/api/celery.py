@@ -5,6 +5,14 @@ from celery import Celery
 from django.conf import settings
 from kombu.utils.url import safequote
 from kombu import Exchange, Queue
+import environ
+
+env = environ.Env()
+# reading .env file
+environ.Env.read_env('.env')
+
+print("==========",env("smart360_env"))
+print("====os==========", os.environ["smart360_env"])
 
 # set the default Django settings module for the 'celery' program.
 if os.environ["smart360_env"] == 'dev':
@@ -50,6 +58,7 @@ CELERY_QUEUES = (
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
     Queue('Dispatch_I', routing_key='Dispatch_I_Tasks'),
     Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
+    Queue('user_timeline_queue', routing_key='user_timeline_queue_Tasks'),
 )
 
 CELERY_ROUTES = {
@@ -80,6 +89,10 @@ CELERY_ROUTES = {
     'v1.meter_data_management.task.update_route_task_status.update_route_task_status': {
             'queue': 'Dispatch_II',
             'routing_key': 'Dispatch_II_Tasks',
+    },
+    'v1.userapp.views.task.save_user_timeline': {
+            'queue': 'user_timeline_queue',
+            'routing_key': 'user_timeline_queue_Tasks',
     },
 }
 

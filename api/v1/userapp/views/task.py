@@ -9,11 +9,11 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 
 
 
-@task(name="user_timeline")
+@task(name="user_timeline", queue='user_timeline_queue')
 def save_user_timeline(obj, title, text, state, user):
     try:
-        module = get_module_by_key("S&M")
-        sub_module = get_sub_module_by_key("S_AND_M_USER")
+        module = get_module_by_key("USER")
+        sub_module = get_sub_module_by_key("USER")
         LifeCycle(
             tenant=obj.tenant,
             # utility=obj.utility,
