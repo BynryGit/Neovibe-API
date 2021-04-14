@@ -8,8 +8,7 @@ from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
-
-@task(name="admin_timeline")
+@task(name="admin_timeline", queue='admin_timeline_queue')
 def save_admin_timeline(obj, title, text, state, user):
     try:
         module = get_module_by_key("ADMIN")
