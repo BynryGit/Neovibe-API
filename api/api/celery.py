@@ -5,7 +5,14 @@ from celery import Celery
 from django.conf import settings
 from kombu.utils.url import safequote
 from kombu import Exchange, Queue
+import environ
+env = environ.Env()
+# reading .env file
+environ.Env.read_env('.env')
 
+print("==========", env("smart360_env"))
+
+print("====os==========", os.environ["smart360_env"])
 # set the default Django settings module for the 'celery' program.
 if os.environ["smart360_env"] == 'dev':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.dev')
@@ -50,6 +57,7 @@ CELERY_QUEUES = (
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
     Queue('Dispatch_I', routing_key='Dispatch_I_Tasks'),
     Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
+    Queue('admin_timeline_queue', routing_key='admin_timeline_queue_Tasks'),
 )
 
 CELERY_ROUTES = {
@@ -81,6 +89,11 @@ CELERY_ROUTES = {
             'queue': 'Dispatch_II',
             'routing_key': 'Dispatch_II_Tasks',
     },
+    'v1.commonapp.views.task.save_admin_timeline': {
+            'queue': 'admin_timeline_queue',
+            'routing_key': 'admin_timeline_queue_Tasks',
+    },
+
 }
 
 app.conf.update(**CELERY_CONFIG)
