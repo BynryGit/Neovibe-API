@@ -80,8 +80,7 @@ class ConsumerOfferDetailList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
-                    queryset = ConsumerOfferModel.objects.filter(utility=utility, is_active=False)
-                    print("===============",queryset)
+                    queryset = ConsumerOfferModel.objects.filter(utility=utility, is_active=True)
                     if "consumer_id" in self.request.query_params:
                         consumer = get_consumer_by_id_string(self.request.query_params['consumer_id'])
                         queryset = queryset.filter(consumer_id=consumer.id)

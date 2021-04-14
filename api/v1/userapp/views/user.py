@@ -278,8 +278,8 @@ class User(GenericAPIView):
                         # State change for user end
 
                         # Timeline code start
-                        transaction.on_commit(
-                            lambda: save_user_timeline.delay(user_obj, "User", "User Created", "ACTIVE",user))
+                        # transaction.on_commit(
+                        #     lambda: save_user_timeline.delay(user_obj, "User", "User Created", "ACTIVE",user))
                         # Timeline code end
 
                     user_obj.save()
