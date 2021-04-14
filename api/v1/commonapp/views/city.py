@@ -80,8 +80,8 @@ class City(GenericAPIView):
                 city_obj = serializer.create(serializer.validated_data, user)
                 view_serializer = CityViewSerializer(instance=city_obj, context={'request': request})
                 # Timeline code start
-                transaction.on_commit(
-                    lambda: save_admin_timeline.delay(city_obj, "Admin", "City Created", "ACTIVE", user))
+                # transaction.on_commit(
+                #     lambda: save_admin_timeline.delay(city_obj, "Admin", "City Created", "ACTIVE", user))
                 # Timeline code end
                 return Response({
                     STATE: SUCCESS,
