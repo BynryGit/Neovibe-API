@@ -1,18 +1,15 @@
 __author__ = "aki"
 
 import os
+import environ
 from celery import Celery
 from django.conf import settings
 from kombu.utils.url import safequote
 from kombu import Exchange, Queue
-import environ
+
 env = environ.Env()
-# reading .env file
 environ.Env.read_env('.env')
 
-print("==========", env("smart360_env"))
-
-print("====os==========", os.environ["smart360_env"])
 # set the default Django settings module for the 'celery' program.
 if os.environ["smart360_env"] == 'dev':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings.dev')
