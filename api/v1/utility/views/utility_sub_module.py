@@ -97,8 +97,11 @@ class UtilitySubModuleListByModule(generics.ListAPIView):
             if token:
                 if is_authorized(1,1,1,user_obj):
                     utility_module_obj = get_utility_module_by_id_string(self.kwargs['id_string'])
+                    utility = get_utility_by_id_string(self.kwargs['utility_id_string'])
+                    print("UTILITY ID",utility)
+                    print("UTILITY MODULE ID",utility_module_obj.id)
                     if utility_module_obj:
-                        queryset = UtilitySubModuleTbl.objects.filter(module_id=utility_module_obj.id, is_active=True)
+                        queryset = UtilitySubModuleTbl.objects.filter(utility=utility.id,module_id=utility_module_obj.id, is_active=True)
                         return queryset
                     else:
                         return Response({
