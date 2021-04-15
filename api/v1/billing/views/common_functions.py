@@ -4,7 +4,7 @@ from v1.consumer.models.consumer_master import ConsumerMaster, get_consumer_by_c
 from v1.consumer.models.consumer_scheme_master import ConsumerSchemeMaster
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string, get_consumer_sub_category_by_id
 from v1.meter_data_management.models.meter_reading import MeterReading
-from v1.meter_data_management.models.meter import get_meter_by_id
+from v1.meter_data_management.models.meter import get_meter_by_id,get_meter_by_number
 from v1.payment.models.payment import Payment
 from v1.utility.models.utility_service_plan import get_utility_service_plans_by_dates, UtilityServicePlan
 from v1.utility.models.utility_service_plan_rate import get_utility_service_plans_rates, UtilityServicePlanRate
@@ -15,7 +15,7 @@ from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string,get
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
-from v1.commonapp.models.city import get_city_by_id_string
+from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.zone import get_zone_by_id_string
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
@@ -44,6 +44,8 @@ from v1.billing.models.fixed_charges import get_fixed_charges_by_id_meter_no
 from v1.consumer.models.consumer_offer_detail import get_consumer_offer_by_consumer_service_contract_detail_id
 from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id
 from v1.billing.models.bill import get_bill_by_id_string
+from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
+from v1.commonapp.models.sub_module import get_sub_module_by_key
 
 def set_validated_data(validated_data):
     if "consumer_category_id" in validated_data:
@@ -683,17 +685,54 @@ def calculate_consumer_offer(consumer_service_contract_detail_id):
     else:
         return 0
 
+# Function for generating Invoice number according to utility
+def generate_invoice_number(bill_obj):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=bill_obj.tenant,utility=bill_obj.utility,
+                                                            sub_module_id=get_sub_module_by_key("BILLING"))
+        
+        invoice_no = str(format_obj.currentno + 1)
+        format_obj.currentno = format_obj.currentno + 1
+        format_obj.save()
+        return invoice_no
+    except Exception as e:
+        raise CustomAPIException("User ID generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 def generate_formate(bill_id_string):
     try:
         data = {}
         bill = get_bill_by_id_string(bill_id_string)
+        if bill:
+            invoice_no = generate_invoice_number(bill)
+            consumer_contract = get_consumer_service_contract_detail_by_id(bill.consumer_service_contract_detail_id)
+            if consumer_contract:
+                consumer_master = get_consumer_by_consumer_no(consumer_contract.consumer_no)
+                city = get_city_by_id(consumer_master.billing_city_id)
+                meter_obj = get_meter_by_id(consumer_contract.meter_id)
+
         data = {
-            "{header.utility_name}" : bill.utility.name
+            "{header.utility_name}" : bill.utility.name,
+            "{header.office_address}" : bill.utility.address,
+            "{header.website}": "==",
+            "{header.email}" : bill.utility.email_id,
+            "{header.phone_no}": bill.utility.phone_no,
+            "{bill.consumer_no}" : consumer_master.consumer_no,
+            "{bill.mobile}" : consumer_master.phone_mobile,
+            "{bill.consumer_name}" : consumer_master.email_id,
+            "{bill.address}" : consumer_master.billing_address_line_1,
+            "{bill.city}" : city.name,
+            "{bill.meter_no}": meter_obj.meter_no,
+            "{bill.invoice_no}":invoice_no,
+            "{bill.invoice_date}":str(datetime.now().date()),
+            "{bill.due_date}":str(bill.bill_date.date()),
+            "{bill.meter_status}":meter_obj.get_meter_status_display(),
+            "{bill.bill_status}" : bill.get_state_display(),
         }   
         return data
-    except:
+    except Exception as exe:
+        print('======',exe)
         return False
 
 
