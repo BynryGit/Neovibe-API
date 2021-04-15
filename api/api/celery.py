@@ -54,6 +54,7 @@ CELERY_QUEUES = (
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
     Queue('Dispatch_I', routing_key='Dispatch_I_Tasks'),
     Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
+    Queue('user_timeline_queue', routing_key='user_timeline_queue_Tasks'),
     Queue('admin_timeline_queue', routing_key='admin_timeline_queue_Tasks'),
 )
 
@@ -85,6 +86,10 @@ CELERY_ROUTES = {
     'v1.meter_data_management.task.update_route_task_status.update_route_task_status': {
             'queue': 'Dispatch_II',
             'routing_key': 'Dispatch_II_Tasks',
+    },
+    'v1.userapp.views.task.save_user_timeline': {
+            'queue': 'user_timeline_queue',
+            'routing_key': 'user_timeline_queue_Tasks',
     },
     'v1.commonapp.views.task.save_admin_timeline': {
             'queue': 'admin_timeline_queue',

@@ -62,7 +62,7 @@ class AdminLifeCycleList(generics.ListAPIView):
                     module = get_module_by_key("ADMIN")
                     sub_module = get_sub_module_by_key("UTILITY_MASTER")
                     print(module, sub_module)
-                    queryset = LifeCycleTbl.objects.filter(object_id=user_obj.id, module_id=module,
+                    queryset = LifeCycleTbl.objects.filter(module_id=module,
                                                            sub_module_id=sub_module, is_active=True)
                     if queryset:
                         return queryset

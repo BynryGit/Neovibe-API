@@ -99,6 +99,7 @@ class CustomFilter:
         if 'consumer_processing_history' in request.query_params:
             consumer_master_list = []
             consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
+            print("======consumer_master_objs===",consumer_master_objs)
             if consumer_master_objs:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
