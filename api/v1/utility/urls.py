@@ -55,7 +55,7 @@ urlpatterns = [
     path('<uuid:id_string>/module/list', UtilityModuleList.as_view(), name='utility_module_list'),
     path('module/<uuid:id_string>', UtilityModuleDetail.as_view(), name='utility_module_details'),
     path('submodule/<uuid:id_string>', UtilitySubModuleDetail.as_view(), name='utility_submodule_details'),
-    path('module/<uuid:id_string>/submodule/list', UtilitySubModuleListByModule.as_view(),
+    path('<uuid:utility_id_string>/module/<uuid:id_string>/submodule/list', UtilitySubModuleListByModule.as_view(),
          name='utility_submodule_list_by_module'),
 
     path('<uuid:id_string>/module-submodule/list', UtilityModuleSubmoduleList.as_view(), name='utility_module_list'),

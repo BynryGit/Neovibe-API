@@ -87,6 +87,7 @@ class TenantSubModuleListByModule(generics.ListAPIView):
             if token:
                 if is_authorized(1,1,1,user_obj):
                     tenant_module_obj = get_tenant_module_by_id_string(self.kwargs['id_string'])
+                    print("TENANT MODULE OBJ",tenant_module_obj.id)
                     if tenant_module_obj:
                         queryset = TenantSubModuleTbl.objects.filter(module_id=tenant_module_obj.id, is_active=True)
                         return queryset
