@@ -7,6 +7,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from master.models import get_user_by_id_string
+from api.constants import MX, UPLOAD, EDIT
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment as RouteTaskAssignmentTbl
@@ -51,7 +52,7 @@ class UploadRouteList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='UPLOAD')
         raise APIException
 
 
@@ -69,7 +70,7 @@ class UploadRouteList(generics.ListAPIView):
 
 class UploadRoute(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, UPLOAD, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -91,7 +92,7 @@ class UploadRoute(GenericAPIView):
                     RESULT: upload_route_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='UPLOAD')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

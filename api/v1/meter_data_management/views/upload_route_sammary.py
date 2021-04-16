@@ -3,7 +3,7 @@ __author__ = "aki"
 from rest_framework.response import Response
 from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
-#from api.constants import CONSUMER_OPS, METER_DATA, VIEW
+from api.constants import MX, UPLOAD, VIEW
 from v1.meter_data_management.models.upload_route import UploadRoute as UploadRouteTbl
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
@@ -26,7 +26,7 @@ from v1.meter_data_management.models.consumer_detail import ConsumerDetail as Co
 # todo need to fix logic
 class UploadRouteSummary(generics.ListAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    @role_required(MX, UPLOAD, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
@@ -53,7 +53,7 @@ class UploadRouteSummary(generics.ListAPIView):
                     RESULT: UTILITY_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='UPLOAD')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
