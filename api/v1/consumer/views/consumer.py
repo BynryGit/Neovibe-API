@@ -1297,7 +1297,7 @@ class ConsumerDisconnect(GenericAPIView):
                     disconnection_id = []
                     for i in previous_work_order_master_obj:
                         disconnection_id.append(i.id)
-                    print(disconnection_id)
+            
 
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
