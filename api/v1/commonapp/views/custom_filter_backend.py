@@ -287,8 +287,9 @@ class CustomFilter:
                     filter_from= datetime.now()
                     queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state=11, consumer_service_contract_detail_id__in=[ i.id for i in consumer_service_contract_detail_obj])
                     print("++++++++++",queryset) 
+                    
         if 'premise_id' in request.query_params:
             premise_obj = get_premise_by_id_string(request.query_params['premise_id'])
             queryset = queryset.filter(premise_id=premise_obj.id)
-            return queryset
+
         return queryset
