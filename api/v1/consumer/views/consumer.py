@@ -1183,8 +1183,6 @@ class ConsumerConnect(GenericAPIView):
 
                 work_order_type_obj = get_work_order_type_by_key('CONNECTION')
                 work_order_sub_type_obj = get_work_order_sub_type_by_key('CONNECTION')
-
-                print("######################", work_order_sub_type_obj, work_order_type_obj)
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_order_type_obj.id)
                 utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id=work_order_sub_type_obj.id)
 
