@@ -6,7 +6,7 @@ from v1.consumer.views.consumer_category import ConsumerCategoryList, ConsumerCa
 from v1.consumer.views.consumer_feedback import ConsumerFeedback
 from v1.consumer.views.consumer_offer_detail import ConsumerOfferDetail, ConsumerOfferDetailList
 from v1.consumer.views.consumer_offer_master import ConsumerOfferMasterList, ConsumerOfferMasterDetail, ConsumerOfferMaster
-from v1.consumer.views.consumer_service_contract_details import ConsumerServiceContractDetailList, ConsumerMeterList, ConsumerServiceContractDetailApprove
+from v1.consumer.views.consumer_service_contract_details import ConsumerServiceContractDetailList, ConsumerMeterList, ConsumerServiceContractDetailApprove, ConsumerServiceContractDetailDetails, ConsumerServiceContractDetailReject, ConsumerServiceContractDetailHold
 from v1.consumer.views.consumer_subcategory import ConsumerSubCategoryDetail, ConsumerSubCategoryList, \
     ConsumerSubCategory
 from v1.consumer.views.consumer_ownership import ConsumerOwnership, ConsumerOwnershipDetail, ConsumerOwnershipList
@@ -80,6 +80,8 @@ urlpatterns = [
     # path('service/subtype', ServiceSubType.as_view()),
     path('<uuid:id_string>/service-contract-detail/list', ConsumerServiceContractDetailList.as_view()),
     path('service-contract-detail',ConsumerServiceContractDetailApprove.as_view()),
+    path('<uuid:id_string>/service-contract-detail/reject',ConsumerServiceContractDetailReject.as_view()),
+    path('<uuid:id_string>/service-contract-detail/hold',ConsumerServiceContractDetailHold.as_view()),
     # path('<uuid:id_string>/note', ConsumerNote.as_view()),
     # path('<uuid:id_string>/note/list', ConsumerNoteList.as_view()),
 
@@ -97,7 +99,7 @@ urlpatterns = [
     path('offer/list', ConsumerOfferDetailList.as_view()),
     path('feedback', ConsumerFeedback.as_view()),
     path('lifecyclelist/<uuid:id_string>', ConsumerLifeCycleList.as_view()),
-    path('<uuid:id_string>/payment-transactions/list', ConsumerPaymentTransactionList.as_view())
+    path('<uuid:id_string>/payment-transactions/list', ConsumerPaymentTransactionList.as_view()),
     # path('<uuid:id_string>/ownerships',ConsumerOwnershipList.as_view()), 
-    
+    path('<uuid:id_string>/service-contract-detail', ConsumerServiceContractDetailDetails.as_view()),
 ]

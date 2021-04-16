@@ -34,10 +34,11 @@ class ReadCycleSerializer(serializers.ModelSerializer):
     subarea_id = serializers.CharField(required=False, max_length=200)
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
+    utility_product_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = ReadCycleTbl
-        fields = ('name', 'id_string', 'city_id', 'zone_id', 'division_id', 'area_id', 'route_json', 'subarea_id', 'utility_id', 'tenant_id')
+        fields = ('name', 'id_string', 'city_id', 'utility_product_id', 'zone_id', 'division_id', 'area_id', 'route_json', 'subarea_id', 'utility_id', 'tenant_id')
 
     def create(self, validated_data, user):
         with transaction.atomic():

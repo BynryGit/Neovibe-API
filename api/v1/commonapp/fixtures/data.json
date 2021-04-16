@@ -4720,8 +4720,23 @@
 "key":"Display Out",
      "is_active": "True"
    }
+ },
+  {
+ "pk": "1",
+   "model": "utility.UtilityServiceNumberFormat",
+   "fields": {
+    "tenant": "1",
+    "utility":"1",
+    "module_id":"8",
+     "sub_module_id": "32",
+     "is_prefix": "True",
+     "prefix": "COMPANY_",
+     "startingno": "1001",
+     "currentno": "1001",
+     "created_by": "1",
+     "is_active": "True"
+   }
  }
-
 
 
 

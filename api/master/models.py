@@ -186,9 +186,6 @@ def get_user_by_email(email):
     return User.objects.get(email=email, is_active=True)
 
 
-
-
-
 def get_all_users():
     return User.objects.filter(is_active=True)
 
@@ -213,6 +210,8 @@ def get_user_by_id(id):
         return User.objects.get(id=id)
     except:
         return False
+
+
 
 
 def get_user_by_username_password(email, password):

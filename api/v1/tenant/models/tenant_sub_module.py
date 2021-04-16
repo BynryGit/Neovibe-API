@@ -45,11 +45,13 @@ class TenantSubModule(models.Model):
     @property
     def get_module(self):
         module = get_module_by_id(self.module_id)
+        print("MODULE",module)
         return module
 
     @property
     def get_sub_module(self):
         sub_module = get_sub_module_by_id(self.sub_module_id)
+        print("SUBMODULE",sub_module)
         return sub_module
 
 

@@ -16,7 +16,9 @@ CONSUMER_DICT = {
     "CONNECTED": 0,
     "DISCONNECTED": 1,
     "CREATED": 2,
-    "APPROVED": 3
+    "APPROVED": 3,
+    "REJECTED":4,
+    "HOLD":5
 }
 
 class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
@@ -24,11 +26,14 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
         (0, 'CONNECTED'),
         (1, 'DISCONNECTED'),
         (2, 'CREATED'),
-        (3, 'APPROVED')
+        (3, 'APPROVED'),
+        (4, 'REJECTED'),
+        (5, 'HOLD')
     )
 
     state_machine = {
-        CONSUMER_DICT['CREATED']: (CONSUMER_DICT['APPROVED'], CONSUMER_DICT['CREATED']),
+        CONSUMER_DICT['CREATED']: (CONSUMER_DICT['APPROVED'],CONSUMER_DICT['REJECTED'],CONSUMER_DICT['HOLD'], CONSUMER_DICT['CREATED']),
+        CONSUMER_DICT['HOLD']: (CONSUMER_DICT['APPROVED'],CONSUMER_DICT['REJECTED']),
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)

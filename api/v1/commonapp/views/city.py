@@ -17,6 +17,9 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.models.city import get_city_by_id_string
 from api.messages import *
 from api.constants import *
+from v1.commonapp.models.lifecycle import LifeCycle
+from v1.commonapp.views.task import save_admin_timeline
+from django.db import transaction
 
 # API Header
 # API end Point: api/v1/utility/:id_string/city/list
@@ -76,6 +79,10 @@ class City(GenericAPIView):
             if serializer.is_valid(raise_exception=False):
                 city_obj = serializer.create(serializer.validated_data, user)
                 view_serializer = CityViewSerializer(instance=city_obj, context={'request': request})
+                # Timeline code start
+                # transaction.on_commit(
+                #     lambda: save_admin_timeline.delay(city_obj, "Admin", "City Created", "ACTIVE", user))
+                # Timeline code end
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,

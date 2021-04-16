@@ -2,13 +2,13 @@ from django.urls import path
 from v1.userapp.views.document import UserDocument
 from v1.userapp.views.login import LoginApiView, LogoutApiView
 # from v1.userapp.views.notes import UserNote
-from v1.userapp.views.user import User, UserList, UserDetail, ResourceList,BulkAssignResourceList,UserNoteList,UserNote, UserLifeCycleList,RequestPasswordResetEmail,SetNewPasswordAPIView, ChangePasswordView
+from v1.userapp.views.user import User, UserList, UserDetail, ResourceList,BulkAssignResourceList,UserNoteList,UserNote, UserLifeCycleList,RequestPasswordResetEmail,SetNewPasswordAPIView, ChangePasswordView, UserNoteDetail, UserNoteDetailList
 from v1.userapp.views.user_area import UserArea
 from v1.userapp.views.user_bank import UserBankDetail
 from v1.userapp.views.user_privilege import UserPrivilegeDetail
 from v1.userapp.views.user_role import UserRole
 from v1.userapp.views.user_skill import UserSkill
-from v1.userapp.views.user_utility import UserUtility,UesrUtilityList
+from v1.userapp.views.user_utility import UserUtility,UesrUtilityList, UserUtilityDetail
 from v1.userapp.views.user_sub_type import UserSubTypeByUserType
 from v1.userapp.views.user_role import UserRoleByUtilityModules,UserRoleByUtilitySubModule,ModulePrivilegesList,\
 UserRoleByTenantModules, UserRoleByTenantSubModule
@@ -50,6 +50,8 @@ urlpatterns = [
     path('utility/<uuid:utility_id_string>/appointment/<uuid:appointment_id_string>/resource/list',ResourceList.as_view(),name="fitered_resource_list"),
     path('utility/<uuid:utility_id_string>/bulk-assign/resource/list',BulkAssignResourceList.as_view(),name="bulk_assign_resource_list"),
     path('<uuid:user_id_string>/utility/<uuid:utility_id_string>/note', UserNote.as_view(), name="add_user_notes_list"),
+    path('note/<uuid:id_string>/utility/<uuid:utility_id_string>', UserNoteDetail.as_view(), name="user_note_detail"),
+    path('note/<uuid:id_string>', UserNoteDetailList.as_view(), name="user_note_detail_list"),
     path('<uuid:id_string>/note/list', UserNoteList.as_view(), name="user_notes_list"),
     path('<uuid:id_string>/life-cycle',UserLifeCycleList.as_view(),name="user_life_cycle"),
     path('request-reset-email/', RequestPasswordResetEmail.as_view(), name='request-reset-email'),
@@ -58,6 +60,7 @@ urlpatterns = [
     path('change-password/<uuid:id_string>',ChangePasswordView.as_view()),
     path('<uuid:user_id_string>/tenant/<uuid:tenant_id_string>', UserRoleByTenantModules.as_view()),
     path('<uuid:user_id_string>/tenant/<uuid:tenant_id_string>/tenant-module/<uuid:module_id_string>', UserRoleByTenantSubModule.as_view()),
+    path('utility/<uuid:id_string>/detail-list', UserUtilityDetail.as_view()),
 
 
 ]

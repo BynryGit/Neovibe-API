@@ -23,6 +23,7 @@ from v1.consumer.models.consumer_category import get_consumer_category_by_id_str
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
 from v1.utility.models.utility_service_contract_template import get_utility_service_contract_template_by_id_string
 from v1.commonapp.models.currency import get_currency_by_id_string
+from master.models import get_user_by_id_string
 
 
 def set_utility_validated_data(validated_data):
@@ -48,6 +49,9 @@ def set_utility_validated_data(validated_data):
     if "currency_id" in validated_data:
         currency = get_currency_by_id_string(validated_data["currency_id"])
         validated_data["currency_id"] = currency.id
+    if "user_id" in validated_data:
+        user = get_user_by_id_string(validated_data["user_id"])
+        validated_data["user_id"] = user.id
     return validated_data
 
 
@@ -238,11 +242,14 @@ def generate_current_no(user):
 # Function for generating userID according to utility
 def generate_company_id(user):
     try:
+        print("USER TENANT", user.tenant, "UTILITY_MASTER", get_sub_module_by_key("UTILITY_MASTER"))
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=user.tenant,
                                                             sub_module_id=get_sub_module_by_key("UTILITY_MASTER"))
+        print("PREFIX OF FORMAT OBJECT", format_obj)
         if format_obj.is_prefix == True:
             user_id = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1
+            print("CURRENT NO",format_obj.currentno)
             format_obj.save()
         else:
             user_id = str(format_obj.currentno + 1)
@@ -250,4 +257,5 @@ def generate_company_id(user):
             format_obj.save()
         return user_id
     except Exception as e:
+        print("E",e)
         raise CustomAPIException("Company ID generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

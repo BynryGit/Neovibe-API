@@ -23,10 +23,11 @@ class RouteSerializer(serializers.ModelSerializer):
                                  error_messages={"required": "The field name is required."})
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
+    utility_product_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = RouteTbl
-        fields = ('name', 'id_string', 'utility_id', 'tenant_id', 'premises_json', 'filter_json')
+        fields = ('name', 'id_string', 'utility_id','utility_product_id', 'tenant_id', 'premises_json', 'filter_json')
 
     def create(self, validated_data, user):
         with transaction.atomic():
@@ -37,7 +38,6 @@ class RouteSerializer(serializers.ModelSerializer):
             else:
                 route_obj = super(RouteSerializer, self).create(validated_data)
                 route_obj.created_by = user.id
-                route_obj.updated_by = user.id
                 route_obj.save()
                 return route_obj
 
@@ -67,4 +67,4 @@ class RouteShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RouteTbl
-        fields = ('id_string','name')
+        fields = ('id_string','name','premises_json')

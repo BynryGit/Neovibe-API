@@ -56,6 +56,7 @@ def get_tenant_module_by_id(id):
 
 def get_tenant_module_by_id_string(id_string):
     try:
+        print("IDSTRing",id_string)
         return TenantModule.objects.get(id_string=id_string)
     except:
         return False

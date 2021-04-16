@@ -24,10 +24,18 @@ class UtilityMasterViewSerializer(serializers.ModelSerializer):
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 
+    def get_utility_short_logo_url(self, utility_master_tbl):
+        request = self.context.get('request')
+        if utility_master_tbl.short_logo:
+            utility_short_logo_url = request.build_absolute_uri(utility_master_tbl.short_logo.url)
+        else:
+            utility_short_logo_url = ''
+        return utility_short_logo_url
+
     class Meta:
         model = UtilityMasterTbl
         fields = (
-            'id_string', 'short_name', 'name', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',
+            'id_string', 'short_name', 'name', 'short_logo', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',
             'created_date', 'updated_date', 'tenant')
 
 
@@ -49,6 +57,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
     state_id = serializers.IntegerField(required=False)
     city_id = serializers.IntegerField(required=False)
     status_id = serializers.IntegerField(required=False)
+    user_id = serializers.CharField(required=False)
 
 
     class Meta:
@@ -68,7 +77,7 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
                 utility_obj.created_by = user.id
                 utility_obj.created_date = timezone.now()
                 utility_obj.tenant_id = tenant
-                # utility_obj.company_id = generate_company_id(utility_obj)
+                utility_obj.company_id = generate_company_id(utility_obj)
                 utility_obj.save()
                 return utility_obj
 

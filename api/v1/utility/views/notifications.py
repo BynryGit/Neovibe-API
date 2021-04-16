@@ -17,9 +17,7 @@ def utility_email_to_admin(utility, transition_obj_id):
         html = get_notification_template_by_id(transition_obj.template_id)
         html.template = html.template.replace("{utility_name}", utility.name)
         if EmailConfiguration.objects.filter(tenant=utility.tenant).exists():
-            print("IIIIIIIIIIII")
             email_configuration_obj = EmailConfiguration.objects.get(tenant=utility.tenant)
-            print("EMAIL",email_configuration_obj)
             backend = EmailBackend(host=email_configuration_obj.email_host, port=email_configuration_obj.email_port,
                                    username=email_configuration_obj.email_host_user, use_tls=True, fail_silently=False)
             send_mail(subject="subject", body="this is body", from_email=email_configuration_obj.from_email,

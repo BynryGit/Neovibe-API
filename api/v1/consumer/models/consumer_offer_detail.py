@@ -41,7 +41,9 @@ class ConsumerOfferDetail(models.Model):
     @property
     def get_consumer_service_contract_detail(self):
         try:
+            print("=========ID=========",self.consumer_service_contract_detail_id)
             consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
+            print("============consumer==========",consumer_service_contract_detail)
             return consumer_service_contract_detail
         except:
             return False

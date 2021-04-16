@@ -137,9 +137,9 @@ class Utility(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             serializer = UtilityMasterSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
-                area_obj = serializer.create(serializer.validated_data, user)
-                area_obj.change_state(UTILITY_DICT["APPROVED"])
-                view_serializer = UtilityMasterViewSerializer(instance=area_obj, context={'request': request})
+                utility_obj = serializer.create(serializer.validated_data, user)
+                utility_obj.change_state(UTILITY_DICT["APPROVED"])
+                view_serializer = UtilityMasterViewSerializer(instance=utility_obj, context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
