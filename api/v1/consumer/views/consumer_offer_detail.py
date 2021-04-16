@@ -45,6 +45,7 @@ class ConsumerOfferDetail(GenericAPIView):
                 if request.data['consumer_service_contract_id_string']:
                     consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(request.data['consumer_service_contract_id_string'])
                     consumer_offer_detail.consumer_service_contract_detail_id = consumer_service_contract_detail_obj.id
+                    consumer_offer_detail.is_active = False
                     consumer_offer_detail.save()
 
                 view_serializer = ConsumerOfferDetailSerializer(instance=consumer_offer_detail, context={'request': request})
