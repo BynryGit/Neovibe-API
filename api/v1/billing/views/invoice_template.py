@@ -33,19 +33,21 @@ class InvoiceTemplate(GenericAPIView):
 
     @is_token_validate
     # role_required(ADMIN, UTILITY_MASTER, EDIT)
-    def get(self, request, utility_id_string,consumer_no,schedule_log_id_string):
+    def get(self, request,consumer_no,schedule_log_id_string):
         try:
             schedule_id = get_schedule_bill_log_by_id_string(schedule_log_id_string)
             bill_obj = get_bill_by_schedule_log_consumer_no(consumer_no,schedule_id.id)
-            replace = generate_formate(bill_obj.id_string)
-            html_template = get_rendering_invoice_template_by_utility_id_string(utility_id_string)
+            # replace = generate_formate(bill_obj.id_string)
+            # html_template = get_rendering_invoice_template_by_utility_id_string("2d5c7d19-f39d-4430-85e1-b1a92fc2467b")
 
-            if html_template:
-                final_obj = html_handler(html_template.template, replace)
+            if bill_obj:
+                # final_obj = html_handler(html_template.template, replace)
+                # print('=======',final_obj)
+                # print('========',type(bill_obj.invoice_template))
                 # return HttpResponse(final_obj)
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: final_obj,
+                    RESULT: bill_obj.invoice_template,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({

@@ -90,6 +90,7 @@ class SaveBillCharges(GenericAPIView):
             data = {}
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
+            calculate_current_all_charges(request.data)
             data['schedule_bill_id_string'] = request.data['schedule_bill_id_string']
             return Response({
                     STATE: SUCCESS,
@@ -104,9 +105,8 @@ class SaveBillCharges(GenericAPIView):
 
 
 
-
-
 class GetBillConsumerDetails(generics.ListAPIView):
+    
     try:
         serializer_class = ScheduleBillConsumerViewSerializer
         pagination_class = StandardResultsSetPagination
@@ -118,19 +118,25 @@ class GetBillConsumerDetails(generics.ListAPIView):
         search_fields = ('tenant__id_string',)
 
         def get_queryset(self):
-            schedule_bill_obj = get_schedule_bill_by_id_string(self.kwargs['schedule_bill_id_string'])
-            if schedule_bill_obj:
-                schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
-                if schedule_log_id:
-                    queryset = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
-                    if queryset:
-                        return queryset
-                    else:
-                        raise CustomAPIException("Consumer not found.", status.HTTP_404_NOT_FOUND)
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    schedule_bill_obj = get_schedule_bill_by_id_string(self.kwargs['schedule_bill_id_string'])
+                    if schedule_bill_obj:
+                        schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
+                        if schedule_log_id:
+                            queryset = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+                            if queryset:
+                                return queryset
+                            else:
+                                raise CustomAPIException("User not found.", status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module='Billing', sub_module='Billing')
+        print('..........',e)
+        logger().log(e, 'MEDIUM', module='BX', sub_module='Billing')
+
+
 

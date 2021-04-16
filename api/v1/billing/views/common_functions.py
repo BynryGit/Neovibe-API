@@ -47,6 +47,7 @@ from v1.billing.models.bill import get_bill_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.billing.models.tax import get_tax_by_utility_id_string
+from v1.billing.models.invoice_template import get_rendering_invoice_template_by_utility_id_string
 
 
 def set_validated_data(validated_data):
@@ -609,6 +610,15 @@ def calculate_current_all_charges(data):
                                 current_charges = current_charge,
                                 is_active = True                        
                             ).save()
+
+                            #Generate invoice start
+                            replace_content = generate_formate(bill_val.id_string)
+                            html_template = get_rendering_invoice_template_by_utility_id_string(utility_id_string)
+                            if html_template:
+                                final_obj = html_handler(html_template.template, replace)
+                                bill_obj = get_bill_by_id_string(bill_val.id_string)
+                                bill_obj.invoice_template = final_obj
+                                bill_obj.save()
 
             # return bill_val
 
