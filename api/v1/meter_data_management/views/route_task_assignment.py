@@ -6,7 +6,7 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
-#from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+from api.constants import MX, EDIT, DISPATCH, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.userapp.decorators import is_token_validate, role_required
@@ -69,7 +69,7 @@ class RouteTaskAssignmentList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='DISPATCH')
         raise APIException
 
 
@@ -87,7 +87,7 @@ class RouteTaskAssignmentList(generics.ListAPIView):
 
 class RouteTaskAssignment(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, DISPATCH, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -105,7 +105,7 @@ class RouteTaskAssignment(GenericAPIView):
                     RESULT: route_task_assignment_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='DISPATCH')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
@@ -126,7 +126,7 @@ class RouteTaskAssignment(GenericAPIView):
 
 class RouteTaskAssignmentDetail(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    @role_required(MX, DISPATCH, VIEW)
     def get(self, request, id_string):
         try:
             route_task_assignment_obj = get_route_task_assignment_by_id_string(id_string)
@@ -143,14 +143,14 @@ class RouteTaskAssignmentDetail(GenericAPIView):
                     RESULT: ROUTE_TASK_ASSIGNMENT_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='DISPATCH')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, DISPATCH, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -179,7 +179,7 @@ class RouteTaskAssignmentDetail(GenericAPIView):
                     RESULT: ROUTE_TASK_ASSIGNMENT_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='DISPATCH')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

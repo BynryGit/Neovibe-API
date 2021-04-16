@@ -3,12 +3,13 @@ __author__ = "aki"
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from api.constants import MX, VALIDATION, EDIT
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, METER_READING_NOT_FOUND
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.meter_reading import get_meter_reading_by_id_string
 from v1.meter_data_management.serializers.meter_reading_validation_one import MeterReadingValidationOneSerializer
-from v1.userapp.decorators import is_token_validate
+from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import get_user_from_token
 
 
@@ -26,7 +27,7 @@ from v1.commonapp.common_functions import get_user_from_token
 
 class MeterReadingValidationOneDetail(GenericAPIView):
     @is_token_validate
-    #role_required(MX, METER_DATA, EDIT)
+    @role_required(MX, VALIDATION, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -56,7 +57,7 @@ class MeterReadingValidationOneDetail(GenericAPIView):
                     RESULT: METER_READING_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='VALIDATION')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

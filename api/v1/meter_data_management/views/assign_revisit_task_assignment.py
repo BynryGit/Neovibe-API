@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
-#from api.constants import CONSUMER_OPS, EDIT, METER_DATA
+from api.constants import MX, EDIT, DISPATCH
 from v1.meter_data_management.task.assign_revisit_task import assign_revisit_task
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import STATE, ERROR, EXCEPTION, RESULT, SUCCESS
@@ -28,7 +28,7 @@ from v1.meter_data_management.serializers.assign_revisit_task_assignment import 
 
 class AssignRevisitTaskAssignment(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, DISPATCH, EDIT)
     def post(self, request):
         try:
             assign_revisit_task_assignment_serializer = AssignRevisitTaskAssignmentViewSerializer(data=request.data)
@@ -49,7 +49,7 @@ class AssignRevisitTaskAssignment(GenericAPIView):
                     RESULT: assign_revisit_task_assignment_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='DISPATCH')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

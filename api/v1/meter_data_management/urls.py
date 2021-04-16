@@ -56,6 +56,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
     path('route', Route.as_view(), name='route_add'),
+
     path('schedule-log/<uuid:id_string>/route/list', ScheduleLogRouteList.as_view(), name='schedule_log_route_list'),
     path('schedule-log/<uuid:id_string>/read-cycle-revisit-task/list', ScheduleLogReadCycleRevisitTaskList.as_view(),
          name='schedule_log_read_cycle_revisit_task_list'),
@@ -103,6 +104,7 @@ urlpatterns = [
          name='meter_reading_validation_one_detail'),
     path('meter-reading/<uuid:id_string>/validation-two', MeterReadingValidationTwoDetail.as_view(),
          name='meter_reading_validation_two_detail'),
+
     path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
     path('upload-route', UploadRoute.as_view(), name='upload_route'),
     path('utility/<uuid:id_string>/upload-route-summary', UploadRouteSummary.as_view(), name='upload_route_summary'),

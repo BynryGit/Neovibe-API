@@ -86,5 +86,5 @@ class ValidationList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='VALIDATION')
         raise APIException
