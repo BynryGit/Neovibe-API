@@ -5,7 +5,7 @@ from rest_framework import generics, status
 from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.utility.models.utility_master import get_utility_by_id_string
-#from api.constants import CONSUMER_OPS, METER_DATA, VIEW
+from api.constants import MX, METER_MASTER, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_FOUND
 
@@ -25,7 +25,7 @@ from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_F
 # todo need to fix logic
 class MeterSummary(generics.ListAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    @role_required(MX, METER_MASTER, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
@@ -47,7 +47,7 @@ class MeterSummary(generics.ListAPIView):
                     RESULT: UTILITY_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

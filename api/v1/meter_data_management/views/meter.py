@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from v1.commonapp.views.logger import logger
 from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND, SUCCESSFULLY_DATA_SAVE
-##from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+from api.constants import MX, EDIT, METER_MASTER, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_value
 from v1.commonapp.models.lifecycle import LifeCycle as LifeCycleTbl
@@ -69,7 +69,7 @@ class MeterList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='METER_MASTER')
         raise APIException
 
 
@@ -87,7 +87,7 @@ class MeterList(generics.ListAPIView):
 
 class Meter(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, METER_MASTER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -140,7 +140,7 @@ class Meter(GenericAPIView):
                     RESULT: SUCCESSFULLY_DATA_SAVE,
                 }, status=status.HTTP_201_CREATED)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
@@ -161,7 +161,7 @@ class Meter(GenericAPIView):
 
 class MeterDetail(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    @role_required(MX, METER_MASTER, VIEW)
     def get(self, request, id_string):
         try:
             meter_obj = get_meter_by_id_string(id_string)
@@ -188,14 +188,14 @@ class MeterDetail(GenericAPIView):
                     RESULT: METER_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, METER_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -222,7 +222,7 @@ class MeterDetail(GenericAPIView):
                     RESULT: METER_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
@@ -269,7 +269,7 @@ class MeterLifeCycleList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='METER_MASTER')
         raise APIException
 
 
@@ -312,7 +312,7 @@ class MeterNoteList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='METER_MASTER')
         raise APIException
 
 
@@ -331,7 +331,7 @@ class MeterNoteList(generics.ListAPIView):
 # todo need to fix this api and note serializer
 class MeterNoteDetail(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, METER_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -360,7 +360,7 @@ class MeterNoteDetail(GenericAPIView):
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             print(ex)
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
