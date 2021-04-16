@@ -141,7 +141,7 @@ class Route(GenericAPIView):
                 user = get_user_by_id_string(user_id_string)
                 serializer = RouteSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    print("Route Object", serializer.validated_data['route_json'])
+                    # print("Route Object", serializer.validated_data['route_json'])
                     for premises_id_string in serializer.validated_data['premises_json']['premises_details']:
                         if premises_id_string['id_string'] in premise_id_string_list:
                             return Response({

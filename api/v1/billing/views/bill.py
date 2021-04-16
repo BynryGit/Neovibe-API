@@ -17,7 +17,12 @@ from v1.billing.views.common_functions import get_consumer_count, get_rate, get_
      get_reading_count,calculate_current_all_charges
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from master.models import get_user_by_id_string
-
+from v1.billing.models.bill_schedule_log import get_schedule_bill_log_by_schedule_id
+from v1.billing.models.bill_consumer_detail import get_bill_consumer_detail_by_schedule_log_id
+from v1.billing.serializers.bill import ScheduleBillConsumerViewSerializer
+from api.messages import *
+from api.constants import *
+from v1.commonapp.views.pagination import StandardResultsSetPagination
 
 # API Header
 # API end Point: api/v1/billing/get-charges/id_string
@@ -85,7 +90,6 @@ class SaveBillCharges(GenericAPIView):
             data = {}
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
-            data['current_charges'] = calculate_current_all_charges(request.data)
             data['schedule_bill_id_string'] = request.data['schedule_bill_id_string']
             return Response({
                     STATE: SUCCESS,
@@ -97,3 +101,36 @@ class SaveBillCharges(GenericAPIView):
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+class GetBillConsumerDetails(generics.ListAPIView):
+    try:
+        serializer_class = ScheduleBillConsumerViewSerializer
+        pagination_class = StandardResultsSetPagination
+
+        filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+        filter_fields = ('tenant__id_string',)
+        ordering_fields = ('tenant__id_string',)
+        ordering = ('created_date',)  # always give by default alphabetical order
+        search_fields = ('tenant__id_string',)
+
+        def get_queryset(self):
+            schedule_bill_obj = get_schedule_bill_by_id_string(self.kwargs['schedule_bill_id_string'])
+            if schedule_bill_obj:
+                schedule_log_id = get_schedule_bill_log_by_schedule_id(schedule_bill_obj.id)
+                if schedule_log_id:
+                    queryset = get_bill_consumer_detail_by_schedule_log_id(schedule_log_id.id)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Consumer not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Billing', sub_module='Billing')
+

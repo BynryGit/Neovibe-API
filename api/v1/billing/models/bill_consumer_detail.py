@@ -16,8 +16,9 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 import uuid  # importing package for GUID
 from django.db import models  # importing package for database
-
-
+from v1.billing.models.bill_cycle import get_bill_cycle_by_id
+from v1.billing.models.bill_schedule_log import get_schedule_bill_log_by_id
+from v1.consumer.models.consumer_master import get_consumer_by_id
 # Create Temp Bill Consumer Master Table Start
 
 class BillConsumerDetail(models.Model):
@@ -44,6 +45,27 @@ class BillConsumerDetail(models.Model):
 
     def __unicode__(self):
         return self.consumer_no
+
+    @property
+    def get_tenant(self):
+        return self.tenant
+
+    @property
+    def get_utility(self):
+        return self.utility
+
+    @property
+    def get_bill_cycle_name(self):
+        bill_cycle = get_bill_cycle_by_id(self.bill_cycle_id)
+        return bill_cycle
+
+    def get_schedule_log(self):
+        bill_schedule_log = get_schedule_bill_log_by_id(self.bill_schedule_log_id)
+        return bill_schedule_log
+
+    def get_consumer(self):
+        consumer = get_consumer_by_id(self.consumer_id)
+        return consumer
 
 # Create Temp Bill Consumer Master Table end
 

@@ -13,9 +13,10 @@ from v1.billing.models.bill_schedule_log import ScheduleBillLog
 from v1.billing.serializers.bill_schedule import ScheduleBillShortViewSerializer
 
 class ScheduleBillLogShortViewSerializer(serializers.ModelSerializer):
+    schedule_bill_id = ScheduleBillShortViewSerializer(many=False, source='get_schedule_bill_name')
     class Meta:
         model = ScheduleBillLog
-        fields = ('id_string',)
+        fields = ('id_string','schedule_bill_id')
 
 
 class ScheduleBillLogViewSerializer(serializers.ModelSerializer):
