@@ -8,7 +8,7 @@ __author__ = "priyanka"
 # Tables used: Bill Schedule, ScheduleBillLog, Global Lookup
 # Author: Priyanka
 # Created on: 08/03/2021
-
+from celery.task import task
 from django.utils import timezone
 from django.db import transaction
 from django.db.models import Q
@@ -18,7 +18,7 @@ from v1.billing.models.bill_schedule_log import ScheduleBillLog
 from v1.billing.models.bill_schedule import ScheduleBill
 from v1.billing.task.bill_consumer_detail import create_bill_consumers
 
-
+@task(name="schedule_bill_name", queue='schedule_bill')
 def schedule_bill_log():
     try:
         current_date = timezone.now()

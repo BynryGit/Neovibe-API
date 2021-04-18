@@ -64,6 +64,12 @@ class UtilityProductList(generics.ListAPIView):
                     queryset = UtilityProductModel.objects.filter(utility=utility, is_active=True)
                     if queryset:
                         return queryset
+                    # if self.request.query_params['tenent_id_string']:
+                    #     queryset = ProductTbl.objects.filter(tenent_id_string=self.request.query_params['tenent_id_string'],is_active=True)
+                    #     return queryset
+                    # elif self.request.query_params['utility_id_string']:
+                    #     queryset = ProductTbl.objects.filter(utility_id_string=self.request.query_params['utility_id_string'],is_active=True)
+                    #     return qu
                     else:
                         raise CustomAPIException("Product Not found.", status.HTTP_404_NOT_FOUND)
                 else:

@@ -129,6 +129,6 @@ def get_bill_by_consumer_service_contract_detail_id(consumer_service_contract_de
 
 def get_bill_by_schedule_log_consumer_no(consumer_no,schedule_log_id):
     try:
-        return Bill.objects.get(consumer_no=consumer_no,bill_schedule_log_id=schedule_log_id)
+        return Bill.objects.filter(consumer_no=consumer_no,bill_schedule_log_id=schedule_log_id).last()
     except:
         return False

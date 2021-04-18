@@ -42,7 +42,7 @@ from v1.billing.models.bill import Bill as BillTbl
 from v1.payment.models.payment import Payment as PaymentTbl
 from v1.billing.models.fixed_charges import get_fixed_charges_by_id_meter_no
 from v1.consumer.models.consumer_offer_detail import get_consumer_offer_by_consumer_service_contract_detail_id
-from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id
+from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id,get_consumer_emi_offer_master_by_id
 from v1.billing.models.bill import get_bill_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.commonapp.models.sub_module import get_sub_module_by_key
@@ -111,26 +111,7 @@ def set_validated_data(validated_data):
 #         pass
 
 
-# def save_emi(consumer, bill_month):
-#     try:
-#         bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
-#         emi = 0.0
-#         if ConsumerMaster.objects.filter(consumer_no=consumer).exists():
-#             consumer = ConsumerMaster.objects.filter(consumer_no=consumer)
-#             scheme = ConsumerSchemeMaster.objects.filter(id=consumer.scheme_id)
-#             if consumer.deposit_amt - consumer.collected_amt <= 0:
-#                 consumer.collected_amt = consumer.collected_amt + scheme.monthly_emi
-#                 bill.current_emi_amt = scheme.monthly_emi
-#                 consumer.save()
-#                 bill.save()
-#             else:
-#                 bill.current_emi_amt = emi
-#                 bill.save()
-#         else:
-#             bill.current_emi_amt = emi
-#             bill.save()
-#     except:
-#         pass
+
 
 
 # def save_meter_data(consumer, bill_month):
@@ -534,6 +515,10 @@ def calculate_current_all_charges(data):
                         fixed_charges = get_fixed_charges_by_id_meter_no(service_contract_obj.consumer_id)
                         # calculate offer charge
                         offer_charges = calculate_consumer_offer(service_contract_obj.id)
+
+                        # calculate emi amount
+                        emi_amount = caluculate_consumer_emi(service_contract_obj.id)
+                        print('......1.emi_amount......',emi_amount)
                         # calculate current charge
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
                         # calculate outstanding amount
@@ -541,6 +526,8 @@ def calculate_current_all_charges(data):
                         # calculate opening balance
                         if int(bill_obj.opening_balance) > 0:
                             opening_balance = int(current_charge) + int(outstanding_amt['due_date_amount']) + int(fixed_charges)
+                        else:
+                            opening_balance = int(current_charge) + int(fixed_charges)
 
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
@@ -553,7 +540,8 @@ def calculate_current_all_charges(data):
                             "fixed_charges": fixed_charges,
                             "offer_charges" : float(offer_charges/100),
                             "paid_amount": float(outstanding_amt['paid_amount']),
-                            "previous_due_amount" : float(outstanding_amt['previous_due_amount'])
+                            "previous_due_amount" : float(outstanding_amt['previous_due_amount']),
+                            "emi_amount":emi_amount
                         }                        
                         rate_details = {"rate":rate, "outstanding" : outstanding_amt['due_date_amount'],"consumption_charges":current_charge, "tax":tax_obj.tax_percentage}
                     else:
@@ -574,6 +562,9 @@ def calculate_current_all_charges(data):
                         # calculate offer charge
                         offer_charges = calculate_consumer_offer(service_contract_obj.id)
 
+                        # calculate emi amount
+                        emi_amount = caluculate_consumer_emi(service_contract_obj.id)
+                        print('......2.emi_amount......',emi_amount)
                         opening_balance = int(current_charge) + int(fixed_charges)
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
@@ -585,16 +576,18 @@ def calculate_current_all_charges(data):
                             "amount_after_due_date" : int(opening_balance) + 50,
                             "fixed_charges": fixed_charges,
                             "offer_charges" : float(offer_charges/100),
-                            "paid_amount": 0
+                            "paid_amount": 0,
+                            "previous_due_amount":0,
+                            "emi_amount":emi_amount
                         }
-                        rate_details = {"unit":rate['unit'],"rate":rate['rate'], "outstanding" : outstanding_amt,"consumption_charges":current_charge, "tax":tax_obj.tax_percentage}
+                        rate_details = {"rate":rate, "outstanding" : outstanding_amt,"consumption_charges":current_charge, "tax":tax_obj.tax_percentage}
 
                     # save bill data
                     if BillTbl.objects.filter(consumer_service_contract_detail_id = service_contract_obj.id,bill_cycle_id = schedule_bill_obj.bill_cycle_id,current_charges = current_charge,is_active=True).exists():
                         print('EXISTS')
                     else:
-                        with transaction.atomic():    
-                            bill_val = BillTbl(
+                        with transaction.atomic():                            
+                            bill = BillTbl(
                                 tenant = schedule_bill_obj.tenant,
                                 utility = schedule_bill_obj.utility,
                                 bill_schedule_log_id = schedule_log_id.id,
@@ -609,14 +602,14 @@ def calculate_current_all_charges(data):
                                 opening_balance = opening_balance,
                                 current_charges = current_charge,
                                 is_active = True                        
-                            ).save()
-
+                            )
+                            bill.save()
                             #Generate invoice start
-                            replace_content = generate_formate(bill_val.id_string)
-                            html_template = get_rendering_invoice_template_by_utility_id_string(utility_id_string)
+                            replace_content = generate_formate(bill.id_string)
+                            html_template = get_rendering_invoice_template_by_utility_id_string(bill.utility.id_string)
                             if html_template:
-                                final_obj = html_handler(html_template.template, replace)
-                                bill_obj = get_bill_by_id_string(bill_val.id_string)
+                                final_obj = html_handler(html_template.template, replace_content)
+                                bill_obj = get_bill_by_id_string(bill.id_string)
                                 bill_obj.invoice_template = final_obj
                                 bill_obj.save()
 
@@ -630,6 +623,7 @@ def calculate_current_all_charges(data):
 # geberate current charges function
 def calculate_current_charges(privious_meter_reading,current_meter_reading,rate):
     try:
+        print('........',privious_meter_reading,current_meter_reading,rate)
         unit_list = []
         rate_list = []
         finalunitrate = []
@@ -650,6 +644,7 @@ def calculate_current_charges(privious_meter_reading,current_meter_reading,rate)
                     item.append(unit_list[a])
                 
             if int(current_charge) > int(unit_list[len(unit_list)-1].split('-')[1]): # it check last element value
+                print('.....if rate.....>>>>')
                 for a in range(len(unit_list)): # if current_charge are greater than all unit range then loop iterate len wise
                     actual_rate = float(rate_list[a]) * float(tax_obj.tax_percentage)/100
                     if int(current_charge) > int(unit_list[a].split('-')[1]) or int(current_charge) == int(unit_list[a].split('-')[1]):
@@ -659,6 +654,7 @@ def calculate_current_charges(privious_meter_reading,current_meter_reading,rate)
                             finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * actual_rate)
                     else:
                         finalunitrate.append((int(unit_list[a].split('-')[1])-int(current_charge))* actual_rate) # not needed
+                print('.....if rate.....>>>>',finalunitrate)
             else:
                 for a in range(len(item)):
                     actual_rate = float(rate_list[a]) * float(tax_obj.tax_percentage)/100
@@ -669,6 +665,7 @@ def calculate_current_charges(privious_meter_reading,current_meter_reading,rate)
                             finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * actual_rate)
                     else:
                         finalunitrate.append((int(current_charge) - (int(unit_list[a-1].split('-')[1])))* actual_rate)
+                print('.......else..rate.........',finalunitrate)
 
             return sum(finalunitrate)
     except Exception as ex:
@@ -703,7 +700,7 @@ def get_outstanding_amount(consumer,bill_obj):
         }
         return data
 
-
+# getting consumer offer amount
 def calculate_consumer_offer(consumer_service_contract_detail_id):
     current_date = datetime.now()
     offer_detail_list = []
@@ -719,6 +716,41 @@ def calculate_consumer_offer(consumer_service_contract_detail_id):
     else:
         return 0
 
+# calculate consmer emi amount(life time 50 rs)
+def caluculate_consumer_emi(consumer_service_contract_detail_id):
+    try:
+        offers =  get_consumer_offer_by_consumer_service_contract_detail_id(consumer_service_contract_detail_id)
+        if offers:
+            for offer_detail in offers:
+                emi_offer = get_consumer_emi_offer_master_by_id(offer_detail.offer_id)
+                if emi_offer:
+                    consumer_service_contract = get_consumer_service_contract_detail_by_id(consumer_service_contract_detail_id)
+                    service_contract =  get_utility_service_contract_master_by_id(consumer_service_contract.service_contract_id)
+                    return 50
+                else:
+                    return 0
+        return 0
+
+
+            # bill = get_consumer_invoice_bill_by_month(consumer, bill_month)
+            # emi = 0.0
+            # if ConsumerMaster.objects.filter(consumer_no=consumer).exists():
+            #     consumer = ConsumerMaster.objects.filter(consumer_no=consumer)
+            #     scheme = ConsumerSchemeMaster.objects.filter(id=consumer.scheme_id)
+            #     if consumer.deposit_amt - consumer.collected_amt <= 0:
+            #         consumer.collected_amt = consumer.collected_amt + scheme.monthly_emi
+            #         bill.current_emi_amt = scheme.monthly_emi
+            #         consumer.save()
+            #         bill.save()
+            #     else:
+            #         bill.current_emi_amt = emi
+            #         bill.save()
+            # else:
+            #     bill.current_emi_amt = emi
+            #     bill.save()
+    except Exception as e:
+        print('=======emi=====',e)
+        pass
 
 # generate schema for replace in invoice template
 def generate_formate(bill_id_string):
@@ -743,34 +775,36 @@ def generate_formate(bill_id_string):
             "{header.office_address}" : bill.utility.address,
             "{header.website}": "==",
             "{header.email}" : bill.utility.email_id,
-            "{header.phone_no}": bill.utility.phone_no,
-            "{bill.consumer_no}" : consumer_master.consumer_no,
-            "{bill.mobile}" : consumer_master.phone_mobile,
-            "{bill.consumer_name}" : consumer_master.email_id,
-            "{bill.address}" : consumer_master.billing_address_line_1,
-            "{bill.city}" : city.name,
-            "{bill.meter_no}": meter_obj.meter_no,
-            "{bill.invoice_no}":invoice_no,
+            "{header.phone_no}": str(bill.utility.phone_no),
+            "{bill.consumer_no}" : str(consumer_master.consumer_no),
+            "{bill.mobile}" : str(consumer_master.phone_mobile),
+            "{bill.consumer_name}" : str(consumer_master.email_id),
+            "{bill.address}" : str(consumer_master.billing_address_line_1),
+            "{bill.city}" : str(city.name),
+            "{bill.meter_no}": str(meter_obj.meter_no),
+            "{bill.invoice_no}":str(invoice_no),
             "{bill.invoice_date}":str(datetime.now().date()),
             "{bill.due_date}":str(bill.bill_date.date()),
             "{bill.meter_status}":meter_obj.get_meter_status_display(),
             "{bill.bill_status}" : bill.get_state_display(),
-            "{bill.prev_reading_date}" : bill.meter_reading['previous_meter_reading_date'],
-            "{bill.prev_reading}" : bill.meter_reading['privious_meter_reading'],
-            "{bill.current_reading}" : bill.meter_reading['current_meter_reading'],
-            "{bill.current_reading_date}":bill.meter_reading['current_meter_reading_date'],
+            "{bill.prev_reading_date}" : str(bill.meter_reading['previous_meter_reading_date']),
+            "{bill.prev_reading}" : str(bill.meter_reading['privious_meter_reading']),
+            "{bill.current_reading}" : str(bill.meter_reading['current_meter_reading']),
+            "{bill.current_reading_date}":str(bill.meter_reading['current_meter_reading_date']),
             "{bill.consumption}": str(bill.meter_reading['consumption']),
             "{bill.days}":str(bill.bill_period),
             "{bill.consumer_status}":consumer_master.get_state_display(),
             "{bill.consumption_charges}":str(bill.rate_details['consumption_charges']),
             "{bill.before_due_date}": str(bill.meter_reading['amount_before_due_date']),
             "{bill.after_due_date}": str(bill.meter_reading['amount_after_due_date']),
-            "{bill.prev_balance}": str(bill.meter_reading['previous_due_amount']),
+            "{bill.prev_balance}": str(bill.rate_details['outstanding']),
             "{bill.payment}": str(bill.meter_reading['paid_amount']),
             "{bill.current_charges}" : str(bill.current_charges),
+            "{bill.emi_amt}" : str(bill.meter_reading['emi_amount']),
             "{bill.rate_unit}":str(unitval),
             "{bill.rate}":str(rateval),
             "{bill.vat_percent}":str(bill.rate_details['tax']),
+            "{bill.offer}":str(bill.meter_reading['offer_charges']),
         }   
         return data
     except Exception as exe:

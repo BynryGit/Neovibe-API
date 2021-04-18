@@ -20,7 +20,7 @@ from v1.billing.serializers.bill_schedule import ScheduleBillSerializer, Schedul
 from v1.billing.models.bill_schedule import ScheduleBill as ScheduleBillTbl, get_schedule_bill_by_id_string
 from v1.billing.models.bill_cycle import get_bill_cycle_by_id
 from v1.billing.views.common_functions import get_consumer_count, get_rate, get_additional_charges_amount
-
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
 
 
 # API Header
@@ -216,7 +216,7 @@ class ScheduleBillDetail(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/billing/utility/<uuid:id_string>/bill-schedule-summary
+# API end Point: api/v1/billing/<uuid:id_string>/bill-schedule-summary
 # API verb: GET
 # Package: Basic
 # Modules: All
@@ -231,21 +231,37 @@ class ScheduleBillDetail(GenericAPIView):
 class BillScheduleSummary(generics.ListAPIView):
     @is_token_validate
     # #role_required(BILLING, SCHEDULE, EDIT)
-    def get(self, request, id_string):
+    def get(self, request):
         try:
-            utility_obj = get_utility_by_id_string(id_string)
-            if utility_obj:
-                bill_schedule_obj = ScheduleBillTbl.objects.filter(utility=utility_obj, is_active=True)
-                Bill_Schedule_Count = {
+            if 'utility_id_string' in request.query_params:
+                utility_obj = get_utility_by_id_string(request.query_params['utility_id_string'])
+                if utility_obj:
+                    bill_schedule_obj = ScheduleBillTbl.objects.filter(utility=utility_obj, is_active=True)
+                    Bill_Schedule_Count = {
                     'Total_Bill_Schedule': bill_schedule_obj.count(),
                     'New_Bill_Schedule': bill_schedule_obj.filter(schedule_status=0).count(),
                     'Complete_Bill_Schedule': bill_schedule_obj.filter(schedule_status=1).count(),
                     'Remaining_Bill_Schedule': bill_schedule_obj.filter(schedule_status=2).count(),
-                }
-                return Response({
-                    STATE: SUCCESS,
-                    RESULT: Bill_Schedule_Count,
-                }, status=status.HTTP_200_OK)
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: Bill_Schedule_Count,
+                    }, status=status.HTTP_200_OK)
+
+            elif 'tenant_id_string' in request.query_params:
+                tenant_obj = get_tenant_by_id_string(request.query_params['tenant_id_string'])
+                if tenant_obj:
+                    bill_schedule_obj = ScheduleBillTbl.objects.filter(tenant=tenant_obj, is_active=True)
+                    Bill_Schedule_Count = {
+                        'Total_Bill_Schedule': bill_schedule_obj.count(),
+                        'New_Bill_Schedule': bill_schedule_obj.filter(schedule_status=0).count(),
+                        'Complete_Bill_Schedule': bill_schedule_obj.filter(schedule_status=1).count(),
+                        'Remaining_Bill_Schedule': bill_schedule_obj.filter(schedule_status=2).count(),
+                    }
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: Bill_Schedule_Count,
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response({
                     STATE: ERROR,

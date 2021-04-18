@@ -70,3 +70,10 @@ def get_consumer_offer_master_by_id(id):
         return ConsumerOfferMaster.objects.get(id=id,is_active=True)
     except:
         return False
+
+
+def get_consumer_emi_offer_master_by_id(id):
+    try:
+        return ConsumerOfferMaster.objects.get(id=id,is_active=True,category=1)
+    except:
+        return False
