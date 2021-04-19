@@ -80,7 +80,7 @@ class UserList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    queryset = UserTbl.objects.filter(form_factor_id=1, is_active=True)
+                    queryset = UserTbl.objects.filter(is_active=True)
                     if queryset:
                         return queryset
                     else:

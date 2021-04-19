@@ -227,8 +227,8 @@ class Consumer(GenericAPIView):
 # Author: Rohan
 # Created on: 19/05/2020
 class ConsumerDetail(GenericAPIView):
-    # @is_token_validate
-    # #role_required(CONSUMER_OPS, CONSUMER, VIEW)
+    @is_token_validate
+    @role_required(CX, CX_SERVICE, VIEW)
     def get(self, request, id_string):
         try:
             consumer = get_consumer_by_id_string(id_string)

@@ -249,7 +249,8 @@ def create_consumer_after_registration(registration_id):
         dict = {}
         dict['tenant'] = registration.tenant
         dict['utility'] = registration.utility
-        dict['email_id'] = registration.email_id
+        dict['email'] = registration.email_id
+        dict['password'] = "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw="
         dict['phone_mobile'] = registration.phone_mobile
         dict['phone_landline'] = registration.phone_landline
         dict['billing_address_line_1'] = registration.billing_address_line_1

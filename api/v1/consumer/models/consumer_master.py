@@ -24,6 +24,11 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 from django.db import models
 from django.utils import timezone # importing package for datetime
+from master.models import MasterUser
+
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser, PermissionsMixin
+)
 
 # *********** CONSUMER CONSTANTS **************
 CONSUMER_DICT = {
@@ -38,7 +43,7 @@ CONSUMER_DICT = {
 
 
 # Create Consumer Master table start.
-class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
+class ConsumerMaster(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     CHOICES = (
         (0, 'CREATED'),
         (1, 'APPROVED'),
@@ -67,12 +72,12 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     }
 
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    # tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     state = models.BigIntegerField(choices=CHOICES, default=0)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     master_consumer_no = models.CharField(max_length=200, null=True, blank=True)
-    email_id = models.CharField(max_length=200, null=True, blank=True)
+    # email_id = models.CharField(max_length=200, null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     billing_address_line_1 = models.CharField(max_length=200, blank=True, null=True)
@@ -92,7 +97,7 @@ class ConsumerMaster(models.Model, fsm.FiniteStateMachineMixin):
     ownership_id = models.BigIntegerField(null=True, blank=True)
     is_address_same = models.BooleanField(default=False)
     is_vip = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    # is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
@@ -162,6 +167,12 @@ def get_consumer_by_id_string(id_string):
 def get_consumer_by_id(id):
     try:
         return ConsumerMaster.objects.get(id=id)
+    except:
+        return False
+
+def get_consumer_by_email(email):
+    try:
+        return ConsumerMaster.objects.get(email=email)
     except:
         return False
 

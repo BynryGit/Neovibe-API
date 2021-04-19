@@ -58,6 +58,22 @@ class MyUserManager(BaseUserManager):
         return user
 
 
+class MasterUser(AbstractBaseUser, PermissionsMixin):
+    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    username = None
+    email = models.CharField(max_length=200, blank=False, unique=True)
+    USERNAME_FIELD = ('email')
+    password = models.CharField(max_length=200, verbose_name='password')
+    last_login = models.DateTimeField(blank=True, null=True)
+    is_superuser = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
+
+    objects = MyUserManager()
+    REQUIRED_FIELDS = []
+
+
+
 # *********** USER CONSTANTS **************
 USER_DICT = {
     "CREATED": 0,
@@ -68,7 +84,7 @@ USER_DICT = {
 
 
 # Create USER Master table start.
-class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
+class User(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     CHOICES = (
         (0, 'CREATED'),
         (1, 'ACTIVE'),
@@ -83,9 +99,9 @@ class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
         USER_DICT['INACTIVE']: (USER_DICT['ARCHIVED'],),
     }
 
-    username = None
+    # username = None
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    # tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     user_id = models.CharField(max_length=200, blank=True, null=True)
     city_id = models.BigIntegerField(blank=True, null=True)
     user_type_id = models.BigIntegerField(null=True, blank=True)  # Tenant, Utility
@@ -94,28 +110,28 @@ class User(AbstractBaseUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     department_id = models.BigIntegerField(null=True, blank=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     state = models.BigIntegerField(choices=CHOICES, default=0)
-    password = models.CharField(max_length=200, verbose_name='password')
+    # password = models.CharField(max_length=200, verbose_name='password')
     first_name = models.CharField(max_length=200, blank=True)
     middle_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
-    email = models.CharField(max_length=200, blank=False, unique=True)
-    USERNAME_FIELD = 'email'
+    # email = models.CharField(max_length=200, blank=False, unique=True)
+    # USERNAME_FIELD = 'email'
     user_image = models.URLField(null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     supplier_id = models.BigIntegerField(null=True, blank=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    last_login = models.DateTimeField(blank=True, null=True)
+    # is_staff = models.BooleanField(default=False)
+    # is_active = models.BooleanField(default=False)
+    # is_superuser = models.BooleanField(default=False)
+    # last_login = models.DateTimeField(blank=True, null=True)
     date_joined = models.DateTimeField(blank=True, null=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True)
 
-    objects = MyUserManager()
-    REQUIRED_FIELDS = []
+    # objects = MyUserManager()
+    # REQUIRED_FIELDS = []
 
     @property
     def get_tenant(self):
