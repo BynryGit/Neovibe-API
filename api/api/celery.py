@@ -56,9 +56,15 @@ CELERY_QUEUES = (
     Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
     Queue('user_timeline_queue', routing_key='user_timeline_queue_Tasks'),
     Queue('admin_timeline_queue', routing_key='admin_timeline_queue_Tasks'),
+    Queue('schedule_bill', routing_key='schedule_bill_task'),
 )
 
 CELERY_ROUTES = {
+    'v1.billing.task.bill_schedule_log.schedule_bill_log': {
+        'queue': 'schedule_bill',
+        'routing_key': 'schedule_bill_task'
+    },
+
     'v1.meter_data_management.task.consumer_detail.create_consumer': {
         'queue': 'ImportConsumer',
         'routing_key': 'ImportConsumer_Tasks'
