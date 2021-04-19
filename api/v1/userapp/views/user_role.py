@@ -481,8 +481,6 @@ class UserRoleByTenantSubModule(GenericAPIView):
             user = get_user_by_id_string(user_id_string)
             module_id = get_module_by_id_string(module_id_string)
             utility_module_obj = get_tenant_module_by_module_id(tenant_id_string,module_id.id)
-            print("Module ID",module_id.id)
-            print("Utility Module Obj",utility_module_obj)
             sub_module_list = TenantSubModule.objects.filter(module_id=utility_module_obj.module_id, is_active=True)
 
             module_obj_data = []

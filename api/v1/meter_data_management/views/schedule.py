@@ -10,7 +10,7 @@ from master.models import get_user_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 from v1.commonapp.views.logger import logger
 from v1.utility.models.utility_master import get_utility_by_id_string
-##from api.constants import CONSUMER_OPS, EDIT, METER_DATA, VIEW
+from api.constants import MX, EDIT, SCHEDULE, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
@@ -54,7 +54,7 @@ class ScheduleList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as ex:
-        logger().log(ex, 'LOW', module='CONSUMER OPS', sub_module='METER DATA')
+        logger().log(ex, 'LOW', module='MX', sub_module='SCHEDULE')
         raise APIException
 
 
@@ -72,7 +72,7 @@ class ScheduleList(generics.ListAPIView):
 
 class Schedule(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, SCHEDULE, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -112,7 +112,7 @@ class Schedule(GenericAPIView):
                     RESULT: schedule_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
@@ -133,7 +133,7 @@ class Schedule(GenericAPIView):
 
 class ScheduleDetail(GenericAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    @role_required(MX, SCHEDULE, VIEW)
     def get(self, request, id_string):
         try:
             schedule_obj = get_schedule_by_id_string(id_string)
@@ -149,14 +149,14 @@ class ScheduleDetail(GenericAPIView):
                     RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, EDIT)
+    @role_required(MX, SCHEDULE, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -203,7 +203,7 @@ class ScheduleDetail(GenericAPIView):
                     RESULT: SCHEDULE_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)
@@ -225,7 +225,7 @@ class ScheduleDetail(GenericAPIView):
 # todo need to fix logic
 class ReadingScheduleSummary(generics.ListAPIView):
     @is_token_validate
-    #role_required(CONSUMER_OPS, METER_DATA, VIEW)
+    @role_required(MX, SCHEDULE, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)
@@ -247,7 +247,7 @@ class ReadingScheduleSummary(generics.ListAPIView):
                     RESULT: UTILITY_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as ex:
-            logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

@@ -18,7 +18,7 @@ from api.constants import *
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.settings_reader import SettingReader
-
+from v1.consumer.models.consumer_master import get_consumer_by_id_string
 setting_reader = SettingReader()
 
 import boto3
@@ -51,6 +51,11 @@ class DocumentList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = DocumentModel.objects.filter(utility=utility, is_active=True)
+                    if 'consumer_id' in self.request.query_params:
+                        id = get_consumer_by_id_string(self.request.query_params['consumer_id']).id
+                        module_obj = get_module_by_key('CX')
+                        sub_module_obj = get_sub_module_by_key('CONSUMER')
+                        queryset = queryset.filter(object_id=id, module_id=module_obj, sub_module_id=sub_module_obj)
                     if queryset:
                         return queryset
                     else:

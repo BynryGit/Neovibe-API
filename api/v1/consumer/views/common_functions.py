@@ -1,4 +1,5 @@
 import collections
+from v1.commonapp.common_functions import validate_user_data
 from rest_framework import status
 from v1.commonapp.models.area import get_area_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
@@ -482,3 +483,20 @@ def set_consumer_feedback_validated_data(validated_data):
         else:
             raise CustomAPIException("Consumer not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+# Function for generating consumer number according to utility
+def generate_transaction_id(consumer):
+    try:
+        format_obj = UtilityServiceNumberFormat.objects.get(tenant=consumer.tenant, utility=consumer.utility,
+                                                            sub_module_id=get_sub_module_by_key("PAYMENT"))
+        if format_obj.is_prefix:
+            transaction_id = format_obj.prefix + str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        else:
+            transaction_id = str(format_obj.currentno + 1)
+            format_obj.currentno = format_obj.currentno + 1
+            format_obj.save()
+        return transaction_id
+    except Exception as e:
+        raise CustomAPIException("Transaction id generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

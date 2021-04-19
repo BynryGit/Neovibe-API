@@ -45,6 +45,12 @@ class Tax(models.Model):
 def get_tax_by_tenant_id_string(tenant_id_string):
     return Tax.objects.filter(tenant__id_string=tenant_id_string)
 
+def get_tax_by_utility_id_string(utility_id_string):
+    try:
+        return Tax.objects.get(utility__id_string=utility_id_string)
+    except:
+        return False
+
 def get_tax_by_id_string(id_string):
     try:
         return Tax.objects.get(id_string = id_string)

@@ -1,5 +1,6 @@
 from rest_framework import serializers, status
 from v1.commonapp.views.settings_reader import SettingReader
+
 setting_reader = SettingReader()
 from v1.commonapp.models.notification_template import NotificationTemplate as NotificationTemplateTbl
 from datetime import datetime
@@ -23,11 +24,10 @@ class NotificationTemplateViewSerializer(serializers.ModelSerializer):
 
 
 class NotificationTemplateSerializer(serializers.ModelSerializer):
-    template = serializers.CharField(required=True, max_length=1000,
+    template = serializers.CharField(required=True, max_length=100000,
                                      error_messages={"required": "The field Template is required."})
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
-
 
     class Meta:
         model = NotificationTemplateTbl

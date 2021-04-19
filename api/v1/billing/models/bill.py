@@ -65,6 +65,7 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
+    bill_schedule_log_id = models.BigIntegerField(null=True, blank=True)
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     bill_cycle_id = models.BigIntegerField(null=True, blank=True)
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
@@ -78,6 +79,7 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     opening_balance = models.CharField(max_length=200, blank=False, null=False)
     current_charges = models.CharField(max_length=200, blank=False, null=False)
     bill_frequency_id = models.BigIntegerField(null=True, blank=True)
+    invoice_template = models.TextField(max_length=20000, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     is_adjusted = models.BooleanField(default=False)
     is_spot_bill = models.BooleanField(default=False)
@@ -122,5 +124,11 @@ def get_bill_by_id(id):
 def get_bill_by_consumer_service_contract_detail_id(consumer_service_contract_detail_id):
     try:
         return Bill.objects.get(consumer_service_contract_detail_id = id)
+    except:
+        return False
+
+def get_bill_by_schedule_log_consumer_no(consumer_no,schedule_log_id):
+    try:
+        return Bill.objects.filter(consumer_no=consumer_no,bill_schedule_log_id=schedule_log_id).last()
     except:
         return False

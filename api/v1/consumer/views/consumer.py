@@ -1,4 +1,7 @@
 from typing import FrozenSet
+from v1.payment.models.payment_transactions import PaymentTransaction
+from v1.commonapp.models.lifecycle import LifeCycle
+from v1.registration.models.registrations import get_registration_by_id_string
 
 from django_filters import rest_framework
 from v1.work_order.models.work_order_master import WorkOrderMaster, get_work_order_master_by_id_string
@@ -16,7 +19,7 @@ from master.models import get_user_by_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no, get_invoice_bill_by_id_string
 from v1.billing.serializers.invoice_bill import *
 from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
-from v1.commonapp.models.notes import Notes
+from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
 from v1.commonapp.views.logger import logger
@@ -56,6 +59,8 @@ from v1.commonapp.models.work_order_sub_type import get_work_order_sub_type_by_k
 from v1.work_order.models.service_appointments import ServiceAppointment as ServiceAppointmentTbl
 from django.db.models import Q
 from v1.meter_data_management.models.meter import Meter
+from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
+from v1.payment.serializer.payment_transactions import PaymentTransactionListSerializer, PaymentTransactionSerializer
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
@@ -85,7 +90,6 @@ class ConsumerList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerMaster.objects.filter(utility=utility, is_active=True)
-                    print("This is the queryset =>", queryset)
                     if "consumer_no" in self.request.query_params:
                         queryset = queryset.filter(consumer_no=self.request.query_params['consumer_no'])
                     if "email_id" in self.request.query_params:
@@ -362,8 +366,9 @@ class ConsumerPaymentList(generics.ListAPIView):
         search_fields = ('transaction_amount',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['token']):
-                if is_authorized():
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
                     consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     if consumer:
                         queryset = get_payments_by_consumer_no(consumer.consumer_no)
@@ -572,7 +577,7 @@ class ConsumerPayment(GenericAPIView):
     #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
-            user_id_string = get_user_from_token(request.headers['token'])
+            user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             consumer_obj = get_consumer_by_id_string(id_string)
             serializer = PaymentSerializer(data=request.data)
@@ -1011,7 +1016,6 @@ class ConsumerOwnershipList(generics.ListAPIView):
 # Author: Rohan
 # Created on: 11/01/2021
 class ConsumerNote(GenericAPIView):
-
     @is_token_validate
     # #role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
     def post(self, request, id_string):
@@ -1048,7 +1052,7 @@ class ConsumerNote(GenericAPIView):
                 RESULT: str(e),
             }, status=res.status_code)
 
-
+        
 # API Header
 # API end Point: api/v1/consumer/:id_string/note/list
 # API verb: POST
@@ -1179,11 +1183,9 @@ class ConsumerConnect(GenericAPIView):
 
                 work_order_type_obj = get_work_order_type_by_key('CONNECTION')
                 work_order_sub_type_obj = get_work_order_sub_type_by_key('CONNECTION')
+                utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_order_type_obj.id)
+                utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id=work_order_sub_type_obj.id)
 
-                utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
-                utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(
-                    work_order_sub_type_id=work_order_sub_type_obj.id)
 
                 work_order_master_obj = WorkOrderMaster.objects.get(utility_product_id=utility_product_obj.id,
                                                                     utility_work_order_type_id=utility_work_order_type_obj.id,
@@ -1269,16 +1271,16 @@ class ConsumerDisconnect(GenericAPIView):
                 work_order_type_obj = get_work_order_type_by_key('DISCONNECTION')
 
                 if work_order_type_obj:
-                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
 
                 # check disconnect type is TEMPORARY OR PERMANENT
                 if request.data['disconnect_type'] == 'TEMPORARY':
                     work_order_sub_type_obj = get_work_order_sub_type_by_key('TEMPORARY_DISCONNECTION')
                 if request.data['disconnect_type'] == 'PERMANENT':
                     work_order_sub_type_obj = get_work_order_sub_type_by_key('PERMANENT_DISCONNECTION')
-
                 if work_order_sub_type_obj:
-                    utility_work_order_sub_type_obj = get_utility_work_order_sub_type_by_id(work_order_sub_type_obj.id)
+                    utility_work_order_sub_type_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id = work_order_sub_type_obj.id)
+
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
                         utility_work_order_type_id=utility_work_order_type_obj.id,
@@ -1295,7 +1297,7 @@ class ConsumerDisconnect(GenericAPIView):
                     disconnection_id = []
                     for i in previous_work_order_master_obj:
                         disconnection_id.append(i.id)
-                    print(disconnection_id)
+            
 
                     previous_connection_request = ServiceAppointmentTbl.objects.filter(
                         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
@@ -1495,16 +1497,16 @@ class ConsumerTransfer(GenericAPIView):
                 work_order_type_obj = get_work_order_type_by_key('TRANSFER')
 
                 if work_order_type_obj:
-                    utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
 
                 # create the transfer connection request
 
                 work_order_sub_type_connect_obj = get_work_order_sub_type_by_key('TRANSFER_CONNECT')
 
                 if work_order_sub_type_connect_obj:
-                    utility_work_order_sub_type_connect_obj = get_utility_work_order_sub_type_by_id(
-                        work_order_sub_type_connect_obj.id)
-
+                    utility_work_order_sub_type_connect_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id = work_order_sub_type_connect_obj.id)
+                   
+                    
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_connect_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
                         utility_work_order_type_id=utility_work_order_type_obj.id,
@@ -1552,8 +1554,7 @@ class ConsumerTransfer(GenericAPIView):
                 # making the transfer disconnection request
                 work_order_sub_type_disconnect_obj = get_work_order_sub_type_by_key('TRANSFER_DISCONNECT')
                 if work_order_sub_type_disconnect_obj:
-                    utility_work_order_sub_type_disconnect_obj = get_utility_work_order_sub_type_by_id(
-                        work_order_sub_type_disconnect_obj.id)
+                    utility_work_order_sub_type_disconnect_obj = UtilityWorkOrderSubType.objects.get(work_order_sub_type_id = work_order_sub_type_connect_obj.id)
                 if utility_product_obj and utility_work_order_type_obj and utility_work_order_sub_type_disconnect_obj:
                     work_order_master_obj = WorkOrderMaster.objects.get(
                         utility_work_order_type_id=utility_work_order_type_obj.id,
@@ -1582,3 +1583,73 @@ class ConsumerTransfer(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=res.status_code)
+            
+            
+# API Header
+# API end Point: api/v1/consumer/lifecyclelist/<uuid:id_string>
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer Life Cycle List
+# Usage: API will fetch required data for consumer life cycle list
+# Tables used: Life Cycle List, Consumer Master
+# Author: Chetan
+# Created on: 22/03/2021
+class ConsumerLifeCycleList(generics.ListAPIView):
+    try:
+        serializer_class = LifeCycleListSerializer
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    module = get_module_by_key("CX")
+                    sub_module = get_sub_module_by_key("CONSUMER")
+                    queryset = LifeCycle.objects.filter(object_id=consumer.id, module_id=module, sub_module_id=sub_module, is_active=True)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Lifecycles not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
+        
+
+# API Header
+# API end Point: api/v1/consumer/:id_string/payment-transactions/list
+# API verb: GET
+# Package: Basic
+# Modules: S&M, Consumer Care, Consumer Ops
+# Sub Module: Consumer
+# Interaction: Consumer Payment Transactions
+# Usage: API will fetch required data for Consumer payment transactions
+# Tables used: Payment Transaction
+# Author: Chetan
+# Created on: 24/03/2021
+class ConsumerPaymentTransactionList(generics.ListAPIView):
+    try:
+        serializer_class = PaymentTransactionListSerializer
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    payment = get_payment_by_id_string(self.kwargs['id_string'])
+                    queryset = PaymentTransaction.objects.filter(payment_id = payment.id)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Transactions not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Consumer Ops', sub_module='Registration')
+
+
+
+

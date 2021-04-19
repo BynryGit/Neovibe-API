@@ -18,7 +18,7 @@ from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from master.models import get_user_by_id_string
 from v1.tenant.models.tenant_sub_module import TenantSubModule as TenantSubModuleTbl, get_tenant_submodule_by_id_string
 from v1.tenant.serializers.tenant_sub_module import TenantSubModuleViewSerializer, TenantSubModuleSerializer
-
+from v1.commonapp.models.module import get_module_by_id_string
 
 # API Header
 # API end Point: api/v1/tenant/id_string/submodule/list
@@ -86,7 +86,7 @@ class TenantSubModuleListByModule(generics.ListAPIView):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
             if token:
                 if is_authorized(1,1,1,user_obj):
-                    tenant_module_obj = get_tenant_module_by_id_string(self.kwargs['id_string'])
+                    tenant_module_obj = get_module_by_id_string(self.kwargs['id_string'])
                     print("TENANT MODULE OBJ",tenant_module_obj.id)
                     if tenant_module_obj:
                         queryset = TenantSubModuleTbl.objects.filter(module_id=tenant_module_obj.id, is_active=True)
