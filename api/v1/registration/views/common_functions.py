@@ -96,6 +96,7 @@ def generate_registration_no(registration):
             format_obj.save()
         return registration_no
     except Exception as e:
+        print("===this is an exception=======",e)
         raise CustomAPIException("Registration no generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
