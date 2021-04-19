@@ -17,15 +17,15 @@ from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 from v1.billing.models.bill_schedule_log import ScheduleBillLog
 from v1.billing.models.bill_schedule import ScheduleBill
 from v1.billing.task.bill_consumer_detail import create_bill_consumers
+from datetime import datetime
+from croniter import croniter
 
-@task(name="schedule_bill_name", queue='schedule_bill')
 def schedule_bill_log():
     try:
         current_date = timezone.now()
         schedule_obj = ScheduleBill.objects.filter(Q(end_date__date__gte=current_date.date()) |
                                                Q(end_date__date=None),
                                                start_date__date__lte=current_date.date(), is_active=True)
-
         for schedule in schedule_obj:
             recurrence_obj = get_global_lookup_by_id(schedule.recurring_id)
             if recurrence_obj.key == 'no':
@@ -63,6 +63,7 @@ def schedule_bill_log():
                 else:
                     print("Cron Expression Not Match")
     except Exception as ex:
+        print(ex)
         logger().log(ex, 'MEDIUM', module='BX', sub_module='Billing')
 
 

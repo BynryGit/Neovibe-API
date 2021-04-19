@@ -102,6 +102,12 @@ CELERY_ROUTES = {
             'routing_key': 'admin_timeline_queue_Tasks',
     },
 
+    #Billing Asy Jobs
+    'v1.billing.task.bill_consumer_detail.create_bill_consumers': {
+        'queue': 'ImportConsumer',
+        'routing_key': 'ImportConsumer_Tasks'
+    },
+
 }
 
 app.conf.update(**CELERY_CONFIG)

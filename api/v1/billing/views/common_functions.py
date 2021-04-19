@@ -367,15 +367,18 @@ def get_rate(schedule_bill_obj):
                     consumer_meter_obj = get_consumer_service_contract_detail_by_premise_id(premise_obj.id)
                     contract_obj = get_utility_service_contract_master_by_id(consumer_meter_obj.service_contract_id)
             rate_obj = get_rate_by_category_sub_category_wise(schedule_bill_obj.utility,schedule_bill_obj.utility_product_id,contract_obj.consumer_category_id,contract_obj.consumer_sub_category_id)
-            for electricity_rate in rate_obj:
-                rate = {}
-                # rate['id_string'] = electricity_rate.id_string
-                rate['unit'] = electricity_rate.unit
-                rate['utility_id_string'] = electricity_rate.utility.id_string
-                rate['rate'] = electricity_rate.rate
-                rate['product']= get_utility_product_by_id(electricity_rate.utility_product_id).name
-                electricity.append(rate)
-            return electricity
+            if rate_obj:
+                for electricity_rate in rate_obj:
+                    rate = {}
+                    # rate['id_string'] = electricity_rate.id_string
+                    rate['unit'] = electricity_rate.unit
+                    rate['utility_id_string'] = electricity_rate.utility.id_string
+                    rate['rate'] = electricity_rate.rate
+                    rate['product']= get_utility_product_by_id(electricity_rate.utility_product_id).name
+                    electricity.append(rate)
+                return electricity
+            else:
+                print("Rate not available")
         else:
             return False
     except Exception as e:
@@ -521,13 +524,14 @@ def calculate_current_all_charges(data):
                         print('......1.emi_amount......',emi_amount)
                         # calculate current charge
                         current_charge = calculate_current_charges(privious_meter_reading,meter_reading.current_meter_reading,rate)
+
+                        offer_amt = float(current_charge * offer_charges/100)
+
                         # calculate outstanding amount
                         outstanding_amt = get_outstanding_amount(consumer,bill_obj)
                         # calculate opening balance
-                        if int(bill_obj.opening_balance) > 0:
-                            opening_balance = int(current_charge) + int(outstanding_amt['due_date_amount']) + int(fixed_charges)
-                        else:
-                            opening_balance = int(current_charge) + int(fixed_charges)
+
+                        opening_balance = float(outstanding_amt['previous_due_amount'])-float(outstanding_amt['paid_amount']) + int(current_charge) + int(fixed_charges) + int(emi_amount) - float(offer_amt)
 
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
@@ -538,7 +542,7 @@ def calculate_current_all_charges(data):
                             "amount_before_due_date" : int(opening_balance),
                             "amount_after_due_date" : int(opening_balance) + 50,
                             "fixed_charges": fixed_charges,
-                            "offer_charges" : float(offer_charges/100),
+                            "offer_charges" : float(offer_amt),
                             "paid_amount": float(outstanding_amt['paid_amount']),
                             "previous_due_amount" : float(outstanding_amt['previous_due_amount']),
                             "emi_amount":emi_amount
@@ -559,13 +563,14 @@ def calculate_current_all_charges(data):
                         # calculate fixed charge
                         fixed_charges = get_fixed_charges_by_id_meter_no(consumer.meter_no)
                         outstanding_amt = 0
+                        paid_amount = 0
                         # calculate offer charge
                         offer_charges = calculate_consumer_offer(service_contract_obj.id)
-
+                        offer_amt = float(current_charge * offer_charges/100)
                         # calculate emi amount
                         emi_amount = caluculate_consumer_emi(service_contract_obj.id)
                         print('......2.emi_amount......',emi_amount)
-                        opening_balance = int(current_charge) + int(fixed_charges)
+                        opening_balance = outstanding_amt - paid_amount + int(current_charge) + int(fixed_charges) + int(emi_amount) - float(offer_amt)
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
                             "current_meter_reading" : meter_reading.current_meter_reading,
@@ -575,8 +580,8 @@ def calculate_current_all_charges(data):
                             "amount_before_due_date" : int(opening_balance),
                             "amount_after_due_date" : int(opening_balance) + 50,
                             "fixed_charges": fixed_charges,
-                            "offer_charges" : float(offer_charges/100),
-                            "paid_amount": 0,
+                            "offer_charges" : float(offer_amt),
+                            "paid_amount": paid_amount,
                             "previous_due_amount":0,
                             "emi_amount":emi_amount
                         }
@@ -623,49 +628,51 @@ def calculate_current_all_charges(data):
 # geberate current charges function
 def calculate_current_charges(privious_meter_reading,current_meter_reading,rate):
     try:
-        print('........',privious_meter_reading,current_meter_reading,rate)
         unit_list = []
         rate_list = []
         finalunitrate = []
         tax_obj = get_tax_by_utility_id_string(rate[0]['utility_id_string'])
-        current_charge = (int(current_meter_reading) - int(privious_meter_reading))
+        consumption_units = (int(current_meter_reading) - int(privious_meter_reading))
         item = []
         if rate[0]['product'] == 'Gas':
             actual_rate = float(rate[0]['rate']) * float(tax_obj.tax_percentage)/100
-            final_current_charge = current_charge * actual_rate
+            final_current_charge = consumption_units * actual_rate
             return final_current_charge
         elif rate[0]['product'] == 'Power':
             for rate_val in rate:
                 unit_list.append(rate_val['unit'])
                 rate_list.append(rate_val['rate'])
-            # creating length of list (e.g. current_charge is 250 )
+
+            # creating length of list (e.g. consumption_units is 250 )
             for a in range(len(unit_list)):
-                if str(unit_list[a].split('-')[0]) != str('>') and int(current_charge) > int(unit_list[a].split('-')[0]):
+                if str(unit_list[a].split('-')[0]) != str('>') and int(consumption_units) > int(unit_list[a].split('-')[0]):
                     item.append(unit_list[a])
                 
-            if int(current_charge) > int(unit_list[len(unit_list)-1].split('-')[1]): # it check last element value
-                print('.....if rate.....>>>>')
-                for a in range(len(unit_list)): # if current_charge are greater than all unit range then loop iterate len wise
+            if int(consumption_units) > int(unit_list[len(unit_list)-1].split('-')[1]): # it check last element value
+                for a in range(len(unit_list)): # if consumption_units are greater than all unit range then loop iterate len wise
                     actual_rate = float(rate_list[a]) * float(tax_obj.tax_percentage)/100
-                    if int(current_charge) > int(unit_list[a].split('-')[1]) or int(current_charge) == int(unit_list[a].split('-')[1]):
+                    if int(consumption_units) > int(unit_list[a].split('-')[1]) or int(consumption_units) == int(unit_list[a].split('-')[1]):
                         if str(unit_list[a].split('-')[0]) != '>':                        
                             finalunitrate.append((int(unit_list[a].split('-')[1])-(int(unit_list[a].split('-')[0])-1))* actual_rate)
                         else:
-                            finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * actual_rate)
+                            finalunitrate.append((int(consumption_units) - int(unit_list[a].split('-')[1])) * actual_rate)
                     else:
-                        finalunitrate.append((int(unit_list[a].split('-')[1])-int(current_charge))* actual_rate) # not needed
-                print('.....if rate.....>>>>',finalunitrate)
+                        finalunitrate.append((int(unit_list[a].split('-')[1])-int(consumption_units))* actual_rate) # not needed
             else:
                 for a in range(len(item)):
                     actual_rate = float(rate_list[a]) * float(tax_obj.tax_percentage)/100
-                    if int(current_charge) > int(unit_list[a].split('-')[1]) or int(current_charge) == int(unit_list[a].split('-')[1]):
-                        if str(unit_list[a].split('-')[0]) != '>':                        
-                            finalunitrate.append((int(unit_list[a].split('-')[1])-(int(unit_list[a].split('-')[0])-1))* actual_rate)
+                    if int(consumption_units) > int(item[a].split('-')[1]) or int(consumption_units) == int(item[a].split('-')[1]):
+                        if str(item[a].split('-')[0]) != '>':    
+                            finalunitrate.append((int(item[a].split('-')[1])-(int(item[a].split('-')[0])-1))* actual_rate)
                         else:
-                            finalunitrate.append((int(current_charge) - int(unit_list[a].split('-')[1])) * actual_rate)
+                            finalunitrate.append((int(consumption_units) - int(item[a].split('-')[1])) * actual_rate)
                     else:
-                        finalunitrate.append((int(current_charge) - (int(unit_list[a-1].split('-')[1])))* actual_rate)
-                print('.......else..rate.........',finalunitrate)
+                        print(int(item[a-1].split('-')[1]),int(item[a].split('-')[0])-1)
+
+                        if int(item[a-1].split('-')[1]) > int(consumption_units):
+                            finalunitrate.append(int(consumption_units) * actual_rate)
+                        else:
+                            finalunitrate.append((int(item[a].split('-')[1]) - int(consumption_units)) * actual_rate)
 
             return sum(finalunitrate)
     except Exception as ex:
