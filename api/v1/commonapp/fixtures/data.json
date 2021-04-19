@@ -2544,6 +2544,18 @@
         "is_active": "True"
       }
     },
+    {
+      "pk": "1",
+      "model": "master.MasterUser",
+      "fields": {
+        "tenant": 1,
+        "email": "testing@bynry.com",
+        "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+        "is_staff": "True",
+        "is_active": "True",
+        "is_superuser": "True"
+      }
+    },
    {
       "pk": "1",
       "model": "master.User",
@@ -2559,6 +2571,18 @@
     },
     {
       "pk": "2",
+      "model": "master.MasterUser",
+      "fields": {
+        "tenant": 1,
+        "email": "mngl@bynry.com",
+        "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+        "is_staff": "True",
+        "is_active": "True",
+        "is_superuser": "True"
+      }
+    },
+    {
+      "pk": "2",
       "model": "master.User",
       "fields": {
         "tenant": 1,
@@ -2569,6 +2593,18 @@
         "is_staff": "True",
         "is_active": "True",
         "status_id":1,
+        "is_superuser": "True"
+      }
+    },
+    {
+      "pk": "3",
+      "model": "master.MasterUser",
+      "fields": {
+        "tenant": 2,
+        "email": "bgcl@bynry.com",
+        "password": "pbkdf2_sha256$180000$uzNpPbxCk89A$RVkZS3CagGqM2rjACQprmRJE/Ok769BaaC0rWKdcFWw=",
+        "is_staff": "True",
+        "is_active": "True",
         "is_superuser": "True"
       }
     },

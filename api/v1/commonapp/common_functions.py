@@ -41,7 +41,10 @@ from v1.commonapp.models.notification_type import get_notification_type_by_id_st
 from v1.commonapp.models.integration_type import get_integration_type_by_id_string
 from v1.commonapp.models.integration_subtype import get_integration_sub_type_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
-
+from v1.consumer.models.consumer_token import get_consumer_token_by_token,check_token_exists_for_consumer
+from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.commonapp.views.settings_reader import SettingReader
+setting_reader = SettingReader()
 secret_reader = SecretReader()
 
 
@@ -57,18 +60,45 @@ def get_user_from_token(token):
     return decoded_token['user_id_string']
 
 
+# def is_token_valid(token):
+#     try:
+#         decoded_token = get_payload(token)
+#         user_obj = get_user_by_id_string(decoded_token['user_id_string'])
+#         if check_token_exists_for_user(token, user_obj.id):
+#             return True, user_obj.id_string
+#         else:
+#             return False
+#     except Exception as e:
+#         logger().log(e, 'ERROR', user='test', name='test')
+#         return False
+
+
 def is_token_valid(token):
     try:
         decoded_token = get_payload(token)
-        user_obj = get_user_by_id_string(decoded_token['user_id_string'])
-        if check_token_exists_for_user(token, user_obj.id):
-            return True, user_obj.id_string
+        if decoded_token:
+            if decoded_token['type'] == setting_reader.get_user():
+                user_obj = get_user_by_id_string(decoded_token['user_id_string'])
+                if check_token_exists_for_user(token, user_obj.id):
+                    return True, user_obj.id_string
+                else:
+                    return False
+            elif decoded_token['type'] == setting_reader.get_consumer_user():
+                print("------aaaaaaaaaaaa--------",decoded_token['type'])
+                consumer_obj = get_consumer_by_id_string(decoded_token['user_id_string'])
+                print("------cccccccccccc--------",consumer_obj)
+                if check_token_exists_for_consumer(token, consumer_obj.id):
+                    return True, consumer_obj.id_string
+                else:
+                    return False
         else:
-            return False
+            return Response({
+                STATE: ERROR,
+                RESULTS: INVALID_TOKEN,
+            }, status=status.HTTP_401_UNAUTHORIZED)
     except Exception as e:
         logger().log(e, 'ERROR', user='test', name='test')
         return False
-
 
 def is_authorized(module_id, sub_module_id, privilege_id, user_id):
     return True

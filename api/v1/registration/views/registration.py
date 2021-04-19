@@ -590,6 +590,7 @@ class RegistrationApprove(GenericAPIView):
                             consumer_service_contract_serializer.is_valid(raise_exception=False)
                             contract_detail_obj = consumer_service_contract_serializer.create(
                                 consumer_service_contract_serializer.validated_data, consumer, user)
+                            contract_detail_obj.is_active=False
                             contract_detail_obj.save()
                             product_id=service_obj['product_id']
                             print("=PROOOOOO===",product_id)

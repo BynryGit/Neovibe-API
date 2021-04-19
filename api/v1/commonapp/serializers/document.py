@@ -72,4 +72,4 @@ class DocumentListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DocumentTbl
-        fields = ('document_name', 'id_string', 'document_type', 'document_size', 'is_active', 'created_by', 'created_date')
+        fields = ('document_name', 'id_string', 'document_type', 'document_size', 'is_active', 'created_by', 'created_date', 'document_generated_name')

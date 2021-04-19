@@ -17,6 +17,10 @@ from v1.commonapp.views.secretcache import SecretManager
 env = environ.Env()
 # reading .env file
 environ.Env.read_env()
+USER = "U"
+CONSUMER_USER = "C"
+MODULE_LIST = ['CONSUMER_CARE','CX']
+SUB_MODULE_LIST = ['CONSUMERS','CONSUMER_CARE_REGISTRATION','CX_SERVICE']
 smart360_env = ''
 secret = ""
 
@@ -100,7 +104,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'api.urls'
 
-AUTH_USER_MODEL = 'master.User'
+AUTH_USER_MODEL = 'master.MasterUser'
 
 TEMPLATES = [
     {
@@ -254,6 +258,10 @@ EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env'] + "_email_ho
 TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env'] + "_twilio_account_id")
 TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env'] + "_twilio_auth_token")
 
+AUTHENTICATION_BACKENDS = ( 
+                            'master.backends.AuthBackend',
+                            'django.contrib.auth.backends.ModelBackend',
+                        )
 
 AWS_ACCESS_KEY = 'AKIARUU5RUAA6JXDZZGR'
 AWS_SECRET_KEY = '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'
