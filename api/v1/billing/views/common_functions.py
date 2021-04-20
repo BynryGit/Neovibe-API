@@ -343,6 +343,8 @@ def get_reading_count(schedule_obj):
                     meter_reading_obj = MeterReading.objects.filter(created_date__date=schedule.start_date.date(),meter_no__in=meters_no_list,is_active=True).count()
                 elif frequency.key == 'monthly':
                     meter_reading_obj = MeterReading.objects.filter(created_date__month=schedule.start_date.month,meter_no__in=meters_no_list,is_active=True).count()
+                else:
+                    meter_reading_obj = 0
                 return meter_reading_obj
             else:
                 return '----'
@@ -609,6 +611,8 @@ def calculate_current_all_charges(data):
                                 is_active = True                        
                             )
                             bill.save()
+                            bill.invoice_no = generate_invoice_number(bill)
+                            bill.save()
                             #Generate invoice start
                             replace_content = generate_formate(bill.id_string)
                             html_template = get_rendering_invoice_template_by_utility_id_string(bill.utility.id_string)
@@ -768,7 +772,6 @@ def generate_formate(bill_id_string):
         rateval = []
         bill = get_bill_by_id_string(bill_id_string)
         if bill:
-            invoice_no = generate_invoice_number(bill)
             consumer_contract = get_consumer_service_contract_detail_by_id(bill.consumer_service_contract_detail_id)
             if consumer_contract:
                 consumer_master = get_consumer_by_consumer_no(consumer_contract.consumer_no)
@@ -785,11 +788,11 @@ def generate_formate(bill_id_string):
             "{header.phone_no}": str(bill.utility.phone_no),
             "{bill.consumer_no}" : str(consumer_master.consumer_no),
             "{bill.mobile}" : str(consumer_master.phone_mobile),
-            "{bill.consumer_name}" : str(consumer_master.email_id),
+            "{bill.consumer_name}" : str(consumer_master.email),
             "{bill.address}" : str(consumer_master.billing_address_line_1),
             "{bill.city}" : str(city.name),
             "{bill.meter_no}": str(meter_obj.meter_no),
-            "{bill.invoice_no}":str(invoice_no),
+            "{bill.invoice_no}":str(bill.invoice_no),
             "{bill.invoice_date}":str(datetime.now().date()),
             "{bill.due_date}":str(bill.bill_date.date()),
             "{bill.meter_status}":meter_obj.get_meter_status_display(),

@@ -79,6 +79,7 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     opening_balance = models.CharField(max_length=200, blank=False, null=False)
     current_charges = models.CharField(max_length=200, blank=False, null=False)
     bill_frequency_id = models.BigIntegerField(null=True, blank=True)
+    invoice_no = models.CharField(max_length=200, null=True, blank=True)
     invoice_template = models.TextField(max_length=20000, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     is_adjusted = models.BooleanField(default=False)
