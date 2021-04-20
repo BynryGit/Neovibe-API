@@ -533,7 +533,7 @@ def calculate_current_all_charges(data):
                         outstanding_amt = get_outstanding_amount(consumer,bill_obj)
                         # calculate opening balance
 
-                        opening_balance = float(outstanding_amt['previous_due_amount'])-float(outstanding_amt['paid_amount']) + int(current_charge) + int(fixed_charges) + int(emi_amount) - float(offer_amt)
+                        opening_balance = float(outstanding_amt['due_date_amount'])-float(outstanding_amt['paid_amount']) + int(current_charge) + int(fixed_charges) + int(emi_amount) - float(offer_amt)
 
                         meter_data = {
                             "privious_meter_reading" : privious_meter_reading,
