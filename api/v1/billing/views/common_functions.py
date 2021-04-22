@@ -789,7 +789,7 @@ def generate_formate(bill_id_string):
             "{bill.consumer_no}" : str(consumer_master.consumer_no),
             "{bill.mobile}" : str(consumer_master.phone_mobile),
             "{bill.consumer_name}" : str(consumer_master.email),
-            "{bill.address}" : str(consumer_master.billing_address_line_1),
+            "{bill.consumer_address}" : str(consumer_master.billing_address_line_1),
             "{bill.city}" : str(city.name),
             "{bill.meter_no}": str(meter_obj.meter_no),
             "{bill.invoice_no}":str(bill.invoice_no),
@@ -813,6 +813,7 @@ def generate_formate(bill_id_string):
             "{bill.emi_amt}" : str(bill.meter_reading['emi_amount']),
             "{bill.rate_unit}":str(unitval),
             "{bill.rate}":str(rateval),
+            "{bill.bill_date}" : str(bill.bill_date),
             "{bill.vat_percent}":str(bill.rate_details['tax']),
             "{bill.offer}":str(bill.meter_reading['offer_charges']),
         }   
