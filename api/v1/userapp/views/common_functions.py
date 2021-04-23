@@ -25,7 +25,7 @@ from v1.userapp.models.user_type import get_user_type_by_id_string
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
 from v1.commonapp.models.sub_module import get_sub_module_by_key
-
+from v1.commonapp.models.module import get_module_by_key
 
 # For getting ID's from id_string in role API request
 def set_role_validated_data(validated_data):
@@ -408,9 +408,8 @@ def set_user_sub_type_validated_data(validated_data):
 def generate_user_id(user):
     try:
         format_obj = UtilityServiceNumberFormat.objects.get(tenant=user.tenant,
-                                                            sub_module_id=get_sub_module_by_key("USER"))
+                                                            module_id=get_module_by_key("USER"))
 
-        print("PRINT",get_sub_module_by_key("ROLE"))
         if format_obj.is_prefix == True:
             user_id = format_obj.prefix + str(format_obj.currentno + 1)
             format_obj.currentno = format_obj.currentno + 1

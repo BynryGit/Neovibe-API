@@ -132,7 +132,7 @@ class ResourceList(generics.ListAPIView):
                     if appointment_obj:
                         work_order_obj = get_work_order_master_by_id(appointment_obj.work_order_master_id)
                         for skill_obj in work_order_obj.json_obj['skill_details']:
-                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])
+                            skill_id = get_skill_by_id_string(skill_obj['id_string'])
                             skill_id_list.append(skill_id.id)
 
                     user_utility_objs = UserUtility.objects.filter(utility=utility, is_active=True)
@@ -210,7 +210,7 @@ class BulkAssignResourceList(generics.ListAPIView):
 
                     for work_order in workOrderList:
                         for skill_obj in work_order.json_obj['skill_details']:
-                            skill_id = get_skill_by_id_string(skill_obj['skill_obj']['id_string'])
+                            skill_id = get_skill_by_id_string(skill_obj['id_string'])
                             skill_id_list.append(skill_id.id)
 
                     user_utility_objs = UserUtility.objects.filter(utility=utility, is_active=True)

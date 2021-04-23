@@ -23,6 +23,10 @@ from django.contrib.postgres.fields import JSONField
 import fsm
 from django.utils import timezone # importing package for datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from PIL import Image, ImageDraw
 
 # *********** BILL CONSTANTS **************
 BILL_DICT = {
@@ -90,11 +94,26 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
+    link = models.CharField(max_length=200,null=True, blank=True)
+    qr_code = models.ImageField(upload_to='https://smart360-bucket.s3.amazonaws.com/MRBD/', null=True, blank=True)
+
+    
     def __str__(self):
         return str(self.id_string)+"-"+str(self.consumer_service_contract_detail_id)
 
     def __unicode__(self):
         return self.id_string
+
+    def save(self, *args, **kwargs):
+        qrcode_img = qrcode.make(self.link)
+        canvas = Image.new('RGB', (350, 350), 'white')
+        canvas.paste(qrcode_img)
+        fname = f'{self.consumer_no}.png'
+        buffer = BytesIO()
+        canvas.save(buffer,'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+        canvas.close()
+        super().save(*args, **kwargs)
 
     
     # Function for finite state machine state change

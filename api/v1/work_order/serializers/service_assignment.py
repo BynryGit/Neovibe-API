@@ -75,7 +75,6 @@ class ServiceAssignmentViewSerializer(serializers.ModelSerializer):
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     sa_id = ServiceAppointmentViewSerializer(many=False, required=True, source='get_service_appointment')
     user_id = GetUserSerializer(many=False, required=True, source='get_user')
-    status_id = ServiceAppointmentStatusListSerializer(many=False, required=True, source='get_status')
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
 

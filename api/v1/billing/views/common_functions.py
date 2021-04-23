@@ -608,6 +608,7 @@ def calculate_current_all_charges(data):
                                 bill_period = bill_period_val,
                                 opening_balance = opening_balance,
                                 current_charges = current_charge,
+                                link = "https://youtu.be/JTFGllcJ29I",
                                 is_active = True                        
                             )
                             bill.save()
@@ -780,6 +781,7 @@ def generate_formate(bill_id_string):
             for rate in bill.rate_details['rate']:
                 unitval.append(rate['unit'])
                 rateval.append(float((rate['rate'])))
+        print('========',bill.qr_code)
         data = {
             "{header.utility_name}" : bill.utility.name,
             "{header.office_address}" : bill.utility.address,
@@ -813,6 +815,7 @@ def generate_formate(bill_id_string):
             "{bill.emi_amt}" : str(bill.meter_reading['emi_amount']),
             "{bill.rate_unit}":str(unitval),
             "{bill.rate}":str(rateval),
+            "{bill.qr_code}":str(bill.qr_code),
             "{bill.bill_date}" : str(bill.bill_date),
             "{bill.vat_percent}":str(bill.rate_details['tax']),
             "{bill.offer}":str(bill.meter_reading['offer_charges']),
