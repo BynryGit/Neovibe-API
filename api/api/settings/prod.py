@@ -217,20 +217,19 @@ STATIC_URL = '/static/'
 #     },
 # }
 
-# CELERY STUFF
-BROKER_URL = 'redis://localhost:6379'  # Todo redis broker is use for message transform
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json', 'application/x-python-serialize']
-CELERY_TASK_SERIALIZER = 'pickle'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Kolkata'
-
 # Cronjob configuration
 CRONJOBS = [
-    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
-    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
+    # Todo Add File Path To Save Log File
+    # Cron Use For MDM Module Start
+    ('0 22 * * *', 'v1.meter_data_management.task.schedule_log.schedule_log',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/schedule_log.log'),
+    ('*/30 * * * *', 'v1.meter_data_management.task.validation_assignment.validation_assignment',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/validation_assignment.log'),
+    ('0 23 * * *', 'v1.meter_data_management.task.smart_meter.smart_meter',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/smart_meter.log'),
+    ('0 23 * * *', 'v1.meter_data_management.task.spot_bill.spot_bill',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/spot_bill.log'),
+    # Cron Use For MDM Module End
 ]
 
 # Amazon s3 Configuration
