@@ -32,6 +32,7 @@ CELERY_CONFIG = {
     "CELERY_ENABLE_REMOTE_CONTROL": False,
 }
 
+# Todo credentials fetch from .env file
 AWS_ACCESS_KEY_ID = safequote('AKIARUU5RUAA6JXDZZGR')
 AWS_SECRET_ACCESS_KEY = safequote('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')
 
@@ -54,17 +55,11 @@ CELERY_QUEUES = (
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
     Queue('Dispatch_I', routing_key='Dispatch_I_Tasks'),
     Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
-    Queue('user_timeline_queue', routing_key='user_timeline_queue_Tasks'),
-    Queue('admin_timeline_queue', routing_key='admin_timeline_queue_Tasks'),
-    Queue('schedule_bill', routing_key='schedule_bill_task'),
+    Queue('Timeline_Queue', routing_key='Timeline_Queue_Tasks'),
 )
 
 CELERY_ROUTES = {
-    'v1.billing.task.bill_schedule_log.schedule_bill_log': {
-        'queue': 'schedule_bill',
-        'routing_key': 'schedule_bill_task'
-    },
-
+    # Task Use For MDM Module Start
     'v1.meter_data_management.task.consumer_detail.create_consumer': {
         'queue': 'ImportConsumer',
         'routing_key': 'ImportConsumer_Tasks'
@@ -93,21 +88,28 @@ CELERY_ROUTES = {
             'queue': 'Dispatch_II',
             'routing_key': 'Dispatch_II_Tasks',
     },
-    'v1.userapp.views.task.save_user_timeline': {
-            'queue': 'user_timeline_queue',
-            'routing_key': 'user_timeline_queue_Tasks',
-    },
-    'v1.commonapp.views.task.save_admin_timeline': {
-            'queue': 'admin_timeline_queue',
-            'routing_key': 'admin_timeline_queue_Tasks',
-    },
+    # Task Use For MDM Module End
 
-    #Billing Asy Jobs
+    # Task Use For User Module Start
+    'v1.userapp.views.task.save_user_timeline': {
+            'queue': 'Timeline_Queue',
+            'routing_key': 'Timeline_Queue_Tasks',
+    },
+    # Task Use For User Module End
+
+    # Task Use For CommonApp Module Start
+    'v1.commonapp.views.task.save_admin_timeline': {
+            'queue': 'Timeline_Queue',
+            'routing_key': 'Timeline_Queue_Tasks',
+    },
+    # Task Use For CommonApp Module End
+
+    # Task Use For Billing Module Start
     'v1.billing.task.bill_consumer_detail.create_bill_consumers': {
         'queue': 'ImportConsumer',
         'routing_key': 'ImportConsumer_Tasks'
     },
-
+    # Task Use For Billing Module End
 }
 
 app.conf.update(**CELERY_CONFIG)
