@@ -28,4 +28,6 @@ pycurl==7.43.0
 croniter==1.0.9
 bs4==0.0.1
 beautifulsoup4==4.9.3
+Pillow==8.2.0
+qrcode==6.1
 
