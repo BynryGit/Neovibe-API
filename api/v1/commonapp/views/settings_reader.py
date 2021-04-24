@@ -32,3 +32,31 @@ class SettingReader:
         except:
             pass
 
+    @staticmethod
+    def get_user():
+        try:
+            return settings.USER
+        except:
+            pass
+
+    @staticmethod
+    def get_consumer_user():
+        try:
+            return settings.CONSUMER_USER
+        except:
+            pass
+
+    @staticmethod
+    def get_module_list():
+        try:
+            return settings.MODULE_LIST
+        except:
+            pass
+
+    @staticmethod
+    def get_sub_module_list():
+        try:
+            return settings.SUB_MODULE_LIST
+        except:
+            pass
+

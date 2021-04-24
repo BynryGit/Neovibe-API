@@ -21,7 +21,7 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_filter_backend import CustomFilter
 import os
-
+from v1.consumer.models.consumer_master import get_consumer_by_id_string
 setting_reader = SettingReader()
 
 from boto.s3.connection import S3Connection
@@ -57,6 +57,13 @@ class DocumentList(generics.ListAPIView):
                     queryset = DocumentModel.objects.filter(utility=utility, is_active=True,
                                                             document_generated_name=latest_record)
                     print("LATEST", latest_record)
+
+                    queryset = DocumentModel.objects.filter(utility=utility, is_active=True)
+                    if 'consumer_id' in self.request.query_params:
+                        id = get_consumer_by_id_string(self.request.query_params['consumer_id']).id
+                        module_obj = get_module_by_key('CX')
+                        sub_module_obj = get_sub_module_by_key('CONSUMER')
+                        queryset = queryset.filter(object_id=id, module_id=module_obj, sub_module_id=sub_module_obj)
                     if queryset:
                         return queryset
                     else:

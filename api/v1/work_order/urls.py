@@ -26,6 +26,7 @@ urlpatterns = [
     path('scheduled-appointment',ScheduledAppointment.as_view(), name="add_scheduled_appointment"),
     path('service-appointment/<uuid:id_string>/life-cycle',ServiceAppointmentLifeCycleList.as_view(),name="service_life_cycle"),
     # path('service-appointment/<uuid:id_string>/disconnect-list',ServiceAppointmentConsumerDisconnectList.as_view(), name="service_disconnect_list"),
+    path('service-appointment/<uuid:id_string>/list',ServiceAppointmentList.as_view(),name='service_appointment_list'),
     path('service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list'),
     path('service-appointment/<uuid:id_string>/reject',ServiceAppointmentReject.as_view(),name='service_appointment_reject'),
     path('service-appointment/<uuid:id_string>/hold',ServiceAppointmentHold.as_view(),name='service_appointment_hold'),

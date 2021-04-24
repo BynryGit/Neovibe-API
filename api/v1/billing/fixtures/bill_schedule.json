@@ -71,5 +71,97 @@
             "bill_cycle_name":"Cycle C",
 			"is_active": "True"
 		}
+	},
+	{
+		"pk": "1",
+		"model": "billing.Rate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_product_id": 1,
+			"consumer_category_id":1,
+			"consumer_subcategory_id":1,
+            "unit" : "1",
+            "rate": "7",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "billing.Rate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_product_id": 2,
+			"consumer_category_id":1,
+			"consumer_subcategory_id":1,
+            "unit" : "1-100",
+            "rate": "5",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "3",
+		"model": "billing.Rate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_product_id": 2,
+			"consumer_category_id":1,
+			"consumer_subcategory_id":1,
+            "unit" : "101-300",
+            "rate": "10",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "4",
+		"model": "billing.Rate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_product_id": 2,
+			"consumer_category_id":1,
+			"consumer_subcategory_id":1,
+            "unit" : "301-500",
+            "rate": "15",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "5",
+		"model": "billing.Rate",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"utility_product_id": 2,
+			"consumer_category_id":1,
+			"consumer_subcategory_id":1,
+            "unit" : ">-500",
+            "rate": "20",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "1",
+		"model": "billing.Tax",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"tax_name": "VAT",
+			"tax_percentage":"10",
+			"is_active": "True"
+		}
+	},
+	{
+		"pk": "2",
+		"model": "billing.Tax",
+		"fields": {
+			"tenant": 1,
+			"utility": 1,
+			"tax_name": "TAX",
+			"tax_percentage":"18",
+			"is_active": "True"
+		}
 	}
 ]

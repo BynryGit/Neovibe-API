@@ -87,6 +87,7 @@ def get_rate_by_id(id):
 
 def get_rate_by_category_sub_category_wise(utility,utility_product_id,consumer_category_id,consumer_sub_category_id):
     try:
+        print('======',utility,utility_product_id,consumer_category_id,consumer_sub_category_id)
         return Rate.objects.filter(utility=utility,utility_product_id=utility_product_id,consumer_category_id=consumer_category_id,consumer_subcategory_id=consumer_sub_category_id,is_active=True).order_by('id')
     except:
         return False

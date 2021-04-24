@@ -17,6 +17,10 @@ from v1.commonapp.views.secretcache import SecretManager
 env = environ.Env()
 # reading .env file
 environ.Env.read_env()
+USER = "U"
+CONSUMER_USER = "C"
+MODULE_LIST = ['CONSUMER_CARE','CX']
+SUB_MODULE_LIST = ['CONSUMERS','CONSUMER_CARE_REGISTRATION','CX_SERVICE']
 smart360_env = ''
 secret = ""
 
@@ -100,7 +104,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'api.urls'
 
-AUTH_USER_MODEL = 'master.User'
+AUTH_USER_MODEL = 'master.MasterUser'
 
 TEMPLATES = [
     {
@@ -213,20 +217,19 @@ STATIC_URL = '/static/'
 #     },
 # }
 
-# CELERY STUFF
-BROKER_URL = 'redis://localhost:6379'  # Todo redis broker is use for message transform
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json', 'application/x-python-serialize']
-CELERY_TASK_SERIALIZER = 'pickle'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Kolkata'
-
 # Cronjob configuration
 CRONJOBS = [
-    ('*/1 * * * *', 'v1.meter_data_management.task.validation_assignment.assign_validation',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/validation.log'),
-    ('0 */30 * * *', 'meter_data_management.task.bill_distribution.import_bill_distribution_data',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/bill_distribution.log')
+    # Todo Add File Path To Save Log File
+    # Cron Use For MDM Module Start
+    ('0 22 * * *', 'v1.meter_data_management.task.schedule_log.schedule_log',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/schedule_log.log'),
+    ('*/30 * * * *', 'v1.meter_data_management.task.validation_assignment.validation_assignment',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/validation_assignment.log'),
+    ('0 23 * * *', 'v1.meter_data_management.task.smart_meter.smart_meter',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/smart_meter.log'),
+    ('0 23 * * *', 'v1.meter_data_management.task.spot_bill.spot_bill',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/spot_bill.log'),
+    # Cron Use For MDM Module End
 ]
 
 # Amazon s3 Configuration
@@ -254,6 +257,10 @@ EMAIL_HOST_PASSWORD = get_secret_manager(os.environ['smart360_env'] + "_email_ho
 TWILIO_ACCOUNT_SID = get_secret_manager(os.environ['smart360_env'] + "_twilio_account_id")
 TWILIO_AUTH_TOKEN = get_secret_manager(os.environ['smart360_env'] + "_twilio_auth_token")
 
+AUTHENTICATION_BACKENDS = ( 
+                            'master.backends.AuthBackend',
+                            'django.contrib.auth.backends.ModelBackend',
+                        )
 
 AWS_ACCESS_KEY = 'AKIARUU5RUAA6JXDZZGR'
 AWS_SECRET_KEY = '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'

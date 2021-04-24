@@ -28,7 +28,7 @@ class InvoiceTemplate(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     template_sections_json = JSONField(blank=True, null=True)
-    template = models.TextField(max_length=20000, null=True, blank=True)
+    template = models.TextField(max_length=200000, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -46,7 +46,7 @@ class InvoiceTemplate(models.Model):
 
 def get_rendering_invoice_template_by_utility_id_string(id_string):
     try:
-        return InvoiceTemplate.objects.get(utility__id_string = id_string)
+        return InvoiceTemplate.objects.get(utility__id_string = id_string, is_active=True)
     except:
         return False
 

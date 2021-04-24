@@ -6,6 +6,7 @@ from v1.billing.views.bill_schedule_log import ScheduleBillLogByBillSchedule
 from v1.billing.views.rate import RateList
 from v1.billing.views.bill import GetAllChargesDetails, SaveBillCharges, GetBillConsumerDetails
 from v1.billing.views.invoice_template import InvoiceTemplate
+# from v1.billing.tests import QRCODE
 
 urlpatterns = [
     path('utility/<uuid:id_string>/bill-cycle/list', BillCycleList.as_view(), name="BillCycleList"),
@@ -20,5 +21,6 @@ urlpatterns = [
     path('save-run-bill/',SaveBillCharges.as_view(),name="SaveBillCharges"),
     path('schedule/<uuid:schedule_bill_id_string>/consumer/list',GetBillConsumerDetails.as_view(), name="GetBillConsumerDetails"),
     path('<uuid:schedule_log_id_string>/consumer/<int:consumer_no>/generate-invoice', InvoiceTemplate.as_view()),
+    # path('qr-code', QRCODE.as_view())
 
 ]

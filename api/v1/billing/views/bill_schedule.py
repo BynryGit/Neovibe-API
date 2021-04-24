@@ -115,6 +115,7 @@ class ScheduleBill(GenericAPIView):
                     RESULT: schedule_bill_serializer.errors,
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
+            print('.......',ex)
             logger().log(ex, 'MEDIUM', module='BILLING', sub_module='Bill')
             return Response({
                 STATE: EXCEPTION,

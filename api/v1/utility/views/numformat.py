@@ -2,7 +2,8 @@ __author__ = "aki"
 
 import traceback
 from api.constants import *
-from v1.utility.serializers.numformat import UtilityServiceNumberFormatListSerializer, UtilityServiceNumberFormatSerializer, UtilityServiceNumberFormatViewSerializer
+from v1.utility.serializers.numformat import UtilityServiceNumberFormatListSerializer, \
+    UtilityServiceNumberFormatSerializer, UtilityServiceNumberFormatViewSerializer
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat as UtilityNumberFormatTbl
 from rest_framework import generics, status
 from rest_framework import generics, status
@@ -21,8 +22,8 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from django.db import transaction
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from v1.utility.models.utility_services_number_format import get_utility_service_number_format_by_id_string, UtilityServiceNumberFormat
-
+from v1.utility.models.utility_services_number_format import get_utility_service_number_format_by_id_string, \
+    UtilityServiceNumberFormat
 
 
 # API Header
@@ -49,7 +50,7 @@ class UtilityNumformatDetail(GenericAPIView):
                 if serializer.is_valid(raise_exception=False):
                     numformat_obj = serializer.update(numformat_obj, serializer.validated_data, user)
                     view_serializer = UtilityServiceNumberFormatViewSerializer(instance=numformat_obj,
-                                                          context={'request': request})
+                                                                               context={'request': request})
                     return Response({
                         STATE: SUCCESS,
                         RESULTS: view_serializer.data,
@@ -70,7 +71,6 @@ class UtilityNumformatDetail(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULTS: str(e),
             }, status=res.status_code)
-    
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
@@ -141,7 +141,8 @@ class UtilityNumFormat(GenericAPIView):
             serializer = UtilityServiceNumberFormatSerializer(data=request.data)
             if serializer.is_valid(raise_exception=False):
                 numformat_obj = serializer.create(serializer.validated_data, user)
-                view_serializer = UtilityServiceNumberFormatViewSerializer(instance=numformat_obj, context={'request': request})
+                view_serializer = UtilityServiceNumberFormatViewSerializer(instance=numformat_obj,
+                                                                           context={'request': request})
                 return Response({
                     STATE: SUCCESS,
                     RESULTS: view_serializer.data,
