@@ -61,5 +61,3 @@ urlpatterns = [
     path('api/v1/work-order/', include(work_order_urls)),
     path('api/v1/service/', include(service_urls)),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
