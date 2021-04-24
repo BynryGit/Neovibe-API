@@ -24,6 +24,7 @@ from v1.commonapp.models.module import get_module_by_key
 from v1.commonapp.models.notes import Notes
 from django.db.models import Q
 from v1.commonapp.views.custom_filter_backend import CustomFilter
+from v1.work_order.views.tasks import save_service_appointment_timeline
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -87,10 +88,10 @@ class ServiceAppointment(GenericAPIView):
                 user = get_user_by_id_string(user_id_string)
                 with transaction.atomic():
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
-                    # # Timeline code start
-                    # transaction.on_commit(
-                    #     lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
-                        # Timeline code end
+                    # Timeline code start                    
+                    transaction.on_commit(
+                        lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
+                    # Timeline code end
                     view_serializer = ServiceAppointmentViewSerializer(instance=appointment_obj, context={'request': request})
                     return Response({
                         STATE: SUCCESS,
@@ -117,7 +118,7 @@ class ServiceAppointment(GenericAPIView):
 # Modules: User
 # Sub Module: Service Appointment
 # Interaction: View Service Appointment, Edit Service Appointment
-# Usage: View, Edit Service Appointment
+# Usage: View, Edit Service Appointment/ this put api also used for mobile side
 # Tables used: ServiceAppointment
 # Author: Priyanka
 # Created on: 05/01/2021
@@ -216,13 +217,14 @@ class ServiceAppointmentDetail(GenericAPIView):
 class ServiceAppointmentLifeCycleList(generics.ListAPIView):
     try:
         serializer_class = LifeCycleListSerializer
-
+        pagination_class = StandardResultsSetPagination
+        
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     service_appointment = get_service_appointment_by_id_string(self.kwargs['id_string'])
-                    module = get_module_by_key("WORK_ORDER")
+                    module = get_module_by_key("WX")
                     sub_module = get_sub_module_by_key("DISPATCHER")
                     queryset = LifeCycle.objects.filter(object_id=service_appointment.id, module_id=module, sub_module_id=sub_module, is_active=True)
                     if queryset:

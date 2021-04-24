@@ -49,31 +49,31 @@ def schedule_appointment_assign():
 schedule_appointment_assign()
 
 
-
-@task(name="service_appointment_timeline")
+@task(name="Timeline_Queue_Tasks", queue='Timeline_Queue')
 def save_service_appointment_timeline(obj, title, text, state, user):
     try:
-        print('************')
-        module = get_module_by_key("WORK_ORDER")
+        module = get_module_by_key("WX")
         sub_module = get_sub_module_by_key("DISPATCHER")
-        print('*****module*******',module)
-        LifeCycle(
-            tenant=obj.tenant,
-            utility=obj.utility,
-            module_id=module.id,
-            sub_module_id=sub_module.id,
-            object_id=obj.id,
-            title=title,
-            lifecycle_text=text,
-            state=state,
-            log_date=datetime.now(),
-            is_active=True,
-            created_by=user.id,
-            updated_by=user.id,
-            created_date=datetime.now(),
-            updated_date=datetime.now()
-        ).save()
-        print('////////save/////////',LifeCycle)
+        if LifeCycle.objects.filter(module_id=module, sub_module_id=sub_module,
+                                                 state=state,is_active=True).exists():
+            print("Schedule Appointment life cycle Already Exist")
+        else:
+            LifeCycle(
+                tenant=obj.tenant,
+                utility=obj.utility,
+                module_id=module,
+                sub_module_id=sub_module,
+                object_id=obj.id,
+                title=title,
+                lifecycle_text=text,
+                state=state,
+                log_date=datetime.now(),
+                is_active=True,
+                created_by=user.id,
+                updated_by=user.id,
+                created_date=datetime.now(),
+                updated_date=datetime.now()
+            ).save()
     except Exception as e:
         print('............',e)
         raise CustomAPIException("Service Appointment timeline save failed", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

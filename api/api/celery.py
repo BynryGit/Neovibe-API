@@ -104,6 +104,13 @@ CELERY_ROUTES = {
     },
     # Task Use For CommonApp Module End
 
+    # Task Use For Work Order Module Start
+    'v1.work_order.views.tasks.save_service_appointment_timeline': {
+            'queue': 'Timeline_Queue',
+            'routing_key': 'Timeline_Queue_Tasks',
+    },
+    # Task Use For Work Order Module End
+
     # Task Use For Billing Module Start
     'v1.billing.task.bill_consumer_detail.create_bill_consumers': {
         'queue': 'ImportConsumer',
