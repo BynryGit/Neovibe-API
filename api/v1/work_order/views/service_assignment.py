@@ -93,13 +93,15 @@ class ServiceAssignment(GenericAPIView):
                     assignment_obj.change_state(SERVICE_ASSIGNMENT_DICT["ASSIGNED"])
                     # State change for service assignment end
 
+                    
+
                     # State change for service appointment start
                     service_appoint_obj.change_state(SERVICE_APPOINTMENT_DICT["ASSIGNED"])
                     # State change for service appointment end
 
                     # Timeline code start
-                    # transaction.on_commit(
-                    #     lambda: save_service_appointment_timeline.delay(service_appoint_obj, "Service Appointment", "Service Appointment Created", "ASSIGNED",user))
+                    transaction.on_commit(
+                        lambda: save_service_appointment_timeline.delay(service_appoint_obj, "Service Appointment", "Service Appointment Assigned", "ASSIGNED",user))
                     # Timeline code end
 
                 view_serializer = ServiceAssignmentViewSerializer(instance=assignment_obj, context={'request': request})
@@ -155,6 +157,11 @@ class ServiceDessignmentDetail(GenericAPIView):
                             # State change for service appointment start
                             appointmentObj.change_state(SERVICE_APPOINTMENT_DICT["NOT ASSIGNED"])
                             # State change for service appointment end
+
+                            # Timeline code start
+                            transaction.on_commit(
+                                lambda: save_service_appointment_timeline.delay(appointmentObj, "Service Appointment", "Service Appointment Deassign", "DEASSIGN",user))
+                            # Timeline code end
 
                             return Response({
                                 STATE: SUCCESS,

@@ -164,6 +164,7 @@ class ResourceList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
+        print('=========>',e)
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
