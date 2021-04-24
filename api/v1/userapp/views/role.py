@@ -5,7 +5,9 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.decorators import permission_classes
-
+from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException, CustomAPIException
 from api.messages import *
 from api.constants import *
 from master.models import get_user_by_id_string
@@ -14,7 +16,7 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.userapp.decorators import utility_required, is_token_validate, role_required
-from v1.userapp.models.role import get_role_by_id_string, get_all_role, get_role_by_type_and_sub_type
+from v1.userapp.models.role import get_role_by_id_string, get_all_role, get_role_by_type_and_sub_type, Role as RoleModel
 from v1.userapp.serializers.role import RoleListSerializer, RoleSerializer, RoleDetailViewSerializer
 
 # API Header
@@ -202,4 +204,28 @@ class GetRoleDetail(GenericAPIView):
                 RESULTS: '',
                 ERROR: str(traceback.print_exc(e))
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class RoleListByUtility(generics.ListAPIView):
+    try:
+        serializer_class = RoleListSerializer
+        pagination_class = StandardResultsSetPagination
+
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    queryset = RoleModel.objects.filter(utility=utility, is_active=True)
+
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Role not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Role')
 

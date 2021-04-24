@@ -45,7 +45,7 @@ class TenantSubscriptionPlan(models.Model, fsm.FiniteStateMachineMixin):
     description = models.CharField(max_length=500, blank=True, null=True)
     max_storage = models.BigIntegerField(null=True, blank=True)
     status = models.BigIntegerField(choices=CHOICES, default=0)
-    module_obj = JSONField(default='')
+    module_obj = JSONField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

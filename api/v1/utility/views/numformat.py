@@ -2,16 +2,6 @@ __author__ = "aki"
 
 import traceback
 from api.constants import *
-from rest_framework.generics import GenericAPIView
-from rest_framework import status
-from rest_framework.response import Response
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT
-from master.models import get_user_by_id_string
-from v1.commonapp.common_functions import get_user_from_token
-from v1.userapp.decorators import is_token_validate, role_required
-from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_services_number_format import \
-    get_utility_service_number_format_by_utility_id_string_and_item
 from v1.utility.serializers.numformat import UtilityServiceNumberFormatListSerializer, UtilityServiceNumberFormatSerializer, UtilityServiceNumberFormatViewSerializer
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat as UtilityNumberFormatTbl
 from rest_framework import generics, status
@@ -30,6 +20,7 @@ from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.models.sub_area import get_sub_area_by_id_string
 from django.db import transaction
+from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.utility.models.utility_services_number_format import get_utility_service_number_format_by_id_string, UtilityServiceNumberFormat
 
 
@@ -120,6 +111,7 @@ class UtilityNumformatDetail(GenericAPIView):
 class UtilityNumFormatList(generics.ListAPIView):
     try:
         serializer_class = UtilityServiceNumberFormatListSerializer
+        pagination_class = StandardResultsSetPagination
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])

@@ -28,7 +28,8 @@ from v1.tenant.models.tenant_master import TenantMaster
 from v1.utility.models.utility_master import UtilityMaster
 
 from django.db import models  # importing package for database
-from django.utils import timezone # importing package for datetime
+from django.utils import timezone  # importing package for datetime
+
 
 # Create Document table start
 
@@ -44,6 +45,9 @@ class Document(models.Model):
     document_sub_type_id = models.BigIntegerField(null=True, blank=True)
     document_generated_name = models.CharField(max_length=1000, blank=True, null=True)
     document_name = models.CharField(max_length=1000, blank=True, null=True)
+    document_auth_details = models.CharField(max_length=5000, blank=True, null=True)
+    last_auth_generated = models.DateTimeField(null=True, blank=True)
+    auth_time_span = models.BigIntegerField(null=True, blank=True)
     file_type = models.CharField(max_length=1000, blank=True, null=True)
     document_size = models.CharField(max_length=1000, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -116,3 +120,4 @@ def get_document_by_id(id):
 
 def get_document_by_user_id(user_id, document_type_id):
     return Document.objects.filter(object_id=user_id, document_type_id=document_type_id)
+
