@@ -103,14 +103,6 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
         return sa_val
        
 
-    @property
-    def get_status(self):
-        status_val = get_service_appointment_status_by_id(self.status_id)
-        return {
-            "status":status_val.status,
-            "id_string":status_val.id_string
-        }
-
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
             self.save()

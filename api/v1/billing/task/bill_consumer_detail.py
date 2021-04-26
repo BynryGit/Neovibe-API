@@ -21,7 +21,7 @@ from v1.meter_data_management.models.route import get_route_by_id_string
 from v1.billing.models.bill_schedule_log import ScheduleBillLog
 
 
-@task
+@task(name="ImportConsumer-task", queue='ImportConsumer')
 def create_bill_consumers(schedule_log_id):
     try:
         schedule_log_obj = ScheduleBillLog.objects.get(id=schedule_log_id)
@@ -51,7 +51,6 @@ def create_bill_consumers(schedule_log_id):
                             consumer_no=consumer_obj.consumer_no,
                             meter_no=meter.meter_no,
                         ).save()
-                        print('Save')
     except Exception as ex:
         print(ex)
         logger().log(ex, 'MEDIUM', module='Billing', sub_module='Billing')

@@ -23,6 +23,10 @@ from django.contrib.postgres.fields import JSONField
 import fsm
 from django.utils import timezone # importing package for datetime
 from v1.commonapp.views.custom_exception import CustomAPIException
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from PIL import Image, ImageDraw
 
 # *********** BILL CONSTANTS **************
 BILL_DICT = {
@@ -79,6 +83,7 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     opening_balance = models.CharField(max_length=200, blank=False, null=False)
     current_charges = models.CharField(max_length=200, blank=False, null=False)
     bill_frequency_id = models.BigIntegerField(null=True, blank=True)
+    invoice_no = models.CharField(max_length=200, null=True, blank=True)
     invoice_template = models.TextField(max_length=20000, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     is_adjusted = models.BooleanField(default=False)
@@ -89,11 +94,25 @@ class Bill(models.Model, fsm.FiniteStateMachineMixin):
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
+    qr_code = models.FileField(null=True, blank=True)
+
+    
     def __str__(self):
         return str(self.id_string)+"-"+str(self.consumer_service_contract_detail_id)
 
     def __unicode__(self):
         return self.id_string
+
+    # def save(self, *args, **kwargs):
+    #     qrcode_img = qrcode.make(self.link)
+    #     canvas = Image.new('RGB', (350, 350), 'white')
+    #     canvas.paste(qrcode_img)
+    #     fname = f'{self.consumer_no}.png'
+    #     buffer = BytesIO()
+    #     canvas.save(buffer,'PNG')
+    #     self.qr_code.save(fname, File(buffer), save=False)
+    #     canvas.close()
+    #     super().save(*args, **kwargs)
 
     
     # Function for finite state machine state change

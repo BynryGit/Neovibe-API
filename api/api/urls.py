@@ -34,6 +34,8 @@ from v1.payment import urls as payment_urls
 from v1.store import urls as store_urls
 from v1.service import urls as service_urls
 from v1.work_order import urls as work_order_urls
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
