@@ -16,6 +16,7 @@ from v1.consumer.serializers.consumer_offer_detail import ConsumerOfferDetailSer
     ConsumerOfferDetailListSerializer
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.consumer.models.consumer_offer_detail import ConsumerOfferDetail as ConsumerOfferModel
+from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token, check_user
 
 # API Header
 # API end Point: api/v1/consumer/:id_string/offer-detail
@@ -36,8 +37,9 @@ class ConsumerOfferDetail(GenericAPIView):
     # @role_required(CONSUMER_OPS, CONSUMER_OPS_CONSUMER, EDIT)
     def post(self, request, id_string):
         try:
-            user_id_string = get_user_from_token(request.headers['Authorization'])
-            user = get_user_by_id_string(user_id_string)
+            # user_id_string = get_user_from_token(request.headers['Authorization'])
+            # user = get_user_by_id_string(user_id_string)
+            user = check_user(request.headers['Authorization'])
             consumer = get_consumer_by_id_string(id_string)
             serializer = ConsumerOfferDetailSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):

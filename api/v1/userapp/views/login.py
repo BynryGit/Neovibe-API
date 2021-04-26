@@ -16,6 +16,8 @@ from v1.consumer.models.consumer_master import get_consumer_by_email
 from v1.consumer.models.consumer_token import ConsumerToken
 from v1.commonapp.common_functions import get_payload
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_short_name
+from v1.consumer.models.consumer_master import ConsumerMaster
 from v1.consumer.models.consumer_token import get_consumer_token_by_token,check_token_exists_for_consumer
 from v1.commonapp.views.settings_reader import SettingReader
 secret_reader = SecretReader()
@@ -87,9 +89,7 @@ def login(request, user, form_factor):
         if (form_factor == 1 or form_factor == 2):
             user_obj = get_user_by_email(user.email)
             payload = {'user_id_string': str(user_obj.id_string),'type':setting_reader.get_user(), 'string': str(uuid.uuid4().hex[:6].upper())}
-            print("=======PAYLOAD======",payload)
             encoded_jwt = jwt.encode(payload, secret_reader.get_secret(), algorithm='HS256').decode('utf-8')
-            print("=======ENCODED TOKEN==========",encoded_jwt)
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
                 ip = x_forwarded_for.split(',')[0]
@@ -109,9 +109,10 @@ def login(request, user, form_factor):
             return token_obj.token
 
         elif(form_factor == 3 or form_factor == 4):
-            consumer_obj = get_consumer_by_email(user.email)
+            tenant_obj = get_tenant_by_short_name(request.data['tenant'])
+            consumer_obj = ConsumerMaster.objects.get(email=user.email, tenant=tenant_obj)
+            # consumer_obj = get_consumer_by_email(user.email)
             payload = {'user_id_string': str(consumer_obj.id_string), 'type':setting_reader.get_consumer_user(),'string': str(uuid.uuid4().hex[:6].upper())}
-            print("=======PAYLOAD======",payload)
             encoded_jwt = jwt.encode(payload, secret_reader.get_secret(), algorithm='HS256').decode('utf-8')
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
