@@ -17,7 +17,7 @@ from v1.meter_data_management.serializers.meter_make import MeterMakeShortViewSe
 from v1.meter_data_management.serializers.route import RouteShortViewSerializer
 from v1.meter_data_management.views.common_function import set_meter_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
-
+from api.messages import *
 
 class MeterShortViewSerializer(serializers.ModelSerializer):
 

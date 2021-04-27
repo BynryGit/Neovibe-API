@@ -22,8 +22,8 @@ from v1.utility.models.utility_work_order_sub_type import get_utility_work_order
 from v1.work_order.models.service_appointments import get_service_appointment_by_id_string
 from master.models import get_user_by_id_string
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string
-
-
+from v1.meter_data_management.views.common_function import set_meter_validated_data
+from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
 
 def set_work_order_validated_data(validated_data):
     if "utility_id" in validated_data:
@@ -217,4 +217,40 @@ def set_service_appointment_data(work_order, consumer):
         return od
     except Exception as e:
         raise CustomAPIException("Error in setting service_appointment_data",
+                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def set_meter_data(service_appointment_obj):
+    try:
+        meter = collections.OrderedDict()
+        mobile_data = service_appointment_obj.completed_task_details
+        validated_data = set_meter_validated_data(mobile_data)
+        meter['tenant_id'] = service_appointment_obj.tenant.id
+        meter['utility_product_id'] = validated_data['utility_product_id']
+        meter['route_id'] = validated_data['route_id']
+        meter['premise_id'] = validated_data['premise_id']
+        meter['meter_no'] = validated_data['meter_no']
+        meter['meter_make_id'] = validated_data['meter_make_id']
+        return meter
+    except Exception as e:
+        print(e)
+        raise CustomAPIException("Error in setting meter data",
+                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def set_consumer_service_contract_data(appointment_obj,meter_obj):
+    try:
+        contract_obj = collections.OrderedDict()
+        validated_data = {}
+        # contract_validated_data = set_consumer_service_contract_detail_validated_data(appointment_obj)
+        # contract_obj['consumer_id'] = appointment_obj.consumer_id
+        # print('==',appointment_obj)
+        # contract_obj['consumer_no'] = appointment_obj.consumer_no
+        contract_obj['service_contract_id'] = appointment_obj.consumer_service_contract_detail_id
+        contract_obj['premise_id'] = meter_obj.premise_id
+        contract_obj['meter_id'] = meter_obj.id
+        return contract_obj
+    except Exception as e:
+        print(e)
+        raise CustomAPIException("Error in setting meter data",
                                  status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

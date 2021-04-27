@@ -25,6 +25,8 @@ from v1.commonapp.models.notes import Notes
 from django.db.models import Q
 from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.work_order.views.tasks import save_service_appointment_timeline
+from v1.work_order.views.common_functions import set_meter_data
+from v1.work_order.signals.signals import after_complete_service_appointment,complete_service_appointment
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -165,10 +167,9 @@ class ServiceAppointmentDetail(GenericAPIView):
                         service_appointment.save()
                 else:
                     serializer = ServiceAppointmentSerializer(data=request.data)
-                    if serializer.is_valid(raise_exception=False):
+                    if serializer.is_valid(raise_exception=True):
                         with transaction.atomic():      
                             service_appointment_obj = serializer.update(service_appointment, serializer.validated_data, user)
-
                             # State change for service assignment start
                             service_appointment_obj.change_state(SERVICE_APPOINTMENT_DICT["COMPLETED"])
                             # State change for service assignment end
@@ -177,6 +178,12 @@ class ServiceAppointmentDetail(GenericAPIView):
                             service_assignment_obj.is_active = False
                             service_assignment_obj.save()
                             # Soft Delete entry from Service Assignment end
+
+                            data = set_meter_data(service_appointment_obj)
+                            # Signal for service appointment
+                            complete_service_appointment.connect(after_complete_service_appointment)
+                            complete_service_appointment.send(service_appointment_obj, data=data)
+                            # Signal for service appointment
 
                         view_serializer = ServiceAppointmentViewSerializer(instance=service_appointment_obj, context={'request': request})
                         return Response({
