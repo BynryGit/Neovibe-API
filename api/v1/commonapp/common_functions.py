@@ -43,6 +43,7 @@ from v1.commonapp.models.integration_subtype import get_integration_sub_type_by_
 from v1.utility.models.utility_product import get_utility_product_by_id_string
 from v1.consumer.models.consumer_token import get_consumer_token_by_token,check_token_exists_for_consumer
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.commonapp.views.settings_reader import SettingReader
 setting_reader = SettingReader()
 secret_reader = SecretReader()
@@ -84,9 +85,7 @@ def is_token_valid(token):
                 else:
                     return False
             elif decoded_token['type'] == setting_reader.get_consumer_user():
-                print("------aaaaaaaaaaaa--------",decoded_token['type'])
                 consumer_obj = get_consumer_by_id_string(decoded_token['user_id_string'])
-                print("------cccccccccccc--------",consumer_obj)
                 if check_token_exists_for_consumer(token, consumer_obj.id):
                     return True, consumer_obj.id_string
                 else:
@@ -757,3 +756,24 @@ def validate_user_data(validated_data):
         else:
             raise CustomAPIException("user_obj not found.", status_code=status.HTTP_404_NOT_FOUND)
     return validated_data
+
+
+def check_user(token):
+    print("this is token==",token)
+    decoded_token = get_payload(token)
+    print("decoded token==",decoded_token['user_id_string'])
+    if decoded_token:
+        if decoded_token['type'] == setting_reader.get_user():
+            print("inside U")
+            user_id_string = get_user_from_token(token)
+            user = get_user_by_id_string(user_id_string)
+        elif decoded_token['type'] == setting_reader.get_consumer_user():
+            print("Inside C")
+            user_token = get_consumer_token_by_token(token)
+            user_id_string = decoded_token['user_id_string']
+            print("---------",user_id_string)
+            user = get_consumer_by_id_string(user_id_string)
+            print("======",user)
+        else:
+            user=False
+    return user
