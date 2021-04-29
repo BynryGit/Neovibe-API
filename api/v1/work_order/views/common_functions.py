@@ -24,6 +24,8 @@ from master.models import get_user_by_id_string
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id_string, CONSUMER_DICT, get_consumer_service_contract_detail_by_id
 from v1.meter_data_management.views.common_function import set_meter_validated_data
 from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
+from v1.meter_data_management.models.meter import Meter as MeterTbl
+from v1.meter_data_management.models.meter import get_meter_by_number
 
 def set_work_order_validated_data(validated_data):
     if "utility_id" in validated_data:
@@ -219,27 +221,35 @@ def set_service_appointment_data(work_order, consumer):
         raise CustomAPIException("Error in setting service_appointment_data",
                                  status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-def set_meter_install_data(service_appointment_obj):
+# set data for meter installation 
+def set_meter_install_data(service_appointment_obj, meter_status):
     try:
         meter = collections.OrderedDict()
         mobile_data = service_appointment_obj.completed_task_details
         validated_data = set_meter_validated_data(mobile_data)
-        meter['tenant_id'] = service_appointment_obj.tenant.id
-        meter['utility_id'] = service_appointment_obj.utility.id
-        meter['utility_product_id'] = validated_data['utility_product_id']
-        meter['route_id'] = validated_data['route_id']
-        meter['premise_id'] = validated_data['premise_id']
-        meter['meter_no'] = validated_data['meter_no']
-        meter['meter_make_id'] = validated_data['meter_make_id']
-        return meter
+        if meter_status == 'NEW_METER':  
+            if MeterTbl.objects.filter(meter_no=str(validated_data['meter_no']),is_active=True).exists():
+                raise CustomAPIException("Meter Already Exists",status_code=status.HTTP_409_CONFLICT)                
+            else:
+                meter['tenant_id'] = service_appointment_obj.tenant.id
+                meter['utility_id'] = service_appointment_obj.utility.id
+                meter['utility_product_id'] = validated_data['utility_product_id']
+                meter['route_id'] = validated_data['route_id']
+                meter['premise_id'] = validated_data['premise_id']
+                meter['meter_no'] = validated_data['meter_no']
+                meter['meter_make_id'] = validated_data['meter_make_id']
+                return meter
+        else:
+            meter = get_meter_by_number(validated_data['meter_no'])
+            return meter
     except Exception as e:
         print(e)
         raise CustomAPIException("Error in setting meter data",
                                  status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-def set_consumer_service_contract_data(appointment_obj,meter_obj):
+#set data for installation service contract
+def set_installation_service_contract_data(appointment_obj,meter_obj):
     try:
         contract_obj = collections.OrderedDict()
         con_contract = get_consumer_service_contract_detail_by_id(appointment_obj.consumer_service_contract_detail_id)
@@ -249,5 +259,26 @@ def set_consumer_service_contract_data(appointment_obj,meter_obj):
         return contract_obj
     except Exception as e:
         print(e)
-        raise CustomAPIException("Error in setting meter data",
+        raise CustomAPIException("Error in setting Installation Service Contract Data",
+                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# set data for disconnection service contract
+def set_disconnection_service_contract_data(appointment_obj, key):
+    try:
+        contract_obj = collections.OrderedDict()
+        con_contract = get_consumer_service_contract_detail_by_id(appointment_obj.consumer_service_contract_detail_id)
+        if con_contract:
+            if key == 'PERMANENT':                  
+                con_contract.change_state(CONSUMER_DICT["DISCONNECTED"])  
+                con_contract.is_active = False
+                con_contract.save()    
+            elif key == 'TEMPORARY':                
+                con_contract.change_state(CONSUMER_DICT["DISCONNECTED"])
+                con_contract.is_active = True
+                con_contract.save()
+        contract_obj['is_active'] = con_contract.is_active                    
+        return contract_obj
+    except Exception as e:
+        print(e)
+        raise CustomAPIException("Error in setting Disconnection Service Contract Data",
                                  status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

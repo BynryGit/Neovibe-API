@@ -26,7 +26,9 @@ from django.db.models import Q
 from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.work_order.views.tasks import save_service_appointment_timeline
 from v1.work_order.views.common_functions import set_meter_install_data
-from v1.work_order.signals.signals import complete_installation_service_appointment,complete_service_appointment
+from v1.work_order.signals.signals import complete_installation_service_appointment,installation_complete_service_appointment, \
+    disconnection_complete_service_appointment,complete_disconnection_service_appointment
+                                        
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -178,15 +180,27 @@ class ServiceAppointmentDetail(GenericAPIView):
                             service_assignment_obj.is_active = False
                             service_assignment_obj.save()
                             # Soft Delete entry from Service Assignment end
-                            if service_appointment_obj.completed_task_details['key'] == 'Installation':
-                                data = set_meter_install_data(service_appointment_obj)
+                            if service_appointment_obj.completed_task_details['key'] == 'New_Meter_Installation':
+                                data = set_meter_install_data(service_appointment_obj,'NEW_METER')
                                 # Signal for service appointment
-                                complete_service_appointment.connect(complete_installation_service_appointment)
-                                complete_service_appointment.send(service_appointment_obj, data=data)
+                                installation_complete_service_appointment.connect(complete_installation_service_appointment)
+                                installation_complete_service_appointment.send(service_appointment_obj,key='NEW_METER', data=data)
                                 # Signal for service appointment
-                            # elif service_appointment_obj.completed_task_details['key'] == 'Disconnection':
-                            #     complete_service_appointment.connect(complete_disconnet_service_appointment)
-                            #     complete_service_appointment.send(service_appointment_obj)
+
+                            elif service_appointment_obj.completed_task_details['key'] == 'Existing_Meter_Installation':
+                                data = set_meter_install_data(service_appointment_obj,'EXISTING_METER')
+                                # Signal for service appointment
+                                installation_complete_service_appointment.connect(complete_installation_service_appointment)
+                                installation_complete_service_appointment.send(service_appointment_obj,key='EXISTING_METER', data=data)
+                                # Signal for service appointment
+
+                            elif service_appointment_obj.completed_task_details['key'] == 'Permanent_Disconnection':
+                                disconnection_complete_service_appointment.connect(complete_disconnection_service_appointment)
+                                disconnection_complete_service_appointment.send(service_appointment_obj,key='PERMANENT')
+
+                            elif service_appointment_obj.completed_task_details['key'] == 'Temporary_Disconnection':
+                                disconnection_complete_service_appointment.connect(complete_disconnection_service_appointment)
+                                disconnection_complete_service_appointment.send(service_appointment_obj,key='TEMPORARY')
 
                         view_serializer = ServiceAppointmentViewSerializer(instance=service_appointment_obj, context={'request': request})
                         return Response({
