@@ -302,7 +302,7 @@
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 3,
-        "key" : "SCHEDULE",
+        "key" : "BILLING_SCHEDULE",
         "name": "Schedule",
         "is_active": "True"
       }
@@ -537,6 +537,16 @@
         "module_id": 10,
         "key" : "DEMOSM",
         "name": "DemoSM",
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "35",
+      "model": "commonapp.SubModule",
+      "fields": {
+        "module_id": 2,
+        "key" : "SEARCH_CONSUMER",
+        "name": "Search Consumer",
         "is_active": "True"
       }
     },
@@ -2545,6 +2555,19 @@
       }
     },
     {
+      "pk": "136",
+      "model": "userapp.RolePrivilege",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "role_id": 6,
+        "module_id": 2,
+        "sub_module_id": 35,
+        "privilege_id": 2,
+        "is_active": "True"
+      }
+    },
+    {
       "pk": "1",
       "model": "master.MasterUser",
       "fields": {
@@ -3182,6 +3205,18 @@
         "label":"DemoSM",
         "module_id": 10,
         "submodule_id": 34,
+        "is_active": "True"
+      }
+    },
+    {
+      "pk": "35",
+      "model": "utility.UtilitySubModule",
+      "fields": {
+        "tenant": 1,
+        "utility": 1,
+        "label":"Search Consumer",
+        "module_id": 2,
+        "submodule_id": 35,
         "is_active": "True"
       }
     },
