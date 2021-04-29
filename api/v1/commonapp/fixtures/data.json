@@ -282,8 +282,8 @@
       "model": "commonapp.SubModule",
       "fields": {
         "module_id": 2,
-        "key" : "SMART_METER",
-        "name": "Smart Meter",
+        "key" : "METER_MASTER",
+        "name": "Meter Master",
         "is_active": "True"
       }
     },

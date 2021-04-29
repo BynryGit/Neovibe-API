@@ -87,7 +87,7 @@ class RouteTaskAssignmentList(generics.ListAPIView):
 
 class RouteTaskAssignment(GenericAPIView):
     @is_token_validate
-    @role_required(MX, DISPATCH, EDIT)
+    # @role_required(MX, DISPATCH, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -126,7 +126,7 @@ class RouteTaskAssignment(GenericAPIView):
 
 class RouteTaskAssignmentDetail(GenericAPIView):
     @is_token_validate
-    @role_required(MX, DISPATCH, VIEW)
+    # @role_required(MX, DISPATCH, VIEW)
     def get(self, request, id_string):
         try:
             route_task_assignment_obj = get_route_task_assignment_by_id_string(id_string)
@@ -150,7 +150,7 @@ class RouteTaskAssignmentDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(MX, DISPATCH, EDIT)
+    # @role_required(MX, DISPATCH, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
