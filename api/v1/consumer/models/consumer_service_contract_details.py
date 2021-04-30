@@ -90,7 +90,7 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
 
 def get_consumer_service_contract_detail_by_id(id):
     try:
-        return ConsumerServiceContractDetail.objects.get(id=id, is_active=True)
+        return ConsumerServiceContractDetail.objects.get(id=id)
     except Exception as ex:
         return False
 
