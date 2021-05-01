@@ -219,16 +219,15 @@ STATIC_URL = '/static/'
 
 # Cronjob configuration
 CRONJOBS = [
-    # Todo Add File Path To Save Log File
     # Cron Use For MDM Module Start
     ('0 22 * * *', 'v1.meter_data_management.task.schedule_log.schedule_log',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/schedule_log.log'),
+     '>> /home/ubuntu/smart360/log_file/schedule_log.log'),
     ('*/30 * * * *', 'v1.meter_data_management.task.validation_assignment.validation_assignment',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/validation_assignment.log'),
+     '>> /home/ubuntu/smart360/log_file/validation_assignment.log'),
     ('0 23 * * *', 'v1.meter_data_management.task.smart_meter.smart_meter',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/smart_meter.log'),
+     '>> /home/ubuntu/smart360/log_file/smart_meter.log'),
     ('0 23 * * *', 'v1.meter_data_management.task.spot_bill.spot_bill',
-     '>> /home/aki/Aki/Projects/Smart360-app/api/spot_bill.log'),
+     '>> /home/ubuntu/smart360/log_file/spot_bill.log'),
     # Cron Use For MDM Module End
 ]
 
