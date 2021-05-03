@@ -70,7 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
             user_obj.joined_date = datetime.utcnow()
             user_obj.last_login = datetime.utcnow()
             user_obj.tenant = user.tenant
-
+            user_obj.status_id = 2
             user_obj.is_active = True
             user_obj.save()
             user_obj.user_id = generate_user_id(user_obj)
@@ -81,6 +81,8 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data = set_user_validated_data(validated_data)
         with transaction.atomic():
             user_obj = super(UserSerializer, self).update(instance, validated_data)
+            if 'password' in validated_data:
+                user_obj.set_password(validated_data['password'])
             user_obj.updated_by = user.id
             user_obj.updated_date = datetime.utcnow()
             user_obj.is_active = True
@@ -135,6 +137,15 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 class UserViewSerializer(serializers.ModelSerializer):
+    # def get_role(self, obj):
+    #     role_list = []
+    #     user_roles = get_user_role_by_user_id(obj.id)
+    #     for user_role in user_roles:
+    #         role = get_role_by_id(user_role.role_id)
+    #         serializer = GetRoleSerializer(instance=role)
+    #         role_list.append(serializer.data)
+    #     return role_list
+
     tenant = TenantStatusViewSerializer(many=False, required=True, source='get_tenant')
     user_type = UserTypeSerializer(many=False, required=True, source='get_role_type')
     user_sub_type = UserSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
@@ -197,15 +208,18 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('password', 'old_password')
 
+
     def update(self, instance, validated_data, user):
         with transaction.atomic():
             user_obj = super(ChangePasswordSerializer, self).update(instance, validated_data)
             user_obj.updated_by = user.id
             user_obj.password = instance.set_password(validated_data['password'])
-            print("YHCYCHCHC", instance.set_password(validated_data['password']))
+            print("YHCYCHCHC",instance.set_password(validated_data['password']))
             user_obj.updated_date = datetime.utcnow()
             user_obj.save()
             return user_obj
+
+
 
 
 class ResetPasswordEmailSerializer(serializers.ModelSerializer):

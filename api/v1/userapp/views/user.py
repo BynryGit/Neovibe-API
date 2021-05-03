@@ -109,7 +109,7 @@ class UserList(generics.ListAPIView):
 class User(GenericAPIView):
 
     @is_token_validate
-    @role_required(USER, USER, EDIT)
+    #@role_required(USER, USER, EDIT)
     def post(self, request):
         try:
             serializer = UserSerializer(data=request.data)
@@ -167,7 +167,7 @@ class User(GenericAPIView):
 class UserDetail(GenericAPIView):
 
     @is_token_validate
-    @role_required(USER, USER, EDIT)
+    #@role_required(USER, USER, EDIT)
     def get(self, request, id_string):
         try:
             user = get_user_by_id_string(id_string)
@@ -191,7 +191,7 @@ class UserDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(USER, USER, EDIT)
+    #@role_required(USER, USER, EDIT)
     def put(self, request, id_string):
         try:
             user_obj = get_user_by_id_string(id_string)
