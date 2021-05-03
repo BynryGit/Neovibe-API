@@ -26,7 +26,7 @@ from v1.meter_data_management.models.consumer_detail import ConsumerDetail as Co
 # todo need to fix logic
 class UploadRouteSummary(generics.ListAPIView):
     @is_token_validate
-    @role_required(MX, UPLOAD, VIEW)
+    # @role_required(MX, UPLOAD, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)

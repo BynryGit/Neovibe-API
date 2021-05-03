@@ -27,7 +27,7 @@ from v1.meter_data_management.serializers.deassign_revisit_task_assignment impor
 
 class DeAssignRevisitTaskAssignment(GenericAPIView):
     @is_token_validate
-    @role_required(MX, DISPATCH, EDIT)
+    # @role_required(MX, DISPATCH, EDIT)
     def post(self, request):
         try:
             de_assign_revisit_task_assignment_serializer = DeAssignRevisitTaskAssignmentViewSerializer(data=request.data)

@@ -21,7 +21,7 @@ from v1.meter_data_management.models.consumer_detail import get_consumer_detail_
 from v1.meter_data_management.models.route_task_assignment import get_route_task_assignment_by_id_string
 from v1.commonapp.models.meter_status import get_meter_status_by_id_string, get_meter_status_by_name
 from v1.meter_data_management.models.reader_status import get_reader_status_by_id_string, get_reader_status_by_name
-
+from v1.meter_data_management.models.meter_make import get_meter_make_by_id_string
 
 def set_schedule_validated_data(validated_data):
     if "utility_id" in validated_data:
@@ -190,6 +190,13 @@ def set_meter_validated_data(validated_data):
             validated_data["premise_id"] = premise.id
         else:
             raise CustomAPIException(PREMISE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "meter_make_id" in validated_data:
+        meter_make = get_meter_make_by_id_string(validated_data["meter_make_id"])
+        if meter_make:
+            validated_data["meter_make_id"] = meter_make.id
+        else:
+            raise CustomAPIException(METER_MAKE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
 
     if "meter_type_id" in validated_data:
         meter_type = get_global_lookup_by_id_string(validated_data["meter_type_id"])

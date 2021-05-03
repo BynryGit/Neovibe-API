@@ -56,6 +56,7 @@ class ServiceAssignmentSerializer(serializers.ModelSerializer):
             assignment_obj.created_date = datetime.utcnow()
             assignment_obj.tenant = user.tenant
             assignment_obj.status_id = 1
+            assignment_obj.is_active = True
             assignment_obj.save()
             
             return assignment_obj

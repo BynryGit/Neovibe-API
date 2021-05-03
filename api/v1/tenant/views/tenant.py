@@ -45,14 +45,14 @@ class TenantList(generics.ListAPIView):
         search_fields = ('name', 'email_id',)
 
         def get_queryset(self):
-            if is_token_valid(self.request.headers['Authorization']):
-                if is_authorized(1,1,1,1):
+            # if is_token_valid(self.request.headers['Authorization']):
+            #     if is_authorized(1,1,1,1):
                     queryset = TenantMasterTbl.objects.filter(is_active=True)
                     return queryset
-                else:
-                    raise InvalidAuthorizationException
-            else:
-                raise InvalidTokenException
+            #     else:
+            #         raise InvalidAuthorizationException
+            # else:
+            #     raise InvalidTokenException
     except Exception as ex:
         logger().log(ex, 'MEDIUM', module='ADMIN', sub_module='TENANT')
         raise APIException

@@ -14,6 +14,9 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone # importing package for datetime
 from v1.commonapp.models.state import get_state_by_id
+from v1.commonapp.models.city import get_city_by_id
+from v1.commonapp.models.premises import get_premise_by_id
+from v1.commonapp.models.sub_area import get_sub_area_by_id
 
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
@@ -104,6 +107,31 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         return {
             'name': state.name,
             'id_string': state.id_string
+        }
+        
+    @property
+    def get_sub_area(self):
+        sub_area = get_sub_area_by_id(self.billing_sub_area_id)
+        return {
+            'name': sub_area.name,
+            'id_string': sub_area.id_string
+        }
+
+
+    @property
+    def get_city(self):
+        city = get_city_by_id(self.billing_city_id)
+        return {
+            'name': city.name,
+            'id_string': city.id_string
+        }
+
+    @property
+    def get_premise(self):
+        premise = get_premise_by_id(self.premise_id)
+        return {
+            'name': premise.name,
+            'id_string': premise.id_string
         }
 
     @property

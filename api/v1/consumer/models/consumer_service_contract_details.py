@@ -33,6 +33,8 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
 
     state_machine = {
         CONSUMER_DICT['CREATED']: (CONSUMER_DICT['APPROVED'],CONSUMER_DICT['REJECTED'],CONSUMER_DICT['HOLD'], CONSUMER_DICT['CREATED']),
+        CONSUMER_DICT['APPROVED']: (CONSUMER_DICT['HOLD'], CONSUMER_DICT['CONNECTED']),
+        CONSUMER_DICT['CONNECTED']: (CONSUMER_DICT['HOLD'], CONSUMER_DICT['DISCONNECTED']),
         CONSUMER_DICT['HOLD']: (CONSUMER_DICT['APPROVED'],CONSUMER_DICT['REJECTED']),
     }
 
@@ -52,7 +54,7 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return str(self.consumer_no)
+        return str(self.consumer_no) + " - " + str(self.id_string)
 
     def __unicode__(self):
         return self.consumer_no
@@ -88,8 +90,8 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
 
 def get_consumer_service_contract_detail_by_id(id):
     try:
-        return ConsumerServiceContractDetail.objects.get(id=id, is_active=True)
-    except:
+        return ConsumerServiceContractDetail.objects.get(id=id)
+    except Exception as ex:
         return False
 
 

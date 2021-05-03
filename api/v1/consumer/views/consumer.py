@@ -18,7 +18,7 @@ from api.messages import *
 from master.models import get_user_by_id_string
 from v1.billing.models.invoice_bill import get_invoice_bills_by_consumer_no, get_invoice_bill_by_id_string
 from v1.billing.serializers.invoice_bill import *
-from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token
+from v1.commonapp.common_functions import is_authorized, is_token_valid, get_user_from_token, check_user
 from v1.commonapp.models.notes import Notes, get_note_by_id_string
 from v1.commonapp.serializers.note import NoteSerializer, NoteViewSerializer, NoteListSerializer
 from v1.commonapp.views.custom_exception import InvalidAuthorizationException, InvalidTokenException
@@ -690,8 +690,9 @@ class ConsumerComplaint(GenericAPIView):
     # #role_required(CONSUMER_OPS, CONSUMER, EDIT)
     def post(self, request):
         try:
-            user_id_string = get_user_from_token(request.headers['Authorization'])
-            user = get_user_by_id_string(user_id_string)
+            # user_id_string = get_user_from_token(request.headers['Authorization'])
+            # user = get_user_by_id_string(user_id_string)
+            user = check_user(request.headers['Authorization'])
             consumer_obj = get_consumer_by_id_string(request.data['consumer_id_string'])
             request.data['consumer_no'] = consumer_obj.consumer_no
             serializer = ComplaintSerializer(data=request.data)
@@ -1170,8 +1171,9 @@ class ConsumerConnect(GenericAPIView):
     def post(self, request):
         try:
             with transaction.atomic():
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
+                # user_id_string = get_user_from_token(request.headers['Authorization'])
+                # user = get_user_by_id_string(user_id_string)
+                user = check_user(request.headers['Authorization'])
                 consumer = get_consumer_by_id_string(request.data['consumer_id'])
                 consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
                     request.data['consumer_service_contract_detail_id'])
@@ -1257,8 +1259,9 @@ class ConsumerDisconnect(GenericAPIView):
     def post(self, request):
         try:
             with transaction.atomic():
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
+                # user_id_string = get_user_from_token(request.headers['Authorization'])
+                # user = get_user_by_id_string(user_id_string)
+                user = check_user(request.headers['Authorization'])
                 consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
                     request.data['consumer_service_contract_detail_id'])
 
@@ -1288,6 +1291,7 @@ class ConsumerDisconnect(GenericAPIView):
                         utility_product_id=utility_product_obj.id)
 
                 request.data['work_order_master_id'] = str(work_order_master_obj.id_string)
+                print("0a0a0a0a00a0a0a",work_order_master_obj.id)
 
                 # prevent adding multiple request for the same meter
                 try:
@@ -1360,8 +1364,9 @@ class ConsumerOutage(GenericAPIView):
     def post(self, request):
         try:
             with transaction.atomic():
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
+                # user_id_string = get_user_from_token(request.headers['Authorization'])
+                # user = get_user_by_id_string(user_id_string)
+                user = check_user(request.headers['Authorization'])
                 consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
                     request.data['consumer_service_contract_detail_id'])
                 work_order_master_obj = get_work_order_master_by_id_string(request.data['work_order_master_id'])
@@ -1421,8 +1426,9 @@ class ConsumerService(GenericAPIView):
     def post(self, request):
         try:
             with transaction.atomic():
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
+                # user_id_string = get_user_from_token(request.headers['Authorization'])
+                # user = get_user_by_id_string(user_id_string)
+                user = check_user(request.headers['Authorization'])
                 consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
                     request.data['consumer_service_contract_detail_id'])
                 work_order_master_obj = get_work_order_master_by_id_string(request.data['work_order_master_id'])
@@ -1483,8 +1489,9 @@ class ConsumerTransfer(GenericAPIView):
     def post(self, request):
         try:
             with transaction.atomic():
-                user_id_string = get_user_from_token(request.headers['Authorization'])
-                user = get_user_by_id_string(user_id_string)
+                # user_id_string = get_user_from_token(request.headers['Authorization'])
+                # user = get_user_by_id_string(user_id_string)
+                user = check_user(request.headers['Authorization'])
                 consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
                     request.data['consumer_service_contract_detail_id'])
 

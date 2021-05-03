@@ -34,7 +34,7 @@ class Skills(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.skill
+        return str(self.skill) + " - " +str(self.id_string)
 
     def __unicode__(self):
         return self.skill

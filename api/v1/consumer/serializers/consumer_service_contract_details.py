@@ -69,3 +69,14 @@ class ConsumerServiceContractDetailSerializer(serializers.ModelSerializer):
                 consumer_service_contract_detail_obj.created_date = datetime.now()
                 consumer_service_contract_detail_obj.save()
                 return consumer_service_contract_detail_obj
+
+
+    def update(self, instance, validated_data, user):
+        validated_data = set_consumer_service_contract_detail_validated_data(validated_data)
+        with transaction.atomic():
+            consumer_service_contract_detail_obj = super(ConsumerServiceContractDetailSerializer, self).update(instance, validated_data)
+            consumer_service_contract_detail_obj.tenant = user.tenant
+            consumer_service_contract_detail_obj.updated_by = user.id
+            consumer_service_contract_detail_obj.updated_date = timezone.now()
+            consumer_service_contract_detail_obj.save()
+            return consumer_service_contract_detail_obj

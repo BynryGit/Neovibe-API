@@ -61,7 +61,7 @@ class MyUserManager(BaseUserManager):
 class MasterUser(AbstractBaseUser, PermissionsMixin):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     username = None
-    email = models.CharField(max_length=200, blank=False, unique=True)
+    email = models.CharField(max_length=200, blank=False)
     USERNAME_FIELD = ('email')
     password = models.CharField(max_length=200, verbose_name='password')
     last_login = models.DateTimeField(blank=True, null=True)

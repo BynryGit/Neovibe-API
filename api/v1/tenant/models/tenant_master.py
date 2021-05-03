@@ -89,3 +89,8 @@ def get_tenant_by_id_string(id_string):
     except:
         return False
 
+def get_tenant_by_short_name(short_name):
+    try:
+        return TenantMaster.objects.get(short_name=short_name)
+    except:
+        return False

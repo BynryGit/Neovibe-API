@@ -76,7 +76,7 @@ class ScheduleLogList(generics.ListAPIView):
 
 class ScheduleLogDetail(GenericAPIView):
     @is_token_validate
-    @role_required(MX, DISPATCH, VIEW)
+    # @role_required(MX, DISPATCH, VIEW)
     def get(self, request, id_string):
         try:
             schedule_log_obj = get_schedule_log_by_id_string(id_string)
@@ -114,7 +114,7 @@ class ScheduleLogDetail(GenericAPIView):
 # todo need to fix logic
 class ReadingScheduleLogSummary(generics.ListAPIView):
     @is_token_validate
-    @role_required(MX, DISPATCH, VIEW)
+    # @role_required(MX, DISPATCH, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)

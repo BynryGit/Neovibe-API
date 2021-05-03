@@ -18,3 +18,13 @@ def after_registration_approved(sender, **kwargs):
         consumer.save()
     except Exception as e:
         raise CustomAPIException(str(e), status_code=status.HTTP_412_PRECONDITION_FAILED)
+
+
+# Signal receiver for consumer
+@receiver([consumer_service_request_created, ])
+def after_consumer_service_request_created(sender, **kwargs):
+    try:
+        service_appointment = super(ServiceAppointmentSerializer, ServiceAppointmentSerializer()).create(kwargs['data'])
+    except Exception as e:
+        raise CustomAPIException("Error in creating service appointment",
+                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
