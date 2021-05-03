@@ -66,7 +66,6 @@ class CitySerializer(serializers.ModelSerializer):
 
 class CityListSerializer(serializers.ModelSerializer):
     state = StateListSerializer(source="get_state")
-
     class Meta:
         model = CityTbl
         fields = ('name', 'id_string', 'state', 'is_active', 'created_by', 'created_date')

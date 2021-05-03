@@ -229,6 +229,8 @@ CRONJOBS = [
      '>> /home/aki/Aki/Projects/Smart360-app/api/smart_meter.log'),
     ('0 23 * * *', 'v1.meter_data_management.task.spot_bill.spot_bill',
      '>> /home/aki/Aki/Projects/Smart360-app/api/spot_bill.log'),
+    ('0 22 * * *', 'v1.commonapp.task.spot_bill.spot_bill',
+     '>> /home/aki/Aki/Projects/Smart360-app/api/spot_bill.log'),
     # Cron Use For MDM Module End
 ]
 

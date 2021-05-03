@@ -16,7 +16,7 @@ class ConsumerConsent(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=200, blank=True, null=True)
+    name = models.TextField(max_length=1000, blank=True, null=True)
     consumer_category_id = models.BigIntegerField(null=True, blank=True)
     consumer_subcategory_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)

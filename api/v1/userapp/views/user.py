@@ -84,13 +84,142 @@ class UserList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("User not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(USER_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
                 raise InvalidTokenException
     except Exception as e:
-        logger().log(e, 'MEDIUM', module='S&M', sub_module='User')
+        logger().log(e, 'MEDIUM', module='USER', sub_module='USER')
+
+
+# API Header
+# API end Point: api/v1/user
+# API verb: POST
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: Add users
+# Usage: Add User
+# Tables used: 2.5.3. Users & Privileges - User Details
+# Author: Arpita
+# Created on: 13/05/2020
+# Updated on: 14/05/2020
+
+class User(GenericAPIView):
+
+    @is_token_validate
+    @role_required(USER, USER, EDIT)
+    def post(self, request):
+        try:
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=False):
+                if not is_email_exists(request.data['email']):
+                    user_id_string = get_user_from_token(request.headers['Authorization'])
+                    user = get_user_by_id_string(user_id_string)
+                    with transaction.atomic():
+                        user_obj = serializer.create(serializer.validated_data, user)
+
+                        # State change for user start
+                        user_obj.change_state(USER_DICT["ACTIVE"])
+                        # State change for user end
+
+                        # Timeline code start
+                        transaction.on_commit(
+                            lambda: save_user_timeline.delay(user_obj, "User", "User Created", "ACTIVE", user))
+                        # Timeline code end
+
+                    user_obj.save()
+                    view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    raise CustomAPIException(USER_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULTS: list(serializer.errors.values())[0][0],
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='USER', sub_module='USER')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
+
+# API Header
+# API end Point: api/v1/user/:id_string
+# API verb: GET, PUT
+# Package: Basic
+# Modules: User
+# Sub Module: User
+# Interaction: View users, Edit users
+# Usage: View, Edit User
+# Tables used: 2.5.3. Users & Privileges - User Details
+# Author: Arpita
+# Created on: 13/05/2020
+# Updated on: 21/05/2020
+
+
+class UserDetail(GenericAPIView):
+
+    @is_token_validate
+    @role_required(USER, USER, EDIT)
+    def get(self, request, id_string):
+        try:
+            user = get_user_by_id_string(id_string)
+            if user:
+                serializer = UserViewSerializer(instance=user, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULTS: serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: EXCEPTION,
+                    RESULTS: ID_STRING_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'MEDIUM', module='USER', sub_module='USER')
+            return Response({
+                STATE: EXCEPTION,
+                RESULTS: str(e),
+                ERROR: str(traceback.print_exc(e))
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @is_token_validate
+    @role_required(USER, USER, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_obj = get_user_by_id_string(id_string)
+            if user_obj:
+                serializer = UserSerializer(data=request.data)
+                if serializer.is_valid(raise_exception=False):
+                    user_id_string = get_user_from_token(request.headers['token'])
+                    user = get_user_by_id_string(user_id_string)
+                    user_obj = serializer.update(user_obj, serializer.validated_data, user)
+                    view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULTS: view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger().log(e, 'HIGH', module='Admin', sub_module='User')
+            res = self.handle_exception(e)
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=res.status_code)
 
 
 # API Header
@@ -150,7 +279,7 @@ class ResourceList(generics.ListAPIView):
                             user_skill_list.append(user_skill.user_id)
 
                         user_leaves_obj = UserLeaves.objects.filter(user_id__in=user_skill_list,
-                                                                    date__date=(appointment_obj.sa_date).date())
+                                                                    date__date=appointment_obj.sa_date.date())
                         for user_leaves in user_leaves_obj:
                             uesr_leaves_list.append(user_leaves.user_id)
 
@@ -247,134 +376,10 @@ class BulkAssignResourceList(generics.ListAPIView):
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
-# API Header
-# API end Point: api/v1/user
-# API verb: POST
-# Package: Basic
-# Modules: User
-# Sub Module: User
-# Interaction: Add users
-# Usage: Add User
-# Tables used: 2.5.3. Users & Privileges - User Details
-# Author: Arpita
-# Created on: 13/05/2020
-# Updated on: 14/05/2020
-
-class User(GenericAPIView):
-
-    @is_token_validate
-    # role_required(ADMIN, UTILITY_MASTER, EDIT)
-    def post(self, request, format=None):
-        try:
-            serializer = UserSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=False):
-                if not is_email_exists(request.data['email']):
-                    user_id_string = get_user_from_token(request.headers['Authorization'])
-                    user = get_user_by_id_string(user_id_string)
-                    with transaction.atomic():
-                        user_obj = serializer.create(serializer.validated_data, user)
-
-                        # State change for user start
-                        user_obj.change_state(USER_DICT["ACTIVE"])
-                        # State change for user end
-
-                        # Timeline code start
-                        # transaction.on_commit(
-                        #     lambda: save_user_timeline.delay(user_obj, "User", "User Created", "ACTIVE",user))
-                        # Timeline code end
-
-                    user_obj.save()
-                    view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
-                    return Response({
-                        STATE: SUCCESS,
-                        RESULTS: view_serializer.data,
-                    }, status=status.HTTP_201_CREATED)
-                else:
-                    raise CustomAPIException("User already exists.", status_code=status.HTTP_409_CONFLICT)
-            else:
-                return Response({
-                    STATE: ERROR,
-                    RESULTS: list(serializer.errors.values())[0][0],
-                }, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logger().log(e, 'HIGH', module='Admin', sub_module='User')
-            res = self.handle_exception(e)
-            return Response({
-                STATE: EXCEPTION,
-                RESULT: str(e),
-            }, status=res.status_code)
 
 
-# API Header
-# API end Point: api/v1/user/:id_string
-# API verb: GET, PUT
-# Package: Basic
-# Modules: User
-# Sub Module: User
-# Interaction: View users, Edit users
-# Usage: View, Edit User
-# Tables used: 2.5.3. Users & Privileges - User Details
-# Author: Arpita
-# Created on: 13/05/2020
-# Updated on: 21/05/2020
 
 
-class UserDetail(GenericAPIView):
-
-    @is_token_validate
-    # role_required(ADMIN, UTILITY_MASTER, EDIT)
-    def get(self, request, id_string):
-        try:
-            user = get_user_by_id_string(id_string)
-            if user:
-                serializer = UserViewSerializer(instance=user, context={'request': request})
-                return Response({
-                    STATE: SUCCESS,
-                    RESULTS: serializer.data,
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response({
-                    STATE: EXCEPTION,
-                    RESULTS: ID_STRING_NOT_FOUND,
-                }, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            logger().log(e, 'MEDIUM', module='Admin', sub_module='User')
-            return Response({
-                STATE: EXCEPTION,
-                RESULTS: '',
-                ERROR: str(traceback.print_exc(e))
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    @is_token_validate
-    # role_required(ADMIN, UTILITY_MASTER,  EDIT)
-    def put(self, request, id_string):
-        try:
-            user_obj = get_user_by_id_string(id_string)
-            if user_obj:
-                serializer = UserSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=False):
-                    user_id_string = get_user_from_token(request.headers['token'])
-                    user = get_user_by_id_string(user_id_string)
-                    user_obj = serializer.update(user_obj, serializer.validated_data, user)
-                    view_serializer = UserViewSerializer(instance=user_obj, context={'request': request})
-                    return Response({
-                        STATE: SUCCESS,
-                        RESULTS: view_serializer.data,
-                    }, status=status.HTTP_200_OK)
-                else:
-                    return Response({
-                        STATE: ERROR,
-                        RESULTS: list(serializer.errors.values())[0][0],
-                    }, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                raise CustomAPIException(ID_STRING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            logger().log(e, 'HIGH', module='Admin', sub_module='User')
-            res = self.handle_exception(e)
-            return Response({
-                STATE: EXCEPTION,
-                RESULT: str(e),
-            }, status=res.status_code)
 
 
 # API Header

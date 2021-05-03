@@ -62,7 +62,7 @@ class StateList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("State not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(STATE_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

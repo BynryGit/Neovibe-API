@@ -22,6 +22,7 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_filter_backend import CustomFilter
 import os
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
+
 setting_reader = SettingReader()
 
 from boto.s3.connection import S3Connection
@@ -212,23 +213,27 @@ class UploadDocument(GenericAPIView):
             # getting object_id start
             user_obj = validate_user_data(request.data)
             # getting object_id end
+
             utility_obj = get_utility_by_id_string(request.data["utility_id_string"])
             module_obj = get_module_by_id_string(request.data["module_id_string"])
             sub_module_obj = get_sub_module_by_id_string(request.data["sub_module_id_string"])
 
             # getting S3 credentials from SettingReader 
             reader_obj = SettingReader.get_s3_credentials()
-
+            print("READER OBJ")
             file_obj = request.FILES['file']
 
             # establish connection with AWS s3 & Upload file/image on s3 start
             conn = S3Connection(reader_obj['AWS_ACCESS_KEY'], reader_obj['AWS_SECRET_KEY'])
             k = Key(conn.get_bucket(reader_obj['AWS_S3_BUCKET']))
+
+            # Storing images module wise
             if module_obj.name == 'ADMIN' and os.environ["smart360_env"] == 'dev':
                 today = datetime.now()
                 month = today.strftime('%B')
                 year = today.strftime('%Y')
-                k.key = 'Development/Admin/' + str(utility_obj.tenant) + '/' + str(utility_obj.name) + '/' + str(
+                k.key = 'Development/' + str(utility_obj.tenant) + '/' + str(utility_obj.name) + '/' + str(
+                    module_obj.name) + '/' + str(
                     year) + '/' + str(month) + '/' + '/%s/%s' % ('', file_obj)
                 k.set_contents_from_string(file_obj.read())
                 k.set_metadata('Content-Type', 'image/jpeg')
@@ -242,32 +247,15 @@ class UploadDocument(GenericAPIView):
 
                 # Create Signed URL
                 signed_url = s3.generate_presigned_url('get_object', Params={'Bucket': reader_obj['AWS_S3_BUCKET'],
-                                                                             'Key': 'Development/Admin/' + str(
+                                                                             'Key': 'Development/' + str(
                                                                                  utility_obj.tenant) + '/' + str(
-                                                                                 utility_obj.name) + '/' + str(
+                                                                                 utility_obj.name) + '/' +
+                                                                                    str(module_obj.name) + '/' + str(
                                                                                  year) + '/' + str(month) + '/' + str(
                                                                                  file_obj)}, ExpiresIn=3600,
                                                        HttpMethod='GET')
+
                 # Split to store auth details in separate field
-                auth_details = signed_url.split(sep="?")
-
-            if module_obj.name == 'CX' and os.environ["smart360_env"] == 'dev':
-                k.key = 'Development/CX/%s/%s' % ('', file_obj)
-                k.set_contents_from_string(file_obj.read())
-                k.set_metadata('Content-Type', 'image/jpeg')
-                # establish connection with AWS s3 & Upload file/image on s3 end
-
-                # Create Normal URL
-                url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
-
-                s3 = boto3.client('s3', aws_access_key_id=reader_obj['AWS_ACCESS_KEY'],
-                                  aws_secret_access_key=reader_obj['AWS_SECRET_KEY'])
-
-                # Create Signed URL
-                signed_url = s3.generate_presigned_url('get_object', Params={'Bucket': reader_obj['AWS_S3_BUCKET'],
-                                                                             'Key': 'Development/CX/' + str(
-                                                                                 file_obj)}, ExpiresIn=3600,
-                                                       HttpMethod='GET')
                 auth_details = signed_url.split(sep="?")
 
             # Save value into Document Table

@@ -28,6 +28,7 @@ from v1.utility.models.utility_work_order_sub_type import get_utility_work_order
 from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
 from master.models import get_user_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
+from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 
 
@@ -293,9 +294,9 @@ class CustomFilter:
             premise_obj = get_premise_by_id_string(request.query_params['premise_id'])
             queryset = queryset.filter(premise_id=premise_obj.id)
 
-        # FOR ALL THE LIST API's TENANT WISE FILTER
-        if 'tenant' in request.query_params:
-            tenant_obj = get_tenant_by_id_string(request.query_params['tenant'])
-            queryset = queryset.filter(tenant=tenant_obj.id)
+        if 'payment_type_id' in request.query_params:
+            payment_type_obj = get_payment_type_by_id_string(request.query_params['payment_type_id'])
+            queryset = queryset.filter(payment_type_id=payment_type_obj.id)
+
 
         return queryset

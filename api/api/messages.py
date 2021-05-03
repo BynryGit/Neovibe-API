@@ -62,10 +62,10 @@ DOCUMENT_NOT_FOUND = 'Document not found.'
 UTILITY_NOT_FOUND = "Utility not found"
 TENANT_NOT_FOUND = "Tenant not found."
 REGION_NOT_FOUND = "Region not found."
+USER_ALREADY_EXISTS = "User Already Exists."
 AREA_NOT_FOUND = "Area not Found."
 SUBAREA_NOT_FOUND = "Subarea not Found."
 DIVISION_NOT_FOUND = "Division not Found."
-CITY_NOT_FOUND = "City not Found."
 ZONE_NOT_FOUND = "Zone not Found."
 DOCUMENT_TYPE_NOT_FOUND = "No record found for user document type"
 SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
@@ -149,6 +149,7 @@ READER_STATUS_NOT_FOUND = "Reader Status Not Found."
 ALLOCATION_IN_PROGRESS = "Allocation is in progress"
 READING_NOT_PROVIDED = "Readings data not provided"
 CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND = "Consumer service contract detail not found"
+
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

@@ -43,7 +43,7 @@ class PaymentSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_payment_subtype_validated_data(validated_data)
             if UtilityPaymentSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                        utility_id=validated_data['utility_id']).exists():
+                                                       utility_id=validated_data['utility_id'], payment_type_id=validated_data['payment_type_id'],gl_code=validated_data['gl_code']).exists():
                 raise CustomAPIException(PAYMENT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 

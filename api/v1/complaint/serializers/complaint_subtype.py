@@ -24,10 +24,12 @@ class ComplaintSubTypeViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    complaint_type = ComplaintTypeListSerializer(source="get_complaint_type")
+    
 
     class Meta:
         model = ComplaintSubTypeTbl
-        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date')
+        fields = ('id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'complaint_type', 'created_date')
 
 
 class ComplaintSubTypeSerializer(serializers.ModelSerializer):
