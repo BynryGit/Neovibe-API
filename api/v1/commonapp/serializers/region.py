@@ -43,10 +43,10 @@ class RegionSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_region_validated_data(validated_data)
             if UtilityRegionTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                        utility_id=validated_data['utility_id']).exists():
+                                               utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(REGION_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
-                
+
                 region_obj = super(RegionSerializer, self).create(validated_data)
                 region_obj.created_by = user.id
                 region_obj.save()
@@ -70,4 +70,4 @@ class RegionSerializer(serializers.ModelSerializer):
 class RegionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegionTbl
-        fields = ('name', 'id_string','is_active','created_by','created_date')
+        fields = ('name', 'id_string', 'is_active', 'created_by', 'created_date')

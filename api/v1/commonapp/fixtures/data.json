@@ -4808,7 +4808,6 @@
      "is_active": "True"
    }
  },
-
 {
 		"pk": "1",
 		"model": "commonapp.Global_Lookup",

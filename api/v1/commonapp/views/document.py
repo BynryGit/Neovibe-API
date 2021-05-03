@@ -1,32 +1,35 @@
-from v1.commonapp.models.document import Document as DocumentModel
-from v1.commonapp.serializers.document import DocumentListSerializer, DocumentSerializer, DocumentViewSerializer
-from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
-from v1.commonapp.views.logger import logger
-from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token, validate_user_data
-from v1.utility.models.utility_master import get_utility_by_id_string
-from v1.commonapp.views.pagination import StandardResultsSetPagination
+from api.constants import *
+from api.messages import *
+from api.messages import *
+from datetime import datetime
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULTS
+from master.models import get_user_by_id_string
 from rest_framework import status, generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from api.messages import *
-from master.models import get_user_by_id_string
-from v1.userapp.decorators import is_token_validate, role_required
+from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token, validate_user_data
+from v1.commonapp.models.document import Document as DocumentModel
 from v1.commonapp.models.document import get_document_by_id_string, Document as DocumentTbl
-from api.messages import *
-from api.constants import *
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
+from v1.commonapp.serializers.document import DocumentListSerializer, DocumentSerializer, DocumentViewSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException, InvalidAuthorizationException, InvalidTokenException
+from v1.commonapp.views.logger import logger
+from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.commonapp.views.settings_reader import SettingReader
+from v1.userapp.decorators import is_token_validate, role_required
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.commonapp.views.custom_filter_backend import CustomFilter
+import os
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
+
 setting_reader = SettingReader()
 
-import boto3
-from botocore.exceptions import NoCredentialsError
-from rest_framework.parsers import FileUploadParser
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
-
+import sys
+import boto3
+import boto.s3.connection
 
 # API Header
 # API end Point: api/v1/utility/:id_string/document/list
@@ -39,17 +42,23 @@ from boto.s3.key import Key
 # Tables used: Document
 # Author: Chinmay
 # Created on: 22/1/2021
+latest_record = []
+
 
 class DocumentList(generics.ListAPIView):
     try:
         serializer_class = DocumentListSerializer
-        pagination_class = StandardResultsSetPagination
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
+                    latest_record = DocumentModel.objects.latest('created_date')
+                    queryset = DocumentModel.objects.filter(utility=utility, is_active=True,
+                                                            document_generated_name=latest_record)
+                    print("LATEST", latest_record)
+
                     queryset = DocumentModel.objects.filter(utility=utility, is_active=True)
                     if 'consumer_id' in self.request.query_params:
                         id = get_consumer_by_id_string(self.request.query_params['consumer_id']).id
@@ -196,8 +205,6 @@ class DocumentDetail(GenericAPIView):
 # Author: Priyanka
 # Created on: 25/02/2021
 
-import boto3
-
 
 class UploadDocument(GenericAPIView):
 
@@ -213,34 +220,55 @@ class UploadDocument(GenericAPIView):
 
             # getting S3 credentials from SettingReader 
             reader_obj = SettingReader.get_s3_credentials()
-
+            print("READER OBJ")
             file_obj = request.FILES['file']
 
             # establish connection with AWS s3 & Upload file/image on s3 start
             conn = S3Connection(reader_obj['AWS_ACCESS_KEY'], reader_obj['AWS_SECRET_KEY'])
-
-            # s3 = boto3.resource('s3',aws_access_key_id=reader_obj['AWS_ACCESS_KEY'],aws_secret_access_key= reader_obj['AWS_SECRET_KEY'])
-            # bucket = s3.Bucket(reader_obj['AWS_S3_BUCKET'])
-            # objs = list(bucket.objects.filter(Key='MRBD/Screenshot%20from%202020-12-08%2013-02-44.png.png'))
-            # print('============',objs)
-            # for obj in objs:
-            #     print('************',obj)
-
             k = Key(conn.get_bucket(reader_obj['AWS_S3_BUCKET']))
-            k.key = 'MRBD/%s/%s' % ('', file_obj)
-            k.set_contents_from_string(file_obj.read())
-            k.set_metadata('Content-Type', 'image/jpeg')
-            # establish connection with AWS s3 & Upload file/image on s3 end           
 
-            # Create URL
-            url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
+            # Storing images module wise
+            if module_obj.name == 'ADMIN' and os.environ["smart360_env"] == 'dev':
+                today = datetime.now()
+                month = today.strftime('%B')
+                year = today.strftime('%Y')
+                k.key = 'Development/' + str(utility_obj.tenant) + '/' + str(utility_obj.name) + '/' + str(
+                    module_obj.name) + '/' + str(
+                    year) + '/' + str(month) + '/' + '/%s/%s' % ('', file_obj)
+                k.set_contents_from_string(file_obj.read())
+                k.set_metadata('Content-Type', 'image/jpeg')
+                # establish connection with AWS s3 & Upload file/image on s3 end
+
+                # Create Normal URL
+                url = k.generate_url(expires_in=0, query_auth=False, force_http=True)
+
+                s3 = boto3.client('s3', aws_access_key_id=reader_obj['AWS_ACCESS_KEY'],
+                                  aws_secret_access_key=reader_obj['AWS_SECRET_KEY'])
+
+                # Create Signed URL
+                signed_url = s3.generate_presigned_url('get_object', Params={'Bucket': reader_obj['AWS_S3_BUCKET'],
+                                                                             'Key': 'Development/' + str(
+                                                                                 utility_obj.tenant) + '/' + str(
+                                                                                 utility_obj.name) + '/' +
+                                                                                    str(module_obj.name) + '/' + str(
+                                                                                 year) + '/' + str(month) + '/' + str(
+                                                                                 file_obj)}, ExpiresIn=3600,
+                                                       HttpMethod='GET')
+
+                # Split to store auth details in separate field
+                auth_details = signed_url.split(sep="?")
 
             # Save value into Document Table
             document = DocumentTbl()
             document.tenant = utility_obj.tenant
             document.utility = utility_obj
+            document.document_auth_details = auth_details[1]
+            document.last_auth_generated = datetime.utcnow()
+            document.auth_time_span = "7"
             document.module_id = module_obj.id
             document.sub_module_id = sub_module_obj.id
+            document.document_type_id = 1
+            document.document_sub_type_id = 1
             document.object_id = user_obj['object_id']
             document.document_generated_name = url
             document.document_name = file_obj

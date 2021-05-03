@@ -96,7 +96,8 @@ class UserRole(GenericAPIView):
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
                 for role in request.data:
-                    # validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'role_id': role['role_id_string']}
+                    # validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'],
+                    # 'role_id': role['role_id_string']}
                     validate_data = {'user_id': str(id_string), 'role_id': role['role_id_string'],
                                      'utility_id': role['utility_id_string']}
 

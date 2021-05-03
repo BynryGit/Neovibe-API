@@ -52,7 +52,6 @@ class AreaList(generics.ListAPIView):
             else:
                 raise InvalidTokenException
     except Exception as e:
-        print("Area",e)
         logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
 
 
@@ -148,7 +147,6 @@ class AreaDetail(GenericAPIView):
             if area_obj:
                 serializer = AreaSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
-                    print("Area Obj", area_obj)
                     area_obj = serializer.update(area_obj, serializer.validated_data, user)
                     view_serializer = AreaViewSerializer(instance=area_obj,
                                                          context={'request': request})

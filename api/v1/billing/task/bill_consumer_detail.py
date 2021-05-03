@@ -21,7 +21,7 @@ from v1.meter_data_management.models.route import get_route_by_id_string
 from v1.billing.models.bill_schedule_log import ScheduleBillLog
 
 
-@task(name="ImportConsumer-task", queue='ImportConsumer')
+@task(name="ImportBillConsumer-task", queue='ImportConsumer')
 def create_bill_consumers(schedule_log_id):
     try:
         schedule_log_obj = ScheduleBillLog.objects.get(id=schedule_log_id)

@@ -16,6 +16,7 @@ class DocumentSubTypeViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    document_type = UtilityDocumentTypeListSerializer(source="get_utility_document_type")
 
     class Meta:
         model = DocumentSubTypeTbl
@@ -29,6 +30,7 @@ class DocumentSubTypeSerializer(serializers.ModelSerializer):
     tenant_id = serializers.CharField(required=False, max_length=200)
     document_type_id = serializers.CharField(required=False, max_length=200)
 
+
     class Meta:
         model = DocumentSubTypeTbl
         fields = '__all__'
@@ -37,7 +39,7 @@ class DocumentSubTypeSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_document_subtype_validated_data(validated_data)
             if DocumentSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                                 utility_id=validated_data['utility_id']).exists():
+                                                 utility_id=validated_data['utility_id'], document_type_id=validated_data['document_type_id']).exists():
                 raise CustomAPIException(DOCUMENT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
 
@@ -49,7 +51,7 @@ class DocumentSubTypeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_document_subtype_validated_data(validated_data)
         if DocumentSubTypeTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                             utility_id=validated_data['utility_id']).exists():
+                                             utility_id=validated_data['utility_id'], document_type_id = validated_data['document_type_id']).exists():
             raise CustomAPIException(DOCUMENT_SUBTYPE_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

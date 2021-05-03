@@ -21,6 +21,7 @@ from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.views.task import save_admin_timeline
 from django.db import transaction
 
+
 # API Header
 # API end Point: api/v1/utility/:id_string/city/list
 # API verb: GET
@@ -47,7 +48,7 @@ class CityList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("City not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(CITY_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

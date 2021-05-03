@@ -41,12 +41,11 @@ class RegionList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    # utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = RegionModel.objects.all()
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Region not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(REGION_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

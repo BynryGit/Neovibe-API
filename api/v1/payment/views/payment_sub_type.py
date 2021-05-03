@@ -21,6 +21,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from api.messages import *
 from api.constants import *
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.payment.models.payment_type import get_payment_type_by_id_string
 
@@ -52,6 +53,7 @@ class PaymentSubTypeList(generics.ListAPIView):
                     else:
                         # utility = get_utility_by_id_string(self.kwargs['id_string'])
                         queryset = PaymentSubTypeModel.objects.all()
+                        queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

@@ -58,11 +58,11 @@ class StateList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = StateModel.objects.filter(utility=utility, is_active=True)
-                    print("***********", queryset)
+
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("State not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(STATE_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

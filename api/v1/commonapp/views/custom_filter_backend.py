@@ -28,6 +28,8 @@ from v1.utility.models.utility_work_order_sub_type import get_utility_work_order
 from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
 from master.models import get_user_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
+from v1.payment.models.payment_type import get_payment_type_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
 
 
 class CustomFilter:
@@ -99,7 +101,7 @@ class CustomFilter:
         if 'consumer_processing_history' in request.query_params:
             consumer_master_list = []
             consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
-            print("======consumer_master_objs===",consumer_master_objs)
+            print("======consumer_master_objs===", consumer_master_objs)
             if consumer_master_objs:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
@@ -291,5 +293,10 @@ class CustomFilter:
         if 'premise_id' in request.query_params:
             premise_obj = get_premise_by_id_string(request.query_params['premise_id'])
             queryset = queryset.filter(premise_id=premise_obj.id)
+
+        if 'payment_type_id' in request.query_params:
+            payment_type_obj = get_payment_type_by_id_string(request.query_params['payment_type_id'])
+            queryset = queryset.filter(payment_type_id=payment_type_obj.id)
+
 
         return queryset
