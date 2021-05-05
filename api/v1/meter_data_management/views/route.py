@@ -142,7 +142,7 @@ class Route(GenericAPIView):
                 serializer = RouteSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
                     # print("Route Object", serializer.validated_data['route_json'])
-                    for premises_id_string in serializer.validated_data['premises_json']['premises_details']:
+                    for premises_id_string in serializer.validated_data['premises_json']:
                         if premises_id_string['id_string'] in premise_id_string_list:
                             return Response({
                                 STATE: ERROR,

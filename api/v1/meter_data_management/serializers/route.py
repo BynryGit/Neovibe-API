@@ -67,4 +67,4 @@ class RouteShortViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RouteTbl
-        fields = ('id_string','name','premises_json')
+        fields = ('id_string','name')
