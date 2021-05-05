@@ -1291,7 +1291,6 @@ class ConsumerDisconnect(GenericAPIView):
                         utility_product_id=utility_product_obj.id)
 
                 request.data['work_order_master_id'] = str(work_order_master_obj.id_string)
-                print("0a0a0a0a00a0a0a",work_order_master_obj.id)
 
                 # prevent adding multiple request for the same meter
                 try:

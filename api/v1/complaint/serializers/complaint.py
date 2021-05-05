@@ -17,9 +17,10 @@ class ComplaintListSerializer(serializers.ModelSerializer):
     consumer_service_contract_detail_id=ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail_id')
     state = ChoiceField(choices=Complaint.CHOICES)
     complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
+    consumer_complaint_master_id=ConsumerComplaintMasterViewSerializer(source='get_complaint_master_id')
     class Meta:
         model = Complaint
-        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date', 'is_active', 'complaint_sub_type', 'consumer_remark')
+        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date', 'is_active','consumer_complaint_master_id', 'complaint_sub_type', 'consumer_remark')
 
 
 class ComplaintViewSerializer(serializers.ModelSerializer):

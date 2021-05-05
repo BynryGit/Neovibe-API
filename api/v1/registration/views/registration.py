@@ -109,27 +109,22 @@ class Registration(GenericAPIView):
                 registration_serializer = RegistrationSerializer(data=request.data)
                 if registration_serializer.is_valid(raise_exception=False):
                     registration_obj = registration_serializer.create(registration_serializer.validated_data, user)
-                    print('???????????????????',registration_obj)
                     registration_obj.registration_no = generate_registration_no(registration_obj)
                     if 'services' in request.data:
                         registration_obj.registration_obj['services'] = request.data.pop('services')
                     if 'transactions' in request.data:
                         transactions_reg=request.data.pop('transactions')
                         registration_obj.registration_obj['transactions'] = transactions_reg
-                        print("-------------------------",transactions_reg)
                     if 'payment' in request.data:
                         payment=request.data.pop('payment')
                         registration_obj.registration_obj['payment'] = payment
-                        print("---------------------------",payment)
                     # if 'offer_id' in request.data:
                     #     registration_obj.registration_obj['offer_id'] = request.data.pop('offer_id')
                     if 'offer' in request.data:
                         offer = request.data.pop('offer')
                         registration_obj.registration_obj['offer'] = offer
-                        print("++++++++++OFFER++++++++++++++",offer)
                     if 'upfPayment' in request.data:
                         upfPayment = request.data.pop('upfPayment')
-                        print("==================UPFPAYMENT=========================",upfPayment)
                         registration_obj.registration_obj['upfPayment'] = upfPayment                                          
                     registration_obj.save()
                     # payment and transaction save code start
@@ -155,7 +150,6 @@ class Registration(GenericAPIView):
                                     transaction_obj.payment_id = payment_obj.id
                                     transaction_obj.identification_id = registration_obj.id
                                     transaction_obj.save()
-                                    print("+++++++++++++++++++++++++++TRANSACTION ADD SUCCESSFULLY++++++++++++++++++++++++++++++")
                     # payment and transaction save code end
                     view_serializer = RegistrationViewSerializer(instance=registration_obj,
                                                                  context={'request': request})
@@ -556,20 +550,16 @@ class RegistrationApprove(GenericAPIView):
                     service_new=[]
                     if 'services' in registration.registration_obj:
                         service_new=registration.registration_obj['services']
-                        print("___________service new_______",service_new)
 
                     transaction_new=[]
                     payment=[]
                     if 'transactions' and 'payment' in registration.registration_obj:
                         transaction_new=registration.registration_obj['transactions']
                         payment=registration.registration_obj['payment'] 
-                        print("++++++++++++transaction new++++++++",transaction_new)
-                        print("===payment=====",payment)   
 
                     upfPayment=[]
                     if 'upfPayment' in registration.registration_obj:    
                         upfPayment=registration.registration_obj['upfPayment']
-                        print("===upfPayment=====",upfPayment)
 
                     # offer_id=[]
                     # if 'offer_id' in registration.registration_obj:    
@@ -579,12 +569,10 @@ class RegistrationApprove(GenericAPIView):
                     offer=[]
                     if 'offer' in registration.registration_obj:    
                         offer=registration.registration_obj['offer']
-                        print("===OFFER_ID=====",offer)
 
                      # Consumer service contract details save start
                     if service_new and offer:
                         for service_obj in service_new:
-                            print("++++++++++++++++++++++++++++++",service_obj)
                             consumer_service_contract_serializer = ConsumerServiceContractDetailSerializer(
                                 data=service_obj)
                             consumer_service_contract_serializer.is_valid(raise_exception=False)
@@ -593,17 +581,13 @@ class RegistrationApprove(GenericAPIView):
                             contract_detail_obj.is_active=False
                             contract_detail_obj.save()
                             product_id=service_obj['product_id']
-                            print("=PROOOOOO===",product_id)
                             
                             for offer_obj in offer:
-                                print("=PROOOOOOoooooooooooooo===",offer_obj)
                                 if offer_obj['product_id']==product_id:
                                     consumer_offer_detail_serializer = ConsumerOfferDetailSerializer(data=offer_obj)
                                     consumer_offer_detail_serializer.is_valid(raise_exception=True)
                                     consumer_offer_detail_obj = consumer_offer_detail_serializer.create(
                                         consumer_offer_detail_serializer.validated_data, consumer, user)
-                                    print("*****************CREATED SUCCESSFULLY************************************")
-                                    print("==========OFFER OBJ===============",offer_obj)
                                     offer_contract=offer_obj['offer_id']
                                     consumer_offer_detail_obj.offer_id = get_consumer_offer_master_by_id_string(
                                         offer_contract).id
@@ -634,11 +618,9 @@ class RegistrationApprove(GenericAPIView):
                             payment_obj = payment_serializer.create(payment_serializer.validated_data,
                                                                     consumer,
                                                                     user)
-                            print("_____________",payment_obj)                                        
                             payment_obj.consumer_no = consumer.consumer_no
                             payment_obj.save()
                             for item in transaction_new:
-                                print('???????????????????ITEMS???????????',item)
                                 transaction_serializer = PaymentTransactionSerializer(data=item)
                                 if transaction_serializer.is_valid(raise_exception=True):
                                     transaction_obj = transaction_serializer.create(
@@ -647,7 +629,6 @@ class RegistrationApprove(GenericAPIView):
                     
                     # upfront payment save code start
                     if upfPayment !='':
-                        print(">>>>>y u p>>>>>>",upfPayment)
                         consumer_down_payment_serializer = ConsumerDownPaymentSerializer(
                             data=upfPayment)
                         consumer_down_payment_serializer.is_valid()

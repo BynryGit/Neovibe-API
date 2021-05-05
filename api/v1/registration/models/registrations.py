@@ -17,6 +17,7 @@ from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.premises import get_premise_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
+from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id
 
 # *********** REGISTRATION CONSTANTS **************
 REGISTRATION_DICT = {
@@ -80,7 +81,7 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.email_id + " " + str(self.id_string)
@@ -132,6 +133,14 @@ class Registration(models.Model, fsm.FiniteStateMachineMixin):
         return {
             'name': premise.name,
             'id_string': premise.id_string
+        }
+    
+    @property
+    def get_ownership(self):
+        ownership = get_consumer_ownership_by_id(self.ownership_id)
+        return {
+            'name': ownership.name,
+            'id_string': ownership.id_string
         }
 
     @property
