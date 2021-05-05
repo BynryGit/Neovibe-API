@@ -20,6 +20,7 @@ from api.constants import *
 from v1.commonapp.models.lifecycle import LifeCycle
 from v1.commonapp.views.task import save_admin_timeline
 from django.db import transaction
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 
 # API Header
@@ -45,6 +46,7 @@ class CityList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = CityModel.objects.filter(utility=utility, is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

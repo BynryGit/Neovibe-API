@@ -22,6 +22,7 @@ if os.environ["smart360_env"] == 'uat':
 
 app = Celery('api')
 
+# Celery Configuration File Start
 CELERY_CONFIG = {
     "CELERY_TASK_SERIALIZER": "pickle",
     "CELERY_ACCEPT_CONTENT": ['json', 'pickle'],
@@ -30,6 +31,9 @@ CELERY_CONFIG = {
     "CELERY_TIMEZONE": 'UTC',
     "CELERY_ENABLE_UTC": True,
     "CELERY_ENABLE_REMOTE_CONTROL": False,
+    # Celery Task File Start
+    "CELERY_IMPORTS" : ('v1.meter_data_management.task.consumer_detail',)
+    # Celery Task File End
 }
 
 # Todo credentials fetch from .env file
@@ -50,6 +54,21 @@ CELERY_CONFIG.update(
     }
 )
 
+app.conf.update(**CELERY_CONFIG)
+
+# Using a string here means the worker will not have to
+# pickle the object when using Windows.
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))
+
+# Celery Configuration File End
+
+# Celery Queue Start
 CELERY_QUEUES = (
     Queue('Default_Queue', Exchange('Default_Queue'), routing_key='Default_Queue'),
     Queue('ImportConsumer', routing_key='ImportConsumer_Tasks'),
@@ -57,6 +76,7 @@ CELERY_QUEUES = (
     Queue('Dispatch_II', routing_key='Dispatch_II_Tasks'),
     Queue('Timeline_Queue', routing_key='Timeline_Queue_Tasks'),
 )
+# Celery Queue End
 
 CELERY_ROUTES = {
     # Task Use For MDM Module Start
@@ -118,15 +138,3 @@ CELERY_ROUTES = {
     },
     # Task Use For Billing Module End
 }
-
-app.conf.update(**CELERY_CONFIG)
-
-# Using a string here means the worker will not have to
-# pickle the object when using Windows.
-app.config_from_object('django.conf:settings')
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
-
-
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))

@@ -65,7 +65,7 @@ class ValidationViewSerializer(serializers.ModelSerializer):
 
         user_details['consumer_no'] = consumer_master_obj.consumer_no
         user_details['consumer_name'] = "NA"
-        user_details['consumer_email'] = consumer_master_obj.email_id
+        user_details['consumer_email'] = consumer_master_obj.email
         user_details['consumer_phone_mobile'] = consumer_master_obj.phone_mobile
         user_details['consumer_status'] = consumer_master_obj.get_state_display()
         user_details['consumer_address'] = consumer_master_obj.billing_address_line_1
@@ -76,9 +76,9 @@ class ValidationViewSerializer(serializers.ModelSerializer):
         user_details['v1_email'] = validator_one_obj.email
         user_details['v1_phone_mobile'] = validator_one_obj.phone_mobile
         if validator_two_obj:
-            user_details['v2_name'] = validator_one_obj.first_name + ' ' + validator_one_obj.last_name
-            user_details['v2_email'] = validator_one_obj.email
-            user_details['v2_phone_mobile'] = validator_one_obj.phone_mobile
+            user_details['v2_name'] = validator_two_obj.first_name + ' ' + validator_two_obj.last_name
+            user_details['v2_email'] = validator_two_obj.email
+            user_details['v2_phone_mobile'] = validator_two_obj.phone_mobile
         else:
             user_details['v2_name'] = 'NA'
             user_details['v2_email'] = 'NA'

@@ -85,21 +85,21 @@ class MeterReading(GenericAPIView):
                 image_dict = {}
                 for data in request.data:
                     meter_image = data.get("meter_image")
-                    if meter_image:
-                        meter_reading_serializer = MeterReadingSerializer(data=data)
-                        if meter_reading_serializer.is_valid():
-                            meter_reading_obj = meter_reading_serializer.create(meter_reading_serializer.validated_data,
-                                                                                user)
-                            if meter_reading_obj:
-                                dict['created_meter_reading'].append(data.get('consumer_detail_id'))
-                                image_dict[meter_reading_obj.id] = {}
-                                image_dict[meter_reading_obj.id]['meter_image'] = json.dumps(meter_image)
-                            else:
-                                dict['create_meter_reading_error'].append(data.get('consumer_detail_id'))
+                    # if meter_image:
+                    meter_reading_serializer = MeterReadingSerializer(data=data)
+                    if meter_reading_serializer.is_valid():
+                        meter_reading_obj = meter_reading_serializer.create(meter_reading_serializer.validated_data,
+                                                                            user)
+                        if meter_reading_obj:
+                            dict['created_meter_reading'].append(data.get('consumer_detail_id'))
+                            # image_dict[meter_reading_obj.id] = {}
+                            # image_dict[meter_reading_obj.id]['meter_image'] = json.dumps(meter_image)
                         else:
-                            dict['serializer_error'].append(data.get('consumer_detail_id'))
+                            dict['create_meter_reading_error'].append(data.get('consumer_detail_id'))
                     else:
-                        dict['image_missing'].append(data.get('consumer_detail_id'))
+                        dict['serializer_error'].append(data.get('consumer_detail_id'))
+                    # else:
+                    #     dict['image_missing'].append(data.get('consumer_detail_id'))
                 return Response({
                     STATE: SUCCESS,
                     RESULT: dict,

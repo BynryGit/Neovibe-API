@@ -28,6 +28,8 @@ from v1.utility.models.utility_work_order_sub_type import get_utility_work_order
 from v1.utility.models.utility_work_order_type import UtilityWorkOrderType
 from master.models import get_user_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
+from v1.utility.models.utility_document_type import get_utility_document_type_by_id_string
+from v1.commonapp.models.state import get_state_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 
@@ -95,7 +97,7 @@ class CustomFilter:
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerServiceContractDetail.objects.filter(
                         consumer_id__in=[consumer.id for consumer in consumer_master_list], is_active=False,
-                        state__in=[2, 5])
+                        state__in=[2])
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
 
         if 'consumer_processing_history' in request.query_params:
@@ -107,7 +109,7 @@ class CustomFilter:
                     consumer_master_list.append(consumer_master_obj)
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerServiceContractDetail.objects.filter(
-                        consumer_id__in=[consumer.id for consumer in consumer_master_list], state__in=[0, 3, 4],
+                        consumer_id__in=[consumer.id for consumer in consumer_master_list], state__in=[0, 3, 4, 5],
                         created_date__gte=datetime.now() - timedelta(days=180))
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
 
@@ -293,6 +295,14 @@ class CustomFilter:
         if 'premise_id' in request.query_params:
             premise_obj = get_premise_by_id_string(request.query_params['premise_id'])
             queryset = queryset.filter(premise_id=premise_obj.id)
+        
+        if 'document_type_id' in request.query_params:
+            document_type = get_utility_document_type_by_id_string(request.query_params['document_type_id'])
+            queryset = queryset.filter(document_type_id=document_type.id)
+        
+        if 'state_id' in request.query_params:
+            state = get_state_by_id_string(request.query_params['state_id'])
+            queryset = queryset.filter(state_id=state.id)
 
         if 'payment_type_id' in request.query_params:
             payment_type_obj = get_payment_type_by_id_string(request.query_params['payment_type_id'])
