@@ -30,6 +30,7 @@ from master.models import get_user_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
+from django.utils.dateparse import parse_date
 
 
 class CustomFilter:
@@ -298,5 +299,7 @@ class CustomFilter:
             payment_type_obj = get_payment_type_by_id_string(request.query_params['payment_type_id'])
             queryset = queryset.filter(payment_type_id=payment_type_obj.id)
 
+        if 'date' in request.query_params:
+            queryset = queryset.filter(sa_date__date=request.query_params['date'])
 
         return queryset
