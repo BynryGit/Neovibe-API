@@ -38,7 +38,7 @@ from api.constants import *
 # Author: Chinmay
 # Created on: 4/12/2020
 from v1.work_order.models.work_order_master import get_work_order_master_by_consumer_service_master_id
-from v1.work_order.signals.signals import after_consumer_service_request_created
+from v1.consumer.signals.signals import after_consumer_service_request_created
 from v1.work_order.views.common_functions import set_service_appointment_data
 
 

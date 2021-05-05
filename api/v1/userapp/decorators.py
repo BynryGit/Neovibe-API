@@ -54,6 +54,7 @@ def is_token_validate(function):
     def wrap(request, *args, **kwargs):
         token = args[0].headers['Authorization']
         decoded_token = get_payload(token)
+        print("DECODED",decoded_token)
         if decoded_token:
             if decoded_token['type'] == setting_reader.get_user():
                 user_obj = get_user_by_id_string(decoded_token['user_id_string'])

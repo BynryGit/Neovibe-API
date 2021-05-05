@@ -81,7 +81,7 @@ class CountryList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("Country not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(COUNTRY_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

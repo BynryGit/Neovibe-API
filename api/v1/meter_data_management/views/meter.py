@@ -87,7 +87,7 @@ class MeterList(generics.ListAPIView):
 
 class Meter(GenericAPIView):
     @is_token_validate
-    @role_required(MX, METER_MASTER, EDIT)
+    # @role_required(MX, METER_MASTER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -161,7 +161,7 @@ class Meter(GenericAPIView):
 
 class MeterDetail(GenericAPIView):
     @is_token_validate
-    @role_required(MX, METER_MASTER, VIEW)
+    # @role_required(MX, METER_MASTER, VIEW)
     def get(self, request, id_string):
         try:
             meter_obj = get_meter_by_id_string(id_string)
@@ -195,7 +195,7 @@ class MeterDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    @role_required(MX, METER_MASTER, EDIT)
+    # @role_required(MX, METER_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -331,7 +331,7 @@ class MeterNoteList(generics.ListAPIView):
 # todo need to fix this api and note serializer
 class MeterNoteDetail(GenericAPIView):
     @is_token_validate
-    @role_required(MX, METER_MASTER, EDIT)
+    # @role_required(MX, METER_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

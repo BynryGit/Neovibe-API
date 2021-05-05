@@ -73,7 +73,6 @@ class MasterUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
 
-
 # *********** USER CONSTANTS **************
 USER_DICT = {
     "CREATED": 0,
@@ -226,8 +225,6 @@ def get_user_by_id(id):
         return User.objects.get(id=id)
     except:
         return False
-
-
 
 
 def get_user_by_username_password(email, password):

@@ -62,10 +62,10 @@ DOCUMENT_NOT_FOUND = 'Document not found.'
 UTILITY_NOT_FOUND = "Utility not found"
 TENANT_NOT_FOUND = "Tenant not found."
 REGION_NOT_FOUND = "Region not found."
+USER_ALREADY_EXISTS = "User Already Exists."
 AREA_NOT_FOUND = "Area not Found."
 SUBAREA_NOT_FOUND = "Subarea not Found."
 DIVISION_NOT_FOUND = "Division not Found."
-CITY_NOT_FOUND = "City not Found."
 ZONE_NOT_FOUND = "Zone not Found."
 DOCUMENT_TYPE_NOT_FOUND = "No record found for user document type"
 SERVICE_TYPE_NOT_FOUND = "No record found for user service type"
@@ -83,6 +83,7 @@ DEPARTMENT_TYPE_ALREADY_EXIST = "Department Type already Exist"
 DEPARTMENT_SUBTYPE_ALREADY_EXIST = "Department SubType already Exist"
 DIVISION_ALREADY_EXIST = "Division Already Exist"
 HOLIDAY_ALREADY_EXIST = "Holiday Already Exist"
+METER_ALREADY_EXIST = "Meter Already Exist"
 READ_CYCLE_ALREADY_EXIST = "Read Cycle Already Exist"
 SERVICE_DEASSIGNMENT = "Service Deassign Successfully"
 CONSUMER_COMPLAINT_ALREADY_EXISTS = "Consumer complaint already exists!"
@@ -143,12 +144,14 @@ METER_NOT_FOUND = 'Meter not found'
 METER_READER_NOT_FOUND = 'Meter reader not found'
 METER_TYPE_NOT_FOUND = 'Meter type not found'
 PREMISE_NOT_FOUND = "Premise not found"
+METER_MAKE_NOT_FOUND = "Meter Make not found"
 METER_READING_NOT_FOUND = "Meter Reading not found"
 ROUTE_TASK_ASSIGNMENT_NOT_FOUND = "Route task assignment not found"
 READER_STATUS_NOT_FOUND = "Reader Status Not Found."
 ALLOCATION_IN_PROGRESS = "Allocation is in progress"
 READING_NOT_PROVIDED = "Readings data not provided"
 CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND = "Consumer service contract detail not found"
+
 
 # *********** ALREADY EXIST CONSTANTS **************
 NAME_ALREADY_EXIST = "Name Already Exist"

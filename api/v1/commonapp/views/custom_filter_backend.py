@@ -30,6 +30,9 @@ from master.models import get_user_by_id_string
 from v1.commonapp.models.premises import get_premise_by_id_string
 from v1.utility.models.utility_document_type import get_utility_document_type_by_id_string
 from v1.commonapp.models.state import get_state_by_id_string
+from v1.payment.models.payment_type import get_payment_type_by_id_string
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
+
 
 class CustomFilter:
 
@@ -100,7 +103,7 @@ class CustomFilter:
         if 'consumer_processing_history' in request.query_params:
             consumer_master_list = []
             consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
-            print("======consumer_master_objs===",consumer_master_objs)
+            print("======consumer_master_objs===", consumer_master_objs)
             if consumer_master_objs:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
@@ -300,5 +303,10 @@ class CustomFilter:
         if 'state_id' in request.query_params:
             state = get_state_by_id_string(request.query_params['state_id'])
             queryset = queryset.filter(state_id=state.id)
+
+        if 'payment_type_id' in request.query_params:
+            payment_type_obj = get_payment_type_by_id_string(request.query_params['payment_type_id'])
+            queryset = queryset.filter(payment_type_id=payment_type_obj.id)
+
 
         return queryset

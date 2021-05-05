@@ -8,7 +8,6 @@ from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 
 
-
 @task(name="user_timeline", queue='user_timeline_queue')
 def save_user_timeline(obj, title, text, state, user):
     try:
@@ -16,7 +15,6 @@ def save_user_timeline(obj, title, text, state, user):
         sub_module = get_sub_module_by_key("USER")
         LifeCycle(
             tenant=obj.tenant,
-            # utility=obj.utility,
             module_id=module.id,
             sub_module_id=sub_module.id,
             object_id=obj.id,

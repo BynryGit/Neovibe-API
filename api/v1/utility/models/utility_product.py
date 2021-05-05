@@ -24,7 +24,7 @@ class UtilityProduct(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name) + " - " + str(self.id_string)
 
     def __unicode__(self):
         return self.name

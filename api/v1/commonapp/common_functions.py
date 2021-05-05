@@ -77,6 +77,7 @@ def get_user_from_token(token):
 def is_token_valid(token):
     try:
         decoded_token = get_payload(token)
+        print("DEOCED",decoded_token)
         if decoded_token:
             if decoded_token['type'] == setting_reader.get_user():
                 user_obj = get_user_by_id_string(decoded_token['user_id_string'])

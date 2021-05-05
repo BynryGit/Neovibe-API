@@ -46,7 +46,7 @@ class SubAreaList(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("SubArea not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(SUBAREA_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:
@@ -69,7 +69,7 @@ class SubAreaListByArea(generics.ListAPIView):
                     if queryset:
                         return queryset
                     else:
-                        raise CustomAPIException("SubArea not found.", status.HTTP_404_NOT_FOUND)
+                        raise CustomAPIException(SUBAREA_NOT_FOUND, status.HTTP_404_NOT_FOUND)
                 else:
                     raise InvalidAuthorizationException
             else:

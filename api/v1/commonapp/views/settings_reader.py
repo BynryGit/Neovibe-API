@@ -23,9 +23,10 @@ class SettingReader:
     def get_s3_credentials():
         try:
             data={
-                "AWS_ACCESS_KEY":settings.AWS_ACCESS_KEY,
-                "AWS_SECRET_KEY":settings.AWS_SECRET_KEY,
-                "AWS_S3_BUCKET":settings.AWS_S3_BUCKET
+                "AWS_ACCESS_KEY":settings.AWS_ACCESS_KEY_ID,
+                "AWS_SECRET_KEY":settings.AWS_SECRET_ACCESS_KEY,
+                "AWS_S3_BUCKET":settings.AWS_STORAGE_BUCKET_NAME,
+                "AWS_S3_REGION":settings.AWS_S3_REGION
                 }
             return data
         except:

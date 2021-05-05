@@ -100,8 +100,8 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     area_id = models.BigIntegerField(null=True, blank=True)
     sub_area_id = models.BigIntegerField(null=True, blank=True)
     premise_id = models.BigIntegerField(null=True, blank=True)
-    actual_start_time = models.TimeField(null=True, blank=True, default='20:00')
-    actual_end_time = models.TimeField(null=True, blank=True, default='20:00')
+    actual_start_time = models.TimeField(null=True, blank=True)
+    actual_end_time = models.TimeField(null=True, blank=True)
     actual_duration = models.BigIntegerField(blank=True, null=True)
     completed_task_details = JSONField(null=True, blank=True)
     sa_GIS_id = models.BigIntegerField(blank=True, null=True)
@@ -111,8 +111,8 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
-    # def __str__(self):
-    #     return self.id_string
+    def __str__(self):
+        return str(self.id_string) + " - " +str(self.consumer_service_contract_detail_id)
 
     def __unicode__(self):
         return self.id_string

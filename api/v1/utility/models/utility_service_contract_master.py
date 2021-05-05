@@ -16,7 +16,7 @@ class UtilityServiceContractMaster(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, null=True, blank=True)
-    service_obj = JSONField(default='')
+    service_obj = JSONField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     end_date = models.DateTimeField(null=True, blank=True, default=timezone.now)

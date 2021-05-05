@@ -88,4 +88,5 @@ class DocumentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ('id_string', 'tenant', 'utility', 'module', 'sub_module', 'document_type', 'document_sub_type',
-                  'identification', 'name', 'link', 'created_date', 'updated_date')
+                  'identification', 'name', 'link', 'document_auth_details', 'last_auth_generated',
+                  'document_generated_name', 'auth_time_span', 'created_date', 'updated_date')

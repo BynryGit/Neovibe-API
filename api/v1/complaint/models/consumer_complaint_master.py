@@ -16,7 +16,7 @@ class ConsumerComplaintMaster(models.Model):
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=False, null=False)
-    service_obj = JSONField(default='')
+    service_obj = JSONField(null=True, blank=True)
     complaint_type_id = models.BigIntegerField(null=True, blank=True)
     complaint_sub_type_id = models.BigIntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)

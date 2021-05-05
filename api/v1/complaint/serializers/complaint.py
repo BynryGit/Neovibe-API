@@ -4,17 +4,19 @@ from v1.complaint.serializers.complaint_subtype import ComplaintSubTypeListSeria
 from v1.complaint.serializers.complaint_type import ComplaintTypeListSerializer
 from django.db import transaction
 from rest_framework import serializers, status
-
 from api.messages import CONSUMER_COMPLAINT_ALREADY_EXISTS
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.complaint.models.complaint import Complaint
 from v1.complaint.views.common_functions import set_complaint_validated_data, generate_complaint_no
 from v1.consumer.serializers.consumer_service_contract_details import ConsumerServiceContractDetailViewSerializer
 from v1.registration.serializers.registration import ChoiceField
-from v1.complaint.serializers.consumer_complaint_master import ConsumerComplaintMasterListSerializer, ConsumerComplaintMasterViewSerializer
+from v1.complaint.serializers.consumer_complaint_master import ConsumerComplaintMasterListSerializer, \
+    ConsumerComplaintMasterViewSerializer
+
 
 class ComplaintListSerializer(serializers.ModelSerializer):
-    consumer_service_contract_detail_id=ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail_id')
+    consumer_service_contract_detail_id = ConsumerServiceContractDetailViewSerializer(
+        source='get_consumer_service_contract_detail_id')
     state = ChoiceField(choices=Complaint.CHOICES)
     complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
     consumer_complaint_master_id=ConsumerComplaintMasterViewSerializer(source='get_complaint_master_id')
@@ -30,8 +32,9 @@ class ComplaintViewSerializer(serializers.ModelSerializer):
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
     state = ChoiceField(choices=Complaint.CHOICES)
     complaint_sub_type = ComplaintSubTypeListSerializer(source='get_complaint_sub_type')
-    consumer_service_contract_detail_id=ConsumerServiceContractDetailViewSerializer(source='get_consumer_service_contract_detail_id')
-    consumer_complaint_master_id=ConsumerComplaintMasterViewSerializer(source='get_complaint_master_id')
+    consumer_service_contract_detail_id = ConsumerServiceContractDetailViewSerializer(
+        source='get_consumer_service_contract_detail_id')
+    consumer_complaint_master_id = ConsumerComplaintMasterViewSerializer(source='get_complaint_master_id')
 
     class Meta:
         model = Complaint
@@ -43,6 +46,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
     consumer_service_contract_detail_id = serializers.CharField(required=False, max_length=200)
     complaint_type_id = serializers.CharField(required=False, max_length=200)
     complaint_sub_type_id = serializers.CharField(required=False, max_length=200)
+
     # complaint_status_id = serializers.CharField(required=False, max_length=200)
 
     class Meta:
@@ -52,7 +56,8 @@ class ComplaintSerializer(serializers.ModelSerializer):
     def create(self, validated_data, consumer, user):
         validated_data = set_complaint_validated_data(validated_data)
         if Complaint.objects.filter(consumer_no=consumer.consumer_no, is_active=True,
-                                    consumer_complaint_master_id=validated_data['consumer_complaint_master_id']).exists():
+                                    consumer_complaint_master_id=validated_data[
+                                        'consumer_complaint_master_id']).exists():
             raise CustomAPIException(CONSUMER_COMPLAINT_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

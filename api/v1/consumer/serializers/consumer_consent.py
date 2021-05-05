@@ -27,6 +27,8 @@ class ConsumerConsentViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    consumer_category = ConsumerCategoryListSerializer(source='get_consumer_category')
+    consumer_subcategory = ConsumerSubCategoryListSerializer(source='get_consumer_subcategory')
 
     class Meta:
         model = ConsumerConsentTbl

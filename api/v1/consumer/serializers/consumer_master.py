@@ -44,7 +44,7 @@ class ConsumerViewSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'consumer_no',
                   'master_consumer_no', 'email', 'phone_mobile', 'billing_address_line_1', 'billing_street',
                   'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise',
-                  'account_type')
+                  'account_type','is_vip')
 
 
 class ConsumerSerializer(serializers.ModelSerializer):

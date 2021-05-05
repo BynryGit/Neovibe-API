@@ -18,8 +18,9 @@ from v1.commonapp.common_functions import get_payload
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_short_name
 from v1.consumer.models.consumer_master import ConsumerMaster
-from v1.consumer.models.consumer_token import get_consumer_token_by_token,check_token_exists_for_consumer
+from v1.consumer.models.consumer_token import get_consumer_token_by_token, check_token_exists_for_consumer
 from v1.commonapp.views.settings_reader import SettingReader
+
 secret_reader = SecretReader()
 setting_reader = SettingReader()
 
@@ -88,7 +89,8 @@ def login(request, user, form_factor):
     try:
         if (form_factor == 1 or form_factor == 2):
             user_obj = get_user_by_email(user.email)
-            payload = {'user_id_string': str(user_obj.id_string),'type':setting_reader.get_user(), 'string': str(uuid.uuid4().hex[:6].upper())}
+            payload = {'user_id_string': str(user_obj.id_string), 'type': setting_reader.get_user(),
+                       'string': str(uuid.uuid4().hex[:6].upper())}
             encoded_jwt = jwt.encode(payload, secret_reader.get_secret(), algorithm='HS256').decode('utf-8')
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
@@ -102,17 +104,18 @@ def login(request, user, form_factor):
                 token=encoded_jwt,
                 ip_address=ip,
                 created_by=user.id,
-                created_date = datetime.utcnow(),
+                created_date=datetime.utcnow(),
                 is_active=True
             )
             token_obj.save()
             return token_obj.token
 
-        elif(form_factor == 3 or form_factor == 4):
+        elif (form_factor == 3 or form_factor == 4):
             tenant_obj = get_tenant_by_short_name(request.data['tenant'])
             consumer_obj = ConsumerMaster.objects.get(email=user.email, tenant=tenant_obj)
             # consumer_obj = get_consumer_by_email(user.email)
-            payload = {'user_id_string': str(consumer_obj.id_string), 'type':setting_reader.get_consumer_user(),'string': str(uuid.uuid4().hex[:6].upper())}
+            payload = {'user_id_string': str(consumer_obj.id_string), 'type': setting_reader.get_consumer_user(),
+                       'string': str(uuid.uuid4().hex[:6].upper())}
             encoded_jwt = jwt.encode(payload, secret_reader.get_secret(), algorithm='HS256').decode('utf-8')
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
@@ -126,16 +129,17 @@ def login(request, user, form_factor):
                 token=encoded_jwt,
                 ip_address=ip,
                 created_by=user.id,
-                created_date = datetime.utcnow(),
+                created_date=datetime.utcnow(),
                 is_active=True
             )
             token_obj.save()
             return token_obj.token
     except Exception as e:
-        print("===error===",e)
+        print("===error===", e)
         print(traceback.print_exc())
-        logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User Login')
+        logger().log(e, 'HIGH', module='Admin', sub_module='User Login')
         return False
+
 
 # API Header
 # API end Point: api/v1/user/login
@@ -245,11 +249,12 @@ class LoginApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            logger().log(ex, 'HIGH', module = 'Admin', sub_module = 'User Login')
+            logger().log(ex, 'HIGH', module='Admin', sub_module='User Login')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # API Header
 # API end Point: api/v1/user/logout
@@ -314,7 +319,7 @@ class LogoutApiView(APIView):
             if validate_logout_data(request):
                 token = request.headers['Authorization']
                 decoded_token = get_payload(token)
-                print("=========this is token---------",decoded_token)
+                print("=========this is token---------", decoded_token)
                 if decoded_token:
                     if decoded_token['type'] == setting_reader.get_user():
                         user_obj = get_user_by_id_string(request.data['id_string'])
@@ -333,7 +338,7 @@ class LogoutApiView(APIView):
 
                     elif decoded_token['type'] == setting_reader.get_consumer_user():
                         consumer_obj = get_consumer_by_id_string(request.data['id_string'])
-                        print("------USER--------",consumer_obj)
+                        print("------USER--------", consumer_obj)
                         if check_token_exists_for_consumer(token, consumer_obj.id):
                             token_obj = get_consumer_token_by_token(token)
                             token_obj.delete()
@@ -346,7 +351,7 @@ class LogoutApiView(APIView):
                                 STATE: FAIL,
                                 RESULTS: INVALID_CREDENTIALS,
                             }, status=status.HTTP_401_UNAUTHORIZED)
-                        
+
                 else:
                     return Response({
                         STATE: ERROR,
@@ -359,9 +364,8 @@ class LogoutApiView(APIView):
 
         except Exception as ex:
             print('file: {} api {} execption {}'.format('user', 'POST login', str(traceback.print_exc(ex))))
-            logger().log(ex, 'HIGH', module = 'Admin', sub_module = 'User Logout')
+            logger().log(ex, 'HIGH', module='Admin', sub_module='User Logout')
             return Response({
                 STATE: FAIL,
                 RESULTS: SERVER_ERROR.format(str(ex)),
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-

@@ -27,7 +27,7 @@ from v1.meter_data_management.models.route_task_assignment import RouteTaskAssig
 # todo need to fix logic
 class MeterReadingSummary(generics.ListAPIView):
     @is_token_validate
-    @role_required(MX, VALIDATION, VIEW)
+    # @role_required(MX, VALIDATION, VIEW)
     def get(self, request, id_string):
         try:
             utility_obj = get_utility_by_id_string(id_string)

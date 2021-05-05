@@ -14,11 +14,11 @@ class NotificationSubTypeViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
-
+    notification_type = NotificationTypeListSerializer(source="get_notification_type")
     class Meta:
         model = NotificationSubTypeTbl
         fields = (
-            'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'name', 'id_string')
+            'tenant', 'tenant_id_string', 'notification_type', 'utility', 'utility_id_string', 'name', 'id_string')
 
 
 class NotificationSubTypeSerializer(serializers.ModelSerializer):
