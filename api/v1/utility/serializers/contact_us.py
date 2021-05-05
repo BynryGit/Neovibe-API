@@ -32,7 +32,8 @@ class ContactUsViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUsTbl
         fields = (
-            'id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string')
+            'id_string', 'tenant', 'tenant_id_string','email', "emergency_no",
+                  "working_days", "portal_site", 'utility', 'utility_id_string')
 
 
 class ContactUsSerializer(serializers.ModelSerializer):
@@ -49,7 +50,8 @@ class ContactUsSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_contact_us_validated_data(validated_data)
             if ContactUsTbl.objects.filter(email=validated_data['email'], tenant_id=validated_data['tenant_id'],
-                                           utility_id=validated_data['utility_id']).exists():
+                                           utility_id=validated_data['utility_id'], emergency_no=validated_data['emergency_no'],
+                                           working_days=validated_data['working_days'],portal_site=validated_data['portal_site']).exists():
                 raise CustomAPIException(CONTACT_DATA_WITH_EMAIL_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 contact_us_obj = super(ContactUsSerializer, self).create(validated_data)
@@ -60,7 +62,8 @@ class ContactUsSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_contact_us_validated_data(validated_data)
         if ContactUsTbl.objects.filter(email=validated_data['email'], tenant_id=validated_data['tenant_id'],
-                                       utility_id=validated_data['utility_id']).exists():
+                                           utility_id=validated_data['utility_id'], emergency_no=validated_data['emergency_no'],
+                                           working_days=validated_data['working_days'],portal_site=validated_data['portal_site']).exists():
             raise CustomAPIException(CONTACT_DATA_WITH_EMAIL_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

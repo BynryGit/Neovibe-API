@@ -44,7 +44,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
     billing_sub_area = serializers.ReadOnlyField(source='get_sub_area')
     premise = serializers.ReadOnlyField(source='get_premise')
     state = ChoiceField(choices=Registration.CHOICES)
-
+    ownership = serializers.ReadOnlyField(source='get_ownership')
     # def to_representation(self, instance):
     #     data = super(RegistrationViewSerializer, self).to_representation(instance)
     #     data['registration_date'] = instance.registration_date.strftime(setting_reader.get_display_date_format())
@@ -55,7 +55,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no',
                   'email_id', 'phone_mobile', 'billing_address_line_1', 'billing_street',
                   'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise',
-                  'state')
+                  'state','ownership','is_vip')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

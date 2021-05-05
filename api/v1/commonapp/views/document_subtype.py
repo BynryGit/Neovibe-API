@@ -34,6 +34,7 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.models.document_sub_type import get_document_sub_type_by_id_string
 from api.messages import *
 from api.constants import *
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 
 # API Header
@@ -60,6 +61,7 @@ class DocumentSubTypeList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = DocumentSubTypeModel.objects.filter(utility=utility, is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset
                     else:

@@ -30,12 +30,12 @@ class PaymentTransaction(models.Model, fsm.FiniteStateMachineMixin):
     state = models.BigIntegerField(choices=CHOICES, default=0)
     payment_id = models.BigIntegerField(null=True, blank=True)
     settlement_amount = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=4)
-    settlement_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    settlement_date = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
         return str(self.utility)
