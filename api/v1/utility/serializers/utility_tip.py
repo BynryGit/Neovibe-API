@@ -30,7 +30,7 @@ class UtilityTipViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UtilityTipTbl
         fields = (
-            'id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string')
+            'id_string', 'tenant', 'tenant_id_string', 'utility', "tip", "description", 'utility_id_string')
 
 
 class UtilityTipSerializer(serializers.ModelSerializer):

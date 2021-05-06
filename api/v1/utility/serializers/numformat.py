@@ -12,8 +12,8 @@ from api.messages import NUMFORMAT_ALREADY_EXIST
 
 
 class UtilityServiceNumberFormatSerializer(serializers.ModelSerializer):
-    sub_module_id = serializers.CharField(required=True, max_length=200)
-    module_id = serializers.CharField(required=True, max_length=200)
+    sub_module_id = serializers.CharField(required=False, max_length=200)
+    module_id = serializers.CharField(required=False, max_length=200)
     utility_id = serializers.CharField(required=False, max_length=200)
     tenant_id = serializers.CharField(required=False, max_length=200)
     prefix = serializers.CharField(required=False, max_length=200)
@@ -30,7 +30,7 @@ class UtilityServiceNumberFormatSerializer(serializers.ModelSerializer):
             if UtilityServiceNumberFormatTbl.objects.filter(tenant_id=validated_data['tenant_id'],
                                                             utility_id=validated_data['utility_id'],
                                                             startingno=validated_data['startingno'],
-                                                            currentno=validated_data['currentno'],
+                                                            sub_module_id = validated_data['sub_module_id'],
                                                             prefix=validated_data['prefix']).exists():
                 raise CustomAPIException(NUMFORMAT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
@@ -43,12 +43,17 @@ class UtilityServiceNumberFormatSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_numformat_validated_data(validated_data)
-        with transaction.atomic():
-            numformat_obj = super(UtilityServiceNumberFormatSerializer, self).update(instance, validated_data)
-            numformat_obj.updated_by = user.id
-            numformat_obj.updated_date = datetime.utcnow()
-            numformat_obj.save()
-            return numformat_obj
+        if UtilityServiceNumberFormatTbl.objects.filter(tenant_id=validated_data['tenant_id'],
+                                                        utility_id=validated_data['utility_id'],
+                                                        prefix=validated_data['prefix']).exists():
+            raise CustomAPIException(NUMFORMAT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                numformat_obj = super(UtilityServiceNumberFormatSerializer, self).update(instance, validated_data)
+                numformat_obj.updated_by = user.id
+                numformat_obj.updated_date = datetime.utcnow()
+                numformat_obj.save()
+                return numformat_obj
 
 
 class UtilityServiceNumberFormatListSerializer(serializers.ModelSerializer):

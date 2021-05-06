@@ -120,7 +120,7 @@ class ReadCycle(GenericAPIView):
                 serializer = ReadCycleSerializer(data=request.data)
                 if serializer.is_valid(raise_exception=False):
                     print("Premise Object", serializer.validated_data['route_json'])
-                    for premises_id_string in serializer.validated_data['route_json']['route_details']:
+                    for premises_id_string in serializer.validated_data['route_json']:
                         if premises_id_string['id_string'] in route_id_string_list:
                             return Response({
                                 STATE: ERROR,
