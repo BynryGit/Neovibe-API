@@ -109,6 +109,7 @@ class Registration(GenericAPIView):
                 registration_serializer = RegistrationSerializer(data=request.data)
                 if registration_serializer.is_valid(raise_exception=False):
                     registration_obj = registration_serializer.create(registration_serializer.validated_data, user)
+                    registration_obj.change_state(REGISTRATION_DICT["CREATED"])
                     registration_obj.registration_no = generate_registration_no(registration_obj)
                     if 'services' in request.data:
                         registration_obj.registration_obj['services'] = request.data.pop('services')

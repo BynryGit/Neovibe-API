@@ -9,7 +9,7 @@ from v1.commonapp.models.sub_module import get_sub_module_by_key
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.consumer.models.consumer_category import get_consumer_category_by_id_string
 from v1.consumer.models.consumer_credit_rating import get_consumer_credit_rating_by_id_string
-from v1.consumer.models.consumer_master import get_consumer_by_id_string
+from v1.consumer.models.consumer_master import get_consumer_by_id_string, get_consumer_by_id
 from v1.consumer.models.consumer_offer_master import get_consumer_offer_master_by_id_string
 from v1.consumer.models.consumer_ownership import get_consumer_ownership_by_id_string
 from v1.consumer.models.consumer_sub_category import get_consumer_sub_category_by_id_string
@@ -30,7 +30,13 @@ from v1.consumer.models.offer_sub_type import get_offer_sub_type_by_id_string
 from v1.utility.models.utility_module import get_utility_module_by_id_string
 from v1.utility.models.utility_sub_module import get_utility_submodule_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
-
+from v1.commonapp.models.transition_configuration import TransitionConfiguration, TRANSITION_CHANNEL_DICT, \
+    is_transition_configuration_exists
+from v1.commonapp.views.logger import logger
+# from v1.commonapp.views.notifications import handle_communications, html_handler
+from v1.commonapp.views.notifications import OutboundHandler, EmailHandler, SMSHandler
+from v1.commonapp.models.notification_template import get_notification_template_by_id
+from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
 
 # Function for converting id_strings to id's
 def set_consumer_validated_data(validated_data):
@@ -500,3 +506,61 @@ def generate_transaction_id(consumer):
         return transaction_id
     except Exception as e:
         raise CustomAPIException("Transaction id generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def perform_events(next_state, consumer, transition_object):
+    try:
+        print("IIIIIIIIINNNNNNNNNNSSSSSSSSSIIIIIIIIDEEEEEEEEE PERFORM EVENTSSSSSSSS",transition_object)
+        print("uuuuuuuuuuuuuuuuu",consumer.utility)
+        print("get consumerrrrrrrrrrr",get_consumer_by_id(consumer.consumer_id))
+        consumer_master = get_consumer_by_id(consumer.consumer_id)
+        print("nextttttttttttttt statee",next_state)
+        if TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,utility=consumer.utility, is_active=True).exists():
+            print("printtttttttttttttttttttttttt")
+            transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object,
+                                                                     transition_state=next_state,
+                                                                     utility=consumer.utility, is_active=True)
+            print("aaaaaaaaaatransitionnnnnnnnn",transition_objs)
+            for transition_obj in transition_objs:
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
+                    # registration_email_to_consumer(registration.id, transition_obj.id)
+                    transition_obj = get_transition_configuration_by_id(transition_obj.id)
+                    print("mmmmmmmmmmmmmmmmmmm",transition_obj)
+                    # Call to the first function
+                    e1 = EmailHandler(transition_obj.transition_object, consumer)
+                    print("emailllllllllllllllllllllllllllll",e1)
+
+                    array = e1.handle_communications()
+                    print("arrayyyyyyyyyyyyyyyyy",array)
+                    print("0000000000000000000000",transition_obj.template_id)
+
+                    html = get_notification_template_by_id(transition_obj.template_id)
+                    print("noooooooooottttttttttttttttttttttttt",html)
+
+                    email_body = e1.html_handler(html.template, array)
+                    print("emaiiiiiiiiiiiibooooooooooooooo",email_body)
+
+                    e1.send_email('Registration Created SuccessFully', "support.smart360@bynry.com",
+                                  [consumer_master.email], None, None, email_body)
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
+                    print("inside SSSSSSSSSSMMMMMMMMMMMMMMSSSSSSSSSS")
+                    # Call to the first function
+                    e1 = SMSHandler(transition_obj.transition_object, consumer)
+
+                    array = e1.handle_communications()
+
+                    transition_obj = get_transition_configuration_by_id(transition_obj.id)
+
+                    html = get_notification_template_by_id(transition_obj.template_id)
+
+                    sms_body = e1.html_handler(html.template, array)
+                    print("SMS Body", consumer_master.phone_mobile)
+                    e1.send_sms(sms_body, SecretReader.get_from_number(),
+                                consumer_master.phone_mobile)
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['WHATSAPP']:
+                    pass
+        else:
+            pass
+    except Exception as e:
+        logger().log(e, 'LOW', module='Consumer Ops', sub_module='Registrations', registration=registration.id)
+        pass
