@@ -30,6 +30,6 @@ urlpatterns = [
     path('service-appointment/list',ServiceAppointmentList.as_view(),name='service_appointment_list'),
     path('service-appointment/<uuid:id_string>/reject',ServiceAppointmentReject.as_view(),name='service_appointment_reject'),
     path('service-appointment/<uuid:id_string>/hold',ServiceAppointmentHold.as_view(),name='service_appointment_hold'),
-    path('service-appointment/<uuid:id_string>/approve',ServiceAppointmentApprove.as_view(),name='service_appointment_approve')
+    path('service-appointment/<uuid:id_string>/approve',ServiceAppointmentApprove.as_view(),name='service_appointment_approve'),
 
 ]

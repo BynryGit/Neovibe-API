@@ -26,6 +26,9 @@ from v1.registration.models import registrations
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from v1.utility.models.utility_product import get_utility_product_by_id_string
 from v1.utility.models.utility_services_number_format import UtilityServiceNumberFormat
+from v1.commonapp.views.notifications import OutboundHandler, EmailHandler, SMSHandler
+from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
+from v1.commonapp.models.notification_template import get_notification_template_by_id
 
 
 def is_data_verified(request):
@@ -101,17 +104,59 @@ def generate_registration_no(registration):
 
 
 # Function for performing registration transition events
+# def perform_events(next_state, registration, transition_object):
+#     try:
+#         if is_transition_configuration_exists(transition_object, next_state, registration.utility):
+#             transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object,
+#                                                                      transition_state=next_state,
+#                                                                      utility=registration.utility, is_active=True)
+#             for transition_obj in transition_objs:
+#                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
+#                     registration_email_to_consumer(registration.id, transition_obj.id)
+#                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
+#                     pass
+#                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['WHATSAPP']:
+#                     pass
+#         else:
+#             pass
+#     except Exception as e:
+#         logger().log(e, 'LOW', module='Consumer Ops', sub_module='Registrations', registration=registration.id)
+#         pass
 def perform_events(next_state, registration, transition_object):
     try:
-        if is_transition_configuration_exists(transition_object, next_state, registration.utility):
+        if TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,utility=registration.utility, is_active=True).exists():
             transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object,
                                                                      transition_state=next_state,
                                                                      utility=registration.utility, is_active=True)
             for transition_obj in transition_objs:
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
-                    registration_email_to_consumer(registration.id, transition_obj.id)
+                    # registration_email_to_consumer(registration.id, transition_obj.id)
+                    transition_obj = get_transition_configuration_by_id(transition_obj.id)
+                    # Call to the first function
+                    e1 = EmailHandler(transition_obj.transition_object, registration)
+
+                    array = e1.handle_communications()
+
+                    html = get_notification_template_by_id(transition_obj.template_id)
+
+                    email_body = e1.html_handler(html.template, array)
+
+                    e1.send_email('Registration Created SuccessFully', "support.smart360@bynry.com",
+                                  [registration.email_id], None, None, email_body)
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
-                    pass
+                    # Call to the first function
+                    e1 = SMSHandler(transition_obj.transition_object, registration)
+
+                    array = e1.handle_communications()
+
+                    transition_obj = get_transition_configuration_by_id(transition_obj.id)
+
+                    html = get_notification_template_by_id(transition_obj.template_id)
+
+                    sms_body = e1.html_handler(html.template, array)
+                    print("SMS Body", registration.phone_mobile)
+                    e1.send_sms(sms_body, SecretReader.get_from_number(),
+                                registration.phone_mobile)
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['WHATSAPP']:
                     pass
         else:

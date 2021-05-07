@@ -10,7 +10,7 @@ from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATIO
 from v1.commonapp.views.custom_exception import CustomAPIException
 import fsm
 from django.utils import timezone # importing package for datetime
-
+from v1.consumer import views
 
 CONSUMER_DICT = {
     "CONNECTED": 0,
@@ -83,6 +83,7 @@ class ConsumerServiceContractDetail(models.Model, fsm.FiniteStateMachineMixin):
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
+            views.common_functions.perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT["CONSUMER"])
             self.save()
         except Exception as e:
             raise CustomAPIException("Consumer transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)    

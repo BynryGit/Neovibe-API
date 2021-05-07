@@ -57,7 +57,7 @@ class ServiceAppointmentList(generics.ListAPIView):
                     queryset = ServiceAppointmentTbl.objects.filter(utility=utility,is_active=True)
                     queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
-                        return queryset
+                        return queryset.reverse()
                     else:
                         raise CustomAPIException("Service Appointment not found.", status.HTTP_404_NOT_FOUND)
                 else:
@@ -382,3 +382,5 @@ class ServiceAppointmentApprove(GenericAPIView):
                 STATE: EXCEPTION,
                 RESULT: str(e),
             }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+

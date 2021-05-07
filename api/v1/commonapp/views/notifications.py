@@ -9,7 +9,8 @@ import html
 from bs4 import BeautifulSoup
 from django.core.mail import send_mail
 from django.core.mail.backends.smtp import EmailBackend
-
+from v1.registration import models
+from v1.consumer import models as consumer_model
 # Local logging
 local_logger = logging.getLogger('django')
 secret_reader = SecretReader()
@@ -28,6 +29,18 @@ class OutboundHandler:
             dictionary_of_variables = {
                 "{Utility.email}": utility.email_id,
                 "{Utility.utility_name}": utility.name,
+            }
+        elif self.type == 10:
+            registration = models.registrations.get_registration_by_id(self.instance.id)
+            dictionary_of_variables = {
+                "{Utility.email}": registration.email_id,
+                "{Utility.utility_name}": registration.email_id,
+            }
+        elif self.type == 3:
+            consumer = consumer_model.consumer_service_contract_details.get_consumer_service_contract_detail_by_id(self.instance.id)
+            dictionary_of_variables = {
+                "{Utility.email}": "dummy@gmail.com",
+                "{Utility.utility_name}": "dummy",
             }
         return dictionary_of_variables
 
