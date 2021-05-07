@@ -14,7 +14,7 @@ from api.messages import COUNTRY_ALREADY_EXIST
 
 
 class CountryViewSerializer(serializers.ModelSerializer):
-    
+    region = UtilityRegionListSerializer(source="get_utility_region")
     tenant = serializers.ReadOnlyField(source='tenant.name')
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
@@ -22,7 +22,7 @@ class CountryViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CountryTbl
-        fields = ('name', 'id_string','utility', 'utility_id_string','tenant', 'tenant_id_string')
+        fields = ('name', 'id_string','utility','region', 'utility_id_string','tenant', 'tenant_id_string')
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -39,8 +39,8 @@ class CountrySerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         with transaction.atomic():
             validated_data = set_country_validated_data(validated_data)
-            if CountryTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                         utility_id=validated_data['utility_id']).exists():
+            if CountryTbl.objects.filter(name__iexact=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                         utility_id=validated_data['utility_id'], region_id=validated_data['region_id']).exists():
                 raise CustomAPIException(COUNTRY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 country_obj = super(CountrySerializer, self).create(validated_data)
@@ -51,8 +51,8 @@ class CountrySerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_country_validated_data(validated_data)
-        if CountryTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                     utility_id=validated_data['utility_id']).exists():
+        if CountryTbl.objects.filter(name__iexact=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                     utility_id=validated_data['utility_id'], region_id=validated_data['region_id']).exists():
             raise CustomAPIException(COUNTRY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
             country_obj = super(CountrySerializer, self).update(instance, validated_data)
