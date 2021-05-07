@@ -9,7 +9,7 @@ class GlobalLookupShortViewSerializer(serializers.ModelSerializer):
         if global_lookup_tbl:
             value = global_lookup_tbl.value
         else:
-            value= '------'
+            value = '-'
         return value
 
     class Meta:
