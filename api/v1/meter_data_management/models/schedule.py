@@ -85,10 +85,10 @@ class Schedule(models.Model):
         return utility_product_type
 
     def __str__(self):
-        return str(self.id_string)
+        return self.name + ' ' + str(self.id_string)
 
     def __unicode__(self):
-        return str(self.id_string)
+        return self.name + ' ' + str(self.id_string)
 
 # Create Schedule Table end
 
