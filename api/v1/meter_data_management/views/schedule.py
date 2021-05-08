@@ -72,7 +72,7 @@ class ScheduleList(generics.ListAPIView):
 
 class Schedule(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, SCHEDULE, EDIT)
+    @role_required(MX, SCHEDULE, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -133,7 +133,7 @@ class Schedule(GenericAPIView):
 
 class ScheduleDetail(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, SCHEDULE, VIEW)
+    @role_required(MX, SCHEDULE, VIEW)
     def get(self, request, id_string):
         try:
             schedule_obj = get_schedule_by_id_string(id_string)
@@ -156,7 +156,7 @@ class ScheduleDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    # @role_required(MX, SCHEDULE, EDIT)
+    @role_required(MX, SCHEDULE, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -211,31 +211,34 @@ class ScheduleDetail(GenericAPIView):
 
 
 # API Header
-# API end Point: api/v1/meter-data/utility/<uuid:id_string>/reading-schedule-summary
+# API end Point: api/v1/meter-data/schedule/summary
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
-# Interaction: Reading Schedule summary
-# Usage: API will fetch required data for reading schedule summary.
+# Interaction: Schedule summary
+# Usage: API will fetch required data for schedule summary.
 # Tables used: Schedule
 # Author: Akshay
 # Created on: 24/02/2021
 
 # todo need to fix logic
-class ReadingScheduleSummary(generics.ListAPIView):
+class ScheduleSummary(generics.ListAPIView):
     @is_token_validate
-    # @role_required(MX, SCHEDULE, VIEW)
-    def get(self, request, id_string):
+    @role_required(MX, SCHEDULE, VIEW)
+    def get(self, request):
         try:
-            utility_obj = get_utility_by_id_string(id_string)
-            if utility_obj:
-                schedule_obj = ScheduleTbl.objects.filter(utility=utility_obj, is_active=True)
+            if 'utility_id_string' in request.query_params:
+                utility_id_string = request.query_params['utility_id_string']
                 Schedule_Count = {
-                    'Total_Schedule': schedule_obj.count(),
-                    'Pending_Schedule': schedule_obj.filter(schedule_status=0).count(),
-                    'Complete_Schedule': schedule_obj.filter(schedule_status=1).count(),
-                    'InProgress_Schedule': schedule_obj.filter(schedule_status=2).count(),
+                    'Total_Schedule': ScheduleTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                 is_active=True).count(),
+                    'Pending_Schedule': ScheduleTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                   schedule_status=0).count(),
+                    'Complete_Schedule': ScheduleTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                    schedule_status=1).count(),
+                    'InProgress_Schedule': ScheduleTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                      schedule_status=2).count(),
                 }
                 return Response({
                     STATE: SUCCESS,

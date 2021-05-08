@@ -14,7 +14,7 @@ from v1.meter_data_management.views.assign_revisit_task_assignment import Assign
 from v1.meter_data_management.views.read_cycle import ReadCycle,ReadCycleShortList,ReadCycleDetail
 from v1.meter_data_management.views.deassign_revisit_task_assignment import DeAssignRevisitTaskAssignment
 from v1.meter_data_management.views.smart_meter_configuration import SmartMeterList, SmartMeter, SmartMeterDetail
-from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ReadingScheduleSummary
+from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ScheduleSummary
 from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
 from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
@@ -35,8 +35,8 @@ urlpatterns = [
     path('schedule', Schedule.as_view(), name='schedule'),
     path('schedule/list', ScheduleList.as_view(), name='schedule_list'),
     path('schedule/<uuid:id_string>', ScheduleDetail.as_view(), name='schedule_detail'),
-    path('utility/<uuid:id_string>/reading-schedule-summary', ReadingScheduleSummary.as_view(),
-         name='reading_schedule_summary'),
+    path('schedule/summary', ScheduleSummary.as_view(),
+         name='schedule_summary'),
 
     path('schedule-log/list', ScheduleLogList.as_view(), name='schedule_log_list'),
     path('schedule-log/<uuid:id_string>', ScheduleLogDetail.as_view(), name='schedule_detail'),

@@ -183,11 +183,3 @@ def utility_required(function):
                 RESULTS: UTILITY_NOT_FOUND,
             }, status=status.HTTP_401_UNAUTHORIZED)
     return wrap
-
-
-
-
-
-
-
-
