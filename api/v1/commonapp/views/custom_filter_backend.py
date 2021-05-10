@@ -331,11 +331,15 @@ class CustomFilter:
             queryset = Payment.objects.filter(is_active=True,  created_date__gte = datetime.now()-timedelta(days=180), state=1 )
         
         if 'Service_list_of_consumer' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========serviceee======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             consumer = get_consumer_by_id_string(request.query_params['Service_list_of_consumer'])
             consumer_service_contract_detail_obj = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
             work_order_type_obj = get_work_order_type_by_key('SERVICE')
             if work_order_type_obj:
-                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id, utility=store_utility)
             if utility_work_order_type_obj:
                 print("++++++++++++",utility_work_order_type_obj)
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
