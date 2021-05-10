@@ -27,7 +27,7 @@ cd /home/ubuntu/smart360/api && sudo python3 manage.py migrate
 
 echo "################################################## Loading data ############################################"
 
-# cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
+#cd /home/ubuntu/smart360/api && sudo python3 manage.py loaddata data.json
 
 echo "############################## Successfully load data ######################################################"
 
