@@ -33,7 +33,7 @@ from v1.commonapp.models.state import get_state_by_id_string
 from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from django.utils.dateparse import parse_date
-
+from v1.utility.models.utility_master import get_utility_by_id_string
 
 class CustomFilter:
 
@@ -90,8 +90,12 @@ class CustomFilter:
             queryset = queryset.filter(user_id=user.id)
 
         if 'consumer_processing' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             consumer_master_list = []
-            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
+            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0, utility=store_utility)
             if consumer_master_objs:
                 for consumer_master_obj in consumer_master_objs:
                     consumer_master_list.append(consumer_master_obj)
@@ -102,8 +106,12 @@ class CustomFilter:
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
 
         if 'consumer_processing_history' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             consumer_master_list = []
-            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0)
+            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0, utility=store_utility)
             print("======consumer_master_objs===", consumer_master_objs)
             if consumer_master_objs:
                 for consumer_master_obj in consumer_master_objs:
@@ -123,12 +131,17 @@ class CustomFilter:
                 queryset = queryset.filter(consumer_id=consumer.id, is_active=True, state=0)
 
         if 'Disconnect_processing' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
+            work_order_type_obj = get_work_order_type_by_key('SERVICE')
             work_order_type_obj = get_work_order_type_by_key('DISCONNECTION')
             if work_order_type_obj:
                 print("============", work_order_type_obj)
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
                 work_order_master_obj = WorkOrderMaster.objects.filter(
@@ -141,10 +154,14 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Disconnect_processing_history' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('DISCONNECTION')
             if work_order_type_obj:
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
@@ -158,11 +175,15 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Outage_processing' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('OUTAGE')
             print("===========", work_order_type_obj)
             if work_order_type_obj:
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
@@ -176,10 +197,14 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Outage_processing_history' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('OUTAGE')
             if work_order_type_obj:
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
@@ -193,12 +218,16 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Transfer_processing' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('TRANSFER')
             print("================", work_order_type_obj)
             if work_order_type_obj:
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
                 print("================", utility_work_order_type_obj)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
@@ -212,11 +241,15 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Transfer_processing_history' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('TRANSFER')
             if work_order_type_obj:
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
                 work_order_master_obj = WorkOrderMaster.objects.filter(
@@ -229,10 +262,14 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Service_processing' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('SERVICE')
             if work_order_type_obj:
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
@@ -247,10 +284,14 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Service_processing_history' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             work_order_type_obj = get_work_order_type_by_key('SERVICE')
             if work_order_type_obj:
                 utility_work_order_type_obj = UtilityWorkOrderType.objects.get(
-                    work_order_type_id=work_order_type_obj.id)
+                    work_order_type_id=work_order_type_obj.id, utility=store_utility)
                 # utility_work_order_type_obj = get_utility_work_order_type_by_id(work_order_type_obj.id)
             if utility_work_order_type_obj:
                 print("++++++++++++", utility_work_order_type_obj)
@@ -267,8 +308,19 @@ class CustomFilter:
                     print("++++++++++", queryset)
 
         if 'Registration_history' in request.query_params:
-            queryset = RegTbl.objects.filter(is_active=True, state__in=[1, 2],
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
+            queryset = RegTbl.objects.filter(is_active=True, state__in=[1, 2], utility=store_utility,
                                              created_date__gte=datetime.now() - timedelta(days=180))
+        
+        if 'Registration_processing' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
+            queryset = RegTbl.objects.filter(is_active=True, state__in=[0,3], utility=store_utility)
 
         if 'Complaint_history' in request.query_params:
             queryset = ComplaintTbl.objects.filter(is_active=True,
@@ -279,18 +331,22 @@ class CustomFilter:
             queryset = Payment.objects.filter(is_active=True,  created_date__gte = datetime.now()-timedelta(days=180), state=1 )
         
         if 'Service_list_of_consumer' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========serviceee======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
             consumer = get_consumer_by_id_string(request.query_params['Service_list_of_consumer'])
             consumer_service_contract_detail_obj = ConsumerServiceContractDetail.objects.filter(consumer_id=consumer.id, is_active=True)
-            work_order_type_obj = get_work_order_type_by_key('SERVICES')
+            work_order_type_obj = get_work_order_type_by_key('SERVICE')
             if work_order_type_obj:
-                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id)
+                    utility_work_order_type_obj = UtilityWorkOrderType.objects.get(work_order_type_id = work_order_type_obj.id, utility=store_utility)
             if utility_work_order_type_obj:
                 print("++++++++++++",utility_work_order_type_obj)
                 work_order_master_obj = WorkOrderMaster.objects.filter(utility_work_order_type_id=utility_work_order_type_obj.id)
                 if work_order_master_obj:
                     print("++++MASTER+++++++",work_order_master_obj)
                     filter_from= datetime.now()
-                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state=11, consumer_service_contract_detail_id__in=[ i.id for i in consumer_service_contract_detail_obj])
+                    queryset = ServiceAppointment.objects.filter(work_order_master_id__in = [ i.id for i in work_order_master_obj],state__in=[0,1,2,3,4,5,6,7,8,9,10,11], consumer_service_contract_detail_id__in=[ i.id for i in consumer_service_contract_detail_obj])
                     print("++++++++++",queryset) 
                     
         if 'premise_id' in request.query_params:
