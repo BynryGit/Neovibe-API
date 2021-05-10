@@ -46,7 +46,9 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
         return route_detail
 
     def get_total_consumer(self, schedule_log_tbl):
-        return ConsumerDetail.objects.filter(schedule_log_id=schedule_log_tbl.id, state=0, is_active=True).count()
+        return ConsumerDetail.objects.filter(schedule_log_id=schedule_log_tbl.id,
+                                             utility_product_id=schedule_log_tbl.utility_product_id,
+                                             state=0, is_active=True).count()
 
     class Meta:
         model = ScheduleLogTbl
