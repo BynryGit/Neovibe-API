@@ -8,4 +8,4 @@ class TenantMasterViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TenantMasterTbl
-        fields = ('id_string', 'name')
+        fields = ('id_string', 'name', 'short_name')
