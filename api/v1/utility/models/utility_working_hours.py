@@ -37,6 +37,8 @@ class UtilityWorkingHours(models.Model):
     fri_end = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     sat_start = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     sat_end = models.TimeField(null=True, auto_now=False, auto_now_add=False)
+    sun_start = models.TimeField(null=True, auto_now=False, auto_now_add=False)
+    sun_end = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
