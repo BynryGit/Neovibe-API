@@ -87,12 +87,21 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
     @property
     def get_user(self):
         user_val = get_user_by_id(self.user_id)
+        print('===user_val.user_type_id==',user_val.user_type_id)
         return {
             "first_name":user_val.first_name,
             "last_name":user_val.last_name,
             "id_string":user_val.id_string,
             "email":user_val.email,
-            "phone_mobile":user_val.phone_mobile
+            "phone_mobile":user_val.phone_mobile,
+            "tenant":user_val.tenant,
+            "user_type_id":user_val.user_type_id,
+            "user_subtype_id":user_val.user_subtype_id,
+            "form_factor_id":user_val.form_factor_id,
+            "status_id":user_val.status_id,
+            "supplier_id":user_val.supplier_id,
+            "city_id":user_val.city_id,
+            "user_id":user_val.user_id,
         }
 
     @property

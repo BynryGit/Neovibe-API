@@ -31,6 +31,10 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from django.contrib.auth.password_validation import validate_password
+from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
+from v1.userapp.models.role_type import RoleType
+from v1.userapp.models.role_sub_type import RoleSubType
+from v1.userapp.serializers.role_type import GetRoleTypeSerializer
 
 l1 = LoginTrail
 
@@ -90,12 +94,6 @@ class UserSerializer(serializers.ModelSerializer):
             return user_obj
 
 
-class GetUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id_string', 'email', 'user_id', 'first_name', 'last_name', 'phone_mobile')
-
-
 class UserStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserStatus
@@ -104,13 +102,13 @@ class UserStatusSerializer(serializers.ModelSerializer):
 
 class UserTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserType
+        model = RoleType
         fields = ('name', 'id_string')
 
 
 class UserSubTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserSubType
+        model = RoleSubType
         fields = ('name', 'id_string')
 
 
@@ -134,6 +132,21 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = (
             'id_string', 'user_id', 'first_name', 'last_name', 'phone_mobile', 'email', 'created_date', 'updated_date',
             'role', 'tenant', 'department', 'status', 'user_type', 'user_department')
+
+class GetUserSerializer(serializers.ModelSerializer):
+    tenant = TenantMasterViewSerializer()
+    # user_type_id = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
+    # user_subtype_id = UserSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+    # form_factor_id = FormFactorSerializer(many=False, required=True, source='get_form_factor')
+    # status_id = UserStatusSerializer(many=False, required=True, source='get_user_status')
+    # city_id = CitySerializer(many=False, required=True, source='get_city')
+    # department_id = DepartmentSerializer(many=False, required=True, source='get_department')
+    # supplier_id = SupplierViewSerializer(many=False, required=True, source='get_supplier')
+
+    class Meta:
+        model = User
+        fields = ('id_string','tenant','email','user_type_id','user_id', 'user_subtype_id',
+            'form_factor_id','first_name','status_id','last_name', 'phone_mobile','city_id','department_id','supplier_id')
 
 
 class UserViewSerializer(serializers.ModelSerializer):

@@ -134,7 +134,11 @@ class User(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
 
     @property
     def get_tenant(self):
-        return self.tenant
+        try:
+           return self.tenant
+        except Exception as e:
+            return False
+        
 
     @property
     def get_utility(self):
@@ -150,15 +154,27 @@ class User(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
 
     @property
     def get_user_type(self):
-        return get_user_type_by_id(self.user_type_id)
+        try:
+            return get_user_type_by_id(self.user_type_id)
+        except Exception as e:
+            return False
+       
 
     @property
     def get_role_type(self):
-        return get_role_type_by_id(self.user_type_id)
+        try:
+
+            print('......get_role_type_by_id(self.user_type_id)...',get_role_type_by_id(self.user_type_id))
+            return get_role_type_by_id(self.user_type_id)
+        except:
+            return False
 
     @property
     def get_user_sub_type(self):
-        return get_user_sub_type_by_id(self.user_subtype_id)
+        try:
+            return get_user_sub_type_by_id(self.user_subtype_id)
+        except:
+            return False
 
     @property
     def get_role_sub_type(self):

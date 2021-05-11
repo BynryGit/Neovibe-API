@@ -47,7 +47,7 @@ class ServiceAssignmentList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['utility_id_string'])
                     user = get_user_by_id_string(self.kwargs['user_id_string'])
-                    print(utility,user.id)
+                    print('============',utility,user.id)
                     if user:
                         queryset = ServiceAssignmentTbl.objects.filter(utility=utility,user_id=user.id,is_active=True)
                         if queryset:
@@ -82,6 +82,7 @@ class ServiceAssignment(GenericAPIView):
     #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
+            print('======',request.data)
             assignment_serializer = ServiceAssignmentSerializer(data=request.data)
             if assignment_serializer.is_valid(raise_exception=True):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
