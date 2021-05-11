@@ -58,7 +58,7 @@ class WorkOrderMasterList(generics.ListAPIView):
                     queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if 'filter_key' in self.request.query_params:
                         work_obj = get_work_order_type_by_key(self.request.query_params['filter_key'])
-                        util_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_obj.id)
+                        util_obj = UtilityWorkOrderType.objects.get(work_order_type_id=work_obj.id, utility=utility)
                         queryset = queryset.filter(utility_work_order_type_id=util_obj.id)
                     if queryset:
                         return queryset
