@@ -44,11 +44,12 @@ class WorkOrderMasterViewSerializer(serializers.ModelSerializer):
     tenant_id_string = serializers.ReadOnlyField(source='tenant.id_string')
     utility = serializers.ReadOnlyField(source='utility.name')
     utility_id_string = serializers.ReadOnlyField(source='utility.id_string')
+    utility_work_order_sub_type = UtilityWorkOrderSubTypeListSerializer(source='get_utility_work_order_sub_type')
 
     class Meta:
         model = WorkOrderMasterTbl
         fields = (
-            'id_string', 'name', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date',
+            'id_string', 'name', 'tenant', 'utility_work_order_sub_type','description', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date',
             'json_obj')
 
 
