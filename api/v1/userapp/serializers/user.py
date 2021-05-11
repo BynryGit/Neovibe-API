@@ -135,13 +135,13 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class GetUserSerializer(serializers.ModelSerializer):
     tenant = TenantMasterViewSerializer()
-    # user_type_id = GetRoleTypeSerializer(many=False, required=True, source='get_role_type')
-    # user_subtype_id = UserSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
-    # form_factor_id = FormFactorSerializer(many=False, required=True, source='get_form_factor')
-    # status_id = UserStatusSerializer(many=False, required=True, source='get_user_status')
-    # city_id = CitySerializer(many=False, required=True, source='get_city')
-    # department_id = DepartmentSerializer(many=False, required=True, source='get_department')
-    # supplier_id = SupplierViewSerializer(many=False, required=True, source='get_supplier')
+    user_type_id = UserTypeSerializer(many=False, required=True, source='get_role_type')
+    user_subtype_id = UserSubTypeSerializer(many=False, required=True, source='get_role_sub_type')
+    form_factor_id = FormFactorSerializer(many=False, required=True, source='get_form_factor')
+    status_id = UserStatusSerializer(many=False, required=True, source='get_user_status')
+    city_id = CitySerializer(many=False, required=True, source='get_city')
+    department_id = DepartmentSerializer(many=False, required=True, source='get_department')
+    supplier_id = SupplierViewSerializer(many=False, required=True, source='get_supplier')
 
     class Meta:
         model = User

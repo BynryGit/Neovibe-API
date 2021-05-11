@@ -163,8 +163,6 @@ class User(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     @property
     def get_role_type(self):
         try:
-
-            print('......get_role_type_by_id(self.user_type_id)...',get_role_type_by_id(self.user_type_id))
             return get_role_type_by_id(self.user_type_id)
         except:
             return False
