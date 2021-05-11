@@ -3,6 +3,8 @@ import rest_framework
 from django.contrib.auth.decorators import login_required
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, generics
+from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.userapp.models.user_utility import UserUtility
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, UpdateAPIView
@@ -48,6 +50,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from v1.commonapp.models.module import get_module_by_key
 from v1.commonapp.models.sub_module import get_sub_module_by_key
+from v1.tenant.models.tenant_master import get_tenant_by_id_string
 
 
 # API Header
@@ -69,18 +72,25 @@ class UserList(generics.ListAPIView):
     try:
         serializer_class = UserListSerializer
         pagination_class = StandardResultsSetPagination
-
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
         filter_fields = ('first_name', 'last_name', 'tenant__id_string')
         ordering_fields = ('first_name', 'last_name',)
         ordering = ('created_date',)  # always give by default alphabetical order
         search_fields = ('first_name', 'email',)
-
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
+                user_list = []
                 if is_authorized(1, 1, 1, user_obj):
-                    queryset = UserTbl.objects.filter(is_active=True)
+                    if 'tenant_id_string' in self.request.query_params:
+                        tenant = get_tenant_by_id_string(self.request.query_params['tenant_id_string'])
+                        queryset = UserTbl.objects.filter(tenant=tenant,is_active=True)
+                    else:   
+                        utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
+                        user_utility = UserUtility.objects.filter(utility = utility,is_active=True)
+                        for user in user_utility:
+                            user_list.append(user.user_id)
+                        queryset = UserTbl.objects.filter(id__in=user_list,is_active=True)
                     if queryset:
                         return queryset
                     else:

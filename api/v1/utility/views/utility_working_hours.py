@@ -33,7 +33,7 @@ from api.constants import *
 # Author: Chinmay
 # Created on: 11/1/2021
 
-
+working_hour_list=[]
 class WorkingHourList(generics.ListAPIView):
     try:
         serializer_class = WorkingHourListSerializer
@@ -45,6 +45,8 @@ class WorkingHourList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     queryset = UtilityWorkingHoursModel.objects.filter(utility=utility, is_active=True)
+                    working_hour_list.append(queryset)
+                    print('WO',working_hour_list)
                     if queryset:
                         return queryset
                     else:

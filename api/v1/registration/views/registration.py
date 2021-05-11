@@ -698,6 +698,7 @@ class RegistrationApprove(GenericAPIView):
 class RegistrationNoteList(generics.ListAPIView):
     try:
         serializer_class = NoteListSerializer
+        pagination_class = StandardResultsSetPagination
 
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
@@ -827,8 +828,10 @@ class RegistrationLifeCycleList(generics.ListAPIView):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
-                    module = get_module_by_key("CONSUMER_OPS")
-                    sub_module = get_sub_module_by_key("CONSUMER_OPS_REGISTRATION")
+                    # module = get_module_by_key("CONSUMER_OPS")
+                    # sub_module = get_sub_module_by_key("CONSUMER_OPS_REGISTRATION")
+                    module = get_module_by_key("CX")
+                    sub_module = get_sub_module_by_key("REGISTRATION")
                     queryset = ""
                     if 'registration_id' in self.request.query_params:
                         registration = get_registration_by_id_string(self.request.query_params['registration_id'])

@@ -13,7 +13,7 @@ class WorkingHourViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UtilityWorkingHoursTbl
-        fields = ('id_string', 'utility', 'utility_id_string', 'tenant', 'tenant_id_string')
+        fields = '__all__'
 
 
 class WorkingHourSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class WorkingHourSerializer(serializers.ModelSerializer):
     class Meta:
         model = UtilityWorkingHoursTbl
         fields = ('id_string', 'utility_id', 'tenant_id','mon_start', 'mon_end','tue_start','tue_end',
-                  'wed_start', 'wed_end', 'thu_start','thu_end','fri_start','fri_end','sat_start','sat_end')
+                  'wed_start', 'wed_end', 'thu_start','thu_end','fri_start','fri_end','sat_start','sat_end','sun_start','sun_end')
 
     def create(self, validated_data, user):
         with transaction.atomic():
@@ -46,6 +46,9 @@ class WorkingHourSerializer(serializers.ModelSerializer):
 
 
 class WorkingHourListSerializer(serializers.ModelSerializer):
+    tenant = serializers.ReadOnlyField(source='tenant.name')
+    utility = serializers.ReadOnlyField(source='utility.name')
     class Meta:
         model = UtilityWorkingHoursTbl
-        fields = '__all__'
+        fields = ('id_string', 'utility', 'tenant','mon_start', 'mon_end','tue_start','tue_end',
+                  'wed_start', 'wed_end', 'thu_start','thu_end','fri_start','fri_end','sat_start','sat_end','sun_start','sun_end')
