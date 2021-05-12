@@ -18,6 +18,8 @@ from v1.work_order.views.common_functions import generate_service_appointment_no
 from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SERVICE_APPOINTMENT_ALREADY_EXIST
 from v1.registration.serializers.registration import ChoiceField
+from v1.commonapp.serializers.area import AreaShortViewSerializer
+
 
 class ServiceAppointmentListSerializer(serializers.ModelSerializer):
     tenant = serializers.ReadOnlyField(source='tenant.name')
@@ -98,10 +100,10 @@ class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     state = ChoiceField(choices=ServiceAppointment.CHOICES)
-    state_id = serializers.ReadOnlyField(source='get_state')
-    city_id = serializers.ReadOnlyField(source='get_city')
-    area_id = serializers.ReadOnlyField(source='get_area')
-    sub_area_id = serializers.ReadOnlyField(source='get_sub_area')
+    # state_id = serializers.ReadOnlyField(source='get_state')
+    # city_id = serializers.ReadOnlyField(source='get_city')
+    # area_id = AreaShortViewSerializer(many=False, required=False, source='get_area')
+    # sub_area_id = serializers.ReadOnlyField(source='get_sub_area')
     
 
     class Meta:

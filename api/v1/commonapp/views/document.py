@@ -22,7 +22,7 @@ from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.commonapp.views.custom_filter_backend import CustomFilter
 import os
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
-
+from v1.commonapp.views.pagination import StandardResultsSetPagination
 setting_reader = SettingReader()
 
 from boto.s3.connection import S3Connection
@@ -48,15 +48,16 @@ latest_record = []
 class DocumentList(generics.ListAPIView):
     try:
         serializer_class = DocumentListSerializer
-
+        pagination_class = StandardResultsSetPagination
         def get_queryset(self):
             response, user_obj = is_token_valid(self.request.headers['Authorization'])
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
                     latest_record = DocumentModel.objects.latest('created_date')
-                    queryset = DocumentModel.objects.filter(utility=utility, is_active=True,
-                                                            document_generated_name=latest_record)
+                    # queryset = DocumentModel.objects.filter(utility=utility, is_active=True,
+                    #                                         document_generated_name=latest_record)
+                    queryset = DocumentModel.objects.filter(utility=utility, is_active=True)
                     print("LATEST", latest_record)
 
                     queryset = DocumentModel.objects.filter(utility=utility, is_active=True)
@@ -65,6 +66,27 @@ class DocumentList(generics.ListAPIView):
                         module_obj = get_module_by_key('CX')
                         sub_module_obj = get_sub_module_by_key('CONSUMER')
                         queryset = queryset.filter(object_id=id, module_id=module_obj, sub_module_id=sub_module_obj)
+                    if queryset:
+                        return queryset
+                    else:
+                        raise CustomAPIException("Document not found.", status.HTTP_404_NOT_FOUND)
+                else:
+                    raise InvalidAuthorizationException
+            else:
+                raise InvalidTokenException
+    except Exception as e:
+        logger().log(e, 'MEDIUM', module='Admin', sub_module='Utility')
+
+
+class GlobalDocumentList(generics.ListAPIView):
+    try:
+        serializer_class = DocumentListSerializer
+        pagination_class = StandardResultsSetPagination
+        def get_queryset(self):
+            response, user_obj = is_token_valid(self.request.headers['Authorization'])
+            if response:
+                if is_authorized(1, 1, 1, user_obj):
+                    queryset = DocumentModel.objects.filter(is_active=True)
                     if queryset:
                         return queryset
                     else:

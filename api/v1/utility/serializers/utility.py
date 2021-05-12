@@ -35,7 +35,7 @@ class UtilityMasterViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UtilityMasterTbl
         fields = (
-            'id_string', 'short_name', 'name', 'short_logo', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',
+            'id_string', 'short_name', 'name','document_generated_name', 'short_logo', 'address', 'company_id', 'pan_no', 'tax_id', 'phone_no', 'email_id',
             'created_date', 'updated_date', 'tenant')
 
 

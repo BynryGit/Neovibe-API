@@ -142,43 +142,23 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     
     @property
     def get_status(self):
-        status_val = get_service_appointment_status_by_id(self.status_id)
-        return {
-            "status":status_val.status,
-            "id_string":status_val.id_string
-        }
+        return get_service_appointment_status_by_id(self.status_id)
 
     @property
     def get_state(self):
-        state = get_state_by_id(self.state_id)
-        return {
-            'name': state.name,
-            'id_string': state.id_string
-        }
+        return get_state_by_id(self.state_id)
 
     @property
     def get_area(self):
-        area = get_area_by_id(self.area_id)
-        return {
-            'name': area.name,
-            'id_string': area.id_string
-        }
+        return get_area_by_id(self.area_id)
     
     @property
     def get_sub_area(self):
-        sub_area = get_sub_area_by_id(self.sub_area_id)
-        return {
-            'name': sub_area.name,
-            'id_string': sub_area.id_string
-        }
+        return get_sub_area_by_id(self.sub_area_id)
 
     @property
     def get_city(self):
-        city = get_city_by_id(self.city_id)
-        return {
-            'name': city.name,
-            'id_string': city.id_string
-        }
+        return get_city_by_id(self.city_id)
 
     @property
     def get_consumer_service_contract_detail_id(self):

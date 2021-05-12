@@ -35,11 +35,12 @@ class UserUtility(models.Model):
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
-    # def __str__(self):
-    #     return self.tenant.name
+    def __str__(self):
+        return str(self.user_id) + " " + str(self.id_string)
+
 
     def __unicode__(self):
-        return self.user_id
+        return str(self.user_id) + " " + str(self.id_string)
 
     @property
     def get_tenant(self):
