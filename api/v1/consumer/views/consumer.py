@@ -1024,7 +1024,7 @@ class ConsumerNote(GenericAPIView):
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             consumer = get_consumer_by_id_string(id_string)
-            module = get_module_by_key("CONSUMEROPS")
+            module = get_module_by_key("CX")
             sub_module = get_sub_module_by_key("CONSUMER")
             serializer = NoteSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
