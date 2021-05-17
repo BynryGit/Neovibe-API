@@ -118,9 +118,26 @@ class CustomFilter:
                     consumer_master_list.append(consumer_master_obj)
                     # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
                     queryset = ConsumerServiceContractDetail.objects.filter(
-                        consumer_id__in=[consumer.id for consumer in consumer_master_list], state__in=[0, 3, 4, 5],
+                        consumer_id__in=[consumer.id for consumer in consumer_master_list], state__in=[1, 3, 4, 5],
                         created_date__gte=datetime.now() - timedelta(days=180))
                     # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
+
+        if 'consumer_processing_approved' in request.query_params:
+            utility = request.GET.get('utility_id_string')
+            print("=========aaaaaaaaaa======",utility)
+            store_utility = get_utility_by_id_string(utility)
+            print("===========store utility================",store_utility.id)
+            consumer_master_list = []
+            consumer_master_objs = ConsumerMaster.objects.filter(is_active=True, state=0, utility=store_utility)
+            print("======consumer_master_objs===", consumer_master_objs)
+            if consumer_master_objs:
+                for consumer_master_obj in consumer_master_objs:
+                    consumer_master_list.append(consumer_master_obj)
+                    # consumer = get_consumer_by_id_string(self.kwargs['id_string'])
+                    queryset = ConsumerServiceContractDetail.objects.filter(
+                        consumer_id__in=[consumer.id for consumer in consumer_master_list], state=0)
+                    # queryset = CustomFilter.get_filtered_queryset(queryset, self.request)        
+        
 
         if 'consumer_id' in request.query_params:
             consumer = get_consumer_by_id_string(request.query_params['consumer_id'])
@@ -367,5 +384,8 @@ class CustomFilter:
 
         if 'date' in request.query_params:
             queryset = queryset.filter(sa_date__date=request.query_params['date'])
+
+        if 'assigned_date' in request.query_params:
+            queryset = queryset.filter(assignment_date__date=request.query_params['assigned_date'])
 
         return queryset

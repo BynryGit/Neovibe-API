@@ -29,7 +29,7 @@ class RegistrationListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Registration
         fields = (
-            'id_string', 'registration_no', 'email_id', 'phone_mobile', 'billing_address_line_1',
+            'id_string', 'registration_no','first_name','last_name', 'email_id', 'phone_mobile', 'billing_address_line_1',
             'billing_street', 'billing_zipcode', 'state', 'billing_area', 'billing_sub_area', 'billing_state','created_date','utility','tenant')        
         # fields = (
         #     'id_string', 'registration_no', 'first_name', 'last_name', 'email_id', 'phone_mobile', 'address_line_1',
@@ -55,7 +55,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no',
+        fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no','first_name','last_name',
                   'email_id', 'phone_mobile', 'billing_address_line_1', 'billing_street',
                   'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise',
                   'state','ownership','is_vip')

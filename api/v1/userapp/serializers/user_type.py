@@ -42,6 +42,8 @@ class UserTypeViewSerializer(serializers.ModelSerializer):
 
 
 class UserTypeSerializer(serializers.ModelSerializer):
+    print('====UserTypeSerializer====')
+    
     name = serializers.CharField(required=False, max_length=200)
 
     class Meta:

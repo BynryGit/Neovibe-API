@@ -66,6 +66,7 @@ class UtilityMaster(models.Model, fsm.FiniteStateMachineMixin):
     address = models.CharField(max_length=200, blank=True, null=True)
     short_logo = models.FileField(upload_to=get_file_path, null=True, blank=True)
     long_logo = models.FileField(upload_to=get_file_path, null=True, blank=True)
+    document_generated_name = models.CharField(max_length=200, blank=True, null=True)
     status_id = models.BigIntegerField(null=True, blank=True)
     user_id = models.BigIntegerField(null=True, blank=True)
     currency_id = models.BigIntegerField(null=True, blank=True)

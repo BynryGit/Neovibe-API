@@ -78,6 +78,8 @@ class ConsumerMaster(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     consumer_no = models.CharField(max_length=200, null=True, blank=True)
     master_consumer_no = models.CharField(max_length=200, null=True, blank=True)
     # email_id = models.CharField(max_length=200, null=True, blank=True)
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
     phone_mobile = models.CharField(max_length=200, null=True, blank=True)
     phone_landline = models.CharField(max_length=200, null=True, blank=True)
     billing_address_line_1 = models.CharField(max_length=200, blank=True, null=True)

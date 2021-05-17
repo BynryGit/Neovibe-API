@@ -27,7 +27,7 @@ from v1.commonapp.views.channel import ChannelList, Channel
 from v1.commonapp.views.frequency import FrequencyDetail, FrequencyList, Frequency
 from v1.commonapp.views.document_type import DocumentTypeList, DocumentTypeDetail, DocumentType
 from v1.commonapp.views.document_subtype import DocumentSubTypeList, DocumentSubTypeDetail, DocumentSubType
-from v1.commonapp.views.document import Document, DocumentList, DocumentDetail
+from v1.commonapp.views.document import Document, DocumentList, DocumentDetail, GlobalDocumentList
 from v1.commonapp.views.notification_type import NotificationTypeList, NotificationTypeDetail, NotificationType
 from v1.commonapp.views.notification_subtype import NotificationSubTypeList, NotificationSubTypeDetail, \
     NotificationSubType
@@ -41,6 +41,7 @@ from v1.commonapp.views.meter_status import MeterStatusList
 from v1.commonapp.views.admin_life_cycle import AdminLifeCycleList
 from v1.commonapp.views.notification_template import NotificationTemplateList, NotificationTemplate, NotificationTemplateDetail
 urlpatterns = [
+    path('document/list', GlobalDocumentList.as_view()),
     path('utility/region', Region.as_view()),
     path('utility/work-order-type', WorkOrderType.as_view()),
     path('utility/work-order-type/<uuid:id_string>', WorkOrderTypeDetail.as_view()),

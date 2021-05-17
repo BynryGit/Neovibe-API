@@ -20,7 +20,7 @@ from v1.commonapp.views.pagination import StandardResultsSetPagination
 from v1.work_order.models.service_assignment import ServiceAssignment as ServiceAssignmentTbl
 from v1.utility.models.utility_master import get_utility_by_id_string
 from v1.work_order.views.tasks import save_service_appointment_timeline
-
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 
 # API Header
 # API end Point: api/v1/utility/:id_string/user/:id_string/service-assignment/list
@@ -47,9 +47,9 @@ class ServiceAssignmentList(generics.ListAPIView):
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['utility_id_string'])
                     user = get_user_by_id_string(self.kwargs['user_id_string'])
-                    print(utility,user.id)
                     if user:
                         queryset = ServiceAssignmentTbl.objects.filter(utility=utility,user_id=user.id,is_active=True)
+                        queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                         if queryset:
                             return queryset
                         else:
@@ -82,6 +82,7 @@ class ServiceAssignment(GenericAPIView):
     #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
+            print('======',request.data)
             assignment_serializer = ServiceAssignmentSerializer(data=request.data)
             if assignment_serializer.is_valid(raise_exception=True):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
