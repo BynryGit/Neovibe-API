@@ -76,7 +76,7 @@ class ScheduleLogList(generics.ListAPIView):
 
 class ScheduleLogDetail(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, DISPATCH, VIEW)
+    @role_required(MX, DISPATCH, VIEW)
     def get(self, request, id_string):
         try:
             schedule_log_obj = get_schedule_log_by_id_string(id_string)
@@ -112,19 +112,22 @@ class ScheduleLogDetail(GenericAPIView):
 # Created on: 1/03/2021
 
 # todo need to fix logic
-class ReadingScheduleLogSummary(generics.ListAPIView):
+class ScheduleLogSummary(generics.ListAPIView):
     @is_token_validate
-    # @role_required(MX, DISPATCH, VIEW)
-    def get(self, request, id_string):
+    @role_required(MX, DISPATCH, VIEW)
+    def get(self, request):
         try:
-            utility_obj = get_utility_by_id_string(id_string)
-            if utility_obj:
-                schedule_log_obj = ScheduleLogTbl.objects.filter(utility=utility_obj, is_active=True)
+            if 'utility_id_string' in request.query_params:
+                utility_id_string = request.query_params['utility_id_string']
                 Schedule_log_Count = {
-                    'Total_Schedule_Log': schedule_log_obj.count(),
-                    'Pending_Schedule_Log': schedule_log_obj.filter(state=0).count(),
-                    'InProgress_Schedule_Log': schedule_log_obj.filter(state=2).count(),
-                    'Complete_Schedule_Log': schedule_log_obj.filter(state=4).count(),
+                    'Total_Schedule_Log': ScheduleLogTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                        is_active=True).count(),
+                    'Pending_Schedule_Log': ScheduleLogTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                          state=0).count(),
+                    'InProgress_Schedule_Log': ScheduleLogTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                             state=2).count(),
+                    'Complete_Schedule_Log': ScheduleLogTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                           state=4).count(),
                 }
                 return Response({
                     STATE: SUCCESS,

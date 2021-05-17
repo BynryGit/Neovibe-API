@@ -47,10 +47,10 @@ class ConsumerDetail(models.Model):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return self.consumer_no + str(self.id_string)
+        return self.meter_no + ' ' + str(self.id_string)
 
     def __unicode__(self):
-        return self.consumer_no + str(self.id_string)
+        return self.meter_no + ' ' +str(self.id_string)
 
 # Create Temp Consumer Master Table end
 

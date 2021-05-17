@@ -16,7 +16,7 @@ from v1.meter_data_management.views.deassign_revisit_task_assignment import DeAs
 from v1.meter_data_management.views.smart_meter_configuration import SmartMeterList, SmartMeter, SmartMeterDetail
 from v1.meter_data_management.views.schedule import Schedule, ScheduleList, ScheduleDetail, ScheduleSummary
 from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import ScheduleLogReadCycleRevisitTaskList
-from v1.meter_data_management.views.schedule_log import ScheduleLogList, ReadingScheduleLogSummary, ScheduleLogDetail
+from v1.meter_data_management.views.schedule_log import ScheduleLogList, ScheduleLogSummary, ScheduleLogDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
 from v1.meter_data_management.views.upload_route import UploadRouteList, UploadRoute
 from v1.meter_data_management.views.upload_route_sammary import UploadRouteSummary
@@ -32,16 +32,21 @@ from v1.meter_data_management.views.route_task_assignment import RouteTaskAssign
     RouteTaskAssignmentDetail
 
 urlpatterns = [
+    # Schedule API Start
     path('schedule', Schedule.as_view(), name='schedule'),
     path('schedule/list', ScheduleList.as_view(), name='schedule_list'),
     path('schedule/<uuid:id_string>', ScheduleDetail.as_view(), name='schedule_detail'),
-    path('schedule/summary', ScheduleSummary.as_view(),
-         name='schedule_summary'),
+    path('schedule/summary', ScheduleSummary.as_view(), name='schedule_summary'),
+    # Schedule API End
 
+    # Dispatch API Start
     path('schedule-log/list', ScheduleLogList.as_view(), name='schedule_log_list'),
     path('schedule-log/<uuid:id_string>', ScheduleLogDetail.as_view(), name='schedule_detail'),
-    path('utility/<uuid:id_string>/reading-schedule-log-summary', ReadingScheduleLogSummary.as_view(),
-         name='reading_schedule_log_summary'),
+    path('schedule-log/summary', ScheduleLogSummary.as_view(), name='schedule_log_summary'),
+    path('schedule-log/<uuid:id_string>/route/list', ScheduleLogRouteList.as_view(), name='schedule_log_route_list'),
+    path('schedule-log/<uuid:id_string>/read-cycle-revisit-task/list', ScheduleLogReadCycleRevisitTaskList.as_view(),
+         name='schedule_log_read_cycle_revisit_task_list'),
+    # Dispatch API End
 
     path('utility/<uuid:id_string>/read_cycle/list', ReadCycleList.as_view(), name='read_cycle_list'),
     path('utility/<uuid:id_string>/read_cycle/short_list', ReadCycleShortList.as_view(), name='read_cycle_short_list'),
@@ -56,10 +61,6 @@ urlpatterns = [
     path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
     path('route', Route.as_view(), name='route_add'),
-
-    path('schedule-log/<uuid:id_string>/route/list', ScheduleLogRouteList.as_view(), name='schedule_log_route_list'),
-    path('schedule-log/<uuid:id_string>/read-cycle-revisit-task/list', ScheduleLogReadCycleRevisitTaskList.as_view(),
-         name='schedule_log_read_cycle_revisit_task_list'),
 
     path('smart-meter', SmartMeter.as_view()),
     path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
