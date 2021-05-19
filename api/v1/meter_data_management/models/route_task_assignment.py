@@ -81,6 +81,7 @@ class RouteTaskAssignment(models.Model, fsm.FiniteStateMachineMixin):
     route_id = models.BigIntegerField(null=False, blank=False)
     meter_reader_id = models.BigIntegerField(null=True, blank=True)
     schedule_log_id = models.BigIntegerField(null=True, blank=True)
+    utility_product_id = models.BigIntegerField(null=True, blank=True)
     consumer_meter_json = JSONField(null=True, blank=True)
     state = models.IntegerField(choices=ROUTE_TASK_ASSIGNMENT_STATUS, default=0)
     assign_date = models.DateTimeField(null=True, blank=True)

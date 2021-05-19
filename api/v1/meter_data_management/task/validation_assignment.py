@@ -22,7 +22,7 @@ def validation_assignment():
             # Validation Assignment To V1
             MeterReadingTbl.objects.filter(reading_status=0, is_assign_to_v1=False, is_active=True,
                                            is_duplicate=False, read_cycle_id=validation.read_cycle_id).update(
-                validator_one_id=validation.validator1_id, is_assign_to_v1 = True)
+                validator_one_id=validation.validator1_id, is_assign_to_v1=True)
             # Validation Assignment To V2
             MeterReadingTbl.objects.filter(reading_status=1, is_assign_to_v2=False, is_active=True,
                                            is_duplicate=False, read_cycle_id=validation.read_cycle_id).update(

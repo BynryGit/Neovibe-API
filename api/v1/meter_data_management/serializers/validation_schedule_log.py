@@ -34,7 +34,6 @@ class ValidationScheduleLogViewSerializer(serializers.ModelSerializer):
         meter_status_obj = get_meter_status_by_name('RCNT')
         consumer_obj = ConsumerDetailTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, state=0,
                                                         is_active=True).count()
-        meter_reading_obj = MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id)
         route_task_assignment_obj = RouteTaskAssignmentTbl.objects.filter(schedule_log_id=schedule_log_tbl.id,
                                                                           is_active=True)
         user_obj = get_user_by_id_string(self.context.get('user_id_string'))
@@ -50,14 +49,19 @@ class ValidationScheduleLogViewSerializer(serializers.ModelSerializer):
             total_completed_task = total_completed_task + len(complete_task_obj)
 
         meter_reading_detail = {
-            'total_consumer' : consumer_obj,
-            'received_reading' : total_completed_task,
-            'pending_reading' : consumer_obj - total_completed_task,
-            'rcnt_reading' : meter_reading_obj.filter(reading_status=2, meter_status_id=meter_status_obj.id, is_active=True).count(),
-            'duplicate_reading' : meter_reading_obj.filter(is_duplicate=True, is_active=False).count(),
-            'validation_one' : meter_reading_obj.filter(reading_status=0, is_assign_to_v1=True, is_active=True).count(),
-            'validation_two' : meter_reading_obj.filter(reading_status=1, is_assign_to_v2=True, is_active=True).count(),
-            'completed_reading': meter_reading_obj.filter(reading_status=2, is_active=True).count(),
+            'total_consumer': consumer_obj,
+            'received_reading': total_completed_task,
+            'pending_reading': consumer_obj - total_completed_task,
+            'rcnt_reading': MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, reading_status=2,
+                                                           meter_status_id=meter_status_obj.id, is_active=True).count(),
+            'duplicate_reading': MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, is_duplicate=True,
+                                                                is_active=False).count(),
+            'validation_one': MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, reading_status=0,
+                                                             is_assign_to_v1=True, is_active=True).count(),
+            'validation_two': MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, reading_status=1,
+                                                             is_assign_to_v2=True, is_active=True).count(),
+            'completed_reading': MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, reading_status=2,
+                                                                is_active=True).count(),
             'role_list': role_list,
         }
         return meter_reading_detail

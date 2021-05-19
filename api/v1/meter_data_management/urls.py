@@ -3,7 +3,7 @@ __author__ = "aki"
 from django.urls import path
 from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
-from v1.meter_data_management.views.meter_reading_summary import MeterReadingSummary
+from v1.meter_data_management.views.validation_summary import ValidationSummary
 from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
 from v1.meter_data_management.views.meter_reading_validation_two import MeterReadingValidationTwoDetail
 from v1.meter_data_management.views.meter_summary import MeterSummary
@@ -46,7 +46,26 @@ urlpatterns = [
     path('schedule-log/<uuid:id_string>/route/list', ScheduleLogRouteList.as_view(), name='schedule_log_route_list'),
     path('schedule-log/<uuid:id_string>/read-cycle-revisit-task/list', ScheduleLogReadCycleRevisitTaskList.as_view(),
          name='schedule_log_read_cycle_revisit_task_list'),
+
+    path('route-task-assignment', RouteTaskAssignment.as_view(), name='route_task_assignment'),
+    path('route-task-assignment/<uuid:id_string>', RouteTaskAssignmentDetail.as_view(),
+         name='route_task_assignment_detail'),
+    path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(),
+         name='assign_revisit_task_assignment'),
+    path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(),
+         name='de_revisit_route_task_assignment'),
     # Dispatch API End
+
+    # validation API Start
+    path('validation/summary', ValidationSummary.as_view(), name='meter_reading_summary'),
+    path('validation-schedule-log/list', ValidationScheduleLogList.as_view(), name='validation_schedule_log_list'),
+    # validation API End
+
+    # Mobile Side API Start
+    path('route-task-assignment/list', RouteTaskAssignmentList.as_view(),
+         name='route_task_assignment_list'),
+    path('meter-reading', MeterReading.as_view(), name='meter_reading'),
+    # Mobile Side API End
 
     path('utility/<uuid:id_string>/read_cycle/list', ReadCycleList.as_view(), name='read_cycle_list'),
     path('utility/<uuid:id_string>/read_cycle/short_list', ReadCycleShortList.as_view(), name='read_cycle_short_list'),
@@ -84,19 +103,6 @@ urlpatterns = [
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
 
-    path('route-task-assignment', RouteTaskAssignment.as_view(), name='route_task_assignment'),
-    path('route-task-assignment/list', RouteTaskAssignmentList.as_view(),
-         name='route_task_assignment_list'),
-    path('route-task-assignment/<uuid:id_string>', RouteTaskAssignmentDetail.as_view(),
-         name='route_task_assignment_detail'),
-    path('assign-revisit-task-assignment', AssignRevisitTaskAssignment.as_view(),
-         name='assign_revisit_task_assignment'),
-    path('de-assign-revisit-task-assignment', DeAssignRevisitTaskAssignment.as_view(),
-         name='de_revisit_route_task_assignment'),
-
-    path('validation-schedule-log/list', ValidationScheduleLogList.as_view(), name='validation_schedule_log_list'),
-    path('utility/<uuid:id_string>/meter-reading-summary', MeterReadingSummary.as_view(), name='meter_reading_summary'),
-    path('meter-reading', MeterReading.as_view(), name='meter_reading'),
     path('meter-reading/<uuid:id_string>/validation-revisit', MeterReadingValidationRevisitDetail.as_view(),
          name='validation_revisit_detail'),
     path('schedule-log/<uuid:schedule_log>/read-cycle/<uuid:read_cycle>/validation/list',
@@ -109,5 +115,4 @@ urlpatterns = [
     path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
     path('upload-route', UploadRoute.as_view(), name='upload_route'),
     path('utility/<uuid:id_string>/upload-route-summary', UploadRouteSummary.as_view(), name='upload_route_summary'),
-
 ]
