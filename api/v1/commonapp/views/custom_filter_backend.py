@@ -388,4 +388,7 @@ class CustomFilter:
         if 'assigned_date' in request.query_params:
             queryset = queryset.filter(assignment_date__date=request.query_params['assigned_date'])
 
+        if 'state' in request.query_params:
+            queryset = queryset.filter(state=request.query_params['state']) 
+
         return queryset
