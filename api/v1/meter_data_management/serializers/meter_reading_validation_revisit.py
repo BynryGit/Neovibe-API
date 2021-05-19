@@ -39,6 +39,7 @@ class MeterReadingValidationRevisitSerializer(serializers.ModelSerializer):
                 for task in task_obj:
                     task['status'] = 'ALLOCATED'
                     task['is_revisit'] = True
+                    task['is_completed'] = False
                     task['meter_reader_id'] = route_task_assignment_obj.meter_reader_id
 
                 route_task_assignment_obj.save()

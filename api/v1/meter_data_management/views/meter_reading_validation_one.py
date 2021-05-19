@@ -27,7 +27,7 @@ from v1.commonapp.common_functions import get_user_from_token
 
 class MeterReadingValidationOneDetail(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, VALIDATION, EDIT)
+    @role_required(MX, VALIDATION, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

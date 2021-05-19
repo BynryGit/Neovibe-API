@@ -38,8 +38,8 @@ class ValidationSummary(generics.ListAPIView):
                                                                                   is_active=True)
 
                 for route_task in route_task_assignment_obj:
-                    complete_task_obj = [x for x in route_task.consumer_meter_json if
-                                         x['is_active'] == True and x['is_completed'] == True]
+                    complete_task_obj = [x for x in route_task.consumer_meter_json if x['is_active'] == True and
+                                         x['is_completed'] == True and x['is_revisit'] == False]
                     total_completed_task = total_completed_task + len(complete_task_obj)
 
                 validation_summary = {
@@ -51,13 +51,13 @@ class ValidationSummary(generics.ListAPIView):
                     'total_duplicate': MeterReadingTbl.objects.filter(utility__id_string=utility_id_string,
                                                                       is_duplicate=True, is_active=False).count(),
                     'validation_one': MeterReadingTbl.objects.filter(utility__id_string=utility_id_string,
-                                                                     reading_status=0, is_active=True).count(),
+                                                                     reading_status=0, is_assign_to_v1=True,
+                                                                     is_active=True).count(),
                     'validation_two': MeterReadingTbl.objects.filter(utility__id_string=utility_id_string,
-                                                                     reading_status=1, is_assign_to_v1=True,
+                                                                     reading_status=1, is_assign_to_v2=True,
                                                                      is_active=True).count(),
                     'completed_reading': MeterReadingTbl.objects.filter(utility__id_string=utility_id_string,
-                                                                        reading_status=2, is_assign_to_v2=True,
-                                                                        is_active=True).count(),
+                                                                        reading_status=2, is_active=True).count(),
                 }
                 return Response({
                     STATE: SUCCESS,

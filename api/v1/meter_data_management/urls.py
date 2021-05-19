@@ -59,6 +59,14 @@ urlpatterns = [
     # validation API Start
     path('validation/summary', ValidationSummary.as_view(), name='meter_reading_summary'),
     path('validation-schedule-log/list', ValidationScheduleLogList.as_view(), name='validation_schedule_log_list'),
+    path('schedule-log/<uuid:schedule_log>/read-cycle/<uuid:read_cycle>/validation/list',
+         ValidationList.as_view(), name='validation_list'),
+    path('meter-reading/<uuid:id_string>/validation-one', MeterReadingValidationOneDetail.as_view(),
+         name='meter_reading_validation_one_detail'),
+    path('meter-reading/<uuid:id_string>/validation-two', MeterReadingValidationTwoDetail.as_view(),
+         name='meter_reading_validation_two_detail'),
+    path('meter-reading/<uuid:id_string>/validation-revisit', MeterReadingValidationRevisitDetail.as_view(),
+         name='validation_revisit_detail'),
     # validation API End
 
     # Mobile Side API Start
@@ -102,15 +110,6 @@ urlpatterns = [
     path('utility/<uuid:id_string>/meter-summary', MeterSummary.as_view(), name='meter_summary'),
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
-
-    path('meter-reading/<uuid:id_string>/validation-revisit', MeterReadingValidationRevisitDetail.as_view(),
-         name='validation_revisit_detail'),
-    path('schedule-log/<uuid:schedule_log>/read-cycle/<uuid:read_cycle>/validation/list',
-         ValidationList.as_view(), name='validation_list'),
-    path('meter-reading/<uuid:id_string>/validation-one', MeterReadingValidationOneDetail.as_view(),
-         name='meter_reading_validation_one_detail'),
-    path('meter-reading/<uuid:id_string>/validation-two', MeterReadingValidationTwoDetail.as_view(),
-         name='meter_reading_validation_two_detail'),
 
     path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
     path('upload-route', UploadRoute.as_view(), name='upload_route'),

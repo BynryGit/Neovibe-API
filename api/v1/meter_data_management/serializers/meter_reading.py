@@ -93,6 +93,7 @@ class MeterReadingSerializer(serializers.ModelSerializer):
                     for task in task_obj:
                         task['status'] = 'COMPLETED'
                         task['is_completed'] = True
+                        task['is_revisit'] = False
 
                     route_task_assignment_obj.save()
 
