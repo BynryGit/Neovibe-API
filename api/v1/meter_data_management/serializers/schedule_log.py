@@ -40,7 +40,7 @@ class ScheduleLogViewSerializer(serializers.ModelSerializer):
                                                                 is_active=True).count(),
             'dispatch_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, state=3,
                                                                  is_active=True).count(),
-            'completed_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, state=3,
+            'completed_route': RouteTaskAssignment.objects.filter(schedule_log_id=schedule_log_tbl.id, state=7,
                                                                   is_completed=True, is_active=True).count(),
         }
         return route_detail

@@ -37,7 +37,6 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
                     'phone_mobile': meter_reader.phone_mobile,
                     'email': meter_reader.email,
                     'route_task_assignment_count': RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader.id,
-                                                                                      schedule_log_id=schedule_log_id.id,
                                                                                       is_completed=False,
                                                                                       is_active=True).count(),
                 }
