@@ -112,7 +112,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return str(self.id_string) + " - " +str(self.consumer_service_contract_detail_id)
+        return str(self.id_string) + " - " +str(self.consumer_service_contract_detail_id)+" - "+str(self.sa_number)
 
     def __unicode__(self):
         return self.id_string
