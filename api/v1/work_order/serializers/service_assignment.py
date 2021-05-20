@@ -29,7 +29,7 @@ class ServiceAssignmentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceAssignment
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'sa_id', 'user_id',
-                  'created_date', 'updated_date')
+                  'created_date', 'updated_date','assignment_date','completion_date')
 
 class ServiceAssignmentSerializer(serializers.ModelSerializer):
     utility_id = serializers.CharField(required=False, max_length=200)

@@ -74,8 +74,8 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
-    # def __str__(self):
-    #     return self.id
+    def __str__(self):
+        return str(self.id_string)+" - "+str(self.sa_id)+" - "+str(self.user_id)
 
     def __unicode__(self):
         return self.id

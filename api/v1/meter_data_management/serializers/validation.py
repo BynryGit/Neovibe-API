@@ -64,11 +64,14 @@ class ValidationViewSerializer(serializers.ModelSerializer):
         validator_two_obj = get_user_by_id(meter_reading_tbl.validator_two_id)
 
         user_details['consumer_no'] = consumer_master_obj.consumer_no
-        user_details['consumer_name'] = "NA"
+        user_details['first_name'] = consumer_master_obj.first_name
+        user_details['last_name'] = consumer_master_obj.last_name
         user_details['consumer_email'] = consumer_master_obj.email
         user_details['consumer_phone_mobile'] = consumer_master_obj.phone_mobile
         user_details['consumer_status'] = consumer_master_obj.get_state_display()
-        user_details['consumer_address'] = consumer_master_obj.billing_address_line_1
+        user_details['consumer_address'] = str(consumer_master_obj.billing_address_line_1) + ' ' + \
+                                           str(consumer_master_obj.billing_street) + ' ' + \
+                                           str(consumer_master_obj.billing_zipcode)
         user_details['mr_name'] = mr_obj.first_name + ' ' + mr_obj.last_name
         user_details['mr_email'] = mr_obj.email
         user_details['mr_phone_mobile'] = mr_obj.phone_mobile
@@ -142,6 +145,25 @@ class ValidationViewSerializer(serializers.ModelSerializer):
                                                                read_cycle_id=read_cycle_obj.id,
                                                                schedule_log_id=schedule_log_obj.id, is_active=True,
                                                                is_duplicate=False).count()
+
+            additional_details['meter_status_id_string'] = meter_status_obj.id_string
+            additional_details['meter_status_name'] = meter_status_obj.name
+            additional_details['reader_status_id_string'] = reader_status_obj.id_string
+            additional_details['reader_status_name'] = reader_status_obj.name
+            additional_details['total_reading'] = total_reading
+            additional_details['completed_reading'] = completed_reading
+            additional_details['pending_reading'] = total_reading - completed_reading
+        else:
+            meter_status_obj = get_meter_status_by_id(meter_reading_tbl.meter_status_id)
+            reader_status_obj = get_reader_status_by_id(meter_reading_tbl.reader_status_id)
+
+            total_reading = MeterReadingTbl.objects.filter(read_cycle_id=read_cycle_obj.id,
+                                                           schedule_log_id=schedule_log_obj.id,
+                                                           is_active=True, is_duplicate=False).count()
+
+            completed_reading = MeterReadingTbl.objects.filter(read_cycle_id=read_cycle_obj.id,
+                                                               schedule_log_id=schedule_log_obj.id, is_validated=True,
+                                                               is_active=True, is_duplicate=False).count()
 
             additional_details['meter_status_id_string'] = meter_status_obj.id_string
             additional_details['meter_status_name'] = meter_status_obj.name
