@@ -27,8 +27,11 @@ from v1.commonapp.views.custom_filter_backend import CustomFilter
 from v1.work_order.views.tasks import save_service_appointment_timeline
 from v1.work_order.views.common_functions import set_meter_install_data
 from v1.work_order.signals.signals import complete_installation_service_appointment,installation_complete_service_appointment, \
-    disconnection_complete_service_appointment,complete_disconnection_service_appointment
-                                        
+    disconnection_complete_service_appointment,complete_disconnection_service_appointment                                       
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id, get_global_lookup_by_id_string
+from datetime import date, timedelta
+from dateutil.parser import parse
+from word2number import w2n
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
@@ -336,6 +339,157 @@ class ServiceAppointmentHold(GenericAPIView):
                     RESULT: COMPLAINT_NOT_FOUND
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            logger().log(e, 'MEDIUM', module='Work Order', Sub_module='service_appointment')
+            return Response({
+                STATE: EXCEPTION,
+                RESULT: str(e),
+            }, status=status.HTTP_412_PRECONDITION_FAILED)
+
+
+class ServiceRequestApprove(GenericAPIView):
+    @is_token_validate
+    #role_required(CONSUMER_OPS, COMPLAINT, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            service_appointment = get_service_appointment_by_id_string(id_string)
+            if service_appointment:
+                print("request data=====",request.data)
+                sd = parse(request.data['start_date'])
+                ed = parse(request.data['end_date'])
+                # start = sd.strftime('%m/%d/%Y')
+                # end = ed.strftime('%m/%d/%Y')
+                print("difference === ",(ed - sd).days)
+                print("frequency=",get_global_lookup_by_id_string(request.data['frequency_id']))
+                print("repeat_every_id=",get_global_lookup_by_id_string(request.data['repeat_every_id']).value)
+                print("recurring_id=",get_global_lookup_by_id_string(request.data['recurring_id']).value)
+                print("start date=",sd)
+                print("end date=",ed)
+                recurrence = get_global_lookup_by_id_string(request.data['recurring_id']).value
+                frequency_obj = get_global_lookup_by_id_string(request.data['frequency_id'])
+                repeat_every = get_global_lookup_by_id_string(request.data['repeat_every_id']).value
+                print("type of repeat",type(repeat_every))
+                if recurrence == "Yes":
+                    print("inside")
+                    # repeat_value = w2n.word_to_num(repeat_every)
+                    repeat = list(filter(str.isdigit, repeat_every))
+                    repeat_value = int(repeat.pop())
+                    date_diff = (ed - sd).days
+                    r=1
+                    # request.data['recurring_id'] = get_global_lookup_by_id(request.data['recurring_id']).id_string
+                    # request.data['frequency_id'] = get_global_lookup_by_id(request.data['frequency_id']).id_string
+                    # request.data['repeat_every_id'] = get_global_lookup_by_id(request.data['repeat_every_id']).id_string
+                    if frequency_obj.key == 'daily':
+                        days = repeat_value
+                        print("days = ",days)
+                        service_number = abs(date_diff/repeat_value)
+                        print("days calculate",int(service_number))
+                        while r < int(service_number):
+                            print("inside service")
+                            appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                            print("this ie request data",request.data)
+                            if appointment_serializer.is_valid(raise_exception=True):
+                                appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                                # appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                                appointment_obj.is_active = True
+                                appointment_obj.sa_date = sd + timedelta(days=days)
+                                appointment_obj.state = 1
+                                appointment_obj.save()
+                            print("days before",days)
+                            days +=repeat_value
+                            print("days after",days)
+                            r +=1
+                        print("rep",service_number)
+
+                    if frequency_obj.key == 'weekly':
+                        week=repeat_value * 7
+                        week_store = repeat_value * 7
+                        print("week calculate",week)
+                        service_number = abs(date_diff/week)
+                        print("days calculate",int(service_number))
+                        while r < int(service_number):
+                            print("inside service")
+                            appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                            print("this ie request data",request.data)
+                            if appointment_serializer.is_valid(raise_exception=True):
+                                appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                                # appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                                appointment_obj.is_active = True
+                                appointment_obj.sa_date = sd + timedelta(days=week)
+                                appointment_obj.state = 1
+                                appointment_obj.save()
+                            week +=week_store
+                            r +=1
+                        print("rep",service_number)
+
+                    if frequency_obj.key == 'monthly':
+                        month=repeat_value * 30
+                        month_store=repeat_value * 30
+                        print("month calculate",month)
+                        service_number = abs(date_diff/month)
+                        print("days calculate",int(service_number))
+                        while r < int(service_number):
+                            print("inside service")
+                            appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                            print("this ie request data",request.data)
+                            if appointment_serializer.is_valid(raise_exception=True):
+                                appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                                # appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                                appointment_obj.is_active = True
+                                appointment_obj.sa_date = sd + timedelta(days=month)
+                                appointment_obj.state = 1
+                                appointment_obj.save()
+                            month +=month_store
+                            r +=1
+                        print("rep",service_number)
+
+                    if frequency_obj.key == 'yearly':
+                        year=repeat_value * 365
+                        year_store=repeat_value * 365
+                        print("year calculate",year)
+                        service_number = abs(date_diff/year)
+                        print("days calculate",int(service_number))
+                        while r < int(service_number):
+                            print("inside service")
+                            appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                            print("this ie request data",request.data)
+                            if appointment_serializer.is_valid(raise_exception=True):
+                                appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                                # appointment_obj.utility = consumer_service_contract_detail_obj.utility
+                                appointment_obj.is_active = True
+                                appointment_obj.sa_date = sd + timedelta(days=year)
+                                appointment_obj.state = 1
+                                appointment_obj.save()
+                            year +=year_store
+                            r +=1
+                        print("rep",service_number)
+                serializer = ServiceAppointmentSerializer(data=request.data)
+                service_appointment.change_state(SERVICE_APPOINTMENT_DICT["NOT ASSIGNED"])
+                service_appointment.is_active=True
+                service_appointment.save()
+                if serializer.is_valid(raise_exception=False):
+                    service_appointment = serializer.update(service_appointment, serializer.validated_data, user)
+                    with transaction.atomic():
+                        # State change for payment start                    
+                        # State change for payment end
+                        serializer = ServiceAppointmentViewSerializer(instance=service_appointment, context={'request': request})
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: serializer.data,
+                        }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULTS: list(serializer.errors.values())[0][0],
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: COMPLAINT_NOT_FOUND
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print("error  ",e)
             logger().log(e, 'MEDIUM', module='Work Order', Sub_module='service_appointment')
             return Response({
                 STATE: EXCEPTION,

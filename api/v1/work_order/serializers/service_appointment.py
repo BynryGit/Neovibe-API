@@ -19,6 +19,7 @@ from v1.commonapp.views.custom_exception import CustomAPIException
 from api.messages import SERVICE_APPOINTMENT_ALREADY_EXIST
 from v1.registration.serializers.registration import ChoiceField
 from v1.commonapp.serializers.area import AreaShortViewSerializer
+from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 
 
 class ServiceAppointmentListSerializer(serializers.ModelSerializer):
@@ -57,6 +58,9 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
     sub_area_id = serializers.CharField(required=False, max_length=200)
     ownership_id = serializers.CharField(required=False, max_length=200)
     premise_id = serializers.CharField(required=False, max_length=200)
+    frequency_id = serializers.UUIDField(required=False)
+    repeat_every_id = serializers.UUIDField(required=False)
+    recurring_id = serializers.UUIDField(required=False)
     # actual_start_time = serializers.CharField(required=False, max_length=200)
     # actual_end_time = serializers.CharField(required=False, max_length=200)
     # actual_duration = serializers.CharField(required=False, max_length=200)
@@ -67,9 +71,9 @@ class ServiceAppointmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_service_appointment_validated_data(validated_data)
-        if ServiceAppointment.objects.filter(consumer_service_contract_detail_id=validated_data['consumer_service_contract_detail_id'],
-                                             work_order_master_id=validated_data['work_order_master_id'], is_active=True).exists():
-            raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        # if ServiceAppointment.objects.filter(consumer_service_contract_detail_id=validated_data['consumer_service_contract_detail_id'],
+        #                                      work_order_master_id=validated_data['work_order_master_id'], is_active=True).exists():
+        #     raise CustomAPIException(SERVICE_APPOINTMENT_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         with transaction.atomic():
             appointment_obj = super(ServiceAppointmentSerializer, self).create(validated_data)
             appointment_obj.created_by = user.id
@@ -100,6 +104,9 @@ class ServiceAppointmentViewSerializer(serializers.ModelSerializer):
     created_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     updated_date = serializers.DateTimeField(format=setting_reader.get_display_date_format(), read_only=True)
     state = ChoiceField(choices=ServiceAppointment.CHOICES)
+    frequency_id = GlobalLookupShortViewSerializer(many=False, source='get_frequency_name')
+    repeat_every_id = GlobalLookupShortViewSerializer(many=False, source='get_repeat_every_name')
+    recurring_id = GlobalLookupShortViewSerializer(many=False, source='get_recurring_name')
     # state_id = serializers.ReadOnlyField(source='get_state')
     # city_id = serializers.ReadOnlyField(source='get_city')
     # area_id = AreaShortViewSerializer(many=False, required=False, source='get_area')
