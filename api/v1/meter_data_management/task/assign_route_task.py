@@ -21,7 +21,7 @@ from v1.meter_data_management.models.route_task_assignment import get_route_task
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.meter_data_management.models.spot_bill import get_spot_bill_by_consumer_detail_id
 
-
+# Todo send id_string to mobile and pending notification code
 @task(name="assign-route-task", queue='Dispatch_I')
 def assign_route_task(route_task_assignment_id):
     try:
@@ -37,6 +37,7 @@ def assign_route_task(route_task_assignment_id):
 
         consumer_detail_obj = ConsumerDetailTbl.objects.filter(route_id=route_task_assignment_obj.route_id,
                                                                schedule_log_id=route_task_assignment_obj.schedule_log_id,
+                                                               utility_product_id=route_task_assignment_obj.utility_product_id,
                                                                state=0, is_active=True)
 
         for consumer in consumer_detail_obj:

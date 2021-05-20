@@ -6,6 +6,7 @@ from rest_framework import serializers
 from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id
 from v1.meter_data_management.task.update_route_task_status import update_route_task_status
 from v1.meter_data_management.task.assign_route_task import assign_route_task
 from v1.meter_data_management.task.assign_partial_route_task import assign_partial_route_task
@@ -109,6 +110,8 @@ class RouteTaskAssignmentSerializer(serializers.ModelSerializer):
                 route_task_assignment_obj.created_by = user.id
                 route_task_assignment_obj.assign_date = timezone.now()
                 route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["IN-PROGRESS"])
+                schedule_log_obj = get_schedule_log_by_id(validated_data["schedule_log_id"])
+                route_task_assignment_obj.utility_product_id = schedule_log_obj.utility_product_id
                 route_task_assignment_obj.save()
                 assign_route_task.delay(route_task_assignment_obj.id)
                 return route_task_assignment_obj
