@@ -31,7 +31,7 @@ class RolePrivilegeUpload(GenericAPIView):
                 tenant_obj = get_tenant_by_id_string(id_string)
                 role_privilege_values = []
                 loc = (r"/home/ubuntu/smart360/api/v1/commonapp/utilities/xls_files/Role-Privilege-Final.xls")
-                workbook = xlrd.open_workbook(loc)
+                workbook = xlrd.open_workbook(loc,ignore_workbook_corruption=True)
                 number_of_rows = workbook.sheets()[0].nrows
                 number_of_columns = workbook.sheets()[0].ncols
                
