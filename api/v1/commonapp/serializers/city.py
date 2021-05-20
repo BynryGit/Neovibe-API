@@ -41,7 +41,7 @@ class CitySerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         with transaction.atomic():
             validated_data = set_city_validated_data(validated_data)
-            if CityTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+            if CityTbl.objects.filter(name=validated_data['name'],state_id=validated_data['state_id'], tenant_id=validated_data['tenant_id'],
                                       utility_id=validated_data['utility_id']).exists():
                 raise CustomAPIException(CITY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
@@ -52,7 +52,7 @@ class CitySerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_city_validated_data(validated_data)
-        if CityTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+        if CityTbl.objects.filter(name=validated_data['name'],state_id=validated_data['state_id'], tenant_id=validated_data['tenant_id'],
                                   utility_id=validated_data['utility_id']).exists():
             raise CustomAPIException(CITY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
