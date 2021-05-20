@@ -43,7 +43,7 @@ class ZoneSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_zone_validated_data(validated_data)
             if ZoneTbl.objects.filter(name=validated_data['name'], tenant=user.tenant,
-                                      utility_id=validated_data['utility_id']).exists():
+                                      utility_id=validated_data['utility_id'],city_id=validated_data['city_id']).exists():
                 raise CustomAPIException(ZONE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
             else:
                 zone_obj = super(ZoneSerializer, self).create(validated_data)
@@ -54,7 +54,7 @@ class ZoneSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_zone_validated_data(validated_data)
         if ZoneTbl.objects.filter(name=validated_data['name'], tenant=user.tenant,
-                                  utility_id=validated_data['utility_id']).exists():
+                                  utility_id=validated_data['utility_id'],city_id=validated_data['city_id']).exists():
             raise CustomAPIException(ZONE_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

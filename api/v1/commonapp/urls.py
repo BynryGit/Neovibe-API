@@ -39,9 +39,31 @@ from v1.commonapp.views.integration_master import IntegrationMasterList, Integra
 from v1.commonapp.views.document import UploadDocument
 from v1.commonapp.views.meter_status import MeterStatusList
 from v1.commonapp.views.admin_life_cycle import AdminLifeCycleList
+from v1.commonapp.views.admin_life_cycle import AdminLifeCycleList
 from v1.commonapp.views.notification_template import NotificationTemplateList, NotificationTemplate, NotificationTemplateDetail
+
+# Setup Import Start
+from v1.commonapp.utilities.views.currency_xl import CurrencyUpload
+from v1.commonapp.utilities.views.tenant_master import TenantMasterUpload
+from v1.commonapp.utilities.views.tenant_module import TenantModuleUpload
+from v1.commonapp.utilities.views.tenant_sub_module import TenantSubModuleUpload
+from v1.commonapp.utilities.views.role_type import RoleTypeUpload
+from v1.commonapp.utilities.views.role_sub_type import RoleSubTypeUpload
+from v1.commonapp.utilities.views.role import RoleUpload
+from v1.commonapp.utilities.views.role_privilege import RolePrivilegeUpload
+from v1.commonapp.utilities.views.master_user import MasterUserUpload
+from v1.commonapp.utilities.views.user import UserUpload
+from v1.commonapp.utilities.views.user_role import UserRoleUpload
+from v1.commonapp.utilities.views.material_type import MaterialTypeUpload
+from v1.commonapp.utilities.views.material_sub_type import MaterialSubTypeUpload
+from v1.commonapp.utilities.views.material_name import MaterialNameUpload
+from v1.commonapp.utilities.views.work_order_rule import WorkOrderRulesUpload
+from v1.commonapp.utilities.views.skills import SkillsUpload
+# Setup Import End
+
 urlpatterns = [
     path('document/list', GlobalDocumentList.as_view()),
+    # path('currency/upload', CurrencyUpload.as_view()),
     path('utility/region', Region.as_view()),
     path('utility/work-order-type', WorkOrderType.as_view()),
     path('utility/work-order-type/<uuid:id_string>', WorkOrderTypeDetail.as_view()),
@@ -148,6 +170,27 @@ urlpatterns = [
     path('utility/<uuid:id_string>/notification-template/list', NotificationTemplateList.as_view(), name="notification_template_list"),
     path('utility/notification-template', NotificationTemplate.as_view(), name="notification_template"),
     path('utility/notification-template/<uuid:id_string>', NotificationTemplateDetail.as_view(), name="notification_template_detail"),
-    path('admin/<uuid:id_string>/life-cycle/list',AdminLifeCycleList.as_view(), name="admin-life-cycle-list")
+    path('admin/<uuid:id_string>/life-cycle/list',AdminLifeCycleList.as_view(), name="admin-life-cycle-list"),
+
+    # Setup URLS Start
+
+    path('currency/upload', CurrencyUpload.as_view()),
+    path('tenant-master/upload', TenantMasterUpload.as_view()),
+    path('<uuid:id_string>/tenant-module/upload', TenantModuleUpload.as_view()),
+    path('<uuid:id_string>/tenant-sub-module/upload', TenantSubModuleUpload.as_view()),
+    path('<uuid:id_string>/role-type/upload', RoleTypeUpload.as_view()),
+    path('<uuid:id_string>/role-sub-type/upload', RoleSubTypeUpload.as_view()),
+    path('<uuid:id_string>/role/upload', RoleUpload.as_view()),
+    path('<uuid:id_string>/role-privilege/upload', RolePrivilegeUpload.as_view()),
+    path('<uuid:id_string>/master-user/upload', MasterUserUpload.as_view()),
+    path('<uuid:id_string>/user/upload', UserUpload.as_view()),
+    path('<uuid:id_string>/user-role/upload', UserRoleUpload.as_view()),
+    path('<uuid:id_string>/material-type/upload', MaterialTypeUpload.as_view()),
+    path('<uuid:id_string>/material-sub-type/upload', MaterialSubTypeUpload.as_view()),
+    path('<uuid:id_string>/material-name/upload', MaterialNameUpload.as_view()),
+    path('<uuid:id_string>/work-order-rule/upload', WorkOrderRulesUpload.as_view()),
+    path('<uuid:id_string>/skills/upload', SkillsUpload.as_view())
+
+    # Setup URLS End
 
 ]

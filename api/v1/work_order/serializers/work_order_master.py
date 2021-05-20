@@ -50,7 +50,7 @@ class WorkOrderMasterViewSerializer(serializers.ModelSerializer):
         model = WorkOrderMasterTbl
         fields = (
             'id_string', 'name', 'tenant', 'utility_work_order_sub_type','description', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date',
-            'json_obj','instructions')
+            'json_obj','instructions','created_date','completion_time')
 
 
 class WorkOrderMasterSerializer(serializers.ModelSerializer):
