@@ -30,6 +30,7 @@ class WorkOrderMaster(models.Model):
     utility_work_order_type_id = models.BigIntegerField(null=True, blank=True)
     utility_work_order_sub_type_id = models.BigIntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, blank=True, null=True)
+    completion_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     json_obj = JSONField(null=True, blank=True)
     service_obj = JSONField(null=True, blank=True)
     description = models.CharField(max_length=10000, blank=True, null=True)

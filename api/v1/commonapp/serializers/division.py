@@ -36,7 +36,7 @@ class DivisionSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_division_validated_data(validated_data)
             if DivisionTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                          utility_id=validated_data['utility_id']).exists():
+                                          utility_id=validated_data['utility_id'],zone_id=validated_data['zone_id']).exists():
                 raise CustomAPIException(DIVISION_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 division_obj = super(DivisionSerializer, self).create(validated_data)
@@ -47,7 +47,7 @@ class DivisionSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_division_validated_data(validated_data)
         if DivisionTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                      utility_id=validated_data['utility_id']).exists():
+                                      utility_id=validated_data['utility_id'],zone_id=validated_data['zone_id']).exists():
             raise CustomAPIException(DIVISION_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

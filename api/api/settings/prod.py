@@ -85,7 +85,7 @@ INSTALLED_APPS = [
     'v1.tender',
     'v1.work_order',
     'v1.utility',
-    'v1.tenant',
+    'v1.tenant'
 ]
 
 MIDDLEWARE = [

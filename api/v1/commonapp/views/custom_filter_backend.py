@@ -386,15 +386,16 @@ class CustomFilter:
             queryset = queryset.filter(sa_date__date=request.query_params['date'])
 
         if 'assigned_date' in request.query_params:
-            queryset = queryset.filter(assignment_date__date=request.query_params['assigned_date'])
+            current_date = datetime.strptime(request.query_params['assigned_date'], '%Y-%m-%d').date()
+            next_date = current_date + timedelta(days=3)
+            queryset = queryset.filter(assignment_date__range=[current_date,next_date])
 
         if 'state' in request.query_params:
             queryset = queryset.filter(state=request.query_params['state'])
 
         if 'current_date' in request.query_params:
             current_date = datetime.strptime(request.query_params['current_date'], '%Y-%m-%d').date()
-            next_date = current_date + timedelta(days=7)
-            # queryset = queryset.filter(sa_date__gte=current_date,sa_date__lte=next_date)
+            next_date = current_date + timedelta(days=8)
             queryset = queryset.filter(sa_date__range=[current_date,next_date]).exclude(state=7)
 
         return queryset
