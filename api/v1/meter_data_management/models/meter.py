@@ -19,6 +19,7 @@ from api.constants import get_file_name, METER_PICTURE
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
+from v1.commonapp.models.meter_status import get_meter_status_by_id
 from v1.commonapp.models.premises import get_premise_by_id
 from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
@@ -34,24 +35,6 @@ def get_file_path(instance, filename):
 
 
 class Meter(models.Model):
-    METER_STATUS = (
-        (0, 'NORMAL'),
-        (1, 'FAULTY'),
-        (2, 'RCNT'),
-    )
-    READER_STATUS = (
-        (0, 'OK'),
-        (1, 'CURRENT LESS THAN PREVIOUS'),
-        (2, 'METER CHANGED'),
-        (3, 'ROUND COMPLETE'),
-        (4, 'METER BRUNT'),
-        (5, 'GLASS BROKEN'),
-        (6, 'METER DEAD'),
-        (7, 'METER MISSING'),
-        (8, 'NO DISPLAY'),
-        (9, 'SITE NOT FOUND'),
-        (10, 'OBSTACLE'),
-    )
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
@@ -66,8 +49,8 @@ class Meter(models.Model):
     meter_type_id = models.BigIntegerField(null=True, blank=True)
     smart_meter_source_id = models.BigIntegerField(null=True, blank=True)
     meter_make_id = models.BigIntegerField(null=True, blank=True)
-    meter_status = models.IntegerField(choices=METER_STATUS, default=0)
-    reader_status = models.IntegerField(choices=READER_STATUS, default=0)
+    meter_status = models.IntegerField(null=True, blank=True)
+    reader_status = models.IntegerField(null=True, blank=True)
     street = models.CharField(max_length=200, blank=True, null=True)
     zipcode = models.CharField(max_length=200, null=True, blank=True)
     meter_no = models.CharField(max_length=200, blank=False, null=False)
@@ -134,6 +117,11 @@ class Meter(models.Model):
     def get_meter_make(self):
         meter_make = get_meter_make_by_id(self.meter_make_id)
         return meter_make
+
+    @property
+    def get_meter_status_name(self):
+        meter_status = get_meter_status_by_id(self.meter_status)
+        return meter_status
 
     def __str__(self):
         return self.meter_no
