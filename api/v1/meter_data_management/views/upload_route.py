@@ -70,7 +70,7 @@ class UploadRouteList(generics.ListAPIView):
 
 class UploadRoute(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, UPLOAD, EDIT)
+    @role_required(MX, UPLOAD, EDIT)
     def post(self, request):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])

@@ -22,7 +22,7 @@ class ComplaintListSerializer(serializers.ModelSerializer):
     consumer_complaint_master_id=ConsumerComplaintMasterViewSerializer(source='get_complaint_master_id')
     class Meta:
         model = Complaint
-        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date', 'is_active','consumer_complaint_master_id', 'complaint_sub_type', 'consumer_remark')
+        fields = ('complaint_name', 'id_string', 'created_by', 'state', 'consumer_service_contract_detail_id','consumer_no', 'complaint_no', 'created_date', 'is_active','consumer_complaint_master_id', 'complaint_sub_type', 'consumer_remark', 'description')
 
 
 class ComplaintViewSerializer(serializers.ModelSerializer):

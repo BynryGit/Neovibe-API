@@ -3,6 +3,7 @@ __author__ = "aki"
 from django.urls import path
 from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading
+from v1.meter_data_management.views.schedule_log_read_cycle import ScheduleLogReadCycleList
 from v1.meter_data_management.views.validation_summary import ValidationSummary
 from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
 from v1.meter_data_management.views.meter_reading_validation_two import MeterReadingValidationTwoDetail
@@ -19,7 +20,7 @@ from v1.meter_data_management.views.schedule_log_read_cycle_revisit_task import 
 from v1.meter_data_management.views.schedule_log import ScheduleLogList, ScheduleLogSummary, ScheduleLogDetail
 from v1.meter_data_management.views.job_card_template import JobCardTemplateList,JobCardTemplateDetail,JobCardTemplate
 from v1.meter_data_management.views.upload_route import UploadRouteList, UploadRoute
-from v1.meter_data_management.views.upload_route_sammary import UploadRouteSummary
+from v1.meter_data_management.views.upload_sammary import UploadSummary
 from v1.meter_data_management.views.validation import ValidationList
 from v1.meter_data_management.views.meter_reading_validation_revisit import MeterReadingValidationRevisitDetail
 from v1.meter_data_management.views.validation_schedule_log import ValidationScheduleLogList
@@ -69,6 +70,17 @@ urlpatterns = [
          name='validation_revisit_detail'),
     # validation API End
 
+    # Search Consumer API Start
+    path('schedule-log/<uuid:id_string>/read-cycle/list', ScheduleLogReadCycleList.as_view(),
+         name='schedule_log_read_cycle_list'),
+    # Search Consumer API End
+
+    # Upload API Start
+    path('upload/summary', UploadSummary.as_view(), name='upload_summary'),
+    path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
+    path('upload-route', UploadRoute.as_view(), name='upload_route'),
+    # Upload API End
+
     # Mobile Side API Start
     path('route-task-assignment/list', RouteTaskAssignmentList.as_view(),
          name='route_task_assignment_list'),
@@ -110,8 +122,4 @@ urlpatterns = [
     path('utility/<uuid:id_string>/meter-summary', MeterSummary.as_view(), name='meter_summary'),
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
-
-    path('upload-route/list', UploadRouteList.as_view(), name='upload_route_list'),
-    path('upload-route', UploadRoute.as_view(), name='upload_route'),
-    path('utility/<uuid:id_string>/upload-route-summary', UploadRouteSummary.as_view(), name='upload_route_summary'),
 ]

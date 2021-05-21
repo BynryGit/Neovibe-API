@@ -19,6 +19,7 @@ from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
 SERVICE_APPOINTMENT_DICT = {
@@ -103,6 +104,12 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     actual_start_time = models.TimeField(null=True, blank=True)
     actual_end_time = models.TimeField(null=True, blank=True)
     actual_duration = models.BigIntegerField(blank=True, null=True)
+    frequency_id = models.BigIntegerField(null=True, blank=True)
+    repeat_every_id = models.BigIntegerField(null=True, blank=True)
+    recurring_id = models.BigIntegerField(null=True, blank=True)
+    # cron_expression = models.CharField(max_length=500, blank=True, null=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     completed_task_details = JSONField(null=True, blank=True)
     sa_GIS_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -159,6 +166,21 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     @property
     def get_city(self):
         return get_city_by_id(self.city_id)
+
+    @property
+    def get_frequency_name(self):
+        frequency = get_global_lookup_by_id(self.frequency_id)
+        return frequency
+
+    @property
+    def get_repeat_every_name(self):
+        repeat_every = get_global_lookup_by_id(self.repeat_every_id)
+        return repeat_every
+
+    @property
+    def get_recurring_name(self):
+        recurring = get_global_lookup_by_id(self.recurring_id)
+        return recurring
 
     @property
     def get_consumer_service_contract_detail_id(self):

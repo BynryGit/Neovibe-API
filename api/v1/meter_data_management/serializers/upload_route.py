@@ -30,7 +30,9 @@ class UploadRouteViewSerializer(serializers.ModelSerializer):
         schedule_obj = get_schedule_by_id(schedule_log_obj.schedule_id)
 
         total_consumer = ConsumerDetailTbl.objects.filter(schedule_log_id=route_task_assignment_tbl.schedule_log_id,
-                                                          route_id=route_task_assignment_tbl.route_id, is_active=True).count()
+                                                          utility_product_id=route_task_assignment_tbl.utility_product_id,
+                                                          route_id=route_task_assignment_tbl.route_id,
+                                                          is_active=True).count()
 
         normal_reading = MeterReadingTbl.objects.filter(~Q(reading_status=3), is_active=True,
                                                         schedule_log_id=route_task_assignment_tbl.schedule_log_id,
@@ -39,11 +41,22 @@ class UploadRouteViewSerializer(serializers.ModelSerializer):
         completed_reading = MeterReadingTbl.objects.filter(reading_status=2, is_active=True,
                                                            schedule_log_id=route_task_assignment_tbl.schedule_log_id,
                                                            route_id=route_task_assignment_tbl.route_id).count()
+
+        if completed_reading >= total_consumer:
+            upload_flag = True
+        else:
+            upload_flag = False
         try:
             upload_route_obj = UploadRouteTbl.objects.get(schedule_log_id=route_task_assignment_tbl.schedule_log_id,
                                                           read_cycle_id=route_task_assignment_tbl.read_cycle_id,
                                                           route_id=route_task_assignment_tbl.route_id, is_active=True)
             status = upload_route_obj.get_state_display()
+
+            if upload_route_obj.state in [0,4,5]:
+                upload_flag = True
+            else:
+                upload_flag = False
+
         except UploadRouteTbl.DoesNotExist:
             status = 'NOT-SENT'
 
@@ -53,7 +66,8 @@ class UploadRouteViewSerializer(serializers.ModelSerializer):
             'total_consumer': total_consumer,
             'normal_reading': normal_reading,
             'completed_reading': completed_reading,
-            'pending_reading': total_consumer - completed_reading
+            'pending_reading': total_consumer - completed_reading,
+            'upload_flag': upload_flag
         }
         return route_detail
 
@@ -77,7 +91,7 @@ class UploadRouteSerializer(serializers.ModelSerializer):
             meter_reading_list = []
             validated_data = set_upload_route_validated_data(validated_data)
             try:
-                upload_route_obj = UploadRouteTbl.objects.get(tenant=user.tenant, utility_id=validated_data['utility_id'],
+                upload_route_obj = UploadRouteTbl.objects.get(utility_id=validated_data['utility_id'],
                                                               schedule_log_id=validated_data["schedule_log_id"],
                                                               read_cycle_id=validated_data["read_cycle_id"],
                                                               route_id=validated_data["route_id"], is_active=True)
