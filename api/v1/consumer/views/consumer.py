@@ -61,6 +61,8 @@ from django.db.models import Q
 from v1.meter_data_management.models.meter import Meter
 from v1.commonapp.serializers.lifecycle import LifeCycleListSerializer
 from v1.payment.serializer.payment_transactions import PaymentTransactionListSerializer, PaymentTransactionSerializer
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
+
 # API Header
 # API end Point: api/v1/consumer/:id_string/list
 # API verb: GET
@@ -93,7 +95,7 @@ class ConsumerList(generics.ListAPIView):
                     if "consumer_no" in self.request.query_params:
                         queryset = queryset.filter(consumer_no=self.request.query_params['consumer_no'])
                     if "email_id" in self.request.query_params:
-                        queryset = queryset.filter(email_id=self.request.query_params['email_id'])
+                        queryset = queryset.filter(email=self.request.query_params['email_id'])
                     if "phone_mobile" in self.request.query_params:
                         queryset = queryset.filter(phone_mobile=self.request.query_params['phone_mobile'])
                     if "meter_no" in self.request.query_params:
@@ -1431,25 +1433,46 @@ class ConsumerService(GenericAPIView):
                 consumer_service_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(
                     request.data['consumer_service_contract_detail_id'])
                 work_order_master_obj = get_work_order_master_by_id_string(request.data['work_order_master_id'])
-                try:
-                    previous_connection_request = ServiceAppointmentTbl.objects.filter(
-                        Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
-                        & Q(is_active=False) &
-                        Q(work_order_master_id=work_order_master_obj.id) &
-                        ~Q(state=7) &
-                        Q(Q(state=1) | Q(state=11)))
-                    if previous_connection_request:
-                        raise CustomAPIException(
-                            "Service Appointment Already Exist",
-                            status_code=status.HTTP_409_CONFLICT)
-                except Exception as e:
-                    res = self.handle_exception(e)
-                    return Response({
-                        STATE: EXCEPTION,
-                        RESULT: str(e),
-                    }, status=res.status_code)
+                # try:
+                #     previous_connection_request = ServiceAppointmentTbl.objects.filter(
+                #         Q(consumer_service_contract_detail_id=consumer_service_contract_detail_obj.id)
+                #         & Q(is_active=False) &
+                #         Q(work_order_master_id=work_order_master_obj.id) &
+                #         ~Q(state=7) &
+                #         Q(Q(state=1) | Q(state=11)))
+                #     if previous_connection_request:
+                #         raise CustomAPIException(
+                #             "Service Appointment Already Exist",
+                #             status_code=status.HTTP_409_CONFLICT)
+                # except Exception as e:
+                #     res = self.handle_exception(e)
+                #     return Response({
+                #         STATE: EXCEPTION,
+                #         RESULT: str(e),
+                #     }, status=res.status_code)
+                # if 'frequency_id' in request.data:
+                #     frequency_obj = get_global_lookup_by_id_string(request.data['frequency_id'])
+                #     repeat_every_obj = get_global_lookup_by_id_string(request.data['repeat_every_id'])
+                #     if frequency_obj.key == 'daily':
+                #         print("inside daily")
+                #         request.data['cron_expression'] = '0 22 */' + str(repeat_every_obj.key[slice(0,1)]) + ' * *'
+                #     if frequency_obj.key == 'weekly':
+                #         week_string = ''
+                #         for occurrence in request.data['occurs_on']:
+                #             occurrence_obj = get_global_lookup_by_id_string(occurrence['id_string'])
+                #             week_string = week_string + occurrence_obj.key + ','
+                #         week_string = week_string[:-1]
+                #         request.data['cron_expression'] = '0 22 * * ' + week_string
+                #     if frequency_obj.key == 'monthly':
+                #         for occurrence in request.data['occurs_on']:
+                #             occurrence_obj = get_global_lookup_by_id_string(occurrence['id_string'])
+                #         request.data['cron_expression'] = '0 22 ' + str(occurrence_obj.key[slice(4,5)]) \
+                #                                           + ' */' + str(repeat_every_obj.key[slice(0,1)]) + ' *'
+                #     if frequency_obj.key == 'yearly':
+                #         request.data['cron_expression'] = '0 22 1 1 *'
 
                 appointment_serializer = ServiceAppointmentSerializer(data=request.data)
+                print("this ie request data",request.data)
                 if appointment_serializer.is_valid(raise_exception=True):
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
                     appointment_obj.utility = consumer_service_contract_detail_obj.utility

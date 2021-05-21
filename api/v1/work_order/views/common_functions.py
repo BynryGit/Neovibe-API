@@ -26,6 +26,7 @@ from v1.meter_data_management.views.common_function import set_meter_validated_d
 from v1.consumer.views.common_functions import set_consumer_service_contract_detail_validated_data
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.meter_data_management.models.meter import get_meter_by_number
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 
 def set_work_order_validated_data(validated_data):
     if "utility_id" in validated_data:
@@ -138,7 +139,32 @@ def set_service_appointment_validated_data(validated_data):
         if consumer_service_contract_detail_obj:
             validated_data["consumer_service_contract_detail_id"]=consumer_service_contract_detail_obj.id
         else:
-            raise CustomAPIException("consumer service contract detail not found.", status_code=status.HTTP_404_NOT_FOUND) 
+            raise CustomAPIException("consumer service contract detail not found.", status_code=status.HTTP_404_NOT_FOUND)
+
+    if "recurring_id" in validated_data:
+        recurring = get_global_lookup_by_id_string(validated_data["recurring_id"])
+        if recurring:
+            validated_data["recurring_id"] = recurring.id
+        else:
+            raise CustomAPIException(IS_RECCURING_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "frequency_id" in validated_data:
+        frequency = get_global_lookup_by_id_string(validated_data["frequency_id"])
+        if frequency:
+            validated_data["frequency_id"] = frequency.id
+        else:
+            raise CustomAPIException(FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["frequency_id"] = None
+
+    if "repeat_every_id" in validated_data:
+        repeat_every = get_global_lookup_by_id_string(validated_data["repeat_every_id"])
+        if repeat_every:
+            validated_data["repeat_every_id"] = repeat_every.id
+        else:
+            raise CustomAPIException(REPEAT_FREQUENCY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        validated_data["repeat_every_id"] = None 
 
     return validated_data
 

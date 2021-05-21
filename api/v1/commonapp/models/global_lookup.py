@@ -46,7 +46,7 @@ def get_global_lookup_by_id(id):
     try:
         return Global_Lookup.objects.get(id=id, is_active=True)
     except:
-        return False
+        return None
 
 
 def get_global_lookup_by_id_string(id_string):
