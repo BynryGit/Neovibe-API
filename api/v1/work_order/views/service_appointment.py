@@ -31,7 +31,7 @@ from v1.work_order.signals.signals import complete_installation_service_appointm
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id, get_global_lookup_by_id_string
 from datetime import date, timedelta
 from dateutil.parser import parse
-from word2number import w2n
+# from word2number import w2n
 
 # API Header
 # API end Point: api/v1/service-appointment/:id_string/list
