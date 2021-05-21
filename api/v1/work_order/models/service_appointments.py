@@ -198,3 +198,10 @@ def get_service_appointment_by_id_string(id_string):
         return ServiceAppointment.objects.get(id_string=id_string)
     except:
         return False
+
+
+def get_service_appointment_by_sa_date_range(id,current_date,next_date):
+    try:
+        return ServiceAppointment.objects.get(id=id,sa_date__range=[current_date,next_date])
+    except:
+        return False
