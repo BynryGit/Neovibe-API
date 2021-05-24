@@ -34,6 +34,8 @@ from v1.payment.models.payment_type import get_payment_type_by_id_string
 from v1.tenant.models.tenant_master import get_tenant_by_id_string
 from django.utils.dateparse import parse_date
 from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.work_order.models.service_appointments import get_service_appointment_by_id, ServiceAppointment
+
 
 class CustomFilter:
 
@@ -386,15 +388,19 @@ class CustomFilter:
             queryset = queryset.filter(sa_date__date=request.query_params['date'])
 
         if 'assigned_date' in request.query_params:
-            queryset = queryset.filter(assignment_date__date=request.query_params['assigned_date'])
+            sa_id_list = []
+            current_date = datetime.strptime(request.query_params['assigned_date'], '%Y-%m-%d').date()
+            next_date = current_date + timedelta(days=3)
+
+            appointment = ServiceAppointment.objects.filter(id__in=[appointment.sa_id for appointment in queryset],sa_date__range=[current_date,next_date])
+            queryset = queryset.filter(sa_id__in=[sa_id.id for sa_id in appointment])
 
         if 'state' in request.query_params:
             queryset = queryset.filter(state=request.query_params['state'])
 
         if 'current_date' in request.query_params:
             current_date = datetime.strptime(request.query_params['current_date'], '%Y-%m-%d').date()
-            next_date = current_date + timedelta(days=7)
-            # queryset = queryset.filter(sa_date__gte=current_date,sa_date__lte=next_date)
+            next_date = current_date + timedelta(days=8)
             queryset = queryset.filter(sa_date__range=[current_date,next_date]).exclude(state=7)
 
         return queryset

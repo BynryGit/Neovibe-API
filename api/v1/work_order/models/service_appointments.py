@@ -19,6 +19,7 @@ from v1.commonapp.models.state import get_state_by_id
 from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
+from v1.commonapp.models.global_lookup import get_global_lookup_by_id
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
 SERVICE_APPOINTMENT_DICT = {
@@ -103,6 +104,12 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     actual_start_time = models.TimeField(null=True, blank=True)
     actual_end_time = models.TimeField(null=True, blank=True)
     actual_duration = models.BigIntegerField(blank=True, null=True)
+    frequency_id = models.BigIntegerField(null=True, blank=True)
+    repeat_every_id = models.BigIntegerField(null=True, blank=True)
+    recurring_id = models.BigIntegerField(null=True, blank=True)
+    # cron_expression = models.CharField(max_length=500, blank=True, null=True)
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
     completed_task_details = JSONField(null=True, blank=True)
     sa_GIS_id = models.BigIntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -112,7 +119,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
 
     def __str__(self):
-        return str(self.id_string) + " - " +str(self.consumer_service_contract_detail_id)
+        return str(self.id_string) + " - " +str(self.consumer_service_contract_detail_id)+" - "+str(self.sa_number)
 
     def __unicode__(self):
         return self.id_string
@@ -161,6 +168,21 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
         return get_city_by_id(self.city_id)
 
     @property
+    def get_frequency_name(self):
+        frequency = get_global_lookup_by_id(self.frequency_id)
+        return frequency
+
+    @property
+    def get_repeat_every_name(self):
+        repeat_every = get_global_lookup_by_id(self.repeat_every_id)
+        return repeat_every
+
+    @property
+    def get_recurring_name(self):
+        recurring = get_global_lookup_by_id(self.recurring_id)
+        return recurring
+
+    @property
     def get_consumer_service_contract_detail_id(self):
         consumer_service_contract_detail = get_consumer_service_contract_detail_by_id(self.consumer_service_contract_detail_id)
         return consumer_service_contract_detail
@@ -196,5 +218,12 @@ def get_service_appointment_by_id(id):
 def get_service_appointment_by_id_string(id_string):
     try:
         return ServiceAppointment.objects.get(id_string=id_string)
+    except:
+        return False
+
+
+def get_service_appointment_by_sa_date_range(id,current_date,next_date):
+    try:
+        return ServiceAppointment.objects.get(id=id,sa_date__range=[current_date,next_date])
     except:
         return False

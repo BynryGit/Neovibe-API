@@ -29,7 +29,7 @@ def schedule_bill_log():
         for schedule in schedule_obj:
             recurrence_obj = get_global_lookup_by_id(schedule.recurring_id)
             if recurrence_obj.key == 'no':
-                if ScheduleBillLog.objects.filter(tenant=schedule.tenant, utility=schedule.utility, bill_schedule_id=schedule.id,
+                if ScheduleBillLog.objects.filter(tenant=schedule.tenant, utility=schedule.utility, schedule_bill_id=schedule.id,
                                               is_active=True).exists():
                     print("Bill Schedule Log Already Exist")
                 else:

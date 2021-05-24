@@ -639,7 +639,7 @@ def calculate_current_charges(privious_meter_reading,current_meter_reading,rate)
         tax_obj = get_tax_by_utility_id_string(rate[0]['utility_id_string'])
         consumption_units = (int(current_meter_reading) - int(privious_meter_reading))
         item = []
-        if rate[0]['product'] == 'Gas':
+        if rate[0]['product'] == 'Gas' or  rate[0]['product'] == 'Water':
             actual_rate = float(rate[0]['rate']) * float(tax_obj.tax_percentage)/100
             final_current_charge = consumption_units * actual_rate
             return final_current_charge

@@ -3,9 +3,9 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
-from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.area import AreaShortViewSerializer
 from v1.commonapp.serializers.city import CityShortViewSerializer
+from v1.commonapp.serializers.meter_status import MeterStatusShortViewSerializer
 from v1.commonapp.serializers.premises import PremisesShortViewSerializer
 from v1.commonapp.serializers.state import StateShortViewSerializer
 from v1.commonapp.serializers.sub_area import SubAreaShortViewSerializer
@@ -17,7 +17,6 @@ from v1.meter_data_management.serializers.meter_make import MeterMakeShortViewSe
 from v1.meter_data_management.serializers.route import RouteShortViewSerializer
 from v1.meter_data_management.views.common_function import set_meter_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
-from api.messages import *
 
 class MeterShortViewSerializer(serializers.ModelSerializer):
 
@@ -39,8 +38,7 @@ class MeterViewSerializer(serializers.ModelSerializer):
     meter_type_id = GlobalLookupShortViewSerializer(many=False, source='get_meter_type_name')
     meter_make_id = MeterMakeShortViewSerializer(many=False, source='get_meter_make')
     utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
-    meter_status = ChoiceField(choices=MeterTbl.METER_STATUS)
-    reader_status = ChoiceField(choices=MeterTbl.READER_STATUS)
+    meter_status = MeterStatusShortViewSerializer(many=False, source='get_meter_status_name')
 
     class Meta:
         model = MeterTbl

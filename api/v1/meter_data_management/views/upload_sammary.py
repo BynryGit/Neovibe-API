@@ -6,46 +6,44 @@ from v1.commonapp.views.logger import logger
 from api.constants import MX, UPLOAD, VIEW
 from v1.meter_data_management.models.upload_route import UploadRoute as UploadRouteTbl
 from v1.userapp.decorators import is_token_validate, role_required
-from v1.utility.models.utility_master import get_utility_by_id_string
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, UTILITY_NOT_FOUND
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail as ConsumerDetailTbl
 
 
 # API Header
-# API end Point: api/v1/meter-data/utility/<uuid:id_string>/upload-route-summary
+# API end Point: api/v1/meter-data/upload/summary
 # API verb: GET
 # Package: Basic
 # Modules: All
 # Sub Module: All
 # Interaction: Upload route summary
-# Usage: API will fetch required data for upload-route-summary.
-# Tables used: MeterReading, UploadRoute
+# Usage: API will fetch required data for upload summary.
+# Tables used: ConsumerDetailTbl, UploadRoute
 # Author: Akshay
 # Created on: 24/03/2021
 
 # todo need to fix logic
-class UploadRouteSummary(generics.ListAPIView):
+class UploadSummary(generics.ListAPIView):
     @is_token_validate
-    # @role_required(MX, UPLOAD, VIEW)
-    def get(self, request, id_string):
+    @role_required(MX, UPLOAD, VIEW)
+    def get(self, request):
         try:
-            utility_obj = get_utility_by_id_string(id_string)
-            if utility_obj:
-                consumer_obj = ConsumerDetailTbl.objects.filter(utility=utility_obj, is_active=True).count()
-                upload_route_obj = UploadRouteTbl.objects.filter(utility=utility_obj, is_active=True)
-                pending_route = upload_route_obj.filter(state=0).count()
-                uploaded_route = upload_route_obj.filter(state=3).count()
-                rejected_route = upload_route_obj.filter(state=4).count()
+            if 'utility_id_string' in request.query_params:
+                utility_id_string = request.query_params['utility_id_string']
 
-                Upload_Route_Count = {
-                    'total_consumer' : consumer_obj,
-                    'uploaded_route' : uploaded_route,
-                    'pending_route' : pending_route,
-                    'rejected_route' : rejected_route,
+                upload_summary = {
+                    'total_consumer': ConsumerDetailTbl.objects.filter(utility__id_string=utility_id_string,
+                                                                       is_active=True).count(),
+                    'uploaded_route': UploadRouteTbl.objects.filter(utility__id_string=utility_id_string, state=3,
+                                                                    is_active=True).count(),
+                    'pending_route': UploadRouteTbl.objects.filter(utility__id_string=utility_id_string, state=0,
+                                                                   is_active=True).count(),
+                    'rejected_route': UploadRouteTbl.objects.filter(utility__id_string=utility_id_string, state=4,
+                                                                    is_active=True).count(),
                 }
                 return Response({
                     STATE: SUCCESS,
-                    RESULT: Upload_Route_Count,
+                    RESULT: upload_summary,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({

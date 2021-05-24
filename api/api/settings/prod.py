@@ -226,6 +226,12 @@ CRONJOBS = [
     ('0 23 * * *', 'v1.meter_data_management.task.spot_bill.spot_bill',
      '>> /home/ubuntu/smart360/log_file/spot_bill.log'),
     # Cron Use For MDM Module End
+
+    # Cron Use For BILLING Module End
+    ('*/15 * * * *', 'v1.billing.task.bill_schedule_log.schedule_bill_log',
+     '>> /home/ubuntu/smart360/log_file/bill_schedule_log.log'),
+    # Cron Use For BILLING Module End
+
 ]
 
 # Amazon s3 Configuration

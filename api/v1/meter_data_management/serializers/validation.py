@@ -153,6 +153,25 @@ class ValidationViewSerializer(serializers.ModelSerializer):
             additional_details['total_reading'] = total_reading
             additional_details['completed_reading'] = completed_reading
             additional_details['pending_reading'] = total_reading - completed_reading
+        else:
+            meter_status_obj = get_meter_status_by_id(meter_reading_tbl.meter_status_id)
+            reader_status_obj = get_reader_status_by_id(meter_reading_tbl.reader_status_id)
+
+            total_reading = MeterReadingTbl.objects.filter(read_cycle_id=read_cycle_obj.id,
+                                                           schedule_log_id=schedule_log_obj.id,
+                                                           is_active=True, is_duplicate=False).count()
+
+            completed_reading = MeterReadingTbl.objects.filter(read_cycle_id=read_cycle_obj.id,
+                                                               schedule_log_id=schedule_log_obj.id, is_validated=True,
+                                                               is_active=True, is_duplicate=False).count()
+
+            additional_details['meter_status_id_string'] = meter_status_obj.id_string
+            additional_details['meter_status_name'] = meter_status_obj.name
+            additional_details['reader_status_id_string'] = reader_status_obj.id_string
+            additional_details['reader_status_name'] = reader_status_obj.name
+            additional_details['total_reading'] = total_reading
+            additional_details['completed_reading'] = completed_reading
+            additional_details['pending_reading'] = total_reading - completed_reading
 
         additional_details['user_role'] =  role_obj.role_ID
         additional_details['read_cycle_list'] = read_cycle_list

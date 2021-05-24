@@ -8,8 +8,11 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from v1.commonapp.models.meter_status import get_meter_status_by_name
 from v1.commonapp.views.logger import logger
-from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND, SUCCESSFULLY_DATA_SAVE
+from api.messages import STATE, ERROR, EXCEPTION, SUCCESS, RESULT, METER_NOT_FOUND, SUCCESSFULLY_DATA_SAVE, \
+    ROUTE_NOT_FOUND, PREMISE_NOT_FOUND, UTILITY_PRODUCT_NOT_FOUND, METER_TYPE_NOT_FOUND, METER_MAKE_NOT_FOUND, \
+    METER_STATUS_NOT_FOUND
 from api.constants import MX, EDIT, METER_MASTER, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_value
@@ -25,7 +28,6 @@ from v1.commonapp.common_functions import is_token_valid, is_authorized, get_use
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.meter_data_management.models.meter_make import get_meter_make_by_name
 from v1.meter_data_management.models.route import get_route_by_name
-from v1.meter_data_management.views.status import check_meter_status
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.meter_data_management.models.meter import Meter as MeterTbl, get_meter_by_id_string
 from v1.meter_data_management.serializers.meter import MeterViewSerializer, MeterSerializer
@@ -87,7 +89,7 @@ class MeterList(generics.ListAPIView):
 
 class Meter(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, METER_MASTER, EDIT)
+    @role_required(MX, METER_MASTER, EDIT)
     def post(self, request):
         try:
             with transaction.atomic():
@@ -113,23 +115,65 @@ class Meter(GenericAPIView):
                                                meter_no=value[5], is_active=True).exists():
                         pass
                     else:
-                        route_obj = get_route_by_name(name=value[0]).id
-                        premise_obj = get_premise_by_name(value[1]).id
-                        utility_product_obj = get_utility_product_by_name(value[2]).id
-                        meter_type_obj = get_global_lookup_by_value(value[3]).id
-                        meter_status = check_meter_status(value[4])
-                        meter_make_obj = get_meter_make_by_name(value[7]).id
+                        route_obj = get_route_by_name(name=value[0])
+                        premise_obj = get_premise_by_name(value[1])
+                        utility_product_obj = get_utility_product_by_name(value[2])
+                        meter_type_obj = get_global_lookup_by_value(value[3])
+                        meter_status = get_meter_status_by_name(value[4])
+                        meter_make_obj = get_meter_make_by_name(value[7])
+                        if route_obj:
+                            pass
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: str(ROUTE_NOT_FOUND)
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        if premise_obj:
+                            pass
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: str(PREMISE_NOT_FOUND)
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        if utility_product_obj:
+                            pass
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: str(UTILITY_PRODUCT_NOT_FOUND)
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        if meter_type_obj:
+                            pass
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: str(METER_TYPE_NOT_FOUND)
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        if meter_status:
+                            pass
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: str(METER_STATUS_NOT_FOUND)
+                            }, status=status.HTTP_404_NOT_FOUND)
+                        if meter_make_obj:
+                            pass
+                        else:
+                            return Response({
+                                STATE: ERROR,
+                                RESULT: str(METER_MAKE_NOT_FOUND)
+                            }, status=status.HTTP_404_NOT_FOUND)
                         MeterTbl(
                             tenant=user.tenant,
                             utility=utility_obj,
-                            route_id=route_obj,
-                            premise_id=premise_obj,
-                            utility_product_id=utility_product_obj,
-                            meter_type_id=meter_type_obj,
-                            meter_status=meter_status,
+                            route_id=route_obj.id,
+                            premise_id=premise_obj.id,
+                            utility_product_id=utility_product_obj.id,
+                            meter_type_id=meter_type_obj.id,
+                            meter_status=meter_status.id,
                             meter_no=value[5],
                             meter_digit=value[6],
-                            meter_make_id=meter_make_obj,
+                            meter_make_id=meter_make_obj.id,
                             current_reading=value[8],
                             latitude=value[9],
                             longitude=value[10],
@@ -140,6 +184,7 @@ class Meter(GenericAPIView):
                     RESULT: SUCCESSFULLY_DATA_SAVE,
                 }, status=status.HTTP_201_CREATED)
         except Exception as ex:
+            print(ex)
             logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')
             return Response({
                 STATE: EXCEPTION,
@@ -161,7 +206,7 @@ class Meter(GenericAPIView):
 
 class MeterDetail(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, METER_MASTER, VIEW)
+    @role_required(MX, METER_MASTER, VIEW)
     def get(self, request, id_string):
         try:
             meter_obj = get_meter_by_id_string(id_string)
@@ -195,7 +240,7 @@ class MeterDetail(GenericAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @is_token_validate
-    # @role_required(MX, METER_MASTER, EDIT)
+    @role_required(MX, METER_MASTER, EDIT)
     def put(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -257,10 +302,11 @@ class MeterLifeCycleList(generics.ListAPIView):
             if token:
                 if is_authorized(1, 1, 1, user_obj):
                     self.request.query_params._mutable = True
-                    module = get_module_by_key("CONSUMER_OPS")
-                    sub_module = get_sub_module_by_key("METER_DATA")
+                    module = get_module_by_key("MX")
+                    sub_module = get_sub_module_by_key("METER_MASTER")
                     if 'object_id' in self.request.query_params:
-                        self.request.query_params['object_id'] = get_meter_by_id_string(self.request.query_params['object_id']).id
+                        self.request.query_params['object_id'] = get_meter_by_id_string\
+                            (self.request.query_params['object_id']).id
                     self.request.query_params._mutable = False
                     queryset = LifeCycleTbl.objects.filter(module_id=module, sub_module_id=sub_module, is_active=True)
                     return queryset
@@ -331,14 +377,14 @@ class MeterNoteList(generics.ListAPIView):
 # todo need to fix this api and note serializer
 class MeterNoteDetail(GenericAPIView):
     @is_token_validate
-    # @role_required(MX, METER_MASTER, EDIT)
+    @role_required(MX, METER_MASTER, EDIT)
     def post(self, request, id_string):
         try:
             user_id_string = get_user_from_token(request.headers['Authorization'])
             user = get_user_by_id_string(user_id_string)
             meter_obj = get_meter_by_id_string(id_string)
-            module = get_module_by_key("CONSUMER_OPS")
-            sub_module = get_sub_module_by_key("METER_DATA")
+            module = get_module_by_key("MX")
+            sub_module = get_sub_module_by_key("METER_MASTER")
             note_serializer = NoteSerializer(data=request.data)
             if note_serializer.is_valid():
                 meter_note_obj = note_serializer.create(note_serializer.validated_data, user)
