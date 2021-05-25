@@ -24,7 +24,7 @@ class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkOrderMasterTbl
-        fields = ('name', 'id_string', 'description', 'json_obj', 'utility_product_id', 'utility_work_order_sub_type', 'base_rate')
+        fields = ('name', 'id_string', 'description', 'json_obj', 'utility_product_id', 'utility_work_order_sub_type', 'base_rate','expert_name','expert_email','expert_contact_no','instructions')
 
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):
