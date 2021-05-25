@@ -360,18 +360,20 @@ class ServiceRequestApprove(GenericAPIView):
                 ed = parse(request.data['end_date'])
                 # start = sd.strftime('%m/%d/%Y')
                 # end = ed.strftime('%m/%d/%Y')
-                print("difference === ",(ed - sd).days)
-                print("frequency=",get_global_lookup_by_id_string(request.data['frequency_id']))
-                print("repeat_every_id=",get_global_lookup_by_id_string(request.data['repeat_every_id']).value)
-                print("recurring_id=",get_global_lookup_by_id_string(request.data['recurring_id']).value)
-                print("start date=",sd)
-                print("end date=",ed)
+                
                 recurrence = get_global_lookup_by_id_string(request.data['recurring_id']).value
-                frequency_obj = get_global_lookup_by_id_string(request.data['frequency_id'])
-                repeat_every = get_global_lookup_by_id_string(request.data['repeat_every_id']).value
-                print("type of repeat",type(repeat_every))
+                
                 if recurrence == "Yes":
                     print("inside")
+                    print("difference === ",(ed - sd).days)
+                    print("frequency=",get_global_lookup_by_id_string(request.data['frequency_id']))
+                    print("repeat_every_id=",get_global_lookup_by_id_string(request.data['repeat_every_id']).value)
+                    print("recurring_id=",get_global_lookup_by_id_string(request.data['recurring_id']).value)
+                    print("start date=",sd)
+                    print("end date=",ed)
+                    frequency_obj = get_global_lookup_by_id_string(request.data['frequency_id'])
+                    repeat_every = get_global_lookup_by_id_string(request.data['repeat_every_id']).value
+                    print("type of repeat",type(repeat_every))
                     # repeat_value = w2n.word_to_num(repeat_every)
                     repeat = list(filter(str.isdigit, repeat_every))
                     repeat_value = int(repeat.pop())
