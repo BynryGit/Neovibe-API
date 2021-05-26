@@ -33,6 +33,33 @@ from v1.meter_data_management.views.route_task_assignment import RouteTaskAssign
     RouteTaskAssignmentDetail
 
 urlpatterns = [
+
+    path('utility/<uuid:id_string>/read_cycle/list', ReadCycleList.as_view(), name='read_cycle_list'),
+    path('utility/<uuid:id_string>/read_cycle/short_list', ReadCycleShortList.as_view(), name='read_cycle_short_list'),
+    path('read_cycle/<uuid:id_string>', ReadCycleDetail.as_view(), name='read_cycle_detail'),
+    path('read_cycle', ReadCycle.as_view(), name='read_cycle_add'),
+
+    path('utility/<uuid:id_string>/reader-status/list', ReaderStatusList.as_view(), name='read_cycle_list'),
+    path('reader-status/<uuid:id_string>', ReaderStatusDetail.as_view(), name='read_cycle_detail'),
+    path('reader-status', ReaderStatus.as_view(), name='read_cycle_add'),
+
+    path('utility/<uuid:id_string>/route/list', RouteList.as_view(), name='route_list'),
+    path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
+    path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
+    path('route', Route.as_view(), name='route_add'),
+
+    path('smart-meter', SmartMeter.as_view()),
+    path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
+    path('smart-meter/<uuid:id_string>', SmartMeterDetail.as_view(), name='meter_detail'),
+
+    path('task-template', JobCardTemplate.as_view()),
+    path('<uuid:id_string>/task-template/list', JobCardTemplateList.as_view()),
+    path('task-template/<uuid:id_string>', JobCardTemplateDetail.as_view()),
+
+    path('validation-assignment/<uuid:id_string>', ValidationAssignmentDetail.as_view()),
+    path('validation-assignment', ValidationAssignment.as_view()),
+    path('<uuid:id_string>/validation-assignment/list', ValidationAssignmentList.as_view()),
+
     # Schedule API Start
     path('schedule', Schedule.as_view(), name='schedule'),
     path('schedule/list', ScheduleList.as_view(), name='schedule_list'),
@@ -81,45 +108,20 @@ urlpatterns = [
     path('upload-route', UploadRoute.as_view(), name='upload_route'),
     # Upload API End
 
+    # Meter Master API Start
+    path('meter/list', MeterList.as_view(), name='meter_list'),
+    path('meter', Meter.as_view(), name='meter'),
+    path('meter/<uuid:id_string>', MeterDetail.as_view()),
+    path('meter/summary', MeterSummary.as_view(), name='meter_summary'),
+    path('meter/note/list', MeterNoteList.as_view(), name="note_list"),
+    path('meter/<uuid:id_string>/note', MeterNoteDetail.as_view(), name='meter_note_detail'),
+    path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
+    path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
+    # Meter Master API End
+
     # Mobile Side API Start
     path('route-task-assignment/list', RouteTaskAssignmentList.as_view(),
          name='route_task_assignment_list'),
     path('meter-reading', MeterReading.as_view(), name='meter_reading'),
     # Mobile Side API End
-
-    path('utility/<uuid:id_string>/read_cycle/list', ReadCycleList.as_view(), name='read_cycle_list'),
-    path('utility/<uuid:id_string>/read_cycle/short_list', ReadCycleShortList.as_view(), name='read_cycle_short_list'),
-    path('read_cycle/<uuid:id_string>', ReadCycleDetail.as_view(), name='read_cycle_detail'),
-    path('read_cycle', ReadCycle.as_view(), name='read_cycle_add'),
-
-    path('utility/<uuid:id_string>/reader-status/list', ReaderStatusList.as_view(), name='read_cycle_list'),
-    path('reader-status/<uuid:id_string>', ReaderStatusDetail.as_view(), name='read_cycle_detail'),
-    path('reader-status', ReaderStatus.as_view(), name='read_cycle_add'),
-
-    path('utility/<uuid:id_string>/route/list', RouteList.as_view(), name='route_list'),
-    path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
-    path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
-    path('route', Route.as_view(), name='route_add'),
-
-    path('smart-meter', SmartMeter.as_view()),
-    path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
-    path('smart-meter/<uuid:id_string>', SmartMeterDetail.as_view(), name='meter_detail'),
-
-    path('task-template', JobCardTemplate.as_view()),
-    path('<uuid:id_string>/task-template/list', JobCardTemplateList.as_view()),
-    path('task-template/<uuid:id_string>', JobCardTemplateDetail.as_view()),
-
-    path('meter', Meter.as_view(), name='meter'),
-    path('meter/list', MeterList.as_view(), name='meter_list'),
-
-    path('validation-assignment/<uuid:id_string>', ValidationAssignmentDetail.as_view()),
-    path('validation-assignment', ValidationAssignment.as_view()),
-    path('<uuid:id_string>/validation-assignment/list', ValidationAssignmentList.as_view()),
-
-    path('meter/<uuid:id_string>', MeterDetail.as_view()),
-    path('meter/note/list',MeterNoteList.as_view(),name="note_list"),
-    path('meter/<uuid:id_string>/note', MeterNoteDetail.as_view(), name='meter_note_detail'),
-    path('utility/<uuid:id_string>/meter-summary', MeterSummary.as_view(), name='meter_summary'),
-    path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
-    path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
 ]

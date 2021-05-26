@@ -24,7 +24,7 @@ class WorkOrderMasterShortListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkOrderMasterTbl
-        fields = ('name', 'id_string', 'description', 'json_obj', 'utility_product_id', 'utility_work_order_sub_type', 'base_rate')
+        fields = ('name', 'id_string', 'description', 'json_obj', 'utility_product_id', 'utility_work_order_sub_type', 'base_rate','expert_name','expert_email','expert_contact_no','instructions')
 
 
 class WorkOrderMasterListSerializer(serializers.ModelSerializer):
@@ -36,7 +36,7 @@ class WorkOrderMasterListSerializer(serializers.ModelSerializer):
         fields = (
             'name', 'json_obj', 'id_string', 'utility_work_order_sub_type', 'description', 'service_obj',
             'created_date', 'is_active',
-            'created_by', 'utility_product', 'base_rate', 'tax_rate', 'is_taxable')
+            'created_by', 'utility_product', 'base_rate','expert_name','expert_email','expert_contact_no', 'tax_rate', 'is_taxable')
 
 
 class WorkOrderMasterViewSerializer(serializers.ModelSerializer):
@@ -50,7 +50,7 @@ class WorkOrderMasterViewSerializer(serializers.ModelSerializer):
         model = WorkOrderMasterTbl
         fields = (
             'id_string', 'name', 'tenant', 'utility_work_order_sub_type','description', 'tenant_id_string', 'utility', 'utility_id_string', 'created_date',
-            'json_obj','instructions','created_date','completion_time')
+            'json_obj','instructions','expert_name','expert_email','expert_contact_no','created_date','completion_time')
 
 
 class WorkOrderMasterSerializer(serializers.ModelSerializer):

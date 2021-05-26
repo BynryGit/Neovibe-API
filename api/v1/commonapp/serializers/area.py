@@ -15,7 +15,7 @@ from api.messages import AREA_ALREADY_EXIST
 class AreaShortViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = AreaTbl
-        fields = ('id_string',)
+        fields = ('id_string', 'name',)
 
 
 class AreaViewSerializer(serializers.ModelSerializer):
