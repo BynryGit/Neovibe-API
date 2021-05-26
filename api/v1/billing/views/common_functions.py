@@ -780,7 +780,7 @@ def generate_formate(bill_id_string):
             for rate in bill.rate_details['rate']:
                 unitval.append(rate['unit'])
                 rateval.append(float((rate['rate'])))
-        print('========',bill.qr_code)
+        print('====generate_formate====',bill)
         data = {
             "{header.utility_name}" : bill.utility.name,
             "{header.office_address}" : bill.utility.address,
@@ -796,7 +796,7 @@ def generate_formate(bill_id_string):
             "{bill.invoice_no}":str(bill.invoice_no),
             "{bill.invoice_date}":str(datetime.now().date()),
             "{bill.due_date}":str(bill.bill_date.date()),
-            "{bill.meter_status}":meter_obj.get_meter_status_display(),
+            # "{bill.meter_status}":meter_obj.get_meter_status_display(),
             "{bill.bill_status}" : bill.get_state_display(),
             "{bill.prev_reading_date}" : str(bill.meter_reading['previous_meter_reading_date']),
             "{bill.prev_reading}" : str(bill.meter_reading['privious_meter_reading']),
@@ -814,7 +814,7 @@ def generate_formate(bill_id_string):
             "{bill.emi_amt}" : str(bill.meter_reading['emi_amount']),
             "{bill.rate_unit}":str(unitval),
             "{bill.rate}":str(rateval),
-            "{bill.qr_code}":str(bill.qr_code),
+            # "{bill.qr_code}":str(bill.qr_code),
             "{bill.bill_date}" : str(bill.bill_date),
             "{bill.vat_percent}":str(bill.rate_details['tax']),
             "{bill.offer}":str(bill.meter_reading['offer_charges']),
