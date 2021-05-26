@@ -87,7 +87,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     state = models.BigIntegerField(choices=CHOICES, default=1)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
-    sa_description = models.CharField(max_length=200, blank=True, null=True)
+    sa_description = models.CharField(max_length=3000, blank=True, null=True)
     sa_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     sa_estimated_effort = models.BigIntegerField(null=True, blank=True)
     sa_rule = JSONField(null=True, blank=True)
@@ -116,7 +116,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
     created_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    updated_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
+    updated_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return str(self.id_string) + " - " +str(self.consumer_service_contract_detail_id)+" - "+str(self.sa_number)
