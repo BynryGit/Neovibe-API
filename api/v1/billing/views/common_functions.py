@@ -608,7 +608,6 @@ def calculate_current_all_charges(data):
                                 bill_period = bill_period_val,
                                 opening_balance = opening_balance,
                                 current_charges = current_charge,
-                                link = "https://youtu.be/JTFGllcJ29I",
                                 is_active = True                        
                             )
                             bill.save()
