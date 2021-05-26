@@ -35,26 +35,30 @@ class InvoiceTemplate(GenericAPIView):
     # role_required(ADMIN, UTILITY_MASTER, EDIT)
     def get(self, request,consumer_no,schedule_log_id_string):
         try:
+            print('====schedule_log_id_string====',schedule_log_id_string)
+            print('=======consumer_no============',consumer_no)
             schedule_id = get_schedule_bill_log_by_id_string(schedule_log_id_string)
-            bill_obj = get_bill_by_schedule_log_consumer_no(consumer_no,schedule_id.id)
-            # replace = generate_formate(bill_obj.id_string)
-            # html_template = get_rendering_invoice_template_by_utility_id_string("2d5c7d19-f39d-4430-85e1-b1a92fc2467b")
-
-            if bill_obj:
-                # final_obj = html_handler(html_template.template, replace)
-                # print('=======',final_obj)
-                # print('========',type(bill_obj.invoice_template))
-                # return HttpResponse(final_obj)
-                return Response({
-                    STATE: SUCCESS,
-                    RESULT: bill_obj.invoice_template,
-                }, status=status.HTTP_200_OK)
+            print('=====schedule_id=====',schedule_id)
+            if schedule_id:
+                bill_obj = get_bill_by_schedule_log_consumer_no(consumer_no,schedule_id.id)
+                print('------bill_obj-------',bill_obj)
+                if bill_obj:
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: bill_obj.invoice_template,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: EXCEPTION,
+                        RESULTS: ID_STRING_NOT_FOUND,
+                    }, status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({
                     STATE: EXCEPTION,
                     RESULTS: ID_STRING_NOT_FOUND,
                 }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            print('===Exception===',e)
             # logger().log(e, 'MEDIUM', module='Admin', sub_module='User')
             return Response({
                 STATE: EXCEPTION,
