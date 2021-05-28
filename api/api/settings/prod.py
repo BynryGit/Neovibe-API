@@ -228,7 +228,7 @@ CRONJOBS = [
     # Cron Use For MDM Module End
 
     # Cron Use For BILLING Module End
-    ('*/15 * * * *', 'v1.billing.task.bill_schedule_log.schedule_bill_log',
+    ('0 22 * * *', 'v1.billing.task.bill_schedule_log.schedule_bill_log',
      '>> /home/ubuntu/smart360/log_file/bill_schedule_log.log'),
     # Cron Use For BILLING Module End
 

@@ -20,7 +20,7 @@ urlpatterns = [
     path('get-charges/<uuid:id_string>',GetAllChargesDetails.as_view(),name="GetAllChargesDetails"),
     path('save-run-bill/',SaveBillCharges.as_view(),name="SaveBillCharges"),
     path('schedule/<uuid:schedule_bill_id_string>/consumer/list',GetBillConsumerDetails.as_view(), name="GetBillConsumerDetails"),
-    path('<uuid:schedule_log_id_string>/consumer/<int:consumer_no>/generate-invoice', InvoiceTemplate.as_view()),
+    path('<uuid:schedule_log_id_string>/consumer/<str:consumer_no>/generate-invoice', InvoiceTemplate.as_view()),
     # path('qr-code', QRCODE.as_view())
 
 ]

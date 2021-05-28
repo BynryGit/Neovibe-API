@@ -387,6 +387,9 @@ class CustomFilter:
         if 'date' in request.query_params:
             queryset = queryset.filter(sa_date__date=request.query_params['date'])
 
+        if 'exclude_state' in request.query_params:
+            queryset = queryset.exclude(state=7)
+
         if 'assigned_date' in request.query_params:
             sa_id_list = []
             current_date = datetime.strptime(request.query_params['assigned_date'], '%Y-%m-%d').date()
