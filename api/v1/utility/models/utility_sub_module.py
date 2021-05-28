@@ -26,6 +26,7 @@ from django.db import models  # importing package for database
 from django.utils import timezone # importing package for datetime
 
 
+
 # Create Utility Sub Module table start.
 
 class UtilitySubModule(models.Model):

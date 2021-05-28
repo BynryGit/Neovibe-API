@@ -282,20 +282,24 @@ class UploadDocument(GenericAPIView):
 
             # Save value into Document Table
             document = DocumentTbl()
-            document.tenant = utility_obj.tenant
-            document.utility = utility_obj
-            document.document_auth_details = auth_details[1]
-            document.last_auth_generated = datetime.utcnow()
-            document.auth_time_span = "7"
-            document.module_id = module_obj.id
-            document.sub_module_id = sub_module_obj.id
-            document.document_type_id = 1
-            document.document_sub_type_id = 1
-            document.object_id = user_obj['object_id']
-            document.document_generated_name = url
-            document.document_name = file_obj
-            document.is_active = True
-            document.save()
+            if DocumentTbl.objects.filter(document_name=file_obj).exists():
+                    raise CustomAPIException("Document Already Exists", status_code=status.HTTP_409_CONFLICT)
+                    pass
+            else:
+                document.tenant = utility_obj.tenant
+                document.utility = utility_obj
+                document.document_auth_details = auth_details[1]
+                document.last_auth_generated = datetime.utcnow()
+                document.auth_time_span = "7"
+                document.module_id = module_obj.id
+                document.sub_module_id = sub_module_obj.id
+                document.document_type_id = 1
+                document.document_sub_type_id = 1
+                document.object_id = user_obj['object_id']
+                document.document_generated_name = url
+                document.document_name = file_obj
+                document.is_active = True
+                document.save()
             return Response({
                 STATE: SUCCESS,
             }, status=status.HTTP_201_CREATED)

@@ -86,11 +86,14 @@ class UserList(generics.ListAPIView):
                         tenant = get_tenant_by_id_string(self.request.query_params['tenant_id_string'])
                         queryset = UserTbl.objects.filter(tenant=tenant,is_active=True)
                     else:   
-                        utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
-                        user_utility = UserUtility.objects.filter(utility = utility,is_active=True)
-                        for user in user_utility:
-                            user_list.append(user.user_id)
-                        queryset = UserTbl.objects.filter(id__in=user_list,is_active=True)
+                        if 'utility_id_string' in self.request.query_params:
+                            utility = get_utility_by_id_string(self.request.query_params['utility_id_string'])
+                            user_utility = UserUtility.objects.filter(utility = utility,is_active=True)
+                            for user in user_utility:
+                                user_list.append(user.user_id)
+                            queryset = UserTbl.objects.filter(id__in=user_list,is_active=True)
+                        else:
+                            queryset = UserTbl.objects.filter(is_active=True)    
                     if queryset:
                         return queryset
                     else:
