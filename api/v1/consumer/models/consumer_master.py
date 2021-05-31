@@ -99,6 +99,7 @@ class ConsumerMaster(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     ownership_id = models.BigIntegerField(null=True, blank=True)
     is_address_same = models.BooleanField(default=False)
     is_vip = models.BooleanField(default=False)
+    remark = models.CharField(max_length=200, null=True, blank=True)
     # is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
