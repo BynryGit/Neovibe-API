@@ -51,24 +51,31 @@ class ValidationAssignmentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_validation_assignment_validated_data(validated_data)
-        # if ValidationAssignmentTbl.objects.filter(tenant_id=validated_data['tenant_id'],
-        #                                           utility_id=validated_data['utility_id'],
-        #                                           smart_meter_api_name=validated_data['smart_meter_api_name']).exists():
-        #     raise CustomAPIException(SMART_METER_CONFIGURATION_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
-        # else:
-        with transaction.atomic():
-            validation_obj = super(ValidationAssignmentSerializer, self).create(validated_data)
-            validation_obj.tenant = user.tenant
-            validation_obj.created_by = user.id
-            validation_obj.save()
-            return validation_obj
+        if ValidationAssignmentTbl.objects.filter(tenant_id=validated_data['tenant_id'],
+                                                  utility_id=validated_data['utility_id'],
+                                                  read_cycle_id=validated_data['read_cycle_id'],validator1_id=validated_data['validator1_id'],
+                                                  validator2_id=validated_data['validator2_id']).exists():
+            raise CustomAPIException(SMART_METER_CONFIGURATION_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                validation_obj = super(ValidationAssignmentSerializer, self).create(validated_data)
+                validation_obj.tenant = user.tenant
+                validation_obj.created_by = user.id
+                validation_obj.save()
+                return validation_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_validation_assignment_validated_data(validated_data)
-        with transaction.atomic():
-            validation_obj = super(ValidationAssignmentSerializer, self).update(instance, validated_data)
-            validation_obj.tenant = user.tenant
-            validation_obj.updated_by = user.id
-            validation_obj.updated_date = timezone.now()
-            validation_obj.save()
-            return validation_obj
+        if ValidationAssignmentTbl.objects.filter(tenant_id=validated_data['tenant_id'],
+                                                  utility_id=validated_data['utility_id'],
+                                                  read_cycle_id=validated_data['read_cycle_id'],validator1_id=validated_data['validator1_id'],
+                                                  validator2_id=validated_data['validator2_id']).exists():
+            raise CustomAPIException(SMART_METER_CONFIGURATION_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                validation_obj = super(ValidationAssignmentSerializer, self).update(instance, validated_data)
+                validation_obj.tenant = user.tenant
+                validation_obj.updated_by = user.id
+                validation_obj.updated_date = timezone.now()
+                validation_obj.save()
+                return validation_obj

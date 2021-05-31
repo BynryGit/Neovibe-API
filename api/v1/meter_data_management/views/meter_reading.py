@@ -10,6 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, METER_READING_NOT_FOUND, READING_NOT_PROVIDED
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
+from v1.meter_data_management.models.meter import get_meter_by_id_string
 from v1.userapp.decorators import is_token_validate
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
@@ -38,7 +39,7 @@ class MeterReadingList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('utility__id_string',)
+        filter_fields = ('utility__id_string', 'meter_no',)
         ordering_fields = ('utility__id_string',)
         ordering = ('utility__id_string',) # always give by default alphabetical order
         search_fields = ('utility__name',)
@@ -47,6 +48,11 @@ class MeterReadingList(generics.ListAPIView):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
             if token:
                 if is_authorized(1,1,1,user_obj):
+                    self.request.query_params._mutable = True
+                    if 'meter_id_String' in self.request.query_params:
+                        self.request.query_params['meter_no'] = get_meter_by_id_string(
+                            self.request.query_params['meter_id_String']).meter_no
+                    self.request.query_params._mutable = False
                     queryset = MeterReadingTbl.objects.filter(is_active=True)
                     return queryset
                 else:

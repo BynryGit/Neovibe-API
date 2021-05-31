@@ -3,12 +3,15 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
+from v1.commonapp.common_functions import ChoiceField
 from v1.commonapp.serializers.area import AreaShortViewSerializer
 from v1.commonapp.serializers.city import CityShortViewSerializer
 from v1.commonapp.serializers.meter_status import MeterStatusShortViewSerializer
 from v1.commonapp.serializers.premises import PremisesShortViewSerializer
 from v1.commonapp.serializers.state import StateShortViewSerializer
 from v1.commonapp.serializers.sub_area import SubAreaShortViewSerializer
+from v1.consumer.models.consumer_master import get_consumer_by_id
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_meter_id
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
@@ -17,6 +20,7 @@ from v1.meter_data_management.serializers.meter_make import MeterMakeShortViewSe
 from v1.meter_data_management.serializers.route import RouteShortViewSerializer
 from v1.meter_data_management.views.common_function import set_meter_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
+
 
 class MeterShortViewSerializer(serializers.ModelSerializer):
 
@@ -39,13 +43,36 @@ class MeterViewSerializer(serializers.ModelSerializer):
     meter_make_id = MeterMakeShortViewSerializer(many=False, source='get_meter_make')
     utility_product_id = UtilityProductShortViewSerializer(many=False, source='get_utility_product_name')
     meter_status = MeterStatusShortViewSerializer(many=False, source='get_meter_status_name')
+    state = ChoiceField(choices=MeterTbl.STATE)
+    consumer_detail = serializers.SerializerMethodField()
+
+    def get_consumer_detail(self, meter_tbl):
+        consumer_service_contract_obj = get_consumer_service_contract_detail_by_meter_id(meter_tbl.id)
+        if consumer_service_contract_obj:
+            consumer_master_obj = get_consumer_by_id(consumer_service_contract_obj.consumer_id)
+            if consumer_master_obj:
+                consumer_detail = {
+                    "id": consumer_master_obj.id_string,
+                    "consumer_number": consumer_master_obj.consumer_no
+                }
+            else:
+                consumer_detail = {
+                    "consumer_number": "Na"
+                }
+        else:
+            consumer_detail = {
+                "consumer_number": "Na"
+            }
+
+        return consumer_detail
 
     class Meta:
         model = MeterTbl
-        fields = ('id_string', 'meter_no', 'meter_digit', 'current_reading', 'latitude', 'longitude', 'meter_status',
-                  'reader_status', 'install_date', 'created_by', 'updated_by', 'created_date', 'updated_date',
-                  'state_id', 'city_id', 'area_id', 'sub_area_id', 'route_id', 'premise_id', 'meter_type_id',
-                  'meter_make_id', 'utility_product_id', 'category_id', 'tenant', 'utility',)
+        fields = ('id_string', 'meter_no', 'state', 'meter_digit', 'current_reading', 'latitude', 'longitude',
+                  'consumer_detail', 'meter_status', 'reader_status', 'install_date', 'created_by', 'updated_by',
+                  'created_date', 'updated_date', 'state_id', 'city_id', 'area_id', 'sub_area_id', 'route_id',
+                  'premise_id', 'meter_type_id', 'meter_make_id', 'utility_product_id', 'category_id', 'tenant',
+                  'utility',)
 
 
 class MeterSerializer(serializers.ModelSerializer):

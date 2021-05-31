@@ -9,6 +9,7 @@ from django.utils import timezone # importing package for datetime
 class TenantStatus(models.Model):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=200, blank=True, null=True)
+    short_name = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)

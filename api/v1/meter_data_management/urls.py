@@ -2,7 +2,7 @@ __author__ = "aki"
 
 from django.urls import path
 from v1.meter_data_management.views.meter_make import MeterMakeList
-from v1.meter_data_management.views.meter_reading import MeterReading
+from v1.meter_data_management.views.meter_reading import MeterReading, MeterReadingList
 from v1.meter_data_management.views.schedule_log_read_cycle import ScheduleLogReadCycleList
 from v1.meter_data_management.views.validation_summary import ValidationSummary
 from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
@@ -117,6 +117,7 @@ urlpatterns = [
     path('meter/<uuid:id_string>/note', MeterNoteDetail.as_view(), name='meter_note_detail'),
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
+    path('meter-reading/list', MeterReadingList.as_view(), name="meter_reading_list"),
     # Meter Master API End
 
     # Mobile Side API Start
