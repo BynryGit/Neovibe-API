@@ -10,6 +10,7 @@ from v1.commonapp.serializers.meter_status import MeterStatusShortViewSerializer
 from v1.commonapp.serializers.premises import PremisesShortViewSerializer
 from v1.commonapp.serializers.state import StateShortViewSerializer
 from v1.commonapp.serializers.sub_area import SubAreaShortViewSerializer
+from v1.consumer.models.consumer_master import get_consumer_by_id
 from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_meter_id
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.commonapp.serializers.global_lookup import GlobalLookupShortViewSerializer
@@ -48,9 +49,20 @@ class MeterViewSerializer(serializers.ModelSerializer):
     def get_consumer_detail(self, meter_tbl):
         consumer_service_contract_obj = get_consumer_service_contract_detail_by_meter_id(meter_tbl.id)
         if consumer_service_contract_obj:
-            consumer_detail = consumer_service_contract_obj.consumer_no
+            consumer_master_obj = get_consumer_by_id(consumer_service_contract_obj.consumer_id)
+            if consumer_master_obj:
+                consumer_detail = {
+                    "id": consumer_master_obj.id_string,
+                    "consumer_number": consumer_master_obj.consumer_no
+                }
+            else:
+                consumer_detail = {
+                    "consumer_number": "Na"
+                }
         else:
-            consumer_detail = 'Na'
+            consumer_detail = {
+                "consumer_number": "Na"
+            }
 
         return consumer_detail
 
