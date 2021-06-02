@@ -37,7 +37,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/read_cycle/list', ReadCycleList.as_view(), name='read_cycle_list'),
     path('utility/<uuid:id_string>/read_cycle/short_list', ReadCycleShortList.as_view(), name='read_cycle_short_list'),
     path('read_cycle/<uuid:id_string>', ReadCycleDetail.as_view(), name='read_cycle_detail'),
-    path('read_cycle', ReadCycle.as_view(), name='read_cycle_add'),
+    path('<uuid:id_string>/read_cycle', ReadCycle.as_view(), name='read_cycle_add'),
 
     path('utility/<uuid:id_string>/reader-status/list', ReaderStatusList.as_view(), name='read_cycle_list'),
     path('reader-status/<uuid:id_string>', ReaderStatusDetail.as_view(), name='read_cycle_detail'),
@@ -46,7 +46,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/route/list', RouteList.as_view(), name='route_list'),
     path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
-    path('route', Route.as_view(), name='route_add'),
+    path('<uuid:id_string>/route', Route.as_view(), name='route_add'),
 
     path('smart-meter', SmartMeter.as_view()),
     path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
