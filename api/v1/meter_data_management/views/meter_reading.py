@@ -42,7 +42,7 @@ class MeterReadingList(generics.ListAPIView):
         filter_fields = ('utility__id_string', 'meter_no',)
         ordering_fields = ('utility__id_string',)
         ordering = ('utility__id_string',) # always give by default alphabetical order
-        search_fields = ('utility__name',)
+        search_fields = ('utility__name', 'meter_no', 'consumer_no',)
 
         def get_queryset(self):
             token, user_obj = is_token_valid(self.request.headers['Authorization'])
