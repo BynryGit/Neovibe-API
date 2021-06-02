@@ -6,7 +6,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('work_order', '0008_merge_20210524_1631'),
         ('work_order', '0008_merge_20210525_1113'),
     ]
 
