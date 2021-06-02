@@ -3,6 +3,7 @@ __author__ = "aki"
 from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
+from v1.meter_data_management.models.meter import get_meter_by_number
 from v1.meter_data_management.models.meter_reading import MeterReading as MeterReadingTbl
 from v1.meter_data_management.views.common_function import set_meter_reading_validation_one_validated_data
 
@@ -48,6 +49,15 @@ class MeterReadingValidationOneSerializer(serializers.ModelSerializer):
                         meter_reading_obj.current_meter_reading_v2 = validated_data["current_meter_reading_v1"]
                         meter_reading_obj.is_meter_matching = True
                         meter_reading_obj.is_reading_matching = True
+
+                        # Save In Meter Master Start
+                        meter_obj = get_meter_by_number(meter_reading_obj.meter_no)
+                        meter_obj.current_reading = validated_data["current_meter_reading_v1"]
+                        meter_obj.meter_status = validated_data["meter_status_v1_id"]
+                        meter_obj.reader_status = validated_data["reader_status_v1_id"]
+
+                        meter_obj.save()
+                        # Save In Meter Master End
                     else:
                         if validated_data["is_meter_matching"]:
                             meter_reading_obj.is_meter_matching = True
