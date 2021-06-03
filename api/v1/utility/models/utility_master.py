@@ -56,7 +56,7 @@ class UtilityMaster(models.Model, fsm.FiniteStateMachineMixin):
     id_string = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     short_name = models.CharField(max_length=200, blank=True, null=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True, unique=True)
     state = models.BigIntegerField(choices=CHOICES, default=0)
     phone_no = models.CharField(max_length=200, blank=True, null=True)
     email_id = models.CharField(max_length=200, blank=True, null=True)

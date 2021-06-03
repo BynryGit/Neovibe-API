@@ -2,7 +2,7 @@ __author__ = "aki"
 
 from django.urls import path
 from v1.meter_data_management.views.meter_make import MeterMakeList
-from v1.meter_data_management.views.meter_reading import MeterReading
+from v1.meter_data_management.views.meter_reading import MeterReading, MeterReadingList
 from v1.meter_data_management.views.schedule_log_read_cycle import ScheduleLogReadCycleList
 from v1.meter_data_management.views.validation_summary import ValidationSummary
 from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
@@ -37,7 +37,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/read_cycle/list', ReadCycleList.as_view(), name='read_cycle_list'),
     path('utility/<uuid:id_string>/read_cycle/short_list', ReadCycleShortList.as_view(), name='read_cycle_short_list'),
     path('read_cycle/<uuid:id_string>', ReadCycleDetail.as_view(), name='read_cycle_detail'),
-    path('read_cycle', ReadCycle.as_view(), name='read_cycle_add'),
+    path('<uuid:id_string>/read_cycle', ReadCycle.as_view(), name='read_cycle_add'),
 
     path('utility/<uuid:id_string>/reader-status/list', ReaderStatusList.as_view(), name='read_cycle_list'),
     path('reader-status/<uuid:id_string>', ReaderStatusDetail.as_view(), name='read_cycle_detail'),
@@ -46,7 +46,7 @@ urlpatterns = [
     path('utility/<uuid:id_string>/route/list', RouteList.as_view(), name='route_list'),
     path('utility/<uuid:id_string>/route/short_list', RouteShortList.as_view(), name='route_short_list'),
     path('route/<uuid:id_string>', RouteDetail.as_view(), name='route_detail'),
-    path('route', Route.as_view(), name='route_add'),
+    path('<uuid:id_string>/route', Route.as_view(), name='route_add'),
 
     path('smart-meter', SmartMeter.as_view()),
     path('<uuid:id_string>/smart-meter/list', SmartMeterList.as_view(), name='meter_list'),
@@ -117,6 +117,7 @@ urlpatterns = [
     path('meter/<uuid:id_string>/note', MeterNoteDetail.as_view(), name='meter_note_detail'),
     path('meter-make/list', MeterMakeList.as_view(), name="meter_make_list"),
     path('meter/life-cycle/list', MeterLifeCycleList.as_view(), name="life_cycle_list"),
+    path('meter-reading/list', MeterReadingList.as_view(), name="meter_reading_list"),
     # Meter Master API End
 
     # Mobile Side API Start

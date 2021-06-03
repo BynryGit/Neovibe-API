@@ -35,7 +35,7 @@ class ReaderStatusSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_reader_status_validated_data(validated_data)
             if ReaderStatusTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                              utility_id=validated_data['utility_id'], status_code=validated_data['status_code']).exists():
+                                              utility_id=validated_data['utility_id'], status_code=validated_data['status_code'],meter_status_id=validated_data['meter_status_id']).exists():
                 raise CustomAPIException(READER_STATUS_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 reader_status_obj = super(ReaderStatusSerializer, self).create(validated_data)
@@ -46,7 +46,7 @@ class ReaderStatusSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data, user):
         validated_data = set_reader_status_validated_data(validated_data)
         if ReaderStatusTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                          utility_id=validated_data['utility_id'], status_code=validated_data['status_code']).exists():
+                                          utility_id=validated_data['utility_id'], status_code=validated_data['status_code'],meter_status_id=validated_data['meter_status_id']).exists():
             raise CustomAPIException(READER_STATUS_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

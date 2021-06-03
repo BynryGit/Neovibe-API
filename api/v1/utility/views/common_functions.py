@@ -259,3 +259,21 @@ def generate_company_id(user):
     except Exception as e:
         print("E",e)
         raise CustomAPIException("Company ID generation failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# Function for generating Meter no according to Tenant
+def generate_meter_no(tenant_id):
+    try:
+        numformat_obj = UtilityServiceNumberFormat.objects.get(tenant_id=tenant_id,
+                                                            sub_module_id=get_sub_module_by_key("METER_MASTER"))
+        if numformat_obj.is_prefix == True:
+            meter_no = numformat_obj.prefix + str(numformat_obj.currentno + 1)
+            numformat_obj.currentno = numformat_obj.currentno + 1
+            numformat_obj.save()
+        else:
+            meter_no = str(numformat_obj.currentno + 1)
+            numformat_obj.currentno = numformat_obj.currentno + 1
+            numformat_obj.save()
+        return meter_no
+    except Exception as e:
+        raise CustomAPIException("Meter No Generation Failed.", status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

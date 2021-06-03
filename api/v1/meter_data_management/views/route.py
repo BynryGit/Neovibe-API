@@ -101,7 +101,7 @@ class RouteShortList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = RouteModel.objects.filter(utility=utility, is_active=True)
+                    queryset = RouteModel.objects.filter(utility=utility, is_active=True, created_date__gte=datetime.now() - timedelta(days=180))
                     if queryset:
                         return queryset
                     else:
@@ -125,7 +125,8 @@ class RouteShortList(generics.ListAPIView):
 # Tables used: Route
 # Author: Chinmay
 # Created on: 14/1/2021
-premise_id_string_list = []
+
+
 
 
 
@@ -133,24 +134,26 @@ class Route(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
-    def post(self, request):
+    def post(self, request, id_string):
         try:
-            global premise_id_string_list
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
                 serializer = RouteSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=False):
+                utility = get_utility_by_id_string(self.kwargs['id_string'])
+                queryset = RouteModel.objects.filter(utility=utility,is_active=True)
+                premise_id_strings = [item.premises_json[0]['id_string'] for item in queryset]
+                # for i in queryset:
+                #     print("QURY",queryset)
+                if serializer.is_valid(raise_exception=False):                  
                     # print("Route Object", serializer.validated_data['route_json'])
                     for premises_id_string in serializer.validated_data['premises_json']:
-                        if premises_id_string['id_string'] in premise_id_string_list:
+                        print("JUJUJ", premises_id_string['id_string'])
+                        if premises_id_string['id_string'] in premise_id_strings:
                             return Response({
                                 STATE: ERROR,
                                 RESULTS: 'CANNOT_ENTER_DUPLICATE_PREMISE',
-                            }, status=status.HTTP_409_CONFLICT)
-                        else:
-                            premise_id_string_list.append(premises_id_string['id_string'])
-                    print("LIST",premise_id_string_list)
+                            }, status=status.HTTP_409_CONFLICT) 
                     route_obj = serializer.create(serializer.validated_data, user)
                     view_serializer = RouteViewSerializer(instance=route_obj, context={'request': request})
                     return Response({

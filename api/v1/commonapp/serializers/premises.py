@@ -95,4 +95,4 @@ class PremiseListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PremiseTbl
-        fields = ('name', 'subarea','id_string','GIS','MRU')
+        fields = ('name', 'subarea','id_string','GIS','MRU','created_date')

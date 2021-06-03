@@ -35,7 +35,7 @@ class HolidaySerializer(serializers.ModelSerializer):
         with transaction.atomic():
             validated_data = set_holiday_validated_data(validated_data)
             if UtilityHolidayCalendarTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
-                                                        utility_id=validated_data['utility_id']).exists():
+                                                        utility_id=validated_data['utility_id'],date=validated_data['date']).exists():
                 raise CustomAPIException(HOLIDAY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
             else:
                 holiday_obj = super(HolidaySerializer, self).create(validated_data)
@@ -46,13 +46,17 @@ class HolidaySerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data, user):
         validated_data = set_holiday_validated_data(validated_data)
-        with transaction.atomic():
-            holiday_obj = super(HolidaySerializer, self).update(instance, validated_data)
-            holiday_obj.tenant = user.tenant
-            holiday_obj.updated_by = user.id
-            holiday_obj.updated_date = datetime.utcnow()
-            holiday_obj.save()
-            return holiday_obj
+        if UtilityHolidayCalendarTbl.objects.filter(name=validated_data['name'], tenant_id=validated_data['tenant_id'],
+                                                        utility_id=validated_data['utility_id'],date=validated_data['date']).exists():
+                raise CustomAPIException(HOLIDAY_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                holiday_obj = super(HolidaySerializer, self).update(instance, validated_data)
+                holiday_obj.tenant = user.tenant
+                holiday_obj.updated_by = user.id
+                holiday_obj.updated_date = datetime.utcnow()
+                holiday_obj.save()
+                return holiday_obj
 
 
 class HolidayListSerializer(serializers.ModelSerializer):

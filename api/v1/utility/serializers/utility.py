@@ -66,8 +66,9 @@ class UtilityMasterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user):
         validated_data = set_utility_validated_data(validated_data)
-        if UtilityMasterTbl.objects.filter(tenant=validated_data["tenant"], name=validated_data["name"],
-                                           tax_id=validated_data['tax_id']).exists():
+        if UtilityMasterTbl.objects.filter(tenant=validated_data["tenant"], name=validated_data["name"]).exists() or UtilityMasterTbl.objects.filter(tenant=validated_data["tenant"],
+                                           tax_id=validated_data['tax_id']).exists() or UtilityMasterTbl.objects.filter(tenant=validated_data["tenant"],
+                                           pan_no=validated_data['pan_no']).exists():
             raise CustomAPIException(UTILITY_WITH_GIVEN_DETAILS_ALREADY_EXIST, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():

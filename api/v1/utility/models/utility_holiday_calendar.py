@@ -26,7 +26,7 @@ class UtilityHolidayCalendar(models.Model):
     tenant = models.ForeignKey(TenantMaster, blank=True, null=True, on_delete=models.SET_NULL)
     utility = models.ForeignKey(UtilityMaster, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200, blank=True, null=True)
-    date = models.DateTimeField(null=False, blank=False, default=timezone.now)
+    date = models.DateField(null=False, blank=False, default=timezone.now)
     start_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     end_time = models.TimeField(null=True, auto_now=False, auto_now_add=False)
     holiday_type_id = models.BigIntegerField(null=False, blank=False)
