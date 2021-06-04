@@ -38,7 +38,7 @@ class ScheduleLogList(generics.ListAPIView):
         pagination_class = StandardResultsSetPagination
 
         filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
-        filter_fields = ('utility__id_string', 'schedule_id')
+        filter_fields = ('utility__id_string', 'schedule_id', 'state')
         ordering_fields = ('utility__id_string',)
         ordering = ('utility__id_string',) # always give by default alphabetical order
         search_fields = ('utility__name',)
