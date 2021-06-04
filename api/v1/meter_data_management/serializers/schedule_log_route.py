@@ -7,7 +7,7 @@ from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
 from v1.meter_data_management.models.consumer_detail import ConsumerDetail
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import Route as RouteTbl
-from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment
+from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment, ROUTE_TASK_ASSIGNMENT_STATUS_DICT
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
 from v1.userapp.models.role import Role as RoleTbl
 from v1.userapp.models.user_role import get_user_role_by_role_id
@@ -45,6 +45,9 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
 
     def get_route_detail(self, route_tbl):
         schedule_log_id = get_schedule_log_by_id_string(self.context.get('schedule_log_id'))
+        total_consumer = ConsumerDetail.objects.filter(utility=schedule_log_id.utility,
+                                                       schedule_log_id=schedule_log_id.id, route_id=route_tbl.id,
+                                                       state=0, is_active=True).count()
         try:
             route_task_assignment_obj = RouteTaskAssignment.objects.get(schedule_log_id=schedule_log_id.id,
                                                                         route_id=route_tbl.id, is_active=True)
@@ -73,6 +76,13 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
                 meter_reader_task_count = RouteTaskAssignment.objects.filter(meter_reader_id=meter_reader_obj.id,
                                                                              schedule_log_id=schedule_log_id.id,
                                                                              is_completed=False, is_active=True).count()
+                try:
+                    if total_consumer == total_reading:
+                        route_task_assignment_obj.change_state(ROUTE_TASK_ASSIGNMENT_STATUS_DICT["COMPLETED"])
+                        route_task_assignment_obj.is_completed=True
+                        route_task_assignment_obj.save()
+                except:
+                    pass
         except:
             meter_reader_first_name = 'NA'
             meter_reader_last_name = ''
@@ -82,9 +92,7 @@ class ScheduleLogRouteViewSerializer(serializers.ModelSerializer):
             total_reading = 0
 
         route_detail = {
-            'total_consumer': ConsumerDetail.objects.filter(utility=schedule_log_id.utility,
-                                                            schedule_log_id=schedule_log_id.id, route_id=route_tbl.id,
-                                                            state=0, is_active=True).count(),
+            'total_consumer': total_consumer,
             'total_reading': total_reading,
             'meter_reader_first_name': meter_reader_first_name,
             'meter_reader_last_name': meter_reader_last_name,
