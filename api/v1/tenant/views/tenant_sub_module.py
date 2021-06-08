@@ -4,6 +4,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, status
 from rest_framework.response import Response
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 #from api.constants import ADMIN, VIEW, TENANT, EDIT
 from v1.tenant.models.tenant_module import get_tenant_module_by_id_string
 from v1.userapp.decorators import is_token_validate, role_required
@@ -90,6 +91,7 @@ class TenantSubModuleListByModule(generics.ListAPIView):
                     print("TENANT MODULE OBJ",tenant_module_obj.id)
                     if tenant_module_obj:
                         queryset = TenantSubModuleTbl.objects.filter(module_id=tenant_module_obj.id, is_active=True)
+                        queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                         return queryset
                     else:
                         return Response({
