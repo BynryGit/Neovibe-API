@@ -31,7 +31,8 @@ class CustomModuleShortViewSerializer(serializers.ModelSerializer):
             dict['id_string'] = str(sub_module_obj.id_string)
             dict['name'] = str(sub_module_obj.name)
             sub_module.append(dict)
-        return sub_module
+        unique_submodule_list = [i for n, i in enumerate(sub_module) if i not in sub_module[n + 1:]]
+        return unique_submodule_list
 
     class Meta:
         model = Module
