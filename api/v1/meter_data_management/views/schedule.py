@@ -9,7 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from master.models import get_user_by_id_string
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id_string
 from v1.commonapp.views.logger import logger
-from v1.utility.models.utility_master import get_utility_by_id_string
+from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
 from api.constants import MX, EDIT, SCHEDULE, VIEW
 from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
@@ -197,6 +197,35 @@ class ScheduleDetail(GenericAPIView):
                         STATE: ERROR,
                         RESULT: schedule_serializer.errors,
                     }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: SCHEDULE_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @is_token_validate
+    @role_required(MX, SCHEDULE, EDIT)
+    def delete(self, request, id_string):
+        try:
+            schedule_obj = get_schedule_by_id_string(id_string)
+            if schedule_obj:
+                if schedule_obj.schedule_status == 0:
+                    schedule_obj.is_active = False
+                    schedule_obj.save()
+                    ScheduleLogTbl.objects.filter(schedule_id=schedule_obj.id, is_active=True).update(is_active=False)
+                    return Response({
+                        STATE: SUCCESS,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                    }, status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({
                     STATE: ERROR,

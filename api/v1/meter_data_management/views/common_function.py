@@ -499,3 +499,55 @@ def set_upload_route_validated_data(validated_data):
             raise CustomAPIException(ROUTE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
 
     return validated_data
+
+
+def set_new_consumer_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "schedule_log_id" in validated_data:
+        schedule_log = get_schedule_log_by_id_string(validated_data["schedule_log_id"])
+        if schedule_log:
+            validated_data["schedule_log_id"] = schedule_log.id
+        else:
+            raise CustomAPIException(SCHEDULE_LOG_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "read_cycle_id" in validated_data:
+        read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
+        if read_cycle:
+            validated_data["read_cycle_id"] = read_cycle.id
+        else:
+            raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "route_id" in validated_data:
+        route = get_route_by_id_string(validated_data["route_id"])
+        if route:
+            validated_data["route_id"] = route.id
+        else:
+            raise CustomAPIException(ROUTE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "meter_status_id" in validated_data:
+        meter_status_obj = get_meter_status_by_id_string(
+            validated_data['meter_status_id'])
+        if meter_status_obj:
+            validated_data["meter_status_id"] = meter_status_obj.id
+        else:
+            validated_data["meter_status_id"] = get_meter_status_by_name('Normal').id
+    else:
+        validated_data["meter_status_id"] = get_meter_status_by_name('Normal').id
+
+    if "reader_status_id" in validated_data:
+        reader_status_obj = get_reader_status_by_id_string(
+            validated_data['reader_status_id'])
+        if reader_status_obj:
+            validated_data["reader_status_id"] = reader_status_obj.id
+        else:
+            validated_data["reader_status_id"] = get_reader_status_by_name('Normal').id
+    else:
+        validated_data["reader_status_id"] = get_reader_status_by_name('Normal').id
+
+    return validated_data

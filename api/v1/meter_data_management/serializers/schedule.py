@@ -18,7 +18,7 @@ from v1.utility.serializers.utility_product import UtilityProductShortViewSerial
 class ScheduleShortViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScheduleTbl
-        fields = ('id_string','name')
+        fields = ('id_string','name', 'start_date', 'end_date')
 
 
 class ScheduleViewSerializer(serializers.ModelSerializer):

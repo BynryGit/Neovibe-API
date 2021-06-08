@@ -41,6 +41,12 @@ SCHEDULE_LOG_STATUS_DICT = {
 
 
 class ScheduleLog(models.Model, fsm.FiniteStateMachineMixin):
+    SCHEDULE_LOG_STATE = (
+        (0, 'PENDING'),
+        (1, 'IN-PROGRESS'),
+        (2, 'COMPLETED'),
+    )
+
     SCHEDULE_LOG_STATUS = (
         (0, 'CREATED'),
         (1, 'NO-DATA'),
@@ -69,6 +75,7 @@ class ScheduleLog(models.Model, fsm.FiniteStateMachineMixin):
     recurring_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
     state = models.IntegerField(choices=SCHEDULE_LOG_STATUS, default=0)
+    schedule_log_status = models.IntegerField(choices=SCHEDULE_LOG_STATE, default=0)
     date_and_time = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)

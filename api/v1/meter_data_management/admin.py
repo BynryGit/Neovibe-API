@@ -5,6 +5,7 @@ from django.contrib import admin
 from v1.meter_data_management.models.meter import Meter
 from v1.meter_data_management.models.meter_make import MeterMake
 from v1.meter_data_management.models.meter_reading import MeterReading
+from v1.meter_data_management.models.new_consumer_detail import NewConsumerDetail
 from v1.meter_data_management.models.route_task_assignment import RouteTaskAssignment
 from v1.meter_data_management.models.schedule import Schedule
 from v1.meter_data_management.models.schedule_log import ScheduleLog
@@ -33,3 +34,4 @@ admin.site.register(ValidationAssignment)
 admin.site.register(ReaderStatus)
 admin.site.register(UploadRoute)
 admin.site.register(SpotBill)
+admin.site.register(NewConsumerDetail)

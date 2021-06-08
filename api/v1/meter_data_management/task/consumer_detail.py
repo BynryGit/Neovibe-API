@@ -19,12 +19,14 @@ from v1.meter_data_management.models.consumer_detail import ConsumerDetail as Co
 from v1.meter_data_management.models.meter import Meter as MeterTbl
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
 from v1.meter_data_management.models.route import get_route_by_id_string
+from v1.meter_data_management.models.schedule import get_schedule_by_id
 from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl, SCHEDULE_LOG_STATUS_DICT
 
 
 @task(name="ImportConsumer-task", queue='ImportConsumer')
 def create_consumer(schedule_log_id):
     try:
+        count = 0
         schedule_log_obj = ScheduleLogTbl.objects.get(id=schedule_log_id)
         schedule_log_obj.change_state(SCHEDULE_LOG_STATUS_DICT["IN-PROGRESS"])
         read_cycle_obj = get_read_cycle_by_id(schedule_log_obj.read_cycle_id)
@@ -41,6 +43,7 @@ def create_consumer(schedule_log_id):
                                                         meter_no=meter.meter_no,
                                                         is_active=True).exists():
                         print('Already Exist')
+                        count += 1
                     else:
                         consumer_detail_obj = ConsumerDetailTbl(
                             tenant=route_obj.tenant,
@@ -66,7 +69,23 @@ def create_consumer(schedule_log_id):
                             consumer_detail_obj.state = 0
 
                         consumer_detail_obj.save()
+                        count += 1
                         print('Consumer Save')
+
+        consumer_detail_count = ConsumerDetailTbl.objects.filter(schedule_log_id=schedule_log_obj.id,
+                                                                 is_active=True).count()
+        schedule_obj = get_schedule_by_id(schedule_log_obj.schedule_id)
+
+        if count == 0:
+            schedule_log_obj.change_state(SCHEDULE_LOG_STATUS_DICT["NO-DATA"])
+        elif count == consumer_detail_count:
+            schedule_log_obj.change_state(SCHEDULE_LOG_STATUS_DICT["COMPLETED"])
+            schedule_obj.schedule_status = 2
+            schedule_obj.save()
+        else:
+            schedule_log_obj.change_state(SCHEDULE_LOG_STATUS_DICT["PARTIAL"])
+            schedule_obj.schedule_status = 2
+            schedule_obj.save()
     except Exception as ex:
         print(ex)
         logger().log(ex, 'MEDIUM', module='CONSUMER OPS', sub_module='METER DATA')
