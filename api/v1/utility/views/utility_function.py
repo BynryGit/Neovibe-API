@@ -1,14 +1,13 @@
 from v1.commonapp.models.transition_configuration import TransitionConfiguration, TRANSITION_CHANNEL_DICT, \
     is_transition_configuration_exists
 from v1.commonapp.views.logger import logger
-# from v1.commonapp.views.notifications import handle_communications, html_handler
 from v1.commonapp.views.notifications import OutboundHandler, EmailHandler, SMSHandler
 from v1.commonapp.models.notification_template import get_notification_template_by_id
 from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
-# from v1.commonapp.views.notifications import send_email
-# from v1.commonapp.views.notifications import send_sms
 from v1.commonapp.views.secret_reader import SecretReader
 from master import models
+# from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
+# from v1.consumer.models.conmer_master import get_consumer_by_consumer_no
 
 
 # Function for performing utility transition events
@@ -25,6 +24,7 @@ def perform_events(next_state, utility, transition_object):
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
                     transition_obj = get_transition_configuration_by_id(transition_obj.id)
                     # Call to the first function
+
                     e1 = EmailHandler(transition_obj.transition_object, utility)
 
                     array = e1.handle_communications()
@@ -33,8 +33,18 @@ def perform_events(next_state, utility, transition_object):
 
                     email_body = e1.html_handler(html.template, array)
 
-                    e1.send_email('Utility Created SuccessFully', SecretReader.get_from_email(),
-                                  [utility.email_id], None, None, email_body)
+                    print('...........transition_obj.transition_object.....',type(transition_obj.transition_object),transition_obj.transition_object,utility.consumer_service_contract_detail_id)
+
+                    if transition_obj.transition_object == 5:
+                        consumer_contract = get_consumer_service_contract_detail_by_id(utility.consumer_service_contract_detail_id)
+                        print('======consumer_contract===',consumer_contract)
+                        # consumer = get_consumer_by_consumer_no(consumer_contract.consumer_no)
+                        # print('=====',consumer.email)
+                        # e1.send_email('Appointment Added SuccessFully', SecretReader.get_from_email(),
+                        #               [consumer.email], None, None, email_body)
+                    else:
+                        e1.send_email('Utility Created SuccessFully', SecretReader.get_from_email(),
+                                      [utility.email_id], None, None, email_body)
 
                 if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
                     # Call to the first function

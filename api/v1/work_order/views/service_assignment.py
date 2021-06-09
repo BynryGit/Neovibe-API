@@ -82,7 +82,6 @@ class ServiceAssignment(GenericAPIView):
     #role_required(WORK_ORDER, DISPATCHER, EDIT)
     def post(self, request):
         try:
-            print('======',request.data)
             assignment_serializer = ServiceAssignmentSerializer(data=request.data)
             if assignment_serializer.is_valid(raise_exception=True):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
@@ -91,19 +90,17 @@ class ServiceAssignment(GenericAPIView):
                 with transaction.atomic():                    
                     assignment_obj = assignment_serializer.create(assignment_serializer.validated_data, user)
 
-                    # State change for service assignment start
-                    assignment_obj.change_state(SERVICE_ASSIGNMENT_DICT["ASSIGNED"])
-                    # State change for service assignment end
-
-                    
-
                     # State change for service appointment start
                     service_appoint_obj.change_state(SERVICE_APPOINTMENT_DICT["ASSIGNED"])
                     # State change for service appointment end
 
+                    # State change for service assignment start
+                    assignment_obj.change_state(SERVICE_ASSIGNMENT_DICT["ASSIGNED"])
+                    # State change for service assignment end
+                    
                     # Timeline code start
-                    transaction.on_commit(
-                        lambda: save_service_appointment_timeline.delay(service_appoint_obj, "Service Appointment", "Service Appointment Assigned", "ASSIGNED",user))
+                    # transaction.on_commit(
+                    #     lambda: save_service_appointment_timeline.delay(service_appoint_obj, "Service Appointment", "Service Appointment Assigned", "ASSIGNED",user))
                     # Timeline code end
 
                 view_serializer = ServiceAssignmentViewSerializer(instance=assignment_obj, context={'request': request})
