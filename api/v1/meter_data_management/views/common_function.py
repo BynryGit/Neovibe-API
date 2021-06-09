@@ -537,8 +537,6 @@ def set_new_consumer_validated_data(validated_data):
             validated_data["meter_status_id"] = meter_status_obj.id
         else:
             validated_data["meter_status_id"] = get_meter_status_by_name('Normal').id
-    else:
-        validated_data["meter_status_id"] = get_meter_status_by_name('Normal').id
 
     if "reader_status_id" in validated_data:
         reader_status_obj = get_reader_status_by_id_string(
@@ -547,7 +545,5 @@ def set_new_consumer_validated_data(validated_data):
             validated_data["reader_status_id"] = reader_status_obj.id
         else:
             validated_data["reader_status_id"] = get_reader_status_by_name('Normal').id
-    else:
-        validated_data["reader_status_id"] = get_reader_status_by_name('Normal').id
 
     return validated_data

@@ -171,6 +171,7 @@ def get_meter_by_id_string(id_string):
     except:
         return False
 
+
 def get_meter_by_number(no):
     try:
         return Meter.objects.get(meter_no=no, is_active=True)
