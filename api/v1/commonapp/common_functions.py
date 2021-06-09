@@ -1,12 +1,11 @@
 import os
 import jwt  # jwt token library
 from rest_framework import status, serializers
-from master.models import get_user_by_id_string, check_user_id_string_exists
+from master.models import get_user_by_id_string, check_user_id_string_exists,get_user_by_id
 from v1.commonapp.models.module import get_module_by_id_string
 from v1.commonapp.models.sub_module import get_sub_module_by_id_string
 from v1.commonapp.views.custom_exception import CustomAPIException
 from v1.commonapp.views.logger import logger
-from v1.commonapp.views.secret_reader import SecretReader
 from v1.userapp.models.user_privilege import check_user_privilege_exists
 from v1.userapp.models.user_token import check_token_exists, check_token_exists_for_user
 from v1.userapp.models.user_utility import check_user_utility_exists
@@ -45,9 +44,22 @@ from v1.consumer.models.consumer_token import get_consumer_token_by_token,check_
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.consumer.models.consumer_master import get_consumer_by_id_string
 from v1.commonapp.views.settings_reader import SettingReader
+
+from v1.commonapp.models.transition_configuration import TransitionConfiguration, TRANSITION_CHANNEL_DICT, \
+    is_transition_configuration_exists
+from v1.commonapp.views.logger import logger
+from v1.commonapp.views.notifications import OutboundHandler, EmailHandler, SMSHandler
+from v1.commonapp.models.notification_template import get_notification_template_by_id
+from v1.commonapp.models.transition_configuration import get_transition_configuration_by_id
+from v1.commonapp.views.secret_reader import SecretReader
+from master import models
+from v1.consumer.models.consumer_service_contract_details import get_consumer_service_contract_detail_by_id
+from v1.consumer.models.consumer_master import get_consumer_by_consumer_no
+from v1.work_order import models as work_orderMdl
+
+
 setting_reader = SettingReader()
 secret_reader = SecretReader()
-
 
 def get_payload(token):
     try:
@@ -778,3 +790,71 @@ def check_user(token):
         else:
             user=False
     return user
+
+
+
+def perform_events(next_state, obj, transition_object):
+    try:
+        print('=====',next_state, obj, transition_object)
+        if TransitionConfiguration.objects.filter(transition_object=transition_object, transition_state=next_state,
+                                                  tenant=obj.tenant, is_active=True).exists():
+
+            transition_objs = TransitionConfiguration.objects.filter(transition_object=transition_object,
+                                                                     transition_state=next_state,
+                                                                     tenant=obj.tenant, is_active=True)
+            print('...........',transition_objs)
+            for transition_obj in transition_objs:
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['EMAIL']:
+                    transition_obj = get_transition_configuration_by_id(transition_obj.id)
+                    print('....transition_obj...',transition_obj)
+                    # Call to the first function
+
+                    e1 = EmailHandler(transition_obj.transition_object, obj)
+                    print('------e1000-----',e1)
+
+                    array = e1.handle_communications()
+                    print('--------array-----',array)
+
+                    html = get_notification_template_by_id(transition_obj.template_id)
+                    print('=======html=======',html)
+
+                    email_body = e1.html_handler(html.template, array)
+
+                    print('--------',transition_obj.transition_object)
+
+                    if transition_obj.transition_object == 5:
+                        consumer_contract = get_consumer_service_contract_detail_by_id(obj.consumer_service_contract_detail_id)
+                        consumer = get_consumer_by_consumer_no(consumer_contract.consumer_no) 
+                        print(',,,,,,,,,,,',obj.get_state_display())
+                        if obj.get_state_display() == 'NOT ASSIGNED':                            
+                            e1.send_email('Appointment Created SuccessFully', SecretReader.get_from_email(),
+                                          [consumer.email], None, None, email_body)
+                            
+                        elif obj.get_state_display() == 'ASSIGNED':
+                            user_obj = get_user_by_id(obj.user_id)
+                            print('=====user_obj====',user_obj.email)
+                            e1.send_email('Appointment Assigned SuccessFully', SecretReader.get_from_email(),
+                                      [consumer.email,user_obj.email], None, None, email_body)
+                    else:
+                        e1.send_email('Utility Created SuccessFully', SecretReader.get_from_email(),
+                                      [obj.email_id], None, None, email_body)
+
+                if transition_obj.channel == TRANSITION_CHANNEL_DICT['SMS']:
+                    # Call to the first function
+                    e1 = SMSHandler(transition_obj.transition_object, obj)
+
+                    array = e1.handle_communications()
+
+                    transition_obj = get_transition_configuration_by_id(transition_obj.id)
+
+                    html = get_notification_template_by_id(transition_obj.template_id)
+
+                    sms_body = e1.html_handler(html.template, array)
+                    print("SMS Body", obj.phone_no)
+                    e1.send_sms(sms_body, SecretReader.get_from_number(),
+                                obj.phone_no)
+        else:
+            pass
+    except Exception as e:
+        logger().log(e, 'LOW', module='Admin', sub_module='Utility Configuration')
+        pass

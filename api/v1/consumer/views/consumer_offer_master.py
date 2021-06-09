@@ -24,7 +24,7 @@ from v1.userapp.decorators import is_token_validate, role_required
 from api.messages import *
 from api.constants import *
 from v1.commonapp.views.custom_filter_backend import CustomFilter
-
+import datetime
 
 # API Header
 # API end Point: api/v1/consumer/:id_string/credit-rating/list
@@ -54,9 +54,10 @@ class ConsumerOfferMasterList(generics.ListAPIView):
                         consumer_contract_detail_obj = get_consumer_service_contract_detail_by_id_string(self.request.query_params["consumer_service_contract_id_string"])
                         utility_product_obj_id = UtilityServiceContractMaster.objects.get(id=consumer_contract_detail_obj.service_contract_id).utility_product_id
                         utility_product_obj = UtilityProduct.objects.get(id=utility_product_obj_id)
-                        queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True, utility_product_id=utility_product_obj.id)
+                        queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True, utility_product_id=utility_product_obj.id,
+                            expiry_date__gte=datetime.date.today())
                     else:
-                        queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True)
+                        queryset = ConsumerOfferMasterModel.objects.filter(utility=utility, is_active=True,expiry_date__gte=datetime.date.today())
                         queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     if queryset:
                         return queryset

@@ -95,9 +95,10 @@ class ServiceAppointment(GenericAPIView):
                 user = get_user_by_id_string(user_id_string)
                 with transaction.atomic():
                     appointment_obj = appointment_serializer.create(appointment_serializer.validated_data, user)
+                    appointment_obj.change_state(SERVICE_APPOINTMENT_DICT["NOT ASSIGNED"])
                     # Timeline code start                    
-                    transaction.on_commit(
-                        lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
+                    # transaction.on_commit(
+                    #     lambda: save_service_appointment_timeline.delay(appointment_obj, "Service Appointment", "Service Appointment Created", "NOT ASSIGNED",user))
                     # Timeline code end
                     view_serializer = ServiceAppointmentViewSerializer(instance=appointment_obj, context={'request': request})
                     return Response({
@@ -105,11 +106,13 @@ class ServiceAppointment(GenericAPIView):
                         RESULTS: view_serializer.data,
                     }, status=status.HTTP_201_CREATED)                
             else:
+                print('=========',appointment_serializer.errors.values())
                 return Response({
                     STATE: ERROR,
                     RESULTS: list(appointment_serializer.errors.values())[0][0],
                 }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            print('---------',e)
             logger().log(e, 'HIGH', module = 'Admin', sub_module = 'User')
             res = self.handle_exception(e)
             return Response({

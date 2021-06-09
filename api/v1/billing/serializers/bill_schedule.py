@@ -14,6 +14,7 @@ from v1.billing.serializers.bill_cycle import BillCycleShortViewSerializer
 from v1.billing.views.common_functions import set_schedule_bill_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
 from v1.billing.views.common_functions import set_schedule_bill_validated_data
+from datetime import datetime
 
 class ScheduleBillShortViewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,7 +55,7 @@ class ScheduleBillSerializer(serializers.ModelSerializer):
     def create(self, validated_data, user):
         validated_data = set_schedule_bill_validated_data(validated_data)
         if ScheduleBillTbl.objects.filter(tenant=user.tenant, utility_id=validated_data['utility_id'],
-                                      bill_cycle_id=validated_data["bill_cycle_id"],start_date=validated_data['start_date'], is_active=True).exists():
+                                      bill_cycle_id=validated_data["bill_cycle_id"],start_date__date=(validated_data['start_date']).date(), is_active=True).exists():
             raise CustomAPIException(DATA_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
         else:
             with transaction.atomic():
