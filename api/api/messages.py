@@ -151,6 +151,7 @@ METER_STATUS_NOT_FOUND = "Meter Status Not Found."
 READER_STATUS_NOT_FOUND = "Reader Status Not Found."
 ALLOCATION_IN_PROGRESS = "Allocation is in progress"
 READING_NOT_PROVIDED = "Readings data not provided"
+DATA_NOT_PROVIDED = "data not provided"
 CONSUMER_SERVICE_CONTRACT_DETAIL_NOT_FOUND = "Consumer service contract detail not found"
 
 

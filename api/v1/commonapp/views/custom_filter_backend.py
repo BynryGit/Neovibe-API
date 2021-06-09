@@ -91,6 +91,11 @@ class CustomFilter:
             user = get_user_by_id_string(request.query_params['user_id'])
             queryset = queryset.filter(user_id=user.id)
 
+        if 'tenant_id' in request.query_params:
+            tenant = get_tenant_by_id_string(request.query_params['tenant_id'])
+            print("TENANTID",tenant.id)
+            queryset = queryset.filter(tenant=tenant.id)
+
         if 'consumer_processing' in request.query_params:
             utility = request.GET.get('utility_id_string')
             print("=========aaaaaaaaaa======",utility)

@@ -23,6 +23,7 @@ from v1.commonapp.models.meter_status import get_meter_status_by_id_string, get_
 from v1.meter_data_management.models.reader_status import get_reader_status_by_id_string, get_reader_status_by_name
 from v1.meter_data_management.models.meter_make import get_meter_make_by_id_string
 
+
 def set_schedule_validated_data(validated_data):
     if "utility_id" in validated_data:
         utility = get_utility_by_id_string(validated_data["utility_id"])
@@ -211,6 +212,13 @@ def set_meter_validated_data(validated_data):
             validated_data["utility_product_id"] = utility_product.id
         else:
             raise CustomAPIException(UTILITY_PRODUCT_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "meter_status" in validated_data:
+        meter_status = get_meter_status_by_id_string(validated_data["meter_status"])
+        if meter_status:
+            validated_data["meter_status"] = meter_status.id
+        else:
+            raise CustomAPIException(METER_STATUS_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
 
     if "install_date" in validated_data:
         pass
@@ -489,5 +497,57 @@ def set_upload_route_validated_data(validated_data):
             validated_data["route_id"] = route.id
         else:
             raise CustomAPIException(ROUTE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    return validated_data
+
+
+def set_new_consumer_validated_data(validated_data):
+    if "utility_id" in validated_data:
+        utility = get_utility_by_id_string(validated_data["utility_id"])
+        if utility:
+            validated_data["utility_id"] = utility.id
+        else:
+            raise CustomAPIException(UTILITY_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "schedule_log_id" in validated_data:
+        schedule_log = get_schedule_log_by_id_string(validated_data["schedule_log_id"])
+        if schedule_log:
+            validated_data["schedule_log_id"] = schedule_log.id
+        else:
+            raise CustomAPIException(SCHEDULE_LOG_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "read_cycle_id" in validated_data:
+        read_cycle = get_read_cycle_by_id_string(validated_data["read_cycle_id"])
+        if read_cycle:
+            validated_data["read_cycle_id"] = read_cycle.id
+        else:
+            raise CustomAPIException(READ_CYCLE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "route_id" in validated_data:
+        route = get_route_by_id_string(validated_data["route_id"])
+        if route:
+            validated_data["route_id"] = route.id
+        else:
+            raise CustomAPIException(ROUTE_NOT_FOUND, status_code=status.HTTP_404_NOT_FOUND)
+
+    if "meter_status_id" in validated_data:
+        meter_status_obj = get_meter_status_by_id_string(
+            validated_data['meter_status_id'])
+        if meter_status_obj:
+            validated_data["meter_status_id"] = meter_status_obj.id
+        else:
+            validated_data["meter_status_id"] = get_meter_status_by_name('Normal').id
+    else:
+        validated_data["meter_status_id"] = get_meter_status_by_name('Normal').id
+
+    if "reader_status_id" in validated_data:
+        reader_status_obj = get_reader_status_by_id_string(
+            validated_data['reader_status_id'])
+        if reader_status_obj:
+            validated_data["reader_status_id"] = reader_status_obj.id
+        else:
+            validated_data["reader_status_id"] = get_reader_status_by_name('Normal').id
+    else:
+        validated_data["reader_status_id"] = get_reader_status_by_name('Normal').id
 
     return validated_data

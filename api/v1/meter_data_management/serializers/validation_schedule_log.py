@@ -6,6 +6,7 @@ from django.db.models import Q
 from v1.commonapp.models.meter_status import get_meter_status_by_name
 from v1.commonapp.serializers.tenant import TenantMasterViewSerializer
 from v1.commonapp.serializers.utility import UtilityMasterViewSerializer
+from v1.meter_data_management.models.new_consumer_detail import NewConsumerDetail as NewConsumerDetailTbl
 from v1.meter_data_management.models.schedule_log import ScheduleLog as ScheduleLogTbl
 from v1.meter_data_management.serializers.read_cycle import ReadCycleShortViewSerializer
 from v1.meter_data_management.serializers.schedule import ScheduleShortViewSerializer
@@ -88,6 +89,8 @@ class ValidationScheduleLogViewSerializer(serializers.ModelSerializer):
                                                                 is_active=False).count(),
             'validation_one': v1_count,
             'validation_two': v2_count,
+            'new_consumer': NewConsumerDetailTbl.objects.filter(schedule_log_id=schedule_log_tbl.id,
+                                                                is_active=True).count(),
             'completed_reading': MeterReadingTbl.objects.filter(schedule_log_id=schedule_log_tbl.id, reading_status=2,
                                                                 is_active=True).count(),
             'v1_flag': v1_flag,

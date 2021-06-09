@@ -91,3 +91,6 @@ def get_utility_submodules_by_utility_id_string(id_string):
 
 def get_utility_submodules_by_module_id(id):
     return UtilitySubModule.objects.filter(module_id=id)
+
+def get_utility_submodules_by_module_id_and_tenant_id_string(id,id_string):
+    return UtilitySubModule.objects.filter(module_id=id,tenant__id_string=id_string)

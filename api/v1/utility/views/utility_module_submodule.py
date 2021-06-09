@@ -1,5 +1,5 @@
 __author__ = "aki"
-
+from v1.commonapp.views.custom_filter_backend import CustomFilter
 from rest_framework.exceptions import APIException
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
@@ -41,6 +41,7 @@ class UtilityModuleSubmoduleList(generics.ListAPIView):
             if response:
                 if is_authorized(1,1,1,user_obj):
                     queryset = UtilityModuleTbl.objects.filter(utility__id_string=self.kwargs['id_string'], is_active=True)
+                    queryset = CustomFilter.get_filtered_queryset(queryset, self.request)
                     return queryset
                 else:
                     raise InvalidAuthorizationException

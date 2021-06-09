@@ -82,7 +82,7 @@ class ReadCycleShortList(generics.ListAPIView):
             if response:
                 if is_authorized(1, 1, 1, user_obj):
                     utility = get_utility_by_id_string(self.kwargs['id_string'])
-                    queryset = ReadCycleModel.objects.filter(utility=utility, is_active=True)
+                    queryset = ReadCycleModel.objects.filter(utility=utility, is_active=True,created_date__gte=datetime.now() - timedelta(days=180))
                     if queryset:
                         return queryset
                     else:
@@ -112,23 +112,23 @@ class ReadCycle(GenericAPIView):
 
     @is_token_validate
     @role_required(ADMIN, UTILITY_MASTER, EDIT)
-    def post(self, request):
+    def post(self, request,id_string):
         try:
             with transaction.atomic():
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
                 serializer = ReadCycleSerializer(data=request.data)
+                utility = get_utility_by_id_string(self.kwargs['id_string'])
+                queryset = ReadCycleModel.objects.filter(utility=utility,is_active=True)
+                route_id_strings = [item.route_json[0]['id_string'] for item in queryset]
+                print("RouteIDStrings",route_id_strings)
                 if serializer.is_valid(raise_exception=False):
-                    print("Premise Object", serializer.validated_data['route_json'])
-                    for premises_id_string in serializer.validated_data['route_json']:
-                        if premises_id_string['id_string'] in route_id_string_list:
+                    for route_id_string in serializer.validated_data['route_json']:
+                        if route_id_string['id_string'] in route_id_strings:
                             return Response({
                                 STATE: ERROR,
                                 RESULTS: 'CANNOT_ENTER_DUPLICATE_ROUTES',
                             }, status=status.HTTP_409_CONFLICT)
-                        else:
-                            route_id_string_list.append(premises_id_string['id_string'])
-                    print("LIST",route_id_string_list)
                     read_cycle_obj = serializer.create(serializer.validated_data, user)
                     view_serializer = ReadCycleViewSerializer(instance=read_cycle_obj, context={'request': request})
                     return Response({

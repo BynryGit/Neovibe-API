@@ -2,8 +2,9 @@ __author__ = "aki"
 
 from django.db import transaction
 from django.utils import timezone
-from rest_framework import serializers
+from rest_framework import serializers, status
 from v1.commonapp.common_functions import ChoiceField
+from v1.commonapp.models.premises import get_premise_by_id
 from v1.commonapp.serializers.area import AreaShortViewSerializer
 from v1.commonapp.serializers.city import CityShortViewSerializer
 from v1.commonapp.serializers.meter_status import MeterStatusShortViewSerializer
@@ -20,6 +21,9 @@ from v1.meter_data_management.serializers.meter_make import MeterMakeShortViewSe
 from v1.meter_data_management.serializers.route import RouteShortViewSerializer
 from v1.meter_data_management.views.common_function import set_meter_validated_data
 from v1.utility.serializers.utility_product import UtilityProductShortViewSerializer
+from v1.commonapp.views.custom_exception import CustomAPIException
+from api.messages import DATA_ALREADY_EXISTS
+from v1.utility.views.common_functions import generate_meter_no
 
 
 class MeterShortViewSerializer(serializers.ModelSerializer):
@@ -68,24 +72,47 @@ class MeterViewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MeterTbl
-        fields = ('id_string', 'meter_no', 'state', 'meter_digit', 'current_reading', 'latitude', 'longitude',
-                  'consumer_detail', 'meter_status', 'reader_status', 'install_date', 'created_by', 'updated_by',
-                  'created_date', 'updated_date', 'state_id', 'city_id', 'area_id', 'sub_area_id', 'route_id',
-                  'premise_id', 'meter_type_id', 'meter_make_id', 'utility_product_id', 'category_id', 'tenant',
-                  'utility',)
+        fields = ('id_string', 'device_no', 'meter_no', 'state', 'meter_digit', 'current_reading', 'latitude',
+                  'longitude', 'consumer_detail', 'meter_status', 'reader_status', 'install_date', 'created_by',
+                  'updated_by', 'created_date', 'updated_date', 'state_id', 'city_id', 'area_id', 'sub_area_id',
+                  'route_id', 'premise_id', 'meter_type_id', 'meter_make_id', 'utility_product_id', 'category_id',
+                  'tenant', 'utility',)
 
 
 class MeterSerializer(serializers.ModelSerializer):
+    device_no = serializers.CharField(required=True)
     utility_id = serializers.UUIDField(required=True)
     route_id = serializers.UUIDField(required=True)
     premise_id = serializers.UUIDField(required=True)
     meter_type_id = serializers.UUIDField(required=False)
+    meter_make_id = serializers.UUIDField(required=False)
+    meter_status = serializers.UUIDField(required=False)
     utility_product_id = serializers.UUIDField(required=False)
     meter_detail = serializers.JSONField(required=False)
+    meter_no = serializers.CharField(required=False)
 
     class Meta:
         model = MeterTbl
         fields = ('__all__')
+
+    def create(self, validated_data, user):
+        validated_data = set_meter_validated_data(validated_data)
+        if MeterTbl.objects.filter(tenant=user.tenant, utility_id=validated_data['utility_id'],
+                                   device_no=validated_data['device_no'], is_active=True).exists():
+            raise CustomAPIException(DATA_ALREADY_EXISTS, status_code=status.HTTP_409_CONFLICT)
+        else:
+            with transaction.atomic():
+                meter_obj = super(MeterSerializer, self).create(validated_data)
+                meter_obj.tenant = user.tenant
+                meter_obj.created_by = user.id
+                meter_obj.save()
+                premise_obj = get_premise_by_id(meter_obj.premise_id)
+                meter_obj.state_id = premise_obj.state_id
+                meter_obj.city_id = premise_obj.city_id
+                meter_obj.area_id = premise_obj.area_id
+                meter_obj.meter_no = generate_meter_no(meter_obj.tenant.id)
+                meter_obj.save()
+                return meter_obj
 
     def update(self, instance, validated_data, user):
         validated_data = set_meter_validated_data(validated_data)

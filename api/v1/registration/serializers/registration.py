@@ -58,7 +58,7 @@ class RegistrationViewSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'tenant', 'tenant_id_string', 'utility', 'utility_id_string', 'registration_no','first_name','last_name',
                   'email_id', 'phone_mobile', 'billing_address_line_1', 'billing_street',
                   'billing_zipcode', 'billing_state', 'billing_city', 'billing_area', 'billing_sub_area', 'premise',
-                  'state','ownership','is_vip')
+                  'state','ownership','is_vip','registration_obj')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

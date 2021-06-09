@@ -46,6 +46,7 @@ from v1.commonapp.views.custom_filter_backend import CustomFilter
 # Tables used: Meter
 # Author: Akshay
 # Created on: 13/02/2021
+from v1.utility.views.common_functions import generate_meter_no
 
 
 class MeterList(generics.ListAPIView):
@@ -87,6 +88,7 @@ class MeterList(generics.ListAPIView):
 # Author: Akshay
 # Created on: 13/02/2021
 
+# Todo need to combine code
 class Meter(GenericAPIView):
     @is_token_validate
     @role_required(MX, METER_MASTER, EDIT)
@@ -96,93 +98,118 @@ class Meter(GenericAPIView):
                 user_id_string = get_user_from_token(request.headers['Authorization'])
                 user = get_user_by_id_string(user_id_string)
                 meter_values = []
-                utility_obj = get_utility_by_id_string(request.data['utility_id_string'])
-                meter_file = request.FILES["meter_file"]
-                workbook = xlrd.open_workbook(file_contents=meter_file.read())
+                utility_obj = get_utility_by_id_string(request.data['utility_id'])
 
-                number_of_rows = workbook.sheets()[0].nrows
-                number_of_columns = workbook.sheets()[0].ncols
+                try:
+                    meter_file = request.FILES["meter_file"]
+                except:
+                    meter_file = False
 
-                for row in range(1, number_of_rows):
-                    row_values = []
-                    for col in range(number_of_columns):
-                        value = (workbook.sheets()[0].cell(row, col).value)
-                        row_values.append(value)
-                    meter_values.append(row_values)
+                if meter_file:
+                    workbook = xlrd.open_workbook(file_contents=meter_file.read())
 
-                for value in meter_values:
-                    if MeterTbl.objects.filter(tenant=user.tenant, utility=utility_obj,
-                                               meter_no=value[5], is_active=True).exists():
-                        pass
+                    number_of_rows = workbook.sheets()[0].nrows
+                    number_of_columns = workbook.sheets()[0].ncols
+
+                    for row in range(1, number_of_rows):
+                        row_values = []
+                        for col in range(number_of_columns):
+                            value = (workbook.sheets()[0].cell(row, col).value)
+                            row_values.append(value)
+                        meter_values.append(row_values)
+
+                    for value in meter_values:
+                        if MeterTbl.objects.filter(tenant=utility_obj.tenant, utility=utility_obj,
+                                                   device_no=value[5], is_active=True).exists():
+                            pass
+                        else:
+                            route_obj = get_route_by_name(name=value[0])
+                            premise_obj = get_premise_by_name(value[1])
+                            utility_product_obj = get_utility_product_by_name(value[2])
+                            meter_type_obj = get_global_lookup_by_value(value[3])
+                            meter_status = get_meter_status_by_name(value[4])
+                            meter_make_obj = get_meter_make_by_name(value[7])
+                            if route_obj:
+                                pass
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: str(ROUTE_NOT_FOUND)
+                                }, status=status.HTTP_404_NOT_FOUND)
+                            if premise_obj:
+                                pass
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: str(PREMISE_NOT_FOUND)
+                                }, status=status.HTTP_404_NOT_FOUND)
+                            if utility_product_obj:
+                                pass
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: str(UTILITY_PRODUCT_NOT_FOUND)
+                                }, status=status.HTTP_404_NOT_FOUND)
+                            if meter_type_obj:
+                                pass
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: str(METER_TYPE_NOT_FOUND)
+                                }, status=status.HTTP_404_NOT_FOUND)
+                            if meter_status:
+                                pass
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: str(METER_STATUS_NOT_FOUND)
+                                }, status=status.HTTP_404_NOT_FOUND)
+                            if meter_make_obj:
+                                pass
+                            else:
+                                return Response({
+                                    STATE: ERROR,
+                                    RESULT: str(METER_MAKE_NOT_FOUND)
+                                }, status=status.HTTP_404_NOT_FOUND)
+
+                            MeterTbl(
+                                tenant=utility_obj.tenant,
+                                utility=utility_obj,
+                                route_id=route_obj.id,
+                                premise_id=premise_obj.id,
+                                state_id=premise_obj.state_id,
+                                city_id=premise_obj.city_id,
+                                area_id=premise_obj.area_id,
+                                utility_product_id=utility_product_obj.id,
+                                meter_type_id=meter_type_obj.id,
+                                meter_status=meter_status.id,
+                                device_no=value[5],
+                                meter_no=generate_meter_no(utility_obj.tenant.id),
+                                meter_digit=value[6],
+                                meter_make_id=meter_make_obj.id,
+                                current_reading=value[8],
+                                latitude=value[9],
+                                longitude=value[10],
+                                install_date=value[11]
+                            ).save()
+
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: SUCCESSFULLY_DATA_SAVE,
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    meter_serializer = MeterSerializer(data=request.data)
+                    if meter_serializer.is_valid():
+                        meter_obj = meter_serializer.create(meter_serializer.validated_data, user)
+                        return Response({
+                            STATE: SUCCESS,
+                            RESULT: SUCCESSFULLY_DATA_SAVE,
+                        }, status=status.HTTP_201_CREATED)
                     else:
-                        route_obj = get_route_by_name(name=value[0])
-                        premise_obj = get_premise_by_name(value[1])
-                        utility_product_obj = get_utility_product_by_name(value[2])
-                        meter_type_obj = get_global_lookup_by_value(value[3])
-                        meter_status = get_meter_status_by_name(value[4])
-                        meter_make_obj = get_meter_make_by_name(value[7])
-                        if route_obj:
-                            pass
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: str(ROUTE_NOT_FOUND)
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        if premise_obj:
-                            pass
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: str(PREMISE_NOT_FOUND)
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        if utility_product_obj:
-                            pass
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: str(UTILITY_PRODUCT_NOT_FOUND)
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        if meter_type_obj:
-                            pass
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: str(METER_TYPE_NOT_FOUND)
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        if meter_status:
-                            pass
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: str(METER_STATUS_NOT_FOUND)
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        if meter_make_obj:
-                            pass
-                        else:
-                            return Response({
-                                STATE: ERROR,
-                                RESULT: str(METER_MAKE_NOT_FOUND)
-                            }, status=status.HTTP_404_NOT_FOUND)
-                        MeterTbl(
-                            tenant=user.tenant,
-                            utility=utility_obj,
-                            route_id=route_obj.id,
-                            premise_id=premise_obj.id,
-                            utility_product_id=utility_product_obj.id,
-                            meter_type_id=meter_type_obj.id,
-                            meter_status=meter_status.id,
-                            meter_no=value[5],
-                            meter_digit=value[6],
-                            meter_make_id=meter_make_obj.id,
-                            current_reading=value[8],
-                            latitude=value[9],
-                            longitude=value[10],
-                            install_date=value[11]
-                        ).save()
-                return Response({
-                    STATE: SUCCESS,
-                    RESULT: SUCCESSFULLY_DATA_SAVE,
-                }, status=status.HTTP_201_CREATED)
+                        return Response({
+                            STATE: ERROR,
+                            RESULT: meter_serializer.errors,
+                        }, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             print(ex)
             logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_MASTER')

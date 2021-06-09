@@ -75,6 +75,7 @@ class Meter(models.Model, fsm.FiniteStateMachineMixin):
     street = models.CharField(max_length=200, blank=True, null=True)
     zipcode = models.CharField(max_length=200, null=True, blank=True)
     meter_no = models.CharField(max_length=200, blank=False, null=False)
+    device_no = models.CharField(max_length=200, blank=False, null=False)
     meter_digit = models.BigIntegerField(null=True, blank=True)
     meter_image = models.FileField(upload_to=get_file_path, null=True, blank=True)
     address_line_1 = models.CharField(max_length=200, blank=True, null=True)
