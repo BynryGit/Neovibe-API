@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.core.mail.backends.smtp import EmailBackend
 from v1.registration import models
 from v1.consumer import models as consumer_model
+from v1.work_order import models as work_order_model
 # Local logging
 local_logger = logging.getLogger('django')
 secret_reader = SecretReader()
@@ -41,6 +42,15 @@ class OutboundHandler:
             dictionary_of_variables = {
                 "{Utility.email}": "dummy@gmail.com",
                 "{Utility.utility_name}": "dummy",
+            }
+        elif self.type == 5:
+            if self.instance.sa_id:
+                appointment_obj = work_order_model.service_assignment.get_service_appointment_by_id(self.instance.sa_id)
+            else:
+                appointment_obj = work_order_model.service_appointments.get_service_appointment_by_id(self.instance.id)
+            dictionary_of_variables = {
+            "{appointment.number}" : appointment_obj.sa_number,
+            "{appointment.name}" : appointment_obj.sa_name
             }
         return dictionary_of_variables
 

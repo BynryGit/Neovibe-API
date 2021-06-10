@@ -3,7 +3,8 @@ __author__ = "aki"
 from django.urls import path
 from v1.meter_data_management.views.meter_make import MeterMakeList
 from v1.meter_data_management.views.meter_reading import MeterReading, MeterReadingList
-from v1.meter_data_management.views.new_consumer_detail import NewConsumerDetail, NewConsumerDetailList
+from v1.meter_data_management.views.new_consumer_detail import NewConsumerDetail, NewConsumerDetailList, \
+    NewConsumerDetailView
 from v1.meter_data_management.views.schedule_log_read_cycle import ScheduleLogReadCycleList
 from v1.meter_data_management.views.validation_summary import ValidationSummary
 from v1.meter_data_management.views.meter_reading_validation_one import MeterReadingValidationOneDetail
@@ -130,5 +131,6 @@ urlpatterns = [
 
     # New Consumer API Start
     path('new-consumer/list', NewConsumerDetailList.as_view(), name='new_consumer_detail_list'),
+    path('new-consumer/<uuid:id_string>', NewConsumerDetailView.as_view(), name='new_consumer_detail_view'),
     # New Consumer API End
 ]

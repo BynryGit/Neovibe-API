@@ -11,6 +11,7 @@ __author__ = "aki"
 
 from v1.commonapp.views.logger import logger
 from v1.meter_data_management.models.meter_reading import MeterReading as MeterReadingTbl
+from v1.meter_data_management.models.new_consumer_detail import NewConsumerDetail as NewConsumerDetailTbl
 from v1.meter_data_management.models.validation_assignments import ValidationAssignment as ValidationAssignmentTbl
 
 
@@ -27,7 +28,9 @@ def validation_assignment():
             MeterReadingTbl.objects.filter(reading_status=1, is_assign_to_v2=False, is_active=True,
                                            is_duplicate=False, read_cycle_id=validation.read_cycle_id).update(
                 validator_two_id=validation.validator2_id, is_assign_to_v2=True)
-
+            # New Consumer Assignment
+            NewConsumerDetailTbl.objects.filter(is_assigned=False, is_confirmed=False,
+                                                read_cycle_id=validation.read_cycle_id).update(is_assigned=True)
             print("Validation Assignment Done")
     except Exception as ex:
         print(ex)

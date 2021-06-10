@@ -47,6 +47,8 @@ class ValidationViewSerializer(serializers.ModelSerializer):
         meter_obj = get_meter_by_id(consumer_detail_obj.meter_id)
         meter_make_obj = get_meter_make_by_id(id=meter_obj.meter_make_id)
         meter_details = {
+            'id_string': meter_obj.id_string,
+            'device_no': meter_obj.device_no,
             'meter_no': meter_obj.meter_no,
             'meter_make': meter_make_obj.name,
             'meter_digit': meter_obj.meter_digit,
@@ -63,6 +65,9 @@ class ValidationViewSerializer(serializers.ModelSerializer):
         validator_one_obj = get_user_by_id(meter_reading_tbl.validator_one_id)
         validator_two_obj = get_user_by_id(meter_reading_tbl.validator_two_id)
 
+        user_details['consumer_id_string'] = consumer_master_obj.id_string
+        user_details['consumer_email'] = consumer_master_obj.email
+        user_details['consumer_password'] = consumer_master_obj.password
         user_details['consumer_no'] = consumer_master_obj.consumer_no
         user_details['first_name'] = consumer_master_obj.first_name
         user_details['last_name'] = consumer_master_obj.last_name

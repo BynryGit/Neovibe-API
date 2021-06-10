@@ -20,6 +20,8 @@ from v1.commonapp.models.area import get_area_by_id
 from v1.commonapp.models.city import get_city_by_id
 from v1.commonapp.models.sub_area import get_sub_area_by_id
 from v1.commonapp.models.global_lookup import get_global_lookup_by_id
+from v1.commonapp.common_functions import perform_events
+from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 
 # *********** SERVICE APPOINTMENT CONSTANTS **************
 SERVICE_APPOINTMENT_DICT = {
@@ -84,7 +86,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     consumer_service_contract_detail_id = models.BigIntegerField(null=True, blank=True)
     asset_id = models.BigIntegerField(blank=True, null=True)
     work_order_master_id = models.BigIntegerField(blank=True, null=True)
-    state = models.BigIntegerField(choices=CHOICES, default=1)
+    state = models.BigIntegerField(choices=CHOICES, default=0)
     sa_number = models.CharField(max_length=200, blank=True, null=True)
     sa_name = models.CharField(max_length=200, blank=True, null=True)
     sa_description = models.CharField(max_length=3000, blank=True, null=True)
@@ -189,10 +191,7 @@ class ServiceAppointment(models.Model, fsm.FiniteStateMachineMixin):
     
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
-            print("======",previous_state)
-            print("======",next_state)
-            # perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT["REGISTRATION"])
-            # perform_signals(next_state, self)
+            perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT['DISPATCHER'])
             self.save()
         except Exception as e:
             raise CustomAPIException("Service Appointment transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)

@@ -11,6 +11,8 @@ from v1.work_order.models.service_appointment_status import get_service_appointm
 from master.models import get_user_by_id
 from v1.work_order.models.service_appointments import get_service_appointment_by_id
 from django.utils import timezone # importing package for datetime
+from v1.commonapp.common_functions import perform_events
+from v1.commonapp.models.transition_configuration import TRANSITION_CONFIGURATION_DICT
 
 # *********** SERVICE ASSIGNMENT CONSTANTS **************
 SERVICE_ASSIGNMENT_DICT = {
@@ -96,6 +98,7 @@ class ServiceAssignment(models.Model, fsm.FiniteStateMachineMixin):
 
     def on_change_state(self, previous_state, next_state, **kwargs):
         try:
+            perform_events(next_state, self, TRANSITION_CONFIGURATION_DICT['DISPATCHER'])
             self.save()
         except Exception as e:
             raise CustomAPIException("Service Assignment transition failed", status_code=status.HTTP_412_PRECONDITION_FAILED)

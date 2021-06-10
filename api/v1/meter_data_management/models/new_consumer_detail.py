@@ -15,7 +15,9 @@ import uuid  # importing package for GUID
 from django.db import models  # importing package for database
 from django.utils import timezone # importing package for datetime
 from master.models import get_user_by_id
+from v1.commonapp.models.meter_status import get_meter_status_by_id
 from v1.meter_data_management.models.read_cycle import get_read_cycle_by_id
+from v1.meter_data_management.models.reader_status import get_reader_status_by_id
 from v1.meter_data_management.models.route import get_route_by_id
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id
 from v1.tenant.models.tenant_master import TenantMaster
@@ -35,11 +37,14 @@ class NewConsumerDetail(models.Model):
     premise_id = models.BigIntegerField(null=True, blank=True)
     activity_type_id = models.BigIntegerField(null=True, blank=True)
     utility_product_id = models.BigIntegerField(null=True, blank=True)
-    consumer_no = models.CharField(max_length=200, null=True, blank=False)
-    meter_no = models.CharField(max_length=200, null=True, blank=False)
+    consumer_no = models.CharField(max_length=200, null=False, blank=False)
+    meter_no = models.CharField(max_length=200, null=False, blank=False)
     current_meter_reading = models.CharField(max_length=200, null=True, blank=True)
     meter_status_id = models.BigIntegerField(null=True, blank=True)
     reader_status_id = models.BigIntegerField(null=True, blank=True)
+    is_confirmed = models.BooleanField(default=False)
+    is_discard = models.BooleanField(default=False)
+    is_assigned = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_by = models.BigIntegerField(null=True, blank=True)
     updated_by = models.BigIntegerField(null=True, blank=True)
@@ -76,6 +81,16 @@ class NewConsumerDetail(models.Model):
     def get_meter_reader_name(self):
         meter_reader = get_user_by_id(self.meter_reader_id)
         return meter_reader
+
+    @property
+    def get_meter_status_name(self):
+        meter_status = get_meter_status_by_id(self.meter_status_id)
+        return meter_status
+
+    @property
+    def get_reader_status_name(self):
+        reader_status = get_reader_status_by_id(self.reader_status_id)
+        return reader_status
 
 # Create Temp New Consumer Master Table end
 
