@@ -176,7 +176,7 @@ class UserViewSerializer(serializers.ModelSerializer):
         fields = ('id_string', 'first_name', 'middle_name', 'last_name', 'email', 'phone_mobile', 'phone_landline',
                   'user_id', 'created_date', 'updated_date', 'tenant', 'user_type', 'user_sub_type', 'form_factor',
                   'city',
-                  'department', 'status', 'supplier')
+                  'department', 'status','address', 'supplier')
 
 
 class UserShortViewSerializer(serializers.ModelSerializer):

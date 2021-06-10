@@ -78,6 +78,7 @@ class UserArea(GenericAPIView):
                 data['email'] = user_obj.email
                 data['id_string'] = id_string
                 for area in request.data:
+                    print("VALIDATED DATA",request.data)
                     # validate_data = {'user_id': str(id_string), 'utility_id': request.data['utility_id'], 'area_id': area['area_id_string']}
                     validate_data = {'user_id': str(id_string),'area_id': area['area_id_string']}
                     serializer = UserAreaSerializer(data=validate_data)
