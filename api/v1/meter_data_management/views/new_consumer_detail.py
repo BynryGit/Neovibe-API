@@ -6,16 +6,18 @@ from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import GenericAPIView
 from django_filters.rest_framework import DjangoFilterBackend
+from api.constants import MX, VALIDATION, EDIT, VIEW
 from master.models import get_user_by_id_string
 from v1.commonapp.views.logger import logger
-from v1.meter_data_management.models.new_consumer_detail import NewConsumerDetail as NewConsumerDetailTbl
+from v1.meter_data_management.models.new_consumer_detail import NewConsumerDetail as NewConsumerDetailTbl, \
+    get_new_consumer_detail_by_id_string
 from v1.meter_data_management.models.schedule_log import get_schedule_log_by_id_string
 from v1.meter_data_management.serializers.new_consumer_detail import NewConsumerDetailViewSerializer, \
     NewConsumerDetailSerializer
-from v1.userapp.decorators import is_token_validate
+from v1.userapp.decorators import is_token_validate, role_required
 from v1.commonapp.common_functions import is_token_valid, is_authorized, get_user_from_token
 from v1.commonapp.views.pagination import StandardResultsSetPagination
-from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DATA_NOT_PROVIDED
+from api.messages import SUCCESS, STATE, ERROR, EXCEPTION, RESULT, DATA_NOT_PROVIDED, CONSUMER_NOT_FOUND
 from v1.commonapp.views.custom_exception import InvalidTokenException, InvalidAuthorizationException
 
 
@@ -51,7 +53,7 @@ class NewConsumerDetailList(generics.ListAPIView):
                         self.request.query_params['schedule_log_id'] = get_schedule_log_by_id_string(
                             self.request.query_params['schedule_log_id']).id
                     self.request.query_params._mutable = False
-                    queryset = NewConsumerDetailTbl.objects.filter(is_active=True)
+                    queryset = NewConsumerDetailTbl.objects.filter(is_confirmed=False, is_active=True)
                     return queryset
                 else:
                     raise InvalidAuthorizationException
@@ -115,6 +117,76 @@ class NewConsumerDetail(GenericAPIView):
                 }, status=status.HTTP_201_CREATED)
         except Exception as ex:
             logger().log(ex, 'MEDIUM', module='MX', sub_module='METER_READING')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# API Header
+# API end Point: api/v1/new-consumer/id_string
+# API verb: GET,PUT
+# Package: Basic
+# Modules: All
+# Sub Module: All
+# Interaction: View New Consumer object
+# Usage: API will fetch and edit required data for New Consumer using id_string
+# Tables used: New Consumer Details
+# Author: Akshay
+# Created on: 09/06/2021
+
+class NewConsumerDetailView(GenericAPIView):
+    @is_token_validate
+    @role_required(MX, VALIDATION, VIEW)
+    def get(self, request, id_string):
+        try:
+            new_consumer_obj = get_new_consumer_detail_by_id_string(id_string)
+            if new_consumer_obj:
+                new_consumer_serializer = NewConsumerDetailViewSerializer(instance=new_consumer_obj, context={'request': request})
+                return Response({
+                    STATE: SUCCESS,
+                    RESULT: new_consumer_serializer.data,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: CONSUMER_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
+            return Response({
+                STATE: EXCEPTION,
+                ERROR: str(ex)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @is_token_validate
+    @role_required(MX, VALIDATION, EDIT)
+    def put(self, request, id_string):
+        try:
+            user_id_string = get_user_from_token(request.headers['Authorization'])
+            user = get_user_by_id_string(user_id_string)
+            new_consumer_obj = get_new_consumer_detail_by_id_string(id_string)
+            if new_consumer_obj:
+                new_consumer_serializer = NewConsumerDetailSerializer(data=request.data)
+                if new_consumer_serializer.is_valid():
+                    new_consumer_obj = new_consumer_serializer.update(new_consumer_obj, new_consumer_serializer.validated_data, user)
+                    schedule_view_serializer = NewConsumerDetailViewSerializer(instance=new_consumer_obj, context={'request': request})
+                    return Response({
+                        STATE: SUCCESS,
+                        RESULT: schedule_view_serializer.data,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        STATE: ERROR,
+                        RESULT: new_consumer_serializer.errors,
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    STATE: ERROR,
+                    RESULT: CONSUMER_NOT_FOUND,
+                }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            logger().log(ex, 'MEDIUM', module='MX', sub_module='SCHEDULE')
             return Response({
                 STATE: EXCEPTION,
                 ERROR: str(ex)

@@ -113,6 +113,7 @@ class User(MasterUser, PermissionsMixin, fsm.FiniteStateMachineMixin):
     first_name = models.CharField(max_length=200, blank=True)
     middle_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
+    address = models.CharField(max_length=10000, blank=True)
     # email = models.CharField(max_length=200, blank=False, unique=True)
     # USERNAME_FIELD = 'email'
     user_image = models.URLField(null=True, blank=True)
